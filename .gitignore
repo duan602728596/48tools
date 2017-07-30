@@ -1,0 +1,22 @@
+# nwjs
+*.exe
+*.html
+*.dll
+*.log
+*.nexe
+*.bin
+*.pak
+*.dat
+pnacl
+locales
+
+# ffmpeg
+ffmpeg/ffmpeg.exe
+ffmpeg/licenses
+
+# output
+output/*.flv
+output/*.mp4
+
+# webstorm
+.idea
