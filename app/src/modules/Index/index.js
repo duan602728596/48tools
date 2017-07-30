@@ -12,6 +12,15 @@ class Index extends Component{
     return(
       <div className={ style.body }>
         <h1 className={ style.title }>口袋48工具</h1>
+        <p className={ style.text }>
+          本软件遵循
+          <b>GNU General Public License v3.0</b>
+          许可证，非商用，如有问题请发送到邮箱duanhaochen@126.com。
+        </p>
+        <p className={ style.text }>
+          源代码托管地址：
+          <span className={ style.url }>https://github.com/duan602728596/48tools</span>
+        </p>
         <Row type="flex" align="top" justify="start">
           <Col xl={ 4 } lg={ 6 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>

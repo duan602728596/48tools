@@ -1,8 +1,14 @@
 {
   "name": "48tools",
   "version": "0.0.1",
-  "description": "口袋48工具，目前有下载直播和录播的功能。",
-  "license": "MIT",
+  "description": "48工具，提供各种视频剪切下载功能。",
+  "license": "GNU General Public License v3.0",
+  "author": {
+    "name" : "段昊辰",
+    "email" : "duanhaochen@126.com",
+    "url" : "https://github.com/duan602728596",
+    "qq": "602728596"
+  },
   "dependencies": {},
   "devDependencies": {
     "antd": "^2.12.2",
