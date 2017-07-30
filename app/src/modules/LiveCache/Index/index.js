@@ -8,8 +8,8 @@ import { Button, Table, Icon, Affix, message } from 'antd';
 import { liveList, liveCache, liveChange } from '../store/index';
 import style from './style.sass';
 import commonStyle from '../../../common.sass';
-import post from '../../post';
-import time from '../../time';
+import post from '../../pubmicMethod/post';
+import time from '../../../function';
 const child_process = node_require('child_process');
 const path = node_require('path');
 const process = node_require('process');
@@ -187,8 +187,10 @@ class LiveCache extends Component{
                 <span>开始自动录制</span>
               </Button>
               <Button>
-                <Icon type="setting" />
-                <span>自动录制配置</span>
+                <Link to="/LiveCache/Option">
+                  <Icon type="setting" />
+                  <span>自动录制配置</span>
+                </Link>
               </Button>
             </div>
             <div className={ style.fr }>

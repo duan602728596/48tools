@@ -4,7 +4,7 @@
 本软件遵循**GNU General Public License v3.0**许可证。
 
 ## 技术栈
-react + antd + webpack + nwjs。  
+pug + sass + ECMA7 + react + antd + webpack + nwjs。  
 
 ## 文件
 * app: 源代码

@@ -22,7 +22,7 @@ class Index extends Component{
           <span className={ style.url }>https://github.com/duan602728596/48tools</span>
         </p>
         <Row type="flex" align="top" justify="start">
-          <Col xl={ 4 } lg={ 6 } md={ 6 } sm={ 8 } xs={ 12 }>
+          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
               <dt>
                 <Link to="/LiveCache" title="直播抓取">
@@ -34,7 +34,7 @@ class Index extends Component{
               </dd>
             </dl>
           </Col>
-          <Col xl={ 4 } lg={ 6 } md={ 6 } sm={ 8 } xs={ 12 }>
+          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
               <dt>
                 <Link to="/" title="录播下载">
