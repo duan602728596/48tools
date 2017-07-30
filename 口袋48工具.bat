@@ -1,1 +1,1 @@
-nw.exe ./app
+start nw.exe ./app
