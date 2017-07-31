@@ -44,6 +44,18 @@ module.exports = config({
             }
           }
         ]
+      },
+      { // pug
+        test: /^.*\.pug$/,
+        use: [
+          {
+            loader: 'pug-loader',
+            options: {
+              pretty: true,
+              name: '[name].html'
+            }
+          }
+        ]
       }
     ]
   },

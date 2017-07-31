@@ -52,12 +52,12 @@ class Index extends Component{
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
               <dt>
-                <Link to="/" title="录播下载">
+                <Link to="/PlayBackDownload" title="录播下载">
                   <img src={ require('./xsy1.jpg') } alt="录播下载" />
                 </Link>
               </dt>
               <dd>
-                <Link to="/">录播下载</Link>
+                <Link to="/PlayBackDownload">录播下载</Link>
               </dd>
             </dl>
           </Col>

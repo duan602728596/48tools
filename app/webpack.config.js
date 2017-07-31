@@ -28,18 +28,6 @@ function config(options){
             }
           ]
         },
-        { // pug
-          test: /^.*\.pug$/,
-          use: [
-            {
-              loader: 'pug-loader',
-              options: {
-                pretty: true,
-                name: '[name].html'
-              }
-            }
-          ]
-        },
         { // 图片
           test: /^.*\.(jpg|png|gif)$/,
           use: [

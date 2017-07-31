@@ -14,6 +14,19 @@ export function objectToArray(obj){
 }
 
 /**
+ * 自动补0
+ * @param { Number } num
+ * @return { String }
+ */
+export function patchZero(num){
+  if(num < 10){
+    return `0${ num }`;
+  }else{
+    return `${ num }`
+  }
+}
+
+/**
  * 格式化时间
  * @param { String } modules         : 格式化的字符串
  * @param { String | Number } timeStr: 时间戳
@@ -28,12 +41,10 @@ export function time(modules, timeStr){
     mm = date.getMinutes(),
     ss = date.getSeconds();
 
-  return modules.replace(/Y{2}/, YY)
-    .replace(/M{2}/, MM)
-    .replace(/D{2}/, DD)
-    .replace(/h{2}/, hh)
-    .replace(/m{2}/, mm)
-    .replace(/s{2}/, ss);
+  return modules.replace(/Y{2}/, patchZero(YY))
+                .replace(/M{2}/, patchZero(MM))
+                .replace(/D{2}/, patchZero(DD))
+                .replace(/h{2}/, patchZero(hh))
+                .replace(/m{2}/, patchZero(mm))
+                .replace(/s{2}/, patchZero(ss));
 }
-
-export default time;

@@ -6,10 +6,10 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message } from 'antd';
 import { liveList, liveCache, liveChange, autoRecording } from '../store/index';
-import style from './style.sass';
+import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
-import time from '../../../function';
+import { time } from '../../../function';
 import IndexedDB from '../../pubmicMethod/IndexedDB';
 import option from '../../pubmicMethod/option';
 const child_process = node_require('child_process');
@@ -163,7 +163,7 @@ class LiveCache extends Component{
   }
   // 录制视频
   recording(item, event){
-    const title = item.liveId + '_' + item.title +
+    const title = '口袋48直播_' + item.liveId + '_' + item.title +
                   '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
                   '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
     const child = child_process.spawn(__dirname + '/ffmpeg/ffmpeg.exe', [
@@ -197,9 +197,9 @@ class LiveCache extends Component{
    */
   recordingPromise(item){
     return new Promise((resolve, reject)=>{
-      const title = item.liveId + '_' + item.title +
-        '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-        '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
+      const title = '口袋48直播_' + item.liveId + '_' + item.title +
+                    '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
+                    '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
       const child = child_process.spawn(__dirname + '/ffmpeg/ffmpeg.exe', [
         '-i',
         `${ item.streamPath }`,
@@ -269,7 +269,7 @@ class LiveCache extends Component{
   // 自动录制
   async onAutoRecording(event){
     const data = await getLiveCacheOption();
-    this.autoRecordingProcess();
+    this.autoRecordingProcess(data.humans);
     this.props.action.autoRecording({
       autoRecording: setInterval(this.autoRecordingProcess.bind(this), data.time * 60 * (10 ** 3), data.humans)
     });
@@ -305,53 +305,52 @@ class LiveCache extends Component{
       <div>
         {/* 功能区 */}
         <Affix>
-          <div className={ `${ style.toolsBox } ${ commonStyle.clearfix }` }>
-            <div className={ style.fl }>
+          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+            <div className={ publicStyle.fl }>
               {
                 this.props.autoRecording ?
                   (
-                    <Button className={ style.mr10 } type="danger" onClick={ this.onStopAutoRecording.bind(this) }>
+                    <Button className={ publicStyle.mr10 } type="danger" onClick={ this.onStopAutoRecording.bind(this) }>
                       <Icon type="close-square" />
                       <span>停止自动录制</span>
                     </Button>
                   ) :
                   (
-                    <Button className={ style.mr10 } type="primary" onClick={ this.onAutoRecording.bind(this) }>
+                    <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onAutoRecording.bind(this) }>
                       <Icon type="play-circle" />
                       <span>开始自动录制</span>
                     </Button>
                   )
               }
-              <Button disabled={ this.props.autoRecording }>
-                <Link className={ style.btnLink } to="/LiveCache/Option">
-                  <Icon type="setting" />
-                  <span>自动录制配置</span>
-                </Link>
+              <Button className={ publicStyle.btn } disabled={ this.props.autoRecording }>
+                <Icon type="setting" />
+                <span>自动录制配置</span>
+                <Link className={ publicStyle.btnLink } to="/LiveCache/Option" />
               </Button>
             </div>
-            <div className={ style.fr }>
+            <div className={ publicStyle.fr }>
               <Button>
                 <Icon type="bars" />
                 <span>正在录制</span>
               </Button>
-              <Button className={ style.ml10 } onClick={ this.getLiveList.bind(this) }>
+              <Button className={ publicStyle.ml10 } onClick={ this.getLiveList.bind(this) }>
                 <Icon type="loading-3-quarters" />
                 <span>刷新列表</span>
               </Button>
-              <Button className={ style.ml10 } type="danger">
-                <Link className={ style.btnLink } to="/">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Link>
+              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="danger">
+                <Icon type="poweroff" />
+                <span>返回</span>
+                <Link className={ publicStyle.btnLink } to="/" />
               </Button>
             </div>
           </div>
         </Affix>
         {/* 显示列表 */}
-        <div className={ style.tableBox }>
+        <div className={ publicStyle.tableBox }>
           <Table loading={ this.state.loading }
                  bordered={ true }
                  columns={ this.columus() }
+                 rowKey={ (item)=>item.liveId }
                  dataSource={ this.props.liveList }
                  pagination={{
                    pageSize: 20,
