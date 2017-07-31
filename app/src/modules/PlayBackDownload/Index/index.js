@@ -130,7 +130,7 @@ class PlayBackDownload extends Component{
   // 加载和刷新列表
   async onPlayBackListLoad(type, event){
     this.setState({
-      loading: false
+      loading: true
     });
     // 判断是加载还是刷新
     let pl = null;
