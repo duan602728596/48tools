@@ -1,11 +1,26 @@
 /* 软件首页 */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Row from 'antd/lib/row';
-import Col from 'antd/lib/col';
-import 'antd/lib/row/style/css';
-import 'antd/lib/col/style/css';
+import { Row, Col } from 'antd';
 import style from './style.sass';
+import IndexedDB from '../pubmicMethod/IndexedDB';
+import option from '../pubmicMethod/option';
+
+/* 初始化所有的数据库 */
+IndexedDB(option.indexeddb.name, option.indexeddb.version, {
+  upgradeneeded: function(){
+    // 这张表存储的是直播抓取页面的自动录制配置
+    if(!this.hasObjectStore('liveCache')){
+      this.createObjectStore('liveCache', 'function', [
+        {
+          name: 'option',
+          index: 'option'
+        }
+      ])
+    }
+    this.close();
+  }
+});
 
 class Index extends Component{
   render(){

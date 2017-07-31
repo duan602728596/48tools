@@ -1,9 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
 
 /* Action */
-export const liveList = createAction('显示当前直播列表');
+export const liveList = createAction('直播列表');
 export const liveCache = createAction('直播抓取');
 export const liveChange = createAction('直播列表和直播抓取');
+export const autoRecording = createAction('自动录制');
 
 /* reducer */
 const reducer = handleActions({
@@ -16,6 +17,9 @@ const reducer = handleActions({
   [liveChange]: (state, action)=>{
     return state.set('liveList', action.payload.liveList)
                 .set('liveCache', action.payload.map);
+  },
+  [autoRecording]: (state, action)=>{
+    return state.set('autoRecording', action.payload.autoRecording);
   }
 }, {});
 
