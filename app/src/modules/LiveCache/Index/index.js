@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message } from 'antd';
 import { liveList, liveCache, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
@@ -16,6 +16,29 @@ const child_process = node_require('child_process');
 const path = node_require('path');
 const process = node_require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
+
+/* 数据库获取自动录制的配置 */
+function getLiveCacheOption(){
+  return new Promise((resolve, reject)=>{
+    IndexedDB(option.indexeddb.name, option.indexeddb.version, {
+      success: function(event){
+        const store = this.getObjectStore('liveCache', true);
+        const _this = this;
+        store.get('liveCacheOption', function(result){
+          if(result){
+            resolve(result.option);
+          }else{
+            resolve({
+              time: 1,
+              humans: []
+            });
+          }
+          _this.close();
+        });
+      }
+    });
+  });
+}
 
 /* 初始化数据 */
 const getIndex = (state)=>state.get('liveCache').get('index');
@@ -45,29 +68,7 @@ const dispatch = (dispatch)=>({
   }, dispatch),
 });
 
-/* 数据库获取自动录制的配置 */
-function getLiveCacheOption(){
-  return new Promise((resolve, reject)=>{
-    IndexedDB(option.indexeddb.name, option.indexeddb.version, {
-      success: function(event){
-        const store = this.getObjectStore('liveCache', true);
-        const _this = this;
-        store.get('liveCacheOption', function(result){
-          if(result){
-            resolve(result.option);
-          }else{
-            resolve({
-              time: 1,
-              humans: []
-            });
-          }
-          _this.close();
-        });
-      }
-    });
-  });
-}
-
+@withRouter
 @connect(state, dispatch)
 class LiveCache extends Component{
   constructor(props){
@@ -197,9 +198,10 @@ class LiveCache extends Component{
    */
   recordingPromise(item){
     return new Promise((resolve, reject)=>{
-      const title = '口袋48直播_' + item.liveId + '_' + item.title +
-                    '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-                    '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
+      const title = '【口袋48直播】' + '_' + item.title +
+                    '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
+                    '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
+                    '_' + item.liveId;
       const child = child_process.spawn(__dirname + '/ffmpeg/ffmpeg.exe', [
         '-i',
         `${ item.streamPath }`,
@@ -231,23 +233,20 @@ class LiveCache extends Component{
       const liveList = 'liveList' in data2.content ? data2.content.liveList : [];
 
       // 获取列表成功后开始构建录制进程
-      const queue = [];                                            // Promise.all进程
-      const humanRegExp = new RegExp(`(${ humans.join('|') })`);   // 正则
+      const queue = [];                                                // Promise.all进程
+      const humanRegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
       liveList.map((item, index)=>{
-        // 有录制的进程
-        if(this.props.liveCache.has(item.liveId)){
-          const m = this.props.liveCache.get(item.liveId);
-          // 录制由于特殊原因已经结束，如断线等
-          if(m.child.exitCode !== null){
-            // 此处用正则表达式判断指定的成员
-            if(humanRegExp.test(item.title)){
+        // 用正则表达式判断指定的成员
+        if(humanRegExp.test(item.title)){
+          // 有录制的进程
+          if(this.props.liveCache.has(item.liveId)){
+            const m = this.props.liveCache.get(item.liveId);
+            // 录制由于特殊原因已经结束，如断线等
+            if(m.child.exitCode !== null){
               queue.push(this.recordingPromise(item));
             }
-          }
-        // 没有录制进程
-        }else{
-          // 此处用正则表达式判断指定的成员
-          if(humanRegExp.test(item.title)){
+            // 没有录制进程
+          }else{
             queue.push(this.recordingPromise(item));
           }
         }
@@ -329,10 +328,6 @@ class LiveCache extends Component{
               </Button>
             </div>
             <div className={ publicStyle.fr }>
-              <Button>
-                <Icon type="bars" />
-                <span>正在录制</span>
-              </Button>
               <Button className={ publicStyle.ml10 } onClick={ this.getLiveList.bind(this) }>
                 <Icon type="loading-3-quarters" />
                 <span>刷新列表</span>

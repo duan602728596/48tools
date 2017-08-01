@@ -5,6 +5,8 @@ import Index from '../modules/Index/index';
 import LiveCache from 'bundle-loader?lazy&name=LiveCache!../modules/LiveCache/Index/index';
 import LiveCacheOption from 'bundle-loader?lazy&name=LiveCache!../modules/LiveCache/Option/index';
 import PlayBackDownload from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/Index/index';
+import PlayBackDownloadDetail from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/Detail/index';
+import PlayBackDownloadList from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/List/index';
 
 /* 路由模块 */
 class Router extends Component{
@@ -34,6 +36,8 @@ class Router extends Component{
           <Route path="/PlayBackDownload" component={(props)=>(
             <Switch>
               <Route path="/PlayBackDownload" component={ this.asyncModule(PlayBackDownload) } exact />
+              <Route path="/PlayBackDownload/Detail" component={ this.asyncModule(PlayBackDownloadDetail) } exact />
+              <Route path="/PlayBackDownload/List" component={ this.asyncModule(PlayBackDownloadList) } exact />
             </Switch>
           )}>
           </Route>

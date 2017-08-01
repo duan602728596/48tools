@@ -3,14 +3,19 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Input } from 'antd';
 import { playBackList } from '../store/index';
+import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
+import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
+import Bundle from "../../../router/bundle";
+const url = node_require('url');
+const path = node_require('path');
 
 /**
  * 搜索的过滤函数
@@ -24,7 +29,7 @@ function filter(array, keyword, key){
     return array;
   }else{
     const newArr = [];
-    const keywordRegExp = new RegExp(`(${ keyword.split(/\s+/).join('|') })`);
+    const keywordRegExp = new RegExp(`(${ keyword.split(/\s+/).join('|') })`, 'i');
     array.map((item, index)=>{
       if(keywordRegExp.test(item[key])){
         newArr.push(item);
@@ -45,16 +50,27 @@ const state = createStructuredSelector({
   giftUpdTime: createSelector(          // 加载时间戳
     getIndex,
     (data)=>data.has('giftUpdTime') ? data.get('giftUpdTime') : 0
+  ),
+  downloadList: createSelector(         // 下载列表
+    (state)=>state.get('playBackDownload').get('downloadList'),
+    (data)=>data
+  ),
+  fnReady: createSelector(             // 下载事件监听
+    (state)=>state.get('playBackDownload').get('fnReady'),
+    (data)=>data
   )
 });
 
 /* dispatch */
 const dispatch = (dispatch)=>({
   action: bindActionCreators({
-    playBackList
+    playBackList,
+    downloadList,
+    fnReady
   }, dispatch),
 });
 
+@withRouter
 @connect(state, dispatch)
 class PlayBackDownload extends Component{
   constructor(props){
@@ -72,13 +88,13 @@ class PlayBackDownload extends Component{
         title: '直播ID',
         dataIndex: 'liveId',
         key: 'liveId',
-        width: '20%'
+        width: '17%'
       },
       {
         title: '直播间',
         dataIndex: 'title',
         key: 'title',
-        width: '15%'
+        width: '13%'
       },
       {
         title: '直播标题',
@@ -96,15 +112,21 @@ class PlayBackDownload extends Component{
       {
         title: '操作',
         key: 'handle',
-        width: '25%',
+        width: '30%',
         render: (text, item)=>{
           return(
             <div>
-              <Button className={ publicStyle.ml10 }>
+              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }>
                 <Icon type="eye" />
                 <span>查看</span>
+                <Link className={ publicStyle.btnLink } to={{
+                  pathname: '/PlayBackDownload/Detail',
+                  query: {
+                    detail: item
+                  }
+                }} />
               </Button>
-              <Button className={ publicStyle.ml10 }>
+              <Button className={ publicStyle.ml10 } onClick={ this.download.bind(this, item) }>
                 <Icon type="fork" />
                 <span>下载</span>
               </Button>
@@ -114,6 +136,46 @@ class PlayBackDownload extends Component{
       }
     ];
     return columns;
+  }
+  // 组件挂载之前监听chrome下载事件
+  componentWillMount(){
+    if(this.props.fnReady === false){
+      chrome.downloads.onCreated.addListener(onChromeDownloadsCreated.bind(this));
+      chrome.downloads.onChanged.addListener(onChromeDownloadsChanged.bind(this));
+      // 函数已监听的标识
+      this.props.action.fnReady({
+        fnReady: true
+      });
+    }
+  }
+  // 下载
+  download(item, event){
+    const urlInfo = url.parse(item.streamPath);
+    const pathInfo = path.parse(urlInfo.pathname);
+
+    const title = '【口袋48录播】' + '_' + item.title +
+                  '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
+                  '_下载时间_' + time('YY-MM-DD-hh-mm-ss') +
+                  '_' + item.liveId;
+
+
+    chrome.downloads.download({
+      url: item.streamPath,
+      filename: title + pathInfo.ext,
+      conflictAction: 'prompt',
+      saveAs: true,
+      method: 'GET'
+    }, (downloadId)=>{
+      // 此处需要添加item详细信息
+      const obj = this.props.downloadList.get(downloadId);
+      obj.item = item;
+      // 更新数据
+      this.props.downloadList.set(downloadId, obj);
+      // 更新store内的数据
+      this.props.action.downloadList({
+        downloadList: this.props.downloadList
+      });
+    });
   }
   // 搜索事件（点击按钮 + input回车）
   onSearchInput(event){
@@ -190,6 +252,11 @@ class PlayBackDownload extends Component{
               <Button className={ publicStyle.ml10 } onClick={ this.onPlayBackListLoad.bind(this, '刷新') }>
                 <Icon type="loading-3-quarters" />
                 <span>刷新列表</span>
+              </Button>
+              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }>
+                <Icon type="bars" />
+                <span>下载列表</span>
+                <Link className={ publicStyle.btnLink } to="/PlayBackDownload/List" />
               </Button>
               <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="danger">
                 <Icon type="poweroff" />

@@ -1,12 +1,13 @@
 /* 口袋48直播抓取配置页面 */
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Input, Button, message, Spin } from 'antd';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import IndexedDB from '../../pubmicMethod/IndexedDB';
 import option from '../../pubmicMethod/option';
 
+@withRouter
 class LiveCacheOption extends Component{
   constructor(props){
     super(props);

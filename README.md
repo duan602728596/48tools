@@ -12,6 +12,13 @@
 ## 技术栈
 pug + sass + ECMA7 + react + antd + webpack + nwjs。  
 
+## nwjs中文文档
+[https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html](https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html)
+
+## 谷歌扩展
+* 教程参考：[http://www.ituring.com.cn/book/1421](http://www.ituring.com.cn/book/1421)
+* api文档：[https://developer.chrome.com/extensions/api_index](https://developer.chrome.com/extensions/api_index)
+
 ## 文件
 * app: 源代码
 * ffmpeg: ffmpeg文件存储目录
