@@ -1,14 +1,14 @@
 /* 软件首页 */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col } from 'antd';
+import { Row, Col, Icon } from 'antd';
+import IndexedDB from 'indexeddb-tools';
 import style from './style.sass';
-import IndexedDB from '../pubmicMethod/IndexedDB';
 import option from '../pubmicMethod/option';
 
 /* 初始化所有的数据库 */
 IndexedDB(option.indexeddb.name, option.indexeddb.version, {
-  upgradeneeded: function(){
+  upgradeneeded: function(et){
     // 这张表存储的是直播抓取页面的自动录制配置
     if(!this.hasObjectStore('liveCache')){
       this.createObjectStore('liveCache', 'function', [
@@ -34,6 +34,7 @@ class Index extends Component{
         </p>
         <p className={ style.text }>
           源代码托管地址：
+          <Icon type="github" />
           <span className={ style.url }>https://github.com/duan602728596/48tools</span>
         </p>
         <Row type="flex" align="top" justify="start">

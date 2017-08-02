@@ -55,7 +55,7 @@ const state = createStructuredSelector({
     (state)=>state.get('playBackDownload').get('downloadList'),
     (data)=>data
   ),
-  fnReady: createSelector(             // 下载事件监听
+  fnReady: createSelector(              // 下载事件监听
     (state)=>state.get('playBackDownload').get('fnReady'),
     (data)=>data
   )
@@ -253,16 +253,18 @@ class PlayBackDownload extends Component{
                 <Icon type="loading-3-quarters" />
                 <span>刷新列表</span>
               </Button>
-              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }>
-                <Icon type="bars" />
-                <span>下载列表</span>
-                <Link className={ publicStyle.btnLink } to="/PlayBackDownload/List" />
-              </Button>
-              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-                <Link className={ publicStyle.btnLink } to="/" />
-              </Button>
+              <Link to="/PlayBackDownload/List">
+                <Button className={ publicStyle.ml10 }>
+                  <Icon type="bars" />
+                  <span>下载列表</span>
+                </Button>
+              </Link>
+              <Link className={ publicStyle.btnLink } to="/">
+                <Button className={ publicStyle.ml10 } type="danger">
+                  <Icon type="poweroff" />
+                  <span>返回</span>
+                </Button>
+              </Link>
             </div>
           </div>
         </Affix>

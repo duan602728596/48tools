@@ -4,9 +4,9 @@
   "description": "48工具，提供各种视频剪切下载功能。",
   "license": "GNU General Public License v3.0",
   "author": {
-    "name" : "段昊辰",
-    "email" : "duanhaochen@126.com",
-    "url" : "https://github.com/duan602728596"
+    "name": "段昊辰",
+    "email": "duanhaochen@126.com",
+    "url": "https://github.com/duan602728596"
   },
   "dependencies": {},
   "devDependencies": {
@@ -24,6 +24,7 @@
     "happypack": "^4.0.0-beta.1",
     "html-webpack-plugin": "^2.30.1",
     "immutable": "^3.8.1",
+    "indexeddb-tools": "^1.0.0",
     "node-sass": "^4.5.3",
     "pug": "^2.0.0-rc.2",
     "pug-loader": "^2.3.0",
@@ -37,10 +38,9 @@
     "reselect": "^3.0.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
-    "uglify-js": "mishoo/UglifyJS2#harmony",
+    "uglifyjs-webpack-plugin": "^1.0.0-beta.2",
     "url-loader": "^0.5.9",
-    "webpack": "^3.4.1",
-    "webpack-uglify-parallel": "^0.1.3"
+    "webpack": "^3.4.1"
   },
   "scripts": {
     "start": "webpack --config webpack.dev.js",

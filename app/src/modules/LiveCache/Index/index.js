@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message } from 'antd';
+import IndexedDB from 'indexeddb-tools';
 import { liveList, liveCache, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
-import IndexedDB from '../../pubmicMethod/IndexedDB';
 import option from '../../pubmicMethod/option';
 const child_process = node_require('child_process');
 const path = node_require('path');
@@ -321,22 +321,24 @@ class LiveCache extends Component{
                     </Button>
                   )
               }
-              <Button className={ publicStyle.btn } disabled={ this.props.autoRecording }>
-                <Icon type="setting" />
-                <span>自动录制配置</span>
-                <Link className={ publicStyle.btnLink } to="/LiveCache/Option" />
-              </Button>
+              <Link to="/LiveCache/Option">
+                <Button disabled={ this.props.autoRecording }>
+                  <Icon type="setting" />
+                  <span>自动录制配置</span>
+                </Button>
+              </Link>
             </div>
             <div className={ publicStyle.fr }>
               <Button className={ publicStyle.ml10 } onClick={ this.getLiveList.bind(this) }>
                 <Icon type="loading-3-quarters" />
                 <span>刷新列表</span>
               </Button>
-              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-                <Link className={ publicStyle.btnLink } to="/" />
-              </Button>
+              <Link to="/">
+                <Button className={ publicStyle.ml10 } type="danger">
+                  <Icon type="poweroff" />
+                  <span>返回</span>
+                </Button>
+              </Link>
             </div>
           </div>
         </Affix>

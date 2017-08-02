@@ -1,7 +1,7 @@
 /* 生产环境 */
 const os = require('os');
 const path = require('path');
-const UglifyJsParallelPlugin = require('webpack-uglify-parallel');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
@@ -116,13 +116,20 @@ module.exports = config({
       verbose: true
     }),
     // 代码压缩
-    new UglifyJsParallelPlugin({
-      workers: os.cpus().length,
-      mangle: true,
-      compressor: {
+    new UglifyJSPlugin({
+      uglifyOptions: {
+        ie8: false,
+        ecma: 8,
         warnings: true,
-        drop_console: true,
-        drop_debugger: true
+        output: {
+          comments: false,
+          beautify: false,
+          quote_style: 3
+        }
+      },
+      parallel: {
+        cache: true,
+        workers: os.cpus().length
       }
     }),
     // 抽离css

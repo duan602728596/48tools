@@ -21,11 +21,12 @@ class Detail extends Component{
     return(
       <div className={ style.body }>
         <video className={ style.video } src={ streamPath } controls />
-        <Button className={ `${ style.btn } ${ publicStyle.btn }` } type="danger">
-          <Icon type="poweroff" />
-          <span>返回</span>
-          <Link className={ publicStyle.btnLink } to="/PlayBackDownload" />
-        </Button>
+        <Link to="/PlayBackDownload">
+          <Button className={ style.btn } type="danger">
+            <Icon type="poweroff" />
+            <span>返回</span>
+          </Button>
+        </Link>
         <div className={ style.textList }>
           <p className={ style.text }>
             <b>liveId:</b>

@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Input, Button, message, Spin } from 'antd';
+import IndexedDB from 'indexeddb-tools';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
-import IndexedDB from '../../pubmicMethod/IndexedDB';
 import option from '../../pubmicMethod/option';
 
 @withRouter
@@ -116,10 +116,11 @@ class LiveCacheOption extends Component{
         </Spin>
         <div>
           <Button className={ style.btn } type="primary" loading={ this.state.btnLoading } onClick={ this.onRevise.bind(this) }>修改</Button>
-          <Button className={ `${ style.btn } ${ publicStyle.btn }` } type="danger" loading={ this.state.btnLoading }>
-            <span>返回</span>
-            <Link className={ publicStyle.btnLink } to="/LiveCache" />
-          </Button>
+          <Link to="/LiveCache">
+            <Button className={ style.btn } type="danger" loading={ this.state.btnLoading }>
+              <span>返回</span>
+            </Button>
+          </Link>
         </div>
       </div>
     );

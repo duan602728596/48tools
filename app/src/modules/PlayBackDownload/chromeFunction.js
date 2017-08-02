@@ -4,12 +4,12 @@
  *   0: 创建文件
  *   1: 开始下载
  *   2: 下载完成
- *   3: 取消
+ *   3: 取消下载
  * 当取消时状态在创建文件(0)时，从下载列表中删除
  * 当取消时状态在开始下载(1)时，不做任何操作
  */
 
-// 谷歌下载文件监听
+/* 谷歌下载文件监听 */
 export function onChromeDownloadsChanged(infor){
   const { id } = infor;
   const { downloadList } = this.props;
@@ -18,7 +18,8 @@ export function onChromeDownloadsChanged(infor){
   if('filename' in infor){
     const obj = downloadList.get(id);
     obj.state = 1;
-    downloadList.set(obj);
+    obj.current = infor.filename.current;
+    downloadList.set(id, obj);
   }
 
   /* 点击取消时 */
@@ -29,7 +30,7 @@ export function onChromeDownloadsChanged(infor){
         downloadList.delete(id);
         break;
       case 1:
-        obj.state = 2;
+        obj.state = 3;
         downloadList.set(id, obj);
         break;
     }
@@ -46,7 +47,7 @@ export function onChromeDownloadsChanged(infor){
     downloadList: downloadList
   });
 }
-// 谷歌下载创建文件监听
+/* 谷歌下载创建文件监听 */
 export function onChromeDownloadsCreated(infor){
   // 先将id和文件信息添加到Map结构内
   this.props.downloadList.set(infor.id, {

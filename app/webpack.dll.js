@@ -2,7 +2,7 @@
 const path = require('path');
 const os = require('os');
 const webpack = require('webpack');
-const UglifyJsParallelPlugin = require('webpack-uglify-parallel');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HappyPack = require('happypack');
 
 const happyThreadPool = HappyPack.ThreadPool({
@@ -62,13 +62,20 @@ module.exports = {
       sourceType: 'var'
     }),
     // 代码压缩
-    new UglifyJsParallelPlugin({
-      workers: os.cpus().length,
-      mangle: true,
-      compressor: {
+    new UglifyJSPlugin({
+      uglifyOptions: {
+        ie8: false,
+        ecma: 5,
         warnings: true,
-        drop_console: true,
-        drop_debugger: true
+        output: {
+          comments: false,
+          beautify: false,
+          quote_style: 3
+        }
+      },
+      parallel: {
+        cache: true,
+        workers: os.cpus().length
       }
     })
   ]
