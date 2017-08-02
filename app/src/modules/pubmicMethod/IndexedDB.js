@@ -248,9 +248,9 @@
   };
 
 
-    /* objectsSore */
+  /* objectsSore */
 
-    /* 初始化 */
+  /* 初始化 */
   function ObjectStore(db, objectStoreName, writeAble){
 
     this.db = db;
