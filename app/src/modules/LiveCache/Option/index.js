@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { Input, Button, message, Spin } from 'antd';
 import IndexedDB from 'indexeddb-tools';
 import style from './style.sass';
-import publicStyle from '../../pubmicMethod/public.sass';
 import option from '../../pubmicMethod/option';
 
 @withRouter

@@ -10,7 +10,6 @@ import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-import Bundle from "../../../router/bundle";
 const fs = node_require('fs');
 
 /* 初始化数据 */
@@ -151,7 +150,6 @@ class List extends Component{
   }
   // 下载
   onDownloadEnd(){
-    console.log(this.props.downloadList);
     this.props.action.downloadList({
       downloadList: new Map(Array.from(this.props.downloadList))
     });
@@ -163,7 +161,6 @@ class List extends Component{
         this.props.downloadList.delete(key);
       }
     });
-    console.log(this.props.downloadList);
     this.props.action.downloadList({
       downloadList: new Map(Array.from(this.props.downloadList))
     });

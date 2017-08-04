@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Icon } from 'antd';
 import style from './style.sass';
-import publicStyle from '../../pubmicMethod/public.sass';
 import { time } from '../../../function';
 
 @withRouter

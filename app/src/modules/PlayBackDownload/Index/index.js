@@ -13,7 +13,6 @@ import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-import Bundle from "../../../router/bundle";
 const url = node_require('url');
 const path = node_require('path');
 
