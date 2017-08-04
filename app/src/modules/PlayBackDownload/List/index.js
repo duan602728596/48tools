@@ -58,7 +58,7 @@ class ListOne extends Component{
     const { detail } = this.props;
     const { current, infor, state } = detail[1];
     fs.stat(current + '.crdownload', (err, state2)=>{
-      if(state === 2){
+      if(state !== 1){
         clearInterval(this.state.timer);
         this.setState({
           timer: null,
@@ -106,9 +106,6 @@ class ListOne extends Component{
   // 取消下载
   onCancelDownload(id, event){
     chrome.downloads.cancel(id);
-    if(this.state.timer){
-      clearInterval(this.state.timer);
-    }
     this.props.onDownloadEnd();
   }
   render(){
@@ -154,6 +151,19 @@ class List extends Component{
   }
   // 下载
   onDownloadEnd(){
+    console.log(this.props.downloadList);
+    this.props.action.downloadList({
+      downloadList: new Map(Array.from(this.props.downloadList))
+    });
+  }
+  // 清除已下载
+  onClear(event){
+    this.props.downloadList.forEach((value, key)=>{
+      if(value.state !== 1){
+        this.props.downloadList.delete(key);
+      }
+    });
+    console.log(this.props.downloadList);
     this.props.action.downloadList({
       downloadList: new Map(Array.from(this.props.downloadList))
     });
@@ -165,6 +175,10 @@ class List extends Component{
         <Affix>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fr }>
+              <Button onClick={ this.onClear.bind(this) }>
+                <Icon type="close-square" />
+                <span>全部清除</span>
+              </Button>
               <Link to="/PlayBackDownload">
                 <Button className={ publicStyle.ml10 } type="danger">
                   <Icon type="poweroff" />

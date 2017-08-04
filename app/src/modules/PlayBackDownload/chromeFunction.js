@@ -8,11 +8,12 @@
  * 当取消时状态在创建文件(0)时，从下载列表中删除
  * 当取消时状态在开始下载(1)时，不做任何操作
  */
+import store from '../../store/store';
 
 /* 谷歌下载文件监听 */
 export function onChromeDownloadsChanged(infor){
   const { id } = infor;
-  const { downloadList } = this.props;
+  const downloadList = store.getState().get('playBackDownload').get('downloadList');
 
   /* 开始下载 */
   if('filename' in infor){
@@ -50,7 +51,8 @@ export function onChromeDownloadsChanged(infor){
 /* 谷歌下载创建文件监听 */
 export function onChromeDownloadsCreated(infor){
   // 先将id和文件信息添加到Map结构内
-  this.props.downloadList.set(infor.id, {
+  const downloadList = store.getState().get('playBackDownload').get('downloadList');
+  downloadList.set(infor.id, {
     infor,
     state: 0
   });
