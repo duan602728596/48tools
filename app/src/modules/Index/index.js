@@ -8,7 +8,10 @@ import option from '../pubmicMethod/option';
 
 /* 初始化所有的数据库 */
 IndexedDB(option.indexeddb.name, option.indexeddb.version, {
-  upgradeneeded: function(et){
+  success: function(et, event){
+    this.close();
+  },
+  upgradeneeded: function(et, event){
     // 这张表存储的是直播抓取页面的自动录制配置
     if(!this.hasObjectStore('liveCache')){
       this.createObjectStore('liveCache', 'function', [

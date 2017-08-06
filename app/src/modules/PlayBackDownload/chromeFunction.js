@@ -9,6 +9,7 @@
  * 当取消时状态在开始下载(1)时，不做任何操作
  */
 import store from '../../store/store';
+import { downloadList as downloadListAction } from './store/reducer';
 
 /* 谷歌下载文件监听 */
 export function onChromeDownloadsChanged(infor){
@@ -44,7 +45,7 @@ export function onChromeDownloadsChanged(infor){
     downloadList.set(id, obj);
   }
 
-  this.props.action.downloadList({
+  downloadListAction({
     downloadList: downloadList
   });
 }
@@ -57,7 +58,7 @@ export function onChromeDownloadsCreated(infor){
     state: 0
   });
   // 更新store内的数据
-  this.props.action.downloadList({
-    downloadList: this.props.downloadList
+  downloadListAction({
+    downloadList: downloadList
   });
 }

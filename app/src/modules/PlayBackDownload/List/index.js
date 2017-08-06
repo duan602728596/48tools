@@ -63,7 +63,6 @@ class ListOne extends Component{
           timer: null,
           percent: 100
         });
-        this.props.onDownloadEnd();
       }else{
         const percent = (state2.size / infor.totalBytes * 100).toFixed(0);
         this.setState({
@@ -105,25 +104,29 @@ class ListOne extends Component{
   // 取消下载
   onCancelDownload(id, event){
     chrome.downloads.cancel(id);
-    this.props.onDownloadEnd();
   }
   render(){
+    console.log(111);
     const { detail } = this.props;
     const { current, item, state } = detail[1];
-    const { streamPath, title, subTitle } = item;
-
-    return(
-      <li>
-        <div className={ commonStyle.clearfix }>
-          <div className={ publicStyle.fl }>
-            <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
-            <p className={ style.line }>{ current }</p>
+    // 判断文件状态，避免渲染bug
+    if(state !== 0){
+      const { streamPath, title, subTitle } = item;
+      return(
+        <li>
+          <div className={ commonStyle.clearfix }>
+            <div className={ publicStyle.fl }>
+              <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
+              <p className={ style.line }>{ current }</p>
+            </div>
+            {  this.stateView() }
           </div>
-          {  this.stateView() }
-        </div>
-        { state === 1 ? (<Progress percent={ this.state.percent } status="active" />) : null }
-      </li>
-    );
+          { state === 1 ? (<Progress percent={ this.state.percent } status="active" />) : null }
+        </li>
+      );
+    }else{
+      return false;
+    }
   }
 }
 
@@ -133,8 +136,8 @@ class List extends Component{
   // 组件挂载之前监听chrome下载事件
   componentWillMount(){
     if(this.props.fnReady === false){
-      chrome.downloads.onCreated.addListener(onChromeDownloadsCreated.bind(this));
-      chrome.downloads.onChanged.addListener(onChromeDownloadsChanged.bind(this));
+      chrome.downloads.onCreated.addListener(onChromeDownloadsCreated);
+      chrome.downloads.onChanged.addListener(onChromeDownloadsChanged);
       // 函数已监听的标识
       this.props.action.fnReady({
         fnReady: true
@@ -144,14 +147,8 @@ class List extends Component{
   listOne(){
     return Array.from(this.props.downloadList).map((item, index)=>{
       return(
-        <ListOne key={ item[0] } detail={ item } onDownloadEnd={ this.onDownloadEnd.bind(this) } />
+        <ListOne key={ item[0] } detail={ item } />
       );
-    });
-  }
-  // 下载
-  onDownloadEnd(){
-    this.props.action.downloadList({
-      downloadList: new Map(Array.from(this.props.downloadList))
     });
   }
   // 清除已下载

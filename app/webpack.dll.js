@@ -65,7 +65,7 @@ module.exports = {
     new UglifyJSPlugin({
       uglifyOptions: {
         ie8: false,
-        ecma: 5,
+        ecma: 8,
         warnings: true,
         output: {
           comments: false,

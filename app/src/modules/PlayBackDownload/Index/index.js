@@ -115,16 +115,17 @@ class PlayBackDownload extends Component{
         render: (text, item)=>{
           return(
             <div>
+              <Link className={ publicStyle.btnLink } to={{
+                pathname: '/PlayBackDownload/Detail',
+                query: {
+                  detail: item
+                }
+              }}>
               <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }>
                 <Icon type="eye" />
                 <span>查看</span>
-                <Link className={ publicStyle.btnLink } to={{
-                  pathname: '/PlayBackDownload/Detail',
-                  query: {
-                    detail: item
-                  }
-                }} />
               </Button>
+              </Link>
               <Button className={ publicStyle.ml10 } onClick={ this.download.bind(this, item) }>
                 <Icon type="fork" />
                 <span>下载</span>
@@ -139,8 +140,8 @@ class PlayBackDownload extends Component{
   // 组件挂载之前监听chrome下载事件
   componentWillMount(){
     if(this.props.fnReady === false){
-      chrome.downloads.onCreated.addListener(onChromeDownloadsCreated.bind(this));
-      chrome.downloads.onChanged.addListener(onChromeDownloadsChanged.bind(this));
+      chrome.downloads.onCreated.addListener(onChromeDownloadsCreated);
+      chrome.downloads.onChanged.addListener(onChromeDownloadsChanged);
       // 函数已监听的标识
       this.props.action.fnReady({
         fnReady: true
