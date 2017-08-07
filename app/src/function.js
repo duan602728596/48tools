@@ -41,7 +41,7 @@ export function time(modules, timeStr){
     mm = date.getMinutes(),
     ss = date.getSeconds();
 
-  return modules.replace(/Y{2}/, patchZero(YY))
+  return modules.replace(/Y{2}/, YY)
                 .replace(/M{2}/, patchZero(MM))
                 .replace(/D{2}/, patchZero(DD))
                 .replace(/h{2}/, patchZero(hh))
