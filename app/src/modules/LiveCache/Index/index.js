@@ -12,9 +12,9 @@ import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import option from '../../pubmicMethod/option';
-const child_process = node_require('child_process');
-const path = node_require('path');
-const process = node_require('process');
+const child_process = global.require('child_process');
+const path = global.require('path');
+const process = global.require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 数据库获取自动录制的配置 */
@@ -271,12 +271,12 @@ class LiveCache extends Component{
     const data = await getLiveCacheOption();
     this.autoRecordingProcess(data.humans);
     this.props.action.autoRecording({
-      autoRecording: setInterval(this.autoRecordingProcess.bind(this), data.time * 60 * (10 ** 3), data.humans)
+      autoRecording: global.setInterval(this.autoRecordingProcess.bind(this), data.time * 60 * (10 ** 3), data.humans)
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）
   onStopAutoRecording(event){
-    clearInterval(this.props.autoRecording);
+    global.clearInterval(this.props.autoRecording);
     this.props.action.autoRecording({
       autoRecording: null
     });

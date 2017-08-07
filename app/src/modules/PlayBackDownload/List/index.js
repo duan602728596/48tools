@@ -10,7 +10,7 @@ import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-const fs = node_require('fs');
+const fs = global.require('fs');
 
 /* 初始化数据 */
 const getIndex = (state)=>state.get('playBackDownload').get('index');
@@ -49,7 +49,7 @@ class ListOne extends Component{
     const { state } = detail[1];
     if(state === 1){
       this.setState({
-        timer: setInterval(this.timer.bind(this), 300)
+        timer: global.setInterval(this.timer.bind(this), 300)
       });
     }
   }
@@ -73,7 +73,7 @@ class ListOne extends Component{
   }
   componentWillUnmount(){
     if(this.state.timer){
-      clearInterval(this.state.timer);
+      global.clearInterval(this.state.timer);
     }
   }
   stateView(){
@@ -106,7 +106,6 @@ class ListOne extends Component{
     chrome.downloads.cancel(id);
   }
   render(){
-    console.log(111);
     const { detail } = this.props;
     const { current, item, state } = detail[1];
     // 判断文件状态，避免渲染bug

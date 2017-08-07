@@ -13,8 +13,8 @@ import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-const url = node_require('url');
-const path = node_require('path');
+const url = global.require('url');
+const path = global.require('path');
 
 /**
  * 搜索的过滤函数
