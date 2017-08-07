@@ -18,11 +18,12 @@ const process = node_require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 数据库获取自动录制的配置 */
+const { name } = option.indexeddb.objectStore.liveCache;
 function getLiveCacheOption(){
   return new Promise((resolve, reject)=>{
     IndexedDB(option.indexeddb.name, option.indexeddb.version, {
       success: function(event){
-        const store = this.getObjectStore('liveCache', true);
+        const store = this.getObjectStore(name, true);
         const _this = this;
         store.get('liveCacheOption', function(result){
           if(result){

@@ -21,9 +21,10 @@ class LiveCacheOption extends Component{
   componentWillMount(){
     const _this = this;
     // 从数据库里获取默认配置
+    const { name } = option.indexeddb.objectStore.liveCache;
     IndexedDB(option.indexeddb.name, option.indexeddb.version, {
       success: function(event){
-        const store = this.getObjectStore('liveCache', true);
+        const store = this.getObjectStore(name, true);
         const _this2 = this;
         store.get('liveCacheOption', function(result){
           if(result){

@@ -64,18 +64,12 @@ module.exports = {
     // 代码压缩
     new UglifyJSPlugin({
       uglifyOptions: {
-        ie8: false,
-        ecma: 8,
         warnings: true,
         output: {
           comments: false,
           beautify: false,
           quote_style: 3
         }
-      },
-      parallel: {
-        cache: true,
-        workers: os.cpus().length
       }
     })
   ]

@@ -21,7 +21,7 @@
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
-    "happypack": "^4.0.0-beta.1",
+    "happypack": "^4.0.0-beta.2",
     "html-webpack-plugin": "^2.30.1",
     "immutable": "^3.8.1",
     "indexeddb-tools": "^1.0.0",
@@ -43,7 +43,7 @@
     "webpack": "^3.4.1"
   },
   "scripts": {
-    "start": "webpack --config webpack.dev.js",
+    "start": "webpack --config webpack.dev.js --watch",
     "build": "webpack --config webpack.pro.js --progress",
     "dll": "webpack --config webpack.dll.js --progress",
     "pro": "npm install --production"

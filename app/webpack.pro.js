@@ -118,8 +118,6 @@ module.exports = config({
     // 代码压缩
     new UglifyJSPlugin({
       uglifyOptions: {
-        ie8: false,
-        ecma: 8,
         warnings: true,
         output: {
           comments: false,

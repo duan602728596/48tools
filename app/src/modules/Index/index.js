@@ -7,19 +7,15 @@ import style from './style.sass';
 import option from '../pubmicMethod/option';
 
 /* 初始化所有的数据库 */
+const { name, key, data } = option.indexeddb.objectStore.liveCache;
 IndexedDB(option.indexeddb.name, option.indexeddb.version, {
   success: function(et, event){
     this.close();
   },
   upgradeneeded: function(et, event){
     // 这张表存储的是直播抓取页面的自动录制配置
-    if(!this.hasObjectStore('liveCache')){
-      this.createObjectStore('liveCache', 'function', [
-        {
-          name: 'option',
-          index: 'option'
-        }
-      ])
+    if(!this.hasObjectStore(name)){
+      this.createObjectStore(name, key, data)
     }
     this.close();
   }
