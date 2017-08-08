@@ -12,34 +12,11 @@ import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import option from '../../pubmicMethod/option';
+import { getAutoRecordingOption } from '../store/reducer';
 const child_process = global.require('child_process');
 const path = global.require('path');
 const process = global.require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
-
-/* 数据库获取自动录制的配置 */
-const { name } = option.indexeddb.objectStore.liveCache;
-function getLiveCacheOption(){
-  return new Promise((resolve, reject)=>{
-    IndexedDB(option.indexeddb.name, option.indexeddb.version, {
-      success: function(event){
-        const store = this.getObjectStore(name, true);
-        const _this = this;
-        store.get('liveCacheOption', function(result){
-          if(result){
-            resolve(result.option);
-          }else{
-            resolve({
-              time: 1,
-              humans: []
-            });
-          }
-          _this.close();
-        });
-      }
-    });
-  });
-}
 
 /* 初始化数据 */
 const getIndex = (state)=>state.get('liveCache').get('index');
@@ -65,7 +42,8 @@ const dispatch = (dispatch)=>({
     liveList,
     liveCache,
     liveChange,
-    autoRecording
+    autoRecording,
+    getAutoRecordingOption
   }, dispatch),
 });
 
@@ -165,7 +143,7 @@ class LiveCache extends Component{
   }
   // 录制视频
   recording(item, event){
-    const title = '口袋48直播_' + item.liveId + '_' + item.title +
+    const title = '【口袋48直播】_' + item.liveId + '_' + item.title +
                   '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
                   '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
     const child = child_process.spawn(__dirname + '/ffmpeg/ffmpeg.exe', [
@@ -268,10 +246,19 @@ class LiveCache extends Component{
   }
   // 自动录制
   async onAutoRecording(event){
-    const data = await getLiveCacheOption();
-    this.autoRecordingProcess(data.humans);
+    const data = await this.props.action.getAutoRecordingOption({
+      data: 'liveCacheOption'
+    });
+    let time = null,
+        humans = null;
+    if(data){
+      [time, humans] = [data.option.time, data.option.humans];
+    }else{
+      [time, humans] = [1, []];
+    }
+    this.autoRecordingProcess(humans);
     this.props.action.autoRecording({
-      autoRecording: global.setInterval(this.autoRecordingProcess.bind(this), data.time * 60 * (10 ** 3), data.humans)
+      autoRecording: global.setInterval(this.autoRecordingProcess.bind(this), time * 60 * (10 ** 3), humans)
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）

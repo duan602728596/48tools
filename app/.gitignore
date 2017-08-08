@@ -9,6 +9,7 @@ yarn-error.log
 
 # webstorm
 .idea
+app/.idea
 
 # webpack
 .happypack

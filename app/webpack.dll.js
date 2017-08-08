@@ -18,10 +18,13 @@ module.exports = {
       'redux',
       'react-redux',
       'redux-actions',
+      'redux-thunk',
       'immutable',
       'redux-immutable',
       'reselect',
-      'antd'
+      'antd',
+      'indexeddb-tools',
+      'indexeddb-tools-redux'
     ]
   },
   output: {
