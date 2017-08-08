@@ -10,7 +10,7 @@
 本软件遵循**GNU General Public License v3.0**许可证。
 
 ## 技术栈
-pug + sass + ECMA7 + react + antd + webpack + nwjs。  
+pug + sass + ECMA8 + react + antd + webpack + nwjs。  
 
 ## nwjs中文文档
 [https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html](https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html)
