@@ -66,7 +66,7 @@ const dispatch = (dispatch)=>({
     playBackList,
     downloadList,
     fnReady
-  }, dispatch),
+  }, dispatch)
 });
 
 @withRouter

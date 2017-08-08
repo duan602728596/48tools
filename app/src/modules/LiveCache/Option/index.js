@@ -17,7 +17,7 @@ const dispatch = (dispatch)=>({
     getAutoRecordingOption,
     addAutoRecordingOption,
     putAutoRecordingOption
-  }, dispatch),
+  }, dispatch)
 });
 
 @withRouter

@@ -31,7 +31,7 @@ const dispatch = (dispatch)=>({
   action: bindActionCreators({
     downloadList,
     fnReady
-  }, dispatch),
+  }, dispatch)
 });
 
 class ListOne extends Component{

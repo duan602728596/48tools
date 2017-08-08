@@ -5,13 +5,11 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message } from 'antd';
-import IndexedDB from 'indexeddb-tools';
 import { liveList, liveCache, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
-import option from '../../pubmicMethod/option';
 import { getAutoRecordingOption } from '../store/reducer';
 const child_process = global.require('child_process');
 const path = global.require('path');
@@ -44,7 +42,7 @@ const dispatch = (dispatch)=>({
     liveChange,
     autoRecording,
     getAutoRecordingOption
-  }, dispatch),
+  }, dispatch)
 });
 
 @withRouter
