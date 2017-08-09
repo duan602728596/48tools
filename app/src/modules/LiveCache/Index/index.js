@@ -11,6 +11,7 @@ import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
+import store from '../../../store/store';
 const child_process = global.require('child_process');
 const path = global.require('path');
 const process = global.require('process');
@@ -125,18 +126,24 @@ class LiveCache extends Component{
    */
   child_process_exit(item, code, data){
     console.log('exit: ' + code + ' ' + data);
-    this.props.liveCache.delete(item.liveId);
-    this.props.action.liveChange({
-      map: this.props.liveCache,
-      liveList: this.props.liveList.slice()
-    });
+    this.child_process_cb(item);
   }
   child_process_error(item, err){
     console.error('error: \n' + err);
-    this.props.liveCache.delete(item.liveId);
+    this.child_process_cb(item);
+  }
+  // 子进程关闭
+  async child_process_cb(item){
+    const s = store.getState().get('liveCache').get('index');
+    const [m] = [s.get('liveCache')];
+    m.delete(item.liveId);
+
+    const data = await post(0);
+    const data2 = JSON.parse(data);
+
     this.props.action.liveChange({
-      map: this.props.liveCache,
-      liveList: this.props.liveList.slice()
+      map: m,
+      liveList: 'liveList' in data2.content ? data2.content.liveList : []
     });
   }
   // 录制视频
