@@ -127,17 +127,17 @@ class LiveCache extends Component{
     console.log('exit: ' + code + ' ' + data);
     this.props.liveCache.delete(item.liveId);
     this.props.action.liveChange({
-      map: this.props.liveCache
+      map: this.props.liveCache,
+      liveList: this.props.liveList.slice()
     });
-    this.forceUpdate();
   }
   child_process_error(item, err){
     console.error('error: \n' + err);
     this.props.liveCache.delete(item.liveId);
     this.props.action.liveChange({
-      map: this.props.liveCache
+      map: this.props.liveCache,
+      liveList: this.props.liveList.slice()
     });
-    this.forceUpdate();
   }
   // 录制视频
   recording(item, event){
@@ -160,9 +160,9 @@ class LiveCache extends Component{
       item: item
     });
     this.props.action.liveChange({
-      map: this.props.liveCache
+      map: this.props.liveCache,
+      liveList: this.props.liveList.slice()
     });
-    this.forceUpdate();
   }
   // 停止录制视频
   stopRecording(item, event){

@@ -158,9 +158,8 @@ class List extends Component{
       }
     });
     this.props.action.downloadList({
-      downloadList: this.props.downloadList
+      downloadList: new Map(Array.from(this.props.downloadList))
     });
-    this.forceUpdate();
   }
   render(){
     return(
