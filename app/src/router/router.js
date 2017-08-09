@@ -8,6 +8,7 @@ import PlayBackDownload from 'bundle-loader?lazy&name=PlayBackDownload!../module
 import PlayBackDownload_Detail from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/Detail/index';
 import PlayBackDownload_List from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/List/index';
 import BiliBili from 'bundle-loader?lazy&name=BiliBili!../modules/Bilibili/Index/index';
+import BiliBili_Option from 'bundle-loader?lazy&name=BiliBili!../modules/Bilibili/Option/index';
 
 /* 路由模块 */
 class Router extends Component{
@@ -46,6 +47,7 @@ class Router extends Component{
           <Route path="/BiliBili" component={(props)=>(
             <Switch>
               <Route path="/BiliBili" component={ this.asyncModule(BiliBili) } exact />
+              <Route path="/BiliBili/Option" component={ this.asyncModule(BiliBili_Option) } exact />
             </Switch>
           )}>
           </Route>

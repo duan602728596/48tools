@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message } from 'antd';
-import { getliveList, putliveList } from '../store/render';
+import { getBilibiliLiveRoom, deleteBilibiliLiveRoom } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 const child_process = global.require('child_process');
@@ -14,18 +14,20 @@ const process = global.require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
+const getIndex = (state)=>state.get('bilibili').get('index');
+
 const state = createStructuredSelector({
-  liveList: createSelector(         // 当前直播列表
-    (state)=>state.get('bilibili').get('liveList'),
-    (data)=>data
+  liveList: createSelector(         // 直播间信息
+    getIndex,
+    (data)=>data.has('liveList') ? data.get('liveList') : []
   )
 });
 
 /* dispatch */
 const dispatch = (dispatch)=>({
   action: bindActionCreators({
-    getliveList,
-    putliveList
+    getBilibiliLiveRoom,
+    deleteBilibiliLiveRoom
   }, dispatch)
 });
 
@@ -39,7 +41,7 @@ class BiliBili extends Component{
         <Affix>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fl }>
-              <Link to="/">
+              <Link to="/BiliBili/Option">
                 <Button type="primary">
                   <Icon type="setting" />
                   <span>添加B站直播间</span>

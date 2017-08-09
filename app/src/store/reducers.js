@@ -1,7 +1,7 @@
 /* reducers */
 import liveCache from '../modules/LiveCache/store/reducer';
 import playBackDownload from '../modules/PlayBackDownload/store/reducer';
-import bilibili from '../modules/Bilibili/store/render';
+import bilibili from '../modules/Bilibili/store/reducer';
 
 const reducers = {
   ...liveCache,
