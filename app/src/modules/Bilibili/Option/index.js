@@ -43,27 +43,35 @@ class BiliBiliOption extends Component{
       loading: true,
       btnLoading: true
     });
-    try{
-      await this.props.action.putBilibiliLiveRoom({
-        data: {
-          roomid: Number(this.state.roomid),
-          roomname: this.state.roomname
-        }
-      });
-      message.success('添加成功！');
-      this.setState({
-        loading: false,
-        btnLoading: false,
-        roomid: '',
-        roomname: ''
-      });
-    }catch(err){
-      message.error('添加失败！');
-      this.setState({
-        loading: false,
-        btnLoading: false
-      });
+
+    const { roomname, roomid } = this.state;
+
+    if(/^\s*$/.test(roomname)){
+      message.error('请输入直播间名称');
+    }else if(/^\s*$/.test(roomid)){
+      message.error('请输入直播间ID');
+    }else{
+      try{
+        await this.props.action.putBilibiliLiveRoom({
+          data: {
+            roomid: Number(roomid),
+            roomname: roomname
+          }
+        });
+        message.success('添加成功！');
+        this.setState({
+          roomid: '',
+          roomname: ''
+        });
+      }catch(err){
+        message.error('添加失败！');
+      }
     }
+
+    this.setState({
+      loading: false,
+      btnLoading: false
+    });
   }
   render(){
     return(

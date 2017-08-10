@@ -10,9 +10,6 @@ const initData = fromJS({
   option: {}
 });
 
-/* Action */
-// None
-
 /* reducer */
 const reducer = handleActions({
   [combineActions(...objectToArray(indexAction))]: (state, action)=>{

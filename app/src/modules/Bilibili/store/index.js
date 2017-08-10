@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { getAction, deleteAction } from 'indexeddb-tools-redux';
+import { cursorAction, deleteAction } from 'indexeddb-tools-redux';
 import option from '../../pubmicMethod/option';
 
 const opt = {
@@ -9,10 +9,19 @@ const opt = {
 };
 
 /* Action */
-export const getBilibiliLiveRoom = getAction(opt);
+export const liveList = createAction('B站直播列表');
+
+export const cursorBilibiliLiveRoom = cursorAction({
+  ...opt,
+  successAction: liveList
+});
 export const deleteBilibiliLiveRoom = deleteAction(opt);
 
 /* reducer */
-const reducer = handleActions({}, {});
+const reducer = handleActions({
+  [liveList]: (state, action)=>{
+    return state.set('liveList', action.payload);
+  }
+}, {});
 
 export default reducer;
