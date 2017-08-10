@@ -13,6 +13,8 @@ locales
 # dependent
 dependent/ffmpeg/ffmpeg.exe
 dependent/ffmpeg/licenses
+dependent/flowplayer/LICENSE.md
+dependent/flowplayer/*.swf
 
 # PepperFlash
 PepperFlash/*.dll
