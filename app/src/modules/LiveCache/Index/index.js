@@ -141,7 +141,7 @@ class LiveCache extends Component{
     const data = await post(0);
     const data2 = JSON.parse(data);
 
-    liveChange({
+    this.props.action.liveChange({
       map: m,
       liveList: 'liveList' in data2.content ? data2.content.liveList : []
     });

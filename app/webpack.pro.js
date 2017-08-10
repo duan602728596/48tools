@@ -49,7 +49,8 @@ module.exports = config({
               }
             }
           ]
-        })
+        }),
+        exclude: /flowplayer.*\.css/
       },
       { // pug
         test: /^.*\.pug$/,

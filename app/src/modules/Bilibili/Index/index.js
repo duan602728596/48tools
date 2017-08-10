@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message } from 'antd';
+import { Button, Table, Icon, Affix, message, Popconfirm } from 'antd';
 import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
@@ -67,10 +67,12 @@ class BiliBili extends Component{
                 <Icon type="step-forward" />
                 <span>录制</span>
               </Button>
-              <Button className={ publicStyle.ml10 } type="danger">
-                <Icon type="close-square" />
-                <span>删除</span>
-              </Button>
+              <Popconfirm title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+                <Button className={ publicStyle.ml10 } type="danger">
+                  <Icon type="close-square" />
+                  <span>删除</span>
+                </Button>
+              </Popconfirm>
             </div>
           );
         }
@@ -85,6 +87,17 @@ class BiliBili extends Component{
     this.setState({
       loading: false
     });
+  }
+  // 删除
+  async onDelete(item, event){
+    try{
+      this.props.action.deleteBilibiliLiveRoom({
+        data: item.roomid
+      });
+      message.success('删除成功！');
+    }catch(err){
+      message.error('删除失败！');
+    }
   }
   render(){
     return(

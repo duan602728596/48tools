@@ -15,9 +15,9 @@ function config(options){
               }
             }
           ],
-          exclude: /(dll\.js|node_modules)/
+          exclude: /(dll\.js|node_modules|common\.js)/
         },
-        { // dll.js
+        {
           test: /(dll\.js|common\.js)/,
           use: [
             {
@@ -36,6 +36,17 @@ function config(options){
               options: {
                 limit: 3000,
                 name: 'image/[name]_[hash].[ext]'
+              }
+            }
+          ]
+        },
+        { // 矢量图片 & 文字
+          test: /^.*\.(eot|svg|ttf|woff|woff2)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: 'file/[name]_[hash].[ext]'
               }
             }
           ]
