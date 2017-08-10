@@ -151,7 +151,7 @@ class LiveCache extends Component{
     const title = '【口袋48直播】_' + item.liveId + '_' + item.title +
                   '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
                   '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
-    const child = child_process.spawn(__dirname + '/ffmpeg/ffmpeg.exe', [
+    const child = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
       '-i',
       `${ item.streamPath }`,
       '-c',
@@ -186,7 +186,7 @@ class LiveCache extends Component{
                     '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
                     '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
                     '_' + item.liveId;
-      const child = child_process.spawn(__dirname + '/ffmpeg/ffmpeg.exe', [
+      const child = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
         '-i',
         `${ item.streamPath }`,
         '-c',

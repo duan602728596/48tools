@@ -10,9 +10,15 @@
 pnacl
 locales
 
-# ffmpeg
-ffmpeg/ffmpeg.exe
-ffmpeg/licenses
+# dependent
+dependent/ffmpeg/ffmpeg.exe
+dependent/ffmpeg/licenses
+
+# PepperFlash
+PepperFlash/*.dll
+PepperFlash/*.json
+PepperFlash/*.fingerprint
+PepperFlash/_metadata
 
 # output
 output/*.flv
