@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Icon, Affix, Progress } from 'antd';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
+import './transition.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
 const fs = global.require('fs');
 
@@ -182,7 +184,11 @@ class List extends Component{
           </div>
         </Affix>
         <ul className={ style.detailList }>
-          { this.listOne() }
+          <ReactCSSTransitionGroup transitionName="PlayBackDownloadList"
+                                   transitionEnterTimeout={ 400 }
+                                   transitionLeaveTimeout={ 400 }>
+            { this.listOne() }
+          </ReactCSSTransitionGroup>
         </ul>
       </div>
     );

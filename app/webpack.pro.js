@@ -35,7 +35,8 @@ module.exports = config({
               }
             }
           ]
-        })
+        }),
+        exclude: /transition\.sass/
       },
       { // css
         test: /^.*\.css$/,
@@ -49,8 +50,7 @@ module.exports = config({
               }
             }
           ]
-        }),
-        exclude: /flowplayer.*\.css/
+        })
       },
       { // pug
         test: /^.*\.pug$/,

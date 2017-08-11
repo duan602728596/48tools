@@ -32,7 +32,8 @@ module.exports = config({
               id: 'sass_loader'
             }
           }
-        ]
+        ],
+        exclude: /transition\.sass/
       },
       { // css
         test: /^.*\.css$/,
@@ -43,8 +44,7 @@ module.exports = config({
               id: 'css_loader'
             }
           }
-        ],
-        exclude: /flowplayer.*\.css/
+        ]
       },
       { // pug
         test: /^.*\.pug$/,
