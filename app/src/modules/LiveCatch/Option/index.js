@@ -22,7 +22,7 @@ const dispatch = (dispatch)=>({
 
 @withRouter
 @connect(state, dispatch)
-class LiveCacheOption extends Component{
+class LiveCatchOption extends Component{
   constructor(props){
     super(props);
 
@@ -35,7 +35,7 @@ class LiveCacheOption extends Component{
   }
   async componentWillMount(){
     const data = await this.props.action.getAutoRecordingOption({
-      data: 'liveCacheOption'
+      data: 'liveCatchOption'
     });
     let time = null,
       humans = null;
@@ -46,7 +46,7 @@ class LiveCacheOption extends Component{
       [time, humans] = [1, []];
       await this.props.action.addAutoRecordingOption({
         data: {
-          function: 'liveCacheOption',
+          function: 'liveCatchOption',
           option: {
             time,
             humans
@@ -84,7 +84,7 @@ class LiveCacheOption extends Component{
     try{
       await this.props.action.putAutoRecordingOption({
         data: {
-          function: 'liveCacheOption',
+          function: 'liveCatchOption',
           option: {
             time: Number(this.state.time),
             humans: humansArray
@@ -105,16 +105,16 @@ class LiveCacheOption extends Component{
       <div className={ style.body }>
         <Spin spinning={ this.state.loading } tip="加载中...">
           <div className={ style.formGroup }>
-            <label className={ style.formLabel } htmlFor="liveCache-time">请输入请求间隔时间（分）：</label>
+            <label className={ style.formLabel } htmlFor="liveCatch-time">请输入请求间隔时间（分）：</label>
             <Input className={ style.input }
-                   id="liveCache-time"
+                   id="liveCatch-time"
                    value={ this.state.time }
                    onChange={ this.onInputChange.bind(this, 'time') } />
           </div>
           <div className={ style.formGroup }>
-            <label className={ style.formLabel } htmlFor="liveCache-humans">请输入想要监控的成员，以","分割，没有配置则为全部：</label>
+            <label className={ style.formLabel } htmlFor="liveCatch-humans">请输入想要监控的成员，以","分割，没有配置则为全部：</label>
             <Input.TextArea className={ style.input }
-                            id="liveCache-humans"
+                            id="liveCatch-humans"
                             rows={ 10 }
                             value={ this.state.humans }
                             onChange={ this.onInputChange.bind(this, 'humans') } />
@@ -122,7 +122,7 @@ class LiveCacheOption extends Component{
         </Spin>
         <div>
           <Button className={ style.btn } type="primary" loading={ this.state.btnLoading } onClick={ this.onRevise.bind(this) }>修改</Button>
-          <Link to="/LiveCache">
+          <Link to="/LiveCatch">
             <Button className={ style.btn } type="danger" loading={ this.state.btnLoading }>
               <span>返回</span>
             </Button>
@@ -133,4 +133,4 @@ class LiveCacheOption extends Component{
   }
 }
 
-export default LiveCacheOption;
+export default LiveCatchOption;

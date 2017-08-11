@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message } from 'antd';
-import { liveList, liveCache, liveChange, autoRecording } from '../store/index';
+import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
@@ -18,16 +18,16 @@ const process = global.require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
-const getIndex = (state)=>state.get('liveCache').get('index');
+const getIndex = (state)=>state.get('liveCatch').get('index');
 
 const state = createStructuredSelector({
   liveList: createSelector(         // 当前直播
     getIndex,
     (data)=>data.has('liveList') ? data.get('liveList') : []
   ),
-  liveCache: createSelector(        // 当前直播录制
+  liveCatch: createSelector(        // 当前直播录制
     getIndex,
-    (data)=>data.has('liveCache') ? data.get('liveCache') : new Map()
+    (data)=>data.has('liveCatch') ? data.get('liveCatch') : new Map()
   ),
   autoRecording: createSelector(    // 自动抓取直播
     getIndex,
@@ -39,7 +39,7 @@ const state = createStructuredSelector({
 const dispatch = (dispatch)=>({
   action: bindActionCreators({
     liveList,
-    liveCache,
+    liveCatch,
     liveChange,
     autoRecording,
     getAutoRecordingOption
@@ -48,7 +48,7 @@ const dispatch = (dispatch)=>({
 
 @withRouter
 @connect(state, dispatch)
-class LiveCache extends Component{
+class LiveCatch extends Component{
   constructor(props){
     super(props);
 
@@ -90,8 +90,8 @@ class LiveCache extends Component{
         key: 'handle',
         width: '25%',
         render: (text, item)=>{
-          if(this.props.liveCache.has(text)){
-            const m = this.props.liveCache.get(text);
+          if(this.props.liveCatch.has(text)){
+            const m = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
               return(
                 <Button type="danger" onClick={ this.stopRecording.bind(this, item) }>
@@ -134,8 +134,8 @@ class LiveCache extends Component{
   }
   // 子进程关闭
   async child_process_cb(item){
-    const s = store.getState().get('liveCache').get('index');
-    const [m] = [s.get('liveCache')];
+    const s = store.getState().get('liveCatch').get('index');
+    const [m] = [s.get('liveCatch')];
     m.delete(item.liveId);
 
     const data = await post(0);
@@ -162,18 +162,18 @@ class LiveCache extends Component{
     child.on('exit', this.child_process_exit.bind(this, item));
     child.on('error', this.child_process_error.bind(this, item));
 
-    this.props.liveCache.set(item.liveId, {
+    this.props.liveCatch.set(item.liveId, {
       child: child,
       item: item
     });
     this.props.action.liveChange({
-      map: this.props.liveCache,
+      map: this.props.liveCatch,
       liveList: this.props.liveList.slice()
     });
   }
   // 停止录制视频
   stopRecording(item, event){
-    const m = this.props.liveCache.get(item.liveId);
+    const m = this.props.liveCatch.get(item.liveId);
     m.child.kill();
   }
   /**
@@ -197,7 +197,7 @@ class LiveCache extends Component{
       child.on('exit', this.child_process_exit.bind(this, item));
       child.on('error', this.child_process_error.bind(this, item));
 
-      this.props.liveCache.set(item.liveId, {
+      this.props.liveCatch.set(item.liveId, {
         child: child,
         item: item
       });
@@ -223,8 +223,8 @@ class LiveCache extends Component{
         // 用正则表达式判断指定的成员
         if(humanRegExp.test(item.title)){
           // 有录制的进程
-          if(this.props.liveCache.has(item.liveId)){
-            const m = this.props.liveCache.get(item.liveId);
+          if(this.props.liveCatch.has(item.liveId)){
+            const m = this.props.liveCatch.get(item.liveId);
             // 录制由于特殊原因已经结束，如断线等
             if(m.child.exitCode !== null){
               queue.push(this.recordingPromise(item));
@@ -239,7 +239,7 @@ class LiveCache extends Component{
       // 启动所有的录制进程
       await Promise.all(queue);
       this.props.action.liveChange({
-        map: this.props.liveCache,
+        map: this.props.liveCatch,
         liveList: liveList
       });
     }else{
@@ -252,7 +252,7 @@ class LiveCache extends Component{
   // 自动录制
   async onAutoRecording(event){
     const data = await this.props.action.getAutoRecordingOption({
-      data: 'liveCacheOption'
+      data: 'liveCatchOption'
     });
     let time = null,
         humans = null;
@@ -314,7 +314,7 @@ class LiveCache extends Component{
                     </Button>
                   )
               }
-              <Link to="/LiveCache/Option">
+              <Link to="/LiveCatch/Option">
                 <Button disabled={ this.props.autoRecording }>
                   <Icon type="setting" />
                   <span>自动录制配置</span>
@@ -352,4 +352,4 @@ class LiveCache extends Component{
   }
 }
 
-export default LiveCache;
+export default LiveCatch;

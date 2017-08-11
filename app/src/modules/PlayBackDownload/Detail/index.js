@@ -5,6 +5,8 @@ import { Button, Icon } from 'antd';
 import style from './style.sass';
 import { time } from '../../../function';
 
+const weakmap = new WeakMap();
+
 @withRouter
 class Detail extends Component{
   componentWillMount(){
@@ -15,11 +17,10 @@ class Detail extends Component{
   }
   render(){
     // 直播id，成员id，开始时间，下载地址，直播标题，直播间标题
-    const { liveId, memberId, startTime, streamPath, subTitle, title} = this.props.location.query.detail;
+    const { liveId, memberId, startTime, streamPath, picPath, subTitle, title} = this.props.location.query.detail;
 
     return(
       <div className={ style.body }>
-        <video className={ style.video } src={ streamPath } controls />
         <Link to="/PlayBackDownload">
           <Button className={ style.btn } type="danger">
             <Icon type="poweroff" />

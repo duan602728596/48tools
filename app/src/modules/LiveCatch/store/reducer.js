@@ -16,7 +16,7 @@ const initData = fromJS({
 const opt = {
   name: option.indexeddb.name,
   version: option.indexeddb.version,
-  objectStoreName: option.indexeddb.objectStore.liveCache.name
+  objectStoreName: option.indexeddb.objectStore.liveCatch.name
 };
 export const getAutoRecordingOption = getAction(opt);  // 获取自动录制配置
 export const addAutoRecordingOption = addAction(opt);  // 添加自动录制配置
@@ -30,5 +30,5 @@ const reducer = handleActions({
 }, initData);
 
 export default {
-  liveCache: reducer
+  liveCatch: reducer
 };

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Bundle from './bundle';
 import Index from '../modules/Index/index';
-import LiveCache from 'bundle-loader?lazy&name=LiveCache!../modules/LiveCache/Index/index';
-import LiveCache_Option from 'bundle-loader?lazy&name=LiveCache!../modules/LiveCache/Option/index';
+import LiveCatch from 'bundle-loader?lazy&name=LiveCatch!../modules/LiveCatch/Index/index';
+import LiveCatch_Option from 'bundle-loader?lazy&name=LiveCatch!../modules/LiveCatch/Option/index';
 import PlayBackDownload from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/Index/index';
 import PlayBackDownload_Detail from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/Detail/index';
 import PlayBackDownload_List from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/List/index';
@@ -27,10 +27,10 @@ class Router extends Component{
           {/* 首页 */}
           <Route path="/" component={ Index } exact />
           {/* 直播抓取 */}
-          <Route path="/LiveCache" component={(props)=>(
+          <Route path="/LiveCatch" component={(props)=>(
             <Switch>
-              <Route path="/LiveCache" component={ this.asyncModule(LiveCache) } exact />
-              <Route path="/LiveCache/Option" component={ this.asyncModule(LiveCache_Option) } exact />
+              <Route path="/LiveCatch" component={ this.asyncModule(LiveCatch) } exact />
+              <Route path="/LiveCatch/Option" component={ this.asyncModule(LiveCatch_Option) } exact />
             </Switch>
           )}>
           </Route>

@@ -5,8 +5,8 @@ export default {
     name: '48tools',
     version: 2,
     objectStore: {
-      liveCache: {
-        name: 'liveCache',         // 视频直播页面
+      liveCatch: {
+        name: 'liveCatch',         // 视频直播页面
         key: 'function',           // liveCacheOption 视频自动抓取配置
         data: [
           {

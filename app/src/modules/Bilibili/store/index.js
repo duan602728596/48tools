@@ -11,6 +11,7 @@ const opt = {
 /* Action */
 export const liveList = createAction('B站直播列表');
 export const liveList_delete = createAction('B站直播列表-删除');
+export const catching = createAction('B站直播抓取');
 
 export const cursorBilibiliLiveRoom = cursorAction({
   ...opt,
@@ -35,6 +36,11 @@ const reducer = handleActions({
       }
     }
     return state.set('liveList', liveList);
+  },
+  [catching]: (state, action)=>{
+    const { liveList, catching } = action.payload;
+    return state.set('liveList', liveList)
+                .set('catching', catching);
   }
 }, {});
 

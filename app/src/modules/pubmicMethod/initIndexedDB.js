@@ -8,7 +8,7 @@ IndexedDB(option.indexeddb.name, option.indexeddb.version, {
   },
   upgradeneeded: function(et, event){
     { // 存储的是直播抓取页面的自动录制配置
-      const { name, key, data } = option.indexeddb.objectStore.liveCache;
+      const { name, key, data } = option.indexeddb.objectStore.liveCatch;
       if(!this.hasObjectStore(name)){
         this.createObjectStore(name, key, data)
       }

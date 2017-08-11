@@ -32,12 +32,12 @@ class Index extends Component{
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
               <dt>
-                <Link to="/LiveCache" title="口袋48直播抓取">
+                <Link to="/LiveCatch" title="口袋48直播抓取">
                   <img src={ require('./image/hty1.jpg') } alt="口袋48直播抓取" />
                 </Link>
               </dt>
               <dd>
-                <Link to="/LiveCache">直播抓取</Link>
+                <Link to="/LiveCatch">直播抓取</Link>
               </dd>
             </dl>
           </Col>
