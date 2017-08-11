@@ -25,7 +25,8 @@ module.exports = {
       'reselect',
       'antd',
       'indexeddb-tools',
-      'indexeddb-tools-redux'
+      'indexeddb-tools-redux',
+      'react/lib/ReactCSSTransitionGroup'
     ]
   },
   output: {
