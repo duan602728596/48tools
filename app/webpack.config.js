@@ -1,11 +1,6 @@
-const os = require('os');
+const process = require('process');
 const webpack = require('webpack');
-const HappyPack = require('happypack');
 const manifest = require('./.dll/manifest.json');
-
-const happyThreadPool = HappyPack.ThreadPool({
-  size: os.cpus().length
-});
 
 function config(options){
   const conf = {
@@ -22,17 +17,6 @@ function config(options){
             }
           ],
           exclude: /(dll\.js|node_modules|common\.js)/
-        },
-        { // sass 不使用module功能
-          test: /transition\.sass/,
-          use: [
-            {
-              loader: 'happypack/loader',
-              options: {
-                id: 'sass_not_loader'
-              }
-            }
-          ]
         },
         {
           test: /(dll\.js|common\.js)/,
@@ -84,23 +68,11 @@ function config(options){
         context: __dirname,
         manifest: manifest
       }),
-      /* HappyPack */
-      // sass
-      new HappyPack({
-        id: 'sass_not_loader',
-        loaders: [
-          'style-loader',
-          'css-loader',
-          {
-            path: 'sass-loader',
-            query: {
-              outputStyle: 'compact'
-            }
-          }
-        ],
-        threadPool: happyThreadPool,
-        verbose: true
-      }),
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+        }
+      })
     ]
   };
 

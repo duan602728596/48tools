@@ -32,8 +32,7 @@ module.exports = config({
               id: 'sass_loader'
             }
           }
-        ],
-        exclude: /transition\.sass/
+        ]
       },
       { // css
         test: /^.*\.css$/,

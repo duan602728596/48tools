@@ -20,6 +20,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "bundle-loader": "^0.5.5",
+    "cross-env": "^5.0.5",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
@@ -31,8 +32,9 @@
     "node-sass": "^4.5.3",
     "pug": "^2.0.0-rc.2",
     "pug-loader": "^2.3.0",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "rc-queue-anim": "^1.2.2",
+    "react": "next",
+    "react-dom": "next",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
@@ -43,15 +45,16 @@
     "reselect": "^3.0.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
-    "uglifyjs-webpack-plugin": "^1.0.0-beta.2",
+    "uglifyjs-webpack-plugin": "next",
     "url-loader": "^0.5.9",
-    "webpack": "^3.5.3"
+    "webpack": "^3.5.4"
   },
   "scripts": {
-    "start": "webpack --config webpack.dev.js --watch",
-    "build": "webpack --config webpack.pro.js --progress",
-    "dll": "webpack --config webpack.dll.js --progress",
-    "pro": "npm install --production"
+    "start": "cross-env NODE_ENV=development webpack --config webpack.dev.js --watch",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.pro.js --progress",
+    "devdll": "cross-env NODE_ENV=development webpack --config webpack.dll.js --progress",
+    "prodll": "cross-env NODE_ENV=production webpack --config webpack.dll.js --progress",
+    "proinstall": "npm install --production"
   },
   "main": "./build/index.html",
   "nodejs": true,

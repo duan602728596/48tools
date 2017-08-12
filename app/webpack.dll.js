@@ -1,6 +1,7 @@
 /* 预先编译dll */
 const path = require('path');
 const os = require('os');
+const process = require('process');
 const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HappyPack = require('happypack');
@@ -26,7 +27,7 @@ module.exports = {
       'antd',
       'indexeddb-tools',
       'indexeddb-tools-redux',
-      'react/lib/ReactCSSTransitionGroup'
+      'rc-queue-anim'
     ]
   },
   output: {
@@ -65,6 +66,11 @@ module.exports = {
       name: '[name]_[hash]',
       context: __dirname,
       sourceType: 'var'
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
     }),
     // 代码压缩
     new UglifyJSPlugin({
