@@ -182,7 +182,6 @@ class List extends Component{
             </div>
           </div>
         </Affix>
-
         <div className={ style.detailList }>
           <QueueAnim component="ul" type="alpha" leaveReverse={ true }>
             { this.listOne() }

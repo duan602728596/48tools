@@ -9,6 +9,7 @@ import PlayBackDownload_Detail from 'bundle-loader?lazy&name=PlayBackDownload!..
 import PlayBackDownload_List from 'bundle-loader?lazy&name=PlayBackDownload!../modules/PlayBackDownload/List/index';
 import BiliBili from 'bundle-loader?lazy&name=BiliBili!../modules/Bilibili/Index/index';
 import BiliBili_Option from 'bundle-loader?lazy&name=BiliBili!../modules/Bilibili/Option/index';
+import Cut from 'bundle-loader?lazy&name=Cut!../modules/Cut/Index/index';
 
 /* 路由模块 */
 class Router extends Component{
@@ -51,6 +52,8 @@ class Router extends Component{
             </Switch>
           )}>
           </Route>
+          {/* 视频剪切 */}
+          <Route path="/Cut" component={ this.asyncModule(Cut) } exact />
         </Switch>
       </div>
     );

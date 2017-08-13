@@ -213,7 +213,7 @@ class PlayBackDownload extends Component{
     // 更新列表
     this.props.action.playBackList({
       playBackList: pl.concat(data2.content.reviewList),
-      giftUpdTime: data2.content.giftUpdTime
+      giftUpdTime: data2.content.reviewList[data2.content.reviewList.length - 1].startTime
     });
     this.setState({
       loading: false
