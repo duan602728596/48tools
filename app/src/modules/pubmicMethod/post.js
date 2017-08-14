@@ -1,3 +1,4 @@
+// @flow
 /**
  * 获取直播信息数据
  * url   : 'https://plive.48.cn/livesystem/api/live/v1/memberLivePage'
@@ -5,7 +6,7 @@
  */
 const https = global.require('https');
 
-const headers = {
+const headers: Object = {
   'os': 'android',
   'User-Agent': 'Mobile_Pocket',
   'IMEI': '864394020228161',
@@ -17,7 +18,13 @@ const headers = {
   'Accept-Encoding': 'gzip'
 };
 
-const options = {
+const options: {
+  hostname: string,
+  port: ?number,
+  path: string,
+  method: string,
+  headers: string
+} = {
   hostname: 'plive.48.cn',
   port: null,
   path: '/livesystem/api/live/v1/memberLivePage',
@@ -26,24 +33,24 @@ const options = {
 };
 
 /* post数据 */
-function postData(number){
+function postData(number: number): string{
   return `{"lastTime":${ number },"limit":20,"groupId":0,"memberId":0,"type":0,"giftUpdTime":1490857731000}`;
 }
 
-function post(number = 0){
-  return new Promise((resolve, reject)=>{
-    const req = https.request(options, (res)=>{
-      let getData = '';
+function post(number: number = 0): Promise{
+  return new Promise((resolve: Function, reject: Function): void=>{
+    const req: Object = https.request(options, (res): void=>{
+      let getData: string = '';
       res.setEncoding('utf8');
-      res.on('data', function(chunk){
+      res.on('data', function(chunk: any): void{
         getData += chunk;
       });
-      res.on('end', function(){
+      res.on('end', function(): void{
         resolve(getData);
       });
     });
 
-    req.on('error', function(err){
+    req.on('error', function(err: any): void{
       console.log('错误：' + err.message);
     });
 

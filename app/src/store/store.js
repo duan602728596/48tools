@@ -1,3 +1,4 @@
+// @flow
 /* 全局的store */
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -7,20 +8,20 @@ import { combineReducers } from 'redux-immutable';
 import reducers from './reducers';
 
 /* reducer列表 */
-const reducer = combineReducers(reducers);
+const reducer: Function = combineReducers(reducers);
 
 /* initialState */
-const initialState = Map();
+const initialState: Object = Map();
 
 /* 日志 */
-const logger = createLogger({
-  stateTransformer: (state) => state.toJS()
+const logger: Function = createLogger({
+  stateTransformer: (state: Object): Object => state.toJS()
 });
 
 /* 中间件 */
-const middlewares = applyMiddleware(thunk, logger);
+const middlewares: Function = applyMiddleware(thunk, logger);
 
 /* store */
-const store = createStore(reducer, initialState, compose(middlewares));
+const store: Object = createStore(reducer, initialState, compose(middlewares));
 
 export default store;

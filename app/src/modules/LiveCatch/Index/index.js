@@ -1,3 +1,4 @@
+// @flow
 /* 口袋48直播抓取 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -18,25 +19,25 @@ const process = global.require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
-const getIndex = (state)=>state.get('liveCatch').get('index');
+const getIndex: Function = (state: Object): Object=>state.get('liveCatch').get('index');
 
-const state = createStructuredSelector({
+const state: Object = createStructuredSelector({
   liveList: createSelector(         // 当前直播
     getIndex,
-    (data)=>data.has('liveList') ? data.get('liveList') : []
+    (data: Object): Array=>data.has('liveList') ? data.get('liveList') : []
   ),
   liveCatch: createSelector(        // 当前直播录制
     getIndex,
-    (data)=>data.has('liveCatch') ? data.get('liveCatch') : new Map()
+    (data: Object): Map=>data.has('liveCatch') ? data.get('liveCatch') : new Map()
   ),
-  autoRecording: createSelector(    // 自动抓取直播
+  autoRecording: createSelector(    // 自动抓取直播定时器
     getIndex,
-    (data)=>data.has('autoRecording') ? data.get('autoRecording') : null
+    (data: Object): ?number=>data.has('autoRecording') ? data.get('autoRecording') : null
   )
 });
 
 /* dispatch */
-const dispatch = (dispatch)=>({
+const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     liveList,
     liveCatch,
@@ -49,7 +50,10 @@ const dispatch = (dispatch)=>({
 @withRouter
 @connect(state, dispatch)
 class LiveCatch extends Component{
-  constructor(props){
+  state: {
+    loading: boolean
+  };
+  constructor(props: ?Object): void{
     super(props);
 
     this.state = {
@@ -57,7 +61,7 @@ class LiveCatch extends Component{
     };
   }
   // 表格配置
-  columus(){
+  columus(): Array{
     const columns = [
       {
         title: '直播ID',
@@ -82,16 +86,16 @@ class LiveCatch extends Component{
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (text, item)=>time('YY-MM-DD hh:mm:ss', text)
+        render: (text: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', text)
       },
       {
         title: '操作',
         dataIndex: 'liveId',
         key: 'handle',
         width: '25%',
-        render: (text, item)=>{
+        render: (text: any, item: Object): Object=>{
           if(this.props.liveCatch.has(text)){
-            const m = this.props.liveCatch.get(text);
+            const m: Object = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
               return(
                 <Button type="danger" onClick={ this.stopRecording.bind(this, item) }>
@@ -124,22 +128,22 @@ class LiveCatch extends Component{
    * 子进程监听
    * 子进程关闭时自动删除itemId对应的Map
    */
-  child_process_exit(item, code, data){
+  child_process_exit(item: Object, code: any, data: any): void{
     console.log('exit: ' + code + ' ' + data);
     this.child_process_cb(item);
   }
-  child_process_error(item, err){
+  child_process_error(item: Object, err: any): void{
     console.error('error: \n' + err);
     this.child_process_cb(item);
   }
   // 子进程关闭
-  async child_process_cb(item){
-    const s = store.getState().get('liveCatch').get('index');
-    const [m] = [s.get('liveCatch')];
+  async child_process_cb(item: Object): void{
+    const s: Object = store.getState().get('liveCatch').get('index');
+    const [m]: [Map] = [s.get('liveCatch')];
     m.delete(item.liveId);
 
-    const data = await post(0);
-    const data2 = JSON.parse(data);
+    const data: string = await post(0);
+    const data2: Object = JSON.parse(data);
 
     this.props.action.liveChange({
       map: m,
@@ -147,11 +151,11 @@ class LiveCatch extends Component{
     });
   }
   // 录制视频
-  recording(item, event){
-    const title = '【口袋48直播】_' + item.liveId + '_' + item.title +
-                  '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-                  '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
-    const child = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
+  recording(item: Object, event: Object): void{
+    const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title +
+      '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
+      '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
+    const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
       '-i',
       `${ item.streamPath }`,
       '-c',
@@ -172,21 +176,21 @@ class LiveCatch extends Component{
     });
   }
   // 停止录制视频
-  stopRecording(item, event){
-    const m = this.props.liveCatch.get(item.liveId);
+  stopRecording(item: Object, event: Object): void{
+    const m: Object = this.props.liveCatch.get(item.liveId);
     m.child.kill();
   }
   /**
    * 录制
    * 使用Promise进行了包装
    */
-  recordingPromise(item){
-    return new Promise((resolve, reject)=>{
-      const title = '【口袋48直播】' + '_' + item.title +
-                    '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-                    '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
-                    '_' + item.liveId;
-      const child = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
+  recordingPromise(item): Promise{
+    return new Promise((resolve: Function, reject: Function): void=>{
+      const title: string = '【口袋48直播】' + '_' + item.title +
+        '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
+        '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
+        '_' + item.liveId;
+      const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
         '-i',
         `${ item.streamPath }`,
         '-c',
@@ -205,26 +209,26 @@ class LiveCatch extends Component{
     });
   }
   // 自动录制的进程
-  async autoRecordingProcess(humans){
+  async autoRecordingProcess(humans: string[]): void{
     this.setState({
       loading: true
     });
     // 获取列表
-    const data = await post(0);
-    const data2 = JSON.parse(data);
+    const data: string = await post(0);
+    const data2: Object = JSON.parse(data);
     if(data2.status === 200){
       message.success('请求成功');
-      const liveList = 'liveList' in data2.content ? data2.content.liveList : [];
+      const liveList: Array = 'liveList' in data2.content ? data2.content.liveList : [];
 
       // 获取列表成功后开始构建录制进程
-      const queue = [];                                                // Promise.all进程
-      const humanRegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
-      liveList.map((item, index)=>{
+      const queue: Array = [];                                                // Promise.all进程
+      const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
+      liveList.map((item: Object, index: number): void=>{
         // 用正则表达式判断指定的成员
         if(humanRegExp.test(item.title)){
           // 有录制的进程
           if(this.props.liveCatch.has(item.liveId)){
-            const m = this.props.liveCatch.get(item.liveId);
+            const m: Object = this.props.liveCatch.get(item.liveId);
             // 录制由于特殊原因已经结束，如断线等
             if(m.child.exitCode !== null){
               queue.push(this.recordingPromise(item));
@@ -250,12 +254,12 @@ class LiveCatch extends Component{
     });
   }
   // 自动录制
-  async onAutoRecording(event){
-    const data = await this.props.action.getAutoRecordingOption({
+  async onAutoRecording(event: Object): void{
+    const data: Object = await this.props.action.getAutoRecordingOption({
       data: 'liveCatchOption'
     });
-    let time = null,
-        humans = null;
+    let time: ?number = null,
+      humans: ?Array = null;
     if(data){
       [time, humans] = [data.option.time, data.option.humans];
     }else{
@@ -267,19 +271,19 @@ class LiveCatch extends Component{
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）
-  onStopAutoRecording(event){
+  onStopAutoRecording(event: Object): void{
     global.clearInterval(this.props.autoRecording);
     this.props.action.autoRecording({
       autoRecording: null
     });
   }
   // 获取录制列表
-  async getLiveList(event){
+  async getLiveList(event: Object): void{
     this.setState({
       loading: true
     });
-    const data = await post(0);
-    const data2 = JSON.parse(data);
+    const data: string = await post(0);
+    const data2: Object = JSON.parse(data);
     if(data2.status === 200){
       message.success('请求成功');
       this.props.action.liveList({
@@ -292,7 +296,7 @@ class LiveCatch extends Component{
       loading: false
     });
   }
-  render(){
+  render(): Object{
     return(
       <div>
         {/* 功能区 */}

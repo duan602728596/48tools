@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Bundle from './bundle';
@@ -14,14 +15,14 @@ import Cut from 'bundle-loader?lazy&name=Cut!../modules/Cut/Index/index';
 /* 路由模块 */
 class Router extends Component{
   // 异步加载模块
-  asyncModule(module){
-    return ()=>(
+  asyncModule(module: Function): Function{
+    return (): Object=>(
       <Bundle load={ module }>
         { (M)=><M /> }
       </Bundle>
     );
   }
-  render(){
+  render(): Object{
     return(
       <div>
         <Switch>

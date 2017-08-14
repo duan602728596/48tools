@@ -1,34 +1,38 @@
+// @flow
 import React, { Component } from 'react';
 
 /* 异步加载模块 */
 class Bundle extends Component{
-  constructor(props){
+  state: {
+    module: ?Function
+  };
+  constructor(props: Object): void{
     super(props);
     this.state = {
       module: null
     };
   }
-  componentWillMount(){
+  componentWillMount(): void{
     this.load(this.props);
   }
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps: Object): void{
     if(nextProps.load !== this.props.load){
       this.load(nextProps);
     }
   }
-  load(props){
+  load(props: Object): void{
     this.setState({
       module: null
     });
-    props.load((module)=>{
+    props.load((module: { default: Function } | Function): void=>{
       this.setState({
         module: module.default ? module.default : module
       });
     });
   }
-  render(){
+  render(): ?Object{
     if(!this.state.module){
-      return false;
+      return null;
     }else{
       return this.props.children(this.state.module);
     }

@@ -89,32 +89,6 @@ module.exports = config({
       threadPool: happyThreadPool,
       verbose: true
     }),
-    // react
-    new HappyPack({
-      id: 'es6_loader',
-      loaders: [
-        {
-          path: 'babel-loader',
-          query: {
-            cacheDirectory: true,
-            presets: ['react'],
-            plugins: [
-              'transform-decorators-legacy',
-              'transform-object-rest-spread',
-              [
-                'import',
-                {
-                  'libraryName': 'antd',
-                  'style': 'css'
-                }
-              ]
-            ]
-          }
-        }
-      ],
-      threadPool: happyThreadPool,
-      verbose: true
-    }),
     // 代码压缩
     new UglifyJSPlugin({
       uglifyOptions: {

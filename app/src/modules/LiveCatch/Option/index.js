@@ -1,3 +1,4 @@
+// @flow
 /* 口袋48直播抓取配置页面 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -9,10 +10,10 @@ import style from './style.sass';
 import { getAutoRecordingOption, addAutoRecordingOption, putAutoRecordingOption } from '../store/reducer';
 
 /* 初始化数据 */
-const state = createStructuredSelector({});
+const state: Object = createStructuredSelector({});
 
 /* dispatch */
-const dispatch = (dispatch)=>({
+const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     getAutoRecordingOption,
     addAutoRecordingOption,
@@ -23,7 +24,13 @@ const dispatch = (dispatch)=>({
 @withRouter
 @connect(state, dispatch)
 class LiveCatchOption extends Component{
-  constructor(props){
+  state: {
+    loading: boolean,
+    btnLoading: boolean,
+    time: string,
+    humans: string
+  };
+  constructor(props: ?Object): void{
     super(props);
 
     this.state = {
@@ -33,12 +40,12 @@ class LiveCatchOption extends Component{
       humans: ''          // 成员
     };
   }
-  async componentWillMount(){
-    const data = await this.props.action.getAutoRecordingOption({
+  async componentWillMount(): void{
+    const data: Object = await this.props.action.getAutoRecordingOption({
       data: 'liveCatchOption'
     });
-    let time = null,
-      humans = null;
+    let time: ?number = null,
+      humans: ?string[] = null;
     if(data){
       [time, humans] = [data.option.time, data.option.humans];
     }else{
@@ -61,21 +68,21 @@ class LiveCatchOption extends Component{
     });
   }
   // 表单的change事件
-  onInputChange(key, event){
+  onInputChange(key: string, event: Object): void{
     this.setState({
       [key]: event.target.value
     });
   }
   // 修改
-  async onRevise(event){
+  async onRevise(event: Object): void{
     this.setState({
       loading: true,
       btnLoading: true
     });
     // 整理数据
-    const humans = this.state.humans.slice();
-    const humansArray = humans.split(/\s*,\s*/);
-    for(let j = humansArray.length - 1; j >= 0; j--){
+    const humans: string = this.state.humans;
+    const humansArray: Array = humans.split(/\s*,\s*/);
+    for(let j: number = humansArray.length - 1; j >= 0; j--){
       if(humansArray[j] === ''){
         humansArray.splice(j, 1);
       }
@@ -100,7 +107,7 @@ class LiveCatchOption extends Component{
       btnLoading: false
     });
   }
-  render(){
+  render(): Object{
     return(
       <div className={ style.body }>
         <Spin spinning={ this.state.loading } tip="加载中...">

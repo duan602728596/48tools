@@ -1,3 +1,4 @@
+// @flow
 /* 口袋48录播下载 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -23,13 +24,13 @@ const path = global.require('path');
  * @param { String } key    : 参考键值
  * @return { Array }
  */
-function filter(array, keyword, key){
+function filter(array: Array, keyword: string, key: string): Array{
   if(/^\s*$/.test(keyword)){
     return array;
   }else{
-    const newArr = [];
-    const keywordRegExp = new RegExp(`(${ keyword.split(/\s+/).join('|') })`, 'i');
-    array.map((item, index)=>{
+    const newArr: Array = [];
+    const keywordRegExp: RegExp = new RegExp(`(${ keyword.split(/\s+/).join('|') })`, 'i');
+    array.map((item: Object, index: number): void=>{
       if(keywordRegExp.test(item[key])){
         newArr.push(item);
       }
@@ -39,29 +40,29 @@ function filter(array, keyword, key){
 }
 
 /* 初始化数据 */
-const getIndex = (state)=>state.get('playBackDownload').get('index');
+const getIndex: Function = (state: Object): Object=>state.get('playBackDownload').get('index');
 
-const state = createStructuredSelector({
+const state: Object = createStructuredSelector({
   playBackList: createSelector(         // 当前录播
     getIndex,
-    (data)=>data.has('playBackList') ? data.get('playBackList') : []
+    (data: Object): Array=>data.has('playBackList') ? data.get('playBackList') : []
   ),
   giftUpdTime: createSelector(          // 加载时间戳
     getIndex,
-    (data)=>data.has('giftUpdTime') ? data.get('giftUpdTime') : 0
+    (data: Object): number=>data.has('giftUpdTime') ? data.get('giftUpdTime') : 0
   ),
   downloadList: createSelector(         // 下载列表
-    (state)=>state.get('playBackDownload').get('downloadList'),
-    (data)=>data
+    (state: Object): Object=>state.get('playBackDownload').get('downloadList'),
+    (data: Map): Map=>data
   ),
   fnReady: createSelector(              // 下载事件监听
-    (state)=>state.get('playBackDownload').get('fnReady'),
-    (data)=>data
+    (state: Object): boolean=>state.get('playBackDownload').get('fnReady'),
+    (data: boolean): boolean=>data
   )
 });
 
 /* dispatch */
-const dispatch = (dispatch)=>({
+const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     playBackList,
     downloadList,
@@ -72,7 +73,11 @@ const dispatch = (dispatch)=>({
 @withRouter
 @connect(state, dispatch)
 class PlayBackDownload extends Component{
-  constructor(props){
+  state: {
+    loading: boolean,
+    keyword: string
+  };
+  constructor(props: ?Object): void{
     super(props);
 
     this.state = {
@@ -81,8 +86,8 @@ class PlayBackDownload extends Component{
     };
   }
   // 表格配置
-  columus(){
-    const columns = [
+  columus(): Array{
+    const columns: Array = [
       {
         title: '直播ID',
         dataIndex: 'liveId',
@@ -106,13 +111,13 @@ class PlayBackDownload extends Component{
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (text, item)=>time('YY-MM-DD hh:mm:ss', text)
+        render: (text: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', text)
       },
       {
         title: '操作',
         key: 'handle',
         width: '30%',
-        render: (text, item)=>{
+        render: (text: any, item: Object): Object=>{
           return(
             <div>
               <Link className={ publicStyle.btnLink } to={{
@@ -138,7 +143,7 @@ class PlayBackDownload extends Component{
     return columns;
   }
   // 组件挂载之前监听chrome下载事件
-  componentWillMount(){
+  componentWillMount(): void{
     if(this.props.fnReady === false){
       chrome.downloads.onCreated.addListener(onChromeDownloadsCreated);
       chrome.downloads.onChanged.addListener(onChromeDownloadsChanged);
@@ -149,14 +154,14 @@ class PlayBackDownload extends Component{
     }
   }
   // 下载
-  download(item, event){
-    const urlInfo = url.parse(item.streamPath);
-    const pathInfo = path.parse(urlInfo.pathname);
+  download(item: Object, event: Object): void{
+    const urlInfo: Object = url.parse(item.streamPath);
+    const pathInfo: Object = path.parse(urlInfo.pathname);
 
-    const title = '【口袋48录播】' + '_' + item.title +
-                  '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-                  '_下载时间_' + time('YY-MM-DD-hh-mm-ss') +
-                  '_' + item.liveId;
+    const title: string = '【口袋48录播】' + '_' + item.title +
+      '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
+      '_下载时间_' + time('YY-MM-DD-hh-mm-ss') +
+      '_' + item.liveId;
 
 
     chrome.downloads.download({
@@ -165,9 +170,9 @@ class PlayBackDownload extends Component{
       conflictAction: 'prompt',
       saveAs: true,
       method: 'GET'
-    }, (downloadId)=>{
+    }, (downloadId: number): void=>{
       // 此处需要添加item详细信息
-      const obj = this.props.downloadList.get(downloadId);
+      const obj: Object = this.props.downloadList.get(downloadId);
       obj.item = item;
       // 更新数据
       this.props.downloadList.set(downloadId, obj);
@@ -178,25 +183,25 @@ class PlayBackDownload extends Component{
     });
   }
   // 搜索事件（点击按钮 + input回车）
-  onSearchInput(event){
+  onSearchInput(event: Object): void{
     this.setState({
       keyword: this.refs['playBackDownload-searchInput'].refs.input.value
     });
   }
   // 重置
-  onReset(event){
+  onReset(event: Object): void{
     this.setState({
       keyword: ''
     });
   }
   // 加载和刷新列表
-  async onPlayBackListLoad(type, event){
+  async onPlayBackListLoad(type: string, event: Object): void{
     this.setState({
       loading: true
     });
     // 判断是加载还是刷新
-    let pl = null;
-    let giftUpdTime = null;
+    let pl: ?Array = null;
+    let giftUpdTime: ?number = null;
     switch(type){
       case '加载':
         pl = this.props.playBackList;
@@ -208,8 +213,8 @@ class PlayBackDownload extends Component{
         break;
     }
     // 获取数据
-    const data = await post(giftUpdTime);
-    const data2 = JSON.parse(data);
+    const data: string = await post(giftUpdTime);
+    const data2: Object = JSON.parse(data);
     // 更新列表
     this.props.action.playBackList({
       playBackList: pl.concat(data2.content.reviewList),
@@ -220,7 +225,7 @@ class PlayBackDownload extends Component{
     });
     message.success('录播加载成功！');
   }
-  render(){
+  render(): Object{
     return(
       <div>
         {/* 功能区 */}

@@ -2,19 +2,21 @@ import { createAction, handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
 /* 使用immutable初始化基础数据 */
-const initData = fromJS({
+const initData: {
+  test: boolean
+} = {
   test: false
-});
+};
 
 /* Action */
-export const test = createAction('是否开启测试功能');  // 是否开启测试功能
+export const test: Function = createAction('是否开启测试功能');  // 是否开启测试功能
 
 /* reducer */
-const reducer = handleActions({
-  [test]: (state, action)=>{
+const reducer: Function = handleActions({
+  [test]: (state: Object, action: Object): Object=>{
     return state.set('test', action.payload.test);
   }
-}, initData);
+}, fromJS(initData));
 
 export default {
   index: reducer

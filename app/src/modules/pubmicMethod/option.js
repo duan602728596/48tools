@@ -1,5 +1,26 @@
+// @flow
 /* 配置文件 */
-export default {
+type inforMap = {
+  name: string,
+  key: string,
+  data: {
+    name: string,
+    index: string
+  }[]
+};
+
+type indexeddbMap = {
+  name: string,
+  version: number,
+  objectStore: {
+    liveCatch: inforMap,
+    bilibili: inforMap
+  }
+};
+
+const option: {
+  indexeddb: indexeddbMap
+} = {
   // 数据库
   indexeddb: {
     name: '48tools',
@@ -28,3 +49,5 @@ export default {
     }
   }
 };
+
+export default option;

@@ -1,3 +1,4 @@
+// @flow
 /**
  * chrome下载事件
  * 事件的state说明
@@ -12,13 +13,13 @@ import store from '../../store/store';
 import { downloadList as downloadListAction } from './store/reducer';
 
 /* 谷歌下载文件监听 */
-export function onChromeDownloadsChanged(infor){
-  const { id } = infor;
-  const downloadList = store.getState().get('playBackDownload').get('downloadList');
+export function onChromeDownloadsChanged(infor: Object): void{
+  const { id }: { id: number } = infor;
+  const downloadList: Array = store.getState().get('playBackDownload').get('downloadList');
 
   /* 开始下载 */
   if('filename' in infor){
-    const obj = downloadList.get(id);
+    const obj: Object = downloadList.get(id);
     obj.state = 1;
     obj.current = infor.filename.current;
     downloadList.set(id, obj);
@@ -26,7 +27,7 @@ export function onChromeDownloadsChanged(infor){
 
   /* 点击取消时 */
   if('error' in infor && infor.error.current === 'USER_CANCELED'){
-    const obj = downloadList.get(id);
+    const obj: Object = downloadList.get(id);
     switch(obj.state){
       case 0:
         downloadList.delete(id);
@@ -40,7 +41,7 @@ export function onChromeDownloadsChanged(infor){
 
   /* 下载完成 */
   if('endTime' in infor){
-    const obj = downloadList.get(id);
+    const obj: Object = downloadList.get(id);
     obj.state = 2;
     downloadList.set(id, obj);
   }
@@ -50,9 +51,9 @@ export function onChromeDownloadsChanged(infor){
   });
 }
 /* 谷歌下载创建文件监听 */
-export function onChromeDownloadsCreated(infor){
+export function onChromeDownloadsCreated(infor: Object): void{
   // 先将id和文件信息添加到Map结构内
-  const downloadList = store.getState().get('playBackDownload').get('downloadList');
+  const downloadList: Array = store.getState().get('playBackDownload').get('downloadList');
   downloadList.set(infor.id, {
     infor,
     state: 0

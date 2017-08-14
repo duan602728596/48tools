@@ -1,3 +1,4 @@
+// @flow
 /* 查看录播详细信息 */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
@@ -5,19 +6,25 @@ import { Button, Icon } from 'antd';
 import style from './style.sass';
 import { time } from '../../../function';
 
-const weakmap = new WeakMap();
-
 @withRouter
 class Detail extends Component{
-  componentWillMount(){
+  componentWillMount(): void{
     // 如果没有传参，就返回到“/PlayBackDownload”页面
     if(!('query' in this.props.location && 'detail' in this.props.location.query)){
       this.props.history.push('/PlayBackDownload');
     }
   }
-  render(){
+  render(): Object{
     // 直播id，成员id，开始时间，下载地址，直播标题，直播间标题
-    const { liveId, memberId, startTime, streamPath, picPath, subTitle, title} = this.props.location.query.detail;
+    const { liveId, memberId, startTime, streamPath, picPath, subTitle, title}: {
+      liveId: number,
+      memberId: number,
+      startTime: number,
+      streamPath: string,
+      picPath: string,
+      subTitle: string,
+      title: string
+    } = this.props.location.query.detail;
 
     return(
       <div className={ style.body }>

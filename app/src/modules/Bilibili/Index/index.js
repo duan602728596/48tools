@@ -18,21 +18,21 @@ const http = global.require('http');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
-const getIndex = (state)=>state.get('bilibili').get('index');
+const getIndex: Function = (state: Object): Object=>state.get('bilibili').get('index');
 
-const state = createStructuredSelector({
+const state: Object = createStructuredSelector({
   liveList: createSelector(            // 直播间信息
     getIndex,
-    (data)=>data.has('liveList') ? data.get('liveList') : []
+    (data: Object): Array=>data.has('liveList') ? data.get('liveList') : []
   ),
   catching: createSelector(  // 正在直播
     getIndex,
-    (data)=>data.has('catching') ? data.get('catching') : new Map()
+    (data: Object): Map=>data.has('catching') ? data.get('catching') : new Map()
   )
 });
 
 /* dispatch */
-const dispatch = (dispatch)=>({
+const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     cursorBilibiliLiveRoom,
     deleteBilibiliLiveRoom,
@@ -43,7 +43,10 @@ const dispatch = (dispatch)=>({
 @withRouter
 @connect(state, dispatch)
 class BiliBili extends Component{
-  constructor(props) {
+  state: {
+    loading: boolean
+  };
+  constructor(props: ?Object): void{
     super(props);
 
     this.state = {
@@ -51,8 +54,8 @@ class BiliBili extends Component{
     };
   }
   // 表格配置
-  columus(){
-    const columns = [
+  columus(): Array{
+    const columns: Array = [
       {
         title: '直播间名称',
         dataIndex: 'roomname',
@@ -69,7 +72,7 @@ class BiliBili extends Component{
         title: '操作',
         key: 'handle',
         width: '36%',
-        render: (text, item)=>{
+        render: (text: any, item: Object): Object=>{
           return (
             <div>
               {
@@ -103,7 +106,7 @@ class BiliBili extends Component{
     ];
     return columns;
   }
-  async componentWillMount(){
+  async componentWillMount(): void{
     await this.props.action.cursorBilibiliLiveRoom({
       indexName: 'roomname'
     });
@@ -115,18 +118,18 @@ class BiliBili extends Component{
    * 子进程监听
    * 子进程关闭时自动删除itemId对应的Map
    */
-  child_process_exit(item, code, data){
+  child_process_exit(item: Object, code: any, data: any): void{
     console.log('exit: ' + code + ' ' + data);
     this.child_process_cb(item);
   }
-  child_process_error(item, err){
+  child_process_error(item: Object, err: any): void{
     console.error('error: \n' + err);
     this.child_process_cb(item);
   }
   // 子进程关闭
-  async child_process_cb(item){
-    const s = store.getState().get('bilibili').get('index');
-    const [m, ll] = [s.get('catching'), s.get('liveList')];
+  async child_process_cb(item: Object): void{
+    const s: Object = store.getState().get('bilibili').get('index');
+    const [m, ll]: [Map, Array] = [s.get('catching'), s.get('liveList')];
     m.delete(item.roomid);
 
     this.props.action.catching({
@@ -135,10 +138,10 @@ class BiliBili extends Component{
     });
   }
   // 录制
-  async onCatch(item, event){
-    const url = await getUrl(item.roomid);
-    const title = `【B站直播抓取】${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
-    const child = child_process.spawn(
+  async onCatch(item: Object, event: Object): void{
+    const url: string = await getUrl(item.roomid);
+    const title: string = `【B站直播抓取】${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
+    const child: Object = child_process.spawn(
       __dirname + '/dependent/ffmpeg/ffmpeg.exe',
       ['-i', url, '-c', 'copy', `${ __dirname }/output/${ title }.flv`]
     );
@@ -156,13 +159,13 @@ class BiliBili extends Component{
     message.success(`开始录制【${ item.roomname }】！`);
   }
   // 停止
-  onCatchStop(item, event){
-    const m = this.props.catching.get(item.roomid);
+  onCatchStop(item: Object, event: Object): void{
+    const m: Object = this.props.catching.get(item.roomid);
     m.child.kill();
     message.warn(`停止录制【${ item.roomname }】！`);
   }
   // 删除
-  async onDelete(item, event){
+  async onDelete(item: Object, event: Object): void{
     try{
       this.props.action.deleteBilibiliLiveRoom({
         data: item.roomid
@@ -172,7 +175,7 @@ class BiliBili extends Component{
       message.error('删除失败！');
     }
   }
-  render(){
+  render(): Object{
     return(
       <div>
         {/* 功能区 */}

@@ -10,15 +10,15 @@ import { test } from './store/reducer';
 import '../pubmicMethod/initIndexedDB';
 
 /* 初始化数据 */
-const state = createStructuredSelector({
+const state: Object = createStructuredSelector({
   test: createSelector(
-    (state)=>state.get('index').get('test'),
-    (data)=>data
+    (state: Object): boolean=>state.get('index').get('test'),
+    (data: boolean): boolean=>data
   )
 });
 
 /* dispatch */
-const dispatch = (dispatch)=>({
+const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     test
   }, dispatch)
@@ -27,16 +27,16 @@ const dispatch = (dispatch)=>({
 @withRouter
 @connect(state, dispatch)
 class Index extends Component{
-  constructor(props){
+  constructor(props: ?Object): void{
     super(props);
   }
   // check
-  onCheckChange(event){
+  onCheckChange(event: Object): void{
     this.props.action.test({
       test: event.target.checked
     });
   }
-  render(){
+  render(): Object{
     return(
       <div className={ style.body }>
         <h1 className={ style.title }>48视频剪辑应援工具</h1>

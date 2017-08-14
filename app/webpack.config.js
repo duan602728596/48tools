@@ -1,6 +1,12 @@
+const os = require('os');
 const process = require('process');
 const webpack = require('webpack');
+const HappyPack = require('happypack');
 const manifest = require('./.dll/manifest.json');
+
+const happyThreadPool = HappyPack.ThreadPool({
+  size: os.cpus().length
+});
 
 function config(options){
   const conf = {
@@ -72,6 +78,34 @@ function config(options){
         'process.env': {
           NODE_ENV: JSON.stringify(process.env.NODE_ENV)
         }
+      }),
+      /* HappyPack */
+      // react
+      new HappyPack({
+        id: 'es6_loader',
+        loaders: [
+          {
+            path: 'babel-loader',
+            query: {
+              cacheDirectory: true,
+              presets: ['react'],
+              plugins: [
+                'transform-decorators-legacy',
+                'transform-object-rest-spread',
+                [
+                  'import',
+                  {
+                    'libraryName': 'antd',
+                    'style': 'css'
+                  }
+                ],
+                'transform-flow-strip-types'
+              ]
+            }
+          }
+        ],
+        threadPool: happyThreadPool,
+        verbose: true
       })
     ]
   };

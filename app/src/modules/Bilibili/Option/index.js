@@ -9,10 +9,10 @@ import style from './style.sass';
 import { putBilibiliLiveRoom } from '../store/option';
 
 /* 初始化数据 */
-const state = createStructuredSelector({});
+const state: Object = createStructuredSelector({});
 
 /* dispatch */
-const dispatch = (dispatch)=>({
+const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     putBilibiliLiveRoom
   }, dispatch)
@@ -21,7 +21,13 @@ const dispatch = (dispatch)=>({
 @withRouter
 @connect(state, dispatch)
 class BiliBiliOption extends Component{
-  constructor(props){
+  state: {
+    loading: boolean,
+    btnLoading: boolean,
+    roomid: string,
+    roomname: string
+  };
+  constructor(props: ?Object): void{
     super(props);
 
     this.state = {
@@ -32,19 +38,22 @@ class BiliBiliOption extends Component{
     };
   }
   // 表单的change事件
-  onInputChange(key, event){
+  onInputChange(key: Object, event: Object): void{
     this.setState({
       [key]: event.target.value
     });
   }
   // 添加
-  async onAdd(event){
+  async onAdd(event: Object): void{
     this.setState({
       loading: true,
       btnLoading: true
     });
 
-    const { roomname, roomid } = this.state;
+    const { roomname, roomid }: {
+      roomname: string,
+      roomid: string
+    } = this.state;
 
     if(/^\s*$/.test(roomname)){
       message.error('请输入直播间名称');
@@ -73,7 +82,7 @@ class BiliBiliOption extends Component{
       btnLoading: false
     });
   }
-  render(){
+  render(): Object{
     return(
       <div className={ style.body }>
         <Spin spinning={ this.state.loading } tip="加载中...">

@@ -16,19 +16,19 @@ const process = global.require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
-const state = createStructuredSelector({
+const state: Object = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
-    (state)=>state.get('cut').get('cutList'),
-    (data)=>data
+    (state: Object): Array=>state.get('cut').get('cutList'),
+    (data: Array): Array=>data
   ),
   cutMap: createSelector(          // 正在剪切
-    (state)=>state.get('cut').get('cutMap'),
-    (data)=>data
+    (state: Object): Map=>state.get('cut').get('cutMap'),
+    (data: Map): Map=>data
   )
 });
 
 /* dispatch */
-const dispatch = (dispatch)=>({
+const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     cutList
   }, dispatch)
@@ -37,7 +37,18 @@ const dispatch = (dispatch)=>({
 @withRouter
 @connect(state, dispatch)
 class Cut extends Component{
-  constructor(props){
+  dir: string;
+  state: {
+    file: ?Object,
+    saveFile: ?Object,
+    starthh: string,
+    startmm: string,
+    startss: string,
+    endhh: string,
+    endmm: string,
+    endss: string
+  };
+  constructor(props: ?Object): void{
     super(props);
 
     this.dir = `${ __dirname }/output`.replace(/\//g, '\\');
@@ -52,40 +63,52 @@ class Cut extends Component{
       endss: ''        // 结束（秒）
     };
   }
-  componentDidMount(){
+  componentDidMount(): void{
     // 为input添加nwsaveas属性
-    const save = document.getElementById('cut-save');
+    const save: any = document.getElementById('cut-save');
     save.nwsaveas = '';
     save.nwworkingdir = this.dir;
   }
   // 选择文件的change事件
-  onFileChange(event){
-    const save = document.getElementById('cut-save');
-    const file = event.target.files[0] || null;
-    const { name, ext } = path.parse(file.path);
-    const title = '【视频剪切】' + name + '_' + time('YY-MM-DD-hh-mm-ss') + ext;
+  onFileChange(event: Object): void{
+    const save: any = document.getElementById('cut-save');
+    const file: ?Object = event.target.files[0] || null;
+    const { name, ext }: {
+      name: string,
+      ext: string
+    } = path.parse(file.path);
+    const title: string = '【视频剪切】' + name + '_' + time('YY-MM-DD-hh-mm-ss') + ext;
     this.setState({
       file
     });
     save.nwsaveas = file ? title : '';
   }
   // 储存文件的change事件
-  onSaveChange(event){
-    const file = event.target.files[0] || null;
+  onSaveChange(event: Object): void{
+    const file: ?Object = event.target.files[0] || null;
     this.setState({
       saveFile: file
     });
   }
   // inputChange
-  onInputChange(key, event){
+  onInputChange(key: string, event: Object): void{
     this.setState({
       [key]: event.target.value
     });
   }
   // 添加到队列
-  onAddQueue(event){
-    const cutList = cutList.slice();
-    const { file, saveFile, starthh, startmm, startss, endhh, endmm, endss } = this.state;
+  onAddQueue(event: Object): void{
+    const cutList: Array = this.props.cutList.slice();
+    const { file, saveFile, starthh, startmm, startss, endhh, endmm, endss }: {
+      file: ?Object,
+      saveFile: ?Object,
+      starthh: string,
+      startmm: string,
+      startss: string,
+      endhh: string,
+      endmm: string,
+      endss: string
+    } = this.state;
     cutList.push({
       file,
       saveFile,
@@ -100,7 +123,7 @@ class Cut extends Component{
       cutList
     });
   }
-  render(){
+  render(): Object{
     return(
       <div>
         <Affix>
