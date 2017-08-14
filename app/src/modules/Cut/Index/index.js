@@ -1,3 +1,4 @@
+// @flow
 /* 视频剪切 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -7,6 +8,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Input } from 'antd';
 import { time, patchZero } from '../../../function';
 import { cutList } from '../store/render';
+import formValidation from './formValidation';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
@@ -18,8 +20,8 @@ const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 /* 初始化数据 */
 const state: Object = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
-    (state: Object): Array=>state.get('cut').get('cutList'),
-    (data: Array): Array=>data
+    (state: Object): Object | Array=>state.get('cut').get('cutList'),
+    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
   ),
   cutMap: createSelector(          // 正在剪切
     (state: Object): Map=>state.get('cut').get('cutMap'),
@@ -34,10 +36,24 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
+type validChildren = {
+  text: string
+};
+
 @withRouter
 @connect(state, dispatch)
 class Cut extends Component{
   dir: string;
+  valid: {
+    file: validChildren,
+    saveFile: validChildren,
+    starthh: validChildren,
+    startmm: validChildren,
+    startss: validChildren,
+    endhh: validChildren,
+    endmm: validChildren,
+    endss: validChildren
+  };
   state: {
     file: ?Object,
     saveFile: ?Object,
@@ -52,6 +68,32 @@ class Cut extends Component{
     super(props);
 
     this.dir = `${ __dirname }/output`.replace(/\//g, '\\');
+    this.valid = {
+      file: {
+        text: '请选择视频文件！'
+      },
+      saveFile: {
+        text: '请选择文件保存位置！'
+      },
+      starthh: {
+        text: '请输入开始时间！'
+      },
+      startmm: {
+        text: '请输入开始时间！'
+      },
+      startss: {
+        text: '请输入开始时间！'
+      },
+      endhh: {
+        text: '请输入结束时间！'
+      },
+      endmm: {
+        text: '请输入结束时间！'
+      },
+      endss: {
+        text: '请输入结束时间！'
+      }
+    };
     this.state = {
       file: null,      // 选择文件
       saveFile: null,  // 保存文件
@@ -62,6 +104,93 @@ class Cut extends Component{
       endmm: '',       // 结束（分）
       endss: ''        // 结束（秒）
     };
+  }
+  // 表格配置
+  columus(): Array{
+    const columus: Array = [
+      {
+        title: '视频文件地址',
+        dataIndex: 'file',
+        key: 'file',
+        width: '20%',
+        render: (text: any, item: Object): string=>item.file.path
+      },
+      {
+        title: '开始时间',
+        key: 'startTime',
+        width: '20%',
+        render: (text: any, item: Object): string=>{
+          const { starthh, startmm, startss }: {
+            starthh: number,
+            startmm: number,
+            startss: number
+          } = item;
+          return `${ patchZero(Number(starthh)) } : ${ patchZero(Number(startmm)) } : ${ patchZero(Number(startss)) }`;
+        }
+      },
+      {
+        title: '结束时间',
+        key: 'endTime',
+        width: '20%',
+        render: (text: any, item: Object): string=>{
+          const { endhh, endmm, endss }: {
+            endhh: number,
+            endmm: number,
+            endss: number
+          } = item;
+          return `${ patchZero(Number(endhh)) } : ${ patchZero(Number(endmm)) } : ${ patchZero(Number(endss)) }`;
+        }
+      },
+      {
+        title: '文件保存位置',
+        dataIndex: 'saveFile',
+        key: 'saveFile',
+        width: '20%',
+        render: (text: any, item: Object): string=>item.saveFile.path
+      },
+      {
+        title: '操作',
+        key: 'handle',
+        width: '20%',
+        render: (text: any, item: Object): Object=>{
+          if(this.props.cutMap.has(item.saveFile.path)){
+            const m: Map = this.props.cutMap.get(item.id);
+            if(m.child.exitCode === null){
+              return(
+                <div>
+                  <b className={ publicStyle.mr10 }>任务结束</b>
+                  <Button type="danger">
+                    <Icon type="delete" />
+                    <span>删除任务</span>
+                  </Button>
+                </div>
+              );
+            }else{
+              return(
+                <Button type="danger">
+                  <Icon type="close-circle" />
+                  <span>停止任务</span>
+                </Button>
+              );
+            }
+          }else{
+            return(
+              <div>
+                <Button className={ publicStyle.mr10 } type="primary">
+                  <Icon type="rocket" />
+                  <span>开始任务</span>
+                </Button>
+                <Button type="danger">
+                  <Icon type="delete" />
+                  <span>删除任务</span>
+                </Button>
+              </div>
+            );
+          }
+        }
+      }
+    ];
+    return columus;
   }
   componentDidMount(): void{
     // 为input添加nwsaveas属性
@@ -98,10 +227,54 @@ class Cut extends Component{
   }
   // 添加到队列
   onAddQueue(event: Object): void{
-    const cutList: Array = this.props.cutList.slice();
-    const { file, saveFile, starthh, startmm, startss, endhh, endmm, endss }: {
-      file: ?Object,
-      saveFile: ?Object,
+    if(formValidation(this.state, this.valid)){
+      const cutList: Array = this.props.cutList.slice();
+      const { file, saveFile, starthh, startmm, startss, endhh, endmm, endss }: {
+        file: ?Object,
+        saveFile: ?Object,
+        starthh: string,
+        startmm: string,
+        startss: string,
+        endhh: string,
+        endmm: string,
+        endss: string
+      } = this.state;
+      cutList.push({
+        id: new Date().getDate(),
+        file,
+        saveFile,
+        starthh,
+        startmm,
+        startss,
+        endhh,
+        endmm,
+        endss
+      });
+      this.props.action.cutList({
+        cutList
+      });
+      this.setState({
+        file: null,      // 选择文件
+        saveFile: null,  // 保存文件
+        starthh: '',     // 开始（时）
+        startmm: '',     // 开始（分）
+        startss: '',     // 开始（秒）
+        endhh: '',       // 结束（时）
+        endmm: '',       // 结束（分）
+        endss: ''        // 结束（秒）
+      });
+
+      {
+        const file: any = document.getElementById('cut-file');
+        const save: any = document.getElementById('cut-save');
+        file.value = '';
+        save.value = '';
+        save.nwsaveas = '';
+      }
+    }
+  }
+  render(): Object{
+    const { starthh, startmm, startss, endhh, endmm, endss }: {
       starthh: string,
       startmm: string,
       startss: string,
@@ -109,21 +282,7 @@ class Cut extends Component{
       endmm: string,
       endss: string
     } = this.state;
-    cutList.push({
-      file,
-      saveFile,
-      starthh,
-      startmm,
-      startss,
-      endhh,
-      endmm,
-      endss
-    });
-    this.props.action.cutList({
-      cutList
-    });
-  }
-  render(): Object{
+
     return(
       <div>
         <Affix>
@@ -144,19 +303,19 @@ class Cut extends Component{
               </div>
               <div className={ style.optGroup }>
                 <b>开始时间：</b>
-                <Input className={ style.input } onChange={ this.onInputChange.bind(this, 'starthh') } />
+                <Input className={ style.input } value={ starthh } onChange={ this.onInputChange.bind(this, 'starthh') } />
                 <span className={ style.maohao }>:</span>
-                <Input className={ style.input } onChange={ this.onInputChange.bind(this, 'startmm') } />
+                <Input className={ style.input } value={ startmm } onChange={ this.onInputChange.bind(this, 'startmm') } />
                 <span className={ style.maohao }>:</span>
-                <Input className={ style.input } onChange={ this.onInputChange.bind(this, 'startss') } />
+                <Input className={ style.input } value={ startss } onChange={ this.onInputChange.bind(this, 'startss') } />
               </div>
               <div className={ style.optGroup }>
                 <b>结束时间：</b>
-                <Input className={ style.input } onChange={ this.onInputChange.bind(this, 'endhh') } />
+                <Input className={ style.input } value={ endhh } onChange={ this.onInputChange.bind(this, 'endhh') } />
                 <span className={ style.maohao }>:</span>
-                <Input className={ style.input } onChange={ this.onInputChange.bind(this, 'endmm') } />
+                <Input className={ style.input } value={ endmm } onChange={ this.onInputChange.bind(this, 'endmm') } />
                 <span className={ style.maohao }>:</span>
-                <Input className={ style.input } onChange={ this.onInputChange.bind(this, 'endss') } />
+                <Input className={ style.input } value={ endss } onChange={ this.onInputChange.bind(this, 'endss') } />
               </div>
               <div className={ style.optGroup }>
                 <b>保存地址：</b>
@@ -181,6 +340,18 @@ class Cut extends Component{
             </div>
           </div>
         </Affix>
+        {/* 显示列表 */}
+        <div className={ publicStyle.tableBox }>
+          <Table loading={ this.state.loading }
+                 bordered={ true }
+                 columns={ this.columus() }
+                 rowKey={ (item: Object): number=>item.id }
+                 dataSource={ this.props.cutList }
+                 pagination={{
+                   pageSize: 20,
+                   showQuickJumper: true
+                 }} />
+        </div>
       </div>
     );
   }

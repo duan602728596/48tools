@@ -278,7 +278,7 @@ class PlayBackDownload extends Component{
           <Table loading={ this.state.loading }
                  bordered={ true }
                  columns={ this.columus() }
-                 rowKey={ (item)=>item.liveId }
+                 rowKey={ (item: Object): number=>item.liveId }
                  dataSource={ filter(this.props.playBackList, this.state.keyword, 'title') }
                  pagination={{
                    pageSize: 20,

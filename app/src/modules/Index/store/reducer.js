@@ -1,3 +1,4 @@
+// @flow
 import { createAction, handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 

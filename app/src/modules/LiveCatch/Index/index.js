@@ -344,7 +344,7 @@ class LiveCatch extends Component{
           <Table loading={ this.state.loading }
                  bordered={ true }
                  columns={ this.columus() }
-                 rowKey={ (item)=>item.liveId }
+                 rowKey={ (item: Object): number=>item.liveId }
                  dataSource={ this.props.liveList }
                  pagination={{
                    pageSize: 20,

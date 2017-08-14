@@ -204,7 +204,7 @@ class BiliBili extends Component{
           <Table loading={ this.state.loading }
                  bordered={ true }
                  columns={ this.columus() }
-                 rowKey={ (item)=>item.roomid }
+                 rowKey={ (item: Object): number=>item.roomid }
                  dataSource={ this.props.liveList }
                  pagination={{
                    pageSize: 20,
