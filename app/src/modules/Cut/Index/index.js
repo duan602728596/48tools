@@ -13,9 +13,9 @@ import computingTime from './computingTime';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
-const child_process = global.require('child_process');
-const path = global.require('path');
-const process = global.require('process');
+const child_process = node_require('child_process');
+const path = node_require('path');
+const process = node_require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */

@@ -4,7 +4,7 @@
  * url   : 'https://plive.48.cn/livesystem/api/live/v1/memberLivePage'
  * method: POST
  */
-const https = global.require('https');
+const https = node_require('https');
 
 const headers: Object = {
   'os': 'android',
