@@ -1,4 +1,4 @@
 /* 全屏 */
-const gui = node_require('nw.gui');
+const gui = global.require('nw.gui');
 const win = gui.Window.get();
 win.maximize();
