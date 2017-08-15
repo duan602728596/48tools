@@ -77,7 +77,12 @@ module.exports = config({
             localIdentName: '[name]__[local]___[hash:base64:15]'
           }
         },
-        'sass-loader'
+        {
+          path: 'sass-loader',
+          query: {
+            outputStyle: 'compressed'
+          }
+        }
       ],
       threadPool: happyThreadPool,
       verbose: true
