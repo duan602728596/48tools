@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Row, Col, Icon, Checkbox } from 'antd';
+import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
 import style from './style.sass';
 import { test } from './store/reducer';
 import '../pubmicMethod/initIndexedDB';
@@ -37,6 +37,11 @@ class Index extends Component{
       test: event.target.checked
     });
   }
+  // 清除缓存
+  onClearCache(event: Object): void{
+    gui.App.clearCache();
+    message.success('缓存清除成功！');
+  }
   render(): Object{
     return(
       <div className={ style.body }>
@@ -64,6 +69,7 @@ class Index extends Component{
             <Checkbox checked={ this.props.test } onChange={ this.onCheckChange.bind(this) } />
             <span>显示测试功能。（某些功能正在测试，功能不稳定）</span>
           </label>
+          <Button className={ style.clearCache } onClick={ this.onClearCache.bind(this) }>清除缓存</Button>
         </div>
         <Row type="flex" align="top" justify="start">
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>

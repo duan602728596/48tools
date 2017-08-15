@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message } from 'antd';
+import { Button, Table, Icon, Affix, message, Popconfirm } from 'antd';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
@@ -13,9 +13,9 @@ import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
 import store from '../../../store/store';
-const child_process = global.require('child_process');
-const path = global.require('path');
-const process = global.require('process');
+const child_process = node_require('child_process');
+const path = node_require('path');
+const process = node_require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
@@ -98,10 +98,12 @@ class LiveCatch extends Component{
             const m: Object = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
               return(
-                <Button type="danger" onClick={ this.stopRecording.bind(this, item) }>
-                  <Icon type="close-square" />
-                  <span>停止录制</span>
-                </Button>
+                <Popconfirm title="确认停止录制吗？" onConfirm={ this.stopRecording.bind(this, item) }>
+                  <Button type="danger">
+                    <Icon type="close-square" />
+                    <span>停止录制</span>
+                  </Button>
+                </Popconfirm>
               );
             }else{
               return(

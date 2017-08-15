@@ -1,3 +1,4 @@
+// @flow
 import { createAction, handleActions } from 'redux-actions';
 import { cursorAction, deleteAction } from 'indexeddb-tools-redux';
 import option from '../../pubmicMethod/option';

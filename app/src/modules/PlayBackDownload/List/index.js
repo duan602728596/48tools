@@ -12,7 +12,7 @@ import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-const fs = global.require('fs');
+const fs = node_require('fs');
 
 /* 初始化数据 */
 const state: Object = createStructuredSelector({

@@ -11,10 +11,10 @@ import commonStyle from '../../../common.sass';
 import getUrl from './getUrl';
 import store from '../../../store/store';
 import { time } from '../../../function';
-const child_process = global.require('child_process');
-const path = global.require('path');
-const process = global.require('process');
-const http = global.require('http');
+const child_process = node_require('child_process');
+const path = node_require('path');
+const process = node_require('process');
+const http = node_require('http');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
