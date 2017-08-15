@@ -9,6 +9,7 @@ import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
 import style from './style.sass';
 import { test } from './store/reducer';
 import '../pubmicMethod/initIndexedDB';
+const gui = global.require('nw.gui');
 
 /* 初始化数据 */
 const state: Object = createStructuredSelector({
