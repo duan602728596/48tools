@@ -13,6 +13,7 @@
 pug + sass + ECMA8 + react + antd + webpack + nwjs。  
 
 ## nwjs中文文档
+> nwjs请使用0.23版本，0.24版本已知会出现ffmpeg获取视频流时卡住的bug。
 [https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html](https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html)
 
 ## 谷歌扩展
