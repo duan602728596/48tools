@@ -11,10 +11,10 @@ import commonStyle from '../../../common.sass';
 import getUrl from './getUrl';
 import store from '../../../store/store';
 import { time } from '../../../function';
-const child_process = node_require('child_process');
-const path = node_require('path');
-const process = node_require('process');
-const http = node_require('http');
+const child_process = global.require('child_process');
+const path = global.require('path');
+const process = global.require('process');
+const http = global.require('http');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
@@ -78,12 +78,12 @@ class BiliBili extends Component{
               {
                 this.props.catching.has(item.roomid) ?
                   (
-                    <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
-                            type="primary"
-                            onClick={ this.onCatchStop.bind(this, item) }>
-                      <Icon type="minus-circle"/>
-                      <span>停止</span>
-                    </Button>
+                    <Popconfirm title="确认停止录制吗？" onConfirm={ this.onCatchStop.bind(this, item) }>
+                      <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="primary">
+                        <Icon type="minus-circle"/>
+                        <span>停止</span>
+                      </Button>
+                    </Popconfirm>
                   ) : (
                   <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
                           type="primary"

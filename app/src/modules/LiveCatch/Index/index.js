@@ -13,9 +13,9 @@ import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
 import store from '../../../store/store';
-const child_process = node_require('child_process');
-const path = node_require('path');
-const process = node_require('process');
+const child_process = global.require('child_process');
+const path = global.require('path');
+const process = global.require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
