@@ -21,7 +21,7 @@ const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 const state: Object = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
     (state: Object): Object | Array=>state.get('cut').get('cutList'),
-    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
+    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS() // bug
   ),
   cutMap: createSelector(          // 正在剪切
     (state: Object): Map=>state.get('cut').get('cutMap'),
@@ -159,7 +159,7 @@ class Cut extends Component{
               return(
                 <div>
                   <b className={ publicStyle.mr10 }>任务结束</b>
-                  <Button type="danger">
+                  <Button type="danger" onClick={ this.onDeleteTask.bind(this, item) }>
                     <Icon type="delete" />
                     <span>删除任务</span>
                   </Button>
@@ -180,7 +180,7 @@ class Cut extends Component{
                   <Icon type="rocket" />
                   <span>开始任务</span>
                 </Button>
-                <Button type="danger">
+                <Button type="danger" onClick={ this.onDeleteTask.bind(this, item) }>
                   <Icon type="delete" />
                   <span>删除任务</span>
                 </Button>
@@ -272,6 +272,14 @@ class Cut extends Component{
         save.nwsaveas = '';
       }
     }
+  }
+  // 删除任务
+  onDeleteTask(item: Object, event: Object): void{
+    const index: number = this.props.cutList.indexOf(item);
+    this.props.cutList.splice(index, 1);
+    this.props.action.cutList({
+      cutList: this.props.cutList
+    });
   }
   render(): Object{
     const { starthh, startmm, startss, endhh, endmm, endss }: {
