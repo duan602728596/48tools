@@ -23,5 +23,7 @@ const middlewares: Function = applyMiddleware(thunk, logger);
 
 /* store */
 const store: Object = createStore(reducer, initialState, compose(middlewares));
+// debug
+window.store = store;
 
 export default store;
