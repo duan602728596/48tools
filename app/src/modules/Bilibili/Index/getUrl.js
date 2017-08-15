@@ -1,5 +1,5 @@
-const http = node_require('http');
-const cheerio = node_require('cheerio');
+const http = global.require('http');
+const cheerio = global.require('cheerio');
 
 const headers: Object = {
   'Host': 'live.bilibili.com',
