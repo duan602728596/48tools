@@ -67,8 +67,5 @@
     "height": 600,
     "fullscreen": false,
     "show_in_taskbar": true
-  },
-  "webkit": {
-    "plugin": true
   }
 }
