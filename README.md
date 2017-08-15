@@ -13,7 +13,6 @@
 pug + sass + ECMA8 + react + antd + webpack + nwjs。  
 
 ## nwjs中文文档
-> nwjs请使用0.23版本，0.24版本已知会出现ffmpeg获取视频流时卡住的bug。
 [https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html](https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html)
 
 ## 谷歌扩展
@@ -33,6 +32,13 @@ node-sass如果安装失败，可以先到[https://github.com/sass/node-sass/rel
 
 ## video无法观看的解决办法
 请到[https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases](https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases)地址下载对应的ffmpeg.dll并覆盖到源目录中
+
+## 打包方法
+* 将文件夹内的文件打包成压缩文件，并重命名为*.nw
+* 将*.nw复制到和nw.exe同级目录下，运行
+```
+$ copy /b nw.exe+*.nw *.exe
+```
 
 ## 源代码托管地址
 [https://github.com/duan602728596/48tools](https://github.com/duan602728596/48tools)
