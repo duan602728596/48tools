@@ -12,12 +12,17 @@ const initData: {
 };
 
 /* Action */
-export const cutList: Function = createAction('剪切队列');  // 是否开启测试功能
+export const cutList: Function = createAction('剪切队列');      // 剪切队列
+export const taskChange: Function = createAction('剪切任务');   // 剪切任务
 
 /* reducer */
 const reducer: Function = handleActions({
   [cutList]: (state: Object, action: Object): Object=>{
     return state.set('cutList', action.payload.cutList);
+  },
+  [taskChange]: (state: Object, action: Object): Object=>{
+    return state.set('cutList', action.payload.cutList)
+      .set('cutMap', action.payload.cutMap);
   }
 }, fromJS(initData));
 

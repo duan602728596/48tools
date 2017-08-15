@@ -5,10 +5,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message, Input } from 'antd';
+import { Button, Table, Icon, Affix, message, Input, Popconfirm } from 'antd';
 import { time, patchZero } from '../../../function';
-import { cutList } from '../store/render';
+import { cutList, taskChange } from '../store/render';
 import formValidation from './formValidation';
+import computingTime from './computingTime';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
@@ -32,7 +33,8 @@ const state: Object = createStructuredSelector({
 /* dispatch */
 const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
-    cutList
+    cutList,
+    taskChange
   }, dispatch)
 });
 
@@ -153,37 +155,43 @@ class Cut extends Component{
         key: 'handle',
         width: '20%',
         render: (text: any, item: Object): Object=>{
-          if(this.props.cutMap.has(item.saveFile.path)){
+          if(this.props.cutMap.has(item.id)){
             const m: Map = this.props.cutMap.get(item.id);
-            if(m.child.exitCode === null){
+            if(m.child.exitCode !== null){
               return(
                 <div>
                   <b className={ publicStyle.mr10 }>任务结束</b>
-                  <Button type="danger" onClick={ this.onDeleteTask.bind(this, item) }>
-                    <Icon type="delete" />
-                    <span>删除任务</span>
-                  </Button>
+                  <Popconfirm title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
+                    <Button type="danger">
+                      <Icon type="delete" />
+                      <span>删除任务</span>
+                    </Button>
+                  </Popconfirm>
                 </div>
               );
             }else{
               return(
-                <Button type="danger">
-                  <Icon type="close-circle" />
-                  <span>停止任务</span>
-                </Button>
+                <Popconfirm title="确认停止任务吗？" onConfirm={ this.onStopTask.bind(this, item) }>
+                  <Button type="danger">
+                    <Icon type="close-circle" />
+                    <span>停止任务</span>
+                  </Button>
+                </Popconfirm>
               );
             }
           }else{
             return(
               <div>
-                <Button className={ publicStyle.mr10 } type="primary">
+                <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onStartTask.bind(this, item) }>
                   <Icon type="rocket" />
                   <span>开始任务</span>
                 </Button>
-                <Button type="danger" onClick={ this.onDeleteTask.bind(this, item) }>
-                  <Icon type="delete" />
-                  <span>删除任务</span>
-                </Button>
+                <Popconfirm title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
+                  <Button type="danger">
+                    <Icon type="delete" />
+                    <span>删除任务</span>
+                  </Button>
+                </Popconfirm>
               </div>
             );
           }
@@ -278,8 +286,81 @@ class Cut extends Component{
     const index: number = this.props.cutList.indexOf(item);
     this.props.cutList.splice(index, 1);
     this.props.action.cutList({
-      cutList: this.props.cutList
+      cutList: this.props.cutList.slice()
     });
+  }
+  /**
+   * 子进程监听
+   * 子进程关闭时自动删除itemId对应的Map
+   */
+  child_process_exit(item: Object, code: any, data: any): void{
+    console.log('exit: ' + code + ' ' + data);
+    this.child_process_cb(item);
+  }
+  child_process_error(item: Object, err: any): void{
+    console.error('error: \n' + err);
+    this.child_process_cb(item);
+  }
+  // 子进程关闭
+  async child_process_cb(item: Object): void{
+    this.props.action.cutList({
+      cutList: this.props.cutList.slice()
+    });
+
+    message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
+  }
+  // 开始任务
+  onStartTask(item: Object, event: Object): void{
+    const { starthh, startmm, startss, endhh, endmm, endss }: {
+      starthh: number,
+      startmm: number,
+      startss: number,
+      endhh: number,
+      endmm: number,
+      endss: number
+    } = item;
+    const [h, m, s]: number[] = computingTime(
+      [Number(starthh), Number(startmm), Number(startss)],
+      [Number(endhh), Number(endmm), Number(endss)]
+    );
+
+    const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
+      '-ss',
+      `${ patchZero(Number(starthh)) }:${ patchZero(Number(startmm)) }:${ patchZero(Number(startss)) }`,
+      '-t',
+      `${ patchZero(h) }:${ patchZero(m) }:${ patchZero(s) }`,
+      '-accurate_seek',
+      '-i',
+      item.file.path,
+      '-acodec',
+      'copy',
+      '-vcodec',
+      'copy',
+      '-y',
+      item.saveFile.path
+    ]);
+
+    console.log(child);
+
+    child.on('exit', this.child_process_exit.bind(this, item));
+    child.on('error', this.child_process_error.bind(this, item));
+
+    this.props.cutMap.set(item.id, {
+      item,
+      child
+    });
+
+    this.props.action.taskChange({
+      cutMap: this.props.cutMap,
+      cutList: this.props.cutList.slice()
+    });
+
+    message.info(`开始剪切【${ item.file.path } => ${ item.saveFile.path }】`);
+  }
+  // 停止任务
+  onStopTask(item: Object, event: Object): void{
+    const m = this.props.cutMap.get(item.id);
+    m.child.kill();
   }
   render(): Object{
     const { starthh, startmm, startss, endhh, endmm, endss }: {
