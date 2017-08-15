@@ -141,10 +141,15 @@ class BiliBili extends Component{
   async onCatch(item: Object, event: Object): void{
     const url: string = await getUrl(item.roomid);
     const title: string = `【B站直播抓取】${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
-    const child: Object = child_process.spawn(
-      __dirname + '/dependent/ffmpeg/ffmpeg.exe',
-      ['-i', url, '-c', 'copy', `${ __dirname }/output/${ title }.flv`]
-    );
+    const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
+      '-i',
+      url,
+      '-acodec',
+      'copy',
+      '-vcodec',
+      'copy',
+      `${ __dirname }/output/${ title }.flv`
+    ]);
     child.on('exit', this.child_process_exit.bind(this, item));
     child.on('error', this.child_process_error.bind(this, item));
 

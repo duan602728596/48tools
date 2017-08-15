@@ -158,7 +158,9 @@ class LiveCatch extends Component{
     const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
       '-i',
       `${ item.streamPath }`,
-      '-c',
+      '-acodec',
+      'copy',
+      '-vcodec',
       'copy',
       `${ __dirname }/output/${ title }.flv`
     ]);

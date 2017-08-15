@@ -336,7 +336,6 @@ class Cut extends Component{
       'copy',
       '-vcodec',
       'copy',
-      '-y',
       item.saveFile.path
     ]);
 
