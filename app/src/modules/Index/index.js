@@ -40,7 +40,7 @@ class Index extends Component{
   render(): Object{
     return(
       <div className={ style.body }>
-        <h1 className={ style.title }>48视应援工具</h1>
+        <h1 className={ style.title }>48应援工具</h1>
         <p className={ style.text }>
           本软件遵循
           <b>GNU General Public License v3.0</b>
