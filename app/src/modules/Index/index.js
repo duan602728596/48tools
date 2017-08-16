@@ -58,13 +58,6 @@ class Index extends Component{
           <span className={ style.url }>https://github.com/duan602728596/48tools</span>
           。
         </p>
-        <p className={ style.text }>
-          图片来自
-          <b>SNH48</b>
-          、
-          <b>BEJ48</b>
-          的成员，都是我的推，请给我的推集资吧……
-        </p>
         <div className={ style.test }>
           <label>
             <Checkbox checked={ this.props.test } onChange={ this.onCheckChange.bind(this) } />
