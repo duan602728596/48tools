@@ -81,9 +81,6 @@ async function generatingExcel(wdsList: { wdsid: string, wdstitle: string }[], p
     });
 
     const result: Array = await Promise.all(queue);
-
-    console.log(result);
-
     const buffer: any = xlsx.build(result);
     await writeExcel(pathname, buffer);
 
