@@ -43,7 +43,10 @@ const reducer: Function = handleActions({
     return state.set('liveList', liveList);
   },
   [catching]: (state: Object, action: Object): Object=>{
-    const { liveList, catching } = action.payload;
+    const { liveList, catching }: {
+      liveList: Array,
+      catching: Map
+    } = action.payload;
     return state.set('liveList', liveList)
       .set('catching', catching);
   }

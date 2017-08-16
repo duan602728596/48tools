@@ -12,7 +12,7 @@ import commonStyle from '../../../common.sass';
 import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
-import store from '../../../store/store';
+import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 const child_process = node_require('child_process');
 const path = node_require('path');
 const process = node_require('process');
@@ -126,47 +126,23 @@ class LiveCatch extends Component{
     ];
     return columns;
   }
-  /**
-   * 子进程监听
-   * 子进程关闭时自动删除itemId对应的Map
-   */
-  child_process_exit(item: Object, code: any, data: any): void{
-    console.log('exit: ' + code + ' ' + data);
-    this.child_process_cb(item);
-  }
-  child_process_error(item: Object, err: any): void{
-    console.error('error: \n' + err);
-    this.child_process_cb(item);
-  }
-  // 子进程关闭
-  async child_process_cb(item: Object): void{
-    const s: Object = store.getState().get('liveCatch').get('index');
-    const [m]: [Map] = [s.get('liveCatch')];
-    m.delete(item.liveId);
-
-    const data: string = await post(0);
-    const data2: Object = JSON.parse(data);
-
-    this.props.action.liveChange({
-      map: m,
-      liveList: 'liveList' in data2.content ? data2.content.liveList : []
-    });
-  }
   // 录制视频
   recording(item: Object, event: Object): void{
     const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title +
       '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
       '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
-    const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
-      '-i',
+    const child: Object = child_process.spawn(`${ __dirname }/dependent/ffmpeg/ffmpeg.exe`, [
+      `-i`,
       `${ item.streamPath }`,
-      '-c',
-      'copy',
+      `-c`,
+      `copy`,
       `${ __dirname }/output/${ title }.flv`
-    ]);
-
-    child.on('exit', this.child_process_exit.bind(this, item));
-    child.on('error', this.child_process_error.bind(this, item));
+      ]
+    );
+    child.stdout.on('data', child_process_stdout);
+    child.stderr.on('data', child_process_stderr);
+    child.on('close', child_process_exit);
+    child.on('error', child_process_error);
 
     this.props.liveCatch.set(item.liveId, {
       child: child,
@@ -192,20 +168,22 @@ class LiveCatch extends Component{
         '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
         '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
         '_' + item.liveId;
-      const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
-        '-i',
-        `${ item.streamPath }`,
-        '-c',
-        'copy',
-        `${ __dirname }/output/${ title }.flv`
-      ]);
-
-      child.on('exit', this.child_process_exit.bind(this, item));
-      child.on('error', this.child_process_error.bind(this, item));
+      const child: Object = child_process.spawn(`${ __dirname }/dependent/ffmpeg/ffmpeg.exe`, [
+          `-i`,
+          `${ item.streamPath }`,
+          `-c`,
+          `copy`,
+          `${ __dirname }/output/${ title }.flv`
+        ]
+      );
+      child.stdout.on('data', child_process_stdout);
+      child.stderr.on('data', child_process_stderr);
+      child.on('close', child_process_exit);
+      child.on('error', child_process_error);
 
       this.props.liveCatch.set(item.liveId, {
         child: child,
-        item: item
+        item: item,
       });
       resolve();
     });

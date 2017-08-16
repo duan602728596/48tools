@@ -9,12 +9,12 @@ import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../sto
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import getUrl from './getUrl';
-import store from '../../../store/store';
+import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../function';
-const child_process = global.require('child_process');
-const path = global.require('path');
-const process = global.require('process');
-const http = global.require('http');
+const child_process = node_require('child_process');
+const path = node_require('path');
+const process = node_require('process');
+const http = node_require('http');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
@@ -114,42 +114,21 @@ class BiliBili extends Component{
       loading: false
     });
   }
-  /**
-   * 子进程监听
-   * 子进程关闭时自动删除itemId对应的Map
-   */
-  child_process_exit(item: Object, code: any, data: any): void{
-    console.log('exit: ' + code + ' ' + data);
-    this.child_process_cb(item);
-  }
-  child_process_error(item: Object, err: any): void{
-    console.error('error: \n' + err);
-    this.child_process_cb(item);
-  }
-  // 子进程关闭
-  async child_process_cb(item: Object): void{
-    const s: Object = store.getState().get('bilibili').get('index');
-    const [m, ll]: [Map, Array] = [s.get('catching'), s.get('liveList')];
-    m.delete(item.roomid);
-
-    this.props.action.catching({
-      catching: m,
-      liveList: ll.slice()
-    });
-  }
   // 录制
   async onCatch(item: Object, event: Object): void{
     const url: string = await getUrl(item.roomid);
-    const title: string = `【B站直播抓取】${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
-    const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
-      '-i',
-      url,
-      '-c',
-      'copy',
+    const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
+    const child: Object = child_process.spawn(`${ __dirname }/dependent/ffmpeg/ffmpeg.exe`, [
+      `-i`,
+      `${ url }`,
+      `-c`,
+      `copy`,
       `${ __dirname }/output/${ title }.flv`
     ]);
-    child.on('exit', this.child_process_exit.bind(this, item));
-    child.on('error', this.child_process_error.bind(this, item));
+    child.stdout.on('data', child_process_stdout);
+    child.stderr.on('data', child_process_stderr);
+    child.on('close', child_process_exit);
+    child.on('error', child_process_error);
 
     this.props.catching.set(item.roomid, {
       child: child,
