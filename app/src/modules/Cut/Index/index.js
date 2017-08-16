@@ -18,6 +18,15 @@ const path = node_require('path');
 const process = node_require('process');
 const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 
+/* 子进程监听 */
+function child_process_stdout(data: any): void{
+  // console.log(data.toString());
+}
+
+function child_process_stderr(data: any): void{
+  // console.log(data.toString());
+}
+
 /* 初始化数据 */
 const state: Object = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
@@ -338,9 +347,8 @@ class Cut extends Component{
       'copy',
       item.saveFile.path
     ]);
-
-    console.log(child);
-
+    child.stdout.on('data', child_process_stdout);
+    child.stderr.on('data', child_process_stderr);
     child.on('exit', this.child_process_exit.bind(this, item));
     child.on('error', this.child_process_error.bind(this, item));
 
