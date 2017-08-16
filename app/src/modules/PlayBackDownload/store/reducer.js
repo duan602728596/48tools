@@ -25,10 +25,10 @@ const reducer: Function = handleActions({
     return state.set('index', indexReducer(state.get('index'), action));
   },
   [downloadList]: (state: Object, action: Object): Object=>{
-    return state.set('downloadList', action.payload.downloadList)
+    return state.set('downloadList', action.payload.downloadList);
   },
   [fnReady]: (state: Object, action: Object): Object=>{
-    return state.set('fnReady', action.payload.fnReady)
+    return state.set('fnReady', action.payload.fnReady);
   }
 }, fromJS(initData));
 

@@ -427,8 +427,8 @@ class Cut extends Component{
               </div>
             </div>
             <div className={ publicStyle.fr }>
-              <Link className={ publicStyle.btnLink } to="/">
-                <Button className={ publicStyle.ml10 } type="danger">
+              <Link className={ publicStyle.ml10 } to="/">
+                <Button type="danger">
                   <Icon type="poweroff" />
                   <span>返回</span>
                 </Button>

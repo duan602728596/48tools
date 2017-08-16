@@ -11,6 +11,7 @@ import PlayBackDownload_List from 'bundle-loader?lazy&name=PlayBackDownload!../m
 import BiliBili from 'bundle-loader?lazy&name=BiliBili!../modules/Bilibili/Index/index';
 import BiliBili_Option from 'bundle-loader?lazy&name=BiliBili!../modules/Bilibili/Option/index';
 import Cut from 'bundle-loader?lazy&name=Cut!../modules/Cut/Index/index';
+import Wds from 'bundle-loader?lazy&name=Wds!../modules/Wds/Index/index';
 
 /* 路由模块 */
 class Router extends Component{
@@ -29,7 +30,7 @@ class Router extends Component{
           {/* 首页 */}
           <Route path="/" component={ Index } exact />
           {/* 直播抓取 */}
-          <Route path="/LiveCatch" component={(props)=>(
+          <Route path="/LiveCatch" component={(props: Object): Object=>(
             <Switch>
               <Route path="/LiveCatch" component={ this.asyncModule(LiveCatch) } exact />
               <Route path="/LiveCatch/Option" component={ this.asyncModule(LiveCatch_Option) } exact />
@@ -37,7 +38,7 @@ class Router extends Component{
           )}>
           </Route>
           {/* 录播下载 */}
-          <Route path="/PlayBackDownload" component={(props)=>(
+          <Route path="/PlayBackDownload" component={(props: Object): Object=>(
             <Switch>
               <Route path="/PlayBackDownload" component={ this.asyncModule(PlayBackDownload) } exact />
               <Route path="/PlayBackDownload/Detail" component={ this.asyncModule(PlayBackDownload_Detail) } exact />
@@ -46,7 +47,7 @@ class Router extends Component{
           )}>
           </Route>
           {/* B站直播间的视频流抓取 */}
-          <Route path="/BiliBili" component={(props)=>(
+          <Route path="/BiliBili" component={(props: Object): Object=>(
             <Switch>
               <Route path="/BiliBili" component={ this.asyncModule(BiliBili) } exact />
               <Route path="/BiliBili/Option" component={ this.asyncModule(BiliBili_Option) } exact />
@@ -55,6 +56,8 @@ class Router extends Component{
           </Route>
           {/* 视频剪切 */}
           <Route path="/Cut" component={ this.asyncModule(Cut) } exact />
+          {/* 微打赏 */}
+          <Route path="/Wds" component={ this.asyncModule(Wds) } exact />
         </Switch>
       </div>
     );

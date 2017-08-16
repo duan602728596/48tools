@@ -264,8 +264,8 @@ class PlayBackDownload extends Component{
                   <span>下载列表</span>
                 </Button>
               </Link>
-              <Link className={ publicStyle.btnLink } to="/">
-                <Button className={ publicStyle.ml10 } type="danger">
+              <Link className={ publicStyle.ml10 } to="/">
+                <Button type="danger">
                   <Icon type="poweroff" />
                   <span>返回</span>
                 </Button>

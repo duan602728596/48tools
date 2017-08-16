@@ -9,7 +9,7 @@ import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
 import style from './style.sass';
 import { test } from './store/reducer';
 import '../pubmicMethod/initIndexedDB';
-const gui = global.require('nw.gui');
+const gui = node_require('nw.gui');
 
 /* 初始化数据 */
 const state: Object = createStructuredSelector({
@@ -124,12 +124,12 @@ class Index extends Component{
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
               <dt className={ style.bTest }>
-                <Link to="/Cut" title="微打赏统计">
+                <Link to="/Wds" title="微打赏统计">
                   <img src={ require('./image/llf1.jpg') } alt="微打赏统计" />
                 </Link>
               </dt>
               <dd>
-                <Link to="/Cut">微打赏统计</Link>
+                <Link to="/Wds">微打赏统计</Link>
               </dd>
             </dl>
           </Col>

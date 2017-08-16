@@ -23,7 +23,7 @@ function getUrl(roomid: number): Promise{
       headers: headers
     };
 
-    const req: any = http.request(options, (res: Object): void=>{
+    const req: any = http.request(options, (res: any): void=>{
       let getData: string = '';
       res.setEncoding('utf8');
       res.on('data', function(chunk: any): void{

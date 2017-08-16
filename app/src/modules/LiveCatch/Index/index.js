@@ -310,8 +310,8 @@ class LiveCatch extends Component{
                 <Icon type="loading-3-quarters" />
                 <span>刷新列表</span>
               </Button>
-              <Link to="/">
-                <Button className={ publicStyle.ml10 } type="danger">
+              <Link className={ publicStyle.ml10 } to="/">
+                <Button type="danger">
                   <Icon type="poweroff" />
                   <span>返回</span>
                 </Button>
