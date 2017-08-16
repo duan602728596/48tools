@@ -1,3 +1,4 @@
+// @flow
 /* B站直播抓取 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -21,7 +22,7 @@ const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 const getIndex: Function = (state: Object): Object=>state.get('bilibili').get('index');
 
 const state: Object = createStructuredSelector({
-  liveList: createSelector(            // 直播间信息
+  liveList: createSelector(  // 直播间信息
     getIndex,
     (data: Object): Array=>data.has('liveList') ? data.get('liveList') : []
   ),

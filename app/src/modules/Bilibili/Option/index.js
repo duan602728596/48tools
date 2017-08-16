@@ -1,3 +1,4 @@
+// @flow
 /* B站直播间添加 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';

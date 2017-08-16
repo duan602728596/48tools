@@ -1,3 +1,4 @@
+// @flow
 const http = node_require('http');
 const cheerio = node_require('cheerio');
 
