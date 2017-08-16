@@ -85,13 +85,13 @@ class BiliBili extends Component{
                       </Button>
                     </Popconfirm>
                   ) : (
-                  <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
-                          type="primary"
-                          onClick={ this.onCatch.bind(this, item) }>
-                    <Icon type="step-forward"/>
-                    <span>录制</span>
-                  </Button>
-                )
+                    <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
+                            type="primary"
+                            onClick={ this.onCatch.bind(this, item) }>
+                      <Icon type="step-forward"/>
+                      <span>录制</span>
+                    </Button>
+                  )
               }
               <Popconfirm title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
                 <Button className={ publicStyle.ml10 } type="danger" disabled={ this.props.catching.has(item.roomid) }>

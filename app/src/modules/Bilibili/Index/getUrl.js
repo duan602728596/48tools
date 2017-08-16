@@ -4,7 +4,7 @@ const cheerio = node_require('cheerio');
 const headers: Object = {
   'Host': 'live.bilibili.com',
   'X-Requested-With': 'ShockwaveFlash/25.0.0.148',
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36',
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'
 };
 
 function getUrl(roomid: number): Promise{
