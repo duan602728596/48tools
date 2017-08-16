@@ -150,7 +150,7 @@ class BiliBili extends Component{
   // 删除
   async onDelete(item: Object, event: Object): void{
     try{
-      this.props.action.deleteBilibiliLiveRoom({
+      await this.props.action.deleteBilibiliLiveRoom({
         data: item.roomid
       });
       message.success('删除成功！');
