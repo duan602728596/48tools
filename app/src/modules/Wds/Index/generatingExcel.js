@@ -41,7 +41,6 @@ function paihangbang(item: Object): Promise{
   ]).then((result: Array): { name: string, data: Array }=>{
     const l0: Object = JSON.parse(result[0]);
     const l1: Object = JSON.parse(result[1]);
-
     const data: Array = (format(l0.data, l1.data));
     data.unshift([item.wdstitle], [
       '序号',
@@ -49,12 +48,10 @@ function paihangbang(item: Object): Promise{
       '金额（元）',
       '时间（天）'
     ]);
-
     return {
       name: item.wdstitle,
       data
     };
-
   });
 }
 
