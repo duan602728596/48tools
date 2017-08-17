@@ -14,6 +14,7 @@ const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
 function format(list0: Array, list1: Array): Array{
   const res: Array[] = [];  // 返回的数据
   const l1: Object = {};    // 用于记录微打赏时间
+  let all: number = 0;      // 统计总金额
 
   // 先存储打卡时间
   list1.map((item: Object, index: number): void=>{
@@ -22,6 +23,7 @@ function format(list0: Array, list1: Array): Array{
 
   // 根据打卡排行榜格式化数据
   list0.map((item: Object, index: number): void=>{
+    all += Number(item.total_back_amount);
     res.push([
       index + 1,                 // 序号,
       item.nickname,             // 昵称
@@ -29,7 +31,7 @@ function format(list0: Array, list1: Array): Array{
       l1[item.user_id]           // 打卡时间
     ]);
   });
-
+  res.push([null], [`总金额（元）：${ all.toFixed(2) }`]);
   return res;
 }
 
@@ -42,9 +44,9 @@ function paihangbang(item: Object): Promise{
     const l0: Object = JSON.parse(result[0]);
     const l1: Object = JSON.parse(result[1]);
     const data: Array = (format(l0.data, l1.data));
-    data.unshift([item.wdstitle], [
+    data.unshift([item.wdstitle], [null], [
       '序号',
-      '昵称',
+      'ID',
       '金额（元）',
       '时间（天）'
     ]);
