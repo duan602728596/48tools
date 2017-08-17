@@ -257,7 +257,7 @@ class Cut extends Component{
         endss: string
       } = this.state;
       cutList.push({
-        id: new Date().getDate(),
+        id: new Date().getTime(),
         file,
         saveFile,
         starthh,
