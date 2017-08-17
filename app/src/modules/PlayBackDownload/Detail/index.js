@@ -26,9 +26,16 @@ class Detail extends Component{
       title: string
     } = this.props.location.query.detail;
 
+    const { current }: { current: number } = this.props.location.query;
+
     return(
       <div className={ style.body }>
-        <Link to="/PlayBackDownload">
+        <Link to={{
+          pathname: '/PlayBackDownload',
+          query: {
+            current
+          }
+        }}>
           <Button className={ style.btn } type="danger">
             <Icon type="poweroff" />
             <span>返回</span>

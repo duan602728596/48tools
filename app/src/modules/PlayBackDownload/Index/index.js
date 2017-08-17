@@ -75,14 +75,16 @@ const dispatch: Function = (dispatch: Function): Object=>({
 class PlayBackDownload extends Component{
   state: {
     loading: boolean,
-    keyword: string
+    keyword: string,
+    current: number
   };
   constructor(props: ?Object): void{
     super(props);
 
     this.state = {
       loading: false,    // 加载动画
-      keyword: ''        // 搜索关键字
+      keyword: '',       // 搜索关键字
+      current: 'query' in this.props.location && 'current' in this.props.location.query ? this.props.location.query.current : 1 // 分页
     };
   }
   // 表格配置
@@ -123,7 +125,8 @@ class PlayBackDownload extends Component{
               <Link className={ publicStyle.btnLink } to={{
                 pathname: '/PlayBackDownload/Detail',
                 query: {
-                  detail: item
+                  detail: item,
+                  current: this.state.current
                 }
               }}>
               <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }>
@@ -152,6 +155,12 @@ class PlayBackDownload extends Component{
         fnReady: true
       });
     }
+  }
+  // 分页变化
+  onPageChange(page: number, pageSize: number): void{
+    this.setState({
+      current: page
+    });
   }
   // 下载
   download(item: Object, event: Object): void{
@@ -282,7 +291,9 @@ class PlayBackDownload extends Component{
                  dataSource={ filter(this.props.playBackList, this.state.keyword, 'title') }
                  pagination={{
                    pageSize: 20,
-                   showQuickJumper: true
+                   showQuickJumper: true,
+                   current: this.state.current,
+                   onChange: this.onPageChange.bind(this)
                  }} />
         </div>
       </div>
