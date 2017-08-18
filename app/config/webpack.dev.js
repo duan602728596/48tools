@@ -83,7 +83,7 @@ module.exports = config({
     new HtmlWebpackPlugin({
       inject: true,
       hash: true,
-      template: path.join(__dirname, '/src/index.pug')
+      template: path.join(__dirname, '../src/index.pug')
     })
   ]
 });
