@@ -2,7 +2,8 @@ const os = require('os');
 const process = require('process');
 const webpack = require('webpack');
 const HappyPack = require('happypack');
-const manifest = require('./.dll/manifest.json');
+const manifest = require('../.dll/manifest.json');
+const babelConfig = require('./babel.config');
 
 const happyThreadPool = HappyPack.ThreadPool({
   size: os.cpus().length
@@ -83,27 +84,7 @@ function config(options){
       // react
       new HappyPack({
         id: 'es6_loader',
-        loaders: [
-          {
-            path: 'babel-loader',
-            query: {
-              cacheDirectory: true,
-              presets: ['react'],
-              plugins: [
-                'transform-decorators-legacy',
-                'transform-object-rest-spread',
-                [
-                  'import',
-                  {
-                    'libraryName': 'antd',
-                    'style': 'css'
-                  }
-                ],
-                'transform-flow-strip-types'
-              ]
-            }
-          }
-        ],
+        loaders: [babelConfig],
         threadPool: happyThreadPool,
         verbose: true
       })

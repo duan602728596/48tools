@@ -1,8 +1,27 @@
 {
   "name": "48tools",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "48应援工具，提供各种常用功能。",
   "license": "GNU General Public License v3.0",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js --watch",
+    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress",
+    "devdll": "cross-env NODE_ENV=development webpack --config ./config/webpack.dll.js --progress",
+    "prodll": "cross-env NODE_ENV=production webpack --config ./config/webpack.dll.js --progress",
+    "proinstall": "npm install --production"
+  },
+  "main": "./build/index.html",
+  "nodejs": true,
+  "window": {
+    "title": "48工具（v0.0.5）",
+    "position": "center",
+    "toolbar": true,
+    "frame": true,
+    "width": 1200,
+    "height": 600,
+    "fullscreen": false,
+    "show_in_taskbar": true
+  },
   "author": {
     "name": "段昊辰",
     "email": "duanhaochen@126.com",
@@ -49,24 +68,5 @@
     "uglifyjs-webpack-plugin": "next",
     "url-loader": "^0.5.9",
     "webpack": "^3.5.5"
-  },
-  "scripts": {
-    "start": "cross-env NODE_ENV=development webpack --config webpack.dev.js --watch",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.pro.js --progress",
-    "devdll": "cross-env NODE_ENV=development webpack --config webpack.dll.js --progress",
-    "prodll": "cross-env NODE_ENV=production webpack --config webpack.dll.js --progress",
-    "proinstall": "npm install --production"
-  },
-  "main": "./build/index.html",
-  "nodejs": true,
-  "window": {
-    "title": "48工具（v0.0.4）",
-    "position": "center",
-    "toolbar": true,
-    "frame": true,
-    "width": 1200,
-    "height": 600,
-    "fullscreen": false,
-    "show_in_taskbar": true
   }
 }

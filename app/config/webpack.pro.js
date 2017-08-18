@@ -6,6 +6,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
 const config = require('./webpack.config');
+const cssConfig = require('./css.config');
+const sassConfig = require('./sass.config');
 
 const happyThreadPool = HappyPack.ThreadPool({
   size: os.cpus().length
@@ -14,10 +16,10 @@ const happyThreadPool = HappyPack.ThreadPool({
 /* 合并配置 */
 module.exports = config({
   entry: {
-    'app': path.join(__dirname, '/src/app.js')
+    'app': path.join(__dirname, '../src/app.js')
   },
   output: {
-    path: path.join(__dirname, '/build'),
+    path: path.join(__dirname, '../build'),
     filename: 'script/[name]_[chunkhash].js',
     chunkFilename: 'script/[name]_[chunkhash]_chunk.js'
   },
@@ -69,21 +71,7 @@ module.exports = config({
     // sass
     new HappyPack({
       id: 'sass_loader',
-      loaders: [
-        {
-          path: 'css-loader',
-          query: {
-            modules: true,
-            localIdentName: '[name]__[local]___[hash:base64:15]'
-          }
-        },
-        {
-          path: 'sass-loader',
-          query: {
-            outputStyle: 'compressed'
-          }
-        }
-      ],
+      loaders: [cssConfig, sassConfig],
       threadPool: happyThreadPool,
       verbose: true
     }),

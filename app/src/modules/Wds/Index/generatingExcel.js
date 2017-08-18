@@ -8,7 +8,7 @@ const fs = node_require('fs');
 const path = node_require('path');
 const process = node_require('process');
 const xlsx = node_require('node-xlsx');
-const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
+const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 // 格式化
 function format(list0: Array, list1: Array): Array{
@@ -60,7 +60,7 @@ function paihangbang(item: Object): Promise{
 // 写入excel
 function writeExcel(title: string, buffer: any): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
-    fs.writeFile(`${ __dirname }/output/【集资统计】${ title }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
+    fs.writeFile(`${ execPath }/output/【集资统计】${ title }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
       'flag': 'w'
     }, (err)=>{
       if(err){

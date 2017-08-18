@@ -16,7 +16,7 @@ import commonStyle from '../../../common.sass';
 const child_process = node_require('child_process');
 const path = node_require('path');
 const process = node_require('process');
-const __dirname = path.dirname(process.execPath).replace(/\\/g, '/');
+const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 子进程监听 */
 function child_process_stdout(data: any): void{
@@ -78,7 +78,7 @@ class Cut extends Component{
   constructor(props: ?Object): void{
     super(props);
 
-    this.dir = `${ __dirname }/output`.replace(/\//g, '\\');
+    this.dir = `${ execPath }/output`.replace(/\//g, '\\');
     this.valid = {
       file: {
         text: '请选择视频文件！'
@@ -333,7 +333,7 @@ class Cut extends Component{
       [Number(endhh), Number(endmm), Number(endss)]
     );
 
-    const child: Object = child_process.spawn(__dirname + '/dependent/ffmpeg/ffmpeg.exe', [
+    const child: Object = child_process.spawn(execPath + '/dependent/ffmpeg/ffmpeg.exe', [
       '-ss',
       `${ patchZero(Number(starthh)) }:${ patchZero(Number(startmm)) }:${ patchZero(Number(startss)) }`,
       '-t',
