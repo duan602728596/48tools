@@ -12,13 +12,14 @@ import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
+import ErrorBoundary from '../../pubmicMethod/CatchError';
 const fs = node_require('fs');
 
 /* 初始化数据 */
 const state: Object = createStructuredSelector({
   downloadList: createSelector(         // 下载列表
     (state: Object): Array=>state.get('playBackDownload').get('downloadList'),
-    (data: Array): Array=>data
+    (data: Map): Map=>data
   ),
   fnReady: createSelector(              // 下载事件监听
     (state: Object): boolean=>state.get('playBackDownload').get('fnReady'),
@@ -49,12 +50,14 @@ class ListOne extends Component{
   }
   componentDidMount(): void{
     // 进度条的定时器
-    const { detail }: { detail: Array } = this.props;
-    const { state }: { state: number } = detail[1];
-    if(state === 1){
-      this.setState({
-        timer: setInterval(this.timer.bind(this), 300)
-      });
+    if('detail' in this.props){
+      const { detail }: { detail: Array } = this.props;
+      const { state }: { state: number } = detail[1];
+      if(state === 1){
+        this.setState({
+          timer: requestAnimationFrame(this.timer.bind(this))
+        });
+      }
     }
   }
   timer(): void{
@@ -66,7 +69,6 @@ class ListOne extends Component{
     } = detail[1];
     fs.stat(current + '.crdownload', (err: ?any, state2: Object)=>{
       if(state !== 1){
-        clearInterval(this.state.timer);
         this.setState({
           timer: null,
           percent: 100
@@ -74,6 +76,7 @@ class ListOne extends Component{
       }else{
         const percent: number = Number((state2.size / infor.totalBytes * 100).toFixed(0));
         this.setState({
+          timer: requestAnimationFrame(this.timer.bind(this)),
           percent: percent
         });
       }
@@ -81,7 +84,7 @@ class ListOne extends Component{
   }
   componentWillUnmount(): void{
     if(this.state.timer){
-      clearInterval(this.state.timer);
+      cancelAnimationFrame(this.state.timer);
     }
   }
   stateView(): Object{
@@ -113,39 +116,44 @@ class ListOne extends Component{
   onCancelDownload(id: number, event: Object): void{
     chrome.downloads.cancel(id);
   }
-  render(): ?Object{
-    const { detail }: { detail: Array } = this.props;
-    const { current, item, state }: {
-      current: string,
-      item: Object,
-      state: number
-    } = detail[1];
-    // 判断文件状态，避免渲染bug
-    if(state !== 0){
-      const { streamPath, title, subTitle }: {
-        streamPath: string,
-        title: string,
-        subTitle: string
-      } = item;
-      return(
-        <li>
-          <div className={ commonStyle.clearfix }>
-            <div className={ publicStyle.fl }>
-              <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
-              <p className={ style.line }>{ current }</p>
+  render(): Object | boolean{
+    if('detail' in this.props){
+      const { detail }: { detail: Array } = this.props;
+      const { current, item, state }: {
+        current: string,
+        item: Object,
+        state: number
+      } = detail[1];
+      // 判断文件状态，避免渲染bug
+      if(state !== 0){
+        const { streamPath, title, subTitle }: {
+          streamPath: string,
+          title: string,
+          subTitle: string
+        } = item;
+        return(
+          <li>
+            <div className={ commonStyle.clearfix }>
+              <div className={ publicStyle.fl }>
+                <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
+                <p className={ style.line }>{ current }</p>
+              </div>
+              {  this.stateView() }
             </div>
-            {  this.stateView() }
-          </div>
-          {
-            /* 判断是否显示进度条 */
-            state === 1 ? (
-              <Progress percent={ this.state.percent } status="active" />
-            ) : null
-          }
-        </li>
-      );
+            {
+              /* 判断是否显示进度条 */
+              state === 1 ? (
+                <Progress percent={ this.state.percent } status="active" />
+              ) : null
+            }
+
+          </li>
+        );
+      }else{
+        return false;
+      }
     }else{
-      return null;
+      return false;
     }
   }
 }
@@ -167,7 +175,11 @@ class List extends Component{
   listOne(): Object{
     return Array.from(this.props.downloadList).map((item: Array, index: number): Object=>{
       return(
-        <ListOne key={ item[0] } detail={ item } />
+        <div>
+          <ErrorBoundary>
+            <ListOne key={ item[0] } detail={ item } />
+          </ErrorBoundary>
+        </div>
       );
     });
   }
