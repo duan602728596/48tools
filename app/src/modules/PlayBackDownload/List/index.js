@@ -51,7 +51,7 @@ class ListOne extends Component{
     // 进度条的定时器
     const { detail }: { detail: Array } = this.props;
     const { state }: { state: number } = detail[1];
-    if(state === 1){
+    if(state && state === 1){
       this.setState({
         timer: requestAnimationFrame(this.timer.bind(this))
       });
@@ -84,7 +84,7 @@ class ListOne extends Component{
       cancelAnimationFrame(this.state.timer);
     }
   }
-  stateView(): Object{
+  stateView(): Object | boolean{
     const { detail }: { detail: Array } = this.props;
     const { state }: { state: number } = detail[1];
     switch(state){
@@ -107,6 +107,8 @@ class ListOne extends Component{
             <b className={ style.error }>取消下载</b>
           </div>
         );
+      default:
+        return false;
     }
   }
   // 取消下载
@@ -121,7 +123,7 @@ class ListOne extends Component{
       state: number
     } = detail[1];
     // 判断文件状态，避免渲染bug
-    if(state !== 0){
+    if(state && state !== 0){
       const { streamPath, title, subTitle }: {
         streamPath: string,
         title: string,
