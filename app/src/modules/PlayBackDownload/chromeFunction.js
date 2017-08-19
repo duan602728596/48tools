@@ -46,8 +46,11 @@ export function onChromeDownloadsChanged(infor: Object): void{
     downloadList.set(id, obj);
   }
 
-  downloadListAction({
-    downloadList: downloadList
+  store.dispatch({
+    type: downloadListAction.toString(),
+    payload: {
+      downloadList: new Map(Array.from(downloadList))
+    }
   });
 }
 /* 谷歌下载创建文件监听 */
