@@ -167,9 +167,7 @@ class List extends Component{
   listOne(): Object{
     return Array.from(this.props.downloadList).map((item: Array, index: number): Object=>{
       return(
-        <div>
-          <ListOne key={ item[0] } detail={ item } />
-        </div>
+        <ListOne key={ item[0] } detail={ item } />
       );
     });
   }
