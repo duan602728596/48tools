@@ -130,7 +130,7 @@ class ListOne extends Component{
         subTitle: string
       } = item;
       return(
-        <li>
+        <div>
           <div className={ commonStyle.clearfix }>
             <div className={ publicStyle.fl }>
               <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
@@ -144,7 +144,7 @@ class ListOne extends Component{
               <Progress percent={ this.state.percent } status="active" />
             ) : null
           }
-        </li>
+        </div>
       );
     }else{
       return false;
@@ -168,13 +168,18 @@ class List extends Component{
   }
   listOne(): Object{
     return Array.from(this.props.downloadList).map((item: Array, index: number): Object=>{
-      return(
-        <ListOne key={ item[0] } detail={ item } />
-      );
+      if(item[1].state !== 0){
+        return(
+          <li key={ item[0] }>
+            <ListOne detail={ item } />
+          </li>
+        );
+      }
     });
   }
   // 清除已下载
   onClear(event: Object): void{
+    const dl = this.props.downloadList instanceof Array ? this.props.downloadList : [];
     this.props.downloadList.forEach((value: Object, key: number): void=>{
       if(value.state !== 1){
         this.props.downloadList.delete(key);

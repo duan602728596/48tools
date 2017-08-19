@@ -24,7 +24,6 @@ module.exports = {
       'immutable',
       'redux-immutable',
       'reselect',
-      'antd',
       'indexeddb-tools',
       'indexeddb-tools-redux',
       'rc-queue-anim'
