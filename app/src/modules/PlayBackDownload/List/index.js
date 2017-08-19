@@ -53,7 +53,7 @@ class ListOne extends Component{
     const { state }: { state: number } = detail[1];
     if(state === 1){
       this.setState({
-        timer: global.setInterval(this.timer.bind(this), 300)
+        timer: requestAnimationFrame(this.timer.bind(this))
       });
     }
   }
@@ -66,22 +66,22 @@ class ListOne extends Component{
     } = detail[1];
     fs.stat(current + '.crdownload', (err: ?string, state2: Object)=>{
       if(state !== 1){
-        clearInterval(this.state.timer);
         this.setState({
           timer: null,
           percent: 100
         });
       }else{
-        const percent: number = (state2.size / infor.totalBytes * 100).toFixed(0);
+        const percent: number = Number((state2.size / infor.totalBytes * 100).toFixed(0));
         this.setState({
-          percent: percent
+          percent: percent,
+          timer: requestAnimationFrame(this.timer.bind(this))
         });
       }
     });
   }
   componentWillUnmount(): void{
     if(this.state.timer){
-      global.clearInterval(this.state.timer);
+      cancelAnimationFrame(this.state.timer);
     }
   }
   stateView(): Object{
