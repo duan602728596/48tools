@@ -64,7 +64,7 @@ class ListOne extends Component{
       infor: Object,
       state: number
     } = detail[1];
-    fs.stat(current + '.crdownload', (err: ?string, state2: Object)=>{
+    fs.stat(current + '.crdownload', (err: ?any, state2: Object)=>{
       if(state !== 1){
         this.setState({
           timer: null,
@@ -136,7 +136,12 @@ class ListOne extends Component{
             </div>
             {  this.stateView() }
           </div>
-          { state === 1 ? (<Progress percent={ this.state.percent } status="active" />) : null }
+          {
+            /* 判断是否显示进度条 */
+            state === 1 ? (
+              <Progress percent={ this.state.percent } status="active" />
+            ) : null
+          }
         </li>
       );
     }else{
