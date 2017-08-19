@@ -12,7 +12,6 @@ import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-import ErrorBoundary from '../../pubmicMethod/CatchError';
 const fs = node_require('fs');
 
 /* 初始化数据 */
@@ -50,14 +49,12 @@ class ListOne extends Component{
   }
   componentDidMount(): void{
     // 进度条的定时器
-    if('detail' in this.props){
-      const { detail }: { detail: Array } = this.props;
-      const { state }: { state: number } = detail[1];
-      if(state === 1){
-        this.setState({
-          timer: requestAnimationFrame(this.timer.bind(this))
-        });
-      }
+    const { detail }: { detail: Array } = this.props;
+    const { state }: { state: number } = detail[1];
+    if(state === 1){
+      this.setState({
+        timer: requestAnimationFrame(this.timer.bind(this))
+      });
     }
   }
   timer(): void{
@@ -117,41 +114,36 @@ class ListOne extends Component{
     chrome.downloads.cancel(id);
   }
   render(): Object | boolean{
-    if('detail' in this.props){
-      const { detail }: { detail: Array } = this.props;
-      const { current, item, state }: {
-        current: string,
-        item: Object,
-        state: number
-      } = detail[1];
-      // 判断文件状态，避免渲染bug
-      if(state !== 0){
-        const { streamPath, title, subTitle }: {
-          streamPath: string,
-          title: string,
-          subTitle: string
-        } = item;
-        return(
-          <li>
-            <div className={ commonStyle.clearfix }>
-              <div className={ publicStyle.fl }>
-                <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
-                <p className={ style.line }>{ current }</p>
-              </div>
-              {  this.stateView() }
+    const { detail }: { detail: Array } = this.props;
+    const { current, item, state }: {
+      current: string,
+      item: Object,
+      state: number
+    } = detail[1];
+    // 判断文件状态，避免渲染bug
+    if(state !== 0){
+      const { streamPath, title, subTitle }: {
+        streamPath: string,
+        title: string,
+        subTitle: string
+      } = item;
+      return(
+        <li>
+          <div className={ commonStyle.clearfix }>
+            <div className={ publicStyle.fl }>
+              <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
+              <p className={ style.line }>{ current }</p>
             </div>
-            {
-              /* 判断是否显示进度条 */
-              state === 1 ? (
-                <Progress percent={ this.state.percent } status="active" />
-              ) : null
-            }
-
-          </li>
-        );
-      }else{
-        return false;
-      }
+            {  this.stateView() }
+          </div>
+          {
+            /* 判断是否显示进度条 */
+            state === 1 ? (
+              <Progress percent={ this.state.percent } status="active" />
+            ) : null
+          }
+        </li>
+      );
     }else{
       return false;
     }
@@ -176,9 +168,7 @@ class List extends Component{
     return Array.from(this.props.downloadList).map((item: Array, index: number): Object=>{
       return(
         <div>
-          <ErrorBoundary>
-            <ListOne key={ item[0] } detail={ item } />
-          </ErrorBoundary>
+          <ListOne key={ item[0] } detail={ item } />
         </div>
       );
     });
