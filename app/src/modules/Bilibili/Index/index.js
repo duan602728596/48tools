@@ -107,7 +107,7 @@ class BiliBili extends Component{
     ];
     return columns;
   }
-  async componentDidMount(): void{
+  async componentWillMount(): void{
     await this.props.action.cursorBilibiliLiveRoom({
       indexName: 'roomname'
     });
