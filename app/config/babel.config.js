@@ -3,18 +3,17 @@ module.exports = {
   path: 'babel-loader',
   query: {
     cacheDirectory: true,
-    presets: ['react'],
+    presets: ['flow', 'react'],
     plugins: [
-      'transform-decorators-legacy',
-      'transform-object-rest-spread',
+      'transform-decorators-legacy',    // 装饰器
+      'transform-object-rest-spread',   // 对象的扩展
       [
         'import',
         {
           'libraryName': 'antd',
           'style': 'css'
         }
-      ],
-      'transform-flow-strip-types'
+      ]
     ]
   }
 };
