@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "node-xlsx": "^0.10.0"
+    "node-xlsx": "^0.11.0"
   },
   "devDependencies": {
     "antd": "^2.12.8",
