@@ -1,10 +1,10 @@
 {
   "name": "48tools",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "48应援工具，提供各种常用功能。",
   "license": "GNU General Public License v3.0",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js",
+    "start": "cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js --watch",
     "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress",
     "devdll": "cross-env NODE_ENV=development webpack --config ./config/webpack.dll.js --progress",
     "prodll": "cross-env NODE_ENV=production webpack --config ./config/webpack.dll.js --progress",
@@ -13,7 +13,7 @@
   "main": "./build/index.html",
   "nodejs": true,
   "window": {
-    "title": "48工具（v0.0.7）",
+    "title": "48工具（v0.0.8）",
     "position": "center",
     "toolbar": true,
     "frame": true,
@@ -38,6 +38,7 @@
     "babel-plugin-import": "^1.4.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "bundle-loader": "^0.5.5",

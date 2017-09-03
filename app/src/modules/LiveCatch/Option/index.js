@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Input, Button, message, Spin } from 'antd';
+import { Input, Button, message, Spin, Form } from 'antd';
 import style from './style.sass';
 import { getAutoRecordingOption, addAutoRecordingOption, putAutoRecordingOption } from '../store/reducer';
 
@@ -22,6 +22,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @withRouter
+@Form.create()
 @connect(state, dispatch)
 class LiveCatchOption extends Component{
   state: {
@@ -67,74 +68,108 @@ class LiveCatchOption extends Component{
       loading: false
     });
   }
-  // 表单的change事件
-  onInputChange(key: string, event: Object): void{
-    this.setState({
-      [key]: event.target.value
-    });
-  }
   // 修改
-  async onRevise(event: Object): void{
+  onRevise(event: Object): void{
+    event.preventDefault();
     this.setState({
       loading: true,
       btnLoading: true
     });
-    // 整理数据
-    const humans: string = this.state.humans;
-    const humansArray: Array = humans.split(/\s*,\s*/);
-    for(let j: number = humansArray.length - 1; j >= 0; j--){
-      if(humansArray[j] === ''){
-        humansArray.splice(j, 1);
-      }
-    }
-    // 修改配置
-    try{
-      await this.props.action.putAutoRecordingOption({
-        data: {
-          function: 'liveCatchOption',
-          option: {
-            time: Number(this.state.time),
-            humans: humansArray
+
+
+    this.props.form.validateFields(async (err: ?any, value: any): void=>{
+      if(!err){
+        const { time, humans }: {
+          time: string,
+          humans: string
+        } = value;
+
+        const humansArray: Array = humans.split(/\s*,\s*/);
+        for(let j: number = humansArray.length - 1; j >= 0; j--){
+          if(humansArray[j] === ''){
+            humansArray.splice(j, 1);
           }
         }
+        // 修改配置
+        try{
+          await this.props.action.putAutoRecordingOption({
+            data: {
+              function: 'liveCatchOption',
+              option: {
+                time: time,
+                humans: humansArray
+              }
+            }
+          });
+          message.success('配置修改成功！');
+        }catch(err){
+          message.error('配置修改失败！');
+        }
+      }else{
+        message.error('配置修改失败！');
+      }
+      this.setState({
+        loading: false,
+        btnLoading: false
       });
-      message.success('配置修改成功！');
-    }catch(err){
-      message.error('配置修改失败！');
-    }
-    this.setState({
-      loading: false,
-      btnLoading: false
     });
   }
   render(): Object{
+    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return(
       <div className={ style.body }>
-        <Spin spinning={ this.state.loading } tip="加载中...">
-          <div className={ style.formGroup }>
-            <label className={ style.formLabel } htmlFor="liveCatch-time">请输入请求间隔时间（分）：</label>
-            <Input className={ style.input }
-                   id="liveCatch-time"
-                   value={ this.state.time }
-                   onChange={ this.onInputChange.bind(this, 'time') } />
+        <Form layout="horizontal" onSubmit={ this.onRevise.bind(this) }>
+          <div>
+            <Spin spinning={ this.state.loading }>
+              <Form.Item label={
+                <span>
+                  请输入请求间隔时间（分）
+                  <span className={ style.red }>（时间大于等于一分钟）</span>
+                </span>
+              }>
+                {
+                  getFieldDecorator('time', {
+                    initialValue: this.state.time,
+                    rules: [
+                      {
+                        message: '必须输入请求间隔时间',
+                        required: true,
+                        whitespace: true,
+                      },
+                      {
+                        message: '时间必须大于等于一分钟',
+                        type: 'number',
+                        min: 1,
+                        transform: (value: string): number=>Number(value)
+                      }
+                    ]
+                  })(
+                    <Input />
+                  )
+                }
+              </Form.Item>
+              <Form.Item label={
+                <span>请输入想要监控的成员，以","分割，没有配置则为全部</span>
+              }>
+                {
+                  getFieldDecorator('humans', {
+                    initialValue: this.state.humans
+                  })(
+                    <Input.TextArea rows={ 10 } />
+                  )
+                }
+              </Form.Item>
+            </Spin>
           </div>
-          <div className={ style.formGroup }>
-            <label className={ style.formLabel } htmlFor="liveCatch-humans">请输入想要监控的成员，以","分割，没有配置则为全部：</label>
-            <Input.TextArea className={ style.input }
-                            id="liveCatch-humans"
-                            rows={ 10 }
-                            value={ this.state.humans }
-                            onChange={ this.onInputChange.bind(this, 'humans') } />
-          </div>
-        </Spin>
-        <div>
-          <Button className={ style.btn } type="primary" loading={ this.state.btnLoading } onClick={ this.onRevise.bind(this) }>修改</Button>
-          <Link to="/LiveCatch">
-            <Button className={ style.btn } type="danger" loading={ this.state.btnLoading }>
-              <span>返回</span>
-            </Button>
-          </Link>
-        </div>
+          <Form.Item>
+            <Button className={ style.btn } type="primary" htmlType="submit" size="default" loading={ this.state.btnLoading }>修改</Button>
+            <Link to="/LiveCatch">
+              <Button className={ style.btn } type="danger" size="default" loading={ this.state.btnLoading }>
+                <span>返回</span>
+              </Button>
+            </Link>
+          </Form.Item>
+        </Form>
       </div>
     );
   }

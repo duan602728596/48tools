@@ -128,7 +128,7 @@ class Wds extends Component{
   }
   // 全部导入到excel
   onToExcelAll(event: Object): void{
-    generatingExcel(this.props.wdsList, 'many');
+    generatingExcel(this.props.wdsList, '');
     message.info('正在生成Excel！');
   }
   render(): Object{
@@ -169,7 +169,7 @@ class Wds extends Component{
                 <Icon type="api" />
                 <span>生成EXCEL</span>
               </Button>
-              <span className={ style.tishi }>结果生成到一个EXCEL中</span>
+              <b className={ style.tishi }>结果生成到一个Excel中</b>
             </div>
             <div className={ publicStyle.fr }>
               <Link className={ publicStyle.ml10 } to="/">

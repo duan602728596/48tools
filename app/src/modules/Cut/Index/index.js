@@ -5,10 +5,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message, Input, Popconfirm } from 'antd';
+import { Button, Table, Icon, Affix, message, Input, Popconfirm, Form } from 'antd';
 import { time, patchZero } from '../../../function';
 import { cutList, taskChange } from '../store/render';
-import formValidation from './formValidation';
 import computingTime from './computingTime';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
@@ -52,6 +51,7 @@ type validChildren = {
 };
 
 @withRouter
+@Form.create()
 @connect(state, dispatch)
 class Cut extends Component{
   dir: string;
@@ -219,15 +219,18 @@ class Cut extends Component{
   onFileChange(event: Object): void{
     const save: any = document.getElementById('cut-save');
     const file: ?Object = event.target.files[0] || null;
-    const { name, ext }: {
-      name: string,
-      ext: string
-    } = path.parse(file.path);
-    const title: string = '【视频剪切】' + name + '_' + time('YY-MM-DD-hh-mm-ss') + ext;
+    let title: string = '';
+    if(file){
+      const { name, ext }: {
+        name: string,
+        ext: string
+      } = path.parse(file.path);
+      title = '【视频剪切】' + name + '_' + time('YY-MM-DD-hh-mm-ss') + ext;
+    }
     this.setState({
       file
     });
-    save.nwsaveas = file ? title : '';
+    save.nwsaveas = title;
   }
   // 储存文件的change事件
   onSaveChange(event: Object): void{
@@ -236,15 +239,55 @@ class Cut extends Component{
       saveFile: file
     });
   }
-  // inputChange
-  onInputChange(key: string, event: Object): void{
-    this.setState({
-      [key]: event.target.value
-    });
+  // 点击input
+  onClickInput(id: string, event: Object): void{
+    document.getElementById(id).click();
   }
   // 添加到队列
   onAddQueue(event: Object): void{
-    if(formValidation(this.state, this.valid)){
+    event.preventDefault();
+    this.props.form.validateFields(async (err: ?any, value: any): void=>{
+      if(!err){
+        const cutList: Array = this.props.cutList.slice();
+        const { file, saveFile }: {
+          file: Object,
+          saveFile: Object,
+        } = this.state;
+        const { starthh, startmm, startss, endhh, endmm, endss }: {
+          starthh: ?string,
+          startmm: ?string,
+          startss: ?string,
+          endhh: ?string,
+          endmm: ?string,
+          endss: ?string
+        } = value;
+        cutList.push({
+          id: new Date().getTime(),
+          file,
+          saveFile,
+          starthh: (starthh === undefined || /^\s*$/i.test(starthh)) ? '0' : starthh,
+          startmm: (startmm === undefined || /^\s*$/i.test(startmm)) ? '0' : startmm,
+          startss: (startss === undefined || /^\s*$/i.test(startss)) ? '0' : startss,
+          endhh: (endhh === undefined || /^\s*$/i.test(endhh)) ? '0' : endhh,
+          endmm: (endmm === undefined || /^\s*$/i.test(endmm)) ? '0' : endmm,
+          endss: (endss === undefined || /^\s*$/i.test(endss)) ? '0' : endss
+        });
+
+        this.props.action.cutList({
+          cutList
+        });
+        this.props.form.resetFields(); // 重置表单
+        this.setState({
+          file: null,      // 选择文件
+          saveFile: null   // 保存文件
+        });
+        {
+          const save: any = document.getElementById('cut-save');
+          save.nwsaveas = '';
+        }
+      }
+    });
+    /*if(formValidation(this.state, this.valid)){
       const cutList: Array = this.props.cutList.slice();
       const { file, saveFile, starthh, startmm, startss, endhh, endmm, endss }: {
         file: ?Object,
@@ -288,7 +331,7 @@ class Cut extends Component{
         save.value = '';
         save.nwsaveas = '';
       }
-    }
+    }*/
   }
   // 删除任务
   onDeleteTask(item: Object, event: Object): void{
@@ -370,61 +413,169 @@ class Cut extends Component{
     m.child.kill();
   }
   render(): Object{
-    const { starthh, startmm, startss, endhh, endmm, endss }: {
-      starthh: string,
-      startmm: string,
-      startss: string,
-      endhh: string,
-      endmm: string,
-      endss: string
-    } = this.state;
-
+    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return(
       <div>
         <Affix>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             {/* 功能区 */}
             <div className={ publicStyle.fl }>
-              <div className={ style.optGroup }>
-                <b>文件地址：</b>
-                <Button className={ style.fBtn }>
-                  <span>选择视频文件</span>
-                  <label className={ style.fLabel } htmlFor="cut-file" />
-                </Button>
-                <span className={ style.path }>{ this.state.file ? this.state.file.path : '' }</span>
-                <input className={ style.none }
-                       id="cut-file"
-                       type="file"
-                       onChange={ this.onFileChange.bind(this) } />
-              </div>
-              <div className={ style.optGroup }>
-                <b>开始时间：</b>
-                <Input className={ style.input } value={ starthh } onChange={ this.onInputChange.bind(this, 'starthh') } />
-                <span className={ style.maohao }>:</span>
-                <Input className={ style.input } value={ startmm } onChange={ this.onInputChange.bind(this, 'startmm') } />
-                <span className={ style.maohao }>:</span>
-                <Input className={ style.input } value={ startss } onChange={ this.onInputChange.bind(this, 'startss') } />
-              </div>
-              <div className={ style.optGroup }>
-                <b>结束时间：</b>
-                <Input className={ style.input } value={ endhh } onChange={ this.onInputChange.bind(this, 'endhh') } />
-                <span className={ style.maohao }>:</span>
-                <Input className={ style.input } value={ endmm } onChange={ this.onInputChange.bind(this, 'endmm') } />
-                <span className={ style.maohao }>:</span>
-                <Input className={ style.input } value={ endss } onChange={ this.onInputChange.bind(this, 'endss') } />
-              </div>
-              <div className={ style.optGroup }>
-                <b>保存地址：</b>
-                <Button className={ style.fBtn }>
-                  <span>选择保存位置</span>
-                  <label className={ style.fLabel } htmlFor="cut-save" />
-                </Button>
-                <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
-                <input className={ style.none } id="cut-save" type="file" onChange={ this.onSaveChange.bind(this) } />
-              </div>
-              <div className={ style.optGroup }>
-                <Button type="primary" onClick={ this.onAddQueue.bind(this) }>添加到队列</Button>
-              </div>
+              <Form layout="inline" onSubmit={ this.onAddQueue.bind(this) }>
+                <div className={ style.optGroup }>
+                  <Form.Item label="文件地址">
+                    {
+                      getFieldDecorator('file', {
+                        rules: [
+                          {
+                            message: '选择视频文件',
+                            required: true
+                          }
+                        ]
+                      })(
+                        <div>
+                          <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-file') }>选择视频文件</Button>
+                          <span className={ style.path }>{ this.state.file ? this.state.file.path : '' }</span>
+                          <input className={ style.disNone } id="cut-file" type="file" onChange={ this.onFileChange.bind(this) } />
+                        </div>
+                      )
+                    }
+                  </Form.Item>
+                </div>
+                <div className={ style.optGroup }>
+                  <Form.Item className={ style.formItem } label="开始时间">
+                    {
+                      getFieldDecorator('starthh', {
+                        rules: [
+                          {
+                            message: '输入正确的时间格式',
+                            type: 'number',
+                            min: 0,
+                            transform: (value: string = ''): number=>Number(value)
+                          }
+                        ]
+                      })(
+                        <Input className={ style.input } />
+                      )
+                    }
+                  </Form.Item>
+                  <span className={ style.maohao }>:</span>
+                  <Form.Item className={ style.formItem }>
+                    {
+                      getFieldDecorator('startmm', {
+                        rules: [
+                          {
+                            message: '输入正确的时间格式',
+                            type: 'number',
+                            min: 0,
+                            max: 59,
+                            transform: (value: string = ''): number=>Number(value)
+                          }
+                        ]
+                      })(
+                        <Input className={ style.input } />
+                      )
+                    }
+                  </Form.Item>
+                  <span className={ style.maohao }>:</span>
+                  <Form.Item className={ style.formItem }>
+                    {
+                      getFieldDecorator('startss', {
+                        rules: [
+                          {
+                            message: '输入正确的时间格式',
+                            type: 'number',
+                            min: 0,
+                            max: 59,
+                            transform: (value: string = ''): number=>Number(value)
+                          }
+                        ]
+                      })(
+                        <Input className={ style.input } />
+                      )
+                    }
+                  </Form.Item>
+                </div>
+                <div className={ style.optGroup }>
+                  <Form.Item className={ style.formItem } label="结束时间">
+                    {
+                      getFieldDecorator('endhh', {
+                        rules: [
+                          {
+                            message: '输入正确的时间格式',
+                            type: 'number',
+                            min: 0,
+                            transform: (value: string = ''): number=>Number(value)
+                          }
+                        ]
+                      })(
+                        <Input className={ style.input } />
+                      )
+                    }
+                  </Form.Item>
+                  <span className={ style.maohao }>:</span>
+                  <Form.Item className={ style.formItem }>
+                    {
+                      getFieldDecorator('endmm', {
+                        rules: [
+                          {
+                            message: '输入正确的时间格式',
+                            type: 'number',
+                            min: 0,
+                            max: 59,
+                            transform: (value: string = ''): number=>Number(value)
+                          }
+                        ]
+                      })(
+                        <Input className={ style.input } />
+                      )
+                    }
+                  </Form.Item>
+                  <span className={ style.maohao }>:</span>
+                  <Form.Item className={ style.formItem }>
+                    {
+                      getFieldDecorator('endss', {
+                        rules: [
+                          {
+                            message: '输入正确的时间格式',
+                            type: 'number',
+                            min: 0,
+                            max: 59,
+                            transform: (value: string = ''): number=>Number(value)
+                          }
+                        ]
+                      })(
+                        <Input className={ style.input } />
+                      )
+                    }
+                  </Form.Item>
+                </div>
+                <div className={ style.optGroup }>
+                  <Form.Item label="保存地址">
+                    {
+                      getFieldDecorator('saveFile', {
+                        rules: [
+                          {
+                            message: '选择保存位置',
+                            required: true
+                          }
+                        ]
+                      })(
+                        <div>
+                          <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
+                          <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
+                          <input className={ style.disNone } id="cut-save" type="file" onChange={ this.onSaveChange.bind(this) } />
+                        </div>
+                      )
+                    }
+                  </Form.Item>
+
+                </div>
+                <div className={ style.optGroup }>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit" size="default">添加到队列</Button>
+                  </Form.Item>
+                </div>
+              </Form>
             </div>
             <div className={ publicStyle.fr }>
               <Link className={ publicStyle.ml10 } to="/">
