@@ -23,7 +23,7 @@ const options: {
   port: ?number,
   path: string,
   method: string,
-  headers: string
+  headers: Object
 } = {
   hostname: 'plive.48.cn',
   port: null,
