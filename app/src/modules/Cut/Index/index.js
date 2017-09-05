@@ -30,7 +30,7 @@ function child_process_stderr(data: any): void{
 const state: Object = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
     (state: Object): Object | Array=>state.get('cut').get('cutList'),
-    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS() // bug
+    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
   ),
   cutMap: createSelector(          // 正在剪切
     (state: Object): Map=>state.get('cut').get('cutMap'),
@@ -55,65 +55,17 @@ type validChildren = {
 @connect(state, dispatch)
 class Cut extends Component{
   dir: string;
-  valid: {
-    file: validChildren,
-    saveFile: validChildren,
-    starthh: validChildren,
-    startmm: validChildren,
-    startss: validChildren,
-    endhh: validChildren,
-    endmm: validChildren,
-    endss: validChildren
-  };
   state: {
     file: ?Object,
-    saveFile: ?Object,
-    starthh: string,
-    startmm: string,
-    startss: string,
-    endhh: string,
-    endmm: string,
-    endss: string
+    saveFile: ?Object
   };
   constructor(props: ?Object): void{
     super(props);
 
     this.dir = `${ execPath }/output`.replace(/\//g, '\\');
-    this.valid = {
-      file: {
-        text: '请选择视频文件！'
-      },
-      saveFile: {
-        text: '请选择文件保存位置！'
-      },
-      starthh: {
-        text: '请输入开始时间！'
-      },
-      startmm: {
-        text: '请输入开始时间！'
-      },
-      startss: {
-        text: '请输入开始时间！'
-      },
-      endhh: {
-        text: '请输入结束时间！'
-      },
-      endmm: {
-        text: '请输入结束时间！'
-      },
-      endss: {
-        text: '请输入结束时间！'
-      }
-    };
     this.state = {
       file: null,      // 选择文件
-      saveFile: null,  // 保存文件
-      starthh: '',     // 开始（时）
-      startmm: '',     // 开始（分）
-      startss: '',     // 开始（秒）
-      endhh: '',       // 结束（时）
-      endmm: '',       // 结束（分）
-      endss: ''        // 结束（秒）
+      saveFile: null   // 保存文件
     };
   }
   // 表格配置
@@ -287,51 +239,6 @@ class Cut extends Component{
         }
       }
     });
-    /*if(formValidation(this.state, this.valid)){
-      const cutList: Array = this.props.cutList.slice();
-      const { file, saveFile, starthh, startmm, startss, endhh, endmm, endss }: {
-        file: ?Object,
-        saveFile: ?Object,
-        starthh: string,
-        startmm: string,
-        startss: string,
-        endhh: string,
-        endmm: string,
-        endss: string
-      } = this.state;
-      cutList.push({
-        id: new Date().getTime(),
-        file,
-        saveFile,
-        starthh,
-        startmm,
-        startss,
-        endhh,
-        endmm,
-        endss
-      });
-      this.props.action.cutList({
-        cutList
-      });
-      this.setState({
-        file: null,      // 选择文件
-        saveFile: null,  // 保存文件
-        starthh: '',     // 开始（时）
-        startmm: '',     // 开始（分）
-        startss: '',     // 开始（秒）
-        endhh: '',       // 结束（时）
-        endmm: '',       // 结束（分）
-        endss: ''        // 结束（秒）
-      });
-
-      {
-        const file: any = document.getElementById('cut-file');
-        const save: any = document.getElementById('cut-save');
-        file.value = '';
-        save.value = '';
-        save.nwsaveas = '';
-      }
-    }*/
   }
   // 删除任务
   onDeleteTask(item: Object, event: Object): void{
