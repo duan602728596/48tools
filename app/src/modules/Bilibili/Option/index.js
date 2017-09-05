@@ -62,10 +62,7 @@ class BiliBiliOption extends Component{
             }
           });
           message.success('添加成功！');
-          this.setState({
-            roomid: '',
-            roomname: ''
-          });
+          this.props.form.resetFields();
         }catch(err){
           message.error('添加失败！');
         }
