@@ -67,7 +67,7 @@ class LiveCatch extends Component{
         title: '直播ID',
         dataIndex: 'liveId',
         key: 'liveId',
-        width: '20%'
+        width: '15%'
       },
       {
         title: '直播间',
@@ -79,20 +79,26 @@ class LiveCatch extends Component{
         title: '直播标题',
         dataIndex: 'subTitle',
         key: 'subTitle',
-        width: '35%'
+        width: '20%'
+      },
+      {
+        title: '直播地址',
+        dataIndex: 'streamPath',
+        key: 'streamPath',
+        width: '30%'
       },
       {
         title: '开始时间',
         dataIndex: 'startTime',
         key: 'startTime',
-        width: '15%',
+        width: '10%',
         render: (text: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', text)
       },
       {
         title: '操作',
         dataIndex: 'liveId',
         key: 'handle',
-        width: '25%',
+        width: '10%',
         render: (text: any, item: Object): Object=>{
           if(this.props.liveCatch.has(text)){
             const m: Object = this.props.liveCatch.get(text);
@@ -280,7 +286,7 @@ class LiveCatch extends Component{
     return(
       <div>
         {/* 功能区 */}
-        <Affix>
+        <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fl }>
               {

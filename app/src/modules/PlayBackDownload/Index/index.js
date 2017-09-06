@@ -238,7 +238,7 @@ class PlayBackDownload extends Component{
     return(
       <div>
         {/* 功能区 */}
-        <Affix>
+        <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fl }>
               <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>

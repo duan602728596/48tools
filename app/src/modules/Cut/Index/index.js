@@ -234,7 +234,10 @@ class Cut extends Component{
           saveFile: null   // 保存文件
         });
         {
+          const file: any = document.getElementById('cut-file');
           const save: any = document.getElementById('cut-save');
+          file.value = '';
+          save.value = '';
           save.nwsaveas = '';
         }
       }
@@ -323,8 +326,8 @@ class Cut extends Component{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return(
       <div>
-        <Affix>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+        <Affix className={ publicStyle.affix }>
+          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix } ${ style.toolsBox }` }>
             {/* 功能区 */}
             <div className={ publicStyle.fl }>
               <Form layout="inline" onSubmit={ this.onAddQueue.bind(this) }>
@@ -401,9 +404,7 @@ class Cut extends Component{
                       )
                     }
                   </Form.Item>
-                </div>
-                <div className={ style.optGroup }>
-                  <Form.Item className={ style.formItem } label="结束时间">
+                  <Form.Item className={ `${ style.formItem  } ${ style.end }`} label="结束时间">
                     {
                       getFieldDecorator('endhh', {
                         rules: [
@@ -475,7 +476,6 @@ class Cut extends Component{
                       )
                     }
                   </Form.Item>
-
                 </div>
                 <div className={ style.optGroup }>
                   <Form.Item>
@@ -495,7 +495,7 @@ class Cut extends Component{
           </div>
         </Affix>
         {/* 显示列表 */}
-        <div className={ publicStyle.tableBox }>
+        <div className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
           <Table loading={ this.state.loading }
                  bordered={ true }
                  columns={ this.columus() }

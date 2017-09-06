@@ -135,7 +135,7 @@ class Wds extends Component{
     return(
       <div>
         {/* 功能区 */}
-        <Affix>
+        <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fl }>
               <label htmlFor="wds-id">微打赏ID: </label>

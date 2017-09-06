@@ -162,7 +162,7 @@ class BiliBili extends Component{
     return(
       <div>
         {/* 功能区 */}
-        <Affix>
+        <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fl }>
               <Link to="/BiliBili/Option">
