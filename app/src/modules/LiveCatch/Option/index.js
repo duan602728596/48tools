@@ -75,8 +75,6 @@ class LiveCatchOption extends Component{
       loading: true,
       btnLoading: true
     });
-
-
     this.props.form.validateFields(async (err: ?any, value: any): void=>{
       if(!err){
         const { time, humans }: {
