@@ -14,7 +14,7 @@ import { searchTitle } from './search';
 import generatingExcel from './generatingExcel';
 
 /* 初始化数据 */
-const state: Object = createStructuredSelector({
+const state: Function = createStructuredSelector({
   wdsList: createSelector(         // 当前查询列表
     (state: Object): Object | Array=>state.get('wds').get('wdsList'),
     (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()

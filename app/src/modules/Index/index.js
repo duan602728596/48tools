@@ -12,7 +12,7 @@ import '../pubmicMethod/initIndexedDB';
 const gui = node_require('nw.gui');
 
 /* 初始化数据 */
-const state: Object = createStructuredSelector({
+const state: Function = createStructuredSelector({
   test: createSelector(
     (state: Object): boolean=>state.get('index').get('test'),
     (data: boolean): boolean=>data

@@ -21,7 +21,7 @@ const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 /* 初始化数据 */
 const getIndex: Function = (state: Object): Object=>state.get('liveCatch').get('index');
 
-const state: Object = createStructuredSelector({
+const state: Function = createStructuredSelector({
   liveList: createSelector(         // 当前直播
     getIndex,
     (data: Object): Array=>data.has('liveList') ? data.get('liveList') : []

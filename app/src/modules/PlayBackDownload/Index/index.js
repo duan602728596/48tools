@@ -42,7 +42,7 @@ function filter(array: Array, keyword: string, key: string): Array{
 /* 初始化数据 */
 const getIndex: Function = (state: Object): Object=>state.get('playBackDownload').get('index');
 
-const state: Object = createStructuredSelector({
+const state: Function = createStructuredSelector({
   playBackList: createSelector(         // 当前录播
     getIndex,
     (data: Object): Array=>data.has('playBackList') ? data.get('playBackList') : []

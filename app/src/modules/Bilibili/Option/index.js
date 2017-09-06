@@ -10,7 +10,7 @@ import style from './style.sass';
 import { putBilibiliLiveRoom } from '../store/option';
 
 /* 初始化数据 */
-const state: Object = createStructuredSelector({});
+const state: Function = createStructuredSelector({});
 
 /* dispatch */
 const dispatch: Function = (dispatch: Function): Object=>({

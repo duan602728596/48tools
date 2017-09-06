@@ -27,7 +27,7 @@ function child_process_stderr(data: any): void{
 }
 
 /* 初始化数据 */
-const state: Object = createStructuredSelector({
+const state: Function = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
     (state: Object): Object | Array=>state.get('cut').get('cutList'),
     (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()

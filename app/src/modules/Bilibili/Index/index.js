@@ -21,7 +21,7 @@ const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 /* 初始化数据 */
 const getIndex: Function = (state: Object): Object=>state.get('bilibili').get('index');
 
-const state: Object = createStructuredSelector({
+const state: Function = createStructuredSelector({
   liveList: createSelector(  // 直播间信息
     getIndex,
     (data: Object): Array=>data.has('liveList') ? data.get('liveList') : []
