@@ -29,11 +29,11 @@ function child_process_stderr(data: any): void{
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
-    (state: Object): Object | Array=>state.get('cut').get('cutList'),
+    (state: Object): Object | Array=>state.has('cut') ? state.get('cut').get('cutList') : [],
     (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
   ),
   cutMap: createSelector(          // 正在剪切
-    (state: Object): Map=>state.get('cut').get('cutMap'),
+    (state: Object): Map=>state.has('cut') ? state.get('cut').get('cutMap') : new Map(),
     (data: Map): Map=>data
   )
 });

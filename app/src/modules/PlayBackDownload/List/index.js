@@ -17,11 +17,11 @@ const fs = node_require('fs');
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   downloadList: createSelector(         // 下载列表
-    (state: Object): Array=>state.get('playBackDownload').get('downloadList'),
+    (state: Object): Map=>state.has('playBackDownload') ? state.get('playBackDownload').get('downloadList') : new Map(),
     (data: Map): Map=>data
   ),
   fnReady: createSelector(              // 下载事件监听
-    (state: Object): boolean=>state.get('playBackDownload').get('fnReady'),
+    (state: Object): boolean=>state.has('playBackDownload') ? state.get('playBackDownload').get('fnReady') : false,
     (data: boolean): boolean=>data
   )
 });

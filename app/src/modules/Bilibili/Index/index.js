@@ -19,16 +19,16 @@ const http = node_require('http');
 const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
-const getIndex: Function = (state: Object): Object=>state.get('bilibili').get('index');
+const getIndex: Function = (state: Object): ?Object=>state.has('bilibili') ? state.get('bilibili').get('index') : null;
 
 const state: Function = createStructuredSelector({
   liveList: createSelector(  // 直播间信息
     getIndex,
-    (data: Object): Array=>data.has('liveList') ? data.get('liveList') : []
+    (data: ?Object): Array=>data !== null && data.has('liveList') ? data.get('liveList') : []
   ),
   catching: createSelector(  // 正在直播
     getIndex,
-    (data: Object): Map=>data.has('catching') ? data.get('catching') : new Map()
+    (data: ?Object): Map=>data !== null && data.has('catching') ? data.get('catching') : new Map()
   )
 });
 

@@ -40,23 +40,23 @@ function filter(array: Array, keyword: string, key: string): Array{
 }
 
 /* 初始化数据 */
-const getIndex: Function = (state: Object): Object=>state.get('playBackDownload').get('index');
+const getIndex: Function = (state: Object): ?Object=>state.has('playBackDownload') ? state.get('playBackDownload').get('index') : null;
 
 const state: Function = createStructuredSelector({
   playBackList: createSelector(         // 当前录播
     getIndex,
-    (data: Object): Array=>data.has('playBackList') ? data.get('playBackList') : []
+    (data: ?Object): Array=>data !== null && data.has('playBackList') ? data.get('playBackList') : []
   ),
   giftUpdTime: createSelector(          // 加载时间戳
     getIndex,
-    (data: Object): number=>data.has('giftUpdTime') ? data.get('giftUpdTime') : 0
+    (data: ?Object): number=>data !== null && data.has('giftUpdTime') ? data.get('giftUpdTime') : 0
   ),
   downloadList: createSelector(         // 下载列表
-    (state: Object): Object=>state.get('playBackDownload').get('downloadList'),
+    (state: Object): Map=>state.has('playBackDownload') ? state.get('playBackDownload').get('downloadList') : new Map(),
     (data: Map): Map=>data
   ),
   fnReady: createSelector(              // 下载事件监听
-    (state: Object): boolean=>state.get('playBackDownload').get('fnReady'),
+    (state: Object): boolean=>state.has('playBackDownload') ? state.get('playBackDownload').get('fnReady') : false,
     (data: boolean): boolean=>data
   )
 });
