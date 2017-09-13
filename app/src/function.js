@@ -16,8 +16,8 @@ export function objectToArray(obj: Object): Function[]{
 
 /**
  * 自动补0
- * @param { Number } num
- * @return { String }
+ * @param { number } num
+ * @return { string }
  */
 export function patchZero(num: number): string{
   if(num < 10){
@@ -29,9 +29,9 @@ export function patchZero(num: number): string{
 
 /**
  * 格式化时间
- * @param { String } modules       : 格式化的字符串
- * @param { Number | null } timeStr: 时间戳
- * @return { String }
+ * @param { string } modules       : 格式化的字符串
+ * @param { number | null } timeStr: 时间戳
+ * @return { string }
  */
 export function time(modules: string, timeStr: ?number): string{
   const date: Object = timeStr ? new Date(timeStr) : new Date();

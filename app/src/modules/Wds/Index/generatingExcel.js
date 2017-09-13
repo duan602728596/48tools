@@ -25,7 +25,7 @@ function format(list0: Array, list1: Array): Array{
   list0.map((item: Object, index: number): void=>{
     all += Number(item.total_back_amount);
     res.push([
-      index + 1,                 // 序号,
+      index + 1,                 // 序号
       item.nickname,             // 昵称
       item.total_back_amount,    // 打卡金额
       l1[item.user_id]           // 打卡时间
