@@ -161,12 +161,6 @@ class Cut extends Component{
     ];
     return columus;
   }
-  componentDidMount(): void{
-    // 为input添加nwsaveas属性
-    const save: any = document.getElementById('cut-save');
-    save.nwsaveas = '';
-    save.nwworkingdir = this.dir;
-  }
   // 选择文件的change事件
   onFileChange(event: Object): void{
     const save: any = document.getElementById('cut-save');
@@ -471,7 +465,12 @@ class Cut extends Component{
                         <div>
                           <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
                           <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
-                          <input className={ style.disNone } id="cut-save" type="file" onChange={ this.onSaveChange.bind(this) } />
+                          <input className={ style.disNone }
+                                 id="cut-save"
+                                 type="file"
+                                 nwsaveas=""
+                                 nwworkingdir={ this.dir }
+                                 onChange={ this.onSaveChange.bind(this) } />
                         </div>
                       )
                     }
