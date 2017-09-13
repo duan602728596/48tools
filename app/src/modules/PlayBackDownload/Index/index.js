@@ -19,24 +19,28 @@ const path = node_require('path');
 
 /**
  * 搜索的过滤函数
- * @param { Array } array   : 需要过滤的数组
- * @param { String } keyword: 关键字
- * @param { String } key    : 参考键值
+ * @param { Array } array            : 需要过滤的数组
+ * @param { string | RegExp } keyword: 关键字或正则表达式
+ * @param { string } key             : 参考键值
+ * @param { number } from            : 查找范围
+ * @param { number } to              : 查找范围
  * @return { Array }
  */
-function filter(array: Array, keyword: string, key: string): Array{
-  if(/^\s*$/.test(keyword)){
+function filter(array: Array, keyword: string | RegExp, key: string, from: number, to: number): Array{
+  // 如果没有搜索字符串，返回所有数组
+  if((typeof keyword === 'string' && /^\s*$/.test(keyword)) || to < 0){
     return array;
-  }else{
-    const newArr: Array = [];
-    const keywordRegExp: RegExp = new RegExp(`(${ keyword.split(/\s+/).join('|') })`, 'i');
-    array.map((item: Object, index: number): void=>{
-      if(keywordRegExp.test(item[key])){
-        newArr.push(item);
-      }
-    });
-    return newArr;
   }
+  // 判断当前是否满足搜索匹配
+  const keywordRegExp: RegExp = typeof keyword === 'string' ? new RegExp(`(${ keyword.split(/\s+/).join('|') })`, 'i') : keyword;
+  if(from === to){
+    return keywordRegExp.test(array[from][key]) ? [array[from]] : [];
+  }
+  // 拆分数组
+  const middle: number = Math.floor((to - from) / 2) + from;
+  const left = filter(array, keywordRegExp, key, from, middle);
+  const right = filter(array, keywordRegExp, key, middle + 1, to);
+  return left.concat(right);
 }
 
 /* 初始化数据 */
@@ -172,7 +176,6 @@ class PlayBackDownload extends Component{
       '_下载时间_' + time('YY-MM-DD-hh-mm-ss') +
       '_' + item.liveId;
 
-
     chrome.downloads.download({
       url: item.streamPath,
       filename: title + pathInfo.ext,
@@ -288,7 +291,7 @@ class PlayBackDownload extends Component{
                  bordered={ true }
                  columns={ this.columus() }
                  rowKey={ (item: Object): number=>item.liveId }
-                 dataSource={ filter(this.props.playBackList, this.state.keyword, 'title') }
+                 dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
                  pagination={{
                    pageSize: 20,
                    showQuickJumper: true,
