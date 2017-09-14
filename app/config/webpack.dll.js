@@ -26,7 +26,8 @@ module.exports = {
       'reselect',
       'indexeddb-tools',
       'indexeddb-tools-redux',
-      'rc-queue-anim'
+      'rc-queue-anim',
+      'jquery'
     ]
   },
   output: {
