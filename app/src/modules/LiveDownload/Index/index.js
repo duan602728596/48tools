@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Select } from 'antd';
-import { liveList, liveListInit } from '../store/index';
+import { liveList, liveListInit, changeGroup } from '../store/index';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
@@ -38,21 +38,20 @@ const state: Function = createStructuredSelector({
 const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     liveList,
-    liveListInit
+    liveListInit,
+    changeGroup
   }, dispatch)
 });
 
 @connect(state, dispatch)
 class LiveDownload extends Component{
   state: {
-    group: string,
     loading: boolean
   };
   constructor(props: Object): void{
     super(props);
 
     this.state = {
-      group: this.props.group,
       loading: false
     };
   }
@@ -95,26 +94,25 @@ class LiveDownload extends Component{
     return columus;
   }
   onGroupSelect(value: string, option: any): void{
-    this.setState({
+    this.props.action.changeGroup({
       group: value
     });
   }
   // 加载列表
-  async onLoadList(event: Object): void{
+  async onLoadList(page: number, pageSize: number, event: Object): void{
     this.setState({
       loading: true
     });
     try{
-      const html = await loadList(this.state.group, this.props.page);
+      const html = await loadList(this.props.group, page);
       const { result, pageLen }: {
         result: Array,
         pageLen: number
       } = queryHtml(html);
       this.props.action.liveListInit({
-        liveList: this.props.page === 1 || this.state.group !== this.props.group ? result : this.props.liveList.concat(result),
+        liveList: result,
         pageLen: pageLen,
-        page: this.state.group === this.props.group ? this.props.page + 1 : 1,
-        group: this.state.group
+        page
       });
       message.success('加载成功');
     }catch(err){
@@ -132,8 +130,9 @@ class LiveDownload extends Component{
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fl }>
               <Select className={ style.select }
-                      value={ this.state.group }
+                      value={ this.props.group }
                       dropdownMatchSelectWidth={ true }
+                      dropdownClassName={ style.select }
                       onSelect={ this.onGroupSelect.bind(this) }>
                 <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
                 <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
@@ -141,9 +140,9 @@ class LiveDownload extends Component{
                 <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
                 <Select.Option key="CKG48" value="CKG48" disabled={ true }>CKG48</Select.Option>
               </Select>
-              <Button className={ publicStyle.ml10 } type="primary" onClick={ this.onLoadList.bind(this) }>
+              <Button className={ publicStyle.ml10 } type="primary" onClick={ this.onLoadList.bind(this, 1, 15) }>
                 <Icon type="cloud" />
-                <span>加载公演录播列表</span>
+                <span>刷新公演录播列表</span>
               </Button>
             </div>
             <div className={ publicStyle.fr }>
@@ -164,8 +163,11 @@ class LiveDownload extends Component{
                  rowKey={ (item: Object): number=>item.id }
                  dataSource={ this.props.liveList }
                  pagination={{
-                   pageSize: 20,
-                   showQuickJumper: true
+                   pageSize: 15,
+                   showQuickJumper: true,
+                   current: this.props.page,
+                   total: this.props.liveList.length === 0 ? 0 : this.props.pageLen * 15,
+                   onChange: this.onLoadList.bind(this)
                  }} />
         </div>
       </div>

@@ -5,6 +5,7 @@ import { cursorAction, deleteAction } from 'indexeddb-tools-redux';
 /* Action */
 export const liveList: Function = createAction('公演录播列表');
 export const liveListInit: Function = createAction('公演录播列表初始化');
+export const changeGroup: Function = createAction('公演录播选择团队');
 
 /* reducer */
 type ll = {
@@ -17,16 +18,17 @@ const reducer: Function = handleActions({
     return state.set('liveList', action.payload.liveList);
   },
   [liveListInit]: (state: Object, action: Object): Object=>{
-    const { liveList, page, pageLen, group }: {
+    const { liveList, page, pageLen }: {
       liveList: ll,
       page: number,
-      pageLen: number,
-      group: string
+      pageLen: number
     } = action.payload;
     return state.set('liveList', liveList)
       .set('page', page)
-      .set('pageLen', pageLen)
-      .set('group', group);
+      .set('pageLen', pageLen);
+  },
+  [changeGroup]: (state: Object, action: Object): Object=>{
+    return state.set('group', action.payload.group);
   }
 }, {});
 
