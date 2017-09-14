@@ -31,6 +31,11 @@ const dispatch: Function = (dispatch: Function): Object=>({
 @withRouter
 @connect(state, dispatch)
 class Wds extends Component{
+  state: {
+    btnLoading: boolean,
+    wdsid: string,
+    wdstitle: string
+  };
   constructor(props: Object): Object{
     super(props);
 

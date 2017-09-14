@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Input, Popconfirm, Form } from 'antd';
+import jQuery from 'jquery';
 import { time, patchZero } from '../../../function';
-import { cutList, taskChange } from '../store/render';
+import { cutList, taskChange } from '../store/reducer';
 import computingTime from './computingTime';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
@@ -187,7 +188,7 @@ class Cut extends Component{
   }
   // 点击input
   onClickInput(id: string, event: Object): void{
-    document.getElementById(id).click();
+    jQuery(`#${ id }`).click();
   }
   // 添加到队列
   onAddQueue(event: Object): void{
@@ -228,11 +229,11 @@ class Cut extends Component{
           saveFile: null   // 保存文件
         });
         {
-          const file: any = document.getElementById('cut-file');
-          const save: any = document.getElementById('cut-save');
-          file.value = '';
-          save.value = '';
-          save.nwsaveas = '';
+          const $file: any = $('#cut-file');
+          const $save: any = $('#cut-save');
+          $file.val('');
+          $save.val('');
+          $save.prop('nwsaveas', '');
         }
       }
     });
@@ -262,7 +263,6 @@ class Cut extends Component{
     this.props.action.cutList({
       cutList: this.props.cutList.slice()
     });
-
     message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 开始任务

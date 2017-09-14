@@ -16,7 +16,7 @@ const initData: {
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...objectToArray(indexAction))]: (state: Object, action: Object)=>{
+  [combineActions(...objectToArray(indexAction))]: (state: Object, action: Object): Object=>{
     return state.set('index', indexReducer(state.get('index'), action));
   },
   [combineActions(...objectToArray(optionAction))]: (state: Object, action: Object): Object=>{
