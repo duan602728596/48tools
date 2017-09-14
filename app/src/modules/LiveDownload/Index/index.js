@@ -111,7 +111,7 @@ class LiveDownload extends Component{
         pageLen: number
       } = queryHtml(html);
       this.props.action.liveListInit({
-        liveList: this.props.page === 1 ? result : this.props.liveList.concat(result),
+        liveList: this.props.page === 1 || this.state.group !== this.props.group ? result : this.props.liveList.concat(result),
         pageLen: pageLen,
         page: this.state.group === this.props.group ? this.props.page + 1 : 1,
         group: this.state.group
