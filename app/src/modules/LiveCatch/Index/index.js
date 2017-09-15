@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Popconfirm } from 'antd';
+import jQuery from 'jquery';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
@@ -200,6 +201,7 @@ class LiveCatch extends Component{
       loading: true
     });
     // 获取列表
+    const _this: Object = this;
     const data: string = await post(0);
     const data2: Object = JSON.parse(data);
     if(data2.status === 200){
@@ -209,19 +211,19 @@ class LiveCatch extends Component{
       // 获取列表成功后开始构建录制进程
       const queue: Array = [];                                                // Promise.all进程
       const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
-      liveList.map((item: Object, index: number): void=>{
+      jQuery(liveList).each(function(index: number, item: Object): void{
         // 用正则表达式判断指定的成员
         if(humanRegExp.test(item.title)){
           // 有录制的进程
-          if(this.props.liveCatch.has(item.liveId)){
-            const m: Object = this.props.liveCatch.get(item.liveId);
+          if(_this.props.liveCatch.has(item.liveId)){
+            const m: Object = _this.props.liveCatch.get(item.liveId);
             // 录制由于特殊原因已经结束，如断线等
             if(m.child.exitCode !== null){
-              queue.push(this.recordingPromise(item));
+              queue.push(_this.recordingPromise(item));
             }
             // 没有录制进程
           }else{
-            queue.push(this.recordingPromise(item));
+            queue.push(_this.recordingPromise(item));
           }
         }
       });

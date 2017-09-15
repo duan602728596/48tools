@@ -11,7 +11,9 @@ export function loadList(group: string, page: number): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
     jQuery.ajax({
       url: `http://live.${ group.toLocaleLowerCase() }.com/Index/index/p/${ page }.html`,
+      type: 'GET',
       dataType: 'text',
+      async: true,
       success: function(result: any, status: number, xhr: any): void{
         resolve(result);
       }
