@@ -1,6 +1,7 @@
 // @flow
 import jQuery from 'jquery';
 import cheerio from 'cheerio';
+const url = node_require('url');
 
 /**
  * 使用ajax加载列表
@@ -46,4 +47,67 @@ export function queryHtml(html: string): Object{
     result,
     pageLen: pageLen
   };
+}
+
+/**
+ * 获取m3u8地址
+ * @param { string } group  : 团
+ * @param { string } id     : 视频ID
+ * @param { string } quality: 品质
+ */
+export function getM3U8(group: string, id: string, quality: string): Promise{
+  return new Promise((resolve: Function, reject: Function): void=>{
+    jQuery.ajax({
+      url: `http://live.${ group.toLocaleLowerCase() }.com/Index/invedio/id/${ id }`,
+      type: 'GET',
+      dataType: 'text',
+      async: true,
+      success: function(result: any, status: number, xhr: any): void{
+        resolve(result);
+      }
+    });
+  }).then((html: string): void=>{
+    const xml: any = cheerio.load(html);
+    return xml(`#${ quality }_url`).attr('value');
+  });
+}
+
+/**
+ * 获取m3u8并解析和下载
+ * @param { string } m3u8Url
+ */
+export function downloadM3U8(m3u8Url: string): Promise{
+  return new Promise((resolve: Function, reject: Function)=>{
+    jQuery.ajax({
+      url: m3u8Url,
+      type: 'GET',
+      dataType: 'text',
+      async: true,
+      success: function(result: any, status: number, xhr: any): void{
+        resolve(result);
+      }
+    });
+  }).then((text: string): { host: string, m3u8: string }=>{
+    /* 使用正则解析网址 */
+    const u: string = text.match(/\n[^#\n]*\n/g)[0].replace(/\n/g, '');
+    let host: string = null;
+    if(/^ht{2}ps?/.test(u)){
+      host = '';
+    }else if(/^\/.+$/.test(u)){
+      const q: Object = url.parse(m3u8Url);
+      host = q.protocol + '//' + q.hostname;
+
+    }else{
+      host = m3u8Url.replace(/[^/]+\.m3u8/, '');
+    }
+    return {
+      host,
+      m3u8: text
+    };
+  }).then(({ host, m3u8 }: { host: string, m3u8: string }): void=>{
+    /* 使用正则替换网址 */
+    return m3u8.replace(/\n[^#\n]*\n/g, (str: string): string=>{
+      return '\n' + host + str.replace(/\n/g, '') + '\n';
+    });
+  });
 }

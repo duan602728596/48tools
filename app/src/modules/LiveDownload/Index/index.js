@@ -10,7 +10,8 @@ import { liveList, liveListInit, changeGroup } from '../store/index';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
-import { loadList, queryHtml } from './loadList';
+import { loadList, queryHtml, getM3U8, downloadM3U8 } from './loadList';
+const fs = node_require('fs');
 
 /* 初始化数据 */
 const getIndex: Function = (state: Object): ?Object=>state.has('liveDownload') ? state.get('liveDownload').get('index') : null;
@@ -83,9 +84,9 @@ class LiveDownload extends Component{
         render: (text: any, item: Object): string=>{
           return (
             <div>
-              <Button className={ publicStyle.mr10 }>超清</Button>
-              <Button className={ publicStyle.mr10 }>高清</Button>
-              <Button>流畅</Button>
+              <Button className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'chao') }>超清</Button>
+              <Button className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'gao') }>高清</Button>
+              <Button onClick={ this.onDownload.bind(this, item, 'liuchang_url') }>流畅</Button>
             </div>
           );
         }
@@ -121,6 +122,16 @@ class LiveDownload extends Component{
     this.setState({
       loading: false
     });
+  }
+  // 公演下载
+  async onDownload(item: Object, quality: string, event: Object): void{
+    try{
+      const m3u8Url: string = await getM3U8(this.props.group, item.id, quality);
+      const dlm: string = await downloadM3U8(m3u8Url);
+      console.log(dlm);
+    }catch(err){
+      message.error('下载失败！');
+    }
   }
   render(){
     return (
