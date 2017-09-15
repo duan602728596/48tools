@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import asyncModule from './asyncModule';
 /* 加载模块 */
 import Index from '../modules/Index/index';
-import LiveCatch from 'bundle-loader?lazy&name=livecatch&rely=../modules/LiveCatch/store/reducer!../modules/LiveCatch/Index/index';
+import LiveCatch from 'bundle-loader?lazy&name=livecatch!../modules/LiveCatch/Index/index';
 import LiveCatch_Option from 'bundle-loader?lazy&name=livecatch!../modules/LiveCatch/Option/index';
 import PlayBackDownload from 'bundle-loader?lazy&name=playbackdownload!../modules/PlayBackDownload/Index/index';
 import PlayBackDownload_Detail from 'bundle-loader?lazy&name=playbackdownload!../modules/PlayBackDownload/Detail/index';
