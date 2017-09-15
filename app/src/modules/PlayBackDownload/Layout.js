@@ -8,7 +8,7 @@ import Detail from 'bundle-loader?lazy&name=playbackdownload!./Detail/index';
 import reducer from 'bundle-loader?lazy&name=playbackdownload!./store/reducer';
 
 const ModuleLayout = (props: Object): Object=>{
-  return(
+  return (
     <Switch>
       <Route path="/PlayBackDownload" component={ asyncModule(Index, reducer) } exact />
       <Route path="/PlayBackDownload/List" component={ asyncModule(List, reducer) } exact />

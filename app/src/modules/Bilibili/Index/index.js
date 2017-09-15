@@ -159,7 +159,7 @@ class BiliBili extends Component{
     }
   }
   render(): Object{
-    return(
+    return (
       <div>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>

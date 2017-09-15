@@ -7,7 +7,7 @@ import Option from 'bundle-loader?lazy&name=bilibili!./Option/index';
 import reducer from 'bundle-loader?lazy&name=bilibili!./store/reducer';
 
 const ModuleLayout = (props: Object): Object=>{
-  return(
+  return (
     <Switch>
       <Route path="/BiliBili" component={ asyncModule(Index, reducer) } exact />
       <Route path="/BiliBili/Option" component={ asyncModule(Option, reducer) } exact />

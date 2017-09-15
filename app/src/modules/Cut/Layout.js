@@ -6,7 +6,7 @@ import Index from 'bundle-loader?lazy&name=cut!./Index/index';
 import reducer from 'bundle-loader?lazy&name=cut!./store/reducer';
 
 const ModuleLayout = (props: Object): Object=>{
-  return(
+  return (
     <Switch>
       <Route path="/Cut" component={ asyncModule(Index, reducer) } exact />
     </Switch>

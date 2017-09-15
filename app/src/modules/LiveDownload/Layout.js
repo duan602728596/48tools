@@ -6,7 +6,7 @@ import Index from 'bundle-loader?lazy&name=livedownload!./Index/index';
 import reducer from 'bundle-loader?lazy&name=livedownload!./store/reducer';
 
 const ModuleLayout = (props: Object): Object=>{
-  return(
+  return (
     <Switch>
       <Route path="/LiveDownload" component={ asyncModule(Index, reducer) } exact />
     </Switch>

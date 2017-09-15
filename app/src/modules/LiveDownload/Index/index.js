@@ -68,7 +68,7 @@ class LiveDownload extends Component{
         title: '标题',
         key: 'title',
         render: (text: any, item: Object): string=>{
-          return(
+          return (
             <div>
               <b className={ style.title }>{ item.title }</b>
               <span>{ item.secondTitle }</span>
@@ -81,7 +81,7 @@ class LiveDownload extends Component{
         key: 'handle',
         width: '20%',
         render: (text: any, item: Object): string=>{
-          return(
+          return (
             <div>
               <Button className={ publicStyle.mr10 }>超清</Button>
               <Button className={ publicStyle.mr10 }>高清</Button>
@@ -123,7 +123,7 @@ class LiveDownload extends Component{
     });
   }
   render(){
-    return(
+    return (
       <div>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>

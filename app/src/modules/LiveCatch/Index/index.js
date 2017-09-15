@@ -104,7 +104,7 @@ class LiveCatch extends Component{
           if(this.props.liveCatch.has(text)){
             const m: Object = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
-              return(
+              return (
                 <Popconfirm title="确认停止录制吗？" onConfirm={ this.stopRecording.bind(this, item) }>
                   <Button type="danger">
                     <Icon type="close-square" />
@@ -113,7 +113,7 @@ class LiveCatch extends Component{
                 </Popconfirm>
               );
             }else{
-              return(
+              return (
                 <Button type="primary" onClick={ this.recording.bind(this, item) }>
                   <Icon type="play-circle-o" />
                   <span>录制</span>
@@ -121,7 +121,7 @@ class LiveCatch extends Component{
               );
             }
           }else{
-            return(
+            return (
               <Button type="primary" onClick={ this.recording.bind(this, item) }>
                 <Icon type="play-circle-o" />
                 <span>录制</span>
@@ -285,7 +285,7 @@ class LiveCatch extends Component{
     });
   }
   render(): Object{
-    return(
+    return (
       <div>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>

@@ -89,20 +89,20 @@ class ListOne extends Component{
     const { state }: { state: number } = detail[1];
     switch(state){
       case 1:
-        return(
+        return (
           <Button className={ publicStyle.fr } type="danger" onClick={ this.onCancelDownload.bind(this, detail[0]) }>
             <Icon type="close-square" />
             <span>取消下载</span>
           </Button>
         );
       case 2:
-        return(
+        return (
           <div className={ publicStyle.fr }>
             <b className={ style.success }>下载完成</b>
           </div>
         );
       case 3:
-        return(
+        return (
           <div className={ publicStyle.fr }>
             <b className={ style.error }>取消下载</b>
           </div>
@@ -129,7 +129,7 @@ class ListOne extends Component{
         title: string,
         subTitle: string
       } = item;
-      return(
+      return (
         <div>
           <div className={ commonStyle.clearfix }>
             <div className={ publicStyle.fl }>
@@ -169,7 +169,7 @@ class List extends Component{
   listOne(): Object{
     return Array.from(this.props.downloadList).map((item: Array, index: number): Object=>{
       if(item[1].state !== 0){
-        return(
+        return (
           <li key={ item[0] }>
             <ListOne detail={ item } />
           </li>
@@ -190,7 +190,7 @@ class List extends Component{
     });
   }
   render(): Object{
-    return(
+    return (
       <div>
         {/* 功能区 */}
         <Affix>

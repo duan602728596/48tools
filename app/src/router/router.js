@@ -14,7 +14,7 @@ import LiveDownload from '../modules/LiveDownload/Layout';
 /* 路由模块 */
 class Router extends Component{
   render(): Object{
-    return(
+    return (
       <div>
         <Switch>
           {/* 首页 */}

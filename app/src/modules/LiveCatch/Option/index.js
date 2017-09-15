@@ -114,7 +114,7 @@ class LiveCatchOption extends Component{
   }
   render(): Object{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
-    return(
+    return (
       <div className={ style.body }>
         <Form layout="horizontal" onSubmit={ this.onRevise.bind(this) }>
           <div>

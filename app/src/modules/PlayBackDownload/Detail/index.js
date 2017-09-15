@@ -28,7 +28,7 @@ class Detail extends Component{
 
     const { current }: { current: number } = this.props.location.query;
 
-    return(
+    return (
       <div className={ style.body }>
         <Link to={{
           pathname: '/PlayBackDownload',

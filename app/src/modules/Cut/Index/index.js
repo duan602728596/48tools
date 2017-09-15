@@ -120,7 +120,7 @@ class Cut extends Component{
           if(this.props.cutMap.has(item.id)){
             const m: Map = this.props.cutMap.get(item.id);
             if(m.child.exitCode !== null){
-              return(
+              return (
                 <div>
                   <b className={ publicStyle.mr10 }>任务结束</b>
                   <Popconfirm title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
@@ -132,7 +132,7 @@ class Cut extends Component{
                 </div>
               );
             }else{
-              return(
+              return (
                 <Popconfirm title="确认停止任务吗？" onConfirm={ this.onStopTask.bind(this, item) }>
                   <Button type="danger">
                     <Icon type="close-circle" />
@@ -142,7 +142,7 @@ class Cut extends Component{
               );
             }
           }else{
-            return(
+            return (
               <div>
                 <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onStartTask.bind(this, item) }>
                   <Icon type="rocket" />
@@ -318,7 +318,7 @@ class Cut extends Component{
   }
   render(): Object{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
-    return(
+    return (
       <div>
         <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix } ${ style.toolsBox }` }>

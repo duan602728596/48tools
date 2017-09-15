@@ -124,7 +124,7 @@ class PlayBackDownload extends Component{
         key: 'handle',
         width: '30%',
         render: (text: any, item: Object): Object=>{
-          return(
+          return (
             <div>
               <Link className={ publicStyle.btnLink } to={{
                 pathname: '/PlayBackDownload/Detail',
@@ -238,7 +238,7 @@ class PlayBackDownload extends Component{
     message.success('录播加载成功！');
   }
   render(): Object{
-    return(
+    return (
       <div>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>

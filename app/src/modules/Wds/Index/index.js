@@ -65,7 +65,7 @@ class Wds extends Component{
         dataIndex: 'handle',
         width: '33%',
         render: (text: any, item: Object): Object=>{
-          return(
+          return (
             <div>
               <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onToExcel.bind(this, item) }>
                 <Icon type="file-excel" />
@@ -137,7 +137,7 @@ class Wds extends Component{
     message.info('正在生成Excel！');
   }
   render(): Object{
-    return(
+    return (
       <div>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>

@@ -7,7 +7,7 @@ import Option from 'bundle-loader?lazy&name=livecatch!./Option/index';
 import reducer from 'bundle-loader?lazy&name=livecatch!./store/reducer';
 
 const ModuleLayout = (props: Object): Object=>{
-  return(
+  return (
     <Switch>
       <Route path="/LiveCatch" component={ asyncModule(Index, reducer) } exact />
       <Route path="/LiveCatch/Option" component={ asyncModule(Option, reducer) } exact />
