@@ -7,8 +7,8 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
 import style from './style.sass';
-import { test } from './store/reducer';
-import '../pubmicMethod/initIndexedDB';
+import { test } from '../store/reducer';
+import '../../pubmicMethod/initIndexedDB';
 const gui = node_require('nw.gui');
 
 /* 初始化数据 */
@@ -70,7 +70,7 @@ class Index extends Component{
             <dl className={ style.linkGroup }>
               <dt className={ style.bTest }>
                 <Link to="/LiveCatch" title="口袋48直播抓取">
-                  <img src={ require('./image/hty1.jpg') } alt="口袋48直播抓取" />
+                  <img src={ require('../image/hty1.jpg') } alt="口袋48直播抓取" />
                 </Link>
               </dt>
               <dd>
@@ -82,7 +82,7 @@ class Index extends Component{
             <dl className={ style.linkGroup }>
               <dt className={ style.bTest }>
                 <Link to="/PlayBackDownload" title="口袋48录播下载">
-                  <img src={ require('./image/xsy1.jpg') } alt="口袋48录播下载" />
+                  <img src={ require('../image/xsy1.jpg') } alt="口袋48录播下载" />
                 </Link>
               </dt>
               <dd>
@@ -94,7 +94,7 @@ class Index extends Component{
             <dl className={ style.linkGroup }>
               <dt className={ style.bTest }>
                 <Link to="/BiliBili" title="B站直播抓取">
-                  <img src={ require('./image/lyy1.jpg') } alt="B站直播抓取" />
+                  <img src={ require('../image/lyy1.jpg') } alt="B站直播抓取" />
                 </Link>
               </dt>
               <dd>
@@ -106,7 +106,7 @@ class Index extends Component{
             <dl className={ style.linkGroup }>
               <dt className={ style.bTest }>
                 <Link to="/Cut" title="视频剪切">
-                  <img src={ require('./image/lxh1.jpg') } alt="视频剪切" />
+                  <img src={ require('../image/lxh1.jpg') } alt="视频剪切" />
                 </Link>
               </dt>
               <dd>
@@ -118,7 +118,7 @@ class Index extends Component{
             <dl className={ style.linkGroup }>
               <dt className={ style.bTest }>
                 <Link to="/Wds" title="微打赏统计">
-                  <img src={ require('./image/llf1.jpg') } alt="微打赏统计" />
+                  <img src={ require('../image/llf1.jpg') } alt="微打赏统计" />
                 </Link>
               </dt>
               <dd>
@@ -130,7 +130,7 @@ class Index extends Component{
             <dl className={ style.linkGroup }>
               <dt className={ style.bTest }>
                 <Link to="/LiveDownload" title="公演录播下载">
-                  <img src={ require('./image/zmh1.jpg') } alt="公演录播下载" />
+                  <img src={ require('../image/zmh1.jpg') } alt="公演录播下载" />
                 </Link>
               </dt>
               <dd>

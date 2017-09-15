@@ -1,6 +1,6 @@
 // @flow
 /**
- * 获取直播信息数据
+ * 获取直播和录播信息数据
  * url   : 'https://plive.48.cn/livesystem/api/live/v1/memberLivePage'
  * method: POST
  */
