@@ -23,8 +23,8 @@ pug + sass + ECMA8 + react + antd + webpack + nwjs。
 
 ## 文件
 * app: 源代码
-* ffmpeg: ffmpeg文件存储目录
-* output: 视频输出目录
+* dependent: 依赖的文件存储目录
+* output: 视频、Excel等文件的输出目录
 
 ## 关于dll
 无论是开发环境还是生产环境，首先要编译dll文件，将公共模块提取出来。
