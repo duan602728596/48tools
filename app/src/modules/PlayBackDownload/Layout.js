@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncModule from '../../router/asyncModule';
-import Index from 'bundle-loader?lazy&name=playbackdownload!./Index/index';
-import List from 'bundle-loader?lazy&name=playbackdownload!./List/index';
-import Detail from 'bundle-loader?lazy&name=playbackdownload!./Detail/index';
-import reducer from 'bundle-loader?lazy&name=playbackdownload!./store/reducer';
+import Index from 'bundle-loader?name=playbackdownload!./Index/index';
+import List from 'bundle-loader?name=playbackdownload!./List/index';
+import Detail from 'bundle-loader?name=playbackdownload!./Detail/index';
+import reducer from 'bundle-loader?name=playbackdownload!./store/reducer';
 
 const ModuleLayout = (props: Object): Object=>{
   return (

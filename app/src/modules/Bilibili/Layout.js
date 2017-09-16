@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncModule from '../../router/asyncModule';
-import Index from 'bundle-loader?lazy&name=bilibili!./Index/index';
-import Option from 'bundle-loader?lazy&name=bilibili!./Option/index';
-import reducer from 'bundle-loader?lazy&name=bilibili!./store/reducer';
+import Index from 'bundle-loader?name=bilibili!./Index/index';
+import Option from 'bundle-loader?name=bilibili!./Option/index';
+import reducer from 'bundle-loader?name=bilibili!./store/reducer';
 
 const ModuleLayout = (props: Object): Object=>{
   return (

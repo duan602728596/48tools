@@ -193,7 +193,7 @@ class List extends Component{
     return (
       <div>
         {/* 功能区 */}
-        <Affix>
+        <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fr }>
               <Button onClick={ this.onClear.bind(this) }>
@@ -209,7 +209,7 @@ class List extends Component{
             </div>
           </div>
         </Affix>
-        <div className={ style.detailList }>
+        <div className={ `${ publicStyle.tableBox } ${ style.detailList }` }>
           <QueueAnim component="ul" type="alpha" leaveReverse={ true }>
             { this.listOne() }
           </QueueAnim>
