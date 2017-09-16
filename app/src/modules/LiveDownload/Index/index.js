@@ -7,11 +7,17 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Select } from 'antd';
 import { liveList, liveListInit, changeGroup } from '../store/index';
+import { downloadList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
-import { loadList, queryHtml, getM3U8, downloadM3U8 } from './loadList';
-const fs = node_require('fs');
+import { loadList, queryHtml, getM3U8, downloadM3U8, saveM3U8 } from './loadList';
+import { time } from '../../../function';
+import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
+const child_process = node_require('child_process');
+const path = node_require('path');
+const process = node_require('process');
+const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
 const getIndex: Function = (state: Object): ?Object=>state.has('liveDownload') ? state.get('liveDownload').get('index') : null;
@@ -32,6 +38,10 @@ const state: Function = createStructuredSelector({
   group: createSelector(
     getIndex,                       // 选择团
     (data: ?Object): string=>data !== null && data.has('group') ? data.get('group') : 'SNH48'
+  ),
+  downloadList: createSelector(     // 下载列表
+    (state: Object): Object | Array=>state.has('liveDownload') ? state.get('liveDownload').get('downloadList') : [],
+    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
   )
 });
 
@@ -40,7 +50,8 @@ const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     liveList,
     liveListInit,
-    changeGroup
+    changeGroup,
+    downloadList
   }, dispatch)
 });
 
@@ -126,10 +137,39 @@ class LiveDownload extends Component{
   // 公演下载
   async onDownload(item: Object, quality: string, event: Object): void{
     try{
-      const m3u8Url: string = await getM3U8(this.props.group, item.id, quality);
-      const dlm: string = await downloadM3U8(m3u8Url);
-      console.log(dlm);
+      const m3u8Url: string = await getM3U8(this.props.group, item.id, quality);   // m3u8地址
+      const dlm: string = await downloadM3U8(m3u8Url);                             // m3u8文本
+      const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`.replace(/\s/g, '');
+      const pSave: string = await saveM3U8(title, dlm);                            // m3u8本地保存路径
+      const child: Object = child_process.spawn(`${ execPath }/dependent/ffmpeg/ffmpeg.exe`, [
+          `-protocol_whitelist`,
+          `file,http,https,tcp,tls`,
+          `-i`,
+          `${ pSave }`,
+          `-c`,
+          `copy`,
+          `-vcodec`,
+          `copy`,
+          `${ execPath }/output/${ title }.ts`
+        ]
+      );
+      child.stdout.on('data', child_process_stdout);
+      child.stderr.on('data', child_process_stderr);
+      child.on('close', child_process_exit);
+      child.on('error', child_process_error);
+
+      this.props.downloadList.push({
+        id: new Date().getTime(),
+        item,
+        pSave,
+        child
+      });
+      this.props.action.downloadList({
+        downloadList: this.props.downloadList.slice()
+      });
+      message.info('正在下载！');
     }catch(err){
+      console.log(err);
       message.error('下载失败！');
     }
   }
@@ -157,6 +197,12 @@ class LiveDownload extends Component{
               </Button>
             </div>
             <div className={ publicStyle.fr }>
+              <Link to="/LiveDownload/List">
+                <Button className={ publicStyle.mr10 }>
+                  <Icon type="bars" />
+                  <span>下载列表</span>
+                </Button>
+              </Link>
               <Link to="/">
                 <Button type="danger">
                   <Icon type="poweroff" />

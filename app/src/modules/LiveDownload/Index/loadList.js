@@ -2,6 +2,11 @@
 import jQuery from 'jquery';
 import cheerio from 'cheerio';
 const url = node_require('url');
+const fs = node_require('fs');
+const child_process = node_require('child_process');
+const path = node_require('path');
+const process = node_require('process');
+const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /**
  * 使用ajax加载列表
@@ -108,6 +113,23 @@ export function downloadM3U8(m3u8Url: string): Promise{
     /* 使用正则替换网址 */
     return m3u8.replace(/\n[^#\n]*\n/g, (str: string): string=>{
       return '\n' + host + str.replace(/\n/g, '') + '\n';
+    });
+  });
+}
+
+/**
+ * 保存m3u8
+ * @param { string } title: 文件标题
+ * @param { string } text : 保存的文本
+ */
+export function saveM3U8(title: string, text: string): Promise{
+  const p: string = path.join(execPath, `/output/${ title }.m3u8`).replace(/\\/g, '/');
+  return new Promise((resolve: Function, reject: Function): void=>{
+    fs.writeFile(p, text, {
+      encoding: 'utf8',
+      flag: 'w'
+    }, (err: any): void=>{
+      err ? reject() : resolve(p);
     });
   });
 }
