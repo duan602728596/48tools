@@ -59,10 +59,9 @@ class Index extends Component{
           。
         </p>
         <div className={ style.test }>
-          <label>
-            <Checkbox checked={ this.props.test } onChange={ this.onCheckChange.bind(this) } />
+          <Checkbox checked={ this.props.test } onChange={ this.onCheckChange.bind(this) }>
             <span>显示测试功能。（某些功能正在测试，功能不稳定）</span>
-          </label>
+          </Checkbox>
           <Button className={ style.clearCache } onClick={ this.onClearCache.bind(this) }>清除缓存</Button>
         </div>
         <Row type="flex" align="top" justify="start">
