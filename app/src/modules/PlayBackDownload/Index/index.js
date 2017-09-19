@@ -19,27 +19,26 @@ const path = node_require('path');
 
 /**
  * 搜索的过滤函数
- * @param { Array } array            : 需要过滤的数组
- * @param { string | RegExp } keyword: 关键字或正则表达式
- * @param { string } key             : 参考键值
- * @param { number } from            : 查找范围
- * @param { number } to              : 查找范围
+ * @param { Array } array   : 需要过滤的数组
+ * @param { RegExp } keyword: 关键字的正则表达式
+ * @param { string } key    : 参考键值
+ * @param { number } from   : 查找范围
+ * @param { number } to     : 查找范围
  * @return { Array }
  */
-function filter(array: Array, keyword: string | RegExp, key: string, from: number, to: number): Array{
+function filter(array: Array, keyword: ?RegExp, key: string, from: number, to: number): Array{
   // 如果没有搜索字符串，返回所有数组
-  if((typeof keyword === 'string' && /^\s*$/.test(keyword)) || to < 0){
+  if(!keyword || array.length === 0){
     return array;
   }
   // 判断当前是否满足搜索匹配
-  const keywordRegExp: RegExp = typeof keyword === 'string' ? new RegExp(`(${ keyword.split(/\s+/).join('|') })`, 'i') : keyword;
   if(from === to){
-    return keywordRegExp.test(array[from][key]) ? [array[from]] : [];
+    return keyword.test(array[from][key]) ? [array[from]] : [];
   }
   // 拆分数组
   const middle: number = Math.floor((to - from) / 2) + from;
-  const left = filter(array, keywordRegExp, key, from, middle);
-  const right = filter(array, keywordRegExp, key, middle + 1, to);
+  const left = filter(array, keyword, key, from, middle);
+  const right = filter(array, keyword, key, middle + 1, to);
   return left.concat(right);
 }
 
@@ -196,8 +195,18 @@ class PlayBackDownload extends Component{
   }
   // 搜索事件（点击按钮 + input回车）
   onSearchInput(event: Object): void{
+    const { value }: { value: string } = this.refs['playBackDownload-searchInput'].refs.input;
+    let reg: ?RegExp = null;
+    if(!/^\s*$/.test(value)){
+      const str: string[] = value.split(/\s+/);
+      for(let i = str.length - 1; i >= 0; i--){
+        if(str[i] === '') str.splice(i, 1);
+      }
+      reg = new RegExp(`(${ str.join('|') })`, 'i');
+    }
+
     this.setState({
-      keyword: this.refs['playBackDownload-searchInput'].refs.input.value
+      keyword: reg
     });
   }
   // 重置
