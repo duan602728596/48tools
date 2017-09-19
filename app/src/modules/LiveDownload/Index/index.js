@@ -142,17 +142,18 @@ class LiveDownload extends Component{
       const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`.replace(/\s/g, '');
       const pSave: string = await saveM3U8(title, dlm);                            // m3u8本地保存路径
       const child: Object = child_process.spawn(`${ execPath }/dependent/ffmpeg/ffmpeg.exe`, [
-          `-protocol_whitelist`,
-          `file,http,https,tcp,tls`,
-          `-i`,
-          `${ pSave }`,
-          `-c`,
-          `copy`,
-          `-vcodec`,
-          `copy`,
-          `${ execPath }/output/${ title }.ts`
-        ]
-      );
+        `-protocol_whitelist`,
+        `file,http,https,tcp,tls`,
+        `-i`,
+        `${ pSave }`,
+        `-acodec`,
+        `copy`,
+        `-vcodec`,
+        `copy`,
+        `-f`,
+        `mp4`,
+        `${ execPath }/output/${ title }.mp4`
+      ]);
       child.stdout.on('data', child_process_stdout);
       child.stderr.on('data', child_process_stderr);
       child.on('close', child_process_exit);
