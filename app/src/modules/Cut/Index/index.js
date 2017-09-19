@@ -229,8 +229,8 @@ class Cut extends Component{
           saveFile: null   // 保存文件
         });
         {
-          const $file: any = $('#cut-file');
-          const $save: any = $('#cut-save');
+          const $file: any = jQuery('#cut-file');
+          const $save: any = jQuery('#cut-save');
           $file.val('');
           $save.val('');
           $save.prop('nwsaveas', '');
