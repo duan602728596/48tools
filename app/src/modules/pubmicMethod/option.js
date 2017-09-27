@@ -1,5 +1,9 @@
 // @flow
 /* 配置文件 */
+const path = node_require('path');
+const process = node_require('process');
+const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
+
 type inforMap = {
   name: string,
   key: string,
@@ -19,7 +23,9 @@ type indexeddbMap = {
 };
 
 const option: {
-  indexeddb: indexeddbMap
+  indexeddb: indexeddbMap,
+  ffmpeg: string,
+  output: string
 } = {
   // 数据库
   indexeddb: {
@@ -47,7 +53,10 @@ const option: {
         ]
       }
     }
-  }
+  },
+  // ffmpeg
+  ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg.exe`,
+  output: `${ execPath }/output`
 };
 
 export default option;

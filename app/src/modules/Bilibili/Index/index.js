@@ -12,11 +12,9 @@ import commonStyle from '../../../common.sass';
 import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../function';
+import option from '../../pubmicMethod/option';
 const child_process = node_require('child_process');
-const path = node_require('path');
-const process = node_require('process');
 const http = node_require('http');
-const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
 const getIndex: Function = (state: Object): ?Object=>state.has('bilibili') ? state.get('bilibili').get('index') : null;
@@ -119,12 +117,12 @@ class BiliBili extends Component{
   async onCatch(item: Object, event: Object): void{
     const url: string = await getUrl(item.roomid);
     const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
-    const child: Object = child_process.spawn(`${ execPath }/dependent/ffmpeg/ffmpeg.exe`, [
+    const child: Object = child_process.spawn(option.ffmpeg, [
       `-i`,
       `${ url }`,
       `-c`,
       `copy`,
-      `${ execPath }/output/${ title }.flv`
+      `${ option.output }/${ title }.flv`
     ]);
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);

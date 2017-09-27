@@ -10,13 +10,12 @@ import jQuery from 'jquery';
 import { time, patchZero } from '../../../function';
 import { cutList, taskChange } from '../store/reducer';
 import computingTime from './computingTime';
+import option from '../../pubmicMethod/option';
 import style from './style.sass';
 import publicStyle from '../../pubmicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 const child_process = node_require('child_process');
 const path = node_require('path');
-const process = node_require('process');
-const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 子进程监听 */
 function child_process_stdout(data: any): void{
@@ -63,7 +62,7 @@ class Cut extends Component{
   constructor(props: ?Object): void{
     super(props);
 
-    this.dir = `${ execPath }/output`.replace(/\//g, '\\');
+    this.dir = option.output.replace(/\//g, '\\');
     this.state = {
       file: null,      // 选择文件
       saveFile: null   // 保存文件
@@ -280,7 +279,7 @@ class Cut extends Component{
       [Number(endhh), Number(endmm), Number(endss)]
     );
 
-    const child: Object = child_process.spawn(execPath + '/dependent/ffmpeg/ffmpeg.exe', [
+    const child: Object = child_process.spawn(option.ffmpeg, [
       '-ss',
       `${ patchZero(Number(starthh)) }:${ patchZero(Number(startmm)) }:${ patchZero(Number(startss)) }`,
       '-t',

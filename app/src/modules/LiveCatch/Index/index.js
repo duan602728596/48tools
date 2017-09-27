@@ -14,10 +14,8 @@ import post from '../../pubmicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
+import option from '../../pubmicMethod/option';
 const child_process = node_require('child_process');
-const path = node_require('path');
-const process = node_require('process');
-const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
 const getIndex: Function = (state: Object): ?Object=>state.has('liveCatch') ? state.get('liveCatch').get('index') : null;
@@ -138,12 +136,12 @@ class LiveCatch extends Component{
     const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title +
       '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
       '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
-    const child: Object = child_process.spawn(`${ execPath }/dependent/ffmpeg/ffmpeg.exe`, [
+    const child: Object = child_process.spawn(option.ffmpeg, [
       `-i`,
       `${ item.streamPath }`,
       `-c`,
       `copy`,
-      `${ execPath }/output/${ title }.flv`
+      `${ option.output }/${ title }.flv`
       ]
     );
     child.stdout.on('data', child_process_stdout);
@@ -175,12 +173,12 @@ class LiveCatch extends Component{
         '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
         '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
         '_' + item.liveId;
-      const child: Object = child_process.spawn(`${ execPath }/dependent/ffmpeg/ffmpeg.exe`, [
+      const child: Object = child_process.spawn(option.ffmpeg, [
           `-i`,
           `${ item.streamPath }`,
           `-c`,
           `copy`,
-          `${ execPath }/output/${ title }.flv`
+          `${ option.output }/${ title }.flv`
         ]
       );
       child.stdout.on('data', child_process_stdout);

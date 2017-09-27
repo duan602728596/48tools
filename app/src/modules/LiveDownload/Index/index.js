@@ -14,10 +14,8 @@ import commonStyle from '../../../common.sass';
 import { loadList, queryHtml, getM3U8, downloadM3U8, saveM3U8 } from './loadList';
 import { time } from '../../../function';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
+import option from '../../pubmicMethod/option';
 const child_process = node_require('child_process');
-const path = node_require('path');
-const process = node_require('process');
-const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /* 初始化数据 */
 const getIndex: Function = (state: Object): ?Object=>state.has('liveDownload') ? state.get('liveDownload').get('index') : null;
@@ -141,7 +139,7 @@ class LiveDownload extends Component{
       const dlm: string = await downloadM3U8(m3u8Url);                             // m3u8文本
       const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`.replace(/\s/g, '');
       const pSave: string = await saveM3U8(title, dlm);                            // m3u8本地保存路径
-      const child: Object = child_process.spawn(`${ execPath }/dependent/ffmpeg/ffmpeg.exe`, [
+      const child: Object = child_process.spawn(option.ffmpeg, [
         `-protocol_whitelist`,
         `file,http,https,tcp,tls`,
         `-i`,
@@ -152,7 +150,7 @@ class LiveDownload extends Component{
         `copy`,
         `-f`,
         `mp4`,
-        `${ execPath }/output/${ title }.mp4`
+        `${ option.output }/${ title }.mp4`
       ]);
       child.stdout.on('data', child_process_stdout);
       child.stderr.on('data', child_process_stderr);

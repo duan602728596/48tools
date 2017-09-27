@@ -15,24 +15,22 @@ import LiveDownload from '../modules/LiveDownload/Layout';
 class Router extends Component{
   render(): Object{
     return (
-      <div>
-        <Switch>
-          {/* 首页 */}
-          <Route path="/" component={ Index } exact />
-          {/* 直播抓取 */}
-          <Route path="/LiveCatch" component={ LiveCatch } />
-          {/* 录播下载 */}
-          <Route path="/PlayBackDownload" component={ PlayBackDownload } />
-          {/* B站直播间的视频流抓取 */}
-          <Route path="/BiliBili" component={ BiliBili } />
-          {/* 视频剪切 */}
-          <Route path="/Cut" component={ Cut } />
-          {/* 微打赏 */}
-          <Route path="/Wds" component={ Wds } />
-          {/* 公演录播下载 */}
-          <Route path="/LiveDownload" component={ LiveDownload } />
-        </Switch>
-      </div>
+      <Switch>
+        {/* 首页 */}
+        <Route path="/" component={ Index } exact />
+        {/* 直播抓取 */}
+        <Route path="/LiveCatch" component={ LiveCatch } />
+        {/* 录播下载 */}
+        <Route path="/PlayBackDownload" component={ PlayBackDownload } />
+        {/* B站直播间的视频流抓取 */}
+        <Route path="/BiliBili" component={ BiliBili } />
+        {/* 视频剪切 */}
+        <Route path="/Cut" component={ Cut } />
+        {/* 微打赏 */}
+        <Route path="/Wds" component={ Wds } />
+        {/* 公演录播下载 */}
+        <Route path="/LiveDownload" component={ LiveDownload } />
+      </Switch>
     );
   }
 }
