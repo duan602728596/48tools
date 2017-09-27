@@ -33,9 +33,9 @@
   },
   "devDependencies": {
     "antd": "^2.13.3",
-    "babel-core": "7.0.0-beta.0",
+    "babel-core": "^7.0.0-beta.2",
     "babel-loader": "^7.1.2",
-    "babel-plugin-import": "^1.5.0",
+    "babel-plugin-import": "github:duan602728596/babel-plugin-import-babel-7-build#master",
     "babel-plugin-transform-decorators": "^7.0.0-beta.2",
     "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.2",
     "babel-preset-es2015": "^7.0.0-beta.2",
