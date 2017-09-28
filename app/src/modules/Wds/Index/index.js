@@ -64,21 +64,19 @@ class Wds extends Component{
         title: '操作',
         dataIndex: 'handle',
         width: '33%',
-        render: (text: any, item: Object): Object=>{
-          return (
-            <div>
-              <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onToExcel.bind(this, item) }>
-                <Icon type="file-excel" />
-                <span>导出EXCEL</span>
-              </Button>
-              <Popconfirm title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
-                <Button type="danger">
+        render: (text: any, item: Object): Array=>{
+          return [
+            <Button key={ 0 } className={ publicStyle.mr10 } type="primary" onClick={ this.onToExcel.bind(this, item) }>
+              <Icon type="file-excel" />
+              <span>导出EXCEL</span>
+            </Button>,
+            <Popconfirm key={ 1 } title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+              <Button type="danger">
                   <Icon type="delete" />
                   <span>删除</span>
-                </Button>
-              </Popconfirm>
-            </div>
-          );
+              </Button>
+            </Popconfirm>
+          ];
         }
       }
     ];

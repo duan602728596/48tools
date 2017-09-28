@@ -92,9 +92,9 @@ class LiveDownload extends Component{
         width: '20%',
         render: (text: any, item: Object): Array=>{
           return [
-            <Button key="A" className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'chao') }>超清</Button>,
-            <Button key="B" className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'gao') }>高清</Button>,
-            <Button key="C" onClick={ this.onDownload.bind(this, item, 'liuchang') }>流畅</Button>
+            <Button key={ 0 } className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'chao') }>超清</Button>,
+            <Button key={ 1 } className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'gao') }>高清</Button>,
+            <Button key={ 2 } onClick={ this.onDownload.bind(this, item, 'liuchang') }>流畅</Button>
           ];
         }
       }
