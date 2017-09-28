@@ -285,7 +285,7 @@ class LiveCatch extends Component{
   render(): Array{
     return [
       /* 功能区 */
-      <Affix key={ A } className={ publicStyle.affix }>
+      <Affix key={ 0 } className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
           <div className={ publicStyle.fl }>
             {
@@ -325,7 +325,7 @@ class LiveCatch extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ B } className={ publicStyle.tableBox }>
+      <div key={ 1 } className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
                bordered={ true }
                columns={ this.columus() }
