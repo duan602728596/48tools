@@ -4,10 +4,10 @@
   "description": "48应援工具，提供各种常用功能。",
   "license": "GNU General Public License v3.0",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js --watch",
-    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress",
-    "devdll": "cross-env NODE_ENV=development webpack --config ./config/webpack.dll.js --progress",
-    "prodll": "cross-env NODE_ENV=production webpack --config ./config/webpack.dll.js --progress",
+    "start": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dev.js --watch",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.pro.js --progress",
+    "devdll": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
+    "prodll": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
     "proinstall": "npm install --production"
   },
   "main": "./build/index.html",
