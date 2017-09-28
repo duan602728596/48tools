@@ -122,27 +122,25 @@ class PlayBackDownload extends Component{
         title: '操作',
         key: 'handle',
         width: '30%',
-        render: (text: any, item: Object): Object=>{
-          return (
-            <div>
-              <Link className={ publicStyle.btnLink } to={{
-                pathname: '/PlayBackDownload/Detail',
-                query: {
-                  detail: item,
-                  current: this.state.current
-                }
-              }}>
+        render: (text: any, item: Object): Array=>{
+          return [
+            <Link key="A" className={ publicStyle.btnLink } to={{
+              pathname: '/PlayBackDownload/Detail',
+              query: {
+                detail: item,
+                current: this.state.current
+              }
+            }}>
               <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }>
                 <Icon type="eye" />
                 <span>查看</span>
               </Button>
-              </Link>
-              <Button className={ publicStyle.ml10 } onClick={ this.download.bind(this, item) }>
-                <Icon type="fork" />
-                <span>下载</span>
-              </Button>
-            </div>
-          );
+            </Link>,
+            <Button key="B" className={ publicStyle.ml10 } onClick={ this.download.bind(this, item) }>
+              <Icon type="fork" />
+              <span>下载</span>
+            </Button>
+          ];
         }
       }
     ];
@@ -246,70 +244,68 @@ class PlayBackDownload extends Component{
     });
     message.success('录播加载成功！');
   }
-  render(): Object{
-    return (
-      <div>
-        {/* 功能区 */}
-        <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
-            <div className={ publicStyle.fl }>
-              <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
-              <Input className={ `${ publicStyle.mr10 } ${ style.searchInput }` }
-                     id="playBackDownload-searchInput"
-                     ref="playBackDownload-searchInput"
-                     placeholder="多个关键字用空格分割"
-                     onPressEnter={ this.onSearchInput.bind(this) } />
-              <Button className={ publicStyle.mr10 } onClick={ this.onSearchInput.bind(this) }>
-                <Icon type="search" />
-                <span>搜索</span>
-              </Button>
-              <Button className={ publicStyle.mr10 } onClick={ this.onReset.bind(this) }>
-                <Icon type="close" />
-                <span>重置</span>
-              </Button>
-            </div>
-            <div className={ publicStyle.fr }>
-              <Button className={ publicStyle.ml10 }
-                      type="primary"
-                      onClick={ this.onPlayBackListLoad.bind(this, '加载') }>
-                <Icon type="cloud-download-o" />
-                <span>加载列表</span>
-              </Button>
-              <Button className={ publicStyle.ml10 } onClick={ this.onPlayBackListLoad.bind(this, '刷新') }>
-                <Icon type="loading-3-quarters" />
-                <span>刷新列表</span>
-              </Button>
-              <Link to="/PlayBackDownload/List">
-                <Button className={ publicStyle.ml10 }>
-                  <Icon type="bars" />
-                  <span>下载列表</span>
-                </Button>
-              </Link>
-              <Link className={ publicStyle.ml10 } to="/">
-                <Button type="danger">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Button>
-              </Link>
-            </div>
+  render(): Array{
+    return [
+      /* 功能区 */
+      <Affix key={ 0 } className={ publicStyle.affix }>
+        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+          <div className={ publicStyle.fl }>
+            <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
+            <Input className={ `${ publicStyle.mr10 } ${ style.searchInput }` }
+                   id="playBackDownload-searchInput"
+                   ref="playBackDownload-searchInput"
+                   placeholder="多个关键字用空格分割"
+                   onPressEnter={ this.onSearchInput.bind(this) } />
+            <Button className={ publicStyle.mr10 } onClick={ this.onSearchInput.bind(this) }>
+              <Icon type="search" />
+              <span>搜索</span>
+            </Button>
+            <Button className={ publicStyle.mr10 } onClick={ this.onReset.bind(this) }>
+              <Icon type="close" />
+              <span>重置</span>
+            </Button>
           </div>
-        </Affix>
-        {/* 显示列表 */}
-        <div className={ publicStyle.tableBox }>
-          <Table loading={ this.state.loading }
-                 bordered={ true }
-                 columns={ this.columus() }
-                 rowKey={ (item: Object): number=>item.liveId }
-                 dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
-                 pagination={{
-                   pageSize: 20,
-                   showQuickJumper: true,
-                   current: this.state.current,
-                   onChange: this.onPageChange.bind(this)
-                 }} />
+          <div className={ publicStyle.fr }>
+            <Button className={ publicStyle.ml10 }
+                    type="primary"
+                    onClick={ this.onPlayBackListLoad.bind(this, '加载') }>
+              <Icon type="cloud-download-o" />
+              <span>加载列表</span>
+            </Button>
+            <Button className={ publicStyle.ml10 } onClick={ this.onPlayBackListLoad.bind(this, '刷新') }>
+              <Icon type="loading-3-quarters" />
+              <span>刷新列表</span>
+            </Button>
+            <Link to="/PlayBackDownload/List">
+              <Button className={ publicStyle.ml10 }>
+                <Icon type="bars" />
+                <span>下载列表</span>
+              </Button>
+            </Link>
+            <Link className={ publicStyle.ml10 } to="/">
+              <Button type="danger">
+                <Icon type="poweroff" />
+                <span>返回</span>
+              </Button>
+            </Link>
+          </div>
         </div>
+      </Affix>,
+      /* 显示列表 */
+      <div key={ 1 } className={ publicStyle.tableBox }>
+        <Table loading={ this.state.loading }
+               bordered={ true }
+               columns={ this.columus() }
+               rowKey={ (item: Object): number=>item.liveId }
+               dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
+               pagination={{
+                 pageSize: 20,
+                 showQuickJumper: true,
+                 current: this.state.current,
+                 onChange: this.onPageChange.bind(this)
+               }} />
       </div>
-    );
+    ];
   }
 }
 

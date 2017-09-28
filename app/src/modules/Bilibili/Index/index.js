@@ -71,35 +71,32 @@ class BiliBili extends Component{
         title: '操作',
         key: 'handle',
         width: '36%',
-        render: (text: any, item: Object): Object=>{
-          return (
-            <div>
-              {
-                this.props.catching.has(item.roomid) ?
-                  (
-                    <Popconfirm title="确认停止录制吗？" onConfirm={ this.onCatchStop.bind(this, item) }>
-                      <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="primary">
-                        <Icon type="minus-circle"/>
-                        <span>停止</span>
-                      </Button>
-                    </Popconfirm>
-                  ) : (
-                    <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
-                            type="primary"
-                            onClick={ this.onCatch.bind(this, item) }>
-                      <Icon type="step-forward"/>
-                      <span>录制</span>
-                    </Button>
-                  )
-              }
-              <Popconfirm title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
-                <Button className={ publicStyle.ml10 } type="danger" disabled={ this.props.catching.has(item.roomid) }>
-                  <Icon type="close-square" />
-                  <span>删除</span>
+        render: (text: any, item: Object): Array=>{
+          return [
+            this.props.catching.has(item.roomid) ?
+              (
+                <Popconfirm key={ 0 } title="确认停止录制吗？" onConfirm={ this.onCatchStop.bind(this, item) }>
+                  <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="primary">
+                    <Icon type="minus-circle"/>
+                    <span>停止</span>
+                  </Button>
+                </Popconfirm>
+              ) : (
+                <Button key={ 0 }
+                        className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
+                        type="primary"
+                        onClick={ this.onCatch.bind(this, item) }>
+                  <Icon type="step-forward"/>
+                  <span>录制</span>
                 </Button>
-              </Popconfirm>
-            </div>
-          );
+              ),
+          <Popconfirm key={ 1 } title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+            <Button className={ publicStyle.ml10 } type="danger" disabled={ this.props.catching.has(item.roomid) }>
+              <Icon type="close-square" />
+              <span>删除</span>
+            </Button>
+          </Popconfirm>
+          ];
         }
       }
     ];
@@ -156,44 +153,42 @@ class BiliBili extends Component{
       message.error('删除失败！');
     }
   }
-  render(): Object{
-    return (
-      <div>
-        {/* 功能区 */}
-        <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
-            <div className={ publicStyle.fl }>
-              <Link to="/BiliBili/Option">
-                <Button type="primary">
-                  <Icon type="setting" />
-                  <span>添加B站直播间</span>
-                </Button>
-              </Link>
-            </div>
-            <div className={ publicStyle.fr }>
-              <Link className={ publicStyle.ml10 } to="/">
-                <Button type="danger">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Button>
-              </Link>
-            </div>
+  render(): Array{
+    return [
+      /* 功能区 */
+      <Affix key={ 0 } className={ publicStyle.affix }>
+        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+          <div className={ publicStyle.fl }>
+            <Link to="/BiliBili/Option">
+              <Button type="primary">
+                <Icon type="setting" />
+                <span>添加B站直播间</span>
+              </Button>
+            </Link>
           </div>
-        </Affix>
-        {/* 显示列表 */}
-        <div className={ publicStyle.tableBox }>
-          <Table loading={ this.state.loading }
-                 bordered={ true }
-                 columns={ this.columus() }
-                 rowKey={ (item: Object): number=>item.roomid }
-                 dataSource={ this.props.liveList }
-                 pagination={{
-                   pageSize: 20,
-                   showQuickJumper: true
-                 }} />
+          <div className={ publicStyle.fr }>
+            <Link className={ publicStyle.ml10 } to="/">
+              <Button type="danger">
+                <Icon type="poweroff" />
+                <span>返回</span>
+              </Button>
+            </Link>
+          </div>
         </div>
+      </Affix>,
+      /* 显示列表 */
+      <div key={ 1 } className={ publicStyle.tableBox }>
+        <Table loading={ this.state.loading }
+               bordered={ true }
+               columns={ this.columus() }
+               rowKey={ (item: Object): number=>item.roomid }
+               dataSource={ this.props.liveList }
+               pagination={{
+                 pageSize: 20,
+                 showQuickJumper: true
+               }} />
       </div>
-    );
+    ];
   }
 }
 

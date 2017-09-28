@@ -136,69 +136,67 @@ class Wds extends Component{
     generatingExcel(this.props.wdsList, '');
     message.info('正在生成Excel！');
   }
-  render(): Object{
-    return (
-      <div>
-        {/* 功能区 */}
-        <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
-            <div className={ publicStyle.fl }>
-              <label htmlFor="wds-id">微打赏ID: </label>
-              <Input className={ style.inputId }
-                     id="wds-id"
-                     value={ this.state.wdsid }
-                     onChange={ this.onWdsIdChange.bind(this) } />
-              <label htmlFor="wds-title">微打赏标题: </label>
-              <Input className={ style.inputTitle }
-                     id="wds-title"
-                     readOnly
-                     value={ this.state.wdstitle } />
-              <Button loading={ this.state.btnLoading }
-                      disabled={ !/^\s*[0-9]+\s*$/.test(this.state.wdsid) }
-                      onClick={ this.onSearchTitle.bind(this) }>
-                <Icon type="search" />
-                <span>查询</span>
-              </Button>
-              <Button className={ publicStyle.ml10 }
-                      type="primary"
-                      loading={ this.state.btnLoading }
-                      disabled={ /^\s*$/.test(this.state.wdsid) || /^\s*$/.test(this.state.wdstitle) }
-                      onClick={ this.onAdd.bind(this) }>
-                <Icon type="file-add" />
-                <span>添加</span>
-              </Button>
-              <Button className={ publicStyle.ml10 }
-                      type="primary"
-                      disabled={ this.props.wdsList.length === 0 }
-                      onClick={ this.onToExcelAll.bind(this) }>
-                <Icon type="api" />
-                <span>生成EXCEL</span>
-              </Button>
-              <b className={ style.tishi }>结果生成到一个Excel中</b>
-            </div>
-            <div className={ publicStyle.fr }>
-              <Link className={ publicStyle.ml10 } to="/">
-                <Button type="danger">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Button>
-              </Link>
-            </div>
+  render(): Array{
+    return [
+      /* 功能区 */
+      <Affix key={ 0 } className={ publicStyle.affix }>
+        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+          <div className={ publicStyle.fl }>
+            <label htmlFor="wds-id">微打赏ID: </label>
+            <Input className={ style.inputId }
+                   id="wds-id"
+                   value={ this.state.wdsid }
+                   onChange={ this.onWdsIdChange.bind(this) } />
+            <label htmlFor="wds-title">微打赏标题: </label>
+            <Input className={ style.inputTitle }
+                   id="wds-title"
+                   readOnly
+                   value={ this.state.wdstitle } />
+            <Button loading={ this.state.btnLoading }
+                    disabled={ !/^\s*[0-9]+\s*$/.test(this.state.wdsid) }
+                    onClick={ this.onSearchTitle.bind(this) }>
+              <Icon type="search" />
+              <span>查询</span>
+            </Button>
+            <Button className={ publicStyle.ml10 }
+                    type="primary"
+                    loading={ this.state.btnLoading }
+                    disabled={ /^\s*$/.test(this.state.wdsid) || /^\s*$/.test(this.state.wdstitle) }
+                    onClick={ this.onAdd.bind(this) }>
+              <Icon type="file-add" />
+              <span>添加</span>
+            </Button>
+            <Button className={ publicStyle.ml10 }
+                    type="primary"
+                    disabled={ this.props.wdsList.length === 0 }
+                    onClick={ this.onToExcelAll.bind(this) }>
+              <Icon type="api" />
+              <span>生成EXCEL</span>
+            </Button>
+            <b className={ style.tishi }>结果生成到一个Excel中</b>
           </div>
-        </Affix>
-        {/* 显示列表 */}
-        <div className={ publicStyle.tableBox }>
-          <Table bordered={ true }
-                 columns={ this.columus() }
-                 rowKey={ (item: Object): string=>item.wdsid }
-                 dataSource={ this.props.wdsList }
-                 pagination={{
-                   pageSize: 20,
-                   showQuickJumper: true
-                 }} />
+          <div className={ publicStyle.fr }>
+            <Link className={ publicStyle.ml10 } to="/">
+              <Button type="danger">
+                <Icon type="poweroff" />
+                <span>返回</span>
+              </Button>
+            </Link>
+          </div>
         </div>
+      </Affix>,
+      /* 显示列表 */
+      <div key={ 1 } className={ publicStyle.tableBox }>
+        <Table bordered={ true }
+               columns={ this.columus() }
+               rowKey={ (item: Object): string=>item.wdsid }
+               dataSource={ this.props.wdsList }
+               pagination={{
+                 pageSize: 20,
+                 showQuickJumper: true
+               }} />
       </div>
-    );
+    ];
   }
 }
 

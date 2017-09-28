@@ -189,33 +189,31 @@ class List extends Component{
       downloadList: new Map(Array.from(this.props.downloadList))
     });
   }
-  render(): Object{
-    return (
-      <div>
-        {/* 功能区 */}
-        <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
-            <div className={ publicStyle.fr }>
-              <Button onClick={ this.onClear.bind(this) }>
-                <Icon type="close-square" />
-                <span>全部清除</span>
+  render(): Array{
+    return [
+      /* 功能区 */
+      <Affix key={ 0 } className={ publicStyle.affix }>
+        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+          <div className={ publicStyle.fr }>
+            <Button onClick={ this.onClear.bind(this) }>
+              <Icon type="close-square" />
+              <span>全部清除</span>
+            </Button>
+            <Link to="/PlayBackDownload">
+              <Button className={ publicStyle.ml10 } type="danger">
+                <Icon type="poweroff" />
+                <span>返回</span>
               </Button>
-              <Link to="/PlayBackDownload">
-                <Button className={ publicStyle.ml10 } type="danger">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Button>
-              </Link>
-            </div>
+            </Link>
           </div>
-        </Affix>
-        <div className={ `${ publicStyle.tableBox } ${ style.detailList }` }>
-          <QueueAnim component="ul" type="alpha" leaveReverse={ true }>
-            { this.listOne() }
-          </QueueAnim>
         </div>
+      </Affix>,
+      <div key={ 1 } className={ `${ publicStyle.tableBox } ${ style.detailList }` }>
+        <QueueAnim component="ul" type="alpha" leaveReverse={ true }>
+          { this.listOne() }
+        </QueueAnim>
       </div>
-    );
+    ];
   }
 }
 

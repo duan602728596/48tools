@@ -282,63 +282,61 @@ class LiveCatch extends Component{
       loading: false
     });
   }
-  render(): Object{
-    return (
-      <div>
-        {/* 功能区 */}
-        <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
-            <div className={ publicStyle.fl }>
-              {
-                this.props.autoRecording ?
-                  (
-                    <Button className={ publicStyle.mr10 } type="danger" onClick={ this.onStopAutoRecording.bind(this) }>
-                      <Icon type="close-square" />
-                      <span>停止自动录制</span>
-                    </Button>
-                  ) :
-                  (
-                    <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onAutoRecording.bind(this) }>
-                      <Icon type="play-circle" />
-                      <span>开始自动录制</span>
-                    </Button>
-                  )
-              }
-              <Link to="/LiveCatch/Option">
-                <Button disabled={ this.props.autoRecording }>
-                  <Icon type="setting" />
-                  <span>自动录制配置</span>
-                </Button>
-              </Link>
-            </div>
-            <div className={ publicStyle.fr }>
-              <Button className={ publicStyle.ml10 } onClick={ this.getLiveList.bind(this) }>
-                <Icon type="loading-3-quarters" />
-                <span>刷新列表</span>
+  render(): Array{
+    return [
+      /* 功能区 */
+      <Affix key={ A } className={ publicStyle.affix }>
+        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+          <div className={ publicStyle.fl }>
+            {
+              this.props.autoRecording ?
+                (
+                  <Button className={ publicStyle.mr10 } type="danger" onClick={ this.onStopAutoRecording.bind(this) }>
+                    <Icon type="close-square" />
+                    <span>停止自动录制</span>
+                  </Button>
+                ) :
+                (
+                  <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onAutoRecording.bind(this) }>
+                    <Icon type="play-circle" />
+                    <span>开始自动录制</span>
+                  </Button>
+                )
+            }
+            <Link to="/LiveCatch/Option">
+              <Button disabled={ this.props.autoRecording }>
+                <Icon type="setting" />
+                <span>自动录制配置</span>
               </Button>
-              <Link className={ publicStyle.ml10 } to="/">
-                <Button type="danger">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Button>
-              </Link>
-            </div>
+            </Link>
           </div>
-        </Affix>
-        {/* 显示列表 */}
-        <div className={ publicStyle.tableBox }>
-          <Table loading={ this.state.loading }
-                 bordered={ true }
-                 columns={ this.columus() }
-                 rowKey={ (item: Object): number=>item.liveId }
-                 dataSource={ this.props.liveList }
-                 pagination={{
-                   pageSize: 20,
-                   showQuickJumper: true
-                 }} />
+          <div className={ publicStyle.fr }>
+            <Button className={ publicStyle.ml10 } onClick={ this.getLiveList.bind(this) }>
+              <Icon type="loading-3-quarters" />
+              <span>刷新列表</span>
+            </Button>
+            <Link className={ publicStyle.ml10 } to="/">
+              <Button type="danger">
+                <Icon type="poweroff" />
+                <span>返回</span>
+              </Button>
+            </Link>
+          </div>
         </div>
+      </Affix>,
+      /* 显示列表 */
+      <div key={ B } className={ publicStyle.tableBox }>
+        <Table loading={ this.state.loading }
+               bordered={ true }
+               columns={ this.columus() }
+               rowKey={ (item: Object): number=>item.liveId }
+               dataSource={ this.props.liveList }
+               pagination={{
+                 pageSize: 20,
+                 showQuickJumper: true
+               }} />
       </div>
-    );
+    ];
   }
 }
 

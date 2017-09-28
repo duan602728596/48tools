@@ -90,14 +90,12 @@ class LiveDownload extends Component{
         title: '视频下载',
         key: 'handle',
         width: '20%',
-        render: (text: any, item: Object): string=>{
-          return (
-            <div>
-              <Button className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'chao') }>超清</Button>
-              <Button className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'gao') }>高清</Button>
-              <Button onClick={ this.onDownload.bind(this, item, 'liuchang_url') }>流畅</Button>
-            </div>
-          );
+        render: (text: any, item: Object): Array=>{
+          return [
+            <Button key="A" className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'chao') }>超清</Button>,
+            <Button key="B" className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'gao') }>高清</Button>,
+            <Button key="C" onClick={ this.onDownload.bind(this, item, 'liuchang') }>流畅</Button>
+          ];
         }
       }
     ];
@@ -172,62 +170,60 @@ class LiveDownload extends Component{
       message.error('下载失败！');
     }
   }
-  render(){
-    return (
-      <div>
-        {/* 功能区 */}
-        <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
-            <div className={ publicStyle.fl }>
-              <Select className={ style.select }
-                      value={ this.props.group }
-                      dropdownMatchSelectWidth={ true }
-                      dropdownClassName={ style.select }
-                      onSelect={ this.onGroupSelect.bind(this) }>
-                <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
-                <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
-                <Select.Option key="GNZ48" value="GNZ48">GNZ48</Select.Option>
-                <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
-                <Select.Option key="CKG48" value="CKG48" disabled={ true }>CKG48</Select.Option>
-              </Select>
-              <Button className={ publicStyle.ml10 } type="primary" onClick={ this.onLoadList.bind(this, 1, 15) }>
-                <Icon type="cloud" />
-                <span>刷新公演录播列表</span>
-              </Button>
-            </div>
-            <div className={ publicStyle.fr }>
-              <Link to="/LiveDownload/List">
-                <Button className={ publicStyle.mr10 }>
-                  <Icon type="bars" />
-                  <span>下载列表</span>
-                </Button>
-              </Link>
-              <Link to="/">
-                <Button type="danger">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Button>
-              </Link>
-            </div>
+  render(): Array{
+    return [
+      /* 功能区 */
+      <Affix key={ 0 } className={ publicStyle.affix }>
+        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+          <div className={ publicStyle.fl }>
+            <Select className={ style.select }
+                    value={ this.props.group }
+                    dropdownMatchSelectWidth={ true }
+                    dropdownClassName={ style.select }
+                    onSelect={ this.onGroupSelect.bind(this) }>
+              <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
+              <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
+              <Select.Option key="GNZ48" value="GNZ48">GNZ48</Select.Option>
+              <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
+              <Select.Option key="CKG48" value="CKG48" disabled={ true }>CKG48</Select.Option>
+            </Select>
+            <Button className={ publicStyle.ml10 } type="primary" onClick={ this.onLoadList.bind(this, 1, 15) }>
+              <Icon type="cloud" />
+              <span>刷新公演录播列表</span>
+            </Button>
           </div>
-        </Affix>
-        {/* 显示列表 */}
-        <div className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
-          <Table loading={ this.state.loading }
-                 bordered={ true }
-                 columns={ this.columus() }
-                 rowKey={ (item: Object): number=>item.id }
-                 dataSource={ this.props.liveList }
-                 pagination={{
-                   pageSize: 15,
-                   showQuickJumper: true,
-                   current: this.props.page,
-                   total: this.props.liveList.length === 0 ? 0 : this.props.pageLen * 15,
-                   onChange: this.onLoadList.bind(this)
-                 }} />
+          <div className={ publicStyle.fr }>
+            <Link to="/LiveDownload/List">
+              <Button className={ publicStyle.mr10 }>
+                <Icon type="bars" />
+                <span>下载列表</span>
+              </Button>
+            </Link>
+            <Link to="/">
+              <Button type="danger">
+                <Icon type="poweroff" />
+                <span>返回</span>
+              </Button>
+            </Link>
+          </div>
         </div>
+      </Affix>,
+      /* 显示列表 */
+      <div key={ 1 } className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
+        <Table loading={ this.state.loading }
+               bordered={ true }
+               columns={ this.columus() }
+               rowKey={ (item: Object): number=>item.id }
+               dataSource={ this.props.liveList }
+               pagination={{
+                 pageSize: 15,
+                 showQuickJumper: true,
+                 current: this.props.page,
+                 total: this.props.liveList.length === 0 ? 0 : this.props.pageLen * 15,
+                 onChange: this.onLoadList.bind(this)
+               }} />
       </div>
-    );
+    ];
   }
 }
 
