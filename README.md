@@ -21,10 +21,12 @@ pug + sass + ECMA8 + react + antd + webpack + nwjs。
 * 教程参考：[http://www.ituring.com.cn/book/1421](http://www.ituring.com.cn/book/1421)
 * api文档：[https://developer.chrome.com/extensions/api_index](https://developer.chrome.com/extensions/api_index)
 
-## 文件
-* app: 源代码
-* dependent: 依赖的文件存储目录
-* output: 视频、Excel等文件的输出目录
+## 文件夹结构
+* nwjs: nwjs SDK
+  * app: 源代码
+  * dependent: 依赖的文件存储目录
+    * ffmpeg: ffmpeg
+  * output: 视频、Excel等文件的输出目录
 
 ## 关于dll
 无论是开发环境还是生产环境，首先要编译dll文件，将公共模块提取出来。
