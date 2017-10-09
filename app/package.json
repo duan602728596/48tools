@@ -44,11 +44,11 @@
     "bundle-loader": "^0.5.5",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
-    "extract-text-webpack-plugin": "^3.0.0",
-    "file-loader": "^0.11.2",
+    "extract-text-webpack-plugin": "^3.0.1",
+    "file-loader": "^1.1.5",
     "happypack": "^4.0.0-beta.5",
     "html-webpack-plugin": "^2.30.1",
-    "immutable": "^3.8.1",
+    "immutable": "^3.8.2",
     "indexeddb-tools": "^1.0.1",
     "indexeddb-tools-redux": "^0.0.4",
     "jquery": "^3.2.1",
@@ -67,9 +67,9 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "sass-loader": "^6.0.6",
-    "style-loader": "^0.18.2",
+    "style-loader": "^0.19.0",
     "uglifyjs-webpack-plugin": "^1.0.0-beta.2",
-    "url-loader": "^0.5.9",
+    "url-loader": "^0.6.2",
     "webpack": "^3.6.0"
   }
 }
