@@ -4,6 +4,7 @@ const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const HappyPack = require('happypack');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
@@ -97,9 +98,11 @@ module.exports = config({
         workers: os.cpus().length
       }
     }),
+    new OptimizeCSSPlugin(),
     // 抽离css
     new ExtractTextPlugin({
-      filename: 'style/[name]_[contenthash].css'
+      filename: 'style/[name]_[contenthash].css',
+      allChunks: true
     }),
     // html模板
     new HtmlWebpackPlugin({
