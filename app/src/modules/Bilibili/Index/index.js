@@ -7,12 +7,12 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Popconfirm } from 'antd';
 import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../store/index';
-import publicStyle from '../../pubmicMethod/public.sass';
+import publicStyle from '../../publicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../function';
-import option from '../../pubmicMethod/option';
+import option from '../../publicMethod/option';
 const child_process = node_require('child_process');
 const http = node_require('http');
 

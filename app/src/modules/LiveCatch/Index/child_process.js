@@ -1,7 +1,7 @@
 // @flow
 import store from '../../../store/store';
 import { liveChange } from '../store/index';
-import post from '../../pubmicMethod/post';
+import post from '../../publicMethod/post';
 
 /* 子进程监听 */
 export function child_process_stdout(data: any): void{

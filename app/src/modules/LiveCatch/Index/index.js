@@ -8,13 +8,13 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Icon, Affix, message, Popconfirm } from 'antd';
 import jQuery from 'jquery';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
-import publicStyle from '../../pubmicMethod/public.sass';
+import publicStyle from '../../publicMethod/public.sass';
 import commonStyle from '../../../common.sass';
-import post from '../../pubmicMethod/post';
+import post from '../../publicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
-import option from '../../pubmicMethod/option';
+import option from '../../publicMethod/option';
 const child_process = node_require('child_process');
 
 /* 初始化数据 */

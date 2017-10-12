@@ -3,7 +3,7 @@ import { handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 import { getAction, addAction, putAction } from 'indexeddb-tools-redux';
 import { objectToArray } from '../../../function';
-import option from '../../pubmicMethod/option';
+import option from '../../publicMethod/option';
 import indexReducer, * as indexAction from './index';
 
 /* 使用immutable初始化基础数据 */

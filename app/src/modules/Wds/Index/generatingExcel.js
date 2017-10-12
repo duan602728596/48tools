@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { message } from 'antd';
 import { paiHang } from './search';
 import { time } from '../../../function';
-import option from '../../pubmicMethod/option';
+import option from '../../publicMethod/option';
 const fs = node_require('fs');
 const process = node_require('process');
 const xlsx = node_require('node-xlsx');

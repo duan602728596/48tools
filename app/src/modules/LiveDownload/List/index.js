@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Button, Icon, Affix } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import style from './style.sass';
-import publicStyle from '../../pubmicMethod/public.sass';
+import publicStyle from '../../publicMethod/public.sass';
 import commonStyle from '../../../common.sass';
 import { downloadList } from '../store/reducer';
 
