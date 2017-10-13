@@ -93,10 +93,13 @@ module.exports = config({
           quote_style: 3
         }
       },
+      /*
+      ！编译报错
       parallel: {
         cache: true,
         workers: os.cpus().length
       }
+      */
     }),
     new OptimizeCSSPlugin(),
     // 抽离css
