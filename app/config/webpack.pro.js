@@ -94,7 +94,7 @@ module.exports = config({
         }
       },
       /*
-      ！编译报错
+      // ！编译报错
       parallel: {
         cache: true,
         workers: os.cpus().length
