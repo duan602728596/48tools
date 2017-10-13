@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message, Input, Popconfirm } from 'antd';
+import { Button, Table, Affix, message, Input, Popconfirm } from 'antd';
 import { wdsList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
@@ -66,15 +66,9 @@ class Wds extends Component{
         width: '33%',
         render: (text: any, item: Object): Array=>{
           return [
-            <Button key={ 0 } className={ publicStyle.mr10 } type="primary" onClick={ this.onToExcel.bind(this, item) }>
-              <Icon type="file-excel" />
-              <span>导出EXCEL</span>
-            </Button>,
+            <Button key={ 0 } className={ publicStyle.mr10 } type="primary" icon="file-excel" onClick={ this.onToExcel.bind(this, item) }>导出EXCEL</Button>,
             <Popconfirm key={ 1 } title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
-              <Button type="danger">
-                  <Icon type="delete" />
-                  <span>删除</span>
-              </Button>
+              <Button type="danger" icon="delete">删除</Button>
             </Popconfirm>
           ];
         }
@@ -151,34 +145,31 @@ class Wds extends Component{
                    readOnly
                    value={ this.state.wdstitle } />
             <Button loading={ this.state.btnLoading }
+                    icon="search"
                     disabled={ !/^\s*[0-9]+\s*$/.test(this.state.wdsid) }
                     onClick={ this.onSearchTitle.bind(this) }>
-              <Icon type="search" />
-              <span>查询</span>
+              查询
             </Button>
             <Button className={ publicStyle.ml10 }
                     type="primary"
+                    icon="file-add"
                     loading={ this.state.btnLoading }
                     disabled={ /^\s*$/.test(this.state.wdsid) || /^\s*$/.test(this.state.wdstitle) }
                     onClick={ this.onAdd.bind(this) }>
-              <Icon type="file-add" />
-              <span>添加</span>
+              添加
             </Button>
             <Button className={ publicStyle.ml10 }
                     type="primary"
+                    icon="api"
                     disabled={ this.props.wdsList.length === 0 }
                     onClick={ this.onToExcelAll.bind(this) }>
-              <Icon type="api" />
-              <span>生成EXCEL</span>
+              生成EXCEL
             </Button>
             <b className={ style.tishi }>结果生成到一个Excel中</b>
           </div>
           <div className={ publicStyle.fr }>
             <Link className={ publicStyle.ml10 } to="/">
-              <Button type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-              </Button>
+              <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
         </div>

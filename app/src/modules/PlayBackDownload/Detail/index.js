@@ -2,7 +2,7 @@
 /* 查看录播详细信息 */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Icon } from 'antd';
+import { Button } from 'antd';
 import style from './style.sass';
 import { time } from '../../../function';
 
@@ -36,10 +36,7 @@ class Detail extends Component{
             current
           }
         }}>
-          <Button className={ style.btn } type="danger">
-            <Icon type="poweroff" />
-            <span>返回</span>
-          </Button>
+          <Button className={ style.btn } type="danger" icon="poweroff">返回</Button>
         </Link>
         <div className={ style.textList }>
           <p className={ style.text }>

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Icon, Affix, Progress } from 'antd';
+import { Button, Affix, Progress } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
@@ -90,10 +90,7 @@ class ListOne extends Component{
     switch(state){
       case 1:
         return (
-          <Button className={ publicStyle.fr } type="danger" onClick={ this.onCancelDownload.bind(this, detail[0]) }>
-            <Icon type="close-square" />
-            <span>取消下载</span>
-          </Button>
+          <Button className={ publicStyle.fr } type="danger" icon="close-square" onClick={ this.onCancelDownload.bind(this, detail[0]) }>取消下载</Button>
         );
       case 2:
         return (
@@ -195,15 +192,9 @@ class List extends Component{
       <Affix key={ 0 } className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
           <div className={ publicStyle.fr }>
-            <Button onClick={ this.onClear.bind(this) }>
-              <Icon type="close-square" />
-              <span>全部清除</span>
-            </Button>
+            <Button icon="close-square" onClick={ this.onClear.bind(this) }>全部清除</Button>
             <Link to="/PlayBackDownload">
-              <Button className={ publicStyle.ml10 } type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-              </Button>
+              <Button className={ publicStyle.ml10 } type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
         </div>

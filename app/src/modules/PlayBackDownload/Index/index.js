@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message, Input } from 'antd';
+import { Button, Table, Affix, message, Input } from 'antd';
 import { playBackList } from '../store/index';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
@@ -131,15 +131,9 @@ class PlayBackDownload extends Component{
                 current: this.state.current
               }
             }}>
-              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }>
-                <Icon type="eye" />
-                <span>查看</span>
-              </Button>
+              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } icon="eye">查看</Button>
             </Link>,
-            <Button key="B" className={ publicStyle.ml10 } onClick={ this.download.bind(this, item) }>
-              <Icon type="fork" />
-              <span>下载</span>
-            </Button>
+            <Button key="B" className={ publicStyle.ml10 } icon="fork" onClick={ this.download.bind(this, item) }>下载</Button>
           ];
         }
       }
@@ -256,37 +250,22 @@ class PlayBackDownload extends Component{
                    ref="playBackDownload-searchInput"
                    placeholder="多个关键字用空格分割"
                    onPressEnter={ this.onSearchInput.bind(this) } />
-            <Button className={ publicStyle.mr10 } onClick={ this.onSearchInput.bind(this) }>
-              <Icon type="search" />
-              <span>搜索</span>
-            </Button>
-            <Button className={ publicStyle.mr10 } onClick={ this.onReset.bind(this) }>
-              <Icon type="close" />
-              <span>重置</span>
-            </Button>
+            <Button className={ publicStyle.mr10 } icon="search" onClick={ this.onSearchInput.bind(this) }>搜索</Button>
+            <Button className={ publicStyle.mr10 } icon="close" onClick={ this.onReset.bind(this) }>重置</Button>
           </div>
           <div className={ publicStyle.fr }>
             <Button className={ publicStyle.ml10 }
                     type="primary"
+                    icon="cloud-download-o"
                     onClick={ this.onPlayBackListLoad.bind(this, '加载') }>
-              <Icon type="cloud-download-o" />
-              <span>加载列表</span>
+              加载列表
             </Button>
-            <Button className={ publicStyle.ml10 } onClick={ this.onPlayBackListLoad.bind(this, '刷新') }>
-              <Icon type="loading-3-quarters" />
-              <span>刷新列表</span>
-            </Button>
+            <Button className={ publicStyle.ml10 } icon="loading-3-quarters" onClick={ this.onPlayBackListLoad.bind(this, '刷新') }>刷新列表</Button>
             <Link to="/PlayBackDownload/List">
-              <Button className={ publicStyle.ml10 }>
-                <Icon type="bars" />
-                <span>下载列表</span>
-              </Button>
+              <Button className={ publicStyle.ml10 } icon="bars">下载列表</Button>
             </Link>
             <Link className={ publicStyle.ml10 } to="/">
-              <Button type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-              </Button>
+              <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
         </div>

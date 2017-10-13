@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message, Input, Popconfirm, Form } from 'antd';
+import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
 import jQuery from 'jquery';
 import { time, patchZero } from '../../../function';
 import { cutList, taskChange } from '../store/reducer';
@@ -122,33 +122,21 @@ class Cut extends Component{
               return [
                 <b key={ 0 } className={ publicStyle.mr10 }>任务结束</b>,
                 <Popconfirm key={ 1 } title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
-                  <Button type="danger">
-                    <Icon type="delete" />
-                    <span>删除任务</span>
-                  </Button>
+                  <Button type="danger" icon="delete">删除任务</Button>
                 </Popconfirm>
               ];
             }else{
               return (
                 <Popconfirm title="确认停止任务吗？" onConfirm={ this.onStopTask.bind(this, item) }>
-                  <Button type="danger">
-                    <Icon type="close-circle" />
-                    <span>停止任务</span>
-                  </Button>
+                  <Button type="danger" icon="close-circle">停止任务</Button>
                 </Popconfirm>
               );
             }
           }else{
             return [
-              <Button key={ 0 } className={ publicStyle.mr10 } type="primary" onClick={ this.onStartTask.bind(this, item) }>
-                <Icon type="rocket" />
-                <span>开始任务</span>
-              </Button>,
+              <Button key={ 0 } className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.onStartTask.bind(this, item) }>开始任务</Button>,
               <Popconfirm key={ 1 } title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
-                <Button type="danger">
-                  <Icon type="delete" />
-                  <span>删除任务</span>
-                </Button>
+                <Button type="danger" icon="delete">删除任务</Button>
               </Popconfirm>
             ];
           }
@@ -479,10 +467,7 @@ class Cut extends Component{
           </div>
           <div className={ publicStyle.fr }>
             <Link className={ publicStyle.ml10 } to="/">
-              <Button type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-              </Button>
+              <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
         </div>

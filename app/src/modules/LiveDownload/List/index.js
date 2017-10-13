@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
-import { Button, Icon, Affix } from 'antd';
+import { Button, Affix } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
@@ -57,10 +57,7 @@ class List extends Component{
           {
             item.child.killed === false && item.child.exitCode === null ?
               (
-                <Button className={ style.ar } type="danger" onClick={ this.onStop.bind(this, item) }>
-                  <Icon type="close-square" />
-                  <span>取消下载</span>
-                </Button>
+                <Button className={ style.ar } type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
               ) : (
                 <b className={ `${ style.ar } ${ style.cancelText }` }>已停止</b>
               )
@@ -76,15 +73,9 @@ class List extends Component{
         <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
             <div className={ publicStyle.fr }>
-              <Button onClick={ this.onClear.bind(this) }>
-                <Icon type="close-square" />
-                <span>全部清除</span>
-              </Button>
+              <Button icon="close-square" onClick={ this.onClear.bind(this) }>全部清除</Button>
               <Link to="/LiveDownload">
-                <Button className={ publicStyle.ml10 } type="danger">
-                  <Icon type="poweroff" />
-                  <span>返回</span>
-                </Button>
+                <Button className={ publicStyle.ml10 } type="danger" icon="poweroff">返回</Button>
               </Link>
             </div>
           </div>

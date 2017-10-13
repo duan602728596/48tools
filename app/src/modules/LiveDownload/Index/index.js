@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message, Select } from 'antd';
+import { Button, Table, Affix, message, Select } from 'antd';
 import { liveList, liveListInit, changeGroup } from '../store/index';
 import { downloadList } from '../store/reducer';
 import style from './style.sass';
@@ -187,23 +187,14 @@ class LiveDownload extends Component{
               <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
               <Select.Option key="CKG48" value="CKG48" disabled={ true }>CKG48</Select.Option>
             </Select>
-            <Button className={ publicStyle.ml10 } type="primary" onClick={ this.onLoadList.bind(this, 1, 15) }>
-              <Icon type="cloud" />
-              <span>刷新公演录播列表</span>
-            </Button>
+            <Button className={ publicStyle.ml10 } type="primary" icon="cloud" onClick={ this.onLoadList.bind(this, 1, 15) }>刷新公演录播列表</Button>
           </div>
           <div className={ publicStyle.fr }>
             <Link to="/LiveDownload/List">
-              <Button className={ publicStyle.mr10 }>
-                <Icon type="bars" />
-                <span>下载列表</span>
-              </Button>
+              <Button className={ publicStyle.mr10 } icon="bars">下载列表</Button>
             </Link>
             <Link to="/">
-              <Button type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-              </Button>
+              <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
         </div>

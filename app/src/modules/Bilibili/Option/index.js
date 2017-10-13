@@ -126,9 +126,7 @@ class BiliBiliOption extends Component{
           <Form.Item>
             <Button className={ style.btn } type="primary" htmlType="submit" size="default" loading={ this.state.btnLoading }>添加</Button>
             <Link to="/BiliBili">
-              <Button className={ style.btn } type="danger" size="default" loading={ this.state.btnLoading }>
-                <span>返回</span>
-              </Button>
+              <Button className={ style.btn } type="danger" size="default" loading={ this.state.btnLoading }>返回</Button>
             </Link>
           </Form.Item>
         </Form>

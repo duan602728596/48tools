@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Icon, Affix, message, Popconfirm } from 'antd';
+import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import jQuery from 'jquery';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../publicMethod/public.sass';
@@ -104,26 +104,17 @@ class LiveCatch extends Component{
             if(m.child.exitCode === null){
               return (
                 <Popconfirm title="确认停止录制吗？" onConfirm={ this.stopRecording.bind(this, item) }>
-                  <Button type="danger">
-                    <Icon type="close-square" />
-                    <span>停止录制</span>
-                  </Button>
+                  <Button type="danger" icon="close-square">停止录制</Button>
                 </Popconfirm>
               );
             }else{
               return (
-                <Button type="primary" onClick={ this.recording.bind(this, item) }>
-                  <Icon type="play-circle-o" />
-                  <span>录制</span>
-                </Button>
+                <Button type="primary" icon="play-circle-o" onClick={ this.recording.bind(this, item) }>录制</Button>
               );
             }
           }else{
             return (
-              <Button type="primary" onClick={ this.recording.bind(this, item) }>
-                <Icon type="play-circle-o" />
-                <span>录制</span>
-              </Button>
+              <Button type="primary" icon="play-circle-o" onClick={ this.recording.bind(this, item) }>录制</Button>
             );
           }
         }
@@ -291,35 +282,20 @@ class LiveCatch extends Component{
             {
               this.props.autoRecording ?
                 (
-                  <Button className={ publicStyle.mr10 } type="danger" onClick={ this.onStopAutoRecording.bind(this) }>
-                    <Icon type="close-square" />
-                    <span>停止自动录制</span>
-                  </Button>
+                  <Button className={ publicStyle.mr10 } type="danger" icon="close-square" onClick={ this.onStopAutoRecording.bind(this) }>停止自动录制</Button>
                 ) :
                 (
-                  <Button className={ publicStyle.mr10 } type="primary" onClick={ this.onAutoRecording.bind(this) }>
-                    <Icon type="play-circle" />
-                    <span>开始自动录制</span>
-                  </Button>
+                  <Button className={ publicStyle.mr10 } type="primary" icon="play-circle" onClick={ this.onAutoRecording.bind(this) }>开始自动录制</Button>
                 )
             }
             <Link to="/LiveCatch/Option">
-              <Button disabled={ this.props.autoRecording }>
-                <Icon type="setting" />
-                <span>自动录制配置</span>
-              </Button>
+              <Button icon="setting" disabled={ this.props.autoRecording }>自动录制配置</Button>
             </Link>
           </div>
           <div className={ publicStyle.fr }>
-            <Button className={ publicStyle.ml10 } onClick={ this.getLiveList.bind(this) }>
-              <Icon type="loading-3-quarters" />
-              <span>刷新列表</span>
-            </Button>
+            <Button className={ publicStyle.ml10 } icon="loading-3-quarters" onClick={ this.getLiveList.bind(this) }>刷新列表</Button>
             <Link className={ publicStyle.ml10 } to="/">
-              <Button type="danger">
-                <Icon type="poweroff" />
-                <span>返回</span>
-              </Button>
+              <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
         </div>
