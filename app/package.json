@@ -35,7 +35,7 @@
     "antd": "^2.13.6",
     "babel-core": "^7.0.0-beta.2",
     "babel-loader": "^7.1.2",
-    "babel-plugin-import": "^1.6.0",
+    "babel-plugin-import": "^1.6.1",
     "babel-plugin-transform-decorators": "^7.0.0-beta.2",
     "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.2",
     "babel-preset-es2015": "^7.0.0-beta.2",
