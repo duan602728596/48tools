@@ -1,11 +1,12 @@
 // @flow
 import jQuery from 'jquery';
-import cheerio from 'cheerio';
 const url = node_require('url');
 const fs = node_require('fs');
 const child_process = node_require('child_process');
 const path = node_require('path');
 const process = node_require('process');
+const cheerio = node_require('cheerio');
+
 const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /**
