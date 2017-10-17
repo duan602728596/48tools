@@ -82,7 +82,7 @@ class LiveCatchOption extends Component{
           humans: string
         } = value;
 
-        const humansArray: Array = humans.split(/\s*,\s*/);
+        const humansArray: Array = humans.replace(/\s+/g, '').split(/\s*,\s*/g);
         for(let j: number = humansArray.length - 1; j >= 0; j--){
           if(humansArray[j] === ''){
             humansArray.splice(j, 1);
