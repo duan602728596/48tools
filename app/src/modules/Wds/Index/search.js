@@ -67,7 +67,7 @@ export function paiHang(wdsid: string, type: number = 1): void{
     } = {
       hostname: 'wds.modian.com',
       port: null,
-      path: `/ajax_backer_list`,
+      path: `/ajax/backer_ranking_list`,
       method: 'POST',
       headers: headers2
     };
@@ -76,7 +76,7 @@ export function paiHang(wdsid: string, type: number = 1): void{
       pro_id: Number(wdsid2),
       type,
       page: 1,
-      pageSize: 10 ** 5
+      page_size: 10 ** 5
     });
 
     const req: any = https.request(options, (res: any): void=>{

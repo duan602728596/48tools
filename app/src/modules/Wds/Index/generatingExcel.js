@@ -5,6 +5,7 @@ import { message } from 'antd';
 import { paiHang } from './search';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
+import { juju, daka } from "./computingWds";
 const fs = node_require('fs');
 const process = node_require('process');
 const xlsx = node_require('node-xlsx');
@@ -17,20 +18,19 @@ function format(list0: Array, list1: Array): Array{
 
   // 先存储打卡时间
   list1.map((item: Object, index: number): void=>{
-    l1[item.user_id] = item.total_back_days;
+    l1[item.id] = item.day;
   });
 
   // 根据打卡排行榜格式化数据
   list0.map((item: Object, index: number): void=>{
-    all += Number(item.total_back_amount);
+    all += item.money;
     res.push([
-      index + 1,                 // 序号
-      item.nickname,             // 昵称
-      item.total_back_amount,    // 打卡金额
-      l1[item.user_id]           // 打卡时间
+      index + 1,                        // 序号
+      item.nickname,                    // 昵称
+      String(item.money.toFixed(2)),    // 打卡金额
+      l1[item.id]                       // 打卡时间
     ]);
   });
-  res.push([null], [`总金额（元）：${ all.toFixed(2) }`]);
   return res;
 }
 
@@ -42,7 +42,11 @@ function paihangbang(item: Object): Promise{
   ]).then((result: Array): { name: string, data: Array }=>{
     const l0: Object = JSON.parse(result[0]);
     const l1: Object = JSON.parse(result[1]);
-    const data: Array = (format(l0.data, l1.data));
+    const jujuResult: Object = juju(l0.data.html);
+    const l0h: Array = jujuResult.arr;
+    const l1h: Array = daka(l1.data.html);
+    const data: Array = (format(l0h, l1h));
+    data.push([null], [`总金额（元）：${ String(jujuResult.allMount.toFixed(2)) }`]);
     data.unshift([item.wdstitle], [null], [
       '序号',
       'ID',
