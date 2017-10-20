@@ -30,6 +30,7 @@ export const deleteBilibiliLiveRoom: Function = deleteAction({
 /* reducer */
 const reducer: Function = handleActions({
   [liveList]: (state: Object, action: Object): Object=>{
+    console.log(action);
     return state.set('liveList', action.payload);
   },
   [liveList_delete]: (state: Object, action: Object): Object=>{

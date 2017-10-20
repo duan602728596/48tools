@@ -23,9 +23,9 @@ export function juju(xmlStr: string): { allMount: number, arr: Array, obj: Objec
   let allMount: number = 0;
   xml("#xml").find("li").each((index: number, item: any): void=>{
     const item2: any = xml(item);
-    const id: string = (item2.find('a').eq(0).attr('href')).match(/[0-9]+/)[0];     // 用户id
-    const nickname: string = item2.find('.nickname').text();                        // 用户的昵称
-    const money: Number = Number(item2.find('.money').text().match(/[0-9.]+/)[0]);  // 用户的打赏金额
+    const id: string = (item2.find('a').eq(0).attr('href')).match(/[0-9]+/)[0];                        // 用户id
+    const nickname: string = item2.find('.nickname').text();                                           // 用户的昵称
+    const money: Number = Number(item2.find('.money').text().match(/[0-9.,]+/)[0].replace(/,/g, ''));  // 用户的打赏金额
     const o: Object = {
       index,
       id,
