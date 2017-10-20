@@ -33,7 +33,8 @@ const reducer: Function = handleActions({
     return state.set('liveList', action.payload);
   },
   [liveList_delete]: (state: Object, action: Object): Object=>{
-    const data: Array = action.payload instanceof Array ? action.payload : [action.payload];
+    const arg: Object = action.payload;
+    const data: Array = arg.data instanceof Array ? arg.data : [arg.data];
     const liveList: Array = state.get('liveList').slice();
     for(let i: number = liveList.length - 1; i >= 0; i--){
       if(data.indexOf(liveList[i].roomid) > -1){
