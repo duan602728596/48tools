@@ -448,11 +448,12 @@ class Cut extends Component{
                         <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
                         <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
                         <input className={ style.disNone }
-                               id="cut-save"
-                               type="file"
-                               nwsaveas=""
-                               nwworkingdir={ this.dir }
-                               onChange={ this.onSaveChange.bind(this) } />
+                          id="cut-save"
+                          type="file"
+                          nwsaveas=""
+                          nwworkingdir={ this.dir }
+                          onChange={ this.onSaveChange.bind(this) }
+                        />
                       </div>
                     )
                   }
@@ -475,14 +476,15 @@ class Cut extends Component{
       /* 显示列表 */
       <div key={ 1 } className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
         <Table loading={ this.state.loading }
-               bordered={ true }
-               columns={ this.columus() }
-               rowKey={ (item: Object): number=>item.id }
-               dataSource={ this.props.cutList }
-               pagination={{
-                 pageSize: 20,
-                 showQuickJumper: true
-               }} />
+          bordered={ true }
+          columns={ this.columus() }
+          rowKey={ (item: Object): number=>item.id }
+          dataSource={ this.props.cutList }
+          pagination={{
+            pageSize: 20,
+            showQuickJumper: true
+          }}
+        />
       </div>
     ];
   }

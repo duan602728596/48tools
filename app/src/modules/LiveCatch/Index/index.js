@@ -303,14 +303,15 @@ class LiveCatch extends Component{
       /* 显示列表 */
       <div key={ 1 } className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
-               bordered={ true }
-               columns={ this.columus() }
-               rowKey={ (item: Object): number=>item.liveId }
-               dataSource={ this.props.liveList }
-               pagination={{
-                 pageSize: 20,
-                 showQuickJumper: true
-               }} />
+          bordered={ true }
+          columns={ this.columus() }
+          rowKey={ (item: Object): number=>item.liveId }
+          dataSource={ this.props.liveList }
+          pagination={{
+            pageSize: 20,
+            showQuickJumper: true
+          }}
+        />
       </div>
     ];
   }

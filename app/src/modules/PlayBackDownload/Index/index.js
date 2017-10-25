@@ -246,18 +246,20 @@ class PlayBackDownload extends Component{
           <div className={ publicStyle.fl }>
             <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
             <Input className={ `${ publicStyle.mr10 } ${ style.searchInput }` }
-                   id="playBackDownload-searchInput"
-                   ref="playBackDownload-searchInput"
-                   placeholder="多个关键字用空格分割"
-                   onPressEnter={ this.onSearchInput.bind(this) } />
+              id="playBackDownload-searchInput"
+              ref="playBackDownload-searchInput"
+              placeholder="多个关键字用空格分割"
+              onPressEnter={ this.onSearchInput.bind(this) }
+            />
             <Button className={ publicStyle.mr10 } icon="search" onClick={ this.onSearchInput.bind(this) }>搜索</Button>
             <Button className={ publicStyle.mr10 } icon="close" onClick={ this.onReset.bind(this) }>重置</Button>
           </div>
           <div className={ publicStyle.fr }>
             <Button className={ publicStyle.ml10 }
-                    type="primary"
-                    icon="cloud-download-o"
-                    onClick={ this.onPlayBackListLoad.bind(this, '加载') }>
+              type="primary"
+              icon="cloud-download-o"
+              onClick={ this.onPlayBackListLoad.bind(this, '加载') }
+            >
               加载列表
             </Button>
             <Button className={ publicStyle.ml10 } icon="loading-3-quarters" onClick={ this.onPlayBackListLoad.bind(this, '刷新') }>刷新列表</Button>
@@ -273,16 +275,17 @@ class PlayBackDownload extends Component{
       /* 显示列表 */
       <div key={ 1 } className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
-               bordered={ true }
-               columns={ this.columus() }
-               rowKey={ (item: Object): number=>item.liveId }
-               dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
-               pagination={{
-                 pageSize: 20,
-                 showQuickJumper: true,
-                 current: this.state.current,
-                 onChange: this.onPageChange.bind(this)
-               }} />
+          bordered={ true }
+          columns={ this.columus() }
+          rowKey={ (item: Object): number=>item.liveId }
+          dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
+          pagination={{
+            pageSize: 20,
+            showQuickJumper: true,
+            current: this.state.current,
+            onChange: this.onPageChange.bind(this)
+          }}
+        />
       </div>
     ];
   }

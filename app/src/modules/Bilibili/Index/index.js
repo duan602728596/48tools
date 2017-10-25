@@ -80,10 +80,11 @@ class BiliBili extends Component{
                 </Popconfirm>
               ) : (
                 <Button key={ 0 }
-                        className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
-                        type="primary"
-                        icon="step-forward"
-                        onClick={ this.onCatch.bind(this, item) }>
+                  className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
+                  type="primary"
+                  icon="step-forward"
+                  onClick={ this.onCatch.bind(this, item) }
+                >
                   录制
                 </Button>
               ),
@@ -167,14 +168,15 @@ class BiliBili extends Component{
       /* 显示列表 */
       <div key={ 1 } className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
-               bordered={ true }
-               columns={ this.columus() }
-               rowKey={ (item: Object): number=>item.roomid }
-               dataSource={ this.props.liveList }
-               pagination={{
-                 pageSize: 20,
-                 showQuickJumper: true
-               }} />
+          bordered={ true }
+          columns={ this.columus() }
+          rowKey={ (item: Object): number=>item.roomid }
+          dataSource={ this.props.liveList }
+          pagination={{
+            pageSize: 20,
+            showQuickJumper: true
+          }}
+        />
       </div>
     ];
   }

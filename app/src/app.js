@@ -13,6 +13,6 @@ ReactDOM.render(
     <HashRouter>
       <Routers />
     </HashRouter>
-  </Provider>
-  , document.getElementById('react-app')
+  </Provider>,
+  document.getElementById('react-app')
 );

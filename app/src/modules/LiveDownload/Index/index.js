@@ -177,10 +177,11 @@ class LiveDownload extends Component{
         <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
           <div className={ publicStyle.fl }>
             <Select className={ style.select }
-                    value={ this.props.group }
-                    dropdownMatchSelectWidth={ true }
-                    dropdownClassName={ style.select }
-                    onSelect={ this.onGroupSelect.bind(this) }>
+              value={ this.props.group }
+              dropdownMatchSelectWidth={ true }
+              dropdownClassName={ style.select }
+              onSelect={ this.onGroupSelect.bind(this) }
+            >
               <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
               <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
               <Select.Option key="GNZ48" value="GNZ48">GNZ48</Select.Option>
@@ -202,17 +203,18 @@ class LiveDownload extends Component{
       /* 显示列表 */
       <div key={ 1 } className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
         <Table loading={ this.state.loading }
-               bordered={ true }
-               columns={ this.columus() }
-               rowKey={ (item: Object): number=>item.id }
-               dataSource={ this.props.liveList }
-               pagination={{
-                 pageSize: 15,
-                 showQuickJumper: true,
-                 current: this.props.page,
-                 total: this.props.liveList.length === 0 ? 0 : this.props.pageLen * 15,
-                 onChange: this.onLoadList.bind(this)
-               }} />
+          bordered={ true }
+          columns={ this.columus() }
+          rowKey={ (item: Object): number=>item.id }
+          dataSource={ this.props.liveList }
+          pagination={{
+            pageSize: 15,
+            showQuickJumper: true,
+            current: this.props.page,
+            total: this.props.liveList.length === 0 ? 0 : this.props.pageLen * 15,
+            onChange: this.onLoadList.bind(this)
+          }}
+        />
       </div>
     ];
   }

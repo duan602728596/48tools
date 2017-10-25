@@ -136,33 +136,38 @@ class Wds extends Component{
           <div className={ publicStyle.fl }>
             <label htmlFor="wds-id">微打赏ID: </label>
             <Input className={ style.inputId }
-                   id="wds-id"
-                   value={ this.state.wdsid }
-                   onChange={ this.onWdsIdChange.bind(this) } />
+              id="wds-id"
+              value={ this.state.wdsid }
+              onChange={ this.onWdsIdChange.bind(this) }
+            />
             <label htmlFor="wds-title">微打赏标题: </label>
             <Input className={ style.inputTitle }
-                   id="wds-title"
-                   readOnly
-                   value={ this.state.wdstitle } />
+              id="wds-title"
+              readOnly
+              value={ this.state.wdstitle }
+            />
             <Button loading={ this.state.btnLoading }
-                    icon="search"
-                    disabled={ !/^\s*[0-9]+\s*$/.test(this.state.wdsid) }
-                    onClick={ this.onSearchTitle.bind(this) }>
+              icon="search"
+              disabled={ !/^\s*[0-9]+\s*$/.test(this.state.wdsid) }
+              onClick={ this.onSearchTitle.bind(this) }
+            >
               查询
             </Button>
             <Button className={ publicStyle.ml10 }
-                    type="primary"
-                    icon="file-add"
-                    loading={ this.state.btnLoading }
-                    disabled={ /^\s*$/.test(this.state.wdsid) || /^\s*$/.test(this.state.wdstitle) }
-                    onClick={ this.onAdd.bind(this) }>
+              type="primary"
+              icon="file-add"
+              loading={ this.state.btnLoading }
+              disabled={ /^\s*$/.test(this.state.wdsid) || /^\s*$/.test(this.state.wdstitle) }
+              onClick={ this.onAdd.bind(this) }
+            >
               添加
             </Button>
             <Button className={ publicStyle.ml10 }
-                    type="primary"
-                    icon="api"
-                    disabled={ this.props.wdsList.length === 0 }
-                    onClick={ this.onToExcelAll.bind(this) }>
+              type="primary"
+              icon="api"
+              disabled={ this.props.wdsList.length === 0 }
+              onClick={ this.onToExcelAll.bind(this) }
+            >
               生成EXCEL
             </Button>
             <b className={ style.tishi }>结果生成到一个Excel中</b>
@@ -177,13 +182,14 @@ class Wds extends Component{
       /* 显示列表 */
       <div key={ 1 } className={ publicStyle.tableBox }>
         <Table bordered={ true }
-               columns={ this.columus() }
-               rowKey={ (item: Object): string=>item.wdsid }
-               dataSource={ this.props.wdsList }
-               pagination={{
-                 pageSize: 20,
-                 showQuickJumper: true
-               }} />
+          columns={ this.columus() }
+          rowKey={ (item: Object): string=>item.wdsid }
+          dataSource={ this.props.wdsList }
+          pagination={{
+            pageSize: 20,
+            showQuickJumper: true
+          }}
+        />
       </div>
     ];
   }
