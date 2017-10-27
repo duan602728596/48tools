@@ -28,7 +28,7 @@ class LiveCatchOption extends Component{
   state: {
     loading: boolean,
     btnLoading: boolean,
-    time: string,
+    time: number,
     humans: string
   };
   constructor(props: ?Object): void{
