@@ -37,7 +37,7 @@ class LiveCatchOption extends Component{
     this.state = {
       loading: true,      // 加载动画
       btnLoading: false,  // 按钮加载动画
-      time: '',           // 间隔时间
+      time: '1',          // 间隔时间
       humans: ''          // 成员
     };
   }
