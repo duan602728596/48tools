@@ -34,7 +34,8 @@ export function loadList(group: string, page: number): Promise{
  */
 export function queryHtml(html: string): Object{
   const xml: any = cheerio.load(html);
-  const pageLen: number = Number(xml('.p-skip').text().match(/[0-9]+/g)[0]);
+  const pSkip: any = xml('.p-skip');
+  const pageLen: number = pSkip.length === 0 ? 1 : Number(pSkip.text().match(/[0-9]+/g)[0]);
   const videoList: any = xml('.videos');
   const result: Array = [];
   videoList.map((index: number, element: any): void=>{
@@ -91,6 +92,9 @@ export function downloadM3U8(m3u8Url: string): Promise{
       async: true,
       success: function(result: any, status: number, xhr: any): void{
         resolve(result);
+      },
+      error: function(xhr: any, err: any): void{
+        reject(err);
       }
     });
   }).then((text: string): { host: string, m3u8: string }=>{
