@@ -186,7 +186,7 @@ class LiveDownload extends Component{
               <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
               <Select.Option key="GNZ48" value="GNZ48">GNZ48</Select.Option>
               <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
-              <Select.Option key="CKG48" value="CKG48" disabled={ true }>CKG48</Select.Option>
+              <Select.Option key="CKG48" value="CKG48">CKG48</Select.Option>
             </Select>
             <Button className={ publicStyle.ml10 } type="primary" icon="cloud" onClick={ this.onLoadList.bind(this, 1, 15) }>刷新公演录播列表</Button>
           </div>
