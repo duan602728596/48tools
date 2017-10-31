@@ -3,10 +3,10 @@ module.exports = {
   path: 'babel-loader',
   query: {
     cacheDirectory: true,
-    presets: ['flow', 'react'],
+    presets: ['@babel/flow', '@babel/react'],
     plugins: [
-      'transform-decorators',           // 装饰器
-      'transform-object-rest-spread',   // 对象的扩展
+      '@babel/proposal-decorators',
+      '@babel/proposal-object-rest-spread',
       [
         'import',
         {
