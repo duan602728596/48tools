@@ -35,8 +35,6 @@
     "@babel/core": "^7.0.0-beta.5",
     "@babel/plugin-proposal-decorators": "^7.0.0-beta.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.5",
-    "@babel/polyfill": "^7.0.0-beta.5",
-    "@babel/preset-env": "^7.0.0-beta.5",
     "@babel/preset-flow": "^7.0.0-beta.5",
     "@babel/preset-react": "^7.0.0-beta.5",
     "antd": "^2.13.8",
