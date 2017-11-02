@@ -1,4 +1,3 @@
-// @flow
 /* 查看录播详细信息 */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';

@@ -1,4 +1,3 @@
-// @flow
 import { createAction, handleActions } from 'redux-actions';
 
 /* Action */

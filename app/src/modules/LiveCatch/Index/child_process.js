@@ -1,4 +1,3 @@
-// @flow
 import store from '../../../store/store';
 import { liveChange } from '../store/index';
 import post from '../../publicMethod/post';

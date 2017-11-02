@@ -1,4 +1,3 @@
-// @flow
 /* 异步加载模块 */
 import React, { Component } from 'react';
 import Bundle from './bundle';

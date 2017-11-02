@@ -1,4 +1,3 @@
-// @flow
 /* 视频剪切 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';

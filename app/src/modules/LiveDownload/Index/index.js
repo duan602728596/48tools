@@ -1,4 +1,3 @@
-// @flow
 /* 直播视频下载 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';

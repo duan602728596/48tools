@@ -1,4 +1,3 @@
-// @flow
 /* 口袋48录播下载 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';

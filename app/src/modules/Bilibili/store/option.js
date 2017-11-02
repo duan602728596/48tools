@@ -1,4 +1,3 @@
-// @flow
 import { createAction, handleActions } from 'redux-actions';
 import { putAction } from 'indexeddb-tools-redux';
 import option from '../../publicMethod/option';

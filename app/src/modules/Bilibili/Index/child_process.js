@@ -1,4 +1,3 @@
-// @flow
 import store from '../../../store/store';
 import { catching } from '../store/index';
 

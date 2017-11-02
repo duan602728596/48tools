@@ -1,4 +1,3 @@
-// @flow
 const http = node_require('http');
 const cheerio = node_require('cheerio');
 
@@ -44,6 +43,9 @@ function getUrl(roomid: number): Promise{
   }).then((data: string): string=>{
     const xml: any = cheerio.load(data);
     return xml('url')[0].children[0].data.match(/http(s)?:[^\[\]]+/g)[0];
+  }).catch((err: any): void=>{
+    reject(err);
+    console.error(err);
   });
 }
 

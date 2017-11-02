@@ -1,4 +1,3 @@
-// @flow
 /* 微打赏统计 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';

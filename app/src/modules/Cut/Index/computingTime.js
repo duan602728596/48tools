@@ -1,4 +1,3 @@
-// @flow
 /**
  * 计算时间差
  * @param { Array } startTime: 开始时间

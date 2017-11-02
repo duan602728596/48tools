@@ -23,6 +23,9 @@ export function loadList(group: string, page: number): Promise{
       async: true,
       success: function(result: any, status: number, xhr: any): void{
         resolve(result);
+      },
+      error: function(xhr: any, err: any): void{
+        reject(err);
       }
     });
   });
@@ -71,6 +74,9 @@ export function getM3U8(group: string, id: string, quality: string): Promise{
       async: true,
       success: function(result: any, status: number, xhr: any): void{
         resolve(result);
+      },
+      error: function(xhr: any, err: any): void{
+        reject(err);
       }
     });
   }).then((html: string): void=>{

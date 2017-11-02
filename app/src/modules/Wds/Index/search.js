@@ -1,4 +1,3 @@
-// @flow
 const https = node_require('https');
 const queryString = node_require('querystring');
 const cheerio = node_require('cheerio');

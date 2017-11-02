@@ -1,4 +1,3 @@
-// @flow
 import { createAction, handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 import { objectToArray } from '../../../function';

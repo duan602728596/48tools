@@ -1,4 +1,3 @@
-// @flow
 /* B站直播间添加 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -119,7 +118,13 @@ class BiliBiliOption extends Component{
                 }
               </Form.Item>
               <Form.Item>
-                <p className={ style.tishi }>ROOMID查看方式：进入B站直播间 -> 右键 -> 查看源代码 -> 第24行</p>
+                <p className={ style.tishi }>
+                  <del>ROOMID查看方式：进入B站直播间 -> 右键 -> 查看源代码 -> 第24行</del>
+                  <br />
+                  B站直播已改版，ROOMID获取方式如下：
+                  <br />
+                  https://api.live.bilibili.com/room/v1/Room/room_init?id={`{{ ID }}`}，GET请求。
+                </p>
               </Form.Item>
             </Spin>
           </div>

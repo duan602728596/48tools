@@ -11,6 +11,9 @@ const happyThreadPool = HappyPack.ThreadPool({
 
 function config(options){
   const conf = {
+    entry: {
+      app: path.join(__dirname, '../src/app.js')
+    },
     module: {
       rules: [
         { // react & js
@@ -95,7 +98,6 @@ function config(options){
   };
 
   /* 合并 */
-  conf.entry = options.entry;                                               // 合并入口文件
   conf.module.rules = conf.module.rules.concat(options.module.rules);       // 合并rules
   conf.plugins = conf.plugins.concat(options.plugins);                      // 合并插件
   conf.output = options.output;                                             // 合并输出目录

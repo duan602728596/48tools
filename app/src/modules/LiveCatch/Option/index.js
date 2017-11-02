@@ -1,4 +1,3 @@
-// @flow
 /* 口袋48直播抓取配置页面 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';

@@ -1,4 +1,3 @@
-// @flow
 /**
  * chrome下载事件
  * 事件的state说明

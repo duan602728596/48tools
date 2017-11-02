@@ -1,4 +1,3 @@
-// @flow
 import { handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 import { getAction, addAction, putAction } from 'indexeddb-tools-redux';

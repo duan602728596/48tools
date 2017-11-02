@@ -1,4 +1,3 @@
-// @flow
 import IndexedDB from 'indexeddb-tools';
 import option from './option';
 

@@ -1,4 +1,3 @@
-// @flow
 /* 软件首页 */
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';

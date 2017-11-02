@@ -1,4 +1,3 @@
-// @flow
 /* 生成xlsx */
 import React, { Component } from 'react';
 import { message } from 'antd';

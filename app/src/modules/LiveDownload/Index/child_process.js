@@ -1,4 +1,3 @@
-// @flow
 import store from '../../../store/store';
 import { downloadList } from '../store/reducer';
 

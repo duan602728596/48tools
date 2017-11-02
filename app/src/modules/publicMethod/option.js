@@ -1,4 +1,3 @@
-// @flow
 /* 配置文件 */
 const path = node_require('path');
 const process = node_require('process');
