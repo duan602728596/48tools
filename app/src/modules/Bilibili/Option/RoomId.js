@@ -1,8 +1,8 @@
 /* RoomId查找 */
 import React, { Component } from 'react';
 import { Input, Button, message } from 'antd';
-import style from './style.sass';
 import jQuery from 'jquery';
+import style from './style.sass';
 const url = node_require('url');
 
 class RoomId extends Component{
