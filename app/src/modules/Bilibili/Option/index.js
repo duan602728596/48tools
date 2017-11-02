@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Input, Button, message, Spin, Form } from 'antd';
 import style from './style.sass';
 import { putBilibiliLiveRoom } from '../store/option';
+import RoomId from './RoomId';
 
 /* 初始化数据 */
 const state: Function = createStructuredSelector({});
@@ -78,7 +79,7 @@ class BiliBiliOption extends Component{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return (
       <div className={ style.body }>
-        <Form layout="horizontal" onSubmit={ this.onAdd.bind(this) }>
+        <Form className={ style.form } layout="horizontal" onSubmit={ this.onAdd.bind(this) }>
           <div>
             <Spin spinning={ this.state.loading } tip="加载中...">
               <Form.Item label="直播间名称">
@@ -135,6 +136,7 @@ class BiliBiliOption extends Component{
             </Link>
           </Form.Item>
         </Form>
+        <RoomId />
       </div>
     );
   }

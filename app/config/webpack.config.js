@@ -1,3 +1,4 @@
+const path = require('path');
 const os = require('os');
 const process = require('process');
 const webpack = require('webpack');

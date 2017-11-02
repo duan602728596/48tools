@@ -21,7 +21,7 @@ export function loadList(group: string, page: number): Promise{
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: number, xhr: any): void{
+      success: function(result: any, status: string, xhr: any): void{
         resolve(result);
       },
       error: function(xhr: any, err: any): void{
@@ -72,7 +72,7 @@ export function getM3U8(group: string, id: string, quality: string): Promise{
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: number, xhr: any): void{
+      success: function(result: any, status: string, xhr: any): void{
         resolve(result);
       },
       error: function(xhr: any, err: any): void{
