@@ -31,7 +31,8 @@ function config(options){
             {
               loader: 'file-loader',
               options: {
-                name: 'script/[name]_[hash].[ext]'
+                name: '[name]_[hash].[ext]',
+                outputPath: 'script/'
               }
             }
           ]
@@ -43,7 +44,8 @@ function config(options){
               loader: 'url-loader',
               options: {
                 limit: 3000,
-                name: 'image/[name]_[hash].[ext]'
+                name: '[name]_[hash].[ext]',
+                outputPath: 'image/',
               }
             }
           ]
@@ -54,7 +56,8 @@ function config(options){
             {
               loader: 'file-loader',
               options: {
-                name: 'file/[name]_[hash].[ext]'
+                name: '[name]_[hash].[ext]',
+                outputPath: 'file/'
               }
             }
           ]
