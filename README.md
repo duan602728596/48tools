@@ -9,7 +9,7 @@
 * 公演录播回放视频下载功能
 
 ## ROOMID获取方法
-B站直播已改版，ROOMID获取方式如下。   
+B站直播已改版，ROOMID获取方式如下：   
 https://api.live.bilibili.com/room/v1/Room/room_init?id={{ ID }}，GET请求。
 
 ## 许可证
