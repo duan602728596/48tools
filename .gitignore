@@ -1,5 +1,4 @@
 # nwjs
-*.exe
 *.html
 *.dll
 *.log
@@ -7,6 +6,10 @@
 *.bin
 *.pak
 *.dat
+chromedriver.exe
+nw.exe
+nwjc.exe
+payload.exe
 pnacl
 locales
 swiftshader
