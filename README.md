@@ -8,6 +8,10 @@
 * 微打赏集资统计功能
 * 公演录播回放视频下载功能
 
+## ROOMID获取方法
+B站直播已改版，ROOMID获取方式如下。   
+https://api.live.bilibili.com/room/v1/Room/room_init?id={{ ID }}，GET请求。
+
 ## 许可证
 本软件遵循**GNU General Public License v3.0**许可证。
 
@@ -43,9 +47,6 @@ node-sass如果安装失败，可以先到[https://github.com/sass/node-sass/rel
 
 ## video无法观看的解决办法
 请到[https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases](https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases)地址下载对应的ffmpeg.dll并覆盖到源目录中
-
-## ROOMID获取方法
-https://api.live.bilibili.com/room/v1/Room/room_init?id={{ ROOMID }}，GET请求。
 
 ## 打包方法
 * 将文件夹内的文件打包成压缩文件，并重命名为*.nw
