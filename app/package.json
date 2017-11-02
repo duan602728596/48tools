@@ -46,7 +46,7 @@
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
-    "happypack": "^4.0.0-beta.5",
+    "happypack": "^4.0.0",
     "html-webpack-plugin": "^2.30.1",
     "immutable": "^3.8.2",
     "indexeddb-tools": "^1.0.1",
