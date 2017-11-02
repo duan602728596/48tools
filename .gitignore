@@ -9,16 +9,11 @@
 *.dat
 pnacl
 locales
+swiftshader
 
 # dependent
 dependent/ffmpeg/ffmpeg.exe
 dependent/ffmpeg/licenses
-
-# PepperFlash
-PepperFlash/_metadata
-PepperFlash/*.fingerprint
-PepperFlash/*.json
-PepperFlash/*.dll
 
 # output
 output/*.flv
