@@ -32,11 +32,11 @@
     "node-xlsx": "^0.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.5",
-    "@babel/plugin-proposal-decorators": "^7.0.0-beta.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.5",
-    "@babel/preset-flow": "^7.0.0-beta.5",
-    "@babel/preset-react": "^7.0.0-beta.5",
+    "@babel/core": "^7.0.0-beta.31",
+    "@babel/plugin-proposal-decorators": "^7.0.0-beta.31",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.31",
+    "@babel/preset-flow": "^7.0.0-beta.31",
+    "@babel/preset-react": "^7.0.0-beta.31",
     "antd": "^2.13.8",
     "babel-loader": "^8.0.0-beta.0",
     "babel-plugin-import": "^1.6.2",
