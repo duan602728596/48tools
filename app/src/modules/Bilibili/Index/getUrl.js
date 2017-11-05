@@ -1,5 +1,4 @@
-const http = node_require('http');
-const cheerio = node_require('cheerio');
+const https = node_require('https');
 
 const headers: Object = {
   'Host': 'live.bilibili.com',
@@ -16,14 +15,14 @@ function getUrl(roomid: number): Promise{
       method: string,
       headers: Object
     } = {
-      hostname: 'live.bilibili.com',
+      hostname: 'api.live.bilibili.com',
       port: null,
-      path: `/api/playurl?player=1&cid=${ roomid }&quality=0`,
+      path: `/api/playurl?cid=${ roomid }&otype=json&quality=0&platform=web`,
       method: 'GET',
       headers: headers
     };
 
-    const req: any = http.request(options, (res: any): void=>{
+    const req: any = https.request(options, (res: any): void=>{
       let getData: string = '';
       res.setEncoding('utf8');
       res.on('data', function(chunk: any): void{
@@ -40,11 +39,7 @@ function getUrl(roomid: number): Promise{
 
     req.write('');
     req.end();
-  }).then((data: string): string=>{
-    const xml: any = cheerio.load(data);
-    return xml('url')[0].children[0].data.match(/http(s)?:[^\[\]]+/g)[0];
   }).catch((err: any): void=>{
-    reject(err);
     console.error(err);
   });
 }

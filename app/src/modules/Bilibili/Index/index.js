@@ -107,10 +107,11 @@ class BiliBili extends Component{
   // 录制
   async onCatch(item: Object, event: Object): void{
     const url: string = await getUrl(item.roomid);
+    const urlList: Object = JSON.parse(url);
     const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
     const child: Object = child_process.spawn(option.ffmpeg, [
       `-i`,
-      `${ url }`,
+      `${ urlList.durl[0].url }`,
       `-c`,
       `copy`,
       `${ option.output }/${ title }.flv`
