@@ -4,8 +4,9 @@
   "description": "48应援工具，提供各种常用功能。",
   "license": "GNU General Public License v3.0",
   "scripts": {
-    "start": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dev.js --watch",
-    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.pro.js --progress",
+    "start": "npm run clean && cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dev.js --watch",
+    "build": "npm run clean && cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.pro.js --progress",
+    "clean": "./node_modules/.bin/rimraf build",
     "devdll": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
     "prodll": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
     "proinstall": "npm install --production"
@@ -67,6 +68,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
+    "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
     "uglifyjs-webpack-plugin": "^1.0.1",
