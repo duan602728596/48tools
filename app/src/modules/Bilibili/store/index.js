@@ -1,40 +1,29 @@
 import { createAction, handleActions } from 'redux-actions';
-import { cursorAction, deleteAction } from 'indexeddb-tools-redux';
 import option from '../../publicMethod/option';
-
-const opt: {
-  name: string,
-  version: number,
-  objectStoreName: string
-} = {
-  name: option.indexeddb.name,
-  version: option.indexeddb.version,
-  objectStoreName: option.indexeddb.objectStore.bilibili.name
-};
+import { db } from '../../publicMethod/initIndexedDB';
 
 /* Action */
 export const liveList: Function = createAction('B站直播列表');
 export const liveList_delete: Function = createAction('B站直播列表-删除');
 export const catching: Function = createAction('B站直播抓取');
 
-export const cursorBilibiliLiveRoom: Function = cursorAction({
-  ...opt,
+export const cursorBilibiliLiveRoom: Function = db.cursorAction({
+  objectStoreName: option.indexeddb.objectStore.bilibili.name,
   successAction: liveList
 });
-export const deleteBilibiliLiveRoom: Function = deleteAction({
-  ...opt,
+export const deleteBilibiliLiveRoom: Function = db.deleteAction({
+  objectStoreName: option.indexeddb.objectStore.bilibili.name,
   successAction: liveList_delete
 });
 
 /* reducer */
 const reducer: Function = handleActions({
   [liveList]: (state: Object, action: Object): Object=>{
-    console.log(action);
-    return state.set('liveList', action.payload);
+    return state.set('liveList', action.payload.result);
   },
   [liveList_delete]: (state: Object, action: Object): Object=>{
     const arg: Object = action.payload;
-    const data: Array = arg.data instanceof Array ? arg.data : [arg.data];
+    const data: Array = arg.query instanceof Array ? arg.query : [arg.query];
     const liveList: Array = state.get('liveList').slice();
     for(let i: number = liveList.length - 1; i >= 0; i--){
       if(data.indexOf(liveList[i].roomid) > -1){

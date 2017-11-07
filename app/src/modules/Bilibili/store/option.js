@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
-import { putAction } from 'indexeddb-tools-redux';
 import option from '../../publicMethod/option';
+import { db } from '../../publicMethod/initIndexedDB';
 
 const opt: {
   name: string,
@@ -13,7 +13,7 @@ const opt: {
 };
 
 /* Action */
-export const putBilibiliLiveRoom: Function = putAction(opt);
+export const putBilibiliLiveRoom: Function = db.putAction(opt);
 
 /* reducer */
 const reducer: Function = handleActions({}, {});

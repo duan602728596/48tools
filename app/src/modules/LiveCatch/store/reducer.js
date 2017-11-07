@@ -1,9 +1,9 @@
 import { handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { getAction, addAction, putAction } from 'indexeddb-tools-redux';
 import { objectToArray } from '../../../function';
 import option from '../../publicMethod/option';
 import indexReducer, * as indexAction from './index';
+import { db } from '../../publicMethod/initIndexedDB';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
@@ -18,17 +18,13 @@ const initData: {
 
 /* Action */
 const opt: {
-  name: string,
-  version: number,
   objectStoreName: string
 } = {
-  name: option.indexeddb.name,
-  version: option.indexeddb.version,
   objectStoreName: option.indexeddb.objectStore.liveCatch.name
 };
-export const getAutoRecordingOption: Function = getAction(opt);  // 获取自动录制配置
-export const addAutoRecordingOption: Function = addAction(opt);  // 添加自动录制配置
-export const putAutoRecordingOption: Function = putAction(opt);  // 更新自动录制配置
+export const getAutoRecordingOption: Function = db.getAction(opt);  // 获取自动录制配置
+export const addAutoRecordingOption: Function = db.addAction(opt);  // 添加自动录制配置
+export const putAutoRecordingOption: Function = db.putAction(opt);  // 更新自动录制配置
 
 /* reducer */
 const reducer: Function = handleActions({

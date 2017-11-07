@@ -231,19 +231,18 @@ class LiveCatch extends Component{
   }
   // 自动录制
   async onAutoRecording(event: Object): void{
-    const data: Object = await this.props.action.getAutoRecordingOption({
-      data: 'liveCatchOption'
+    const qr: Object = await this.props.action.getAutoRecordingOption({
+      query: 'liveCatchOption'
     });
+    const data: Object = qr.data;
     let time: ?number = null,
       humans: ?Array = null;
     if(data){
       [time, humans] = [data.option.time, data.option.humans];
-    }else{
-      [time, humans] = [1, []];
     }
-    this.autoRecordingProcess(humans);
+    this.autoRecordingProcess(humans ? humans : []);
     this.props.action.autoRecording({
-      autoRecording: global.setInterval(this.autoRecordingProcess.bind(this), time * 60 * (10 ** 3), humans)
+      autoRecording: global.setInterval(this.autoRecordingProcess.bind(this), (time ? time : 1) * 60 * (10 ** 3), humans ? humans : [])
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）

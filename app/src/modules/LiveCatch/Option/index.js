@@ -36,36 +36,29 @@ class LiveCatchOption extends Component{
     this.state = {
       loading: true,      // 加载动画
       btnLoading: false,  // 按钮加载动画
-      time: 1,            // 间隔时间
-      humans: ''          // 成员
+      time: null,         // 间隔时间
+      humans: null        // 成员
     };
   }
   async componentWillMount(): void{
-    const data: Object = await this.props.action.getAutoRecordingOption({
-      data: 'liveCatchOption'
+    const qr: Object = await this.props.action.getAutoRecordingOption({
+      query: 'liveCatchOption'
     });
+    const data: Object = qr.result;
     let time: ?number = null,
       humans: ?string[] = null;
     if(data){
       [time, humans] = [data.option.time, data.option.humans];
+      this.setState({
+        time: time,
+        humans: humans.join(', '),
+        loading: false
+      });
     }else{
-      // 初始化数据
-      [time, humans] = [1, []];
-      await this.props.action.addAutoRecordingOption({
-        data: {
-          function: 'liveCatchOption',
-          option: {
-            time,
-            humans
-          }
-        }
+      this.setState({
+        loading: false
       });
     }
-    this.setState({
-      time: time,
-      humans: humans.join(', '),
-      loading: false
-    });
   }
   // 修改
   onRevise(event: Object): void{
@@ -78,10 +71,10 @@ class LiveCatchOption extends Component{
       if(!err){
         const { time, humans }: {
           time: string,
-          humans: string
+          humans: ?string
         } = value;
 
-        const humansArray: Array = humans.replace(/\s+/g, '').split(/\s*,\s*/g);
+        const humansArray: Array = (humans ? humans : '').replace(/\s+/g, '').split(/\s*,\s*/g);
         for(let j: number = humansArray.length - 1; j >= 0; j--){
           if(humansArray[j] === ''){
             humansArray.splice(j, 1);
@@ -93,7 +86,7 @@ class LiveCatchOption extends Component{
             data: {
               function: 'liveCatchOption',
               option: {
-                time: time,
+                time: Number(time),
                 humans: humansArray
               }
             }

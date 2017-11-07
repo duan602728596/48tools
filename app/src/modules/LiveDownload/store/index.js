@@ -1,5 +1,4 @@
 import { createAction, handleActions } from 'redux-actions';
-import { cursorAction, deleteAction } from 'indexeddb-tools-redux';
 
 /* Action */
 export const liveList: Function = createAction('公演录播列表');

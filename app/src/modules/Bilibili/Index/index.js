@@ -98,7 +98,9 @@ class BiliBili extends Component{
   }
   async componentWillMount(): void{
     await this.props.action.cursorBilibiliLiveRoom({
-      indexName: 'roomname'
+      query: {
+        indexName: 'roomname'
+      }
     });
     this.setState({
       loading: false
@@ -141,7 +143,7 @@ class BiliBili extends Component{
   async onDelete(item: Object, event: Object): void{
     try{
       await this.props.action.deleteBilibiliLiveRoom({
-        data: item.roomid
+        query: item.roomid
       });
       message.success('删除成功！');
     }catch(err){
