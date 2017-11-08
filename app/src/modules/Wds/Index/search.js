@@ -54,7 +54,7 @@ const headers2: Object = Object.assign(headers1, {
 });
 
 /* 获取排行榜 */
-export function paiHang(wdsid: string, type: number = 1): void{
+export function paiHang(wdsid: string, page: number, type: number = 1): void{
   const wdsid2 = wdsid.match(/[0-9]+/)[0];
   return new Promise((resolve: Function, reject: Function): void=>{
     const options: {
@@ -74,8 +74,8 @@ export function paiHang(wdsid: string, type: number = 1): void{
     const data: string = queryString.stringify({
       pro_id: Number(wdsid2),
       type,
-      page: 1,
-      page_size: 10 ** 5
+      page: page,
+      page_size: 20
     });
 
     const req: any = https.request(options, (res: any): void=>{
@@ -95,5 +95,24 @@ export function paiHang(wdsid: string, type: number = 1): void{
 
     req.write(data);
     req.end();
+  });
+}
+
+/* 微打赏接口调整，每次只能返回二十条数据 */
+export function paiHang2(wdsid: string, type: number = 1): Promise{
+  return new Promise(async (resolve: Function, reject: Function): void=>{
+    let html: string = '';
+    let i: number = 1;
+    while(true){
+      const rt: string = await paiHang(wdsid, i, type);
+      const rt2: Object = JSON.parse(rt);
+      if(rt2.status !== 0){
+        break;
+      }else{
+        html += rt2.data.html;
+        i += 1;
+      }
+    }
+    resolve(html);
   });
 }

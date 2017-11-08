@@ -1,7 +1,7 @@
 /* 生成xlsx */
 import React, { Component } from 'react';
 import { message } from 'antd';
-import { paiHang } from './search';
+import { paiHang2 } from './search';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
 import { juju, daka } from "./computingWds";
@@ -36,14 +36,14 @@ function format(list0: Array, list1: Array): Array{
 // 查询排行
 function paihangbang(item: Object): Promise{
   return Promise.all([
-    paiHang(item.wdsid, 1),
-    paiHang(item.wdsid, 2)
+    paiHang2(item.wdsid, 1),
+    paiHang2(item.wdsid, 2)
   ]).then((result: Array): { name: string, data: Array }=>{
-    const l0: Object = JSON.parse(result[0]);
-    const l1: Object = JSON.parse(result[1]);
-    const jujuResult: Object = juju(l0.data.html);
+    const l0: string = result[0];  // html
+    const l1: string = result[1];  // html
+    const jujuResult: Object = juju(l0);
     const l0h: Array = jujuResult.arr;
-    const l1h: Array = daka(l1.data.html);
+    const l1h: Array = daka(l1);
     const data: Array = (format(l0h, l1h));
     data.push([null], [`总金额（元）：${ String(jujuResult.allMount.toFixed(2)) }`]);
     data.unshift([item.wdstitle], [null], [
