@@ -12,7 +12,6 @@ import computingTime from './computingTime';
 import option from '../../publicMethod/option';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 const child_process = node_require('child_process');
 const path = node_require('path');
 
@@ -303,7 +302,7 @@ class Cut extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix } ${ style.toolsBox }` }>
+        <div className={ `${ publicStyle.toolsBox } ${ style.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <Form layout="inline" onSubmit={ this.onAddQueue.bind(this) }>
               <div className={ style.optGroup }>

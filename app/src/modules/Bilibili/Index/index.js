@@ -7,7 +7,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../store/index';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../function';
@@ -154,7 +153,7 @@ class BiliBili extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+        <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <Link to="/BiliBili/Option">
               <Button type="primary" icon="setting">添加B站直播间</Button>

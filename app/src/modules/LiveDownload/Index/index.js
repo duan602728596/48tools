@@ -9,7 +9,6 @@ import { liveList, liveListInit, changeGroup } from '../store/index';
 import { downloadList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 import { loadList, queryHtml, getM3U8, downloadM3U8, saveM3U8 } from './loadList';
 import { time } from '../../../function';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
@@ -173,7 +172,7 @@ class LiveDownload extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+        <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <Select className={ style.select }
               value={ this.props.group }

@@ -8,7 +8,6 @@ import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import jQuery from 'jquery';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 import post from '../../publicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
@@ -275,7 +274,7 @@ class LiveCatch extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+        <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             {
               this.props.autoRecording ?

@@ -8,7 +8,6 @@ import { Button, Affix } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 import { downloadList } from '../store/reducer';
 
 /* 初始化数据 */
@@ -70,7 +69,7 @@ class List extends Component{
       <div>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+          <div className={ `${ publicStyle.toolsBox } clearfix` }>
             <div className={ publicStyle.fr }>
               <Button icon="close-square" onClick={ this.onClear.bind(this) }>全部清除</Button>
               <Link to="/LiveDownload">

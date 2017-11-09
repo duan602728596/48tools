@@ -9,7 +9,6 @@ import { playBackList } from '../store/index';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 import post from '../../publicMethod/post';
 import { time } from '../../../function';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
@@ -241,7 +240,7 @@ class PlayBackDownload extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+        <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
             <Input className={ `${ publicStyle.mr10 } ${ style.searchInput }` }

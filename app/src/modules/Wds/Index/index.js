@@ -8,7 +8,6 @@ import { Button, Table, Affix, message, Input, Popconfirm } from 'antd';
 import { wdsList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 import { searchTitle } from './search';
 import generatingExcel from './generatingExcel';
 
@@ -131,7 +130,7 @@ class Wds extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+        <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <label htmlFor="wds-id">微打赏ID: </label>
             <Input className={ style.inputId }

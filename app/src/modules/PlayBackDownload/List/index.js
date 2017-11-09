@@ -9,7 +9,6 @@ import QueueAnim from 'rc-queue-anim';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-import commonStyle from '../../../common.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
 const fs = node_require('fs');
 
@@ -127,7 +126,7 @@ class ListOne extends Component{
       } = item;
       return (
         <div>
-          <div className={ commonStyle.clearfix }>
+          <div className="clearfix">
             <div className={ publicStyle.fl }>
               <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
               <p className={ style.line }>{ current }</p>
@@ -189,7 +188,7 @@ class List extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ commonStyle.clearfix }` }>
+        <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fr }>
             <Button icon="close-square" onClick={ this.onClear.bind(this) }>全部清除</Button>
             <Link to="/PlayBackDownload">
