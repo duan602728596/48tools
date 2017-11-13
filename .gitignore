@@ -21,6 +21,8 @@ dependent/ffmpeg/licenses
 # output
 output/*.flv
 output/*.mp4
+output/*.xls
+output/*.xlsx
 
 # webstorm
 .idea
