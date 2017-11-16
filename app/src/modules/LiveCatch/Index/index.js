@@ -196,7 +196,7 @@ class LiveCatch extends Component{
       const liveList: Array = 'liveList' in data2.content ? data2.content.liveList : [];
 
       // 获取列表成功后开始构建录制进程
-      const queue: Array = [];                                                // Promise.all进程
+      const queue: Array = [];                                                 // Promise.all进程
       const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
       jQuery(liveList).each(function(index: number, item: Object): void{
         // 用正则表达式判断指定的成员
@@ -233,7 +233,7 @@ class LiveCatch extends Component{
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
-    const data: Object = qr.data;
+    const data: Object = qr.result;
     let time: ?number = null,
       humans: ?Array = null;
     if(data){

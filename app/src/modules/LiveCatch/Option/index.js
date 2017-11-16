@@ -70,7 +70,7 @@ class LiveCatchOption extends Component{
     this.props.form.validateFields(async (err: ?any, value: any): void=>{
       if(!err){
         const { time, humans }: {
-          time: string,
+          time: ?string,
           humans: ?string
         } = value;
 
@@ -86,7 +86,7 @@ class LiveCatchOption extends Component{
             data: {
               function: 'liveCatchOption',
               option: {
-                time: Number(time),
+                time: time ? Number(time) : 1,
                 humans: humansArray
               }
             }
@@ -121,11 +121,6 @@ class LiveCatchOption extends Component{
                   getFieldDecorator('time', {
                     initialValue: this.state.time,
                     rules: [
-                      {
-                        message: '必须输入请求间隔时间',
-                        required: true,
-                        whitespace: true,
-                      },
                       {
                         message: '时间必须大于等于一分钟',
                         type: 'number',
