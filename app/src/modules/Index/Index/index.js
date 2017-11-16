@@ -136,6 +136,18 @@ class Index extends Component{
               </dd>
             </dl>
           </Col>
+          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
+            <dl className={ style.linkGroup }>
+              <dt className={ style.bTest }>
+                <Link to="/InLive48" title="公演官方直播抓取">
+                  <img src={ require('../image/rxy1.jpg') } alt="公演官方直播抓取" />
+                </Link>
+              </dt>
+              <dd>
+                <Link to="/InLive48">公演官方直播抓取</Link>
+              </dd>
+            </dl>
+          </Col>
         </Row>
       </div>
     );

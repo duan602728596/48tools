@@ -9,6 +9,7 @@ import BiliBili from '../modules/Bilibili/Layout';
 import Cut from '../modules/Cut/Layout';
 import Wds from '../modules/Wds/Layout';
 import LiveDownload from '../modules/LiveDownload/Layout';
+import InLive48 from '../modules/InLive48/Layout';
 
 /* 路由模块 */
 class Router extends Component{
@@ -29,6 +30,8 @@ class Router extends Component{
         <Route path="/Wds" component={ Wds } />
         {/* 公演录播下载 */}
         <Route path="/LiveDownload" component={ LiveDownload } />
+        {/* 公演官方直播抓取 */}
+        <Route path="/InLive48" component={ InLive48 } />
       </Switch>
     );
   }

@@ -1,5 +1,5 @@
 import store from '../../../store/store';
-import { downloadList } from '../store/reducer';
+import { inLiveList } from '../store/reducer';
 
 /* 子进程监听 */
 export function child_process_stdout(data: any): void{
@@ -22,11 +22,11 @@ export function child_process_error(err: any): void{
 
 // 子进程关闭
 function child_process_cb(): void{
-  const s: Array = store.getState().get('liveDownload').get('downloadList');
+  const s: Array = store.getState().get('inLive48').get('inLiveList');
   store.dispatch({
-    type: downloadList.toString(),
+    type: inLiveList.toString(),
     payload: {
-      downloadList: s.slice()
+      inLiveList: s.slice()
     }
   });
 }
