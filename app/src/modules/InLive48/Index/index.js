@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import jQuery from 'jquery';
-import { Affix, Button, Select, Table } from 'antd';
+import { Affix, Button, Select, Table, message, Popconfirm } from 'antd';
 import publicStyle from '../../publicMethod/public.sass';
 import option from '../../publicMethod/option';
 import style from './style.sass';
@@ -41,13 +41,15 @@ const dispatch: Function = (dispatch: Function): Object=>({
 @connect(state, dispatch)
 class InLive48 extends Component{
   state: {
-    group: string
+    group: string,
+    quality: string
   };
   constructor(props: Object): void{
     super(props);
 
     this.state = {
-      group: 'SNH48'
+      group: 'SNH48',
+      quality: 'gao_url'
     };
   }
   // 表格配置
@@ -57,26 +59,33 @@ class InLive48 extends Component{
         title: '团名称',
         dataIndex: 'group',
         key: 'group',
-        width: '33%'
+        width: '25%'
       },
       {
         title: '标题',
         dataIndex: 'title',
         key: 'title',
-        width: '34%'
+        width: '25%'
+      },
+      {
+        title: '视频质量',
+        dataIndex: 'quality',
+        key: 'quality',
+        width: '25%'
       },
       {
         title: '操作',
         key: 'handle',
-        width: '33%',
-        render: (text: string, item: Object, index: number): Object | Array=>{
+        width: '25%',
+        render: (text: string, item: Object, index: number): Array=>{
           return [
-            item.child.killed === false && item.child.exitCode === null ?
-              (
-                <Button type="danger" size="small" icon="close-square">取消下载</Button>
-              ) : [
-                <b key={ 0 } className={ publicStyle.mr10 }>已停止</b>,
-                <Button key={ 1 } type="danger" size="small" icon="delete">删除</Button>
+            item.child.killed === false && item.child.exitCode === null ? [
+              <Button key={ 0 } type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
+            ] : [
+                <b key={ 1 } className={ publicStyle.mr10 }>已停止</b>,
+                <Popconfirm key={ 2 } title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+                  <Button type="danger" icon="delete">删除</Button>
+                </Popconfirm>
               ]
           ];
         }
@@ -108,12 +117,17 @@ class InLive48 extends Component{
     });
   }
   // 点击录制事件
-  async onDownLoadLive(event: Object): void{
+  async onDownLoadLive(event: Object): void | boolean{
     const html: string = await this.getHtml();
     const xml: any = cheerio.load(html);
-    const liveUrl: string = '';
     const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
+    const urlInput: any = xml(`#${ this.state.quality }`);
+    if(urlInput.length === 0){
+      message.warn('直播未开始！');
+      return false;
+    }
 
+    const liveUrl: string = urlInput.attr('value');
     const child: Object = child_process.spawn(option.ffmpeg, [
       `-i`,
       `${ liveUrl }`,
@@ -125,6 +139,32 @@ class InLive48 extends Component{
     child.stderr.on('data', child_process_stderr);
     child.on('close', child_process_exit);
     child.on('error', child_process_error);
+
+    const ils: Array = this.props.inLiveList.slice();
+    ils.push({
+      child,
+      title,
+      group: this.state.group,
+      quality: this.state.quality === 'chao_url' ? '超清' : (
+        this.state.quality === 'gao_url' ? '高清' : '流畅'
+      )
+    });
+    this.props.action.inLiveList({
+      inLiveList: ils
+    });
+  }
+  // 停止下载
+  onStop(item: Object, event: Object): void{
+    item.child.kill();
+  }
+  // 删除
+  onDelete(item: Object, event: Object){
+    const index: number = this.props.inLiveList.indexOf(item);
+    const ils: Array = this.props.inLiveList.slice();
+    ils.splice(index, 1);
+    this.props.action.inLiveList({
+      inLiveList: ils
+    });
   }
   render(): Array{
     return [
@@ -144,6 +184,16 @@ class InLive48 extends Component{
               <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
               <Select.Option key="CKG48" value="CKG48">CKG48</Select.Option>
             </Select>
+            <Select className={ `${ publicStyle.mr10 } ${ style.select }` }
+              value={ this.state.quality }
+              dropdownMatchSelectWidth={ true }
+              dropdownClassName={ style.select }
+              onSelect={ this.onSelect.bind(this, 'quality') }
+            >
+              <Select.Option key="gao_url" value="gao_url">高清</Select.Option>
+              <Select.Option key="chao_url" value="chao_url">超清</Select.Option>
+              <Select.Option key="liuchang_url" value="liuchang_url">流畅</Select.Option>
+            </Select>
             <Button type="primary" icon="cloud-download" onClick={ this.onDownLoadLive.bind(this) }>录制官方源</Button>
           </div>
           <div className={ publicStyle.fr }>
@@ -158,7 +208,7 @@ class InLive48 extends Component{
         className={ publicStyle.tableBox }
         bordered={ true }
         columns={ this.columus() }
-        rowKey={ (item: Object): number=>item.id }
+        rowKey={ (item: Object): string=>item.title }
         dataSource={ this.props.inLiveList }
         pagination={{
           pageSize: 20,
