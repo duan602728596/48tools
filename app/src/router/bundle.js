@@ -30,14 +30,12 @@ class Bundle extends Component{
         module: module.default ? module.default : module
       });
     });
-    /* =================================================================== */
-    // 异步注入reducer
+    /* 异步注入reducer */
     if(props.asyncReducer){
       props.asyncReducer((reducer: { default: Object } | Object): void=>{
         injectReducers(reducer.default ? reducer.default : reducer);
       });
     }
-    /* =================================================================== */
   }
   render(): ?Object{
     if(!this.state.module){

@@ -10,7 +10,7 @@ import Bundle from './bundle';
 function asyncModule(module: Function, asyncReducer: ?Function): Function{
   return (): Object=>(
     <Bundle load={ module } asyncReducer={ asyncReducer }>
-      { (M)=><M /> }
+      { (Module)=>(<Module />) }
     </Bundle>
   );
 }
