@@ -107,14 +107,16 @@ export function downloadM3U8(m3u8Url: string): Promise{
     /* 使用正则解析网址 */
     const u: string = text.match(/\n[^#\n]*\n/g)[0].replace(/\n/g, '');
     let host: string = null;
+    // 以http或https开头的网址
     if(/^ht{2}ps?/.test(u)){
       host = '';
+    // 以'/'开头的网址
     }else if(/^\/.+$/.test(u)){
       const q: Object = url.parse(m3u8Url);
       host = q.protocol + '//' + q.hostname;
-
+    // 相对路径
     }else{
-      host = m3u8Url.replace(/[^/]+\.m3u8/, '');
+      host = m3u8Url.replace(/[^/]+\.m3u8.*/, '');
     }
     return {
       host,
