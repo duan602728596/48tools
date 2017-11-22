@@ -73,13 +73,13 @@ class Cut extends Component{
         title: '视频文件地址',
         dataIndex: 'file',
         key: 'file',
-        width: '20%',
+        width: '30%',
         render: (text: any, item: Object): string=>item.file.path
       },
       {
         title: '开始时间',
         key: 'startTime',
-        width: '20%',
+        width: '10%',
         render: (text: any, item: Object): string=>{
           const { starthh, startmm, startss }: {
             starthh: number,
@@ -92,7 +92,7 @@ class Cut extends Component{
       {
         title: '结束时间',
         key: 'endTime',
-        width: '20%',
+        width: '10%',
         render: (text: any, item: Object): string=>{
           const { endhh, endmm, endss }: {
             endhh: number,
@@ -106,7 +106,7 @@ class Cut extends Component{
         title: '文件保存位置',
         dataIndex: 'saveFile',
         key: 'saveFile',
-        width: '20%',
+        width: '30%',
         render: (text: any, item: Object): string=>item.saveFile.path
       },
       {
@@ -326,7 +326,7 @@ class Cut extends Component{
                 </Form.Item>
               </div>
               <div className={ style.optGroup }>
-                <Form.Item className={ style.formItem } label="开始时间">
+                <Form.Item className={ `${ style.formItem } ${ style.timeGroup }` } label="开始时间">
                   {
                     getFieldDecorator('starthh', {
                       rules: [
