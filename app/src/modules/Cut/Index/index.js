@@ -144,7 +144,7 @@ class Cut extends Component{
     return columus;
   }
   // 选择文件的change事件
-  onFileChange(event: Object): void{
+  onFileChange(event: Event): void{
     const save: any = document.getElementById('cut-save');
     const file: ?Object = event.target.files[0] || null;
     let title: string = '';
@@ -161,18 +161,18 @@ class Cut extends Component{
     save.nwsaveas = title;
   }
   // 储存文件的change事件
-  onSaveChange(event: Object): void{
+  onSaveChange(event: Event): void{
     const file: ?Object = event.target.files[0] || null;
     this.setState({
       saveFile: file
     });
   }
   // 点击input
-  onClickInput(id: string, event: Object): void{
+  onClickInput(id: string, event: Event): void{
     jQuery(`#${ id }`).click();
   }
   // 添加到队列
-  onAddQueue(event: Object): void{
+  onAddQueue(event: Event): void{
     event.preventDefault();
     this.props.form.validateFields(async (err: ?any, value: any): void=>{
       if(!err){
@@ -220,7 +220,7 @@ class Cut extends Component{
     });
   }
   // 删除任务
-  onDeleteTask(item: Object, event: Object): void{
+  onDeleteTask(item: Object, event: Event): void{
     const index: number = this.props.cutList.indexOf(item);
     this.props.cutList.splice(index, 1);
     this.props.action.cutList({
@@ -247,7 +247,7 @@ class Cut extends Component{
     message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 开始任务
-  onStartTask(item: Object, event: Object): void{
+  onStartTask(item: Object, event: Event): void{
     const { starthh, startmm, startss, endhh, endmm, endss }: {
       starthh: number,
       startmm: number,
@@ -293,7 +293,7 @@ class Cut extends Component{
     message.info(`开始剪切【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 停止任务
-  onStopTask(item: Object, event: Object): void{
+  onStopTask(item: Object, event: Event): void{
     const m = this.props.cutMap.get(item.id);
     m.child.kill();
   }

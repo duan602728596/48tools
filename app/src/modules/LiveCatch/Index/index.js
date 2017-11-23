@@ -121,7 +121,7 @@ class LiveCatch extends Component{
     return columns;
   }
   // 录制视频
-  recording(item: Object, event: Object): void{
+  recording(item: Object, event: Event): void{
     const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title +
       '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
       '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
@@ -148,7 +148,7 @@ class LiveCatch extends Component{
     });
   }
   // 停止录制视频
-  stopRecording(item: Object, event: Object): void{
+  stopRecording(item: Object, event: Event): void{
     const m: Object = this.props.liveCatch.get(item.liveId);
     m.child.kill();
   }
@@ -229,7 +229,7 @@ class LiveCatch extends Component{
     });
   }
   // 自动录制
-  async onAutoRecording(event: Object): void{
+  async onAutoRecording(event: Event): void{
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
@@ -245,14 +245,14 @@ class LiveCatch extends Component{
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）
-  onStopAutoRecording(event: Object): void{
+  onStopAutoRecording(event: Event): void{
     global.clearInterval(this.props.autoRecording);
     this.props.action.autoRecording({
       autoRecording: null
     });
   }
   // 获取录制列表
-  async getLiveList(event: Object): void{
+  async getLiveList(event: Event): void{
     this.setState({
       loading: true
     });

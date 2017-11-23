@@ -19,7 +19,7 @@ class RoomId extends Component{
     };
   }
   // 复制
-  onCopy(event: Object): void{
+  onCopy(event: Event): void{
     const range = document.createRange();
     range.selectNode(document.getElementById('roomId'));
     const selection = window.getSelection();
@@ -28,14 +28,14 @@ class RoomId extends Component{
     document.execCommand('copy');
   }
   // change
-  onChange(event: Object): void{
+  onChange(event: Event): void{
     this.setState({
       url: event.target.value,
       roomId: ''
     });
   }
   // 搜索
-  onSearch(event: Object): void{
+  onSearch(event: Event): void{
     const _this = this;
     const u: Object = url.parse(this.state.url);
     if(u.host !== 'live.bilibili.com'){

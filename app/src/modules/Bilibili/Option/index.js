@@ -40,7 +40,7 @@ class BiliBiliOption extends Component{
     };
   }
   // 添加
-  async onAdd(event: Object): void{
+  async onAdd(event: Event): void{
     event.preventDefault();
     this.setState({
       loading: true,

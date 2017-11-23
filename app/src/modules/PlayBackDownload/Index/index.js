@@ -156,7 +156,7 @@ class PlayBackDownload extends Component{
     });
   }
   // 下载
-  download(item: Object, event: Object): void{
+  download(item: Object, event: Event): void{
     const urlInfo: Object = url.parse(item.streamPath);
     const pathInfo: Object = path.parse(urlInfo.pathname);
 
@@ -184,7 +184,7 @@ class PlayBackDownload extends Component{
     });
   }
   // 搜索事件（点击按钮 + input回车）
-  onSearchInput(event: Object): void{
+  onSearchInput(event: Event): void{
     const { value }: { value: string } = this.refs['playBackDownload-searchInput'].refs.input;
     let reg: ?RegExp = null;
     if(!/^\s*$/.test(value)){
@@ -200,13 +200,13 @@ class PlayBackDownload extends Component{
     });
   }
   // 重置
-  onReset(event: Object): void{
+  onReset(event: Event): void{
     this.setState({
       keyword: ''
     });
   }
   // 加载和刷新列表
-  async onPlayBackListLoad(type: string, event: Object): void{
+  async onPlayBackListLoad(type: string, event: Event): void{
     this.setState({
       loading: true
     });

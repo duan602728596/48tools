@@ -75,7 +75,7 @@ class Wds extends Component{
     return columus;
   }
   // 查询标题
-  async onSearchTitle(event: Object): void{
+  async onSearchTitle(event: Event): void{
     this.setState({
       btnLoading: true
     });
@@ -86,14 +86,14 @@ class Wds extends Component{
     });
   }
   // input change
-  onWdsIdChange(event: Object): void{
+  onWdsIdChange(event: Event): void{
     this.setState({
       wdsid: event.target.value,
       wdstitle: ''
     });
   }
   // 删除
-  onDelete(item: Object, event: Object): void{
+  onDelete(item: Object, event: Event): void{
     const index: number = this.props.wdsList.indexOf(item);
     const c: Array = this.props.wdsList.slice();
     c.splice(index, 1);
@@ -102,7 +102,7 @@ class Wds extends Component{
     });
   }
   // 添加到列表
-  onAdd(event: Object): void{
+  onAdd(event: Event): void{
     this.props.wdsList.push({
       wdsid: this.state.wdsid,
       wdstitle: this.state.wdstitle
@@ -117,12 +117,12 @@ class Wds extends Component{
     });
   }
   // 导入到excel
-  onToExcel(item: Object, event: Object): void{
+  onToExcel(item: Object, event: Event): void{
     generatingExcel([item], item.wdstitle);
     message.info('正在生成Excel！');
   }
   // 全部导入到excel
-  onToExcelAll(event: Object): void{
+  onToExcelAll(event: Event): void{
     generatingExcel(this.props.wdsList, '');
     message.info('正在生成Excel！');
   }

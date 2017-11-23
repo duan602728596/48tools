@@ -117,7 +117,7 @@ class InLive48 extends Component{
     });
   }
   // 点击录制事件
-  async onDownLoadLive(event: Object): void | boolean{
+  async onDownLoadLive(event: Event): void | boolean{
     const html: string = await this.getHtml();
     const xml: any = cheerio.load(html);
     const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
@@ -154,11 +154,11 @@ class InLive48 extends Component{
     });
   }
   // 停止下载
-  onStop(item: Object, event: Object): void{
+  onStop(item: Object, event: Event): void{
     item.child.kill();
   }
   // 删除
-  onDelete(item: Object, event: Object){
+  onDelete(item: Object, event: Event){
     const index: number = this.props.inLiveList.indexOf(item);
     const ils: Array = this.props.inLiveList.slice();
     ils.splice(index, 1);

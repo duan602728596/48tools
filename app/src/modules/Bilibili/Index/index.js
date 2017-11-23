@@ -106,7 +106,7 @@ class BiliBili extends Component{
     });
   }
   // 录制
-  async onCatch(item: Object, event: Object): void{
+  async onCatch(item: Object, event: Event): void{
     const url: string = await getUrl(item.roomid);
     const urlList: Object = JSON.parse(url);
     const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
@@ -133,13 +133,13 @@ class BiliBili extends Component{
     message.success(`开始录制【${ item.roomname }】！`);
   }
   // 停止
-  onCatchStop(item: Object, event: Object): void{
+  onCatchStop(item: Object, event: Event): void{
     const m: Object = this.props.catching.get(item.roomid);
     m.child.kill();
     message.warn(`停止录制【${ item.roomname }】！`);
   }
   // 删除
-  async onDelete(item: Object, event: Object): void{
+  async onDelete(item: Object, event: Event): void{
     try{
       await this.props.action.deleteBilibiliLiveRoom({
         query: item.roomid

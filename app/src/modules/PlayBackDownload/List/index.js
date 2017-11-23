@@ -107,7 +107,7 @@ class ListOne extends Component{
     }
   }
   // 取消下载
-  onCancelDownload(id: number, event: Object): void{
+  onCancelDownload(id: number, event: Event): void{
     chrome.downloads.cancel(id);
   }
   render(): Object | boolean{
@@ -173,7 +173,7 @@ class List extends Component{
     });
   }
   // 清除已下载
-  onClear(event: Object): void{
+  onClear(event: Event): void{
     const dl = this.props.downloadList instanceof Array ? this.props.downloadList : [];
     this.props.downloadList.forEach((value: Object, key: number): void=>{
       if(value.state !== 1){

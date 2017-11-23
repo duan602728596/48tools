@@ -61,7 +61,7 @@ class LiveCatchOption extends Component{
     }
   }
   // 修改
-  onRevise(event: Object): void{
+  onRevise(event: Event): void{
     event.preventDefault();
     this.setState({
       loading: true,

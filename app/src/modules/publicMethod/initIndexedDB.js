@@ -4,10 +4,10 @@ import option from './option';
 
 /* 初始化所有的数据库 */
 IndexedDB(option.indexeddb.name, option.indexeddb.version, {
-  success: function(et: Object, event: Object): void{
+  success: function(et: Object, event: Event): void{
     this.close();
   },
-  upgradeneeded: function(et: Object, event: Object): void{
+  upgradeneeded: function(et: Object, event: Event): void{
     { // 存储的是直播抓取页面的自动录制配置
       const { name, key, data }: {
         name: string,

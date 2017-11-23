@@ -28,7 +28,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 @connect(state, dispatch)
 class List extends Component{
   // 清除列表
-  onClear(event: Object): void{
+  onClear(event: Event): void{
     for(let i = this.props.downloadList.length - 1; i >= 0; i--){
       const item: Object = this.props.downloadList[i];
       if(!(item.child.killed === false && item.child.exitCode === null)){
@@ -40,7 +40,7 @@ class List extends Component{
     });
   }
   // 取消下载
-  onStop(item: Object, event: Object): void{
+  onStop(item: Object, event: Event): void{
     item.child.kill();
   }
   downloadList(): Object{

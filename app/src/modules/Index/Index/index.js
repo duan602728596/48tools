@@ -32,13 +32,13 @@ class Index extends Component{
     super(props);
   }
   // check
-  onCheckChange(event: Object): void{
+  onCheckChange(event: Event): void{
     this.props.action.test({
       test: event.target.checked
     });
   }
   // 清除缓存
-  onClearCache(event: Object): void{
+  onClearCache(event: Event): void{
     gui.App.clearCache();
     message.success('缓存清除成功！');
   }
