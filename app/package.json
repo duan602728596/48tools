@@ -50,7 +50,7 @@
     "happypack": "^4.0.0",
     "html-webpack-plugin": "^2.30.1",
     "immutable": "^3.8.2",
-    "indexeddb-tools": "^2.0.2",
+    "indexeddb-tools": "^2.0.3",
     "indexeddb-tools-redux": "^2.0.0",
     "jquery": "^3.2.1",
     "node-sass": "^4.7.2",
