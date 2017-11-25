@@ -13,6 +13,7 @@ export getFlvUrl = (cid, sign)->
   )
 
 export queryUrl = (list)->
+  console.log('List Number: ' + list.length)
   url = []
   for item in list
     u = item.url.replace('http:', 'https:')

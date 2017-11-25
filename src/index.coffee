@@ -37,8 +37,9 @@ start = ()->
   result = await getFlvUrl(CID, SIGN)
   flvList = queryUrl(result.durl)
   for item, index in flvList
+    index2 = index + 1
     blobUrl = await download(item)
-    title = "#{ av }_#{ page }_#{ index + 1 }.flv"
+    title = "#{ av }_#{ page }_#{ index2 }.flv"
     a = document.createElement('a')
     a.style.cssText = '
       display: block;
@@ -48,4 +49,5 @@ start = ()->
     a.download = title
     a.innerText = title
     div.appendChild(a)
+    console.log('Finish: ' + index2)
 start()

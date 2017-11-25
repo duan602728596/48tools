@@ -24,6 +24,7 @@ var getFlvUrl = function(cid, sign) {
 
 var queryUrl = function(list) {
   var i, item, len, u, url;
+  console.log('List Number: ' + list.length);
   url = [];
   for (i = 0, len = list.length; i < len; i++) {
     item = list[i];
@@ -101,20 +102,22 @@ div.style.cssText = 'position: fixed; z-index: 100; top: 0; left: 0; padding: 5p
 body.appendChild(div);
 
 start = async function() {
-  var a, blobUrl, flvList, i, index, item, len, result, results, title;
+  var a, blobUrl, flvList, i, index, index2, item, len, result, results, title;
   result = (await getFlvUrl(CID, SIGN));
   flvList = queryUrl(result.durl);
   results = [];
   for (index = i = 0, len = flvList.length; i < len; index = ++i) {
     item = flvList[index];
+    index2 = index + 1;
     blobUrl = (await download(item));
-    title = `${av}_${page}_${index + 1}.flv`;
+    title = `${av}_${page}_${index2}.flv`;
     a = document.createElement('a');
     a.style.cssText = 'display: block; padding: 5px;';
     a.href = blobUrl;
     a.download = title;
     a.innerText = title;
-    results.push(div.appendChild(a));
+    div.appendChild(a);
+    results.push(console.log('Finish: ' + index2));
   }
   return results;
 };
