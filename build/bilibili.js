@@ -74,6 +74,7 @@ var getAvNumber = function() {
  @@@@   @@@@@  @@@@@  @@@@@  @@@@   @@@@@  @@@@@  @@@@@
 
 */
+var BREAK_INDEX;
 var CID;
 var SIGN;
 var av;
@@ -85,6 +86,9 @@ var start;
 // it from playurl
 // change it if need
 SIGN = 'a0cfb0ac98c3ec669cd52ea491ba38ab';
+
+// change it
+BREAK_INDEX = 0;
 
 CID = window.cid;
 
@@ -108,16 +112,20 @@ start = async function() {
   results = [];
   for (index = i = 0, len = flvList.length; i < len; index = ++i) {
     item = flvList[index];
-    index2 = index + 1;
-    blobUrl = (await download(item));
-    title = `${av}_${page}_${index2}.flv`;
-    a = document.createElement('a');
-    a.style.cssText = 'display: block; padding: 5px;';
-    a.href = blobUrl;
-    a.download = title;
-    a.innerText = title;
-    div.appendChild(a);
-    results.push(console.log('Finish: ' + index2));
+    if (index > BREAK_INDEX) {
+      index2 = index + 1;
+      blobUrl = (await download(item));
+      title = `${av}_${page}_${index2}.flv`;
+      a = document.createElement('a');
+      a.style.cssText = 'display: block; padding: 5px;';
+      a.href = blobUrl;
+      a.download = title;
+      a.innerText = title;
+      div.appendChild(a);
+      results.push(console.log('Finish: ' + index2));
+    } else {
+      results.push(void 0);
+    }
   }
   return results;
 };
