@@ -74,5 +74,8 @@
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1"
+  },
+  "peerDependencies": {
+    "node-modules-clean": "0.0.1-alpha.1"
   }
 }
