@@ -13,8 +13,8 @@ const gui = node_require('nw.gui');
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   test: createSelector(
-    (state: Object): boolean=>state.get('index').get('test'),
-    (data: boolean): boolean=>data
+    (state: Object): Object => state.get('index'),
+    (data: Object): boolean => data.get('test')
   )
 });
 

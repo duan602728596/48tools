@@ -16,28 +16,31 @@ import option from '../../publicMethod/option';
 const child_process = node_require('child_process');
 
 /* 初始化数据 */
-const getIndex: Function = (state: Object): ?Object=>state.has('liveDownload') ? state.get('liveDownload').get('index') : null;
+const getIndex: Function = (state: Object): ?Object => state.has('liveDownload') ? state.get('liveDownload').get('index') : null;
 
 const state: Function = createStructuredSelector({
   liveList: createSelector(         // 当前公演录播列表
     getIndex,
-    (data: ?Object): Array=>data !== null && data.has('liveList') ? data.get('liveList') : []
+    (data: ?Object): Array => data !== null && data.has('liveList') ? data.get('liveList') : []
   ),
   page: createSelector(             // 当前页码
     getIndex,
-    (data: ?Object): number=>data !== null && data.has('page') ? data.get('page') : 1
+    (data: ?Object): number => data !== null && data.has('page') ? data.get('page') : 1
   ),
   pageLen: createSelector(          // 当前页数
     getIndex,
-    (data: ?Object): number=>data !== null && data.has('pageLen') ? data.get('pageLen') : 1
+    (data: ?Object): number => data !== null && data.has('pageLen') ? data.get('pageLen') : 1
   ),
   group: createSelector(
     getIndex,                       // 选择团
     (data: ?Object): string=>data !== null && data.has('group') ? data.get('group') : 'SNH48'
   ),
   downloadList: createSelector(     // 下载列表
-    (state: Object): Object | Array=>state.has('liveDownload') ? state.get('liveDownload').get('downloadList') : [],
-    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
+    (state: Object): ?Object => state.has('liveDownload') ? state.get('liveDownload') : null,
+    (data: ?Object): Array=>{
+      const downloadList: Object | Array = data !== null ? data.get('downloadList') : [];
+      return downloadList instanceof Array ? downloadList : downloadList.toJS();
+    }
   )
 });
 

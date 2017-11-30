@@ -14,8 +14,11 @@ import generatingExcel from './generatingExcel';
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   wdsList: createSelector(         // 当前查询列表
-    (state: Object): Object | Array=>state.has('wds') ? state.get('wds').get('wdsList') : [],
-    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
+    (state: Object): ?Object => state.has('wds') ? state.get('wds') : null,
+    (data: ?Object): Array=>{
+      const wdsList: Object | Array = data.get('wdsList');
+      return wdsList instanceof Array ? wdsList : wdsList.toJS()
+    }
   )
 });
 

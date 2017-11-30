@@ -25,14 +25,19 @@ function child_process_stderr(data: any): void{
 }
 
 /* 初始化数据 */
+const getState: Object = (state: Object): ?Object => state.has('cut') ? state.get('cut') : [];
+
 const state: Function = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
-    (state: Object): Object | Array=>state.has('cut') ? state.get('cut').get('cutList') : [],
-    (data: Object | Array): Array=>data instanceof Array ? data : data.toJS()
+    getState,
+    (data: ?Object): Array=>{
+      const cutList: Object | Array = data !== null ? data.get('cutList') : [];
+      return cutList instanceof Array ? cutList : cutList.toJS()
+    }
   ),
   cutMap: createSelector(          // 正在剪切
-    (state: Object): Map=>state.has('cut') ? state.get('cut').get('cutMap') : new Map(),
-    (data: Map): Map=>data
+    getState,
+    (data: ?Object): Map => data !== null ? data.get('cutMap') : new Map()
   )
 });
 

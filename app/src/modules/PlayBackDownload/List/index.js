@@ -13,14 +13,16 @@ import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFun
 const fs = node_require('fs');
 
 /* 初始化数据 */
+const getState: Function = (state: Object): ?Object => state.has('playBackDownload') ? state.get('playBackDownload') : null;
+
 const state: Function = createStructuredSelector({
   downloadList: createSelector(         // 下载列表
-    (state: Object): Map=>state.has('playBackDownload') ? state.get('playBackDownload').get('downloadList') : new Map(),
-    (data: Map): Map=>data
+    getState,
+    (data: ?Object): Map => data !== null ? data.get('downloadList') : new Map()
   ),
   fnReady: createSelector(              // 下载事件监听
-    (state: Object): boolean=>state.has('playBackDownload') ? state.get('playBackDownload').get('fnReady') : false,
-    (data: boolean): boolean=>data
+    getState,
+    (data: ?Object): boolean => data !== null ? data.get('fnReady') : false
   )
 });
 
