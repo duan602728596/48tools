@@ -24,7 +24,7 @@ pug + sass + ECMA8 + react + antd + webpack + nwjs。
 * 输入命令 `$ npm build` 编译到文件夹。
 * 输入命令 `$ npm run devdll` 编译开发环境dll文件。
 * 输入命令 `$ npm run prodll` 编译生产环境编译dll文件。
-* 输入命令 `$ npm run proinstall` 安装生产环境依赖。
+* 输入命令 `$ npm run npmi` 或 `$ yarn run yarni` 安装生产环境依赖。
 
 ## nwjs中文文档
 [https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html](https://wizardforcel.gitbooks.io/nwjs-doc/content/wiki/index.html)
