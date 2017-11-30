@@ -1,20 +1,22 @@
 {
   "name": "48tools",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "48应援工具，提供各种常用功能。",
   "license": "GNU General Public License v3.0",
   "scripts": {
-    "start": "npm run clean && cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dev.js --watch",
-    "build": "npm run clean && cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.pro.js --progress",
-    "clean": "./node_modules/.bin/rimraf build",
+    "start": "npm run cleanbuild && cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dev.js --watch",
+    "build": "npm run cleanbuild && cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.pro.js --progress",
+    "cleanbuild": "./node_modules/.bin/rimraf build",
     "devdll": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
     "prodll": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
-    "proinstall": "npm install --production"
+    "npmi": "npm install --production",
+    "yarni": "yarn install --production=true",
+    "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\""
   },
   "main": "./build/index.html",
   "nodejs": true,
   "window": {
-    "title": "48工具（v0.6.3）",
+    "title": "48工具（v0.7.0）",
     "position": "center",
     "toolbar": true,
     "frame": true,
