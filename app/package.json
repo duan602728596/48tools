@@ -10,7 +10,7 @@
     "devdll": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
     "prodll": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
     "npmi": "npm install --production",
-    "yarni": "yarn install --production=true",
+    "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\""
   },
   "main": "./build/index.html",
