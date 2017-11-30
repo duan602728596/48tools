@@ -25,4 +25,5 @@
 3、在之前的开发环境运行`npm run prodll`或`yarn run prodll`编译dll文件。   
 4、之前的开发环境运行`npm run build`或`yarn run build`编译文件。   
 5、将build文件夹和package.json文件复制到发布环境的app文件夹内。   
-6、在发布环境的app文件夹内运行`npm run proinstall`或`yarn run proinstall`安装依赖。   
+6、在发布环境的app文件夹内运行`npm run npmi`或`yarn run yarni`安装依赖。   
+7、（可选）全局安装`node-modules-clean`，运行`npm run clean`或`yarn run clean`清除node_modules文件夹内的冗余文件。
