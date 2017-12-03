@@ -15,16 +15,16 @@ const child_process = node_require('child_process');
 const http = node_require('http');
 
 /* 初始化数据 */
-const getIndex: Function = (state: Object): ?Object => state.has('bilibili') ? state.get('bilibili').get('index') : null;
+const getIndex: Function = ($$state: Immutable): ?Immutable => $$state.has('bilibili') ? $$state.get('bilibili').get('index') : null;
 
 const state: Function = createStructuredSelector({
   liveList: createSelector(  // 直播间信息
     getIndex,
-    (data: ?Object): Array => data !== null && data.has('liveList') ? data.get('liveList') : []
+    ($$data: ?Immutable): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList') : []
   ),
   catching: createSelector(  // 正在直播
     getIndex,
-    (data: ?Object): Map => data !== null && data.has('catching') ? data.get('catching') : new Map()
+    ($$data: ?Immutable): Map => $$data !== null && $$data.has('catching') ? $$data.get('catching') : new Map()
   )
 });
 

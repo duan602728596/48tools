@@ -41,25 +41,25 @@ function filter(array: Array, keyword: ?RegExp, key: string, from: number, to: n
 }
 
 /* 初始化数据 */
-const getIndex: Function = (state: Object): ?Object => state.has('playBackDownload') ? state.get('playBackDownload').get('index') : null;
-const getState: Function = (state: Object): ?Object => state.has('playBackDownload') ? state.get('playBackDownload') : null;
+const getIndex: Function = ($$state: Immutable): ?Immutable => $$state.has('playBackDownload') ? $$state.get('playBackDownload').get('index') : null;
+const getState: Function = ($$state: Immutable): ?Immutable => $$state.has('playBackDownload') ? $$state.get('playBackDownload') : null;
 
 const state: Function = createStructuredSelector({
   playBackList: createSelector(         // 当前录播
     getIndex,
-    (data: ?Object): Array=>data !== null && data.has('playBackList') ? data.get('playBackList') : []
+    ($$data: ?Immutable): Array => $$data !== null && $$data.has('playBackList') ? $$data.get('playBackList') : []
   ),
   giftUpdTime: createSelector(          // 加载时间戳
     getIndex,
-    (data: ?Object): number=>data !== null && data.has('giftUpdTime') ? data.get('giftUpdTime') : 0
+    ($$data: ?Immutable): number => $$data !== null && $$data.has('giftUpdTime') ? $$data.get('giftUpdTime') : 0
   ),
   downloadList: createSelector(         // 下载列表
     getState,
-    (data: ?Object): Map => data !== null ? data.get('downloadList') : new Map()
+    ($$data: ?Immutable): Map => $$data !== null ? $$data.get('downloadList') : new Map()
   ),
   fnReady: createSelector(              // 下载事件监听
     getState,
-    (data: ?Object): boolean => data !== null ? data.get('fnReady') : false
+    ($$data: ?Immutable): boolean => $$data !== null ? $$data.get('fnReady') : false
   )
 });
 
