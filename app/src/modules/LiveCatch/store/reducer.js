@@ -28,8 +28,8 @@ export const putAutoRecordingOption: Function = db.putAction(opt);  // 更新自
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...objectToArray(indexAction))]: (state: Object, action: Object): Object=>{
-    return state.set('index', indexReducer(state.get('index'), action));
+  [combineActions(...objectToArray(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('index', indexReducer($$state.get('index'), action));
   }
 }, fromJS(initData));
 

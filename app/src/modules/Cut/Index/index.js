@@ -25,19 +25,19 @@ function child_process_stderr(data: any): void{
 }
 
 /* 初始化数据 */
-const getState: Immutable = ($$state: Immutable): ?Immutable => $$state.has('cut') ? $$state.get('cut') : null;
+const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('cut') ? $$state.get('cut') : null;
 
 const state: Function = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
     getState,
-    ($$data: ?Immutable): Array=>{
-      const cutList: Object | Array = $$data !== null ? $$data.get('cutList') : [];
+    ($$data: ?Immutable.Map): Array=>{
+      const cutList: Immutable.List | Array = $$data !== null ? $$data.get('cutList') : [];
       return cutList instanceof Array ? cutList : cutList.toJS()
     }
   ),
   cutMap: createSelector(          // 正在剪切
     getState,
-    ($$data: ?Immutable): Map => $$data !== null ? $$data.get('cutMap') : new Map()
+    ($$data: ?Immutable.Map): Map => $$data !== null ? $$data.get('cutMap') : new Map()
   )
 });
 

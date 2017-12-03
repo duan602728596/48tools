@@ -13,9 +13,9 @@ import { downloadList } from '../store/reducer';
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   downloadList: createSelector(     // 下载列表
-    ($$state: Immutable): ?Immutable => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
-    ($$data: ?Immutable): Array=>{
-      const downloadList: Object | Array = $$data !== null ? $$data.get('downloadList') : [];
+    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
+    ($$data: ?Immutable.Map): Array=>{
+      const downloadList: Immutable.List | Array = $$data !== null ? $$data.get('downloadList') : [];
       return downloadList instanceof Array ? downloadList : downloadList.toJS();
     }
   )

@@ -16,11 +16,11 @@ export const taskChange: Function = createAction('剪切任务');   // 剪切任
 
 /* reducer */
 const reducer: Function = handleActions({
-  [cutList]: (state: Object, action: Object): Object=>{
-    return state.set('cutList', action.payload.cutList);
+  [cutList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('cutList', action.payload.cutList);
   },
-  [taskChange]: (state: Object, action: Object): Object=>{
-    return state.set('cutList', action.payload.cutList)
+  [taskChange]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('cutList', action.payload.cutList)
       .set('cutMap', action.payload.cutMap);
   }
 }, fromJS(initData));

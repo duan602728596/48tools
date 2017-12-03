@@ -18,26 +18,26 @@ export const deleteBilibiliLiveRoom: Function = db.deleteAction({
 
 /* reducer */
 const reducer: Function = handleActions({
-  [liveList]: (state: Object, action: Object): Object=>{
-    return state.set('liveList', action.payload.result);
+  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('liveList', action.payload.result);
   },
-  [liveList_delete]: (state: Object, action: Object): Object=>{
+  [liveList_delete]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     const arg: Object = action.payload;
     const data: Array = arg.query instanceof Array ? arg.query : [arg.query];
-    const liveList: Array = state.get('liveList').slice();
+    const liveList: Array = $$state.get('liveList').slice();
     for(let i: number = liveList.length - 1; i >= 0; i--){
       if(data.indexOf(liveList[i].roomid) > -1){
         liveList.splice(i, 1);
       }
     }
-    return state.set('liveList', liveList);
+    return $$state.set('liveList', liveList);
   },
-  [catching]: (state: Object, action: Object): Object=>{
+  [catching]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     const { liveList, catching }: {
       liveList: Array,
       catching: Map
     } = action.payload;
-    return state.set('liveList', liveList)
+    return $$state.set('liveList', liveList)
       .set('catching', catching);
   }
 }, {});

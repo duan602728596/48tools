@@ -13,8 +13,8 @@ export const inLiveList: Function = createAction('官方源直播抓取列表');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [inLiveList]: (state: Object, action: Object): Object=>{
-    return state.set('inLiveList', action.payload.inLiveList);
+  [inLiveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('inLiveList', action.payload.inLiveList);
   }
 }, fromJS(initData));
 

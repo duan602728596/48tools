@@ -16,8 +16,8 @@ export const wdsList: Function = createAction('微打赏查询列表');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [wdsList]: (state: Object, action: Object): Object=>{
-    return state.set('wdsList', action.payload.wdsList);
+  [wdsList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('wdsList', action.payload.wdsList);
   }
 }, fromJS(initData));
 

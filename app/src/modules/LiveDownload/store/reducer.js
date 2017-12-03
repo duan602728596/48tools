@@ -17,11 +17,11 @@ export const downloadList = createAction('公演下载列表');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...objectToArray(indexAction))]: (state: Object, action: Object): Object=>{
-    return state.set('index', indexReducer(state.get('index'), action));
+  [combineActions(...objectToArray(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [downloadList]: (state: Object, action: Object): Object=>{
-    return state.set('downloadList', action.payload.downloadList);
+  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('downloadList', action.payload.downloadList);
   }
 }, fromJS(initData));
 

@@ -20,14 +20,14 @@ export const fnReady: Function = createAction('下载监听函数初始化');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...objectToArray(indexAction))]: (state: Object, action: Object): Object=>{
-    return state.set('index', indexReducer(state.get('index'), action));
+  [combineActions(...objectToArray(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [downloadList]: (state: Object, action: Object): Object=>{
-    return state.set('downloadList', action.payload.downloadList);
+  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('downloadList', action.payload.downloadList);
   },
-  [fnReady]: (state: Object, action: Object): Object=>{
-    return state.set('fnReady', action.payload.fnReady);
+  [fnReady]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('fnReady', action.payload.fnReady);
   }
 }, fromJS(initData));
 

@@ -8,18 +8,18 @@ export const autoRecording: Function = createAction('自动录制');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [liveList]: (state: Object, action: Object): Object=>{
+  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     return state.set('liveList', action.payload.liveList);
   },
-  [liveCatch]: (state: Object, action: Object): Object=>{
-    return state.set('liveCatch', action.payload.map);
+  [liveCatch]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('liveCatch', action.payload.map);
   },
-  [liveChange]: (state: Object, action: Object): Object=>{
-    return state.set('liveList', action.payload.liveList)
+  [liveChange]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('liveList', action.payload.liveList)
       .set('liveCatch', action.payload.map);
   },
-  [autoRecording]: (state: Object, action: Object): Object=>{
-    return state.set('autoRecording', action.payload.autoRecording);
+  [autoRecording]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('autoRecording', action.payload.autoRecording);
   }
 }, {});
 

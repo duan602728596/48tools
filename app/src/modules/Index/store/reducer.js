@@ -13,8 +13,8 @@ export const test: Function = createAction('是否开启测试功能');  // 是�
 
 /* reducer */
 const reducer: Function = handleActions({
-  [test]: (state: Object, action: Object): Object=>{
-    return state.set('test', action.payload.test);
+  [test]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('test', action.payload.test);
   }
 }, fromJS(initData));
 

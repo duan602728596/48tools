@@ -13,8 +13,8 @@ const gui = node_require('nw.gui');
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   test: createSelector(
-    (state: Immutable): Immutable => state.get('index'),
-    (data: Immutable): boolean => data.get('test')
+    (state: Immutable.Map): Immutable.Map => state.get('index'),
+    (data: Immutable.Map): boolean => data.get('test')
   )
 });
 

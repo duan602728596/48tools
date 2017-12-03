@@ -26,9 +26,9 @@ const IN_LIVE_URL: Object = {
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   inLiveList: createSelector(         // 当前查询列表
-    ($$state: Immutable): Immutable => $$state.has('inLive48') ? $$state.get('inLive48') : null,
-    ($$data: ?Immutable): Array=>{
-      const inLiveList: Object | Array = $$data !== null ? $$data.get('inLiveList') : [];
+    ($$state: Immutable.Map): Immutable.Map => $$state.has('inLive48') ? $$state.get('inLive48') : null,
+    ($$data: ?Immutable.Map): Array=>{
+      const inLiveList: Immutable.List | Array = $$data !== null ? $$data.get('inLiveList') : [];
       return inLiveList instanceof Array ? inLiveList : inLiveList.toJS();
     }
   )

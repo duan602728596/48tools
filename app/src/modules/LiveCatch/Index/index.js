@@ -16,20 +16,20 @@ import option from '../../publicMethod/option';
 const child_process = node_require('child_process');
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable): ?Immutable => $$state.has('liveCatch') ? $$state.get('liveCatch').get('index') : null;
+const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveCatch') ? $$state.get('liveCatch').get('index') : null;
 
 const state: Function = createStructuredSelector({
   liveList: createSelector(         // 当前直播
     getIndex,
-    ($$data: ?Immutable): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList') : []
+    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList') : []
   ),
   liveCatch: createSelector(        // 当前直播录制
     getIndex,
-    ($$data: ?Immutable): Map => $$data !== null && $$data.has('liveCatch') ? $$data.get('liveCatch') : new Map()
+    ($$data: ?Immutable.Map): Map => $$data !== null && $$data.has('liveCatch') ? $$data.get('liveCatch') : new Map()
   ),
   autoRecording: createSelector(    // 自动抓取直播定时器
     getIndex,
-    ($$data: ?Immutable): ?number => $$data !== null && $$data.has('autoRecording') ? $$data.get('autoRecording') : null
+    ($$data: ?Immutable.Map): ?number => $$data !== null && $$data.has('autoRecording') ? $$data.get('autoRecording') : null
   )
 });
 
