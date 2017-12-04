@@ -336,7 +336,7 @@ class Cut extends Component{
                     getFieldDecorator('starthh', {
                       rules: [
                         {
-                          message: '输入正确的时间格式',
+                          message: '时间格式错误',
                           type: 'number',
                           min: 0,
                           transform: (value: string = ''): number=>Number(value)
@@ -353,7 +353,7 @@ class Cut extends Component{
                     getFieldDecorator('startmm', {
                       rules: [
                         {
-                          message: '输入正确的时间格式',
+                          message: '时间格式错误',
                           type: 'number',
                           min: 0,
                           max: 59,
@@ -371,7 +371,7 @@ class Cut extends Component{
                     getFieldDecorator('startss', {
                       rules: [
                         {
-                          message: '输入正确的时间格式',
+                          message: '时间格式错误',
                           type: 'number',
                           min: 0,
                           max: 59,
@@ -388,7 +388,7 @@ class Cut extends Component{
                     getFieldDecorator('endhh', {
                       rules: [
                         {
-                          message: '输入正确的时间格式',
+                          message: '时间格式错误',
                           type: 'number',
                           min: 0,
                           transform: (value: string = ''): number=>Number(value)
@@ -405,7 +405,7 @@ class Cut extends Component{
                     getFieldDecorator('endmm', {
                       rules: [
                         {
-                          message: '输入正确的时间格式',
+                          message: '时间格式错误',
                           type: 'number',
                           min: 0,
                           max: 59,
@@ -423,7 +423,7 @@ class Cut extends Component{
                     getFieldDecorator('endss', {
                       rules: [
                         {
-                          message: '输入正确的时间格式',
+                          message: '时间格式错误',
                           type: 'number',
                           min: 0,
                           max: 59,
