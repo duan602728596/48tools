@@ -9,7 +9,7 @@ export const autoRecording: Function = createAction('自动录制');
 /* reducer */
 const reducer: Function = handleActions({
   [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    return state.set('liveList', action.payload.liveList);
+    return $$state.set('liveList', action.payload.liveList);
   },
   [liveCatch]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     return $$state.set('liveCatch', action.payload.map);
