@@ -7,6 +7,7 @@ import LiveCatch from '../modules/LiveCatch/Layout';
 import PlayBackDownload from '../modules/PlayBackDownload/Layout';
 import BiliBili from '../modules/Bilibili/Layout';
 import Cut from '../modules/Cut/Layout';
+import MergeVideo from '../modules/MergeVideo/Layout';
 import Wds from '../modules/Wds/Layout';
 import LiveDownload from '../modules/LiveDownload/Layout';
 import InLive48 from '../modules/InLive48/Layout';
@@ -26,6 +27,8 @@ class Router extends Component{
         <Route path="/BiliBili" component={ BiliBili } />
         {/* 视频剪切 */}
         <Route path="/Cut" component={ Cut } />
+        {/* 视频合并 */}
+        <Route path="/MergeVideo" component={ MergeVideo } />
         {/* 微打赏 */}
         <Route path="/Wds" component={ Wds } />
         {/* 公演录播下载 */}

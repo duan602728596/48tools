@@ -5,7 +5,7 @@ import { fromJS } from 'immutable';
 const initData: {
   test: boolean
 } = {
-  test: false
+  test: true
 };
 
 /* Action */

@@ -66,7 +66,7 @@ class Index extends Component{
         <Row type="flex" align="top" justify="start">
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
-              <dt className={ style.bTest }>
+              <dt className={ style.bPro }>
                 <Link to="/LiveCatch" title="口袋48直播抓取">
                   <img src={ require('../image/hty1.jpg') } alt="口袋48直播抓取" />
                 </Link>
@@ -78,7 +78,7 @@ class Index extends Component{
           </Col>
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
-              <dt className={ style.bTest }>
+              <dt className={ style.bPro }>
                 <Link to="/PlayBackDownload" title="口袋48录播下载">
                   <img src={ require('../image/xsy1.jpg') } alt="口袋48录播下载" />
                 </Link>
@@ -90,7 +90,7 @@ class Index extends Component{
           </Col>
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
-              <dt className={ style.bTest }>
+              <dt className={ style.bPro }>
                 <Link to="/BiliBili" title="B站直播抓取">
                   <img src={ require('../image/lyy1.jpg') } alt="B站直播抓取" />
                 </Link>
@@ -102,7 +102,7 @@ class Index extends Component{
           </Col>
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
-              <dt className={ style.bTest }>
+              <dt className={ style.bPro }>
                 <Link to="/Cut" title="视频剪切">
                   <img src={ require('../image/lxh1.jpg') } alt="视频剪切" />
                 </Link>
@@ -112,9 +112,25 @@ class Index extends Component{
               </dd>
             </dl>
           </Col>
+          {
+            this.props.test ? (
+              <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
+                <dl className={ style.linkGroup }>
+                  <dt className={ style.bNext }>
+                    <Link to="/MergeVideo" title="视频合并（测试）">
+                      <img src={ require('../image/tsl1.jpg') } alt="视频合并（测试）" />
+                    </Link>
+                  </dt>
+                  <dd>
+                    <Link to="/MergeVideo">视频合并（测试）</Link>
+                  </dd>
+                </dl>
+              </Col>
+            ) : null
+          }
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
-              <dt className={ style.bTest }>
+              <dt className={ style.bPro }>
                 <Link to="/Wds" title="微打赏统计">
                   <img src={ require('../image/llf1.jpg') } alt="微打赏统计" />
                 </Link>
@@ -126,7 +142,7 @@ class Index extends Component{
           </Col>
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
-              <dt className={ style.bTest }>
+              <dt className={ style.bPro }>
                 <Link to="/LiveDownload" title="公演录播下载">
                   <img src={ require('../image/zmh1.jpg') } alt="公演录播下载" />
                 </Link>
@@ -138,7 +154,7 @@ class Index extends Component{
           </Col>
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
-              <dt className={ style.bTest }>
+              <dt className={ style.bPro }>
                 <Link to="/InLive48" title="公演官方直播抓取">
                   <img src={ require('../image/rxy1.jpg') } alt="公演官方直播抓取" />
                 </Link>
