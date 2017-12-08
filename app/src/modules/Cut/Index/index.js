@@ -48,10 +48,6 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-type validChildren = {
-  text: string
-};
-
 @withRouter
 @Form.create()
 @connect(state, dispatch)
@@ -492,7 +488,7 @@ class Cut extends Component{
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number=>item.id }
+          rowKey={ (item: Object): number => item.id }
           dataSource={ this.props.cutList }
           pagination={{
             pageSize: 20,
