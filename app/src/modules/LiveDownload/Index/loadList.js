@@ -1,5 +1,3 @@
-// @flow
-import jQuery from 'jquery';
 const url = node_require('url');
 const fs = node_require('fs');
 const child_process = node_require('child_process');
@@ -16,15 +14,15 @@ const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
  */
 export function loadList(group: string, page: number): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
-    jQuery.ajax({
+    $.ajax({
       url: `http://live.${ group.toLocaleLowerCase() }.com/Index/index/p/${ page }.html`,
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: string, xhr: any): void{
+      success: function(result: any, status: string, xhr: XMLHttpRequest): void{
         resolve(result);
       },
-      error: function(xhr: any, err: any): void{
+      error: function(xhr: XMLHttpRequest, err: any): void{
         reject(err);
       }
     });
@@ -67,15 +65,15 @@ export function queryHtml(html: string): Object{
  */
 export function getM3U8(group: string, id: string, quality: string): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
-    jQuery.ajax({
+    $.ajax({
       url: `http://live.${ group.toLocaleLowerCase() }.com/Index/invedio/id/${ id }`,
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: string, xhr: any): void{
+      success: function(result: any, status: string, xhr: XMLHttpRequest): void{
         resolve(result);
       },
-      error: function(xhr: any, err: any): void{
+      error: function(xhr: XMLHttpRequest, err: any): void{
         reject(err);
       }
     });
@@ -91,15 +89,15 @@ export function getM3U8(group: string, id: string, quality: string): Promise{
  */
 export function downloadM3U8(m3u8Url: string): Promise{
   return new Promise((resolve: Function, reject: Function)=>{
-    jQuery.ajax({
+    $.ajax({
       url: m3u8Url,
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: number, xhr: any): void{
+      success: function(result: any, status: number, xhr: XMLHttpRequest): void{
         resolve(result);
       },
-      error: function(xhr: any, err: any): void{
+      error: function(xhr: XMLHttpRequest, err: any): void{
         reject(err);
       }
     });

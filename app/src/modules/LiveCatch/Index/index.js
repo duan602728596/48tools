@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm } from 'antd';
-import jQuery from 'jquery';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../publicMethod/public.sass';
 import post from '../../publicMethod/post';
@@ -198,7 +197,7 @@ class LiveCatch extends Component{
       // 获取列表成功后开始构建录制进程
       const queue: Array = [];                                                 // Promise.all进程
       const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
-      jQuery(liveList).each(function(index: number, item: Object): void{
+      $(liveList).each(function(index: number, item: Object): void{
         // 用正则表达式判断指定的成员
         if(humanRegExp.test(item.title)){
           // 有录制的进程

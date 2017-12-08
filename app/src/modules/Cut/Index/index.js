@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
-import jQuery from 'jquery';
 import { time, patchZero } from '../../../function';
 import { cutList, taskChange } from '../store/reducer';
 import computingTime from './computingTime';
@@ -174,7 +173,7 @@ class Cut extends Component{
   }
   // 点击input
   onClickInput(id: string, event: Event): void{
-    jQuery(`#${ id }`).click();
+    $(`#${ id }`).click();
   }
   // 添加到队列
   onAddQueue(event: Event): void{
@@ -215,8 +214,8 @@ class Cut extends Component{
           saveFile: null   // 保存文件
         });
         {
-          const $file: any = jQuery('#cut-file');
-          const $save: any = jQuery('#cut-save');
+          const $file: any = $('#cut-file');
+          const $save: any = $('#cut-save');
           $file.val('');
           $save.val('');
           $save.prop('nwsaveas', '');

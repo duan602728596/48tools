@@ -1,7 +1,6 @@
 /* RoomId查找 */
 import React, { Component } from 'react';
 import { Input, Button, message } from 'antd';
-import jQuery from 'jquery';
 import style from './style.sass';
 const url = node_require('url');
 
@@ -44,12 +43,11 @@ class RoomId extends Component{
     }
     const id: string[] = this.state.url.split(/\//g);
     const id2: string = id[id.length - 1];
-    jQuery.ajax({
+    $.ajax({
       url: `https://api.live.bilibili.com/room/v1/Room/room_init?id=${ id2 }`,
       type: 'GET',
       dataType: 'json',
-      success: function(data: Object, status: string, xhr: any): void{
-        console.log(data);
+      success: function(data: Object, status: string, xhr: XMLHttpRequest): void{
         if(data.code === 0 && xhr.status === 200){
           _this.setState({
             roomId: data.data.room_id

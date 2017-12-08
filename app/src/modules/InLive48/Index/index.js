@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
-import jQuery from 'jquery';
 import { Affix, Button, Select, Table, message, Popconfirm } from 'antd';
 import publicStyle from '../../publicMethod/public.sass';
 import option from '../../publicMethod/option';
@@ -105,7 +104,7 @@ class InLive48 extends Component{
   // 获取页面信息
   getHtml(): Promise{
     return new Promise((resolve: Function, reject: Function): void=>{
-      jQuery.ajax({
+      $.ajax({
         url: IN_LIVE_URL[this.state.group],
         type: 'GET',
         cache: true,
@@ -113,7 +112,7 @@ class InLive48 extends Component{
         success: function(data: string, status: string, xhr: XMLHttpRequest): void{
           resolve(data);
         },
-        error: function(err: any): void{
+        error: function(xhr: XMLHttpRequest, err: any): void{
           reject(err);
         }
       });
