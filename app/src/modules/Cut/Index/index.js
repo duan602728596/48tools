@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
+import { Button, Table, Affix, message, Input, Popconfirm, Form, Radio } from 'antd';
 import { time, patchZero } from '../../../function';
 import { cutList, taskChange } from '../store/reducer';
 import computingTime from './computingTime';
@@ -264,8 +264,17 @@ class Cut extends Component{
       [Number(starthh), Number(startmm), Number(startss)],
       [Number(endhh), Number(endmm), Number(endss)]
     );
-
-    const child: Object = child_process.spawn(option.ffmpeg, [
+    // 根据文件扩展名判断是保存成gif还是视频
+    const { ext }: { ext: string } = path.parse(item.saveFile.path);
+    const arg: string[] = ext === '.gif' ? [
+      '-ss',
+      `${ patchZero(Number(starthh)) }:${ patchZero(Number(startmm)) }:${ patchZero(Number(startss)) }`,
+      '-t',
+      `${ patchZero(h) }:${ patchZero(m) }:${ patchZero(s) }`,
+      '-i',
+      item.file.path,
+      item.saveFile.path
+    ] : [
       '-ss',
       `${ patchZero(Number(starthh)) }:${ patchZero(Number(startmm)) }:${ patchZero(Number(startss)) }`,
       '-t',
@@ -278,7 +287,9 @@ class Cut extends Component{
       '-vcodec',
       'copy',
       item.saveFile.path
-    ]);
+    ];
+
+    const child: Object = child_process.spawn(option.ffmpeg, arg);
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);
     child.on('exit', this.child_process_exit.bind(this, item));
@@ -308,8 +319,9 @@ class Cut extends Component{
       <Affix key={ 0 } className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } ${ style.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
+            <p className={ style.tishi }>提示：文件保存成“gif”格式可导出动图。</p>
             <Form layout="inline" onSubmit={ this.onAddQueue.bind(this) }>
-              <div className={ style.optGroup }>
+              <div className={ style.fileGroup }>
                 <Form.Item label="文件地址">
                   {
                     getFieldDecorator('file', {
@@ -324,6 +336,32 @@ class Cut extends Component{
                         <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-file') }>选择视频文件</Button>
                         <span className={ style.path }>{ this.state.file ? this.state.file.path : '' }</span>
                         <input className={ style.disNone } id="cut-file" type="file" onChange={ this.onFileChange.bind(this) } />
+                      </div>
+                    )
+                  }
+                </Form.Item>
+              </div>
+              <div className={ style.fileGroup }>
+                <Form.Item label="保存地址">
+                  {
+                    getFieldDecorator('saveFile', {
+                      rules: [
+                        {
+                          message: '选择保存位置',
+                          required: true
+                        }
+                      ]
+                    })(
+                      <div>
+                        <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
+                        <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
+                        <input className={ style.disNone }
+                               id="cut-save"
+                               type="file"
+                               nwsaveas=""
+                               nwworkingdir={ this.dir }
+                               onChange={ this.onSaveChange.bind(this) }
+                        />
                       </div>
                     )
                   }
@@ -431,32 +469,6 @@ class Cut extends Component{
                       ]
                     })(
                       <Input className={ style.input } />
-                    )
-                  }
-                </Form.Item>
-              </div>
-              <div className={ style.optGroup }>
-                <Form.Item label="保存地址">
-                  {
-                    getFieldDecorator('saveFile', {
-                      rules: [
-                        {
-                          message: '选择保存位置',
-                          required: true
-                        }
-                      ]
-                    })(
-                      <div>
-                        <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
-                        <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
-                        <input className={ style.disNone }
-                          id="cut-save"
-                          type="file"
-                          nwsaveas=""
-                          nwworkingdir={ this.dir }
-                          onChange={ this.onSaveChange.bind(this) }
-                        />
-                      </div>
                     )
                   }
                 </Form.Item>
