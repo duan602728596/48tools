@@ -156,13 +156,12 @@ class LiveCatch extends Component{
         '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
         '_' + item.liveId;
       const child: Object = child_process.spawn(option.ffmpeg, [
-          `-i`,
-          `${ item.streamPath }`,
-          `-c`,
-          `copy`,
-          `${ option.output }/${ title }.flv`
-        ]
-      );
+        `-i`,
+        `${ item.streamPath }`,
+        `-c`,
+        `copy`,
+        `${ option.output }/${ title }.flv`
+      ]);
       child.stdout.on('data', child_process_stdout);
       child.stderr.on('data', child_process_stderr);
       child.on('close', child_process_exit);
