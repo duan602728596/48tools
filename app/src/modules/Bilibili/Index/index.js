@@ -160,7 +160,7 @@ class BiliBili extends Component{
             </Link>
           </div>
           <div className={ publicStyle.fr }>
-            <Link className={ publicStyle.ml10 } to="/">
+            <Link to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
@@ -171,7 +171,7 @@ class BiliBili extends Component{
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number=>item.roomid }
+          rowKey={ (item: Object): number => item.roomid }
           dataSource={ this.props.liveList }
           pagination={{
             pageSize: 20,

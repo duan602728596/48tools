@@ -60,12 +60,6 @@ class LiveCatch extends Component{
   columus(): Array{
     const columns = [
       {
-        title: '直播ID',
-        dataIndex: 'liveId',
-        key: 'liveId',
-        width: '15%'
-      },
-      {
         title: '直播间',
         dataIndex: 'title',
         key: 'title',
@@ -87,14 +81,14 @@ class LiveCatch extends Component{
         title: '开始时间',
         dataIndex: 'startTime',
         key: 'startTime',
-        width: '10%',
+        width: '20%',
         render: (text: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', text)
       },
       {
         title: '操作',
         dataIndex: 'liveId',
         key: 'handle',
-        width: '10%',
+        width: '15%',
         render: (text: any, item: Object): Object=>{
           if(this.props.liveCatch.has(text)){
             const m: Object = this.props.liveCatch.get(text);
@@ -289,7 +283,7 @@ class LiveCatch extends Component{
             </Link>
           </div>
           <div className={ publicStyle.fr }>
-            <Button className={ publicStyle.ml10 } icon="loading-3-quarters" onClick={ this.getLiveList.bind(this) }>刷新列表</Button>
+            <Button icon="loading-3-quarters" onClick={ this.getLiveList.bind(this) }>刷新列表</Button>
             <Link className={ publicStyle.ml10 } to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>
@@ -301,7 +295,7 @@ class LiveCatch extends Component{
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number=>item.liveId }
+          rowKey={ (item: Object): number => item.liveId }
           dataSource={ this.props.liveList }
           pagination={{
             pageSize: 20,

@@ -186,7 +186,7 @@ class PlayBackDownload extends Component{
   }
   // 搜索事件（点击按钮 + input回车）
   onSearchInput(event: Event): void{
-    const { value }: { value: string } = this.refs['playBackDownload-searchInput'].refs.input;
+    const { value }: { value: string } = this.refs['playBackDownload-searchInput'].input;
     let reg: ?RegExp = null;
     if(!/^\s*$/.test(value)){
       const str: string[] = value.split(/\s+/);
@@ -244,18 +244,17 @@ class PlayBackDownload extends Component{
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
-            <Input className={ `${ publicStyle.mr10 } ${ style.searchInput }` }
+            <Input className={ style.searchInput }
               id="playBackDownload-searchInput"
               ref="playBackDownload-searchInput"
               placeholder="多个关键字用空格分割"
               onPressEnter={ this.onSearchInput.bind(this) }
             />
             <Button className={ publicStyle.mr10 } icon="search" onClick={ this.onSearchInput.bind(this) }>搜索</Button>
-            <Button className={ publicStyle.mr10 } icon="close" onClick={ this.onReset.bind(this) }>重置</Button>
+            <Button icon="close" onClick={ this.onReset.bind(this) }>重置</Button>
           </div>
           <div className={ publicStyle.fr }>
-            <Button className={ publicStyle.ml10 }
-              type="primary"
+            <Button type="primary"
               icon="cloud-download-o"
               onClick={ this.onPlayBackListLoad.bind(this, '加载') }
             >
@@ -276,7 +275,7 @@ class PlayBackDownload extends Component{
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number=>item.liveId }
+          rowKey={ (item: Object): number => item.liveId }
           dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
           pagination={{
             pageSize: 20,

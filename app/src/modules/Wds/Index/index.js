@@ -174,7 +174,7 @@ class Wds extends Component{
             <b className={ style.tishi }>结果生成到一个Excel中</b>
           </div>
           <div className={ publicStyle.fr }>
-            <Link className={ publicStyle.ml10 } to="/">
+            <Link to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
@@ -184,7 +184,7 @@ class Wds extends Component{
       <div key={ 1 } className={ publicStyle.tableBox }>
         <Table bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): string=>item.wdsid }
+          rowKey={ (item: Object): string => item.wdsid }
           dataSource={ this.props.wdsList }
           pagination={{
             pageSize: 20,

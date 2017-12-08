@@ -174,7 +174,7 @@ class InLive48 extends Component{
       <Affix key={ 0 } className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
-            <Select className={ `${ publicStyle.mr10 } ${ style.select }` }
+            <Select className={ style.select }
               value={ this.state.group }
               dropdownMatchSelectWidth={ true }
               dropdownClassName={ style.select }
@@ -186,7 +186,7 @@ class InLive48 extends Component{
               <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
               <Select.Option key="CKG48" value="CKG48">CKG48</Select.Option>
             </Select>
-            <Select className={ `${ publicStyle.mr10 } ${ style.select }` }
+            <Select className={ style.select }
               value={ this.state.quality }
               dropdownMatchSelectWidth={ true }
               dropdownClassName={ style.select }
@@ -199,7 +199,7 @@ class InLive48 extends Component{
             <Button type="primary" icon="cloud-download" onClick={ this.onDownLoadLive.bind(this) }>录制官方源</Button>
           </div>
           <div className={ publicStyle.fr }>
-            <Link className={ publicStyle.ml10 } to="/">
+            <Link to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>
           </div>
@@ -210,7 +210,7 @@ class InLive48 extends Component{
         className={ publicStyle.tableBox }
         bordered={ true }
         columns={ this.columus() }
-        rowKey={ (item: Object): string=>item.title }
+        rowKey={ (item: Object): string => item.title }
         dataSource={ this.props.inLiveList }
         pagination={{
           pageSize: 20,

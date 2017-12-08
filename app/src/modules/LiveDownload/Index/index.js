@@ -206,7 +206,7 @@ class LiveDownload extends Component{
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number=>item.id }
+          rowKey={ (item: Object): number => item.id }
           dataSource={ this.props.liveList }
           pagination={{
             pageSize: 15,
