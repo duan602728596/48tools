@@ -46,7 +46,7 @@ class List extends Component{
   onStop(item: Object, event: Event): void{
     item.child.kill();
   }
-  downloadList(): Object{
+  downloadList(): Array{
     return this.props.downloadList.map((item: Object, index: Number): Object=>{
       return (
         <li key={ item.id }>

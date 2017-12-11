@@ -163,7 +163,7 @@ class List extends Component{
       });
     }
   }
-  listOne(): Object{
+  listOne(): Array{
     return Array.from(this.props.downloadList).map((item: Array, index: number): Object=>{
       if(item[1].state !== 0){
         return (
