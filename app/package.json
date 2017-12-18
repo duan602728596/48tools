@@ -48,7 +48,7 @@
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
-    "file-loader": "^1.1.5",
+    "file-loader": "^1.1.6",
     "happypack": "^4.0.0",
     "html-webpack-plugin": "^2.30.1",
     "immutable": "^3.8.2",
