@@ -43,7 +43,6 @@
     "antd": "^3.0.3",
     "babel-loader": "^8.0.0-beta.0",
     "babel-plugin-import": "^1.6.3",
-    "babel-preset-es2015": "^7.0.0-beta.3",
     "bundle-loader": "^0.5.5",
     "cross-env": "^5.1.3",
     "css-loader": "^0.28.7",
