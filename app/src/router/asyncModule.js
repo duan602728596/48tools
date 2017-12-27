@@ -1,6 +1,6 @@
 /* 异步加载模块 */
 import React, { Component } from 'react';
-import Bundle from './bundle';
+import Bundle from './Bundle';
 
 /**
  * 异步加载、注入模块和reducer
