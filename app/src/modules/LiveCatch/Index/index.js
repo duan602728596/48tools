@@ -49,8 +49,8 @@ class LiveCatch extends Component{
   state: {
     loading: boolean
   };
-  constructor(props: ?Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
 
     this.state = {
       loading: false       // 表格的加载动画

@@ -46,8 +46,8 @@ class InLive48 extends Component{
     group: string,
     quality: string
   };
-  constructor(props: Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
 
     this.state = {
       group: 'SNH48',

@@ -80,8 +80,8 @@ class PlayBackDownload extends Component{
     keyword: string,
     current: number
   };
-  constructor(props: ?Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
 
     this.state = {
       loading: false,    // 加载动画

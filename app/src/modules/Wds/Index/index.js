@@ -38,7 +38,7 @@ class Wds extends Component{
     wdstitle: string
   };
   constructor(props: Object): Object{
-    super(props);
+    super(...arguments);
 
     this.state = {
       btnLoading: false,             // 按钮加载动画

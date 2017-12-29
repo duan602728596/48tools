@@ -39,8 +39,8 @@ class ListOne extends Component{
     timer: ?number,
     percent: number
   };
-  constructor(props: ?Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
 
     this.state = {
       timer: null,  // 定时器

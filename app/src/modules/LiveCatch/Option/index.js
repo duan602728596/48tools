@@ -30,8 +30,8 @@ class LiveCatchOption extends Component{
     time: number,
     humans: string
   };
-  constructor(props: ?Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
 
     this.state = {
       loading: true,      // 加载动画

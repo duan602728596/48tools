@@ -9,8 +9,8 @@ class RoomId extends Component{
     url: string,
     roomId: string
   };
-  constructor(props: Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
 
     this.state = {
       url: '',

@@ -6,8 +6,8 @@ class Bundle extends Component{
   state: {
     module: ?Function
   };
-  constructor(props: Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
     this.state = {
       module: null
     };

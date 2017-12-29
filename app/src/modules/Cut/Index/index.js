@@ -57,8 +57,8 @@ class Cut extends Component{
     file: ?Object,
     saveFile: ?Object
   };
-  constructor(props: ?Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
 
     this.dir = option.output.replace(/\//g, '\\');
     this.state = {

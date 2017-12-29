@@ -28,8 +28,8 @@ const dispatch: Function = (dispatch: Function): Object=>({
 @withRouter
 @connect(state, dispatch)
 class Index extends Component{
-  constructor(props: ?Object): void{
-    super(props);
+  constructor(): void{
+    super(...arguments);
   }
   // check
   onCheckChange(event: Event): void{
