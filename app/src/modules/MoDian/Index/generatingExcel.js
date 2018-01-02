@@ -4,59 +4,71 @@ import { message } from 'antd';
 import { paiHang2 } from './search';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
-import { juju, daka } from "./computingWds";
 const fs = node_require('fs');
 const process = node_require('process');
 const xlsx = node_require('node-xlsx');
 
 // 格式化
 function format(list0: Array, list1: Array): Array{
-  const res: Array[] = [];  // 返回的数据
-  const l1: Object = {};    // 用于记录微打赏时间
-  let all: number = 0;      // 统计总金额
+  const res: Array[] = [];    // 返回的数据
+  const l1: Map = new Map();  // 用于记录微打赏时间
+  let all: number = 0;        // 统计总金额
 
   // 先存储打卡时间
   list1.map((item: Object, index: number): void=>{
-    l1[item.id] = item.day;
+    l1.set(item.nickname, item.support_days);
   });
 
   // 根据打卡排行榜格式化数据
   list0.map((item: Object, index: number): void=>{
-    all += item.money;
+    all += Number(item.backer_money);
     res.push([
       index + 1,                        // 序号
       item.nickname,                    // 昵称
-      String(item.money.toFixed(2)),    // 打卡金额
-      l1[item.id]                       // 打卡时间
+      item.backer_money,                // 打卡金额
+      l1.get(item.nickname)             // 打卡时间
     ]);
   });
-  return res;
+  return {
+    all,
+    data: res
+  };
 }
 
 // 查询排行
 function paihangbang(item: Object): Promise{
-  return Promise.all([
-    paiHang2(item.wdsid, 1),
-    paiHang2(item.wdsid, 2)
-  ]).then((result: Array): { name: string, data: Array }=>{
-    const l0: string = result[0];  // html
-    const l1: string = result[1];  // html
-    const jujuResult: Object = juju(l0);
-    const l0h: Array = jujuResult.arr;
-    const l1h: Array = daka(l1);
-    const data: Array = (format(l0h, l1h));
-    data.push([null], [`总金额（元）：${ String(jujuResult.allMount.toFixed(2)) }`]);
-    data.unshift([item.wdstitle], [null], [
-      '序号',
-      'ID',
-      '金额（元）',
-      '时间（天）'
-    ]);
-    return {
-      name: item.wdstitle,
-      data
-    };
-  });
+  let l0: ?Array = null;
+  let l1: ?Array = null;
+  return paiHang2(item.modianid, 1)  // 此处不使用Promise.all是为了避免缓存
+    .then((result: Array): Promise=>{
+      l0 = result;
+      return new Promise((resolve: Function, reject: Function): number=>{
+        setTimeout(()=>{
+          resolve();
+        }, 10500);
+      }); // 避免缓存，所以延迟获取数据
+    })
+    .then((): Promise => paiHang2(item.modianid, 2))
+    .then((result: Array): void=>{
+      l1 = result;
+    })
+    .then((): { name: string, data: Array }=>{
+      const { data, all }: {
+        data: Array,
+        all: number
+      } = format(l0, l1);
+      data.push([null], [`总金额（元）：${ all.toFixed(2) }`]);
+      data.unshift([item.modiantitle], [null], [
+        '序号',
+        '昵称',
+        '金额（元）',
+        '时间（天）'
+      ]);
+      return {
+        name: item.modiantitle,
+        data
+      };
+    });
 }
 
 // 写入excel
@@ -74,14 +86,16 @@ function writeExcel(title: string, buffer: any): Promise{
   });
 }
 
-async function generatingExcel(wdsList: { wdsid: string, wdstitle: string }[], pathname: string): void{
+async function generatingExcel(modianList: { modianid: string, modiantitle: string }[], pathname: string): void{
   try{
     const queue: Array = [];
-    wdsList.map((item: Object, index: number)=>{
+    // 计算排行榜
+    modianList.map((item: Object, index: number)=>{
       queue.push(paihangbang(item));
     });
 
     const result: Array = await Promise.all(queue);
+
     const buffer: any = xlsx.build(result);
     await writeExcel(pathname, buffer);
 

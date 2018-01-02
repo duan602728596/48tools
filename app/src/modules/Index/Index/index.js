@@ -131,12 +131,12 @@ class Index extends Component{
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
               <dt className={ style.bPro }>
-                <Link to="/Wds" title="微打赏统计">
-                  <img src={ require('../image/llf1.jpg') } alt="微打赏统计" />
+                <Link to="/MoDian" title="摩点项目集资统计">
+                  <img src={ require('../image/llf1.jpg') } alt="摩点项目集资统计" />
                 </Link>
               </dt>
               <dd>
-                <Link to="/Wds">微打赏统计</Link>
+                <Link to="/MoDian">摩点项目集资统计</Link>
               </dd>
             </dl>
           </Col>

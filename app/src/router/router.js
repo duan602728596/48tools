@@ -8,7 +8,7 @@ import PlayBackDownload from '../modules/PlayBackDownload/Layout';
 import BiliBili from '../modules/Bilibili/Layout';
 import Cut from '../modules/Cut/Layout';
 import MergeVideo from '../modules/MergeVideo/Layout';
-import Wds from '../modules/Wds/Layout';
+import MoDian from '../modules/MoDian/Layout';
 import LiveDownload from '../modules/LiveDownload/Layout';
 import InLive48 from '../modules/InLive48/Layout';
 
@@ -29,8 +29,8 @@ class Router extends Component{
         <Route path="/Cut" component={ Cut } />
         {/* 视频合并 */}
         <Route path="/MergeVideo" component={ MergeVideo } />
-        {/* 微打赏 */}
-        <Route path="/Wds" component={ Wds } />
+        {/* 摩点项目集资统计 */}
+        <Route path="/MoDian" component={ MoDian } />
         {/* 公演录播下载 */}
         <Route path="/LiveDownload" component={ LiveDownload } />
         {/* 公演官方直播抓取 */}
