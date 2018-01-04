@@ -15,7 +15,7 @@ class Detail extends Component{
   }
   render(): Object{
     // 直播id，成员id，开始时间，下载地址，直播标题，直播间标题
-    const { liveId, memberId, startTime, streamPath, picPath, subTitle, title}: {
+    const { liveId, memberId, startTime, streamPath, picPath, subTitle, title }: {
       liveId: string,
       memberId: string,
       startTime: number,
