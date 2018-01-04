@@ -1,12 +1,4 @@
-const https = node_require('https');
-const queryString = node_require('querystring');
 const MD5 = node_require('md5.js');
-const cheerio = node_require('cheerio');
-
-const headers1: Object = {
-  'Host': 'wds.modian.com',
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36',
-};
 
 /**
  * 获取摩点项目的相关信息
