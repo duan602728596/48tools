@@ -123,16 +123,16 @@ class PlayBackDownload extends Component{
         width: '30%',
         render: (text: any, item: Object): Array=>{
           return [
-            <Link key="A" className={ publicStyle.btnLink } to={{
+            <Link key={ 0 } to={{
               pathname: '/PlayBackDownload/Detail',
               query: {
                 detail: item,
                 current: this.state.current
               }
             }}>
-              <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } icon="eye">查看</Button>
+              <Button className={ publicStyle.ml10 } icon="eye">查看</Button>
             </Link>,
-            <Button key="B" className={ publicStyle.ml10 } icon="fork" onClick={ this.download.bind(this, item) }>下载</Button>
+            <Button key={ 1 } className={ publicStyle.ml10 } icon="fork" onClick={ this.onDownload.bind(this, item) }>下载</Button>
           ];
         }
       }
@@ -157,7 +157,7 @@ class PlayBackDownload extends Component{
     });
   }
   // 下载
-  download(item: Object, event: Event): void{
+  onDownload(item: Object, event: Event): void{
     const urlInfo: Object = url.parse(item.streamPath);
     const pathInfo: Object = path.parse(urlInfo.pathname);
 

@@ -94,18 +94,18 @@ class LiveCatch extends Component{
             const m: Object = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
               return (
-                <Popconfirm title="确认停止录制吗？" onConfirm={ this.stopRecording.bind(this, item) }>
+                <Popconfirm title="确认停止录制吗？" onConfirm={ this.onStopRecording.bind(this, item) }>
                   <Button type="danger" icon="close-square">停止录制</Button>
                 </Popconfirm>
               );
             }else{
               return (
-                <Button type="primary" icon="play-circle-o" onClick={ this.recording.bind(this, item) }>录制</Button>
+                <Button type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
               );
             }
           }else{
             return (
-              <Button type="primary" icon="play-circle-o" onClick={ this.recording.bind(this, item) }>录制</Button>
+              <Button type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
             );
           }
         }
@@ -114,7 +114,7 @@ class LiveCatch extends Component{
     return columns;
   }
   // 录制视频
-  recording(item: Object, event: Event): void{
+  onRecording(item: Object, event: Event): void{
     const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title +
       '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
       '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
@@ -141,7 +141,7 @@ class LiveCatch extends Component{
     });
   }
   // 停止录制视频
-  stopRecording(item: Object, event: Event): void{
+  onStopRecording(item: Object, event: Event): void{
     const m: Object = this.props.liveCatch.get(item.liveId);
     m.child.kill();
   }
@@ -244,7 +244,7 @@ class LiveCatch extends Component{
     });
   }
   // 获取录制列表
-  async getLiveList(event: Event): void{
+  async onGetLiveList(event: Event): void{
     this.setState({
       loading: true
     });
@@ -282,7 +282,7 @@ class LiveCatch extends Component{
             </Link>
           </div>
           <div className={ publicStyle.fr }>
-            <Button icon="loading-3-quarters" onClick={ this.getLiveList.bind(this) }>刷新列表</Button>
+            <Button icon="loading-3-quarters" onClick={ this.onGetLiveList.bind(this) }>刷新列表</Button>
             <Link className={ publicStyle.ml10 } to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>
