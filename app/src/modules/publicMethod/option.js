@@ -56,7 +56,7 @@ const option: {
     }
   },
   // ffmpeg
-  ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg.exe`,
+  ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg`,
   output: `${ execPath }/output`
 };
 
