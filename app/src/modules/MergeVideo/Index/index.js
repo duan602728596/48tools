@@ -83,13 +83,13 @@ class Merge extends Component{
   // 选择视频
   onFileChange(event: Event): void{
     const x: Object[] = [];
-    $.each(event.target.files, (index: number, item: Object): void=>{
+    for(const item: Object of event.target.files){
       x.push({
         id: Math.random(),
         path: item.path,
         name: item.name
       });
-    });
+    }
     this.props.action.mergeList({
       mergeList: this.props.mergeList.concat(x)
     });
@@ -118,10 +118,10 @@ class Merge extends Component{
       const fi: Object = path.parse(this.props.mergeList[0].path);
       let title: string = '【视频合并】';
       let text: string = '';
-      $.each(this.props.mergeList, (index: number, item: Object)=>{
+      for(const item: Object of this.props.mergeList){
         title += item.name.match(/.{1,3}/g)[0] + '_';
         text += `file '${ item.path.replace(/\\/g, '\\') }' \n`;
-      });
+      }
       title += time('YYMMDDhhmmss') + fi.ext;
       text = '# ' + title + '\n' + text;
       // 写文件

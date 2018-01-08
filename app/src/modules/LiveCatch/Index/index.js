@@ -190,7 +190,7 @@ class LiveCatch extends Component{
       // 获取列表成功后开始构建录制进程
       const queue: Array = [];                                                 // Promise.all进程
       const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
-      $(liveList).each(function(index: number, item: Object): void{
+      for(const item: Object of liveList){
         // 用正则表达式判断指定的成员
         if(humanRegExp.test(item.title)){
           // 有录制的进程
@@ -205,8 +205,7 @@ class LiveCatch extends Component{
             queue.push(_this.recordingPromise(item));
           }
         }
-      });
-
+      }
       // 启动所有的录制进程
       await Promise.all(queue);
       this.props.action.liveChange({
