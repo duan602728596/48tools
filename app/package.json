@@ -36,12 +36,12 @@
     "node-xlsx": "^0.11.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.36",
-    "@babel/plugin-proposal-decorators": "^7.0.0-beta.36",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.36",
-    "@babel/preset-flow": "^7.0.0-beta.36",
-    "@babel/preset-react": "^7.0.0-beta.36",
-    "antd": "^3.1.0",
+    "@babel/core": "^7.0.0-beta.37",
+    "@babel/plugin-proposal-decorators": "^7.0.0-beta.37",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.37",
+    "@babel/preset-flow": "^7.0.0-beta.37",
+    "@babel/preset-react": "^7.0.0-beta.37",
+    "antd": "^3.1.1",
     "babel-loader": "^8.0.0-beta.0",
     "babel-plugin-import": "^1.6.3",
     "bundle-loader": "^0.5.5",
