@@ -21,15 +21,13 @@ class Bundle extends Component{
     }
   }
   load(props: Object): void{
-    this.setState({
-      module: null
-    });
     /* 异步注入模块 */
     props.load((module: { default: Function } | Function): void=>{
       this.setState({
         module: module.default ? module.default : module
       });
     });
+    
     /* 异步注入reducer */
     if(props.asyncReducer){
       props.asyncReducer((reducer: { default: Object } | Object): void=>{
