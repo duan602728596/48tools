@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import asyncModule from '../../router/asyncModule';
-import Index from 'bundle-loader?name=playbackdownload!./Index/index';
-import List from 'bundle-loader?name=playbackdownload!./List/index';
-import Detail from 'bundle-loader?name=playbackdownload!./Detail/index';
-import reducer from 'bundle-loader?name=playbackdownload!./store/reducer';
+import Index from './Index/index';
+import List from './List/index';
+import Detail from './Detail/index';
 
 const ModuleLayout = (props: Object): Object=>{
   return (
     <Switch>
-      <Route path="/PlayBackDownload" component={ asyncModule(Index, reducer) } exact />
-      <Route path="/PlayBackDownload/List" component={ asyncModule(List, reducer) } exact />
-      <Route path="/PlayBackDownload/Detail" component={ asyncModule(Detail, reducer) } exact />
+      <Route path="/PlayBackDownload" component={ Index } exact />
+      <Route path="/PlayBackDownload/List" component={ List } exact />
+      <Route path="/PlayBackDownload/Detail" component={ Detail } exact />
     </Switch>
   );
 };

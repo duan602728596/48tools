@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import asyncModule from '../../router/asyncModule';
-import Index from 'bundle-loader?name=livedownload!./Index/index';
-import List from 'bundle-loader?name=livedownload!./List/index';
-import reducer from 'bundle-loader?name=livedownload!./store/reducer';
+import Index from './Index/index';
+import List from './List/index';
 
 const ModuleLayout = (props: Object): Object=>{
   return (
     <Switch>
-      <Route path="/LiveDownload" component={ asyncModule(Index, reducer) } exact />
-      <Route path="/LiveDownload/List" component={ asyncModule(List, reducer) } exact />
+      <Route path="/LiveDownload" component={ Index } exact />
+      <Route path="/LiveDownload/List" component={ List } exact />
     </Switch>
   );
 };
