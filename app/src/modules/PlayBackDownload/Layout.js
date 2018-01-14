@@ -15,3 +15,4 @@ const ModuleLayout = (props: Object): Object=>{
 };
 
 export default ModuleLayout;
+export reducer from './store/reducer';

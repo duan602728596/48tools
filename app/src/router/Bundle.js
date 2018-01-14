@@ -21,19 +21,18 @@ class Bundle extends Component{
     }
   }
   load(props: Object): void{
-    /* 异步注入模块 */
-    props.load((module: { default: Function } | Function): void=>{
+    // es6 module
+    props.load((module: { default: Function, reducer: ?Object }): void=>{
+      /* 异步注入模块 */
       this.setState({
-        module: module.default ? module.default : module
+        module: module.default
       });
+
+      /* 异步注入reducer */
+      if('reducer' in module){
+        injectReducers(module.reducer);
+      }
     });
-    
-    /* 异步注入reducer */
-    if(props.asyncReducer){
-      props.asyncReducer((reducer: { default: Object } | Object): void=>{
-        injectReducers(reducer.default ? reducer.default : reducer);
-      });
-    }
   }
   render(): ?Object{
     if(!this.state.module){
