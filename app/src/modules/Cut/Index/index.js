@@ -468,11 +468,7 @@ class Cut extends Component{
                     )
                   }
                 </Form.Item>
-              </div>
-              <div className={ style.optGroup }>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit" size="default">添加到队列</Button>
-                </Form.Item>
+                <Button className={ style.addBtn } type="primary" htmlType="submit" size="default">添加到队列</Button>
               </div>
             </Form>
           </div>
