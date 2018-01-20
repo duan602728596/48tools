@@ -21,6 +21,7 @@ dependent/ffmpeg/licenses
 # output
 output/*.flv
 output/*.mp4
+output/*.m3u8
 output/*.xls
 output/*.xlsx
 
