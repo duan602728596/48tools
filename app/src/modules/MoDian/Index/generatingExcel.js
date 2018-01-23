@@ -45,7 +45,7 @@ function paihangbang(item: Object): Promise{
       return new Promise((resolve: Function, reject: Function): number=>{
         setTimeout(()=>{
           resolve();
-        }, 10500);
+        }, 12000);
       }); // 避免缓存，所以延迟获取数据
     })
     .then((): Promise => paiHang2(item.modianid, 2))
