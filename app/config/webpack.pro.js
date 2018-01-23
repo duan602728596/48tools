@@ -99,9 +99,22 @@ module.exports = config({
     }),
     // html模板
     new HtmlWebpackPlugin({
+      filename: 'index.html',
       inject: true,
       hash: true,
       template: path.join(__dirname, '../src/index.pug'),
+      excludeChunks: ['videoPlay'],
+      minify: {
+        minifyCSS: true,
+        minifyJS: true
+      }
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'videoPlay.html',
+      inject: true,
+      hash: true,
+      template: path.join(__dirname, '../src/videoPlay.pug'),
+      excludeChunks: ['app'],
       minify: {
         minifyCSS: true,
         minifyJS: true

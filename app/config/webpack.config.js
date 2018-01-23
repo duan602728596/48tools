@@ -13,7 +13,8 @@ const happyThreadPool = HappyPack.ThreadPool({
 function config(options){
   const conf = {
     entry: {
-      app: path.join(__dirname, '../src/app.js')
+      app: path.join(__dirname, '../src/app.js'),
+      videoPlay: path.join(__dirname, '../src/videoPlay.js')
     },
     module: {
       rules: [
@@ -27,10 +28,10 @@ function config(options){
               }
             }
           ],
-          exclude: /(dll\.js|common\.js|jquery\.min|flv\.min|node_modules)/
+          exclude: /(dll\.js|appInit\.js|jquery\.min|flv\.min|node_modules)/
         },
         {
-          test: /(dll\.js|common\.js|jquery\.min|flv\.min)/,
+          test: /(dll\.js|appInit\.js|jquery\.min|flv\.min)/,
           use: [
             {
               loader: 'file-loader',
@@ -69,12 +70,6 @@ function config(options){
       ]
     },
     plugins: [
-      // 公共模块
-      /*
-      new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor'
-      }),
-      */
       // 范围提升
       new webpack.optimize.ModuleConcatenationPlugin(),
       // dll
@@ -87,6 +82,7 @@ function config(options){
           NODE_ENV: JSON.stringify(process.env.NODE_ENV)
         }
       }),
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       /* HappyPack */
       // react
       new HappyPack({
