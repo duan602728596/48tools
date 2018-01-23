@@ -27,10 +27,10 @@ function config(options){
               }
             }
           ],
-          exclude: /(dll\.js|common\.js|jquery|node_modules)/
+          exclude: /(dll\.js|common\.js|jquery\.min|flv\.min|node_modules)/
         },
         {
-          test: /(dll\.js|common\.js|jquery)/,
+          test: /(dll\.js|common\.js|jquery\.min|flv\.min)/,
           use: [
             {
               loader: 'file-loader',
