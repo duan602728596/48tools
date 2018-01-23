@@ -4,9 +4,9 @@ import { message } from 'antd';
 import { paiHang2 } from './search';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
-const fs = node_require('fs');
-const process = node_require('process');
-const xlsx = node_require('node-xlsx');
+const fs = global.require('fs');
+const process = global.require('process');
+const xlsx = global.require('node-xlsx');
 
 // 格式化
 function format(list0: Array, list1: Array): Array{

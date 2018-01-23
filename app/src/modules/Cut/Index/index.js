@@ -11,8 +11,8 @@ import computingTime from './computingTime';
 import option from '../../publicMethod/option';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-const child_process = node_require('child_process');
-const path = node_require('path');
+const child_process = global.require('child_process');
+const path = global.require('path');
 
 /* 子进程监听 */
 function child_process_stdout(data: any): void{

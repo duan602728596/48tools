@@ -11,8 +11,8 @@ import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
-const child_process = node_require('child_process');
-const http = node_require('http');
+const child_process = global.require('child_process');
+const http = global.require('http');
 
 /* 初始化数据 */
 const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('bilibili') ? $$state.get('bilibili').get('index') : null;

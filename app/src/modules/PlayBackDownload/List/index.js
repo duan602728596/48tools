@@ -10,7 +10,7 @@ import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-const fs = node_require('fs');
+const fs = global.require('fs');
 
 /* 初始化数据 */
 const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload') ? $$state.get('playBackDownload') : null;

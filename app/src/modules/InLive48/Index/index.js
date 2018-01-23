@@ -11,8 +11,8 @@ import style from './style.sass';
 import { inLiveList } from '../store/reducer';
 import { time } from '../../../function';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
-const child_process = node_require('child_process');
-const cheerio = node_require('cheerio');
+const child_process = global.require('child_process');
+const cheerio = global.require('cheerio');
 
 const IN_LIVE_URL: Object = {
   SNH48: 'http://live.snh48.com/Index/inlive',

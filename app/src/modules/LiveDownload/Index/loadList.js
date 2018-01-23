@@ -1,9 +1,9 @@
-const url = node_require('url');
-const fs = node_require('fs');
-const child_process = node_require('child_process');
-const path = node_require('path');
-const process = node_require('process');
-const cheerio = node_require('cheerio');
+const url = global.require('url');
+const fs = global.require('fs');
+const child_process = global.require('child_process');
+const path = global.require('path');
+const process = global.require('process');
+const cheerio = global.require('cheerio');
 
 const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
 

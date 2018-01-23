@@ -1,6 +1,6 @@
 /* 配置文件 */
-const path = node_require('path');
-const process = node_require('process');
+const path = global.require('path');
+const process = global.require('process');
 
 // 软件目录
 const execPath = path.dirname(process.execPath).replace(/\\/g, '/');

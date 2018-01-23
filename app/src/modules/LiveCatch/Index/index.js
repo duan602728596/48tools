@@ -12,7 +12,9 @@ import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import option from '../../publicMethod/option';
-const child_process = node_require('child_process');
+const child_process = global.require('child_process');
+const querystring = global.require('querystring');
+const gui = global.require('nw.gui');
 
 /* 初始化数据 */
 const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveCatch') ? $$state.get('liveCatch').get('index') : null;
@@ -81,37 +83,58 @@ class LiveCatch extends Component{
         title: '开始时间',
         dataIndex: 'startTime',
         key: 'startTime',
-        width: '20%',
+        width: '15%',
         render: (text: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', text)
       },
       {
         title: '操作',
         dataIndex: 'liveId',
         key: 'handle',
-        width: '15%',
-        render: (text: any, item: Object): Object=>{
+        width: '20%',
+        render: (text: any, item: Object): Array=>{
+          let btn: Object = null;
           if(this.props.liveCatch.has(text)){
             const m: Object = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
-              return (
-                <Popconfirm title="确认停止录制吗？" onConfirm={ this.onStopRecording.bind(this, item) }>
+              btn = (
+                <Popconfirm key={ 0 } title="确认停止录制吗？" onConfirm={ this.onStopRecording.bind(this, item) }>
                   <Button type="danger" icon="close-square">停止录制</Button>
                 </Popconfirm>
               );
             }else{
-              return (
-                <Button type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
+              btn = (
+                <Button key={ 1 } type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
               );
             }
           }else{
-            return (
-              <Button type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
+            btn = (
+              <Button key={ 1 } type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
             );
           }
+          return [
+            btn,
+            <Button key={ 2 } className={ publicStyle.ml10 } icon="video-camera" onClick={ this.onVideoPlay.bind(this, item) }>播放</Button>
+          ];
         }
       }
     ];
     return columns;
+  }
+  // 打开信息窗口看直播
+  onVideoPlay(item: Object, event: Event): void{
+    const qs: Object = {
+      title: item.title,
+      subTitle: item.subTitle,
+      streamPath: item.streamPath
+    };
+    const u: string = './build/videoPlay.html?' + querystring.stringify(qs);
+    gui.Window.open(u, {
+      position: 'center',
+      width: 400,
+      height: 600,
+      focus: true,
+      title: item.title,
+    })
   }
   // 录制视频
   onRecording(item: Object, event: Event): void{

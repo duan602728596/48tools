@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Input, Button, message } from 'antd';
 import style from './style.sass';
-const url = node_require('url');
+const url = global.require('url');
 
 class RoomId extends Component{
   state: {

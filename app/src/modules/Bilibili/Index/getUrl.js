@@ -1,4 +1,4 @@
-const https = node_require('https');
+const https = global.require('https');
 
 const headers: Object = {
   'Host': 'live.bilibili.com',

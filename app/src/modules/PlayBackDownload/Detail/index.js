@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button } from 'antd';
 import style from './style.sass';
 import { time } from '../../../function';
-const path = node_require('path');
+const path = global.require('path');
 
 @withRouter
 class Detail extends Component{

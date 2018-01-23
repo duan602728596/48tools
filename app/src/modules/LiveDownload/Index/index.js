@@ -13,7 +13,7 @@ import { loadList, queryHtml, getM3U8, downloadM3U8, saveM3U8 } from './loadList
 import { time } from '../../../function';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import option from '../../publicMethod/option';
-const child_process = node_require('child_process');
+const child_process = global.require('child_process');
 
 /* 初始化数据 */
 const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload').get('index') : null;

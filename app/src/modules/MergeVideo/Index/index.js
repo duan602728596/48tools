@@ -9,9 +9,9 @@ import publicStyle from '../../publicMethod/public.sass';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
 import { mergeList } from "../store/reducer";
-const fs = node_require('fs');
-const path = node_require('path');
-const child_process = node_require('child_process');
+const fs = global.require('fs');
+const path = global.require('path');
+const child_process = global.require('child_process');
 
 /* 子进程监听 */
 function child_process_stdout(data: any): void{
