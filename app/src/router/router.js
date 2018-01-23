@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncModule from './asyncModule';
-/* 加载模块 */
 import Index from '../modules/Index/Layout';
-import LiveCatch from 'bundle-loader?name=livecatch!../modules/LiveCatch/Layout';
-import PlayBackDownload from 'bundle-loader?name=playbackdownload!../modules/PlayBackDownload/Layout';
-import BiliBili from 'bundle-loader?name=bilibili!../modules/Bilibili/Layout';
-import Cut from 'bundle-loader?name=cut!../modules/Cut/Layout';
-import MergeVideo from 'bundle-loader?name=mergevideo!../modules/MergeVideo/Layout';
-import MoDian from 'bundle-loader?name=modian!../modules/MoDian/Layout';
-import LiveDownload from 'bundle-loader?name=livedownload!../modules/LiveDownload/Layout';
-import InLive48 from 'bundle-loader?name=inlive48!../modules/InLive48/Layout';
+import LiveCatch from 'bundle-loader?lazy&name=livecatch!../modules/LiveCatch/Layout';
+import PlayBackDownload from 'bundle-loader?lazy&name=playbackdownload!../modules/PlayBackDownload/Layout';
+import BiliBili from 'bundle-loader?lazy&name=bilibili!../modules/Bilibili/Layout';
+import Cut from 'bundle-loader?lazy&name=cut!../modules/Cut/Layout';
+import MergeVideo from 'bundle-loader?lazy&name=mergevideo!../modules/MergeVideo/Layout';
+import MoDian from 'bundle-loader?lazy&name=modian!../modules/MoDian/Layout';
+import LiveDownload from 'bundle-loader?lazy&name=livedownload!../modules/LiveDownload/Layout';
+import InLive48 from 'bundle-loader?lazy&name=inlive48!../modules/InLive48/Layout';
 
 const LiveCatchBundle: Function = asyncModule(LiveCatch);
 const PlayBackDownloadBundle: Function = asyncModule(PlayBackDownload);
