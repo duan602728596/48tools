@@ -120,7 +120,7 @@ class LiveCatch extends Component{
     ];
     return columns;
   }
-  // 打开信息窗口看直播
+  // 打开新窗口看直播
   onVideoPlay(item: Object, event: Event): void{
     const qs: Object = {
       title: item.title,
