@@ -113,7 +113,7 @@ module.exports = config({
       filename: 'videoPlay.html',
       inject: true,
       hash: true,
-      template: path.join(__dirname, '../src/videoPlay.pug'),
+      template: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.pug'),
       excludeChunks: ['app'],
       minify: {
         minifyCSS: true,

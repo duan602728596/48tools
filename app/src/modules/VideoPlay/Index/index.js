@@ -1,3 +1,4 @@
+/* 新窗口播放视频 */
 import React, { Component } from 'react';
 import { Card } from 'antd';
 import style from './style.sass';

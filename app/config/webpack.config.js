@@ -14,7 +14,7 @@ function config(options){
   const conf = {
     entry: {
       app: path.join(__dirname, '../src/app.js'),
-      videoPlay: path.join(__dirname, '../src/videoPlay.js')
+      videoPlay: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.js')
     },
     module: {
       rules: [
