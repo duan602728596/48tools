@@ -40,7 +40,7 @@ pug + sass + ECMA8 + react + antd + webpack + nwjs。
 * nwjs: nwjs SDK
   * app: 源代码
   * dependent: 依赖的文件存储目录
-    * ffmpeg: ffmpeg
+    * ffmpeg: ffmpeg（20180124版本在windows上会出现错误，导致无法运行命令，错误代码3221225781，应避免使用此版本。）
   * output: 视频、Excel等文件的输出目录
 
 ## 关于dll
