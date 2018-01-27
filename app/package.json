@@ -42,7 +42,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.38",
     "@babel/preset-flow": "^7.0.0-beta.38",
     "@babel/preset-react": "^7.0.0-beta.38",
-    "antd": "^3.1.4",
+    "antd": "^3.1.5",
     "babel-loader": "^8.0.0-beta.0",
     "babel-plugin-import": "^1.6.3",
     "bundle-loader": "^0.5.5",
