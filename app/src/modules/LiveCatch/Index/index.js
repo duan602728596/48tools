@@ -198,7 +198,7 @@ class LiveCatch extends Component{
     });
   }
   // 自动录制的进程
-  async autoRecordingProcess(humans: string[]): void{
+  async autoRecordingProcess(humans: string[]): Promise<void>{
     this.setState({
       loading: true
     });
@@ -243,7 +243,7 @@ class LiveCatch extends Component{
     });
   }
   // 自动录制
-  async onAutoRecording(event: Event): void{
+  async onAutoRecording(event: Event): Promise<void>{
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
@@ -266,7 +266,7 @@ class LiveCatch extends Component{
     });
   }
   // 获取录制列表
-  async onGetLiveList(event: Event): void{
+  async onGetLiveList(event: Event): Promise<void>{
     this.setState({
       loading: true
     });

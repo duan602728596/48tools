@@ -207,7 +207,7 @@ class PlayBackDownload extends Component{
     });
   }
   // 加载和刷新列表
-  async onPlayBackListLoad(type: string, event: Event): void{
+  async onPlayBackListLoad(type: string, event: Event): Promise<void>{
     this.setState({
       loading: true
     });

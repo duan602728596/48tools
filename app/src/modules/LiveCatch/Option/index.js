@@ -40,7 +40,7 @@ class LiveCatchOption extends Component{
       humans: null        // 成员
     };
   }
-  async componentWillMount(): void{
+  async componentWillMount(): Promise<void>{
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
@@ -67,7 +67,7 @@ class LiveCatchOption extends Component{
       loading: true,
       btnLoading: true
     });
-    this.props.form.validateFields(async (err: ?any, value: any): void=>{
+    this.props.form.validateFields(async (err: ?any, value: any): Promise<void>=>{
       if(!err){
         const { time, humans }: {
           time: ?string,

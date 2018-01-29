@@ -86,7 +86,7 @@ function writeExcel(title: string, buffer: any): Promise{
   });
 }
 
-async function generatingExcel(modianList: { modianid: string, modiantitle: string }[], pathname: string): void{
+async function generatingExcel(modianList: { modianid: string, modiantitle: string }[], pathname: string): Promise<void>{
   try{
     const queue: Array = [];
     // 计算排行榜

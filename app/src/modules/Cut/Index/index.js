@@ -174,7 +174,7 @@ class Cut extends Component{
   // 添加到队列
   onAddQueue(event: Event): void{
     event.preventDefault();
-    this.props.form.validateFields(async (err: ?any, value: any): void=>{
+    this.props.form.validateFields(async (err: ?any, value: any): Promise<void>=>{
       if(!err){
         const cutList: Array = this.props.cutList.slice();
         const { file, saveFile }: {
@@ -240,7 +240,7 @@ class Cut extends Component{
     this.child_process_cb(item);
   }
   // 子进程关闭
-  async child_process_cb(item: Object): void{
+  async child_process_cb(item: Object): Promise<void>{
     this.props.action.cutList({
       cutList: this.props.cutList.slice()
     });

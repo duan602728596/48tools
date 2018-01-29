@@ -40,14 +40,14 @@ class BiliBiliOption extends Component{
     };
   }
   // 添加
-  async onAdd(event: Event): void{
+  async onAdd(event: Event): Promise<void>{
     event.preventDefault();
     this.setState({
       loading: true,
       btnLoading: true
     });
 
-    this.props.form.validateFields(async (err: ?any, value: any): void=>{
+    this.props.form.validateFields(async (err: ?any, value: any): Promise<void>=>{
       if(!err){
         const { roomname, roomid }: {
           roomname: string,

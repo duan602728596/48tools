@@ -22,7 +22,7 @@ export function child_process_error(err: any): void{
 }
 
 // 子进程关闭
-async function child_process_cb(): void{
+async function child_process_cb(): Promise<void>{
   const s: Object = store.getState().get('liveCatch').get('index');
   const [m]: [Map] = [s.get('liveCatch')];
 

@@ -119,7 +119,7 @@ class InLive48 extends Component{
     });
   }
   // 点击录制事件
-  async onDownLoadLive(event: Event): void | boolean{
+  async onDownLoadLive(event: Event): Promise<void | boolean>{
     const html: string = await this.getHtml();
     const xml: any = cheerio.load(html);
     const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;

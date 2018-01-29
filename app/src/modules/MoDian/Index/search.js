@@ -72,7 +72,7 @@ export function paiHang(modianid: string, page: number, type: number): void{
 
 /* 摩点接口，每次只能返回二十条数据 */
 export function paiHang2(modianid: string, type: number): Promise{
-  return new Promise(async (resolve: Function, reject: Function): void=>{
+  return new Promise(async (resolve: Function, reject: Function): Promise<void>=>{
     let data: Array = [];
     let i: number = 1;
     while(true){

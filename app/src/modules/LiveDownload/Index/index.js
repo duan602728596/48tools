@@ -108,7 +108,7 @@ class LiveDownload extends Component{
     });
   }
   // 加载列表
-  async onLoadList(page: number, pageSize: number, event: Event): void{
+  async onLoadList(page: number, pageSize: number, event: Event): Promise<void>{
     this.setState({
       loading: true
     });
@@ -132,7 +132,7 @@ class LiveDownload extends Component{
     });
   }
   // 公演下载
-  async onDownload(item: Object, quality: string, event: Event): void{
+  async onDownload(item: Object, quality: string, event: Event): Promise<void>{
     try{
       const m3u8Url: string = await getM3U8(this.props.group, item.id, quality);   // m3u8地址
       const dlm: string = await downloadM3U8(m3u8Url);                             // m3u8文本

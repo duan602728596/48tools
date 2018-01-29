@@ -78,7 +78,7 @@ class MoDian extends Component{
     return columus;
   }
   // 查询标题
-  async onSearchTitle(event: Event): void{
+  async onSearchTitle(event: Event): Promise<void>{
     this.setState({
       btnLoading: true
     });
