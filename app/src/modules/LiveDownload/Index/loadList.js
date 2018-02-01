@@ -1,11 +1,11 @@
-const url = global.require('url');
-const fs = global.require('fs');
-const child_process = global.require('child_process');
-const path = global.require('path');
-const process = global.require('process');
-const cheerio = global.require('cheerio');
+const url: Object = global.require('url');
+const fs: Object = global.require('fs');
+const child_process: Object = global.require('child_process');
+const path: Object = global.require('path');
+const process: Object = global.require('process');
+const cheerio: Object = global.require('cheerio');
 
-const execPath = path.dirname(process.execPath).replace(/\\/g, '/');
+const execPath: string = path.dirname(process.execPath).replace(/\\/g, '/');
 
 /**
  * 使用ajax加载列表
@@ -19,10 +19,10 @@ export function loadList(group: string, page: number): Promise{
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: string, xhr: XMLHttpRequest): void{
+      success(result: any, status: string, xhr: XMLHttpRequest): void{
         resolve(result);
       },
-      error: function(xhr: XMLHttpRequest, err: any): void{
+      error(xhr: XMLHttpRequest, err: any): void{
         reject(err);
       }
     });
@@ -53,7 +53,7 @@ export function queryHtml(html: string): Object{
   });
   return {
     result,
-    pageLen: pageLen
+    pageLen
   };
 }
 
@@ -70,10 +70,10 @@ export function getM3U8(group: string, id: string, quality: string): Promise{
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: string, xhr: XMLHttpRequest): void{
+      success(result: any, status: string, xhr: XMLHttpRequest): void{
         resolve(result);
       },
-      error: function(xhr: XMLHttpRequest, err: any): void{
+      error(xhr: XMLHttpRequest, err: any): void{
         reject(err);
       }
     });
@@ -94,10 +94,10 @@ export function downloadM3U8(m3u8Url: string): Promise{
       type: 'GET',
       dataType: 'text',
       async: true,
-      success: function(result: any, status: number, xhr: XMLHttpRequest): void{
+      success(result: any, status: number, xhr: XMLHttpRequest): void{
         resolve(result);
       },
-      error: function(xhr: XMLHttpRequest, err: any): void{
+      error(xhr: XMLHttpRequest, err: any): void{
         reject(err);
       }
     });

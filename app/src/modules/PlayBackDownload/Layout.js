@@ -4,12 +4,12 @@ import Index from './Index/index';
 import List from './List/index';
 import Detail from './Detail/index';
 
-const ModuleLayout = (props: Object): Object=>{
+const ModuleLayout: Function = (props: Object): Object=>{
   return (
     <Switch>
-      <Route path="/PlayBackDownload" component={ Index } exact />
-      <Route path="/PlayBackDownload/List" component={ List } exact />
-      <Route path="/PlayBackDownload/Detail" component={ Detail } exact />
+      <Route path="/PlayBackDownload" component={ Index } exact={ true } />
+      <Route path="/PlayBackDownload/List" component={ List } exact={ true } />
+      <Route path="/PlayBackDownload/Detail" component={ Detail } exact={ true } />
     </Switch>
   );
 };

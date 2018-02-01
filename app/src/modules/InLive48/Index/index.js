@@ -11,8 +11,8 @@ import style from './style.sass';
 import { inLiveList } from '../store/reducer';
 import { time } from '../../../function';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
-const child_process = global.require('child_process');
-const cheerio = global.require('cheerio');
+const child_process: Object = global.require('child_process');
+const cheerio: Object = global.require('cheerio');
 
 const IN_LIVE_URL: Object = {
   SNH48: 'http://live.snh48.com/Index/inlive',
@@ -81,9 +81,10 @@ class InLive48 extends Component{
         width: '25%',
         render: (text: string, item: Object, index: number): Array=>{
           return [
-            item.child.killed === false && item.child.exitCode === null ? [
-              <Button key={ 0 } type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
-            ] : [
+            item.child.killed === false && item.child.exitCode === null
+              ? [
+                <Button key={ 0 } type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
+              ] : [
                 <b key={ 1 } className={ publicStyle.mr10 }>已停止</b>,
                 <Popconfirm key={ 2 } title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
                   <Button type="danger" icon="delete">删除</Button>
@@ -109,10 +110,10 @@ class InLive48 extends Component{
         type: 'GET',
         cache: true,
         dataType: 'text',
-        success: function(data: string, status: string, xhr: XMLHttpRequest): void{
+        success(data: string, status: string, xhr: XMLHttpRequest): void{
           resolve(data);
         },
-        error: function(xhr: XMLHttpRequest, err: any): void{
+        error(xhr: XMLHttpRequest, err: any): void{
           reject(err);
         }
       });
@@ -131,10 +132,10 @@ class InLive48 extends Component{
 
     const liveUrl: string = urlInput.attr('value');
     const child: Object = child_process.spawn(option.ffmpeg, [
-      `-i`,
+      '-i',
       `${ liveUrl }`,
-      `-c`,
-      `copy`,
+      '-c',
+      'copy',
       `${ option.output }/${ title }.flv`
     ]);
     child.stdout.on('data', child_process_stdout);

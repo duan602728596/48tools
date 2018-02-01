@@ -1,4 +1,4 @@
-const https = global.require('https');
+const https: Object = global.require('https');
 
 const headers: Object = {
   'Host': 'live.bilibili.com',
@@ -19,7 +19,7 @@ function getUrl(roomid: number): Promise{
       port: null,
       path: `/api/playurl?cid=${ roomid }&otype=json&quality=0&platform=web`,
       method: 'GET',
-      headers: headers
+      headers
     };
 
     const req: any = https.request(options, (res: any): void=>{

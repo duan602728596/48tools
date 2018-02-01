@@ -11,8 +11,8 @@ import computingTime from './computingTime';
 import option from '../../publicMethod/option';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-const child_process = global.require('child_process');
-const path = global.require('path');
+const child_process: Object = global.require('child_process');
+const path: Object = global.require('path');
 
 /* 子进程监听 */
 function child_process_stdout(data: any): void{
@@ -31,7 +31,7 @@ const state: Function = createStructuredSelector({
     getState,
     ($$data: ?Immutable.Map): Array=>{
       const cutList: Immutable.List | Array = $$data !== null ? $$data.get('cutList') : [];
-      return cutList instanceof Array ? cutList : cutList.toJS()
+      return cutList instanceof Array ? cutList : cutList.toJS();
     }
   ),
   cutMap: createSelector(          // 正在剪切
@@ -174,12 +174,12 @@ class Cut extends Component{
   // 添加到队列
   onAddQueue(event: Event): void{
     event.preventDefault();
-    this.props.form.validateFields(async (err: ?any, value: any): Promise<void>=>{
+    this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
       if(!err){
         const cutList: Array = this.props.cutList.slice();
         const { file, saveFile }: {
           file: Object,
-          saveFile: Object,
+          saveFile: Object
         } = this.state;
         const { starthh, startmm, startss, endhh, endmm, endss }: {
           starthh: ?string,
@@ -305,7 +305,7 @@ class Cut extends Component{
   }
   // 停止任务
   onStopTask(item: Object, event: Event): void{
-    const m = this.props.cutMap.get(item.id);
+    const m: Object = this.props.cutMap.get(item.id);
     m.child.kill();
   }
   render(): Array{
@@ -352,11 +352,11 @@ class Cut extends Component{
                         <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
                         <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
                         <input className={ style.disNone }
-                               id="cut-save"
-                               type="file"
-                               nwsaveas=""
-                               nwworkingdir={ this.dir }
-                               onChange={ this.onSaveChange.bind(this) }
+                          id="cut-save"
+                          type="file"
+                          nwsaveas=""
+                          nwworkingdir={ this.dir }
+                          onChange={ this.onSaveChange.bind(this) }
                         />
                       </div>
                     )

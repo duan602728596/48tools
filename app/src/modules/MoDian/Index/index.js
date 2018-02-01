@@ -17,7 +17,7 @@ const state: Function = createStructuredSelector({
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('modian') ? $$state.get('modian') : null,
     ($$data: ?Immutable.Map): Array=>{
       const modianList: Immutable.List | Array = $$data !== null ? $$data.get('modianList') : [];
-      return modianList instanceof Array ? modianList : modianList.toJS()
+      return modianList instanceof Array ? modianList : modianList.toJS();
     }
   )
 });

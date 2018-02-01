@@ -8,10 +8,10 @@ import { Button, message, Affix, Table, Popconfirm } from 'antd';
 import publicStyle from '../../publicMethod/public.sass';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
-import { mergeList } from "../store/reducer";
-const fs = global.require('fs');
-const path = global.require('path');
-const child_process = global.require('child_process');
+import { mergeList } from '../store/reducer';
+const fs: Object = global.require('fs');
+const path: Object = global.require('path');
+const child_process: Object = global.require('child_process');
 
 /* 子进程监听 */
 function child_process_stdout(data: any): void{

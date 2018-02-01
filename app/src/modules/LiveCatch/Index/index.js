@@ -12,9 +12,9 @@ import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import option from '../../publicMethod/option';
-const child_process = global.require('child_process');
-const querystring = global.require('querystring');
-const gui = global.require('nw.gui');
+const child_process: Object = global.require('child_process');
+const querystring: Object = global.require('querystring');
+const gui: Object = global.require('nw.gui');
 
 /* 初始化数据 */
 const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveCatch') ? $$state.get('liveCatch').get('index') : null;
@@ -133,30 +133,29 @@ class LiveCatch extends Component{
       width: 400,
       height: 600,
       focus: true,
-      title: item.title,
-    })
+      title: item.title
+    });
   }
   // 录制视频
   onRecording(item: Object, event: Event): void{
-    const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title +
-      '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-      '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
+    const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title
+                        + '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+                        + '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
     const child: Object = child_process.spawn(option.ffmpeg, [
-      `-i`,
+      '-i',
       `${ item.streamPath }`,
-      `-c`,
-      `copy`,
+      '-c',
+      'copy',
       `${ option.output }/${ title }.flv`
-      ]
-    );
+    ]);
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);
     child.on('close', child_process_exit);
     child.on('error', child_process_error);
 
     this.props.liveCatch.set(item.liveId, {
-      child: child,
-      item: item
+      child,
+      item
     });
     this.props.action.liveChange({
       map: this.props.liveCatch,
@@ -172,17 +171,17 @@ class LiveCatch extends Component{
    * 录制
    * 使用Promise进行了包装
    */
-  recordingPromise(item): Promise{
+  recordingPromise(item: Object): Promise{
     return new Promise((resolve: Function, reject: Function): void=>{
-      const title: string = '【口袋48直播】' + '_' + item.title +
-        '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-        '_录制时间_' + time('YY-MM-DD-hh-mm-ss') +
-        '_' + item.liveId;
+      const title: string = '【口袋48直播】' + '_' + item.title
+                          + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+                          + '_录制时间_' + time('YY-MM-DD-hh-mm-ss')
+                          + '_' + item.liveId;
       const child: Object = child_process.spawn(option.ffmpeg, [
-        `-i`,
+        '-i',
         `${ item.streamPath }`,
-        `-c`,
-        `copy`,
+        '-c',
+        'copy',
         `${ option.output }/${ title }.flv`
       ]);
       child.stdout.on('data', child_process_stdout);
@@ -191,8 +190,8 @@ class LiveCatch extends Component{
       child.on('error', child_process_error);
 
       this.props.liveCatch.set(item.liveId, {
-        child: child,
-        item: item,
+        child,
+        item,
       });
       resolve();
     });
@@ -233,7 +232,7 @@ class LiveCatch extends Component{
       await Promise.all(queue);
       this.props.action.liveChange({
         map: this.props.liveCatch,
-        liveList: liveList
+        liveList
       });
     }else{
       message.error('请求失败');
@@ -291,11 +290,10 @@ class LiveCatch extends Component{
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             {
-              this.props.autoRecording ?
-                (
+              this.props.autoRecording
+                ? (
                   <Button className={ publicStyle.mr10 } type="danger" icon="close-square" onClick={ this.onStopAutoRecording.bind(this) }>停止自动录制</Button>
-                ) :
-                (
+                ) : (
                   <Button className={ publicStyle.mr10 } type="primary" icon="play-circle" onClick={ this.onAutoRecording.bind(this) }>开始自动录制</Button>
                 )
             }

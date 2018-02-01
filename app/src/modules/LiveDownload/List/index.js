@@ -32,7 +32,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 class List extends Component{
   // 清除列表
   onClear(event: Event): void{
-    for(let i = this.props.downloadList.length - 1; i >= 0; i--){
+    for(let i: number = this.props.downloadList.length - 1; i >= 0; i--){
       const item: Object = this.props.downloadList[i];
       if(!(item.child.killed === false && item.child.exitCode === null)){
         this.props.downloadList.splice(i, 1);
@@ -47,7 +47,7 @@ class List extends Component{
     item.child.kill();
   }
   downloadList(): Array{
-    return this.props.downloadList.map((item: Object, index: Number): Object=>{
+    return this.props.downloadList.map((item: Object, index: number): Object=>{
       return (
         <li key={ item.id }>
           <h4>
@@ -56,8 +56,8 @@ class List extends Component{
           </h4>
           <p>{ item.pSave }</p>
           {
-            item.child.killed === false && item.child.exitCode === null ?
-              (
+            item.child.killed === false && item.child.exitCode === null
+              ? (
                 <Button className={ style.ar } type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
               ) : (
                 <b className={ `${ style.ar } ${ style.cancelText }` }>已停止</b>

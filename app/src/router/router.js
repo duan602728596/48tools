@@ -26,7 +26,7 @@ class Router extends Component{
     return (
       <Switch>
         {/* 首页 */}
-        <Route path="/" component={ Index } exact />
+        <Route path="/" component={ Index } exact={ true } />
         {/* 直播抓取 */}
         <Route path="/LiveCatch" component={ LiveCatchBundle } />
         {/* 录播下载 */}

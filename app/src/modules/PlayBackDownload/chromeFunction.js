@@ -62,6 +62,6 @@ export function onChromeDownloadsCreated(infor: Object): void{
   });
   // 更新store内的数据
   downloadListAction({
-    downloadList: downloadList
+    downloadList
   });
 }

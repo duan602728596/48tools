@@ -4,9 +4,9 @@ import { message } from 'antd';
 import { paiHang2 } from './search';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
-const fs = global.require('fs');
-const process = global.require('process');
-const xlsx = global.require('node-xlsx');
+const fs: Object = global.require('fs');
+const process: Object = global.require('process');
+const xlsx: Object = global.require('node-xlsx');
 
 // 格式化
 function format(list0: Array, list1: Array): Array{
@@ -76,7 +76,7 @@ function writeExcel(title: string, buffer: any): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
     fs.writeFile(`${ option.output }/【集资统计】${ title }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
       'flag': 'w'
-    }, (err)=>{
+    }, (err: any)=>{
       if(err){
         reject();
       }else{

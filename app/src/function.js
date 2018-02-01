@@ -7,7 +7,7 @@
  */
 export function objectToArray(obj: Object): Function[]{
   const arr: Array = [];
-  for(let key in obj){
+  for(const key: string in obj){
     arr.push(obj[key]);
   }
   return arr;
@@ -22,7 +22,7 @@ export function patchZero(num: number): string{
   if(num < 10){
     return `0${ num }`;
   }else{
-    return `${ num }`
+    return `${ num }`;
   }
 }
 

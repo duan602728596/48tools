@@ -13,7 +13,7 @@ const initData: {
 };
 
 /* Action */
-export const downloadList = createAction('公演下载列表');
+export const downloadList: Function = createAction('公演下载列表');
 
 /* reducer */
 const reducer: Function = handleActions({

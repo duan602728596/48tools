@@ -12,8 +12,8 @@ import publicStyle from '../../publicMethod/public.sass';
 import post from '../../publicMethod/post';
 import { time } from '../../../function';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-const url = global.require('url');
-const path = global.require('path');
+const url: Object = global.require('url');
+const path: Object = global.require('path');
 
 /**
  * 搜索的过滤函数
@@ -35,8 +35,8 @@ function filter(array: Array, keyword: ?RegExp, key: string, from: number, to: n
   }
   // 拆分数组
   const middle: number = Math.floor((to - from) / 2) + from;
-  const left = filter(array, keyword, key, from, middle);
-  const right = filter(array, keyword, key, middle + 1, to);
+  const left: Array = filter(array, keyword, key, from, middle);
+  const right: Array = filter(array, keyword, key, middle + 1, to);
   return left.concat(right);
 }
 
@@ -161,10 +161,10 @@ class PlayBackDownload extends Component{
     const urlInfo: Object = url.parse(item.streamPath);
     const pathInfo: Object = path.parse(urlInfo.pathname);
 
-    const title: string = '【口袋48录播】' + '_' + item.title +
-      '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime) +
-      '_下载时间_' + time('YY-MM-DD-hh-mm-ss') +
-      '_' + item.liveId;
+    const title: string = '【口袋48录播】' + '_' + item.title
+                        + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+                        + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
+                        + '_' + item.liveId;
 
     chrome.downloads.download({
       url: item.streamPath,
@@ -190,7 +190,7 @@ class PlayBackDownload extends Component{
     let reg: ?RegExp = null;
     if(!/^\s*$/.test(value)){
       const str: string[] = value.split(/\s+/);
-      for(let i = str.length - 1; i >= 0; i--){
+      for(let i: number = str.length - 1; i >= 0; i--){
         if(str[i] === '') str.splice(i, 1);
       }
       reg = new RegExp(`(${ str.join('|') })`, 'i');

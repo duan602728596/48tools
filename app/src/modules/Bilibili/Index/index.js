@@ -11,8 +11,8 @@ import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';
-const child_process = global.require('child_process');
-const http = global.require('http');
+const child_process: Object = global.require('child_process');
+const http: Object = global.require('http');
 
 /* 初始化数据 */
 const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('bilibili') ? $$state.get('bilibili').get('index') : null;
@@ -71,8 +71,8 @@ class BiliBili extends Component{
         width: '36%',
         render: (text: any, item: Object): Array=>{
           return [
-            this.props.catching.has(item.roomid) ?
-              (
+            this.props.catching.has(item.roomid)
+              ? (
                 <Popconfirm key={ 0 } title="确认停止录制吗？" onConfirm={ this.onCatchStop.bind(this, item) }>
                   <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="primary" icon="minus-circle">停止</Button>
                 </Popconfirm>
@@ -86,9 +86,9 @@ class BiliBili extends Component{
                   录制
                 </Button>
               ),
-          <Popconfirm key={ 1 } title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
-            <Button className={ publicStyle.ml10 } type="danger" icon="close-square" disabled={ this.props.catching.has(item.roomid) }>删除</Button>
-          </Popconfirm>
+            <Popconfirm key={ 1 } title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+              <Button className={ publicStyle.ml10 } type="danger" icon="close-square" disabled={ this.props.catching.has(item.roomid) }>删除</Button>
+            </Popconfirm>
           ];
         }
       }
@@ -111,10 +111,10 @@ class BiliBili extends Component{
     const urlList: Object = JSON.parse(url);
     const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
     const child: Object = child_process.spawn(option.ffmpeg, [
-      `-i`,
+      '-i',
       `${ urlList.durl[0].url }`,
-      `-c`,
-      `copy`,
+      '-c',
+      'copy',
       `${ option.output }/${ title }.flv`
     ]);
     child.stdout.on('data', child_process_stdout);
@@ -123,8 +123,8 @@ class BiliBili extends Component{
     child.on('error', child_process_error);
 
     this.props.catching.set(item.roomid, {
-      child: child,
-      item: item
+      child,
+      item
     });
     this.props.action.catching({
       catching: this.props.catching,

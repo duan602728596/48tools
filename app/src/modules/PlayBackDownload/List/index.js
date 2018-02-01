@@ -10,7 +10,7 @@ import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
 import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
-const fs = global.require('fs');
+const fs: Object = global.require('fs');
 
 /* 初始化数据 */
 const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload') ? $$state.get('playBackDownload') : null;
@@ -74,7 +74,7 @@ class ListOne extends Component{
         const percent: number = Number((state2.size / infor.totalBytes * 100).toFixed(0));
         this.setState({
           timer: requestAnimationFrame(this.timer.bind(this)),
-          percent: percent
+          percent
         });
       }
     });
@@ -176,7 +176,6 @@ class List extends Component{
   }
   // 清除已下载
   onClear(event: Event): void{
-    const dl = this.props.downloadList instanceof Array ? this.props.downloadList : [];
     this.props.downloadList.forEach((value: Object, key: number): void=>{
       if(value.state !== 1){
         this.props.downloadList.delete(key);

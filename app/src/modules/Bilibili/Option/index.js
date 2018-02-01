@@ -47,7 +47,7 @@ class BiliBiliOption extends Component{
       btnLoading: true
     });
 
-    this.props.form.validateFields(async (err: ?any, value: any): Promise<void>=>{
+    this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
       if(!err){
         const { roomname, roomid }: {
           roomname: string,
@@ -58,7 +58,7 @@ class BiliBiliOption extends Component{
           await this.props.action.putBilibiliLiveRoom({
             data: {
               roomid: Number(roomid),
-              roomname: roomname
+              roomname
             }
           });
           message.success('添加成功！');
@@ -124,7 +124,7 @@ class BiliBiliOption extends Component{
                   <br />
                   B站直播已改版，ROOMID获取方式如下：
                   <br />
-                  https://api.live.bilibili.com/room/v1/Room/room_init?id={`{{ ID }}`}，GET请求。
+                  https://api.live.bilibili.com/room/v1/Room/room_init?id={ '{{ ID }}' }，GET请求。
                 </p>
               </Form.Item>
             </Spin>

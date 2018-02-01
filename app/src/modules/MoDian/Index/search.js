@@ -1,4 +1,4 @@
-const MD5 = global.require('md5.js');
+const MD5: Object = global.require('md5.js');
 
 /**
  * 摩点请求加密方法
@@ -22,11 +22,11 @@ export function searchTitle(modianId: string): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
     $.ajax({
       type: 'POST',
-      url: `https://wds.modian.com/api/project/detail`,
+      url: 'https://wds.modian.com/api/project/detail',
       cache: true,
       data,
       dataType: 'json',
-      success: function(data: string, status: string, xhr: XMLHttpRequest): void{
+      success(data: string, status: string, xhr: XMLHttpRequest): void{
         if(data.status !== '0'){
           resolve({
             title: null
@@ -39,7 +39,7 @@ export function searchTitle(modianId: string): Promise{
           });
         }
       },
-      error: function(err: any): void{
+      error(err: any): void{
         reject(err);
       }
     });
@@ -53,17 +53,17 @@ export function paiHang(modianid: string, page: number, type: number): void{
   return new Promise((resolve: Function, reject: Function): void=>{
     $.ajax({
       type: 'POST',
-      url: `https://wds.modian.com/api/project/rankings`,
+      url: 'https://wds.modian.com/api/project/rankings',
       data,
       dataType: 'json',
       headers: {
         'Cache-Control': 'no-cache',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      success: function(data: string, status: string, xhr: XMLHttpRequest): void{
+      success(data: string, status: string, xhr: XMLHttpRequest): void{
         resolve(data);
       },
-      error: function(err: any): void{
+      error(err: any): void{
         reject(err);
       }
     });
@@ -72,10 +72,12 @@ export function paiHang(modianid: string, page: number, type: number): void{
 
 /* 摩点接口，每次只能返回二十条数据 */
 export function paiHang2(modianid: string, type: number): Promise{
-  return new Promise(async (resolve: Function, reject: Function): Promise<void>=>{
+  return new Promise(async(resolve: Function, reject: Function): Promise<void>=>{
     let data: Array = [];
     let i: number = 1;
+    /* eslint-disable */
     while(true){
+      /* eslint-enable */
       const rt: Object = await paiHang(modianid, i, type);
       if(rt.data.length === 0){
         break;

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Input, Button, message } from 'antd';
 import style from './style.sass';
-const url = global.require('url');
+const url: Object = global.require('url');
 
 class RoomId extends Component{
   state: {
@@ -19,9 +19,9 @@ class RoomId extends Component{
   }
   // 复制
   onCopy(event: Event): void{
-    const range = document.createRange();
+    const range: Object = document.createRange();
     range.selectNode(document.getElementById('roomId'));
-    const selection = window.getSelection();
+    const selection: Object = window.getSelection();
     if(selection.rangeCount > 0) selection.removeAllRanges();
     selection.addRange(range);
     document.execCommand('copy');
@@ -35,7 +35,7 @@ class RoomId extends Component{
   }
   // 搜索
   onSearch(event: Event): void{
-    const _this = this;
+    const _this: this = this;
     const u: Object = url.parse(this.state.url);
     if(u.host !== 'live.bilibili.com'){
       message.warn('直播间地址错误！');
@@ -47,7 +47,7 @@ class RoomId extends Component{
       url: `https://api.live.bilibili.com/room/v1/Room/room_init?id=${ id2 }`,
       type: 'GET',
       dataType: 'json',
-      success: function(data: Object, status: string, xhr: XMLHttpRequest): void{
+      success(data: Object, status: string, xhr: XMLHttpRequest): void{
         if(data.code === 0 && xhr.status === 200){
           _this.setState({
             roomId: data.data.room_id
@@ -62,25 +62,25 @@ class RoomId extends Component{
     return [
       <h3 key={ 0 } className={ style.title }>RoomId查找</h3>,
       <div key={ 1 } className={ style.group }>
-        <label className={ style.label } htmlFor='roomUrl'>直播间地址：</label>
+        <label className={ style.label } htmlFor="roomUrl">直播间地址：</label>
         <Input className={ style.input }
-          id='roomUrl'
-          placeholder='输入B站的直播间地址'
+          id="roomUrl"
+          placeholder="输入B站的直播间地址"
           value={ this.state.url }
           onChange={ this.onChange.bind(this) }
           suffix={
-            <Button className={ style.ipb } type='primary' title='搜索' icon='share-alt' onClick={ this.onSearch.bind(this) } />
+            <Button className={ style.ipb } type="primary" title="搜索" icon="share-alt" onClick={ this.onSearch.bind(this) } />
           }
         />
       </div>,
       <div key={ 2 } className={ style.group }>
-        <label className={ style.label } htmlFor='roomId'>RoomID：</label>
+        <label className={ style.label } htmlFor="roomId">RoomID：</label>
         <Input className={ style.input }
-          id='roomId'
-          readOnly
+          id="roomId"
+          readOnly={ true }
           value={ this.state.roomId }
           suffix={
-            <Button className={ style.ipb } type='primary' title='复制' icon='copy' onClick={ this.onCopy.bind(this) } />
+            <Button className={ style.ipb } type="primary" title="复制" icon="copy" onClick={ this.onCopy.bind(this) } />
           }
         />
       </div>

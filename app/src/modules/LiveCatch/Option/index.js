@@ -50,7 +50,7 @@ class LiveCatchOption extends Component{
     if(data){
       [time, humans] = [data.option.time, data.option.humans];
       this.setState({
-        time: time,
+        time,
         humans: humans.join(', '),
         loading: false
       });
@@ -67,7 +67,7 @@ class LiveCatchOption extends Component{
       loading: true,
       btnLoading: true
     });
-    this.props.form.validateFields(async (err: ?any, value: any): Promise<void>=>{
+    this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
       if(!err){
         const { time, humans }: {
           time: ?string,

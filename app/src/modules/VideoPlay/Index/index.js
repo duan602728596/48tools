@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { Card } from 'antd';
 import style from './style.sass';
-const querystring = global.require('querystring');
-const path = global.require('path');
+const querystring: Object = global.require('querystring');
+const path: Object = global.require('path');
 
 class VideoPlay extends Component{
   item: {
@@ -25,7 +25,7 @@ class VideoPlay extends Component{
     if(flvjs.isSupported()){
       const videoElement: Element = document.getElementById('video-element');
       const flvPlayer: flvjs = flvjs.createPlayer({
-        type: type,
+        type,
         url: this.item.streamPath
       });
       flvPlayer.attachMediaElement(videoElement);
