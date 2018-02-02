@@ -90,7 +90,7 @@ class BiliBiliOption extends Component{
                       {
                         message: '必须输入直播间名称',
                         required: true,
-                        whitespace: true,
+                        whitespace: true
                       }
                     ]
                   })(
@@ -106,7 +106,7 @@ class BiliBiliOption extends Component{
                       {
                         message: '必须输入直播间ID',
                         required: true,
-                        whitespace: true,
+                        whitespace: true
                       },
                       {
                         message: '必须输入有效的直播间ID',

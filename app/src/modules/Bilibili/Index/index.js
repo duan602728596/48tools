@@ -47,7 +47,7 @@ class BiliBili extends Component{
     super(...arguments);
 
     this.state = {
-      loading: true,     // 加载动画
+      loading: true     // 加载动画
     };
   }
   // 表格配置

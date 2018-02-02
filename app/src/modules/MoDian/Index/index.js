@@ -37,7 +37,7 @@ class MoDian extends Component{
     modianid: string,
     modiantitle: string
   };
-  constructor(props: Object): Object{
+  constructor(props: Object): void{
     super(...arguments);
 
     this.state = {
@@ -149,7 +149,7 @@ class MoDian extends Component{
             <label htmlFor="modian-title">摩点项目标题: </label>
             <Input className={ style.inputTitle }
               id="modian-title"
-              readOnly
+              readOnly={ true }
               value={ this.state.modiantitle }
             />
             <Button loading={ this.state.btnLoading }

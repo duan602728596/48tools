@@ -42,8 +42,8 @@ function paihangbang(item: Object): Promise{
   return paiHang2(item.modianid, 1)  // 此处不使用Promise.all是为了避免缓存
     .then((result: Array): Promise=>{
       l0 = result;
-      return new Promise((resolve: Function, reject: Function): number=>{
-        setTimeout(()=>{
+      return new Promise((resolve: Function, reject: Function): void=>{
+        setTimeout((): void=>{
           resolve();
         }, 12000);
       }); // 避免缓存，所以延迟获取数据
@@ -76,7 +76,7 @@ function writeExcel(title: string, buffer: any): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
     fs.writeFile(`${ option.output }/【集资统计】${ title }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
       'flag': 'w'
-    }, (err: any)=>{
+    }, (err: any): void=>{
       if(err){
         reject();
       }else{
@@ -90,7 +90,7 @@ async function generatingExcel(modianList: { modianid: string, modiantitle: stri
   try{
     const queue: Array = [];
     // 计算排行榜
-    modianList.map((item: Object, index: number)=>{
+    modianList.map((item: Object, index: number): void=>{
       queue.push(paihangbang(item));
     });
 

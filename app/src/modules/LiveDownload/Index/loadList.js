@@ -88,7 +88,7 @@ export function getM3U8(group: string, id: string, quality: string): Promise{
  * @param { string } m3u8Url
  */
 export function downloadM3U8(m3u8Url: string): Promise{
-  return new Promise((resolve: Function, reject: Function)=>{
+  return new Promise((resolve: Function, reject: Function): void=>{
     $.ajax({
       url: m3u8Url,
       type: 'GET',
@@ -140,7 +140,11 @@ export function saveM3U8(title: string, text: string): Promise{
       encoding: 'utf8',
       flag: 'w'
     }, (err: any): void=>{
-      err ? reject() : resolve(p);
+      if(err){
+        reject();
+      }else{
+        resolve();
+      }
     });
   });
 }

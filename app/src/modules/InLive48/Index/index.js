@@ -161,7 +161,7 @@ class InLive48 extends Component{
     item.child.kill();
   }
   // 删除
-  onDelete(item: Object, event: Event){
+  onDelete(item: Object, event: Event): void{
     const index: number = this.props.inLiveList.indexOf(item);
     const ils: Array = this.props.inLiveList.slice();
     ils.splice(index, 1);

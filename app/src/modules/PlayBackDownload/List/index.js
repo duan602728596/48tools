@@ -64,7 +64,7 @@ class ListOne extends Component{
       infor: Object,
       state: number
     } = detail[1];
-    fs.stat(current + '.crdownload', (err: ?any, state2: Object)=>{
+    fs.stat(current + '.crdownload', (err: ?any, state2: Object): void=>{
       if(state !== 1){
         this.setState({
           timer: null,

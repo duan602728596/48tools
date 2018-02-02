@@ -169,6 +169,10 @@ rules:
     - warn
     - comma
   flowtype/require-parameter-type: warn               # 要求所有的函数参数都有类型注释
+  flowtype/require-return-type:                       # 要求该函数具有返回类型注释
+    - warn
+    - always
+    - annotateUndefined: always
   flowtype/require-variable-type: warn                # 要求所有变量声明符都有类型注释
   flowtype/semi: error                                # 在类型别名后强制使用分号
   flowtype/space-after-type-colon: warn               # 在类型注释冒号后强制一致的间距

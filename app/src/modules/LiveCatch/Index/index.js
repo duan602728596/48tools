@@ -60,7 +60,7 @@ class LiveCatch extends Component{
   }
   // 表格配置
   columus(): Array{
-    const columns = [
+    const columns: Array = [
       {
         title: '直播间',
         dataIndex: 'title',
@@ -191,7 +191,7 @@ class LiveCatch extends Component{
 
       this.props.liveCatch.set(item.liveId, {
         child,
-        item,
+        item
       });
       resolve();
     });
