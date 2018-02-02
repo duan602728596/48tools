@@ -85,7 +85,10 @@ rules:
     - max: 3
       maxEOF: 0
       maxBOF: 0
-  no-trailing-spaces: warn                            # 禁用行尾空格
+  no-trailing-spaces:                                 # 禁用行尾空格
+    - warn
+    - skipBlankLines: true
+      ignoreComments: true
   no-whitespace-before-property: error                # 禁止属性前有空白
   object-curly-spacing:                               # 强制在大括号中使用一致的空格
     - warn
