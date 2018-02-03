@@ -15,7 +15,7 @@ import { getHash, getAvNumber } from './getLocation'
 # change it if need
 SIGN = 'a0cfb0ac98c3ec669cd52ea491ba38ab'
 # change it
-BREAK_INDEX = 0
+BREAK_INDEX = -1
 
 CID = window.cid
 body = document.getElementsByTagName('body')[0]

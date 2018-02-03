@@ -88,7 +88,7 @@ var start;
 SIGN = 'a0cfb0ac98c3ec669cd52ea491ba38ab';
 
 // change it
-BREAK_INDEX = 0;
+BREAK_INDEX = -1;
 
 CID = window.cid;
 
