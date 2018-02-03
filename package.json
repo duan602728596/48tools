@@ -6,9 +6,9 @@
     "cleanbuild": "./node_modules/.bin/rimraf build"
   },
   "devDependencies": {
-    "coffeescript": "^2.0.2",
+    "coffeescript": "^2.2.0",
     "cross-env": "^5.1.1",
-    "gulp": "gulpjs/gulp#4.0",
+    "gulp": "^4.0.0",
     "gulp-changed": "^3.1.1",
     "gulp-coffee2": "^2.3.4",
     "gulp-notify": "^3.0.0",

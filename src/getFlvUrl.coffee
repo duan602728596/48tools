@@ -1,6 +1,6 @@
 export getFlvUrl = (cid, sign)->
   url = "https://interface.bilibili.com/playurl?cid=#{ cid }" +
-    "&appkey=84956560bc028eb7&otype=json&type=&quality=0&qn=0&tid=137&sign=#{ sign }"
+    "&appkey=84956560bc028eb7&otype=json&type=&quality=0&qn=0&sign=#{ sign }"
   return new Promise((resolve, reject)->
     request = new XMLHttpRequest()
     request.open('GET', url, true)
