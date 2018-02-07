@@ -53,6 +53,14 @@ module.exports = config({
               pretty: true,
               name: '[name].html'
             }
+          },
+          {
+            loader: 'nwjs-webpack-hot-loader/loader',
+            options: {
+              buildFile: './build',
+              rootFile: 'script/app.js',
+              type: 'pug'
+            }
           }
         ]
       }

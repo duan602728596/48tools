@@ -63,6 +63,7 @@
     "indexeddb-tools-redux": "^2.0.0",
     "jquery": "^3.2.1",
     "node-sass": "^4.7.2",
+    "nwjs-webpack-hot-loader": "github:duan602728596/nwjs-webpack-hot-loader",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "pug": "^2.0.0-rc.4",
     "pug-loader": "^2.3.0",
