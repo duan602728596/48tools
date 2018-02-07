@@ -11,6 +11,7 @@ import post from '../../publicMethod/post';
 import { time } from '../../../function';
 import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
+import style from './style.sass';
 import option from '../../publicMethod/option';
 const child_process: Object = global.require('child_process');
 const querystring: Object = global.require('querystring');
@@ -65,26 +66,54 @@ class LiveCatch extends Component{
         title: '直播间',
         dataIndex: 'title',
         key: 'title',
-        width: '15%'
+        width: '15%',
+        render: (text: string, item: Object, index: number): Object | string=>{
+          if(item._end === true){
+            return <span className={ style.overdue }>{ text }</span>;
+          }else{
+            return text;
+          }
+        }
       },
       {
         title: '直播标题',
         dataIndex: 'subTitle',
         key: 'subTitle',
-        width: '20%'
+        width: '20%',
+        render: (text: string, item: Object, index: number): Object | string=>{
+          if(item._end === true){
+            return <span className={ style.overdue }>{ text }</span>;
+          }else{
+            return text;
+          }
+        }
       },
       {
         title: '直播地址',
         dataIndex: 'streamPath',
         key: 'streamPath',
-        width: '30%'
+        width: '30%',
+        render: (text: string, item: Object, index: number): Object | string=>{
+          if(item._end === true){
+            return <span className={ style.overdue }>{ text }</span>;
+          }else{
+            return text;
+          }
+        }
       },
       {
         title: '开始时间',
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (text: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', text)
+        render: (text: string, item: Object, index: number): Object | string=>{
+          const t: string = time('YY-MM-DD hh:mm:ss', text);
+          if(item._end === true){
+            return <span className={ style.overdue }>{ t }</span>;
+          }else{
+            return t;
+          }
+        }
       },
       {
         title: '操作',

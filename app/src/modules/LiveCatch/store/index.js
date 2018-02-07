@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { oldArray } from '../Index/unit';
 
 /* Action */
 export const liveList: Function = createAction('直播列表');
@@ -9,13 +10,21 @@ export const autoRecording: Function = createAction('自动录制');
 /* reducer */
 const reducer: Function = handleActions({
   [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    return $$state.set('liveList', action.payload.liveList);
+    const ll: Array = action.payload.liveList;
+    // 获取旧的直播录制列表
+    const oa: Array = $$state.get('liveList')
+      ? oldArray($$state.get('liveList'), ll, $$state.get('liveCatch')) : [];
+    return $$state.set('liveList', [...ll, ...oa]);
   },
   [liveCatch]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     return $$state.set('liveCatch', action.payload.map);
   },
   [liveChange]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    return $$state.set('liveList', action.payload.liveList)
+    const ll: Array = action.payload.liveList;
+    // 获取旧的直播录制列表
+    const oa: Array = $$state.get('liveList')
+      ? oldArray($$state.get('liveList'), ll, $$state.get('liveCatch')) : [];
+    return $$state.set('liveList', [...ll, ...oa])
       .set('liveCatch', action.payload.map);
   },
   [autoRecording]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
