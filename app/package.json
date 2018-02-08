@@ -11,7 +11,7 @@
     "prodll": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",
     "npmi": "npm install --production",
     "yarni": "yarn install --production=true --pure-lockfile",
-    "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\"",
+    "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
     "eslint": "./node_modules/.bin/eslint src"
   },
   "main": "./build/index.html",
@@ -86,6 +86,6 @@
     "webpack": "^3.10.0"
   },
   "peerDependencies": {
-    "node-modules-clean": "^0.0.1-alpha.2"
+    "node-modules-clean": "^0.1.1"
   }
 }
