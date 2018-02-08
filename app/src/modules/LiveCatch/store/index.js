@@ -11,9 +11,10 @@ export const autoRecording: Function = createAction('自动录制');
 const reducer: Function = handleActions({
   [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     const ll: Array = action.payload.liveList;
+    const s$ll: Array = $$state.get('liveList');
+    const s$lc: Map = $$state.get('liveCatch');
     // 获取旧的直播录制列表
-    const oa: Array = $$state.get('liveList')
-      ? oldArray($$state.get('liveList'), ll, $$state.get('liveCatch')) : [];
+    const oa: Array = oldArray(s$ll, ll, s$lc);
     return $$state.set('liveList', [...ll, ...oa]);
   },
   [liveCatch]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
@@ -21,9 +22,10 @@ const reducer: Function = handleActions({
   },
   [liveChange]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     const ll: Array = action.payload.liveList;
+    const s$ll: Array = $$state.get('liveList');
+    const s$lc: Map = $$state.get('liveCatch');
     // 获取旧的直播录制列表
-    const oa: Array = $$state.get('liveList')
-      ? oldArray($$state.get('liveList'), ll, $$state.get('liveCatch')) : [];
+    const oa: Array = oldArray(s$ll, ll, s$lc);
     return $$state.set('liveList', [...ll, ...oa])
       .set('liveCatch', action.payload.map);
   },
