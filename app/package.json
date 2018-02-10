@@ -51,7 +51,7 @@
     "cross-env": "^5.1.3",
     "css-loader": "^0.28.9",
     "eslint": "^4.17.0",
-    "eslint-plugin-flowtype": "^2.42.0",
+    "eslint-plugin-flowtype": "^2.43.0",
     "eslint-plugin-react": "^7.6.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
