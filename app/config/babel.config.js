@@ -1,7 +1,7 @@
 /* babel-loader 配置 */
 module.exports = {
-  path: 'babel-loader',
-  query: {
+  loader: 'babel-loader',
+  options: {
     cacheDirectory: true,
     presets: ['@babel/preset-flow', '@babel/preset-react'],
     plugins: [

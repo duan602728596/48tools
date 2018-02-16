@@ -114,10 +114,12 @@ class LiveDownload extends Component{
     });
     try{
       const html: string = await loadList(this.props.group, page);
-      const { result, pageLen }: {
+      const _qh: {
         result: Array,
         pageLen: number
       } = queryHtml(html);
+      const result: Array = _qh.result;
+      const pageLen: number = _qh.pageLen;
       this.props.action.liveListInit({
         liveList: result,
         pageLen,

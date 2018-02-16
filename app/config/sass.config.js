@@ -11,14 +11,12 @@ function output(env){
 }
 
 // 根据当前环境配置sass输出格式
-// development
-// production
 const env = process.env.NODE_ENV;
 const out = output(env);
 
 module.exports = {
-  path: 'sass-loader',
-  query: {
+  loader: 'sass-loader',
+  options: {
     outputStyle: out
   }
 };

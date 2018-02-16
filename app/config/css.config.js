@@ -11,14 +11,12 @@ function output(env){
 }
 
 // 根据当前环境配置css-in-js的name
-// development
-// production
 const env = process.env.NODE_ENV;
 const name = output(env);
 
 module.exports = {
-  path: 'css-loader',
-  query: {
+  loader: 'css-loader',
+  options: {
     modules: true,
     localIdentName: name
   }
