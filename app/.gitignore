@@ -15,3 +15,6 @@ app/.idea
 .happypack
 .dll
 build
+
+# babel
+.babelCache
