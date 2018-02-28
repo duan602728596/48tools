@@ -2,9 +2,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./webpack.config');
-const cssConfig = require('./css.config');
-const sassConfig = require('./sass.config');
-const postcssConfig = require('./postcss.config');
 
 /* 合并配置 */
 module.exports = config({
@@ -16,14 +13,6 @@ module.exports = config({
   devtool: 'cheap-module-source-map',
   module: {
     rules: [
-      { // sass
-        test: /^.*\.sass$/,
-        use: ['style-loader', cssConfig, postcssConfig, sassConfig],
-      },
-      { // css
-        test: /^.*\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
       { // pug
         test: /^.*\.pug$/,
         use: [

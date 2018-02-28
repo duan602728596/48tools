@@ -2,6 +2,9 @@ const path = require('path');
 const process = require('process');
 const webpack = require('webpack');
 const babelConfig = require('./babel.config');
+const cssConfig = require('./css.config');
+const sassConfig = require('./sass.config');
+const postcssConfig = require('./postcss.config');
 const manifest = require('../.dll/manifest.json');
 
 function config(options){
@@ -29,6 +32,14 @@ function config(options){
               }
             }
           ]
+        },
+        { // sass
+          test: /^.*\.sass$/,
+          use: ['style-loader', cssConfig, postcssConfig, sassConfig],
+        },
+        { // css
+          test: /^.*\.css$/,
+          use: ['style-loader', 'css-loader']
         },
         { // 图片
           test: /^.*\.(jpg|png|gif)$/,
