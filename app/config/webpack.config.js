@@ -54,18 +54,6 @@ function config(options){
               }
             }
           ]
-        },
-        { // pug
-          test: /^.*\.pug$/,
-          use: [
-            {
-              loader: 'pug-loader',
-              options: {
-                pretty: process.env.NODE_ENV === 'development',
-                name: '[name].html'
-              }
-            }
-          ]
         }
       ]
     },
