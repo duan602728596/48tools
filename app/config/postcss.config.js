@@ -1,6 +1,8 @@
 /* postcss-loader 配置 */
+const autoprefixer = require('autoprefixer');
+
 const plugins = [
-  require('autoprefixer')
+  autoprefixer
 ];
 
 module.exports = {

@@ -2,9 +2,6 @@ const path = require('path');
 const process = require('process');
 const webpack = require('webpack');
 const babelConfig = require('./babel.config');
-const cssConfig = require('./css.config');
-const sassConfig = require('./sass.config');
-const postcssConfig = require('./postcss.config');
 const manifest = require('../.dll/manifest.json');
 
 function config(options){
@@ -32,14 +29,6 @@ function config(options){
               }
             }
           ]
-        },
-        { // sass
-          test: /^.*\.sass$/,
-          use: ['style-loader', cssConfig, postcssConfig, sassConfig]
-        },
-        { // css
-          test: /^.*\.css$/,
-          use: ['style-loader', 'css-loader']
         },
         { // 图片
           test: /^.*\.(jpg|png|gif)$/,
@@ -91,11 +80,10 @@ function config(options){
   };
 
   /* 合并 */
+  conf.module.rules = conf.module.rules.concat(options.module.rules);       // 合并rules
   conf.plugins = conf.plugins.concat(options.plugins);                      // 合并插件
   conf.output = options.output;                                             // 合并输出目录
-  if('devtool' in options){                                                 // 合并source-map配置
-    conf.devtool = options.devtool;
-  }
+  if('devtool' in options) conf.devtool = options.devtool;                  // 合并source-map配置
 
   return conf;
 }
