@@ -3,6 +3,7 @@ const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
@@ -90,6 +91,7 @@ module.exports = config({
       }
     }),
     antdExtractTextPlugin,
-    sassExtractTextPlugin
+    sassExtractTextPlugin,
+    new OptimizeCssAssets()
   ]
 });
