@@ -2,7 +2,6 @@
 const path = require('path');
 const process = require('process');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -35,17 +34,6 @@ module.exports = {
       path: '.dll/manifest.json',
       name: '[name]_[hash]',
       context: __dirname
-    }),
-    // 代码压缩
-    new UglifyJSPlugin({
-      uglifyOptions: {
-        warnings: true,
-        output: {
-          comments: false,
-          beautify: false,
-          quote_style: 3
-        }
-      }
     })
   ]
 };
