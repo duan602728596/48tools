@@ -16,17 +16,17 @@ module.exports = config({
   devtool: 'cheap-module-source-map',
   module: {
     rules: [
+      { // sass
+        test: /^.*\.sass$/,
+        use: ['style-loader', cssConfig, postcssConfig, sassConfig]
+      },
+      { // css
+        test: /^.*\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
       { // pug
         test: /^.*\.pug$/,
         use: [
-          { // sass
-            test: /^.*\.sass$/,
-            use: ['style-loader', cssConfig, postcssConfig, sassConfig]
-          },
-          { // css
-            test: /^.*\.css$/,
-            use: ['style-loader', 'css-loader']
-          },
           {
             loader: 'pug-loader',
             options: {
