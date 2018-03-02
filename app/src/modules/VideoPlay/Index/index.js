@@ -1,6 +1,7 @@
 /* 新窗口播放视频 */
 import React, { Component } from 'react';
 import { Card } from 'antd';
+import flvjs from 'flvjs';
 import style from './style.sass';
 const querystring: Object = global.require('querystring');
 const path: Object = global.require('path');

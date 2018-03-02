@@ -11,6 +11,10 @@ function config(options){
       app: path.join(__dirname, '../src/app.js'),
       videoPlay: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.js')
     },
+    externals: {
+      jquery: 'window.jQuery',
+      flvjs: 'window.flvjs'
+    },
     module: {
       rules: [
         { // react & js

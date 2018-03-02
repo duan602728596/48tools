@@ -1,3 +1,4 @@
+import $ from 'jquery';
 const url: Object = global.require('url');
 const fs: Object = global.require('fs');
 const child_process: Object = global.require('child_process');

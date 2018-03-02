@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
+import $ from 'jquery';
 import { time, patchZero } from '../../../function';
 import { cutList, taskChange } from '../store/reducer';
 import computingTime from './computingTime';

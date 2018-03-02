@@ -1,6 +1,7 @@
 /* RoomId查找 */
 import React, { Component } from 'react';
 import { Input, Button, message } from 'antd';
+import $ from 'jquery';
 import style from './style.sass';
 const url: Object = global.require('url');
 

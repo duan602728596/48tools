@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Affix, Table, Popconfirm } from 'antd';
+import $ from 'jquery';
 import publicStyle from '../../publicMethod/public.sass';
 import { time } from '../../../function';
 import option from '../../publicMethod/option';

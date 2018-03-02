@@ -1,3 +1,4 @@
+import $ from 'jquery';
 const MD5: Object = global.require('md5.js');
 
 /**

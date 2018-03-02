@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button } from 'antd';
+import $ from 'jquery';
+import flvjs from 'flvjs';
 import style from './style.sass';
 import { time } from '../../../function';
 const path: Object = global.require('path');
