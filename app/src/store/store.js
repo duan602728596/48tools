@@ -1,7 +1,6 @@
 /* 全局的store */
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
 import { Map } from 'immutable';
 import { createReducer } from './reducers';
 
@@ -11,13 +10,8 @@ const reducer: Function = createReducer({});
 /* initialState */
 const $$initialState: Immutable.Map = Map();
 
-/* 日志 */
-const logger: Function = createLogger({
-  stateTransformer: (state: Object): Object => state.toJS()
-});
-
 /* 中间件 */
-const middlewares: Function = applyMiddleware(thunk, logger);
+const middlewares: Function = applyMiddleware(thunk);
 
 /* store */
 const store: Object = createStore(reducer, $$initialState, compose(middlewares));

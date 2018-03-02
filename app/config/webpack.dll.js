@@ -14,7 +14,6 @@ module.exports = {
       'redux',
       'react-redux',
       'redux-thunk',
-      'redux-logger',
       'redux-actions',
       'immutable',
       'redux-immutable',
