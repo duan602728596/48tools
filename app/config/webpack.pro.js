@@ -1,6 +1,5 @@
 /* 生产环境 */
 const path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
@@ -56,17 +55,6 @@ module.exports = config({
     ]
   },
   plugins: [
-    // 代码压缩
-    new UglifyJSPlugin({
-      uglifyOptions: {
-        warnings: true,
-        output: {
-          comments: false,
-          beautify: false,
-          quote_style: 3
-        }
-      }
-    }),
     // html模板
     new HtmlWebpackPlugin({
       filename: 'index.html',
