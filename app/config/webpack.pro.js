@@ -1,12 +1,17 @@
 /* 生产环境 */
 const path = require('path');
+const os = require('os');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
+const HappyPack = require('happypack');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
-const postcssConfig = require('./postcss.config');
+
+const happyThreadPool = HappyPack.ThreadPool({
+  size: os.cpus().length
+});
 
 const sassExtractTextPlugin = new ExtractTextPlugin({
   filename: 'style/[name]_[contenthash].css',
@@ -31,14 +36,14 @@ module.exports = config({
         test: /^.*\.sass$/,
         use: sassExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: [cssConfig, postcssConfig, sassConfig]
+          use: ['happypack/loader?id=sass']
         })
       },
       { // css
         test: /^.*\.css$/,
         use: antdExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader']
+          use: ['happypack/loader?id=css']
         })
       },
       { // pug
@@ -80,6 +85,16 @@ module.exports = config({
     }),
     antdExtractTextPlugin,
     sassExtractTextPlugin,
-    new OptimizeCssAssets()
+    new OptimizeCssAssets(),
+    new HappyPack({
+      id: 'sass',
+      loaders: [cssConfig, sassConfig],
+      threadPool: happyThreadPool
+    }),
+    new HappyPack({
+      id: 'css',
+      loaders: ['css-loader'],
+      threadPool: happyThreadPool
+    })
   ]
 });

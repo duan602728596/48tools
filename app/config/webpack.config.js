@@ -1,8 +1,14 @@
 const path = require('path');
 const process = require('process');
+const os = require('os');
 const webpack = require('webpack');
+const HappyPack = require('happypack');
 const babelConfig = require('./babel.config');
 const manifest = require('../.dll/manifest.json');
+
+const happyThreadPool = HappyPack.ThreadPool({
+  size: os.cpus().length
+});
 
 function config(options){
   const conf = {
@@ -19,7 +25,7 @@ function config(options){
       rules: [
         { // react & js
           test: /^.*\.js$/,
-          use: [babelConfig],
+          use: ['happypack/loader?id=babel'],
           exclude: /(dll\.js|appInit\.js|jquery\.min|flv\.min|node_modules)/
         },
         {
@@ -67,7 +73,12 @@ function config(options){
         context: __dirname,
         manifest: manifest
       }),
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new HappyPack({
+        id: 'babel',
+        loaders: [babelConfig],
+        threadPool: happyThreadPool
+      })
     ]
   };
 
