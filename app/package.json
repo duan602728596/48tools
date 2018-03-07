@@ -57,7 +57,7 @@
     "file-loader": "^1.1.11",
     "flv.js": "^1.4.0",
     "happypack": "^5.0.0-beta.1",
-    "html-webpack-plugin": "^3.0.4",
+    "html-webpack-plugin": "^3.0.6",
     "immutable": "^4.0.0-rc.9",
     "indexeddb-tools": "^2.0.3",
     "indexeddb-tools-redux": "^2.0.0",
