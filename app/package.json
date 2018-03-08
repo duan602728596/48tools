@@ -73,7 +73,7 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
-    "redux-actions": "^2.2.1",
+    "redux-actions": "^2.3.0",
     "redux-immutable": "^4.0.0",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
@@ -82,7 +82,7 @@
     "style-loader": "^0.20.2",
     "uglifyjs-webpack-plugin": "^1.2.2",
     "url-loader": "^1.0.1",
-    "webpack": "^4.0.1",
+    "webpack": "^4.1.1",
     "webpack-cli": "^2.0.10"
   },
   "peerDependencies": {
