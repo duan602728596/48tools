@@ -12,7 +12,8 @@
     "npmi": "npm install --production",
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
-    "eslint": "./node_modules/.bin/eslint src"
+    "eslint": "./node_modules/.bin/eslint src",
+    "gv": "node ./get-version"
   },
   "main": "./build/index.html",
   "nodejs": true,
@@ -55,7 +56,7 @@
     "eslint-plugin-react": "^7.7.0",
     "extract-text-webpack-plugin": "duan602728596/extract-text-webpack-plugin#build",
     "file-loader": "^1.1.11",
-    "flv.js": "^1.4.0",
+    "flv.js": "^1.4.2",
     "happypack": "^5.0.0-beta.1",
     "html-webpack-plugin": "^3.0.6",
     "immutable": "^4.0.0-rc.9",
