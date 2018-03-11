@@ -62,7 +62,7 @@
     "indexeddb-tools": "^2.0.3",
     "indexeddb-tools-redux": "^2.0.0",
     "jquery": "^3.3.1",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.8.0",
     "nwjs-webpack-hot-loader": "github:duan602728596/nwjs-webpack-hot-loader",
     "optimize-css-assets-webpack-plugin": "^4.0.0",
     "pug": "^2.0.1",
@@ -80,7 +80,7 @@
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
-    "uglifyjs-webpack-plugin": "^1.2.2",
+    "uglifyjs-webpack-plugin": "^1.2.3",
     "url-loader": "^1.0.1",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.11"
