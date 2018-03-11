@@ -66,6 +66,7 @@
     "node-sass": "^4.8.0",
     "nwjs-webpack-hot-loader": "github:duan602728596/nwjs-webpack-hot-loader",
     "optimize-css-assets-webpack-plugin": "^4.0.0",
+    "pre-commit": "^1.2.2",
     "pug": "^2.0.1",
     "pug-loader": "github:pugjs/pug-loader",
     "rc-queue-anim": "^1.4.1",
@@ -88,5 +89,8 @@
   },
   "peerDependencies": {
     "node-modules-clean": "^0.1.1"
+  },
+  "pre-commit": {
+    "run": ["eslint"]
   }
 }
