@@ -13,7 +13,7 @@
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
     "eslint": "./node_modules/.bin/eslint src",
-    "gv": "node ./get-version"
+    "gv": "node ./scripts/get-version"
   },
   "main": "./build/index.html",
   "nodejs": true,
