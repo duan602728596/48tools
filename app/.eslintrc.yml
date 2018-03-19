@@ -38,7 +38,7 @@ rules:
   # Best Practices
   block-scoped-var: error                             # 强制把变量的使用限制在其定义的作用域范围内
   dot-location:                                       # 强制在点号之前和之后一致的换行
-    - warn
+    - error
     - property
   eqeqeq:                                             # 要求使用 === 和 !==
     - error
@@ -60,56 +60,56 @@ rules:
   # Node.js and CommonJS
   no-new-require: error                               # 禁止调用 require 时使用 new 操作符
   # Stylistic Issues
-  array-bracket-spacing: warn                         # 强制数组方括号中使用一致的空格
-  block-spacing: warn                                 # 强制在单行代码块中使用一致的空格
-  brace-style: warn                                   # 强制在代码块中使用一致的大括号风格
+  array-bracket-spacing: error                        # 强制数组方括号中使用一致的空格
+  block-spacing: error                                # 强制在单行代码块中使用一致的空格
+  brace-style: error                                  # 强制在代码块中使用一致的大括号风格
   comma-dangle:                                       # 要求或禁止末尾逗号
     - error
     - never
-  comma-spacing: warn                                 # 强制在逗号前后使用一致的空格
+  comma-spacing: error                                # 强制在逗号前后使用一致的空格
   indent:                                             # 强制使用一致的缩进
-    - warn
+    - error
     - 2
     - SwitchCase: 1
-  jsx-quotes: warn                                    # 强制在 JSX 属性中一致地使用双引号或单引号
+  jsx-quotes: error                                   # 强制在 JSX 属性中一致地使用双引号或单引号
   key-spacing:                                        # 强制在对象字面量的属性中键和值之间使用一致的间距
-    - warn
+    - error
     - beforeColon: false
       afterColon: true
       mode: strict
   keyword-spacing: off                                # 强制在关键字前后使用一致的空格
   no-mixed-operators: error                           # 禁止混合使用不同的操作符
-  no-mixed-spaces-and-tabs: warn                      # 禁止空格和 tab 的混合缩进
+  no-mixed-spaces-and-tabs: error                     # 禁止空格和 tab 的混合缩进
   no-multiple-empty-lines:                            # 禁止出现多行空行
-    - warn
+    - error
     - max: 3
       maxEOF: 0
       maxBOF: 0
   no-trailing-spaces:                                 # 禁用行尾空格
-    - warn
+    - error
     - skipBlankLines: true
       ignoreComments: true
   no-whitespace-before-property: error                # 禁止属性前有空白
   object-curly-spacing:                               # 强制在大括号中使用一致的空格
-    - warn
+    - error
     - always
   operator-linebreak:                                 # 强制操作符使用一致的换行符
-    - warn
+    - error
     - before
   quotes:                                             # 强制使用一致的反勾号、双引号或单引号
-    - warn
+    - error
     - single
   semi:                                               # 要求或禁止使用分号代替 ASI
-    - warn
+    - error
     - always
   space-before-blocks:                                # 强制在块之前使用一致的空格
-    - warn
+    - error
     - never
   space-before-function-paren:                        # 强制在 function的左括号之前使用一致的空格
-    - warn
+    - error
     - never
   space-infix-ops: error                              # 要求操作符周围有空格
-  spaced-comment: warn                                # 强制在注释中 // 或 /* 使用一致的空格
+  spaced-comment: error                               # 强制在注释中 // 或 /* 使用一致的空格
   # ECMAScript 6
   arrow-parens:                                       # 要求箭头函数的参数使用圆括号
     - error
@@ -118,10 +118,10 @@ rules:
   no-this-before-super: error                         # 禁止在构造函数中，在调用 super() 之前使用 this 或 super
   no-var: error                                       # 要求使用 let 或 const 而不是 var
   prefer-const: error                                 # 要求使用 const 声明那些声明后不再被修改的变量
-  object-shorthand: warn                              # 要求或禁止对象字面量中方法和属性使用简写语法
+  object-shorthand: error                             # 要求或禁止对象字面量中方法和属性使用简写语法
   require-yield: error                                # 要求 generator 函数内有 yield
   template-curly-spacing:                             # 要求或禁止模板字符串中的嵌入表达式周围空格的使用
-    - warn
+    - error
     - always
   # React
   react/button-has-type: error                        # 禁止<button>元素没有显式的"type"属性
@@ -132,50 +132,50 @@ rules:
   react/jsx-boolean-value:                            # 在JSX中使用布尔属性时，可以将属性值设置为true或省略值
     - error
     - always
-  react/jsx-closing-tag-location: warn                # 验证JSX中的结束标签位置
-  react/jsx-equals-spacing: warn                      # 强制或禁止JSX属性中的等号周围的空格
+  react/jsx-closing-tag-location: error               # 验证JSX中的结束标签位置
+  react/jsx-equals-spacing: error                     # 强制或禁止JSX属性中的等号周围的空格
   react/jsx-first-prop-new-line:                      # 此规则检查所有JSX元素的第一个属性是否正确放置
-    - warn
+    - error
     - never
   react/jsx-indent:                                   # 验证JSX缩进
-    - warn
+    - error
     - 2
   react/jsx-indent-props:                             # 验证JSX中props的缩进
-    - warn
+    - error
     - 2
   react/jsx-key: error                                # 在数组或迭代器中验证JSX具有key属性
   react/jsx-no-comment-textnodes: error               # 防止将注释插入为文本节点
   react/jsx-no-duplicate-props: error                 # 在JSX中防止重复的props
   react/jsx-curly-brace-presence:                     # 强制使用大括号或不使用不必要的大括号
-    - warn
+    - error
     - never
   react/jsx-tag-spacing:                              # 验证JSX左右括号中的空格
-    - warn
+    - error
     - closingSlash: never
       beforeSelfClosing: always
       afterOpening: never
       beforeClosing: never
   # flow
   flowtype/boolean-style:                             # 强制布尔类型注释的特定样式
-    - warn
+    - error
     - boolean
   flowtype/delimiter-dangle:                          # 强制在Object和Tuple注释中一致使用尾随逗号
-    - warn
+    - error
     - never
-  flowtype/generic-spacing: warn                      # 在泛型类型注释参数中强制保持一致的间距
+  flowtype/generic-spacing: error                     # 在泛型类型注释参数中强制保持一致的间距
   flowtype/no-dupe-keys: error                        # 检查对象注释中的重复属性
   flowtype/no-primitive-constructor-types: error      # 不允许使用基本构造函数作为类型，如Boolean，Number和String
   flowtype/object-type-delimiter:                     # 强制Flow对象类型中的属性之间保持一致的分隔符
-    - warn
+    - error
     - comma
-  flowtype/require-parameter-type: warn               # 要求所有的函数参数都有类型注释
+  flowtype/require-parameter-type: error              # 要求所有的函数参数都有类型注释
   flowtype/require-return-type:                       # 要求该函数具有返回类型注释
-    - warn
+    - error
     - always
     - annotateUndefined: always
-  flowtype/require-variable-type: warn                # 要求所有变量声明符都有类型注释
+  flowtype/require-variable-type: error               # 要求所有变量声明符都有类型注释
   flowtype/semi: error                                # 在类型别名后强制使用分号
-  flowtype/space-after-type-colon: warn               # 在类型注释冒号后强制一致的间距
-  flowtype/space-before-generic-bracket: warn         # 在打开<泛型类型注释参数之前强制一致的间距
-  flowtype/space-before-type-colon: warn              # 在类型注释冒号之前强制一致的间距
-  flowtype/union-intersection-spacing: warn           # 在联合和相交类型分隔符周围实施一致的间距
+  flowtype/space-after-type-colon: error              # 在类型注释冒号后强制一致的间距
+  flowtype/space-before-generic-bracket: error        # 在泛型类型注释参数之前强制一致的间距
+  flowtype/space-before-type-colon: error             # 在类型注释冒号之前强制一致的间距
+  flowtype/union-intersection-spacing: error          # 在联合和相交类型分隔符周围实施一致的间距
