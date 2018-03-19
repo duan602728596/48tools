@@ -39,6 +39,7 @@ function format(list0: Array, list1: Array): Array{
 function paihangbang(item: Object): Promise{
   let l0: ?Array = null;
   let l1: ?Array = null;
+  /*
   return paiHang2(item.modianid, 1)  // 此处不使用Promise.all是为了避免缓存
     .then((result: Array): Promise=>{
       l0 = result;
@@ -51,6 +52,16 @@ function paihangbang(item: Object): Promise{
     .then((): Promise => paiHang2(item.modianid, 2))
     .then((result: Array): void=>{
       l1 = result;
+    })
+  */
+
+
+  return Promise.all([
+    paiHang2(item.modianid, 1),
+    paiHang2(item.modianid, 2)
+  ])
+    .then((result: Array): void=>{
+      [l0, l1] = result;
     })
     .then((): { name: string, data: Array }=>{
       const { data, all }: {
