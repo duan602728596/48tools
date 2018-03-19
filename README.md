@@ -8,19 +8,20 @@
 * 成员录播下载
 * B站视频录源
 * 视频剪切
-* <del>微打赏</del>摩点项目集资统计功能
+* 视频合并
+* 摩点项目集资统计功能
 * 公演录播回放视频下载功能
 * 官方源录制
 
 ## ROOMID获取方法
-B站直播已改版，ROOMID获取方式如下：   
+B站直播已改版，ROOMID获取方式如下：
 https://api.live.bilibili.com/room/v1/Room/room_init?id={{ ID }}，GET请求。
 
 ## 许可证
 本软件遵循**GNU General Public License v3.0**许可证。
 
 ## 技术栈
-pug + sass + ECMA8 + react + antd + webpack + nwjs。  
+pug + sass + ECMA8 + react + antd + webpack + nwjs。
 
 ## 编译命令
 * 输入命令 `$ npm start` 运行开发环境。
