@@ -112,22 +112,18 @@ class Index extends Component{
               </dd>
             </dl>
           </Col>
-          {
-            this.props.test ? (
-              <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-                <dl className={ style.linkGroup }>
-                  <dt className={ style.bNext }>
-                    <Link to="/MergeVideo" title="视频合并（测试）">
-                      <img src={ require('../image/tsl1.jpg') } alt="视频合并（测试）" />
-                    </Link>
-                  </dt>
-                  <dd>
-                    <Link to="/MergeVideo">视频合并（测试）</Link>
-                  </dd>
-                </dl>
-              </Col>
-            ) : null
-          }
+          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
+            <dl className={ style.linkGroup }>
+              <dt className={ style.bPro }>
+                <Link to="/MergeVideo" title="视频合并">
+                  <img src={ require('../image/tsl1.jpg') } alt="视频合并" />
+                </Link>
+              </dt>
+              <dd>
+                <Link to="/MergeVideo">视频合并</Link>
+              </dd>
+            </dl>
+          </Col>
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
             <dl className={ style.linkGroup }>
               <dt className={ style.bPro }>
