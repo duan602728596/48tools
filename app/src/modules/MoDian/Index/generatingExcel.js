@@ -37,55 +37,33 @@ function format(list0: Array, list1: Array): Array{
 
 // 查询排行
 function paihangbang(item: Object): Promise{
-  let l0: ?Array = null;
-  let l1: ?Array = null;
-  /*
-  return paiHang2(item.modianid, 1)  // 此处不使用Promise.all是为了避免缓存
-    .then((result: Array): Promise=>{
-      l0 = result;
-      return new Promise((resolve: Function, reject: Function): void=>{
-        setTimeout((): void=>{
-          resolve();
-        }, 12000);
-      }); // 避免缓存，所以延迟获取数据
-    })
-    .then((): Promise => paiHang2(item.modianid, 2))
-    .then((result: Array): void=>{
-      l1 = result;
-    })
-  */
-
-
   return Promise.all([
     paiHang2(item.modianid, 1),
     paiHang2(item.modianid, 2)
-  ])
-    .then((result: Array): void=>{
-      [l0, l1] = result;
-    })
-    .then((): { name: string, data: Array }=>{
-      const { data, all }: {
-        data: Array,
-        all: number
-      } = format(l0, l1);
-      data.push([null], [`总金额（元）：${ all.toFixed(2) }`]);
-      data.unshift([item.modiantitle], [null], [
-        '序号',
-        '昵称',
-        '金额（元）',
-        '时间（天）'
-      ]);
-      return {
-        name: item.modiantitle,
-        data
-      };
-    });
+  ]).then((result: Array): { name: string, data: Array }=>{
+    const { data, all }: {
+      data: Array,
+      all: number
+    } = format(result[0], result[1]);
+    data.push([null], [`总金额（元）：${ all.toFixed(2) }`]);
+    data.unshift([item.modiantitle], [null], [
+      '序号',
+      '昵称',
+      '金额（元）',
+      '时间（天）'
+    ]);
+    return {
+      name: item.modiantitle,
+      data
+    };
+  });
 }
 
 // 写入excel
 function writeExcel(title: string, buffer: any): Promise{
+  const t: string = title;
   return new Promise((resolve: Function, reject: Function): void=>{
-    fs.writeFile(`${ option.output }/【集资统计】${ title }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
+    fs.writeFile(`${ option.output }/【集资统计】${ t }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
       'flag': 'w'
     }, (err: any): void=>{
       if(err){
