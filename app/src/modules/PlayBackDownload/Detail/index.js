@@ -49,13 +49,13 @@ class Detail extends Component{
 
     return (
       <div className={ style.body }>
-        <Link to={{
+        <Link className={ style.btn } to={{
           pathname: '/PlayBackDownload',
           query: {
             current
           }
         }}>
-          <Button className={ style.btn } type="danger" icon="poweroff">返回</Button>
+          <Button type="danger" icon="poweroff">返回</Button>
         </Link>
         <div className={ style.videobox }>
           <video className={ style.video } id="videoElement" controls={ true } />
