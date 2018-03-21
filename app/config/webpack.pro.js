@@ -1,27 +1,11 @@
 /* 生产环境 */
 const path = require('path');
-const os = require('os');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
-const HappyPack = require('happypack');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
-
-const happyThreadPool = HappyPack.ThreadPool({
-  size: os.cpus().length
-});
-
-const sassExtractTextPlugin = new ExtractTextPlugin({
-  filename: 'style/[name]_[contenthash].css',
-  allChunks: true
-});
-
-const antdExtractTextPlugin = new ExtractTextPlugin({
-  filename: 'style/antd_[contenthash].css',
-  allChunks: true
-});
 
 /* 合并配置 */
 module.exports = config({
@@ -34,28 +18,11 @@ module.exports = config({
     rules: [
       { // sass
         test: /^.*\.sass$/,
-        use: sassExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['happypack/loader?id=sass']
-        })
+        use: [MiniCssExtractPlugin.loader, cssConfig, sassConfig]
       },
       { // css
         test: /^.*\.css$/,
-        use: antdExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['happypack/loader?id=css']
-        })
-      },
-      { // pug
-        test: /^.*\.pug$/,
-        use: [
-          {
-            loader: 'pug-loader',
-            options: {
-              name: '[name].html'
-            }
-          }
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   },
@@ -83,18 +50,10 @@ module.exports = config({
         minifyJS: true
       }
     }),
-    antdExtractTextPlugin,
-    sassExtractTextPlugin,
-    new OptimizeCssAssets(),
-    new HappyPack({
-      id: 'sass',
-      loaders: [cssConfig, sassConfig],
-      threadPool: happyThreadPool
+    new MiniCssExtractPlugin({
+      filename: 'style/[name]_[chunkhash].css',
+      chunkFilename: 'style/[name]_[chunkhash]_chunk.css'
     }),
-    new HappyPack({
-      id: 'css',
-      loaders: ['css-loader'],
-      threadPool: happyThreadPool
-    })
+    new OptimizeCssAssets()
   ]
 });
