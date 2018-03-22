@@ -12,8 +12,7 @@
     "npmi": "npm install --production",
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
-    "eslint": "./node_modules/.bin/eslint src",
-    "gv": "node ./scripts/get-version"
+    "eslint": "./node_modules/.bin/eslint src"
   },
   "main": "./build/index.html",
   "nodejs": true,
