@@ -16,7 +16,7 @@ const child_process: Object = global.require('child_process');
 const cheerio: Object = global.require('cheerio');
 
 const IN_LIVE_URL: Object = {
-  SNH48: 'http://live.snh48.com/Index/inlive',
+  SNH48: 'http://zhibo.ckg48.com/Index/inlive',   // 48直播地址重定向
   BEJ48: 'http://live.bej48.com/Index/inlive',
   GNZ48: 'http://live.gnz48.com/Index/inlive',
   SHY48: 'http://live.shy48.com/Index/inlive',

@@ -7,7 +7,13 @@ const process: Object = global.require('process');
 const cheerio: Object = global.require('cheerio');
 
 const execPath: string = path.dirname(process.execPath).replace(/\\/g, '/');
-
+const IN_LIVE_URL: Object = {
+  SNH48: 'http://zhibo.ckg48.com',   // 48直播地址重定向
+  BEJ48: 'http://live.bej48.com',
+  GNZ48: 'http://live.gnz48.com',
+  SHY48: 'http://live.shy48.com',
+  CKG48: 'http://live.ckg48.com'
+};
 /**
  * 使用ajax加载列表
  * @param { string } group
@@ -16,7 +22,7 @@ const execPath: string = path.dirname(process.execPath).replace(/\\/g, '/');
 export function loadList(group: string, page: number): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
     $.ajax({
-      url: `http://live.${ group.toLocaleLowerCase() }.com/Index/index/p/${ page }.html`,
+      url: `${ IN_LIVE_URL[group] }/Index/index/p/${ page }.html`,
       type: 'GET',
       dataType: 'text',
       async: true,
@@ -67,7 +73,7 @@ export function queryHtml(html: string): Object{
 export function getM3U8(group: string, id: string, quality: string): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
     $.ajax({
-      url: `http://live.${ group.toLocaleLowerCase() }.com/Index/invedio/id/${ id }`,
+      url: `${ IN_LIVE_URL[group] }/Index/invedio/id/${ id }`,
       type: 'GET',
       dataType: 'text',
       async: true,
@@ -144,7 +150,7 @@ export function saveM3U8(title: string, text: string): Promise{
       if(err){
         reject();
       }else{
-        resolve();
+        resolve(p);
       }
     });
   });
