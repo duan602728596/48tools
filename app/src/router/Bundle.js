@@ -34,12 +34,8 @@ class Bundle extends Component{
       }
     });
   }
-  render(): ?Object{
-    if(!this.state.module){
-      return null;
-    }else{
-      return this.props.children(this.state.module);
-    }
+  render(): Object{
+    return this.props.children(this.state.module ? this.state.module : null);
   }
 }
 

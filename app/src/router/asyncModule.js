@@ -9,7 +9,7 @@ import Bundle from './Bundle';
 function asyncModule(module: Function): Function{
   return (): Object=>(
     <Bundle load={ module }>
-      { (Module: Object): Object => <Module /> }
+      { (Module: Object): Object => Module ? <Module /> : null }
     </Bundle>
   );
 }
