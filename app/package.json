@@ -43,7 +43,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.44",
     "@babel/preset-flow": "^7.0.0-beta.44",
     "@babel/preset-react": "^7.0.0-beta.44",
-    "antd": "^3.4.0",
+    "antd": "^3.4.1",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^8.0.0-beta.2",
     "babel-plugin-import": "^1.7.0",
