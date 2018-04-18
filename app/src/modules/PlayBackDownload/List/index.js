@@ -153,7 +153,7 @@ class ListOne extends Component{
 @connect(state, dispatch)
 class List extends Component{
   // 组件挂载之前监听chrome下载事件
-  componentWillMount(): void{
+  UNSAFE_componentWillMount(): void{
     if(this.props.fnReady === false){
       chrome.downloads.onCreated.addListener(onChromeDownloadsCreated);
       chrome.downloads.onChanged.addListener(onChromeDownloadsChanged);

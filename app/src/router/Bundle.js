@@ -12,13 +12,8 @@ class Bundle extends Component{
       module: null
     };
   }
-  componentWillMount(): void{
+  componentDidMount(): void{
     this.load(this.props);
-  }
-  componentWillReceiveProps(nextProps: Object): void{
-    if(nextProps.load !== this.props.load){
-      this.load(nextProps);
-    }
   }
   load(props: Object): void{
     // es6 module

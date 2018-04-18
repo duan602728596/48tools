@@ -140,7 +140,7 @@ class PlayBackDownload extends Component{
     return columns;
   }
   // 组件挂载之前监听chrome下载事件
-  componentWillMount(): void{
+  UNSAFE_componentWillMount(): void{
     if(this.props.fnReady === false){
       chrome.downloads.onCreated.addListener(onChromeDownloadsCreated);
       chrome.downloads.onChanged.addListener(onChromeDownloadsChanged);
