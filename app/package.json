@@ -88,6 +88,8 @@
     "node-modules-clean": "^0.1.1"
   },
   "pre-commit": {
-    "run": ["eslint"]
+    "run": [
+      "eslint"
+    ]
   }
 }
