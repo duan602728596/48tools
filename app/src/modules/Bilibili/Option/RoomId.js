@@ -10,6 +10,7 @@ class RoomId extends Component{
     url: string,
     roomId: string
   };
+
   constructor(): void{
     super(...arguments);
 

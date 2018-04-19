@@ -37,6 +37,7 @@ class MoDian extends Component{
     modianid: string,
     modiantitle: string
   };
+
   constructor(props: Object): void{
     super(...arguments);
 

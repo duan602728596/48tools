@@ -30,6 +30,7 @@ class LiveCatchOption extends Component{
     time: number,
     humans: string
   };
+
   constructor(): void{
     super(...arguments);
 

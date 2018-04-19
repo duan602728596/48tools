@@ -80,6 +80,7 @@ class PlayBackDownload extends Component{
     keyword: string,
     current: number
   };
+
   constructor(): void{
     super(...arguments);
 

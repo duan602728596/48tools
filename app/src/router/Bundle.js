@@ -6,6 +6,7 @@ class Bundle extends Component{
   state: {
     module: ?Function
   };
+
   constructor(): void{
     super(...arguments);
     this.state = {

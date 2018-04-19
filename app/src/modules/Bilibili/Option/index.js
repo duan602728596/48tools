@@ -29,6 +29,7 @@ class BiliBiliOption extends Component{
     roomid: string,
     roomname: string
   };
+
   constructor(): void{
     super(...arguments);
 

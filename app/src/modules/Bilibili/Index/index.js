@@ -43,6 +43,7 @@ class BiliBili extends Component{
   state: {
     loading: boolean
   };
+
   constructor(): void{
     super(...arguments);
 

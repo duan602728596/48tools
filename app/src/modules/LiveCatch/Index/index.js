@@ -52,6 +52,7 @@ class LiveCatch extends Component{
   state: {
     loading: boolean
   };
+
   constructor(): void{
     super(...arguments);
 

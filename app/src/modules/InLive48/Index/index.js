@@ -47,6 +47,7 @@ class InLive48 extends Component{
     group: string,
     quality: string
   };
+
   constructor(): void{
     super(...arguments);
 

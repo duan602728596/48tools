@@ -58,6 +58,7 @@ class Cut extends Component{
     file: ?Object,
     saveFile: ?Object
   };
+
   constructor(): void{
     super(...arguments);
 

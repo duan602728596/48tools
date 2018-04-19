@@ -39,6 +39,7 @@ class ListOne extends Component{
     timer: ?number,
     percent: number
   };
+
   constructor(): void{
     super(...arguments);
 
