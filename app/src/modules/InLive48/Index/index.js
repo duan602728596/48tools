@@ -1,5 +1,5 @@
 /* 直播抓取 */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -16,21 +16,18 @@ const child_process: Object = global.require('child_process');
 const cheerio: Object = global.require('cheerio');
 
 const IN_LIVE_URL: Object = {
-  SNH48: 'http://zhibo.ckg48.com/Index/inlive',   // 48直播地址重定向
-  BEJ48: 'http://live.bej48.com/Index/inlive',
-  GNZ48: 'http://live.gnz48.com/Index/inlive',
-  SHY48: 'http://live.shy48.com/Index/inlive',
-  CKG48: 'http://live.ckg48.com/Index/inlive'
+  SNH48: 'http://zhibo.ckg48.com',   // 48直播地址重定向
+  BEJ48: 'http://live.bej48.com',
+  GNZ48: 'http://live.gnz48.com',
+  SHY48: 'http://live.shy48.com',
+  CKG48: 'http://live.ckg48.com'
 };
 
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   inLiveList: createSelector(         // 当前查询列表
     ($$state: Immutable.Map): Immutable.Map => $$state.has('inLive48') ? $$state.get('inLive48') : null,
-    ($$data: ?Immutable.Map): Array=>{
-      const inLiveList: Immutable.List | Array = $$data !== null ? $$data.get('inLiveList') : [];
-      return inLiveList instanceof Array ? inLiveList : inLiveList.toJS();
-    }
+    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('inLiveList').toJS() : []
   )
 });
 
@@ -105,10 +102,10 @@ class InLive48 extends Component{
     });
   }
   // 获取页面信息
-  getHtml(): Promise{
+  getHtml(url: string): Promise{
     return new Promise((resolve: Function, reject: Function): void=>{
       $.ajax({
-        url: IN_LIVE_URL[this.state.group],
+        url,
         type: 'GET',
         cache: true,
         dataType: 'text',
@@ -121,9 +118,34 @@ class InLive48 extends Component{
       });
     });
   }
+  // 获取直播间地址（新的直播间地址，其他地方使用旧的直播间地址）
+  getInliveUrl(): Promise{
+    return new Promise((resolve: Function, reject: Function): void=>{
+      $.ajax({
+        url: IN_LIVE_URL[this.state.group],
+        type: 'GET',
+        cache: true,
+        dataType: 'text',
+        success(data: string, status: string, xhr: XMLHttpRequest): void{
+          const xml: any = cheerio.load(data);
+          resolve(xml('.v-img a').attr('href'));
+        },
+        error(xhr: XMLHttpRequest, err: any): void{
+          reject(err);
+        }
+      });
+    });
+  }
   // 点击录制事件
   async onDownLoadLive(event: Event): Promise<void | boolean>{
-    const html: string = await this.getHtml();
+    let html: ?string = null;
+    if(this.state.group === 'SNH48'){
+      const inliveUrl: string = await this.getInliveUrl();
+      html = await this.getHtml(IN_LIVE_URL[this.state.group] + inliveUrl);
+    }else{
+      html = await this.getHtml(IN_LIVE_URL[this.state.group] + '/Index/inlive');
+    }
+
     const xml: any = cheerio.load(html);
     const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
     const urlInput: any = xml(`#${ this.state.quality }`);
@@ -145,7 +167,7 @@ class InLive48 extends Component{
     child.on('close', child_process_exit);
     child.on('error', child_process_error);
 
-    const ils: Array = this.props.inLiveList.slice();
+    const ils: Array = this.props.inLiveList;
     ils.push({
       child,
       title,
@@ -165,62 +187,63 @@ class InLive48 extends Component{
   // 删除
   onDelete(item: Object, event: Event): void{
     const index: number = this.props.inLiveList.indexOf(item);
-    const ils: Array = this.props.inLiveList.slice();
+    const ils: Array = this.props.inLiveList;
     ils.splice(index, 1);
     this.props.action.inLiveList({
       inLiveList: ils
     });
   }
-  render(): Array{
-    return [
-      /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } clearfix` }>
-          <div className={ publicStyle.fl }>
-            <Select className={ style.select }
-              value={ this.state.group }
-              dropdownMatchSelectWidth={ true }
-              dropdownClassName={ style.select }
-              onSelect={ this.onSelect.bind(this, 'group') }
-            >
-              <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
-              <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
-              <Select.Option key="GNZ48" value="GNZ48">GNZ48</Select.Option>
-              <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
-              <Select.Option key="CKG48" value="CKG48">CKG48</Select.Option>
-            </Select>
-            <Select className={ style.select }
-              value={ this.state.quality }
-              dropdownMatchSelectWidth={ true }
-              dropdownClassName={ style.select }
-              onSelect={ this.onSelect.bind(this, 'quality') }
-            >
-              <Select.Option key="gao_url" value="gao_url">高清</Select.Option>
-              <Select.Option key="chao_url" value="chao_url">超清</Select.Option>
-              <Select.Option key="liuchang_url" value="liuchang_url">流畅</Select.Option>
-            </Select>
-            <Button type="primary" icon="cloud-download" onClick={ this.onDownLoadLive.bind(this) }>录制官方源</Button>
+  render(): Object{
+    return (
+      <Fragment>
+        {/* 功能区 */}
+        <Affix className={ publicStyle.affix }>
+          <div className={ `${ publicStyle.toolsBox } clearfix` }>
+            <div className={ publicStyle.fl }>
+              <Select className={ style.select }
+                value={ this.state.group }
+                dropdownMatchSelectWidth={ true }
+                dropdownClassName={ style.select }
+                onSelect={ this.onSelect.bind(this, 'group') }
+              >
+                <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
+                <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
+                <Select.Option key="GNZ48" value="GNZ48">GNZ48</Select.Option>
+                <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
+                <Select.Option key="CKG48" value="CKG48">CKG48</Select.Option>
+              </Select>
+              <Select className={ style.select }
+                value={ this.state.quality }
+                dropdownMatchSelectWidth={ true }
+                dropdownClassName={ style.select }
+                onSelect={ this.onSelect.bind(this, 'quality') }
+              >
+                <Select.Option key="gao_url" value="gao_url">高清</Select.Option>
+                <Select.Option key="chao_url" value="chao_url">超清</Select.Option>
+                <Select.Option key="liuchang_url" value="liuchang_url">流畅</Select.Option>
+              </Select>
+              <Button type="primary" icon="cloud-download" onClick={ this.onDownLoadLive.bind(this) }>录制官方源</Button>
+            </div>
+            <div className={ publicStyle.fr }>
+              <Link to="/">
+                <Button type="danger" icon="poweroff">返回</Button>
+              </Link>
+            </div>
           </div>
-          <div className={ publicStyle.fr }>
-            <Link to="/">
-              <Button type="danger" icon="poweroff">返回</Button>
-            </Link>
-          </div>
-        </div>
-      </Affix>,
-      /* 录制列表 */
-      <Table key={ 1 }
-        className={ publicStyle.tableBox }
-        bordered={ true }
-        columns={ this.columus() }
-        rowKey={ (item: Object): string => item.title }
-        dataSource={ this.props.inLiveList }
-        pagination={{
-          pageSize: 20,
-          showQuickJumper: true
-        }}
-      />
-    ];
+        </Affix>
+        {/* 录制列表 */}
+        <Table className={ publicStyle.tableBox }
+          bordered={ true }
+          columns={ this.columus() }
+          rowKey={ (item: Object): string => item.title }
+          dataSource={ this.props.inLiveList }
+          pagination={{
+            pageSize: 20,
+            showQuickJumper: true
+          }}
+        />
+      </Fragment>
+    );
   }
 }
 
