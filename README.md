@@ -21,7 +21,7 @@ https://api.live.bilibili.com/room/v1/Room/room_init?id={{ ID }}，GET请求。
 本软件遵循**GNU General Public License v3.0**许可证。
 
 ## 技术栈
-pug + sass + ECMA8 + react + antd + webpack + nwjs。
+Pug + Sass + ECMAScript + React + AntD + Webpack + NW.js。
 
 ## 编译命令
 * 输入命令 `$ npm start` 运行开发环境。
