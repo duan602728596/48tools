@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { List } from 'immutable';
 import option from '../../publicMethod/option';
 import { db } from '../../publicMethod/initIndexedDB';
 
@@ -19,25 +20,25 @@ export const deleteBilibiliLiveRoom: Function = db.deleteAction({
 /* reducer */
 const reducer: Function = handleActions({
   [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    return $$state.set('liveList', action.payload.result);
+    return $$state.set('liveList', List(action.payload.result));
   },
   [liveList_delete]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     const arg: Object = action.payload;
     const data: Array = arg.query instanceof Array ? arg.query : [arg.query];
-    const liveList: Array = $$state.get('liveList').slice();
+    const liveList: Array = $$state.get('liveList').toJS();
     for(let i: number = liveList.length - 1; i >= 0; i--){
       if(data.indexOf(liveList[i].roomid) > -1){
         liveList.splice(i, 1);
       }
     }
-    return $$state.set('liveList', liveList);
+    return $$state.set('liveList', List(liveList));
   },
   [catching]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     const { liveList, catching }: {
       liveList: Array,
       catching: Map
     } = action.payload;
-    return $$state.set('liveList', liveList)
+    return $$state.set('liveList', List(liveList))
       .set('catching', catching);
   }
 }, {});

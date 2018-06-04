@@ -1,3 +1,4 @@
+import { List } from 'immutable';
 import store from '../../../store/store';
 import { catching } from '../store/index';
 
@@ -23,7 +24,7 @@ export function child_process_error(err: any): void{
 // 子进程关闭
 function child_process_cb(): void{
   const s: Object = store.getState().get('bilibili').get('index');
-  const [m, ll]: [Map, Array] = [s.get('catching'), s.get('liveList')];
+  const [m, ll]: [Map, Array] = [s.get('catching'), s.get('liveList').toJS()];
 
   m.forEach((value: Object, key: string): void=>{
     if(value.child.exitCode !== null || value.child.killed){
@@ -35,7 +36,7 @@ function child_process_cb(): void{
     type: catching.toString(),
     payload: {
       catching: m,
-      liveList: ll.slice()
+      liveList: List(ll)
     }
   });
 }

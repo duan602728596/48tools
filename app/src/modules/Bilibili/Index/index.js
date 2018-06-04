@@ -20,7 +20,7 @@ const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.h
 const state: Function = createStructuredSelector({
   liveList: createSelector(  // 直播间信息
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList') : []
+    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
   catching: createSelector(  // 正在直播
     getIndex,
