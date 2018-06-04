@@ -30,10 +30,7 @@ const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.h
 const state: Function = createStructuredSelector({
   cutList: createSelector(         // 剪切队列
     getState,
-    ($$data: ?Immutable.Map): Array=>{
-      const cutList: Immutable.List | Array = $$data !== null ? $$data.get('cutList') : [];
-      return cutList instanceof Array ? cutList : cutList.toJS();
-    }
+    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('cutList').toJS() : []
   ),
   cutMap: createSelector(          // 正在剪切
     getState,
@@ -244,7 +241,7 @@ class Cut extends Component{
   // 子进程关闭
   async child_process_cb(item: Object): Promise<void>{
     this.props.action.cutList({
-      cutList: this.props.cutList.slice()
+      cutList: this.props.cutList
     });
     message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
   }
@@ -300,7 +297,7 @@ class Cut extends Component{
 
     this.props.action.taskChange({
       cutMap: this.props.cutMap,
-      cutList: this.props.cutList.slice()
+      cutList: this.props.cutList
     });
 
     message.info(`开始剪切【${ item.file.path } => ${ item.saveFile.path }】`);

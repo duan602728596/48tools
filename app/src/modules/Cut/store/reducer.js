@@ -1,12 +1,12 @@
 import { createAction, handleActions } from 'redux-actions';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  cutList: Array,
+  cutList: Immutable.List,
   cutMap: Map
 } = {
-  cutList: [],
+  cutList: List([]),
   cutMap: new Map()
 };
 
@@ -17,10 +17,10 @@ export const taskChange: Function = createAction('剪切任务');   // 剪切任
 /* reducer */
 const reducer: Function = handleActions({
   [cutList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    return $$state.set('cutList', action.payload.cutList);
+    return $$state.set('cutList', List(action.payload.cutList));
   },
   [taskChange]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    return $$state.set('cutList', action.payload.cutList)
+    return $$state.set('cutList', List(action.payload.cutList))
       .set('cutMap', action.payload.cutMap);
   }
 }, fromJS(initData));
