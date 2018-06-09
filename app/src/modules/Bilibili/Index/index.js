@@ -15,7 +15,8 @@ const child_process: Object = global.require('child_process');
 const http: Object = global.require('http');
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('bilibili') ? $$state.get('bilibili').get('index') : null;
+const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('bilibili')
+  ? $$state.get('bilibili').get('index') : null;
 
 const state: Function = createStructuredSelector({
   liveList: createSelector(  // 直播间信息

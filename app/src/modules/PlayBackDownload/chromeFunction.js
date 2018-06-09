@@ -61,7 +61,10 @@ export function onChromeDownloadsCreated(infor: Object): void{
     state: 0
   });
   // 更新store内的数据
-  downloadListAction({
-    downloadList
+  store.dispatch({
+    type: downloadListAction.toString(),
+    payload: {
+      downloadList
+    }
   });
 }

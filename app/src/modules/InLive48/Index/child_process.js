@@ -22,11 +22,11 @@ export function child_process_error(err: any): void{
 
 // 子进程关闭
 function child_process_cb(): void{
-  const s: Array = store.getState().get('inLive48').get('inLiveList');
+  const s: Array = store.getState().get('inLive48').get('inLiveList').toJS();
   store.dispatch({
     type: inLiveList.toString(),
     payload: {
-      inLiveList: s.slice()
+      inLiveList: s
     }
   });
 }

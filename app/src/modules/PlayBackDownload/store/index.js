@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { List } from 'immutable';
 
 /* Action */
 export const playBackList: Function = createAction('录播列表');
@@ -10,7 +11,7 @@ const reducer: Function = handleActions({
       giftUpdTime: number,
       playBackList: Array
     } = action.payload;
-    return $$state.set('playBackList', playBackList)
+    return $$state.set('playBackList', List(playBackList))
       .set('giftUpdTime', giftUpdTime);
   }
 }, {});

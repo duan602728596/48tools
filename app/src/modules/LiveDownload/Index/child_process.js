@@ -22,11 +22,11 @@ export function child_process_error(err: any): void{
 
 // 子进程关闭
 function child_process_cb(): void{
-  const s: Array = store.getState().get('liveDownload').get('downloadList');
+  const s: Array = store.getState().get('liveDownload').get('downloadList').toJS();
   store.dispatch({
     type: downloadList.toString(),
     payload: {
-      downloadList: s.slice()
+      downloadList: s
     }
   });
 }

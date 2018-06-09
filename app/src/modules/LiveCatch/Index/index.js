@@ -18,12 +18,13 @@ const querystring: Object = global.require('querystring');
 const gui: Object = global.require('nw.gui');
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveCatch') ? $$state.get('liveCatch').get('index') : null;
+const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveCatch')
+  ? $$state.get('liveCatch').get('index') : null;
 
 const state: Function = createStructuredSelector({
   liveList: createSelector(         // 当前直播
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList') : []
+    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
   liveCatch: createSelector(        // 当前直播录制
     getIndex,
@@ -189,7 +190,7 @@ class LiveCatch extends Component{
     });
     this.props.action.liveChange({
       map: this.props.liveCatch,
-      liveList: this.props.liveList.slice()
+      liveList: this.props.liveList
     });
   }
   // 停止录制视频

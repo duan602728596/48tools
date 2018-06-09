@@ -35,10 +35,7 @@ function child_process_error(err: any): void{
 const state: Function = createStructuredSelector({
   mergeList: createSelector(         // 当前公演录播列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('mergeVideo') ? $$state.get('mergeVideo') : null,
-    ($$data: ?Immutable.Map): Array=>{
-      const mergeList: Immutable.List | Array = $$data !== null ? $$data.get('mergeList') : [];
-      return mergeList instanceof Array ? mergeList : mergeList.toJS();
-    }
+    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('mergeList').toJS() : []
   )
 });
 
@@ -110,7 +107,7 @@ class Merge extends Component{
   onDelete(index: number, event: Event): void{
     this.props.mergeList.splice(index, 1);
     this.props.action.mergeList({
-      mergeList: this.props.mergeList.slice()
+      mergeList: this.props.mergeList
     });
   }
   // 合并
@@ -157,7 +154,7 @@ class Merge extends Component{
     this.props.mergeList[index - 1] = this.props.mergeList[index];
     this.props.mergeList[index] = middle;
     this.props.action.mergeList({
-      mergeList: this.props.mergeList.slice()
+      mergeList: this.props.mergeList
     });
   }
   // 视频下移
@@ -166,7 +163,7 @@ class Merge extends Component{
     this.props.mergeList[index + 1] = this.props.mergeList[index];
     this.props.mergeList[index] = middle;
     this.props.action.mergeList({
-      mergeList: this.props.mergeList.slice()
+      mergeList: this.props.mergeList
     });
   }
   render(): Array{

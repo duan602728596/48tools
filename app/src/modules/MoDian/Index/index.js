@@ -15,10 +15,7 @@ import generatingExcel from './generatingExcel';
 const state: Function = createStructuredSelector({
   modianList: createSelector(         // 当前查询列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('modian') ? $$state.get('modian') : null,
-    ($$data: ?Immutable.Map): Array=>{
-      const modianList: Immutable.List | Array = $$data !== null ? $$data.get('modianList') : [];
-      return modianList instanceof Array ? modianList : modianList.toJS();
-    }
+    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('modianList').toJS() : []
   )
 });
 
@@ -68,7 +65,14 @@ class MoDian extends Component{
         width: '33%',
         render: (text: any, item: Object): Array=>{
           return [
-            <Button key={ 0 } className={ publicStyle.mr10 } type="primary" icon="file-excel" onClick={ this.onToExcel.bind(this, item) }>导出EXCEL</Button>,
+            <Button key={ 0 }
+              className={ publicStyle.mr10 }
+              type="primary"
+              icon="file-excel"
+              onClick={ this.onToExcel.bind(this, item) }
+            >
+              导出EXCEL
+            </Button>,
             <Popconfirm key={ 1 } title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
               <Button type="danger" icon="delete">删除</Button>
             </Popconfirm>
@@ -100,7 +104,7 @@ class MoDian extends Component{
   // 删除
   onDelete(item: Object, event: Event): void{
     const index: number = this.props.modianList.indexOf(item);
-    const c: Array = this.props.modianList.slice();
+    const c: Array = this.props.modianList;
     c.splice(index, 1);
     this.props.action.modianList({
       modianList: c

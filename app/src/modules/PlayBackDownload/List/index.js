@@ -13,7 +13,8 @@ import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFun
 const fs: Object = global.require('fs');
 
 /* 初始化数据 */
-const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload') ? $$state.get('playBackDownload') : null;
+const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload')
+  ? $$state.get('playBackDownload') : null;
 
 const state: Function = createStructuredSelector({
   downloadList: createSelector(         // 下载列表

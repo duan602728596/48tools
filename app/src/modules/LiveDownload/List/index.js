@@ -14,10 +14,7 @@ import { downloadList } from '../store/reducer';
 const state: Function = createStructuredSelector({
   downloadList: createSelector(     // 下载列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
-    ($$data: ?Immutable.Map): Array=>{
-      const downloadList: Immutable.List | Array = $$data !== null ? $$data.get('downloadList') : [];
-      return downloadList instanceof Array ? downloadList : downloadList.toJS();
-    }
+    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('downloadList').toJS() : []
   )
 });
 
@@ -39,7 +36,7 @@ class List extends Component{
       }
     }
     this.props.action.downloadList({
-      downloadList: this.props.downloadList.slice()
+      downloadList: this.props.downloadList
     });
   }
   // 取消下载

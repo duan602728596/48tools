@@ -32,6 +32,7 @@ output/*.mp4
 output/*.m3u8
 output/*.xls
 output/*.xlsx
+output/*.txt
 
 # webstorm
 .idea

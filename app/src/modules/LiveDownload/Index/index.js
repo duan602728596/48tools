@@ -16,12 +16,13 @@ import option from '../../publicMethod/option';
 const child_process: Object = global.require('child_process');
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload').get('index') : null;
+const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload')
+  ? $$state.get('liveDownload').get('index') : null;
 
 const state: Function = createStructuredSelector({
   liveList: createSelector(         // 当前公演录播列表
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList') : []
+    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
   page: createSelector(             // 当前页码
     getIndex,
@@ -37,10 +38,7 @@ const state: Function = createStructuredSelector({
   ),
   downloadList: createSelector(     // 下载列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
-    ($$data: ?Immutable.Map): Array=>{
-      const downloadList: Immutable.List | Array = $$data !== null ? $$data.get('downloadList') : [];
-      return downloadList instanceof Array ? downloadList : downloadList.toJS();
-    }
+    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('downloadList').toJS() : []
   )
 });
 
@@ -128,6 +126,7 @@ class LiveDownload extends Component{
       });
       message.success('加载成功');
     }catch(err){
+      console.error(err);
       message.error('加载失败');
     }
     this.setState({
@@ -166,7 +165,7 @@ class LiveDownload extends Component{
         child
       });
       this.props.action.downloadList({
-        downloadList: this.props.downloadList.slice()
+        downloadList: this.props.downloadList
       });
       message.info('正在下载！');
     }catch(err){

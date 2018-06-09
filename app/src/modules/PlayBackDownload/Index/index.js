@@ -41,13 +41,15 @@ function filter(array: Array, keyword: ?RegExp, key: string, from: number, to: n
 }
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload') ? $$state.get('playBackDownload').get('index') : null;
-const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload') ? $$state.get('playBackDownload') : null;
+const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload')
+  ? $$state.get('playBackDownload').get('index') : null;
+const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload')
+  ? $$state.get('playBackDownload') : null;
 
 const state: Function = createStructuredSelector({
   playBackList: createSelector(         // 当前录播
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('playBackList') ? $$data.get('playBackList') : []
+    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('playBackList') ? $$data.get('playBackList').toJS() : []
   ),
   giftUpdTime: createSelector(          // 加载时间戳
     getIndex,

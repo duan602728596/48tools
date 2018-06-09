@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
+import { List } from 'immutable';
 
 /* Action */
 export const liveList: Function = createAction('公演录播列表');
@@ -12,21 +13,21 @@ type ll = {
   secondTitle: string
 }[];
 const reducer: Function = handleActions({
-  [liveList]: (state: Object, action: Object): Object=>{
-    return state.set('liveList', action.payload.liveList);
+  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+    return $$state.set('liveList', List(action.payload.liveList));
   },
-  [liveListInit]: (state: Object, action: Object): Object=>{
+  [liveListInit]: ($$state: Object, action: Object): Immutable.Map=>{
     const { liveList, page, pageLen }: {
       liveList: ll,
       page: number,
       pageLen: number
     } = action.payload;
-    return state.set('liveList', liveList)
+    return $$state.set('liveList', List(liveList))
       .set('page', page)
       .set('pageLen', pageLen);
   },
-  [changeGroup]: (state: Object, action: Object): Object=>{
-    return state.set('group', action.payload.group);
+  [changeGroup]: ($$state: Object, action: Object): Immutable.Map=>{
+    return $$state.set('group', action.payload.group);
   }
 }, {});
 

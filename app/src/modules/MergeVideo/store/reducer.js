@@ -1,11 +1,11 @@
 import { createAction, handleActions } from 'redux-actions';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  mergeList: Array
+  mergeList: Immutable.List
 } = {
-  mergeList: []
+  mergeList: List([])
 };
 
 /* Action */
@@ -14,7 +14,7 @@ export const mergeList: Function = createAction('合并视频列表');      // �
 /* reducer */
 const reducer: Function = handleActions({
   [mergeList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    return $$state.set('mergeList', action.payload.mergeList);
+    return $$state.set('mergeList', List(action.payload.mergeList));
   }
 }, fromJS(initData));
 
