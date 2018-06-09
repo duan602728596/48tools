@@ -53,8 +53,6 @@ rules:
   no-self-assign: error                               # 禁止自我赋值
   no-self-compare: error                              # 禁止自身比较
   no-sequences: error                                 # 禁用逗号操作符
-  no-unused-expressions: error                        # 禁止出现未使用过的表达式
-  no-unused-labels: error                             # 禁用出现未使用过的标
   # Variables
   no-delete-var: error                                # 禁止删除变量
   # Node.js and CommonJS

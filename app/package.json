@@ -5,6 +5,7 @@
   "license": "GNU General Public License v3.0",
   "scripts": {
     "start": "npm run cleanbuild && cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dev.js --watch",
+    "macdev": "../nwjs.app/Contents/MacOS/nwjs .",
     "build": "npm run cleanbuild && cross-env NODE_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.pro.js --progress",
     "cleanbuild": "./node_modules/.bin/rimraf build",
     "devdll": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config ./config/webpack.dll.js --progress",

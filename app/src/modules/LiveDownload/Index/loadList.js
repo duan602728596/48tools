@@ -3,10 +3,9 @@ const url: Object = global.require('url');
 const fs: Object = global.require('fs');
 const child_process: Object = global.require('child_process');
 const path: Object = global.require('path');
-const process: Object = global.require('process');
 const cheerio: Object = global.require('cheerio');
+import { execPath } from '../../../function';
 
-const execPath: string = path.dirname(process.execPath).replace(/\\/g, '/');
 const IN_LIVE_URL: Object = {
   SNH48: 'http://zhibo.ckg48.com',   // 48直播地址重定向
   BEJ48: 'http://live.bej48.com',
@@ -132,6 +131,8 @@ export function downloadM3U8(m3u8Url: string): Promise{
     return m3u8.replace(/\n[^#\n]*\n/g, (str: string): string=>{
       return '\n' + host + str.replace(/\n/g, '') + '\n';
     });
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }
 
@@ -148,10 +149,12 @@ export function saveM3U8(title: string, text: string): Promise{
       flag: 'w'
     }, (err: any): void=>{
       if(err){
-        reject();
+        reject(err);
       }else{
         resolve(p);
       }
     });
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }

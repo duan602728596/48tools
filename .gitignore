@@ -14,8 +14,16 @@ pnacl
 locales
 swiftshader
 
+# nwjs mac
+nwjs.app
+chromedriver
+minidump_stackwalk
+nwjc
+payload
+
 # dependent
 dependent/ffmpeg/ffmpeg.exe
+dependent/ffmpeg/ffmpeg
 dependent/ffmpeg/licenses
 
 # output
