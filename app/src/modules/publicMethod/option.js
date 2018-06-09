@@ -1,5 +1,10 @@
 /* 配置文件 */
-import { execPath } from '../../function';
+const fs: Object = global.require('fs');
+const path: Object = global.require('path');
+import { execPath, type } from '../../function';
+
+// 获取downloads文件夹路径
+const username: string = fs.readdirSync('/Users');
 
 type inforMap = {
   name: string,
@@ -53,7 +58,7 @@ const option: {
   },
   // ffmpeg
   ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg`,
-  output: `${ execPath }/output`
+  output: type === 'Darwin' ? path.join('/Users', username[username.length - 1], '/Downloads') : `${ execPath }/output`
 };
 
 export default option;

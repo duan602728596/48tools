@@ -55,15 +55,14 @@ export function time(modules: string, timeStr: ?number): string{
 /**
  * 获取运行地址
  */
+export const type: string = os.type();
 export const execPath: string = do{
-  const type: string = os.platform();
   let ep: string = '';
   switch(type){
     // mac
-    case 'darwin':
+    case 'Darwin':
       const p: string[] = process.execPath.match(/^[^\.]+\.app/)[0].split(/\//);
-      p.pop();
-      ep = p.join('/');
+      ep = path.join(p.join('/'), 'Contents');
       break;
     // win32
     default:

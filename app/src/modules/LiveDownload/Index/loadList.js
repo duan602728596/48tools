@@ -1,10 +1,10 @@
 import $ from 'jquery';
+import option from '../../publicMethod/option';
 const url: Object = global.require('url');
 const fs: Object = global.require('fs');
 const child_process: Object = global.require('child_process');
 const path: Object = global.require('path');
 const cheerio: Object = global.require('cheerio');
-import { execPath } from '../../../function';
 
 const IN_LIVE_URL: Object = {
   SNH48: 'http://zhibo.ckg48.com',   // 48直播地址重定向
@@ -142,7 +142,7 @@ export function downloadM3U8(m3u8Url: string): Promise{
  * @param { string } text : 保存的文本
  */
 export function saveM3U8(title: string, text: string): Promise{
-  const p: string = path.join(execPath, `/output/${ title }.m3u8`).replace(/\\/g, '/');
+  const p: string = path.join(option.output, `/${ title }.m3u8`).replace(/\\/g, '/');
   return new Promise((resolve: Function, reject: Function): void=>{
     fs.writeFile(p, text, {
       encoding: 'utf8',

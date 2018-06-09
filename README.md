@@ -42,7 +42,7 @@ Pug + Sass + ECMAScript + React + AntD + Webpack + NW.js。
   * app: 源代码
   * dependent: 依赖的文件存储目录
     * ffmpeg: ffmpeg（20180124版本在windows上会出现错误，导致无法运行命令，错误代码3221225781，应避免使用此版本。）
-  * output: 视频、Excel等文件的输出目录
+  * output: window环境下的视频、Excel等文件的输出目录；mac下输出到**下载**目录
 
 ## 关于dll
 无论是开发环境还是生产环境，首先要编译dll文件，将公共模块提取出来。
