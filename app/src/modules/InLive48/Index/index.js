@@ -26,7 +26,7 @@ const IN_LIVE_URL: Object = {
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
   inLiveList: createSelector(         // 当前查询列表
-    ($$state: Immutable.Map): Immutable.Map => $$state.has('inLive48') ? $$state.get('inLive48') : null,
+    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('inLive48') ? $$state.get('inLive48') : null,
     ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('inLiveList').toJS() : []
   )
 });
