@@ -3,9 +3,6 @@ const fs: Object = global.require('fs');
 const path: Object = global.require('path');
 import { execPath, type } from '../../function';
 
-// 获取downloads文件夹路径
-const username: string = fs.readdirSync('/Users');
-
 type inforMap = {
   name: string,
   key: string,
@@ -58,7 +55,15 @@ const option: {
   },
   // ffmpeg
   ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg`,
-  output: type === 'Darwin' ? path.join('/Users', username[username.length - 1], '/Downloads') : `${ execPath }/output`
+  output: do{
+    if(type === 'Darwin'){
+      // 获取downloads文件夹路径
+      const username: string = fs.readdirSync('/Users');
+      path.join('/Users', username[username.length - 1], '/Downloads');
+    }else{
+      `${ execPath }/output`;
+    }
+  }
 };
 
 export default option;

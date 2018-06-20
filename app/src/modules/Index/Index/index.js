@@ -160,6 +160,26 @@ class Index extends Component{
               </dd>
             </dl>
           </Col>
+          {
+            do{
+              if(this.props.test){
+                (
+                  <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
+                    <dl className={ style.linkGroup }>
+                      <dt className={ style.bNext }>
+                        <Link to="/AvDownload" title="B站视频下载">
+                          <img src={ require('../image/ler1.jpg') } alt="B站视频下载" />
+                        </Link>
+                      </dt>
+                      <dd>
+                        <Link to="/AvDownload">B站视频下载</Link>
+                      </dd>
+                    </dl>
+                  </Col>
+                );
+              }
+            }
+          }
         </Row>
       </div>
     );

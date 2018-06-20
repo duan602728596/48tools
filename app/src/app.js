@@ -4,7 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import Routers from './router/routers';
+import Routers from './router/Routers';
 import store from './store/store';
 import './common.sass';
 

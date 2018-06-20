@@ -10,6 +10,7 @@ import MergeVideo from 'bundle-loader?lazy&name=mergevideo!../modules/MergeVideo
 import MoDian from 'bundle-loader?lazy&name=modian!../modules/MoDian/Layout';
 import LiveDownload from 'bundle-loader?lazy&name=livedownload!../modules/LiveDownload/Layout';
 import InLive48 from 'bundle-loader?lazy&name=inlive48!../modules/InLive48/Layout';
+import AvDownload from 'bundle-loader?lazy&name=avdownload!../modules/AvDownload/Layout';
 
 const LiveCatchBundle: Function = asyncModule(LiveCatch);
 const PlayBackDownloadBundle: Function = asyncModule(PlayBackDownload);
@@ -19,9 +20,10 @@ const MergeVideoBundle: Function = asyncModule(MergeVideo);
 const MoDianBundle: Function = asyncModule(MoDian);
 const LiveDownloadBundle: Function = asyncModule(LiveDownload);
 const InLive48Bundle: Function = asyncModule(InLive48);
+const AvDownloadBundle: Function = asyncModule(AvDownload);
 
 /* 路由模块 */
-class Router extends Component{
+class Routers extends Component{
   render(): Object{
     return (
       <Switch>
@@ -43,9 +45,11 @@ class Router extends Component{
         <Route path="/LiveDownload" component={ LiveDownloadBundle } />
         {/* 公演官方直播抓取 */}
         <Route path="/InLive48" component={ InLive48Bundle } />
+        {/* B站的视频下载 */}
+        <Route path="/AvDownload" component={ AvDownloadBundle } />
       </Switch>
     );
   }
 }
 
-export default Router;
+export default Routers;
