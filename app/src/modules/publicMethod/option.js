@@ -1,7 +1,29 @@
 /* 配置文件 */
 const fs: Object = global.require('fs');
 const path: Object = global.require('path');
-import { execPath, type } from '../../function';
+const process: Object = global.require('process');
+const os: Object = global.require('os');
+
+/**
+ * 获取运行地址
+ */
+export const type: string = os.type();
+export const execPath: string = do{
+  let ep: string = '';
+  switch(type){
+    // mac
+    case 'Darwin':
+      const p: string[] = process.execPath.match(/^[^\.]+\.app/);
+      const p2: [] = p[0].split(/\//);
+      ep = path.join(p2.join('/'), 'Contents');
+      break;
+    // win32
+    default:
+      ep = path.dirname(process.execPath).replace(/\\/g, '/');
+      break;
+  }
+  ep;
+};
 
 type inforMap = {
   name: string,

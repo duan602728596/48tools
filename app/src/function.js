@@ -1,7 +1,4 @@
 /* 公共函数 */
-const path: Object = global.require('path');
-const process: Object = global.require('process');
-const os: Object = global.require('os');
 
 /**
  * 将对象转换成一个数组
@@ -51,23 +48,3 @@ export function time(modules: string, timeStr: ?number): string{
     .replace(/m{2}/, patchZero(mm))
     .replace(/s{2}/, patchZero(ss));
 }
-
-/**
- * 获取运行地址
- */
-export const type: string = os.type();
-export const execPath: string = do{
-  let ep: string = '';
-  switch(type){
-    // mac
-    case 'Darwin':
-      const p: string[] = process.execPath.match(/^[^\.]+\.app/)[0].split(/\//);
-      ep = path.join(p.join('/'), 'Contents');
-      break;
-    // win32
-    default:
-      ep = path.dirname(process.execPath).replace(/\\/g, '/');
-      break;
-  }
-  ep;
-};
