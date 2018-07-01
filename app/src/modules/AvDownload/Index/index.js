@@ -1,4 +1,5 @@
 import React, { Component, Fragment, createRef } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -31,6 +32,11 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @connect(state, dispatch)
 class AvDownload extends Component{
+  static propTypes: Object = {
+    avList: PropTypes.array,
+    action: PropTypes.objectOf(PropTypes.func)
+  };
+
   // 配置
   columus(): Array{
     const columus: Array = [
@@ -150,7 +156,7 @@ class AvDownload extends Component{
               break;
             }
           }
-          resolve(infor.durl[0].url);
+          resolve(infor.durl);
         },
         error(err: any): void{
           reject(err);
@@ -198,15 +204,21 @@ class AvDownload extends Component{
       if(!/^[0-9]+$/.test(page)){
         page = 1;
       }
-      const uri: string = await this.getUrl(number, page);
+      const durl: { url: string }[] = await this.getUrl(number, page);
+      const arr: [] = [];
+      for(let i: number = 0, j: number = durl.length; i < j; i++){
+        const item: Object = durl[i];
+        arr.push({
+          number,
+          page,
+          index: i,
+          uri: item.url,
+          time: new Date().getTime(),
+          status: 0
+        });
+      }
       const avList: [] = this.props.avList;
-      avList.push({
-        number,
-        page,
-        uri,
-        time: new Date().getTime(),
-        status: 0
-      });
+      avList.push(...arr);
       this.props.action.avList({
         avList
       });
