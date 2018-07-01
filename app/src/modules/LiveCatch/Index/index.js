@@ -1,5 +1,6 @@
 /* 口袋48直播抓取 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -47,11 +48,17 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-@withRouter
 @connect(state, dispatch)
 class LiveCatch extends Component{
   state: {
     loading: boolean
+  };
+
+  static propTypes: Object = {
+    liveList: PropTypes.array,
+    liveCatch: PropTypes.object,
+    autoRecording: PropTypes.number,
+    action: PropTypes.objectOf(PropTypes.func)
   };
 
   constructor(): void{
@@ -285,7 +292,10 @@ class LiveCatch extends Component{
     }
     this.autoRecordingProcess(humans ? humans : []);
     this.props.action.autoRecording({
-      autoRecording: global.setInterval(this.autoRecordingProcess.bind(this), (time ? time : 1) * 60 * (10 ** 3), humans ? humans : [])
+      autoRecording: global.setInterval(
+        this.autoRecordingProcess.bind(this),
+        (time ? time : 1) * 60 * (10 ** 3), humans ? humans : []
+      )
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）
@@ -323,9 +333,21 @@ class LiveCatch extends Component{
             {
               this.props.autoRecording
                 ? (
-                  <Button className={ publicStyle.mr10 } type="danger" icon="close-square" onClick={ this.onStopAutoRecording.bind(this) }>停止自动录制</Button>
+                  <Button className={ publicStyle.mr10 }
+                    type="danger"
+                    icon="close-square"
+                    onClick={ this.onStopAutoRecording.bind(this) }
+                  >
+                    停止自动录制
+                  </Button>
                 ) : (
-                  <Button className={ publicStyle.mr10 } type="primary" icon="play-circle" onClick={ this.onAutoRecording.bind(this) }>开始自动录制</Button>
+                  <Button className={ publicStyle.mr10 }
+                    type="primary"
+                    icon="play-circle"
+                    onClick={ this.onAutoRecording.bind(this) }
+                  >
+                    开始自动录制
+                  </Button>
                 )
             }
             <Link to="/LiveCatch/Option">

@@ -1,9 +1,10 @@
 /* B站直播间添加 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Input, Button, message, Spin, Form } from 'antd';
 import style from './style.sass';
 import { putBilibiliLiveRoom } from '../store/option';
@@ -19,7 +20,6 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-@withRouter
 @Form.create()
 @connect(state, dispatch)
 class BiliBiliOption extends Component{
@@ -28,6 +28,11 @@ class BiliBiliOption extends Component{
     btnLoading: boolean,
     roomid: string,
     roomname: string
+  };
+
+  static propTypes: Object = {
+    action: PropTypes.objectOf(PropTypes.func),
+    form: PropTypes.object
   };
 
   constructor(): void{

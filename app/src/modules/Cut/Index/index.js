@@ -1,9 +1,10 @@
 /* 视频剪切 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
 import $ from 'jquery';
 import { time, patchZero } from '../../../function';
@@ -46,7 +47,6 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-@withRouter
 @Form.create()
 @connect(state, dispatch)
 class Cut extends Component{
@@ -54,6 +54,13 @@ class Cut extends Component{
   state: {
     file: ?Object,
     saveFile: ?Object
+  };
+
+  static propTypes: Object = {
+    cutList: PropTypes.array,
+    cutMap: PropTypes.object,
+    action: PropTypes.objectOf(PropTypes.func),
+    form: PropTypes.object
   };
 
   constructor(): void{

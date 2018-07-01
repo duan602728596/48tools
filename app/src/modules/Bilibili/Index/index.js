@@ -1,9 +1,10 @@
 /* B站直播抓取 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../store/index';
 import publicStyle from '../../publicMethod/public.sass';
@@ -38,11 +39,16 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-@withRouter
 @connect(state, dispatch)
 class BiliBili extends Component{
   state: {
     loading: boolean
+  };
+
+  static propTypes: Object = {
+    liveList: PropTypes.array,
+    catching: PropTypes.object,
+    action: PropTypes.objectOf(PropTypes.func)
   };
 
   constructor(): void{

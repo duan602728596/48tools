@@ -1,5 +1,6 @@
 /* 下载列表 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -27,6 +28,11 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @connect(state, dispatch)
 class List extends Component{
+  static propTypes: Object = {
+    downloadList: PropTypes.array,
+    action: PropTypes.objectOf(PropTypes.func)
+  };
+
   // 清除列表
   onClear(event: Event): void{
     for(let i: number = this.props.downloadList.length - 1; i >= 0; i--){

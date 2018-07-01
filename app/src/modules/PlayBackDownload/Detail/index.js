@@ -1,5 +1,6 @@
 /* 查看录播详细信息 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { Button } from 'antd';
 import $ from 'jquery';
@@ -10,6 +11,11 @@ const path: Object = global.require('path');
 
 @withRouter
 class Detail extends Component{
+  static propTypes: Object = {
+    location: PropTypes.object,
+    history: PropTypes.object
+  };
+
   UNSAFE_componentWillMount(): void{
     // 如果没有传参，就返回到“/PlayBackDownload”页面
     if(!('query' in this.props.location && 'detail' in this.props.location.query)){

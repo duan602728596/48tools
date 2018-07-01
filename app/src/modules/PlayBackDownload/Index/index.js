@@ -1,5 +1,6 @@
 /* 口袋48录播下载 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -83,13 +84,23 @@ class PlayBackDownload extends Component{
     current: number
   };
 
+  static propTypes: Object = {
+    playBackList: PropTypes.array,
+    giftUpdTime: PropTypes.number,
+    downloadList: PropTypes.object,
+    fnReady: PropTypes.bool,
+    action: PropTypes.objectOf(PropTypes.func),
+    location: PropTypes.object
+  };
+
   constructor(): void{
     super(...arguments);
 
     this.state = {
       loading: false,    // 加载动画
       keyword: '',       // 搜索关键字
-      current: 'query' in this.props.location && 'current' in this.props.location.query ? this.props.location.query.current : 1 // 分页
+      current: 'query' in this.props.location && 'current' in this.props.location.query
+        ? this.props.location.query.current : 1 // 分页
     };
   }
   // 表格配置

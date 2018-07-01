@@ -1,5 +1,6 @@
 /* 直播视频下载 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -56,6 +57,15 @@ const dispatch: Function = (dispatch: Function): Object=>({
 class LiveDownload extends Component{
   state: {
     loading: boolean
+  };
+
+  static propTypes: Object = {
+    liveList: PropTypes.array,
+    page: PropTypes.number,
+    pageLen: PropTypes.number,
+    group: PropTypes.string,
+    downloadList: PropTypes.array,
+    action: PropTypes.objectOf(PropTypes.func)
   };
 
   constructor(): void{
@@ -138,7 +148,8 @@ class LiveDownload extends Component{
     try{
       const m3u8Url: string = await getM3U8(this.props.group, item.id, quality);   // m3u8地址
       const dlm: string = await downloadM3U8(m3u8Url);                             // m3u8文本
-      const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`.replace(/\s/g, '');
+      const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`
+        .replace(/\s/g, '');
       const pSave: string = await saveM3U8(title, dlm);                            // m3u8本地保存路径
       const child: Object = child_process.spawn(option.ffmpeg, [
         '-protocol_whitelist',

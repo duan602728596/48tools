@@ -1,9 +1,10 @@
 /* 微打赏统计 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm } from 'antd';
 import { modianList } from '../store/reducer';
 import style from './style.sass';
@@ -26,13 +27,17 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-@withRouter
 @connect(state, dispatch)
 class MoDian extends Component{
   state: {
     btnLoading: boolean,
     modianid: string,
     modiantitle: string
+  };
+
+  static propTypes: Object = {
+    modianList: PropTypes.array,
+    action: PropTypes.objectOf(PropTypes.func)
   };
 
   constructor(props: Object): void{

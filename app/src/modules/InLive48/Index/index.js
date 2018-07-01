@@ -1,5 +1,6 @@
 /* 直播抓取 */
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -43,6 +44,11 @@ class InLive48 extends Component{
   state: {
     group: string,
     quality: string
+  };
+
+  static propTypes: Object = {
+    inLiveList: PropTypes.array,
+    action: PropTypes.objectOf(PropTypes.func)
   };
 
   constructor(): void{

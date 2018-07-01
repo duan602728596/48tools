@@ -1,9 +1,10 @@
 /* 口袋48直播抓取配置页面 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Input, Button, message, Spin, Form } from 'antd';
 import style from './style.sass';
 import { getAutoRecordingOption, addAutoRecordingOption, putAutoRecordingOption } from '../store/reducer';
@@ -20,7 +21,6 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-@withRouter
 @Form.create()
 @connect(state, dispatch)
 class LiveCatchOption extends Component{
@@ -29,6 +29,11 @@ class LiveCatchOption extends Component{
     btnLoading: boolean,
     time: number,
     humans: string
+  };
+
+  static propTypes: Object = {
+    action: PropTypes.objectOf(PropTypes.func),
+    form: PropTypes.object
   };
 
   constructor(): void{

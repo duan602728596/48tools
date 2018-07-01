@@ -1,9 +1,10 @@
 /* 软件首页 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
 import style from './style.sass';
 import { test } from '../store/reducer';
@@ -25,9 +26,13 @@ const dispatch: Function = (dispatch: Function): Object=>({
   }, dispatch)
 });
 
-@withRouter
 @connect(state, dispatch)
 class Index extends Component{
+  static propTypes: Object = {
+    test: PropTypes.bool,
+    action: PropTypes.objectOf(PropTypes.func)
+  };
+
   constructor(): void{
     super(...arguments);
   }
