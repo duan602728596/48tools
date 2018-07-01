@@ -13,8 +13,9 @@ export const execPath: string = do{
   switch(type){
     // mac
     case 'Darwin':
-      const p: string[] = process.execPath.match(/^[^\.]+\.app/);
-      const p2: [] = p[0].split(/\//);
+      // 兼容开发环境
+      const p: ?string[] = process.execPath.match(/^[^\.]+\.app/);
+      const p2: [] = p ? p[0].split(/\//) : [];
       ep = path.join(p2.join('/'), 'Contents');
       break;
     // win32
