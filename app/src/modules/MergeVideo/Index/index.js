@@ -1,5 +1,6 @@
 /* 视频合并 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -8,7 +9,7 @@ import { Button, message, Affix, Table, Popconfirm } from 'antd';
 import $ from 'jquery';
 import publicStyle from '../../publicMethod/public.sass';
 import { time } from '../../../function';
-import option from '../../publicMethod/option';
+import option, { type } from '../../publicMethod/option';
 import { mergeList } from '../store/reducer';
 const fs: Object = global.require('fs');
 const path: Object = global.require('path');
@@ -48,6 +49,11 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @connect(state, dispatch)
 class Merge extends Component{
+  static propTypes: Object = {
+    mergeList: PropTypes.array,
+    action: PropTypes.objectOf(PropTypes.func)
+  };
+
   // 表格配置
   columus(): Array{
     const len: number = this.props.mergeList.length - 1;
@@ -68,10 +74,18 @@ class Merge extends Component{
               <Button className={ publicStyle.mr10 } type="danger" size="small">删除</Button>
             </Popconfirm>,
             index === 0 ? null : (
-              <Button key={ 1 } className={ publicStyle.mr10 } size="small" icon="arrow-up" onClick={ this.onUpIndex.bind(this, index) } />
+              <Button key={ 1 }
+                className={ publicStyle.mr10 }
+                size="small" icon="arrow-up"
+                onClick={ this.onUpIndex.bind(this, index) }
+              />
             ),
             index === len ? null : (
-              <Button key={ 2 } size="small" icon="arrow-down" onClick={ this.onDownIndex.bind(this, index) } />
+              <Button key={ 2 }
+                size="small"
+                icon="arrow-down"
+                onClick={ this.onDownIndex.bind(this, index) }
+              />
             )
           ];
         }
@@ -118,14 +132,19 @@ class Merge extends Component{
       let text: string = '';
       for(const item: Object of this.props.mergeList){
         title += item.name.match(/.{1,3}/g)[0] + '_';
-        text += `file '${ item.path.replace(/\\/g, '\\') }' \n`;
+        const p: string = type === 'Darwin' ? item.path : item.path.replace(/\\/g, '\\');
+        text += `file '${ p }' \n`;
       }
       title += time('YYMMDDhhmmss') + fi.ext;
       text = '# ' + title + '\n' + text;
       // 写文件
       const textTitle: string = title + '.txt';
-      const textPath: string = (option.output + '/' + textTitle).replace(/\//g, '\\');
-      fs.writeFile(textPath, text, (err: Error): void=>{
+      const tp: string = option.output + '/' + textTitle;
+      const textPath: string = type === 'Darwin' ? tp : tp.replace(/\//g, '\\');
+      fs.writeFile(textPath, text, {
+        encoding: 'utf8',
+        flag: 'w'
+      }, (err: Error): void=>{
         if(err) return message.error('合并失败！');
         // 命令
         const child: Object = child_process.spawn(option.ffmpeg, [
@@ -172,8 +191,19 @@ class Merge extends Component{
       <Affix key={ 0 } className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
-            <Button className={ publicStyle.mr10 } type="primary" icon="youtube" onClick={ this.onChoose.bind(this, 'choose-video') }>选择视频</Button>
-            <input id="choose-video" type="file" style={{ display: 'none' }} multiple={ true } onChange={ this.onFileChange.bind(this) } />
+            <Button className={ publicStyle.mr10 }
+              type="primary"
+              icon="youtube"
+              onClick={ this.onChoose.bind(this, 'choose-video') }
+            >
+              选择视频
+            </Button>
+            <input id="choose-video"
+              type="file"
+              style={{ display: 'none' }}
+              multiple={ true }
+              onChange={ this.onFileChange.bind(this) }
+            />
             <Button icon="fork" onClick={ this.onMergeVideos.bind(this) }>合并视频</Button>
           </div>
           <div className={ publicStyle.fr }>
