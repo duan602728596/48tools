@@ -117,7 +117,7 @@ class AvDownload extends Component{
     });
     try{
       const data: Buffer = await this.downloadFlv(item.uri, item.number);
-      fs.writeFile(path.join(option.output, `av${ item.number }_${ item.page }_${ item.time }.flv`), data, (err: Error): void=>{
+      fs.writeFile(path.join(option.output, `av${ item.number }_${ item.page }_${ item.index }_${ item.time }.flv`), data, (err: Error): void=>{
         if(err){
           message.error('视频下载失败！');
           this.props.avList[index].status = 3;
