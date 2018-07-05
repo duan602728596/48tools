@@ -81,10 +81,10 @@ class AvDownload extends Component{
         title: '操作',
         dataIndex: 'handle',
         width: '20%',
-        render: (text: any, item: Object, index: number): Array=>{
+        render: (text: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           const isLoading: boolean = item.status === 1;
           return [
-            <Button key={ 0 }
+            <Button key="download"
               className={ publicStyle.mr10 }
               type="primary"
               icon="video-camera"
@@ -93,7 +93,7 @@ class AvDownload extends Component{
             >
               下载
             </Button>,
-            <Popconfirm key={ 1 } title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, item, index) }>
+            <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, item, index) }>
               <Button type="danger" icon="delete" loading={ isLoading }>删除</Button>
             </Popconfirm>
           ];
@@ -230,7 +230,7 @@ class AvDownload extends Component{
       message.error('获取地址失败！');
     }
   };
-  render(): Object{
+  render(): React.Element{
     return (
       <Fragment>
         {/* 功能区 */}

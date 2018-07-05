@@ -77,15 +77,15 @@ class BiliBili extends Component{
         title: '操作',
         key: 'handle',
         width: '36%',
-        render: (text: any, item: Object): Array=>{
+        render: (text: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           return [
             this.props.catching.has(item.roomid)
               ? (
-                <Popconfirm key={ 0 } title="确认停止录制吗？" onConfirm={ this.onCatchStop.bind(this, item) }>
+                <Popconfirm key="catchStop" title="确认停止录制吗？" onConfirm={ this.onCatchStop.bind(this, item) }>
                   <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="primary" icon="minus-circle">停止</Button>
                 </Popconfirm>
               ) : (
-                <Button key={ 0 }
+                <Button key="catch"
                   className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
                   type="primary"
                   icon="step-forward"
@@ -94,7 +94,7 @@ class BiliBili extends Component{
                   录制
                 </Button>
               ),
-            <Popconfirm key={ 1 } title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+            <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
               <Button className={ publicStyle.ml10 } type="danger" icon="close-square" disabled={ this.props.catching.has(item.roomid) }>删除</Button>
             </Popconfirm>
           ];
@@ -157,10 +157,10 @@ class BiliBili extends Component{
       message.error('删除失败！');
     }
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <Link to="/BiliBili/Option">
@@ -175,7 +175,7 @@ class BiliBili extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ publicStyle.tableBox }>
+      <div key="tableBox" className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }

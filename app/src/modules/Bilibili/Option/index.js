@@ -81,7 +81,7 @@ class BiliBiliOption extends Component{
       });
     });
   }
-  render(): Object{
+  render(): React.Element{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return (
       <div className={ style.body }>

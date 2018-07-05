@@ -84,14 +84,14 @@ class InLive48 extends Component{
         title: '操作',
         key: 'handle',
         width: '25%',
-        render: (text: string, item: Object, index: number): Array=>{
+        render: (text: string, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           return [
             item.child.killed === false && item.child.exitCode === null
               ? [
-                <Button key={ 0 } type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
+                <Button key="stop" type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
               ] : [
-                <b key={ 1 } className={ publicStyle.mr10 }>已停止</b>,
-                <Popconfirm key={ 2 } title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+                <b key="isStop" className={ publicStyle.mr10 }>已停止</b>,
+                <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
                   <Button type="danger" icon="delete">删除</Button>
                 </Popconfirm>
               ]
@@ -199,7 +199,7 @@ class InLive48 extends Component{
       inLiveList: ils
     });
   }
-  render(): Object{
+  render(): React.Element{
     return (
       <Fragment>
         {/* 功能区 */}

@@ -30,7 +30,7 @@ class Bundle extends Component{
       }
     });
   }
-  render(): Object{
+  render(): React.Element{
     return this.props.children(this.state.module ? this.state.module : null);
   }
 }

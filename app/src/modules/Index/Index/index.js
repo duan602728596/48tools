@@ -47,7 +47,7 @@ class Index extends Component{
     gui.App.clearCache();
     message.success('缓存清除成功！');
   }
-  render(): Object{
+  render(): React.Element{
     return (
       <div className={ style.body }>
         <h1 className={ style.title }>48应援工具</h1>

@@ -80,13 +80,13 @@ class Cut extends Component{
         dataIndex: 'file',
         key: 'file',
         width: '30%',
-        render: (text: any, item: Object): string=>item.file.path
+        render: (text: any, item: Object): string => item.file.path
       },
       {
         title: '开始时间',
         key: 'startTime',
         width: '10%',
-        render: (text: any, item: Object): string=>{
+        render: (text: any, item: Object, index: number): string=>{
           const { starthh, startmm, startss }: {
             starthh: number,
             startmm: number,
@@ -99,7 +99,7 @@ class Cut extends Component{
         title: '结束时间',
         key: 'endTime',
         width: '10%',
-        render: (text: any, item: Object): string=>{
+        render: (text: any, item: Object, index: number): string=>{
           const { endhh, endmm, endss }: {
             endhh: number,
             endmm: number,
@@ -113,18 +113,18 @@ class Cut extends Component{
         dataIndex: 'saveFile',
         key: 'saveFile',
         width: '30%',
-        render: (text: any, item: Object): string=>item.saveFile.path
+        render: (text: any, item: Object, index: number): string => item.saveFile.path
       },
       {
         title: '操作',
         key: 'handle',
         width: '20%',
-        render: (text: any, item: Object): Object | Array=>{
+        render: (text: any, item: Object, index: number): React.Element | React.ChildrenArray<React.Element>=>{
           if(this.props.cutMap.has(item.id)){
             const m: Map = this.props.cutMap.get(item.id);
             if(m.child.exitCode !== null){
               return [
-                <b key={ 0 } className={ publicStyle.mr10 }>任务结束</b>,
+                <b key="delete" className={ publicStyle.mr10 }>任务结束</b>,
                 <Popconfirm key={ 1 } title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
                   <Button type="danger" icon="delete">删除任务</Button>
                 </Popconfirm>
@@ -138,8 +138,8 @@ class Cut extends Component{
             }
           }else{
             return [
-              <Button key={ 0 } className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.onStartTask.bind(this, item) }>开始任务</Button>,
-              <Popconfirm key={ 1 } title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
+              <Button key="start" className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.onStartTask.bind(this, item) }>开始任务</Button>,
+              <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
                 <Button type="danger" icon="delete">删除任务</Button>
               </Popconfirm>
             ];
@@ -314,7 +314,7 @@ class Cut extends Component{
     const m: Object = this.props.cutMap.get(item.id);
     m.child.kill();
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return [
       /* 功能区 */

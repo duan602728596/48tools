@@ -7,7 +7,7 @@ import Bundle from './Bundle';
  * @param { Function } module: 需要异步注入的模块
  */
 function asyncModule(module: Function): Function{
-  return (): Object=>(
+  return (): React.Element=>(
     <Bundle load={ module }>
       { (Module: Object): Object => Module ? <Module /> : null }
     </Bundle>
