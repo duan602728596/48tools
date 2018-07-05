@@ -33,7 +33,7 @@ class VideoPlay extends Component{
       flvPlayer.load();
     }
   }
-  render(): Object{
+  render(): React.Element{
     return (
       <Card className={ style.card } cover={
         <div className={ style.videobox }>

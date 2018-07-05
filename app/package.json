@@ -49,7 +49,7 @@
     "@babel/preset-react": "^7.0.0-beta.51",
     "antd": "^3.6.3",
     "babel-eslint": "^8.2.4",
-    "babel-loader": "^8.0.0-beta.3",
+    "babel-loader": "^8.0.0-beta.4",
     "babel-plugin-import": "^1.8.0",
     "bundle-loader": "^0.5.6 ",
     "cross-env": "^5.2.0",

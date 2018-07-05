@@ -111,7 +111,7 @@ class LiveDownload extends Component{
     ];
     return columus;
   }
-  onGroupSelect(value: string, option: any): void{
+  onGroupSelect(value: string, option: Object): void{
     this.props.action.changeGroup({
       group: value
     });
@@ -184,10 +184,10 @@ class LiveDownload extends Component{
       message.error('下载失败！');
     }
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <Select className={ style.select }
@@ -215,7 +215,7 @@ class LiveDownload extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
+      <div key="tableBox" className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }

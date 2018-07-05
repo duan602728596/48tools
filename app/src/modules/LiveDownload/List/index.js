@@ -49,8 +49,8 @@ class List extends Component{
   onStop(item: Object, event: Event): void{
     item.child.kill();
   }
-  downloadList(): Array{
-    return this.props.downloadList.map((item: Object, index: number): Object=>{
+  downloadList(): React.ChildrenArray<React.Element>{
+    return this.props.downloadList.map((item: Object, index: number): React.Element=>{
       return (
         <li key={ item.id }>
           <h4>
@@ -70,7 +70,7 @@ class List extends Component{
       );
     });
   }
-  render(): Object{
+  render(): React.Element{
     return (
       <div>
         {/* 功能区 */}

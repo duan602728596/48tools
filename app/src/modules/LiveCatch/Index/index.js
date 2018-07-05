@@ -89,7 +89,7 @@ class LiveCatch extends Component{
         dataIndex: 'subTitle',
         key: 'subTitle',
         width: '20%',
-        render: (text: string, item: Object, index: number): Object | string=>{
+        render: (text: string, item: Object, index: number): React.Element | string=>{
           if(item._end === true){
             return <span className={ style.overdue }>{ text }</span>;
           }else{
@@ -102,7 +102,7 @@ class LiveCatch extends Component{
         dataIndex: 'streamPath',
         key: 'streamPath',
         width: '30%',
-        render: (text: string, item: Object, index: number): Object | string=>{
+        render: (text: string, item: Object, index: number): React.Element | string=>{
           if(item._end === true){
             return <span className={ style.overdue }>{ text }</span>;
           }else{
@@ -115,7 +115,7 @@ class LiveCatch extends Component{
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (text: string, item: Object, index: number): Object | string=>{
+        render: (text: string, item: Object, index: number): React.Element | string=>{
           const t: string = time('YY-MM-DD hh:mm:ss', text);
           if(item._end === true){
             return <span className={ style.overdue }>{ t }</span>;
@@ -129,29 +129,35 @@ class LiveCatch extends Component{
         dataIndex: 'liveId',
         key: 'handle',
         width: '20%',
-        render: (text: any, item: Object): Array=>{
+        render: (text: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           let btn: Object = null;
           if(this.props.liveCatch.has(text)){
             const m: Object = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
               btn = (
-                <Popconfirm key={ 0 } title="确认停止录制吗？" onConfirm={ this.onStopRecording.bind(this, item) }>
+                <Popconfirm key="stop" title="确认停止录制吗？" onConfirm={ this.onStopRecording.bind(this, item) }>
                   <Button type="danger" icon="close-square">停止录制</Button>
                 </Popconfirm>
               );
             }else{
               btn = (
-                <Button key={ 1 } type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
+                <Button key="record" type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
               );
             }
           }else{
             btn = (
-              <Button key={ 1 } type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
+              <Button key="record" type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
             );
           }
           return [
             btn,
-            <Button key={ 2 } className={ publicStyle.ml10 } icon="video-camera" onClick={ this.onVideoPlay.bind(this, item) }>播放</Button>
+            <Button key="camera"
+              className={ publicStyle.ml10 }
+              icon="video-camera"
+              onClick={ this.onVideoPlay.bind(this, item) }
+            >
+              播放
+            </Button>
           ];
         }
       }
@@ -324,10 +330,10 @@ class LiveCatch extends Component{
       loading: false
     });
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             {
@@ -363,7 +369,7 @@ class LiveCatch extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ publicStyle.tableBox }>
+      <div key="tableBox" className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }

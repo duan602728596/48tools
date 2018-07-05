@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Index from './Index/index';
 import Option from './Option/index';
 
-const ModuleLayout: Function = (props: Object): Object=>{
+const ModuleLayout: Function = (props: Object): React.Element=>{
   return (
     <Switch>
       <Route path="/LiveCatch" component={ Index } exact={ true } />

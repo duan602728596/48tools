@@ -86,13 +86,19 @@ class ListOne extends Component{
       cancelAnimationFrame(this.state.timer);
     }
   }
-  stateView(): Object | boolean{
+  stateView(): ?React.Element{
     const { detail }: { detail: Array } = this.props;
     const { state }: { state: number } = detail[1];
     switch(state){
       case 1:
         return (
-          <Button className={ publicStyle.fr } type="danger" icon="close-square" onClick={ this.onCancelDownload.bind(this, detail[0]) }>取消下载</Button>
+          <Button className={ publicStyle.fr }
+            type="danger"
+            icon="close-square"
+            onClick={ this.onCancelDownload.bind(this, detail[0]) }
+          >
+            取消下载
+          </Button>
         );
       case 2:
         return (
@@ -107,14 +113,14 @@ class ListOne extends Component{
           </div>
         );
       default:
-        return false;
+        return null;
     }
   }
   // 取消下载
   onCancelDownload(id: number, event: Event): void{
     chrome.downloads.cancel(id);
   }
-  render(): Object | boolean{
+  render(): ?React.Element{
     const { detail }: { detail: Array } = this.props;
     const { current, item, state }: {
       current: string,
@@ -146,7 +152,7 @@ class ListOne extends Component{
         </div>
       );
     }else{
-      return false;
+      return null;
     }
   }
 }
@@ -165,8 +171,8 @@ class List extends Component{
       });
     }
   }
-  listOne(): Array{
-    return Array.from(this.props.downloadList).map((item: Array, index: number): Object=>{
+  listOne(): React.ChildrenArray<React.Element>{
+    return Array.from(this.props.downloadList).map((item: Array, index: number): React.Element=>{
       if(item[1].state !== 0){
         return (
           <li key={ item[0] }>
@@ -187,10 +193,10 @@ class List extends Component{
       downloadList: new Map(Array.from(this.props.downloadList))
     });
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fr }>
             <Button icon="close-square" onClick={ this.onClear.bind(this) }>全部清除</Button>
@@ -200,7 +206,7 @@ class List extends Component{
           </div>
         </div>
       </Affix>,
-      <div key={ 1 } className={ `${ publicStyle.tableBox } ${ style.detailList }` }>
+      <div key="tableBox" className={ `${ publicStyle.tableBox } ${ style.detailList }` }>
         <QueueAnim component="ul" type="alpha" leaveReverse={ true }>
           { this.listOne() }
         </QueueAnim>

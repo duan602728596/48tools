@@ -99,8 +99,7 @@ class PlayBackDownload extends Component{
     this.state = {
       loading: false,    // 加载动画
       keyword: '',       // 搜索关键字
-      current: 'query' in this.props.location && 'current' in this.props.location.query
-        ? this.props.location.query.current : 1 // 分页
+      current: this?.props?.location?.query?.current || 1 // 分页
     };
   }
   // 表格配置
@@ -135,9 +134,9 @@ class PlayBackDownload extends Component{
         title: '操作',
         key: 'handle',
         width: '30%',
-        render: (text: any, item: Object): Array=>{
+        render: (text: any, item: Object): React.ChildrenArray<React.Element>=>{
           return [
-            <Link key={ 0 } to={{
+            <Link key="link" to={{
               pathname: '/PlayBackDownload/Detail',
               query: {
                 detail: item,
@@ -146,7 +145,13 @@ class PlayBackDownload extends Component{
             }}>
               <Button className={ publicStyle.ml10 } icon="eye">查看</Button>
             </Link>,
-            <Button key={ 1 } className={ publicStyle.ml10 } icon="fork" onClick={ this.onDownload.bind(this, item) }>下载</Button>
+            <Button key="download"
+              className={ publicStyle.ml10 }
+              icon="fork"
+              onClick={ this.onDownload.bind(this, item) }
+            >
+              下载
+            </Button>
           ];
         }
       }
@@ -251,10 +256,10 @@ class PlayBackDownload extends Component{
     });
     message.success('录播加载成功！');
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
@@ -274,7 +279,12 @@ class PlayBackDownload extends Component{
             >
               加载列表
             </Button>
-            <Button className={ publicStyle.ml10 } icon="loading-3-quarters" onClick={ this.onPlayBackListLoad.bind(this, '刷新') }>刷新列表</Button>
+            <Button className={ publicStyle.ml10 }
+              icon="loading-3-quarters"
+              onClick={ this.onPlayBackListLoad.bind(this, '刷新') }
+            >
+              刷新列表
+            </Button>
             <Link to="/PlayBackDownload/List">
               <Button className={ publicStyle.ml10 } icon="bars">下载列表</Button>
             </Link>
@@ -285,7 +295,7 @@ class PlayBackDownload extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ publicStyle.tableBox }>
+      <div key="tableBox" className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }

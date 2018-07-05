@@ -68,7 +68,7 @@ class MoDian extends Component{
         title: '操作',
         dataIndex: 'handle',
         width: '33%',
-        render: (text: any, item: Object): Array=>{
+        render: (text: any, item: Object): React.ChildrenArray<React.Element>=>{
           return [
             <Button key={ 0 }
               className={ publicStyle.mr10 }
@@ -144,10 +144,10 @@ class MoDian extends Component{
     generatingExcel(this.props.modianList, '');
     message.info('正在生成Excel！');
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <label htmlFor="modian-id">摩点项目ID: </label>
@@ -196,7 +196,7 @@ class MoDian extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ publicStyle.tableBox }>
+      <div key="tableBox" className={ publicStyle.tableBox }>
         <Table bordered={ true }
           columns={ this.columus() }
           rowKey={ (item: Object): string => item.modianid }

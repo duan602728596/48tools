@@ -68,20 +68,20 @@ class Merge extends Component{
         title: '操作',
         key: 'handle',
         width: '40%',
-        render: (text: string, item: Object, index: number): Array=>{
+        render: (text: string, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           return [
-            <Popconfirm key={ 0 } title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, index) }>
+            <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, index) }>
               <Button className={ publicStyle.mr10 } type="danger" size="small">删除</Button>
             </Popconfirm>,
             index === 0 ? null : (
-              <Button key={ 1 }
+              <Button key="upIndex"
                 className={ publicStyle.mr10 }
                 size="small" icon="arrow-up"
                 onClick={ this.onUpIndex.bind(this, index) }
               />
             ),
             index === len ? null : (
-              <Button key={ 2 }
+              <Button key="downIndex"
                 size="small"
                 icon="arrow-down"
                 onClick={ this.onDownIndex.bind(this, index) }
@@ -185,10 +185,10 @@ class Merge extends Component{
       mergeList: this.props.mergeList
     });
   }
-  render(): Array{
+  render(): React.ChildrenArray<React.Element>{
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <Button className={ publicStyle.mr10 }
@@ -217,7 +217,7 @@ class Merge extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ publicStyle.tableBox }>
+      <div key="tableBox" className={ publicStyle.tableBox }>
         <Table bordered={ true }
           size="small"
           columns={ this.columus() }
