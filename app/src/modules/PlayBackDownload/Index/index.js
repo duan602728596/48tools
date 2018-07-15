@@ -12,7 +12,7 @@ import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
 import post from '../../publicMethod/post';
 import { time } from '../../../function';
-import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
+import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
 const url: Object = global.require('url');
 const path: Object = global.require('path');
 
@@ -148,7 +148,7 @@ class PlayBackDownload extends Component{
             <Button key="download"
               className={ publicStyle.ml10 }
               icon="fork"
-              onClick={ this.onDownload.bind(this, item) }
+              onClick={ this.handleDownload.bind(this, item) }
             >
               下载
             </Button>
@@ -161,8 +161,8 @@ class PlayBackDownload extends Component{
   // 组件挂载之前监听chrome下载事件
   UNSAFE_componentWillMount(): void{
     if(this.props.fnReady === false){
-      chrome.downloads.onCreated.addListener(onChromeDownloadsCreated);
-      chrome.downloads.onChanged.addListener(onChromeDownloadsChanged);
+      chrome.downloads.onCreated.addListener(handleChromeDownloadsCreated);
+      chrome.downloads.onChanged.addListener(handleChromeDownloadsChanged);
       // 函数已监听的标识
       this.props.action.fnReady({
         fnReady: true
@@ -170,13 +170,13 @@ class PlayBackDownload extends Component{
     }
   }
   // 分页变化
-  onPageChange(page: number, pageSize: number): void{
+  handlePageChange(page: number, pageSize: number): void{
     this.setState({
       current: page
     });
   }
   // 下载
-  onDownload(item: Object, event: Event): void{
+  handleDownload(item: Object, event: Event): void{
     const urlInfo: Object = url.parse(item.streamPath);
     const pathInfo: Object = path.parse(urlInfo.pathname);
 
@@ -204,7 +204,7 @@ class PlayBackDownload extends Component{
     });
   }
   // 搜索事件（点击按钮 + input回车）
-  onSearchInput(event: Event): void{
+  handleSearchInput(event: Event): void{
     const { value }: { value: string } = this.refs['playBackDownload-searchInput'].input;
     let reg: ?RegExp = null;
     if(!/^\s*$/.test(value)){
@@ -220,13 +220,13 @@ class PlayBackDownload extends Component{
     });
   }
   // 重置
-  onReset(event: Event): void{
+  handleReset(event: Event): void{
     this.setState({
       keyword: ''
     });
   }
   // 加载和刷新列表
-  async onPlayBackListLoad(type: string, event: Event): Promise<void>{
+  async handlePlayBackListLoad(type: string, event: Event): Promise<void>{
     this.setState({
       loading: true
     });
@@ -267,21 +267,21 @@ class PlayBackDownload extends Component{
               id="playBackDownload-searchInput"
               ref="playBackDownload-searchInput"
               placeholder="多个关键字用空格分割"
-              onPressEnter={ this.onSearchInput.bind(this) }
+              onPressEnter={ this.handleSearchInput.bind(this) }
             />
-            <Button className={ publicStyle.mr10 } icon="search" onClick={ this.onSearchInput.bind(this) }>搜索</Button>
-            <Button icon="close" onClick={ this.onReset.bind(this) }>重置</Button>
+            <Button className={ publicStyle.mr10 } icon="search" onClick={ this.handleSearchInput.bind(this) }>搜索</Button>
+            <Button icon="close" onClick={ this.handleReset.bind(this) }>重置</Button>
           </div>
           <div className={ publicStyle.fr }>
             <Button type="primary"
               icon="cloud-download-o"
-              onClick={ this.onPlayBackListLoad.bind(this, '加载') }
+              onClick={ this.handlePlayBackListLoad.bind(this, '加载') }
             >
               加载列表
             </Button>
             <Button className={ publicStyle.ml10 }
               icon="loading-3-quarters"
-              onClick={ this.onPlayBackListLoad.bind(this, '刷新') }
+              onClick={ this.handlePlayBackListLoad.bind(this, '刷新') }
             >
               刷新列表
             </Button>
@@ -305,7 +305,7 @@ class PlayBackDownload extends Component{
             pageSize: 20,
             showQuickJumper: true,
             current: this.state.current,
-            onChange: this.onPageChange.bind(this)
+            onChange: this.handlePageChange.bind(this)
           }}
         />
       </div>

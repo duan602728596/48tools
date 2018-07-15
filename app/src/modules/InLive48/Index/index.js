@@ -88,10 +88,10 @@ class InLive48 extends Component{
           return [
             item.child.killed === false && item.child.exitCode === null
               ? [
-                <Button key="stop" type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
+                <Button key="stop" type="danger" icon="close-square" onClick={ this.handleStop.bind(this, item) }>取消下载</Button>
               ] : [
                 <b key="isStop" className={ publicStyle.mr10 }>已停止</b>,
-                <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+                <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.handleDelete.bind(this, item) }>
                   <Button type="danger" icon="delete">删除</Button>
                 </Popconfirm>
               ]
@@ -102,7 +102,7 @@ class InLive48 extends Component{
     return columus;
   }
   // select选择
-  onSelect(key: string, value: string, option: any): void{
+  handleSelect(key: string, value: string, option: any): void{
     this.setState({
       [key]: value
     });
@@ -143,15 +143,9 @@ class InLive48 extends Component{
     });
   }
   // 点击录制事件
-  async onDownLoadLive(event: Event): Promise<void | boolean>{
-    let html: ?string = null;
-    if(this.state.group === 'SNH48'){
-      const inliveUrl: string = await this.getInliveUrl();
-      html = await this.getHtml(IN_LIVE_URL[this.state.group] + inliveUrl);
-    }else{
-      html = await this.getHtml(IN_LIVE_URL[this.state.group] + '/Index/inlive');
-    }
-
+  async handleDownLoadLive(event: Event): Promise<void | boolean>{
+    const inliveUrl: string = await this.getInliveUrl();
+    const html: string = await this.getHtml(IN_LIVE_URL[this.state.group] + inliveUrl);
     const xml: any = cheerio.load(html);
     const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
     const urlInput: any = xml(`#${ this.state.quality }`);
@@ -187,11 +181,11 @@ class InLive48 extends Component{
     });
   }
   // 停止下载
-  onStop(item: Object, event: Event): void{
+  handleStop(item: Object, event: Event): void{
     item.child.kill();
   }
   // 删除
-  onDelete(item: Object, event: Event): void{
+  handleDelete(item: Object, event: Event): void{
     const index: number = this.props.inLiveList.indexOf(item);
     const ils: Array = this.props.inLiveList;
     ils.splice(index, 1);
@@ -210,7 +204,7 @@ class InLive48 extends Component{
                 value={ this.state.group }
                 dropdownMatchSelectWidth={ true }
                 dropdownClassName={ style.select }
-                onSelect={ this.onSelect.bind(this, 'group') }
+                onSelect={ this.handleSelect.bind(this, 'group') }
               >
                 <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
                 <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
@@ -222,13 +216,13 @@ class InLive48 extends Component{
                 value={ this.state.quality }
                 dropdownMatchSelectWidth={ true }
                 dropdownClassName={ style.select }
-                onSelect={ this.onSelect.bind(this, 'quality') }
+                onSelect={ this.handleSelect.bind(this, 'quality') }
               >
                 <Select.Option key="gao_url" value="gao_url">高清</Select.Option>
                 <Select.Option key="chao_url" value="chao_url">超清</Select.Option>
                 <Select.Option key="liuchang_url" value="liuchang_url">流畅</Select.Option>
               </Select>
-              <Button type="primary" icon="cloud-download" onClick={ this.onDownLoadLive.bind(this) }>录制官方源</Button>
+              <Button type="primary" icon="cloud-download" onClick={ this.handleDownLoadLive.bind(this) }>录制官方源</Button>
             </div>
             <div className={ publicStyle.fr }>
               <Link to="/">

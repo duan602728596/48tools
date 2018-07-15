@@ -9,7 +9,7 @@ import QueueAnim from 'rc-queue-anim';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../publicMethod/public.sass';
-import { onChromeDownloadsCreated, onChromeDownloadsChanged } from '../chromeFunction';
+import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
 const fs: Object = global.require('fs');
 
 /* 初始化数据 */
@@ -95,7 +95,7 @@ class ListOne extends Component{
           <Button className={ publicStyle.fr }
             type="danger"
             icon="close-square"
-            onClick={ this.onCancelDownload.bind(this, detail[0]) }
+            onClick={ this.handleCancelDownload.bind(this, detail[0]) }
           >
             取消下载
           </Button>
@@ -117,7 +117,7 @@ class ListOne extends Component{
     }
   }
   // 取消下载
-  onCancelDownload(id: number, event: Event): void{
+  handleCancelDownload(id: number, event: Event): void{
     chrome.downloads.cancel(id);
   }
   render(): ?React.Element{
@@ -163,8 +163,8 @@ class List extends Component{
   // 组件挂载之前监听chrome下载事件
   UNSAFE_componentWillMount(): void{
     if(this.props.fnReady === false){
-      chrome.downloads.onCreated.addListener(onChromeDownloadsCreated);
-      chrome.downloads.onChanged.addListener(onChromeDownloadsChanged);
+      chrome.downloads.onCreated.addListener(handleChromeDownloadsCreated);
+      chrome.downloads.onChanged.addListener(handleChromeDownloadsChanged);
       // 函数已监听的标识
       this.props.action.fnReady({
         fnReady: true
@@ -183,7 +183,7 @@ class List extends Component{
     });
   }
   // 清除已下载
-  onClear(event: Event): void{
+  handleClear(event: Event): void{
     this.props.downloadList.forEach((value: Object, key: number): void=>{
       if(value.state !== 1){
         this.props.downloadList.delete(key);
@@ -199,7 +199,7 @@ class List extends Component{
       <Affix key="affix" className={ publicStyle.affix }>
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fr }>
-            <Button icon="close-square" onClick={ this.onClear.bind(this) }>全部清除</Button>
+            <Button icon="close-square" onClick={ this.handleClear.bind(this) }>全部清除</Button>
             <Link to="/PlayBackDownload">
               <Button className={ publicStyle.ml10 } type="danger" icon="poweroff">返回</Button>
             </Link>

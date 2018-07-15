@@ -20,7 +20,7 @@ class RoomId extends Component{
     };
   }
   // 复制
-  onCopy(event: Event): void{
+  handleCopy(event: Event): void{
     const range: Object = document.createRange();
     range.selectNode(document.getElementById('roomId'));
     const selection: Object = window.getSelection();
@@ -29,14 +29,14 @@ class RoomId extends Component{
     document.execCommand('copy');
   }
   // change
-  onChange(event: Event): void{
+  handleChange(event: Event): void{
     this.setState({
       url: event.target.value,
       roomId: ''
     });
   }
   // 搜索
-  onSearch(event: Event): void{
+  handleSearch(event: Event): void{
     const _this: this = this;
     const u: Object = url.parse(this.state.url);
     if(u.host !== 'live.bilibili.com'){
@@ -69,9 +69,9 @@ class RoomId extends Component{
           id="roomUrl"
           placeholder="输入B站的直播间地址"
           value={ this.state.url }
-          onChange={ this.onChange.bind(this) }
+          onChange={ this.handleChange.bind(this) }
           suffix={
-            <Button className={ style.ipb } type="primary" title="搜索" icon="share-alt" onClick={ this.onSearch.bind(this) } />
+            <Button className={ style.ipb } type="primary" title="搜索" icon="share-alt" onClick={ this.handleSearch.bind(this) } />
           }
         />
       </div>,
@@ -82,7 +82,7 @@ class RoomId extends Component{
           readOnly={ true }
           value={ this.state.roomId }
           suffix={
-            <Button className={ style.ipb } type="primary" title="复制" icon="copy" onClick={ this.onCopy.bind(this) } />
+            <Button className={ style.ipb } type="primary" title="复制" icon="copy" onClick={ this.handleCopy.bind(this) } />
           }
         />
       </div>

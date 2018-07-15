@@ -125,21 +125,21 @@ class Cut extends Component{
             if(m.child.exitCode !== null){
               return [
                 <b key="delete" className={ publicStyle.mr10 }>任务结束</b>,
-                <Popconfirm key={ 1 } title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
+                <Popconfirm key={ 1 } title="确认删除任务吗？" onConfirm={ this.handleDeleteTask.bind(this, item) }>
                   <Button type="danger" icon="delete">删除任务</Button>
                 </Popconfirm>
               ];
             }else{
               return (
-                <Popconfirm title="确认停止任务吗？" onConfirm={ this.onStopTask.bind(this, item) }>
+                <Popconfirm title="确认停止任务吗？" onConfirm={ this.handleStopTask.bind(this, item) }>
                   <Button type="danger" icon="close-circle">停止任务</Button>
                 </Popconfirm>
               );
             }
           }else{
             return [
-              <Button key="start" className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.onStartTask.bind(this, item) }>开始任务</Button>,
-              <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.onDeleteTask.bind(this, item) }>
+              <Button key="start" className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.handleStartTask.bind(this, item) }>开始任务</Button>,
+              <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTask.bind(this, item) }>
                 <Button type="danger" icon="delete">删除任务</Button>
               </Popconfirm>
             ];
@@ -150,7 +150,7 @@ class Cut extends Component{
     return columus;
   }
   // 选择文件的change事件
-  onFileChange(event: Event): void{
+  handleFileChange(event: Event): void{
     const save: any = document.getElementById('cut-save');
     const file: ?Object = event.target.files[0] || null;
     let title: string = '';
@@ -167,18 +167,18 @@ class Cut extends Component{
     save.nwsaveas = title;
   }
   // 储存文件的change事件
-  onSaveChange(event: Event): void{
+  handleSaveChange(event: Event): void{
     const file: ?Object = event.target.files[0] || null;
     this.setState({
       saveFile: file
     });
   }
   // 点击input
-  onClickInput(id: string, event: Event): void{
+  handleClickInput(id: string, event: Event): void{
     $(`#${ id }`).click();
   }
   // 添加到队列
-  onAddQueue(event: Event): void{
+  handleAddQueue(event: Event): void{
     event.preventDefault();
     this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
       if(!err){
@@ -226,7 +226,7 @@ class Cut extends Component{
     });
   }
   // 删除任务
-  onDeleteTask(item: Object, event: Event): void{
+  handleDeleteTask(item: Object, event: Event): void{
     const index: number = this.props.cutList.indexOf(item);
     this.props.cutList.splice(index, 1);
     this.props.action.cutList({
@@ -253,7 +253,7 @@ class Cut extends Component{
     message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 开始任务
-  onStartTask(item: Object, event: Event): void{
+  handleStartTask(item: Object, event: Event): void{
     const { starthh, startmm, startss, endhh, endmm, endss }: {
       starthh: number,
       startmm: number,
@@ -310,7 +310,7 @@ class Cut extends Component{
     message.info(`开始剪切【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 停止任务
-  onStopTask(item: Object, event: Event): void{
+  handleStopTask(item: Object, event: Event): void{
     const m: Object = this.props.cutMap.get(item.id);
     m.child.kill();
   }
@@ -322,7 +322,7 @@ class Cut extends Component{
         <div className={ `${ publicStyle.toolsBox } ${ style.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <p className={ style.tishi }>提示：文件保存成“gif”格式可导出动图。</p>
-            <Form layout="inline" onSubmit={ this.onAddQueue.bind(this) }>
+            <Form layout="inline" onSubmit={ this.handleAddQueue.bind(this) }>
               <div className={ style.fileGroup }>
                 <Form.Item label="文件地址">
                   {
@@ -335,9 +335,9 @@ class Cut extends Component{
                       ]
                     })(
                       <div>
-                        <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-file') }>选择视频文件</Button>
+                        <Button size="default" onClick={ this.handleClickInput.bind(this, 'cut-file') }>选择视频文件</Button>
                         <span className={ style.path }>{ this.state.file ? this.state.file.path : '' }</span>
-                        <input className={ style.disNone } id="cut-file" type="file" onChange={ this.onFileChange.bind(this) } />
+                        <input className={ style.disNone } id="cut-file" type="file" onChange={ this.handleFileChange.bind(this) } />
                       </div>
                     )
                   }
@@ -355,14 +355,14 @@ class Cut extends Component{
                       ]
                     })(
                       <div>
-                        <Button size="default" onClick={ this.onClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
+                        <Button size="default" onClick={ this.handleClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
                         <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
                         <input className={ style.disNone }
                           id="cut-save"
                           type="file"
                           nwsaveas=""
                           nwworkingdir={ this.dir }
-                          onChange={ this.onSaveChange.bind(this) }
+                          onChange={ this.handleSaveChange.bind(this) }
                         />
                       </div>
                     )

@@ -34,7 +34,7 @@ class List extends Component{
   };
 
   // 清除列表
-  onClear(event: Event): void{
+  handleClear(event: Event): void{
     for(let i: number = this.props.downloadList.length - 1; i >= 0; i--){
       const item: Object = this.props.downloadList[i];
       if(!(item.child.killed === false && item.child.exitCode === null)){
@@ -46,7 +46,7 @@ class List extends Component{
     });
   }
   // 取消下载
-  onStop(item: Object, event: Event): void{
+  handleStop(item: Object, event: Event): void{
     item.child.kill();
   }
   downloadList(): React.ChildrenArray<React.Element>{
@@ -61,7 +61,7 @@ class List extends Component{
           {
             item.child.killed === false && item.child.exitCode === null
               ? (
-                <Button className={ style.ar } type="danger" icon="close-square" onClick={ this.onStop.bind(this, item) }>取消下载</Button>
+                <Button className={ style.ar } type="danger" icon="close-square" onClick={ this.handleStop.bind(this, item) }>取消下载</Button>
               ) : (
                 <b className={ `${ style.ar } ${ style.cancelText }` }>已停止</b>
               )
@@ -77,7 +77,7 @@ class List extends Component{
         <Affix className={ publicStyle.affix }>
           <div className={ `${ publicStyle.toolsBox } clearfix` }>
             <div className={ publicStyle.fr }>
-              <Button icon="close-square" onClick={ this.onClear.bind(this) }>全部清除</Button>
+              <Button icon="close-square" onClick={ this.handleClear.bind(this) }>全部清除</Button>
               <Link to="/LiveDownload">
                 <Button className={ publicStyle.ml10 } type="danger" icon="poweroff">返回</Button>
               </Link>

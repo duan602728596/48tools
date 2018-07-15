@@ -12,7 +12,7 @@ import store from '../../store/store';
 import { downloadList as downloadListAction } from './store/reducer';
 
 /* 谷歌下载文件监听 */
-export function onChromeDownloadsChanged(infor: Object): void{
+export function handleChromeDownloadsChanged(infor: Object): void{
   const { id }: { id: number } = infor;
   const downloadList: Array = store.getState().get('playBackDownload').get('downloadList');
 
@@ -53,7 +53,7 @@ export function onChromeDownloadsChanged(infor: Object): void{
   });
 }
 /* 谷歌下载创建文件监听 */
-export function onChromeDownloadsCreated(infor: Object): void{
+export function handleChromeDownloadsCreated(infor: Object): void{
   // 先将id和文件信息添加到Map结构内
   const downloadList: Map = store.getState().get('playBackDownload').get('downloadList');
   downloadList.set(infor.id, {

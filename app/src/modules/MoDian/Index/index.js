@@ -74,11 +74,11 @@ class MoDian extends Component{
               className={ publicStyle.mr10 }
               type="primary"
               icon="file-excel"
-              onClick={ this.onToExcel.bind(this, item) }
+              onClick={ this.handleToExcel.bind(this, item) }
             >
               导出EXCEL
             </Button>,
-            <Popconfirm key={ 1 } title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, item) }>
+            <Popconfirm key={ 1 } title="确认要删除吗？" onConfirm={ this.handleDelete.bind(this, item) }>
               <Button type="danger" icon="delete">删除</Button>
             </Popconfirm>
           ];
@@ -88,7 +88,7 @@ class MoDian extends Component{
     return columus;
   }
   // 查询标题
-  async onSearchTitle(event: Event): Promise<void>{
+  async handleSearchTitle(event: Event): Promise<void>{
     this.setState({
       btnLoading: true
     });
@@ -100,14 +100,14 @@ class MoDian extends Component{
     if(!title) message.info('项目不存在！');
   }
   // input change
-  onMoDianIdChange(event: Event): void{
+  handleMoDianIdChange(event: Event): void{
     this.setState({
       modianid: event.target.value,
       modiantitle: ''
     });
   }
   // 删除
-  onDelete(item: Object, event: Event): void{
+  handleDelete(item: Object, event: Event): void{
     const index: number = this.props.modianList.indexOf(item);
     const c: Array = this.props.modianList;
     c.splice(index, 1);
@@ -116,7 +116,7 @@ class MoDian extends Component{
     });
   }
   // 添加到列表
-  onAdd(event: Event): void{
+  handleAdd(event: Event): void{
     if(this.state.modiantitle){
       this.props.modianList.push({
         modianid: this.state.modianid,
@@ -135,12 +135,12 @@ class MoDian extends Component{
     }
   }
   // 导入到excel
-  onToExcel(item: Object, event: Event): void{
+  handleToExcel(item: Object, event: Event): void{
     generatingExcel([item], item.modiantitle);
     message.info('正在生成Excel！');
   }
   // 全部导入到excel
-  onToExcelAll(event: Event): void{
+  handleToExcelAll(event: Event): void{
     generatingExcel(this.props.modianList, '');
     message.info('正在生成Excel！');
   }
@@ -154,7 +154,7 @@ class MoDian extends Component{
             <Input className={ style.inputId }
               id="modian-id"
               value={ this.state.modianid }
-              onChange={ this.onMoDianIdChange.bind(this) }
+              onChange={ this.handleMoDianIdChange.bind(this) }
             />
             <label htmlFor="modian-title">摩点项目标题: </label>
             <Input className={ style.inputTitle }
@@ -165,7 +165,7 @@ class MoDian extends Component{
             <Button loading={ this.state.btnLoading }
               icon="search"
               disabled={ !/^\s*[0-9]+\s*$/.test(this.state.modianid) }
-              onClick={ this.onSearchTitle.bind(this) }
+              onClick={ this.handleSearchTitle.bind(this) }
             >
               查询
             </Button>
@@ -174,7 +174,7 @@ class MoDian extends Component{
               icon="file-add"
               loading={ this.state.btnLoading }
               disabled={ /^\s*$/.test(this.state.modianid) || /^\s*$/.test(this.state.modiantitle) }
-              onClick={ this.onAdd.bind(this) }
+              onClick={ this.handleAdd.bind(this) }
             >
               添加
             </Button>
@@ -182,7 +182,7 @@ class MoDian extends Component{
               type="primary"
               icon="api"
               disabled={ this.props.modianList.length === 0 }
-              onClick={ this.onToExcelAll.bind(this) }
+              onClick={ this.handleToExcelAll.bind(this) }
             >
               生成EXCEL
             </Button>

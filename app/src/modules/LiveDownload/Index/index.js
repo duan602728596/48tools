@@ -102,22 +102,22 @@ class LiveDownload extends Component{
         width: '20%',
         render: (text: any, item: Object): Array=>{
           return [
-            <Button key={ 0 } className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'chao') }>超清</Button>,
-            <Button key={ 1 } className={ publicStyle.mr10 } onClick={ this.onDownload.bind(this, item, 'gao') }>高清</Button>,
-            <Button key={ 2 } onClick={ this.onDownload.bind(this, item, 'liuchang') }>流畅</Button>
+            <Button key={ 0 } className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'chao') }>超清</Button>,
+            <Button key={ 1 } className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'gao') }>高清</Button>,
+            <Button key={ 2 } onClick={ this.handleDownload.bind(this, item, 'liuchang') }>流畅</Button>
           ];
         }
       }
     ];
     return columus;
   }
-  onGroupSelect(value: string, option: Object): void{
+  handleGroupSelect(value: string, option: Object): void{
     this.props.action.changeGroup({
       group: value
     });
   }
   // 加载列表
-  async onLoadList(page: number, pageSize: number, event: Event): Promise<void>{
+  async handleLoadList(page: number, pageSize: number, event: Event): Promise<void>{
     this.setState({
       loading: true
     });
@@ -144,7 +144,7 @@ class LiveDownload extends Component{
     });
   }
   // 公演下载
-  async onDownload(item: Object, quality: string, event: Event): Promise<void>{
+  async handleDownload(item: Object, quality: string, event: Event): Promise<void>{
     try{
       const m3u8Url: string = await getM3U8(this.props.group, item.id, quality);   // m3u8地址
       const dlm: string = await downloadM3U8(m3u8Url);                             // m3u8文本
@@ -194,7 +194,7 @@ class LiveDownload extends Component{
               value={ this.props.group }
               dropdownMatchSelectWidth={ true }
               dropdownClassName={ style.select }
-              onSelect={ this.onGroupSelect.bind(this) }
+              onSelect={ this.handleGroupSelect.bind(this) }
             >
               <Select.Option key="SNH48" value="SNH48">SNH48</Select.Option>
               <Select.Option key="BEJ48" value="BEJ48">BEJ48</Select.Option>
@@ -202,7 +202,7 @@ class LiveDownload extends Component{
               <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
               <Select.Option key="CKG48" value="CKG48">CKG48</Select.Option>
             </Select>
-            <Button className={ publicStyle.ml10 } type="primary" icon="cloud" onClick={ this.onLoadList.bind(this, 1, 15) }>刷新公演录播列表</Button>
+            <Button className={ publicStyle.ml10 } type="primary" icon="cloud" onClick={ this.handleLoadList.bind(this, 1, 15) }>刷新公演录播列表</Button>
           </div>
           <div className={ publicStyle.fr }>
             <Link to="/LiveDownload/List">
@@ -226,7 +226,7 @@ class LiveDownload extends Component{
             showQuickJumper: true,
             current: this.props.page,
             total: this.props.liveList.length === 0 ? 0 : this.props.pageLen * 15,
-            onChange: this.onLoadList.bind(this)
+            onChange: this.handleLoadList.bind(this)
           }}
         />
       </div>

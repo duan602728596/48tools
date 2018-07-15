@@ -70,21 +70,21 @@ class Merge extends Component{
         width: '40%',
         render: (text: string, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           return [
-            <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.onDelete.bind(this, index) }>
+            <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.handleDelete.bind(this, index) }>
               <Button className={ publicStyle.mr10 } type="danger" size="small">删除</Button>
             </Popconfirm>,
             index === 0 ? null : (
               <Button key="upIndex"
                 className={ publicStyle.mr10 }
                 size="small" icon="arrow-up"
-                onClick={ this.onUpIndex.bind(this, index) }
+                onClick={ this.handleUpIndex.bind(this, index) }
               />
             ),
             index === len ? null : (
               <Button key="downIndex"
                 size="small"
                 icon="arrow-down"
-                onClick={ this.onDownIndex.bind(this, index) }
+                onClick={ this.handleDownIndex.bind(this, index) }
               />
             )
           ];
@@ -93,7 +93,7 @@ class Merge extends Component{
     ];
   }
   // 选择视频
-  onFileChange(event: Event): void{
+  handleFileChange(event: Event): void{
     const x: Object[] = [];
     for(const item: Object of event.target.files){
       x.push({
@@ -107,25 +107,25 @@ class Merge extends Component{
     });
   }
   // 点击选择视频
-  onChoose(id: string, event: Event): void{
+  handleChoose(id: string, event: Event): void{
     $(`#${ id }`).click();
   }
   // 清空列表
-  onClear(event: Event): void{
+  handleClear(event: Event): void{
     this.props.action.mergeList({
       mergeList: []
     });
     message.info('已清空列表！');
   }
   // 删除一个视频
-  onDelete(index: number, event: Event): void{
+  handleDelete(index: number, event: Event): void{
     this.props.mergeList.splice(index, 1);
     this.props.action.mergeList({
       mergeList: this.props.mergeList
     });
   }
   // 合并
-  onMergeVideos(event: Event): void{
+  handleMergeVideos(event: Event): void{
     if(this.props.mergeList.length > 0){
       const fi: Object = path.parse(this.props.mergeList[0].path);
       let title: string = '【视频合并】';
@@ -168,7 +168,7 @@ class Merge extends Component{
     }
   }
   // 视频上移
-  onUpIndex(index: number, event: Event): void{
+  handleUpIndex(index: number, event: Event): void{
     const middle: Object = this.props.mergeList[index - 1];
     this.props.mergeList[index - 1] = this.props.mergeList[index];
     this.props.mergeList[index] = middle;
@@ -177,7 +177,7 @@ class Merge extends Component{
     });
   }
   // 视频下移
-  onDownIndex(index: number, event: Event): void{
+  handleDownIndex(index: number, event: Event): void{
     const middle: Object = this.props.mergeList[index + 1];
     this.props.mergeList[index + 1] = this.props.mergeList[index];
     this.props.mergeList[index] = middle;
@@ -194,7 +194,7 @@ class Merge extends Component{
             <Button className={ publicStyle.mr10 }
               type="primary"
               icon="youtube"
-              onClick={ this.onChoose.bind(this, 'choose-video') }
+              onClick={ this.handleChoose.bind(this, 'choose-video') }
             >
               选择视频
             </Button>
@@ -202,12 +202,12 @@ class Merge extends Component{
               type="file"
               style={{ display: 'none' }}
               multiple={ true }
-              onChange={ this.onFileChange.bind(this) }
+              onChange={ this.handleFileChange.bind(this) }
             />
-            <Button icon="fork" onClick={ this.onMergeVideos.bind(this) }>合并视频</Button>
+            <Button icon="fork" onClick={ this.handleMergeVideos.bind(this) }>合并视频</Button>
           </div>
           <div className={ publicStyle.fr }>
-            <Popconfirm title="确认要清空列表？" onConfirm={ this.onClear.bind(this) }>
+            <Popconfirm title="确认要清空列表？" onConfirm={ this.handleClear.bind(this) }>
               <Button icon="frown">清空列表</Button>
             </Popconfirm>
             <Link className={ publicStyle.ml10 } to="/">

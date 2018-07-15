@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { List } from 'immutable';
-import { oldArray } from '../Index/unit';
+import { oldArray } from '../Index/utils';
 
 /* Action */
 export const liveList: Function = createAction('直播列表');

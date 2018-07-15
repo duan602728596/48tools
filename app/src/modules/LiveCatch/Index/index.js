@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../publicMethod/public.sass';
@@ -135,18 +135,18 @@ class LiveCatch extends Component{
             const m: Object = this.props.liveCatch.get(text);
             if(m.child.exitCode === null){
               btn = (
-                <Popconfirm key="stop" title="确认停止录制吗？" onConfirm={ this.onStopRecording.bind(this, item) }>
+                <Popconfirm key="stop" title="确认停止录制吗？" onConfirm={ this.handleStopRecording.bind(this, item) }>
                   <Button type="danger" icon="close-square">停止录制</Button>
                 </Popconfirm>
               );
             }else{
               btn = (
-                <Button key="record" type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
+                <Button key="record" type="primary" icon="play-circle-o" onClick={ this.handleRecording.bind(this, item) }>录制</Button>
               );
             }
           }else{
             btn = (
-              <Button key="record" type="primary" icon="play-circle-o" onClick={ this.onRecording.bind(this, item) }>录制</Button>
+              <Button key="record" type="primary" icon="play-circle-o" onClick={ this.handleRecording.bind(this, item) }>录制</Button>
             );
           }
           return [
@@ -154,7 +154,7 @@ class LiveCatch extends Component{
             <Button key="camera"
               className={ publicStyle.ml10 }
               icon="video-camera"
-              onClick={ this.onVideoPlay.bind(this, item) }
+              onClick={ this.handleVideoPlay.bind(this, item) }
             >
               播放
             </Button>
@@ -165,7 +165,7 @@ class LiveCatch extends Component{
     return columns;
   }
   // 打开新窗口看直播
-  onVideoPlay(item: Object, event: Event): void{
+  handleVideoPlay(item: Object, event: Event): void{
     const qs: Object = {
       title: item.title,
       subTitle: item.subTitle,
@@ -181,7 +181,7 @@ class LiveCatch extends Component{
     });
   }
   // 录制视频
-  onRecording(item: Object, event: Event): void{
+  handleRecording(item: Object, event: Event): void{
     const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title
                         + '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
                         + '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
@@ -207,7 +207,7 @@ class LiveCatch extends Component{
     });
   }
   // 停止录制视频
-  onStopRecording(item: Object, event: Event): void{
+  handleStopRecording(item: Object, event: Event): void{
     const m: Object = this.props.liveCatch.get(item.liveId);
     m.child.kill();
   }
@@ -286,7 +286,7 @@ class LiveCatch extends Component{
     });
   }
   // 自动录制
-  async onAutoRecording(event: Event): Promise<void>{
+  async handleAutoRecording(event: Event): Promise<void>{
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
@@ -305,14 +305,14 @@ class LiveCatch extends Component{
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）
-  onStopAutoRecording(event: Event): void{
+  handleStopAutoRecording(event: Event): void{
     global.clearInterval(this.props.autoRecording);
     this.props.action.autoRecording({
       autoRecording: null
     });
   }
   // 获取录制列表
-  async onGetLiveList(event: Event): Promise<void>{
+  async handleGetLiveList(event: Event): Promise<void>{
     this.setState({
       loading: true
     });
@@ -342,7 +342,7 @@ class LiveCatch extends Component{
                   <Button className={ publicStyle.mr10 }
                     type="danger"
                     icon="close-square"
-                    onClick={ this.onStopAutoRecording.bind(this) }
+                    onClick={ this.handleStopAutoRecording.bind(this) }
                   >
                     停止自动录制
                   </Button>
@@ -350,7 +350,7 @@ class LiveCatch extends Component{
                   <Button className={ publicStyle.mr10 }
                     type="primary"
                     icon="play-circle"
-                    onClick={ this.onAutoRecording.bind(this) }
+                    onClick={ this.handleAutoRecording.bind(this) }
                   >
                     开始自动录制
                   </Button>
@@ -361,7 +361,7 @@ class LiveCatch extends Component{
             </Link>
           </div>
           <div className={ publicStyle.fr }>
-            <Button icon="loading-3-quarters" onClick={ this.onGetLiveList.bind(this) }>刷新列表</Button>
+            <Button icon="loading-3-quarters" onClick={ this.handleGetLiveList.bind(this) }>刷新列表</Button>
             <Link className={ publicStyle.ml10 } to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>
