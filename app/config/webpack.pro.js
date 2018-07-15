@@ -6,13 +6,14 @@ const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
+const lessConfig = require('./less.config');
 
 /* 合并配置 */
 module.exports = config({
   output: {
     path: path.join(__dirname, '../build'),
-    filename: 'script/[name]_[chunkhash].js',
-    chunkFilename: 'script/[name]_[chunkhash]_chunk.js'
+    filename: 'script/[name].[chunkhash].js',
+    chunkFilename: 'script/[name].[chunkhash].js'
   },
   module: {
     rules: [
@@ -20,9 +21,9 @@ module.exports = config({
         test: /^.*\.sass$/,
         use: [MiniCssExtractPlugin.loader, cssConfig, sassConfig]
       },
-      { // css
-        test: /^.*\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      { // less, css
+        test: /^.*\.(le|c)ss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', lessConfig]
       }
     ]
   },

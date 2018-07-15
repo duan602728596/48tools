@@ -4,13 +4,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
+const lessConfig = require('./less.config');
 
 /* 合并配置 */
 module.exports = config({
   output: {
     path: path.join(__dirname, '../build'),
     filename: 'script/[name].js',
-    chunkFilename: 'script/[name]_chunk.js'
+    chunkFilename: 'script/[name].js'
   },
   devtool: 'cheap-module-source-map',
   module: {
@@ -19,9 +20,9 @@ module.exports = config({
         test: /^.*\.sass$/,
         use: ['style-loader', cssConfig, sassConfig]
       },
-      { // css
-        test: /^.*\.css$/,
-        use: ['style-loader', 'css-loader']
+      { // less, css
+        test: /^.*\.(le|c)ss$/,
+        use: ['style-loader', 'css-loader', lessConfig]
       }
     ]
   },

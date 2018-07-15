@@ -1,7 +1,6 @@
-server
 node_modules
 config
-scripts
+bin
 .dll
 appInit.js
 build
