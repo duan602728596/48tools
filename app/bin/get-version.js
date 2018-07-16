@@ -125,10 +125,10 @@ function consoleLogText(packageArray){
       consoleText += `    latest : ${ formatVersion(item.version, item.latest) }\n`;
     }
     if(item.next){
-      consoleText += `    next  :  ${ formatVersion(item.version, item.next) }\n`;
+      consoleText += `    next   : ${ formatVersion(item.version, item.next) }\n`;
     }
     if(item.rc){
-      consoleText += `    rc    :  ${ formatVersion(item.version, item.rc) }\n`;
+      consoleText += `    rc     : ${ formatVersion(item.version, item.rc) }\n`;
     }
   }
   return consoleText;
