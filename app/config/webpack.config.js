@@ -80,12 +80,7 @@ function config(options){
         manifest: manifest
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-    ],
-    optimization: {
-      runtimeChunk: {
-        name: 'manifest'
-      }
-    }
+    ]
   };
 
   /* 合并 */
