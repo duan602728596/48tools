@@ -52,8 +52,8 @@ module.exports = config({
       }
     }),
     new MiniCssExtractPlugin({
-      filename: 'style/[name]_[chunkhash].css',
-      chunkFilename: 'style/[name]_[chunkhash]_chunk.css'
+      filename: 'style/[name].[chunkhash].css',
+      chunkFilename: 'style/[name].[chunkhash].css'
     }),
     new OptimizeCssAssets()
   ]
