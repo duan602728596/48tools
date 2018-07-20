@@ -1,5 +1,6 @@
 /* 下载列表 */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
@@ -39,6 +40,10 @@ class ListOne extends Component{
   state: {
     timer: ?number,
     percent: number
+  };
+  
+  static propTypes: Object = {
+    detail: PropTypes.array
   };
 
   constructor(): void{
@@ -160,6 +165,15 @@ class ListOne extends Component{
 @withRouter
 @connect(state, dispatch)
 class List extends Component{
+  static propTypes: Object = {
+    downloadList: PropTypes.object,
+    fnReady: PropTypes.bool,
+    action: PropTypes.objectOf(PropTypes.func),
+    history: PropTypes.object,
+    location: PropTypes.object,
+    match: PropTypes.object
+  };
+  
   // 组件挂载之前监听chrome下载事件
   UNSAFE_componentWillMount(): void{
     if(this.props.fnReady === false){

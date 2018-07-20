@@ -12,8 +12,9 @@ const path: Object = global.require('path');
 @withRouter
 class Detail extends Component{
   static propTypes: Object = {
+    history: PropTypes.object,
     location: PropTypes.object,
-    history: PropTypes.object
+    match: PropTypes.object
   };
 
   UNSAFE_componentWillMount(): void{

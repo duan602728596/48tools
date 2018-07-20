@@ -90,7 +90,9 @@ class PlayBackDownload extends Component{
     downloadList: PropTypes.object,
     fnReady: PropTypes.bool,
     action: PropTypes.objectOf(PropTypes.func),
-    location: PropTypes.object
+    history: PropTypes.object,
+    location: PropTypes.object,
+    match: PropTypes.object
   };
 
   constructor(): void{
