@@ -64,7 +64,7 @@ class AvDownload extends Component{
         key: 'status',
         dataIndex: 'status',
         width: '10%',
-        render: (text: any, item: Object, index: number): Object=>{
+        render: (text: any, item: Object, index: number): React.Element=>{
           switch(text){
             case 0:
               return <span className={ style.status0 }>未下载</span>;

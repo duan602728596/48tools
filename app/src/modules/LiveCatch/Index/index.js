@@ -77,7 +77,7 @@ class LiveCatch extends Component{
         dataIndex: 'title',
         key: 'title',
         width: '15%',
-        render: (text: string, item: Object, index: number): Object | string=>{
+        render: (text: string, item: Object, index: number): React.Element | string=>{
           if(item._end === true){
             return <span className={ style.overdue }>{ text }</span>;
           }else{
