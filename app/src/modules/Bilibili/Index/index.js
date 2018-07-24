@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm } from 'antd';
+import classNames from 'classnames';
 import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../store/index';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import getUrl from './getUrl';
@@ -82,11 +83,11 @@ class BiliBili extends Component{
             this.props.catching.has(item.roomid)
               ? (
                 <Popconfirm key="catchStop" title="确认停止录制吗？" onConfirm={ this.handleCatchStop.bind(this, item) }>
-                  <Button className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` } type="primary" icon="minus-circle">停止</Button>
+                  <Button className={ classNames(publicStyle.ml10, publicStyle.btn) } type="primary" icon="minus-circle">停止</Button>
                 </Popconfirm>
               ) : (
                 <Button key="catch"
-                  className={ `${ publicStyle.ml10 } ${ publicStyle.btn }` }
+                  className={ classNames(publicStyle.ml10, publicStyle.btn) }
                   type="primary"
                   icon="step-forward"
                   onClick={ this.handleCatch.bind(this, item) }
@@ -161,7 +162,7 @@ class BiliBili extends Component{
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } clearfix` }>
+        <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <Link to="/BiliBili/Option">
               <Button type="primary" icon="setting">添加B站直播间</Button>

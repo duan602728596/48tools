@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Affix, Button, Select, Table, message, Popconfirm } from 'antd';
+import classNames from 'classnames';
 import $ from 'jquery';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import option from '../../../components/option/option';
@@ -198,7 +199,7 @@ class InLive48 extends Component{
       <Fragment>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } clearfix` }>
+          <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
             <div className={ publicStyle.fl }>
               <Select className={ style.select }
                 value={ this.state.group }

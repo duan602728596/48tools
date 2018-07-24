@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
+import classNames from 'classnames';
 import $ from 'jquery';
 import { time, patchZero } from '../../../utils';
 import { cutList, taskChange } from '../store/reducer';
@@ -319,7 +320,7 @@ class Cut extends Component{
     return [
       /* 功能区 */
       <Affix key={ 0 } className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } ${ style.toolsBox } clearfix` }>
+        <div className={ classNames(publicStyle.toolsBox, style.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <p className={ style.tishi }>提示：文件保存成“gif”格式可导出动图。</p>
             <Form layout="inline" onSubmit={ this.handleAddQueue.bind(this) }>
@@ -370,7 +371,7 @@ class Cut extends Component{
                 </Form.Item>
               </div>
               <div className={ style.optGroup }>
-                <Form.Item className={ `${ style.formItem } ${ style.timeGroup }` } label="开始时间">
+                <Form.Item className={ classNames(style.formItem, style.timeGroup) } label="开始时间">
                   {
                     getFieldDecorator('starthh', {
                       rules: [
@@ -422,7 +423,7 @@ class Cut extends Component{
                     )
                   }
                 </Form.Item>
-                <Form.Item className={ `${ style.formItem  } ${ style.end }`} label="结束时间">
+                <Form.Item className={ classNames(style.formItem, style.end) } label="结束时间">
                   {
                     getFieldDecorator('endhh', {
                       rules: [
@@ -486,7 +487,7 @@ class Cut extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
+      <div key={ 1 } className={ classNames(publicStyle.tableBox, style.tableBox) }>
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }

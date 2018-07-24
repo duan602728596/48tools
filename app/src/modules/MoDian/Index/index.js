@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm } from 'antd';
+import classNames from 'classnames';
 import { modianList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
@@ -148,7 +149,7 @@ class MoDian extends Component{
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } clearfix` }>
+        <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <label htmlFor="modian-id">摩点项目ID: </label>
             <Input className={ style.inputId }

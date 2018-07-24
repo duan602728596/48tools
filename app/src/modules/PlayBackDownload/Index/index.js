@@ -265,9 +265,9 @@ class PlayBackDownload extends Component{
         <div className={ `${ publicStyle.toolsBox } clearfix` }>
           <div className={ publicStyle.fl }>
             <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
-            <Input className={ style.searchInput }
+            <Input ref="playBackDownload-searchInput"
+              className={ style.searchInput }
               id="playBackDownload-searchInput"
-              ref="playBackDownload-searchInput"
               placeholder="多个关键字用空格分割"
               onPressEnter={ this.handleSearchInput.bind(this) }
             />
