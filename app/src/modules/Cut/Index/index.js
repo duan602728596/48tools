@@ -125,8 +125,8 @@ class Cut extends Component{
             const m: Map = this.props.cutMap.get(item.id);
             if(m.child.exitCode !== null){
               return [
-                <b key="delete" className={ publicStyle.mr10 }>任务结束</b>,
-                <Popconfirm key={ 1 } title="确认删除任务吗？" onConfirm={ this.handleDeleteTask.bind(this, item) }>
+                <b key="stop" className={ publicStyle.mr10 }>任务结束</b>,
+                <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTask.bind(this, item) }>
                   <Button type="danger" icon="delete">删除任务</Button>
                 </Popconfirm>
               ];
@@ -319,7 +319,7 @@ class Cut extends Component{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return [
       /* 功能区 */
-      <Affix key={ 0 } className={ publicStyle.affix }>
+      <Affix key="affix" className={ publicStyle.affix }>
         <div className={ classNames(publicStyle.toolsBox, style.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <p className={ style.tishi }>提示：文件保存成“gif”格式可导出动图。</p>
@@ -487,7 +487,7 @@ class Cut extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key={ 1 } className={ classNames(publicStyle.tableBox, style.tableBox) }>
+      <div key="tableBox" className={ classNames(publicStyle.tableBox, style.tableBox) }>
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Select } from 'antd';
+import classNames from 'classnames';
 import { liveList, liveListInit, changeGroup } from '../store/index';
 import { downloadList } from '../store/reducer';
 import style from './style.sass';
@@ -102,9 +103,9 @@ class LiveDownload extends Component{
         width: '20%',
         render: (text: any, item: Object): Array=>{
           return [
-            <Button key={ 0 } className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'chao') }>超清</Button>,
-            <Button key={ 1 } className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'gao') }>高清</Button>,
-            <Button key={ 2 } onClick={ this.handleDownload.bind(this, item, 'liuchang') }>流畅</Button>
+            <Button key="chao" className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'chao') }>超清</Button>,
+            <Button key="gao" className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'gao') }>高清</Button>,
+            <Button key="liuchang" onClick={ this.handleDownload.bind(this, item, 'liuchang') }>流畅</Button>
           ];
         }
       }
@@ -188,7 +189,7 @@ class LiveDownload extends Component{
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } clearfix` }>
+        <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <Select className={ style.select }
               value={ this.props.group }
@@ -215,7 +216,7 @@ class LiveDownload extends Component{
         </div>
       </Affix>,
       /* 显示列表 */
-      <div key="tableBox" className={ `${ publicStyle.tableBox } ${ style.tableBox }` }>
+      <div key="tableBox" className={ publicStyle.tableBox }>
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }

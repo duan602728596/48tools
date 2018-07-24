@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Affix, message, Input } from 'antd';
+import classNames from 'classnames';
 import { playBackList } from '../store/index';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
@@ -262,7 +263,7 @@ class PlayBackDownload extends Component{
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } clearfix` }>
+        <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
             <Input ref="playBackDownload-searchInput"

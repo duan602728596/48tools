@@ -71,7 +71,7 @@ class MoDian extends Component{
         width: '33%',
         render: (text: any, item: Object): React.ChildrenArray<React.Element>=>{
           return [
-            <Button key={ 0 }
+            <Button key="excel"
               className={ publicStyle.mr10 }
               type="primary"
               icon="file-excel"
@@ -79,7 +79,7 @@ class MoDian extends Component{
             >
               导出EXCEL
             </Button>,
-            <Popconfirm key={ 1 } title="确认要删除吗？" onConfirm={ this.handleDelete.bind(this, item) }>
+            <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.handleDelete.bind(this, item) }>
               <Button type="danger" icon="delete">删除</Button>
             </Popconfirm>
           ];

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Affix, Button, Input, Table, message, Popconfirm } from 'antd';
+import classNames from 'classnames';
 import $ from 'jquery';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import style from './style.sass';
@@ -235,12 +236,12 @@ class AvDownload extends Component{
       <Fragment>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } clearfix` }>
+          <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
             <div className={ publicStyle.fl }>
               <label htmlFor="av-number">av号: </label>
-              <Input className={ `${ publicStyle.mr10 } ${ style.input }` } id="av-number" />
+              <Input className={ classNames`${ publicStyle.mr10 } ${ style.input }` } id="av-number" />
               <label htmlFor="av-page">视频page: </label>
-              <Input className={ `${ publicStyle.mr10 } ${ style.page }` } id="av-page" />
+              <Input className={ classNames(publicStyle.mr10, style.page) } id="av-page" />
               <Button type="primary" icon="down-square" onClick={ this.handleGetPage }>添加队列</Button>
             </div>
             <div className={ publicStyle.fr }>

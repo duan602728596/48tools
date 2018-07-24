@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Affix, Progress } from 'antd';
+import classNames from 'classnames';
 import QueueAnim from 'rc-queue-anim';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
@@ -211,7 +212,7 @@ class List extends Component{
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } clearfix` }>
+        <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fr }>
             <Button icon="close-square" onClick={ this.handleClear.bind(this) }>全部清除</Button>
             <Link to="/PlayBackDownload">
@@ -220,7 +221,7 @@ class List extends Component{
           </div>
         </div>
       </Affix>,
-      <div key="tableBox" className={ `${ publicStyle.tableBox } ${ style.detailList }` }>
+      <div key="tableBox" className={ classNames(publicStyle.tableBox, style.detailList) }>
         <QueueAnim component="ul" type="alpha" leaveReverse={ true }>
           { this.listOne() }
         </QueueAnim>

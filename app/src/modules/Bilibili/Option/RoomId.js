@@ -62,8 +62,8 @@ class RoomId extends Component{
   }
   render(): Array{
     return [
-      <h3 key={ 0 } className={ style.title }>RoomId查找</h3>,
-      <div key={ 1 } className={ style.group }>
+      <h3 key="title" className={ style.title }>RoomId查找</h3>,
+      <div key="search" className={ style.group }>
         <label className={ style.label } htmlFor="roomUrl">直播间地址：</label>
         <Input className={ style.input }
           id="roomUrl"
@@ -75,7 +75,7 @@ class RoomId extends Component{
           }
         />
       </div>,
-      <div key={ 2 } className={ style.group }>
+      <div key="roomId" className={ style.group }>
         <label className={ style.label } htmlFor="roomId">RoomID：</label>
         <Input className={ style.input }
           id="roomId"

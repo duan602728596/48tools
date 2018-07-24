@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Affix } from 'antd';
+import classNames from 'classnames';
 import QueueAnim from 'rc-queue-anim';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
@@ -63,7 +64,7 @@ class List extends Component{
               ? (
                 <Button className={ style.ar } type="danger" icon="close-square" onClick={ this.handleStop.bind(this, item) }>取消下载</Button>
               ) : (
-                <b className={ `${ style.ar } ${ style.cancelText }` }>已停止</b>
+                <b className={ classNames(style.ar, style.cancelText) }>已停止</b>
               )
           }
         </li>
@@ -75,7 +76,7 @@ class List extends Component{
       <div>
         {/* 功能区 */}
         <Affix className={ publicStyle.affix }>
-          <div className={ `${ publicStyle.toolsBox } clearfix` }>
+          <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
             <div className={ publicStyle.fr }>
               <Button icon="close-square" onClick={ this.handleClear.bind(this) }>全部清除</Button>
               <Link to="/LiveDownload">
@@ -84,7 +85,7 @@ class List extends Component{
             </div>
           </div>
         </Affix>
-        <div className={ `${ publicStyle.tableBox } ${ style.detailList }` }>
+        <div className={ classNames(publicStyle.tableBox, style.detailList) }>
           <QueueAnim component="ul" type="alpha" leaveReverse={ true }>
             { this.downloadList() }
           </QueueAnim>

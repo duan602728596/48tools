@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Affix, Table, Popconfirm } from 'antd';
+import classNames from 'classnames';
 import $ from 'jquery';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { time } from '../../../utils';
@@ -189,7 +190,7 @@ class Merge extends Component{
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
-        <div className={ `${ publicStyle.toolsBox } clearfix` }>
+        <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <Button className={ publicStyle.mr10 }
               type="primary"
