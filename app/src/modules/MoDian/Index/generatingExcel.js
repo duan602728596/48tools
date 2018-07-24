@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { message } from 'antd';
 import { paiHang2 } from './search';
 import { time } from '../../../function';
-import option from '../../publicMethod/option';
+import option from '../../../components/option/option';
 const fs: Object = global.require('fs');
 const process: Object = global.require('process');
 const xlsx: Object = global.require('node-xlsx');

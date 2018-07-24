@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { List } from 'immutable';
-import option from '../../publicMethod/option';
-import { db } from '../../publicMethod/initIndexedDB';
+import option from '../../../components/option/option';
+import { db } from '../../../components/indexedDB/initIndexedDB';
 
 /* Action */
 export const liveList: Function = createAction('B站直播列表');

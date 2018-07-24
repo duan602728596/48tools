@@ -1,6 +1,6 @@
 import store from '../../../store/store';
 import { liveChange } from '../store/index';
-import post from '../../publicMethod/post';
+import post from '../../../components/post/post';
 
 /* 子进程监听 */
 export function child_process_stdout(data: any): void{

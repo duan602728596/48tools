@@ -7,11 +7,11 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../store/index';
-import publicStyle from '../../publicMethod/public.sass';
+import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../function';
-import option from '../../publicMethod/option';
+import option from '../../../components/option/option';
 const child_process: Object = global.require('child_process');
 const http: Object = global.require('http');
 

@@ -10,9 +10,9 @@ import $ from 'jquery';
 import { time, patchZero } from '../../../function';
 import { cutList, taskChange } from '../store/reducer';
 import computingTime from './computingTime';
-import option from '../../publicMethod/option';
+import option from '../../../components/option/option';
 import style from './style.sass';
-import publicStyle from '../../publicMethod/public.sass';
+import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 const child_process: Object = global.require('child_process');
 const path: Object = global.require('path');
 

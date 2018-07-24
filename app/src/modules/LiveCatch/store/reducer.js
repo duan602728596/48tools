@@ -1,9 +1,9 @@
 import { handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 import { objectToArray } from '../../../function';
-import option from '../../publicMethod/option';
+import option from '../../../components/option/option';
 import indexReducer, * as indexAction from './index';
-import { db } from '../../publicMethod/initIndexedDB';
+import { db } from '../../../components/indexedDB/initIndexedDB';
 
 /* 使用immutable初始化基础数据 */
 const initData: {

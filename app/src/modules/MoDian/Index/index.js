@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm } from 'antd';
 import { modianList } from '../store/reducer';
 import style from './style.sass';
-import publicStyle from '../../publicMethod/public.sass';
+import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { searchTitle } from './search';
 import generatingExcel from './generatingExcel';
 

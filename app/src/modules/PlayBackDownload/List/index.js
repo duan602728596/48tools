@@ -9,7 +9,7 @@ import { Button, Affix, Progress } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
-import publicStyle from '../../publicMethod/public.sass';
+import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
 const fs: Object = global.require('fs');
 

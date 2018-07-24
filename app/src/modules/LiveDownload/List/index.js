@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Button, Affix } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import style from './style.sass';
-import publicStyle from '../../publicMethod/public.sass';
+import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { downloadList } from '../store/reducer';
 
 /* 初始化数据 */

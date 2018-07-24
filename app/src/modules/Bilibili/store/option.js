@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
-import option from '../../publicMethod/option';
-import { db } from '../../publicMethod/initIndexedDB';
+import option from '../../../components/option/option';
+import { db } from '../../../components/indexedDB/initIndexedDB';
 
 const opt: {
   name: string,

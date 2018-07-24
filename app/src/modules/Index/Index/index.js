@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
 import style from './style.sass';
 import { test } from '../store/reducer';
-import '../../publicMethod/initIndexedDB';
+import '../../../components/indexedDB/initIndexedDB';
 const gui: Object = global.require('nw.gui');
 
 /* 初始化数据 */
