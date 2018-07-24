@@ -10,7 +10,7 @@ import SwitchLoading from '../assembly/SwitchLoading/index';
 function asyncModule(module: Function): Function{
   return (): React.Element=>(
     <Bundle load={ module }>
-      { (Module: Object): Object => Module ? <Module /> : <SwitchLoading /> }
+      { (Module: Function): React.Element => Module ? <Module /> : <SwitchLoading /> }
     </Bundle>
   );
 }

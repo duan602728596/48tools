@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { injectReducers } from '../store/store';
 
 /* 显示模块 */
 class Bundle extends Component{
   state: {
     module: ?Function
+  };
+
+  static propTypes: Object = {
+    load: PropTypes.func,
+    children: PropTypes.func
   };
 
   constructor(): void{
