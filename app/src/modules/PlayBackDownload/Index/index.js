@@ -11,7 +11,7 @@ import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import post from '../../../components/post/post';
-import { time } from '../../../function';
+import { time } from '../../../utils';
 import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
 const url: Object = global.require('url');
 const path: Object = global.require('path');

@@ -11,7 +11,7 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import option from '../../../components/option/option';
 import style from './style.sass';
 import { inLiveList } from '../store/reducer';
-import { time } from '../../../function';
+import { time } from '../../../utils';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 const child_process: Object = global.require('child_process');
 const cheerio: Object = global.require('cheerio');

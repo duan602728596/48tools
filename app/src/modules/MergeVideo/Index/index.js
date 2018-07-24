@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Button, message, Affix, Table, Popconfirm } from 'antd';
 import $ from 'jquery';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
-import { time } from '../../../function';
+import { time } from '../../../utils';
 import option, { type } from '../../../components/option/option';
 import { mergeList } from '../store/reducer';
 const fs: Object = global.require('fs');

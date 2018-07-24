@@ -1,6 +1,6 @@
 import { createAction, handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { objectToArray } from '../../../function';
+import { objectToArray } from '../../../utils';
 import indexReducer, * as indexAction from './index';
 
 /* 使用immutable初始化基础数据 */

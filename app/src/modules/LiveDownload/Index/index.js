@@ -11,7 +11,7 @@ import { downloadList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { loadList, queryHtml, getM3U8, downloadM3U8, saveM3U8 } from './loadList';
-import { time } from '../../../function';
+import { time } from '../../../utils';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import option from '../../../components/option/option';
 const child_process: Object = global.require('child_process');

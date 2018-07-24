@@ -6,7 +6,7 @@ import { Button } from 'antd';
 import $ from 'jquery';
 import flvjs from 'flvjs';
 import style from './style.sass';
-import { time } from '../../../function';
+import { time } from '../../../utils';
 const path: Object = global.require('path');
 
 @withRouter

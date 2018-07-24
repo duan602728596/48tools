@@ -7,7 +7,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
 import $ from 'jquery';
-import { time, patchZero } from '../../../function';
+import { time, patchZero } from '../../../utils';
 import { cutList, taskChange } from '../store/reducer';
 import computingTime from './computingTime';
 import option from '../../../components/option/option';

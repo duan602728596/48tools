@@ -9,7 +9,7 @@ import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import post from '../../../components/post/post';
-import { time } from '../../../function';
+import { time } from '../../../utils';
 import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import style from './style.sass';

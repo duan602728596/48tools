@@ -1,6 +1,6 @@
 import { handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { objectToArray } from '../../../function';
+import { objectToArray } from '../../../utils';
 import option from '../../../components/option/option';
 import indexReducer, * as indexAction from './index';
 import { db } from '../../../components/indexedDB/initIndexedDB';
