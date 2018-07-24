@@ -1,5 +1,5 @@
 /* 口袋48录播下载 */
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -95,6 +95,7 @@ class PlayBackDownload extends Component{
     location: PropTypes.object,
     match: PropTypes.object
   };
+  playBackDownloadSearchInput: Object = createRef();
 
   constructor(): void{
     super(...arguments);
@@ -208,7 +209,7 @@ class PlayBackDownload extends Component{
   }
   // 搜索事件（点击按钮 + input回车）
   handleSearchInput(event: Event): void{
-    const { value }: { value: string } = this.refs['playBackDownload-searchInput'].input;
+    const { value }: { value: string } = this.playBackDownloadSearchInput.current.input;
     let reg: ?RegExp = null;
     if(!/^\s*$/.test(value)){
       const str: string[] = value.split(/\s+/);
@@ -266,7 +267,7 @@ class PlayBackDownload extends Component{
         <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <label className={ publicStyle.mr10 } htmlFor="playBackDownload-searchInput">搜索已加载列表：</label>
-            <Input ref="playBackDownload-searchInput"
+            <Input ref={ this.playBackDownloadSearchInput }
               className={ style.searchInput }
               id="playBackDownload-searchInput"
               placeholder="多个关键字用空格分割"
