@@ -1,19 +1,6 @@
 /* 公共函数 */
 
 /**
- * 将对象转换成一个数组
- * @param { Object } obj
- * @return { Array }
- */
-export function objectToArray(obj: Object): Function[]{
-  const arr: Array = [];
-  for(const key: string in obj){
-    arr.push(obj[key]);
-  }
-  return arr;
-}
-
-/**
  * 自动补0
  * @param { number } num
  * @return { string }
@@ -28,8 +15,8 @@ export function patchZero(num: number): string{
 
 /**
  * 格式化时间
- * @param { string } modules       : 格式化的字符串
- * @param { number | null } timeStr: 时间戳
+ * @param { string } modules : 格式化的字符串
+ * @param { ?number } timeStr: 时间字符串
  * @return { string }
  */
 export function time(modules: string, timeStr: ?number): string{

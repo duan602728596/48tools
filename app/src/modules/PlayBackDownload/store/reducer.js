@@ -1,6 +1,5 @@
 import { createAction, handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { objectToArray } from '../../../utils';
 import indexReducer, * as indexAction from './index';
 
 /* 使用immutable初始化基础数据 */
@@ -20,7 +19,7 @@ export const fnReady: Function = createAction('下载监听函数初始化');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...objectToArray(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     return $$state.set('index', indexReducer($$state.get('index'), action));
   },
   [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{

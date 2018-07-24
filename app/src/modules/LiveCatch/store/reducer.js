@@ -1,6 +1,5 @@
 import { handleActions, combineActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { objectToArray } from '../../../utils';
 import option from '../../../components/option/option';
 import indexReducer, * as indexAction from './index';
 import { db } from '../../../components/indexedDB/initIndexedDB';
@@ -28,7 +27,7 @@ export const putAutoRecordingOption: Function = db.putAction(opt);  // 更新自
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...objectToArray(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
     return $$state.set('index', indexReducer($$state.get('index'), action));
   }
 }, fromJS(initData));
