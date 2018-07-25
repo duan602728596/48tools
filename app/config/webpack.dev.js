@@ -1,4 +1,5 @@
 /* 开发环境 */
+const process = require('process');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -40,14 +41,16 @@ module.exports = config({
       inject: true,
       hash: true,
       template: path.join(__dirname, '../src/index.pug'),
-      excludeChunks: ['videoPlay']
+      excludeChunks: ['videoPlay'],
+      NODE_ENV: process.env.NODE_ENV
     }),
     new HtmlWebpackPlugin({
       filename: 'videoPlay.html',
       inject: true,
       hash: true,
       template: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.pug'),
-      excludeChunks: ['app']
+      excludeChunks: ['app'],
+      NODE_ENV: process.env.NODE_ENV
     })
   ]
 });

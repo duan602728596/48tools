@@ -8,5 +8,5 @@ html
     script(type='text/javascript' src=require('./appInit'))
     script(type='text/javascript' src=require('jquery/dist/jquery.min'))
     script(type='text/javascript' src=require('flv.js/dist/flv.min'))
-    if process.env.NODE_ENV === 'development'
+    if htmlWebpackPlugin.options.NODE_ENV === 'development'
       script(type='text/javascript' src=require('../.dll/dll'))

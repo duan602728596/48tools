@@ -1,5 +1,5 @@
-const path = require('path');
 const process = require('process');
+const path = require('path');
 const webpack = require('webpack');
 const babelConfig = require('./babel.config');
 
