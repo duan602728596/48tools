@@ -5,10 +5,9 @@
   "license": "GNU General Public License v3.0",
   "scripts": {
     "start": "npm run cleanbuild && cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js --watch",
-    "build": "npm run cleanbuild && cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress",
+    "build": "npm run cleanbuild && cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress && node ./bin/clean.js",
     "cleanbuild": "rimraf ./build",
     "devdll": "cross-env NODE_ENV=development webpack --config ./config/webpack.dll.js --progress",
-    "prodll": "cross-env NODE_ENV=production webpack --config ./config/webpack.dll.js --progress",
     "npmi": "npm install --production",
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",

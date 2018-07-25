@@ -2,14 +2,13 @@ const path = require('path');
 const process = require('process');
 const webpack = require('webpack');
 const babelConfig = require('./babel.config');
-const manifestJson = require('../.dll/manifest.json');
 
 function config(options){
   const conf = {
     mode: process.env.NODE_ENV,
     entry: {
-      app: path.join(__dirname, '../src/app.js'),
-      videoPlay: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.js')
+      app: [path.join(__dirname, '../src/app.js')],
+      videoPlay: [path.join(__dirname, '../src/modules/VideoPlay/videoPlay.js')]
     },
     externals: {
       jquery: 'window.jQuery',
@@ -74,11 +73,6 @@ function config(options){
       ]
     },
     plugins: [
-      // dll
-      new webpack.DllReferencePlugin({
-        context: __dirname,
-        manifest: manifestJson
-      }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
   };
@@ -88,6 +82,7 @@ function config(options){
   conf.plugins = conf.plugins.concat(options.plugins);                      // 合并插件
   conf.output = options.output;                                             // 合并输出目录
   if('devtool' in options) conf.devtool = options.devtool;                  // 合并source-map配置
+  if('optimization' in options) conf.optimization = options.optimization;   // 合并optimization
 
   return conf;
 }
