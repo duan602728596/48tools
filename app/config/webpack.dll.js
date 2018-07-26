@@ -1,6 +1,6 @@
 /* 预先编译dll */
-const path = require('path');
 const process = require('process');
+const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
