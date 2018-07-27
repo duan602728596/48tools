@@ -119,9 +119,11 @@ class MoDian extends Component{
   // 添加到列表
   handleAdd(event: Event): void{
     if(this.state.modiantitle){
+      const modiantitle: string = this.state.modiantitle.replace(/[/\\*\[\]?"']/g, '.');
+
       this.props.modianList.push({
         modianid: this.state.modianid,
-        modiantitle: this.state.modiantitle
+        modiantitle
       });
 
       this.props.action.modianList({
