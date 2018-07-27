@@ -5,7 +5,7 @@
   "license": "GNU General Public License v3.0",
   "scripts": {
     "start": "npm run cleanbuild && cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js --watch",
-    "build": "npm run cleanbuild && cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress && node ./bin/clean.js",
+    "build": "npm run cleanbuild && cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress",
     "cleanbuild": "rimraf ./build",
     "devdll": "cross-env NODE_ENV=development webpack --config ./config/webpack.dll.js --progress",
     "npmi": "npm install --production",

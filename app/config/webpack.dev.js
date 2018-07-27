@@ -39,7 +39,6 @@ module.exports = config({
     new HtmlWebpackPlugin({
       filename: 'index.html',
       inject: true,
-      hash: true,
       template: path.join(__dirname, '../src/index.pug'),
       excludeChunks: ['videoPlay'],
       NODE_ENV: process.env.NODE_ENV
@@ -47,7 +46,6 @@ module.exports = config({
     new HtmlWebpackPlugin({
       filename: 'videoPlay.html',
       inject: true,
-      hash: true,
       template: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.pug'),
       excludeChunks: ['app'],
       NODE_ENV: process.env.NODE_ENV

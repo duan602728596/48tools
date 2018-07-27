@@ -13,8 +13,8 @@ const lessConfig = require('./less.config');
 module.exports = config({
   output: {
     path: path.join(__dirname, '../build'),
-    filename: 'script/[name].[chunkhash].js',
-    chunkFilename: 'script/[name].[chunkhash].js'
+    filename: 'script/[name].[chunkhash:5].js',
+    chunkFilename: 'script/[name].[chunkhash:5].js'
   },
   module: {
     rules: [
@@ -33,7 +33,6 @@ module.exports = config({
     new HtmlWebpackPlugin({
       filename: 'index.html',
       inject: true,
-      hash: true,
       template: path.join(__dirname, '../src/index.pug'),
       excludeChunks: ['videoPlay'],
       minify: {
@@ -45,7 +44,6 @@ module.exports = config({
     new HtmlWebpackPlugin({
       filename: 'videoPlay.html',
       inject: true,
-      hash: true,
       template: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.pug'),
       excludeChunks: ['app'],
       minify: {
@@ -55,8 +53,8 @@ module.exports = config({
       NODE_ENV: process.env.NODE_ENV
     }),
     new MiniCssExtractPlugin({
-      filename: 'style/[name].[chunkhash].css',
-      chunkFilename: 'style/[name].[chunkhash].css'
+      filename: 'style/[name].[chunkhash:5].css',
+      chunkFilename: 'style/[name].[chunkhash:5].css'
     }),
     new OptimizeCssAssets()
   ],
