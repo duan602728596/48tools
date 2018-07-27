@@ -56,9 +56,9 @@ function rename(oldFilePath, newFilePath){
       }else{
         resolve();
       }
-    }).catch((err)=>{
-      console.error(err);
     });
+  }).catch((err)=>{
+    console.error(err);
   });
 }
 
@@ -71,8 +71,8 @@ function mkdir(filePath){
       }else{
         resolve();
       }
-    }).catch((err)=>{
-      console.error(err);
     });
+  }).catch((err)=>{
+    console.error(err);
   });
 }
