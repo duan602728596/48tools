@@ -1,6 +1,7 @@
 const process = require('process');
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const babelConfig = require('./babel.config');
 
 function config(options){
@@ -73,6 +74,21 @@ function config(options){
       ]
     },
     plugins: [
+      // html模板
+      new HtmlWebpackPlugin({
+        filename: 'index.html',
+        inject: true,
+        template: path.join(__dirname, '../src/index.pug'),
+        excludeChunks: ['videoPlay'],
+        NODE_ENV: process.env.NODE_ENV
+      }),
+      new HtmlWebpackPlugin({
+        filename: 'videoPlay.html',
+        inject: true,
+        template: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.pug'),
+        excludeChunks: ['app'],
+        NODE_ENV: process.env.NODE_ENV
+      }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
   };

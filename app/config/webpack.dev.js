@@ -1,8 +1,6 @@
 /* 开发环境 */
-const process = require('process');
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
@@ -34,21 +32,6 @@ module.exports = config({
     new webpack.DllReferencePlugin({
       context: __dirname,
       manifest: manifestJson
-    }),
-    // html模板
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      inject: true,
-      template: path.join(__dirname, '../src/index.pug'),
-      excludeChunks: ['videoPlay'],
-      NODE_ENV: process.env.NODE_ENV
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'videoPlay.html',
-      inject: true,
-      template: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.pug'),
-      excludeChunks: ['app'],
-      NODE_ENV: process.env.NODE_ENV
     })
   ]
 });
