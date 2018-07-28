@@ -88,7 +88,7 @@ class LiveDownload extends Component{
       {
         title: '标题',
         key: 'title',
-        render: (text: any, item: Object): string=>{
+        render: (value: any, item: Object): string=>{
           return (
             <div>
               <b className={ style.title }>{ item.title }</b>
@@ -101,7 +101,7 @@ class LiveDownload extends Component{
         title: '视频下载',
         key: 'handle',
         width: '20%',
-        render: (text: any, item: Object): Array=>{
+        render: (value: any, item: Object): Array=>{
           return [
             <Button key="chao" className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'chao') }>超清</Button>,
             <Button key="gao" className={ publicStyle.mr10 } onClick={ this.handleDownload.bind(this, item, 'gao') }>高清</Button>,

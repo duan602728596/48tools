@@ -64,8 +64,8 @@ class AvDownload extends Component{
         key: 'status',
         dataIndex: 'status',
         width: '10%',
-        render: (text: any, item: Object, index: number): React.Element=>{
-          switch(text){
+        render: (value: number, item: Object, index: number): React.Element=>{
+          switch(value){
             case 0:
               return <span className={ style.status0 }>未下载</span>;
             case 1:
@@ -82,7 +82,7 @@ class AvDownload extends Component{
         title: '操作',
         dataIndex: 'handle',
         width: '20%',
-        render: (text: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           const isLoading: boolean = item.status === 1;
           return [
             <Button key="download"
@@ -176,7 +176,7 @@ class AvDownload extends Component{
         headers: {
           referer: `https://www.bilibili.com/video/av${ number }/`,
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) '
-          + 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
+                      + 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
           Range: 'bytes=0-'
         },
         encoding: null
@@ -239,7 +239,7 @@ class AvDownload extends Component{
           <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
             <div className={ publicStyle.fl }>
               <label htmlFor="av-number">av号: </label>
-              <Input className={ classNames`${ publicStyle.mr10 } ${ style.input }` } id="av-number" />
+              <Input className={ classNames(publicStyle.mr10, style.input) } id="av-number" />
               <label htmlFor="av-page">视频page: </label>
               <Input className={ classNames(publicStyle.mr10, style.page) } id="av-page" />
               <Button type="primary" icon="down-square" onClick={ this.handleGetPage }>添加队列</Button>

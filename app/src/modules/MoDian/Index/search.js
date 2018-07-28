@@ -44,6 +44,8 @@ export function searchTitle(modianId: string): Promise{
         reject(err);
       }
     });
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }
 
@@ -68,6 +70,8 @@ export function paiHang(modianid: string, page: number, type: number): void{
         reject(err);
       }
     });
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }
 
@@ -88,5 +92,7 @@ export function paiHang2(modianid: string, type: number): Promise{
       }
     }
     resolve(data);
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }

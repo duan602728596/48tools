@@ -78,7 +78,7 @@ class BiliBili extends Component{
         title: '操作',
         key: 'handle',
         width: '36%',
-        render: (text: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           return [
             this.props.catching.has(item.roomid)
               ? (

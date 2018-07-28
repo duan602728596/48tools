@@ -85,7 +85,7 @@ class InLive48 extends Component{
         title: '操作',
         key: 'handle',
         width: '25%',
-        render: (text: string, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           return [
             item.child.killed === false && item.child.exitCode === null
               ? [
@@ -123,6 +123,8 @@ class InLive48 extends Component{
           reject(err);
         }
       });
+    }).catch((err: any): void=>{
+      console.error(err);
     });
   }
   // 获取直播间地址（新的直播间地址，其他地方使用旧的直播间地址）
@@ -141,6 +143,8 @@ class InLive48 extends Component{
           reject(err);
         }
       });
+    }).catch((err: any): void=>{
+      console.error(err);
     });
   }
   // 点击录制事件

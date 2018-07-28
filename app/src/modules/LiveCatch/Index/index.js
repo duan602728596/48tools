@@ -77,11 +77,11 @@ class LiveCatch extends Component{
         dataIndex: 'title',
         key: 'title',
         width: '15%',
-        render: (text: string, item: Object, index: number): React.Element | string=>{
+        render: (value: string, item: Object, index: number): React.Element | string=>{
           if(item._end === true){
-            return <span className={ style.overdue }>{ text }</span>;
+            return <span className={ style.overdue }>{ value }</span>;
           }else{
-            return text;
+            return value;
           }
         }
       },
@@ -90,11 +90,11 @@ class LiveCatch extends Component{
         dataIndex: 'subTitle',
         key: 'subTitle',
         width: '20%',
-        render: (text: string, item: Object, index: number): React.Element | string=>{
+        render: (value: string, item: Object, index: number): React.Element | string=>{
           if(item._end === true){
-            return <span className={ style.overdue }>{ text }</span>;
+            return <span className={ style.overdue }>{ value }</span>;
           }else{
-            return text;
+            return value;
           }
         }
       },
@@ -103,11 +103,11 @@ class LiveCatch extends Component{
         dataIndex: 'streamPath',
         key: 'streamPath',
         width: '30%',
-        render: (text: string, item: Object, index: number): React.Element | string=>{
+        render: (value: string, item: Object, index: number): React.Element | string=>{
           if(item._end === true){
-            return <span className={ style.overdue }>{ text }</span>;
+            return <span className={ style.overdue }>{ value }</span>;
           }else{
-            return text;
+            return value;
           }
         }
       },
@@ -116,8 +116,8 @@ class LiveCatch extends Component{
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (text: string, item: Object, index: number): React.Element | string=>{
-          const t: string = time('YY-MM-DD hh:mm:ss', text);
+        render: (value: string, item: Object, index: number): React.Element | string=>{
+          const t: string = time('YY-MM-DD hh:mm:ss', value);
           if(item._end === true){
             return <span className={ style.overdue }>{ t }</span>;
           }else{
@@ -130,10 +130,10 @@ class LiveCatch extends Component{
         dataIndex: 'liveId',
         key: 'handle',
         width: '20%',
-        render: (text: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           let btn: Object = null;
-          if(this.props.liveCatch.has(text)){
-            const m: Object = this.props.liveCatch.get(text);
+          if(this.props.liveCatch.has(value)){
+            const m: Object = this.props.liveCatch.get(value);
             if(m.child.exitCode === null){
               btn = (
                 <Popconfirm key="stop" title="确认停止录制吗？" onConfirm={ this.handleStopRecording.bind(this, item) }>
@@ -239,6 +239,8 @@ class LiveCatch extends Component{
         item
       });
       resolve();
+    }).catch((err: any): void=>{
+      console.error(err);
     });
   }
   // 自动录制的进程

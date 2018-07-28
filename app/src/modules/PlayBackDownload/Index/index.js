@@ -132,13 +132,13 @@ class PlayBackDownload extends Component{
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (text: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', text)
+        render: (value: any, item: Object): string=>time('YY-MM-DD hh:mm:ss', value)
       },
       {
         title: '操作',
         key: 'handle',
         width: '30%',
-        render: (text: any, item: Object): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object): React.ChildrenArray<React.Element>=>{
           return [
             <Link key="link" to={{
               pathname: '/PlayBackDownload/Detail',

@@ -6,14 +6,14 @@
 const https: Object = global.require('https');
 
 const headers: Object = {
-  'os': 'android',
+  os: 'android',
   'User-Agent': 'Mobile_Pocket',
-  'IMEI': '864394020228161',
-  'token': '0',
-  'version': '4.0.4',
+  IMEI: '864394020228161',
+  token: '0',
+  version: '4.0.4',
   'Content-Type': 'application/json;charset=utf-8',
-  'Host': 'plive.48.cn',
-  'Connection': 'Keep-Alive',
+  Host: 'plive.48.cn',
+  Connection: 'Keep-Alive',
   'Accept-Encoding': 'gzip'
 };
 

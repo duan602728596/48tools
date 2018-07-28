@@ -69,7 +69,7 @@ class MoDian extends Component{
         title: '操作',
         dataIndex: 'handle',
         width: '33%',
-        render: (text: any, item: Object): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object): React.ChildrenArray<React.Element>=>{
           return [
             <Button key="excel"
               className={ publicStyle.mr10 }
@@ -119,11 +119,9 @@ class MoDian extends Component{
   // 添加到列表
   handleAdd(event: Event): void{
     if(this.state.modiantitle){
-      const modiantitle: string = this.state.modiantitle.replace(/[/\\*\[\]?"']/g, '.');
-
       this.props.modianList.push({
         modianid: this.state.modianid,
-        modiantitle
+        modiantitle: this.state.modiantitle
       });
 
       this.props.action.modianList({

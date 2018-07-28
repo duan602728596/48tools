@@ -69,7 +69,7 @@ class Merge extends Component{
         title: '操作',
         key: 'handle',
         width: '40%',
-        render: (text: string, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
           return [
             <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.handleDelete.bind(this, index) }>
               <Button className={ publicStyle.mr10 } type="danger" size="small">删除</Button>

@@ -32,6 +32,8 @@ export function loadList(group: string, page: number): Promise{
         reject(err);
       }
     });
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }
 
@@ -86,6 +88,8 @@ export function getM3U8(group: string, id: string, quality: string): Promise{
   }).then((html: string): void=>{
     const xml: any = cheerio.load(html);
     return xml(`#${ quality }_url`).attr('value');
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }
 

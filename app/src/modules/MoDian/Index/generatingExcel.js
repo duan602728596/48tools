@@ -5,7 +5,6 @@ import { paiHang2 } from './search';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
 const fs: Object = global.require('fs');
-const process: Object = global.require('process');
 const xlsx: Object = global.require('node-xlsx');
 
 // 格式化
@@ -53,25 +52,29 @@ function paihangbang(item: Object): Promise{
       '时间（天）'
     ]);
     return {
-      name: item.modiantitle,
+      name: item.modiantitle.replace(/[/\\*\[\]?"']/g, '.'),
       data
     };
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }
 
 // 写入excel
 function writeExcel(title: string, buffer: any): Promise{
-  const t: string = title;
+  const t: string = title.replace(/[/\\*\[\]?"']/g, '.');
   return new Promise((resolve: Function, reject: Function): void=>{
     fs.writeFile(`${ option.output }/【集资统计】${ t }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
       'flag': 'w'
     }, (err: any): void=>{
       if(err){
-        reject();
+        reject(err);
       }else{
         resolve();
       }
     });
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }
 
@@ -84,7 +87,6 @@ async function generatingExcel(modianList: { modianid: string, modiantitle: stri
     });
 
     const result: Array = await Promise.all(queue);
-
     const buffer: any = xlsx.build(result);
     await writeExcel(pathname, buffer);
 

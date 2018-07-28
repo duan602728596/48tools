@@ -81,13 +81,13 @@ class Cut extends Component{
         dataIndex: 'file',
         key: 'file',
         width: '30%',
-        render: (text: any, item: Object): string => item.file.path
+        render: (value: any, item: Object): string => item.file.path
       },
       {
         title: '开始时间',
         key: 'startTime',
         width: '10%',
-        render: (text: any, item: Object, index: number): string=>{
+        render: (value: any, item: Object, index: number): string=>{
           const { starthh, startmm, startss }: {
             starthh: number,
             startmm: number,
@@ -100,7 +100,7 @@ class Cut extends Component{
         title: '结束时间',
         key: 'endTime',
         width: '10%',
-        render: (text: any, item: Object, index: number): string=>{
+        render: (value: any, item: Object, index: number): string=>{
           const { endhh, endmm, endss }: {
             endhh: number,
             endmm: number,
@@ -114,13 +114,13 @@ class Cut extends Component{
         dataIndex: 'saveFile',
         key: 'saveFile',
         width: '30%',
-        render: (text: any, item: Object, index: number): string => item.saveFile.path
+        render: (value: any, item: Object, index: number): string => item.saveFile.path
       },
       {
         title: '操作',
         key: 'handle',
         width: '20%',
-        render: (text: any, item: Object, index: number): React.Element | React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.Element | React.ChildrenArray<React.Element>=>{
           if(this.props.cutMap.has(item.id)){
             const m: Map = this.props.cutMap.get(item.id);
             if(m.child.exitCode !== null){
