@@ -107,7 +107,7 @@ class AvDownload extends Component{
   handleDelete(item: Object, index: number, event: Event): void{
     this.props.avList.splice(index, 1);
     this.props.action.avList({
-      avList
+      avList: this.props.avList
     });
   }
   // 下载
@@ -157,7 +157,7 @@ class AvDownload extends Component{
               break;
             }
           }
-          resolve(infor.durl);
+          resolve(infor?.durl || []);
         },
         error(err: any): void{
           reject(err);
@@ -206,6 +206,10 @@ class AvDownload extends Component{
         page = 1;
       }
       const durl: { url: string }[] = await this.getUrl(number, page);
+      if(durl.length === 0){
+        message.info('视频不存在！');
+        return void 0;
+      }
       const arr: [] = [];
       for(let i: number = 0, j: number = durl.length; i < j; i++){
         const item: Object = durl[i];
@@ -232,6 +236,7 @@ class AvDownload extends Component{
     }
   };
   render(): React.Element{
+    const { avList }: { avList: [] } = this.props;
     return (
       <Fragment>
         {/* 功能区 */}
@@ -253,12 +258,12 @@ class AvDownload extends Component{
         </Affix>
         <div className={ publicStyle.tableBox }>
           <Table bordered={ true }
+            size="small"
             columns={ this.columus() }
             rowKey={ (item: Object): number => item.time }
-            dataSource={ this.props.avList }
+            dataSource={ avList }
             pagination={{
-              pageSize: 20,
-              showQuickJumper: true
+              pageSize: avList.length
             }}
           />
         </div>
