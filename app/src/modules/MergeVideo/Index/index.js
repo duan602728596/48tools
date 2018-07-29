@@ -187,6 +187,7 @@ class Merge extends Component{
     });
   }
   render(): React.ChildrenArray<React.Element>{
+    const { mergeList }: { mergeList: [] } = this.props;
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
@@ -223,10 +224,10 @@ class Merge extends Component{
           size="small"
           columns={ this.columus() }
           rowKey={ (item: Object): number => item.id }
-          dataSource={ this.props.mergeList }
+          dataSource={ mergeList }
           pagination={{
-            pageSize: 20,
-            showQuickJumper: true
+            pageSize: mergeList.length,
+            showQuickJumper: false
           }}
         />
       </div>
