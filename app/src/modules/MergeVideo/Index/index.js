@@ -226,8 +226,7 @@ class Merge extends Component{
           rowKey={ (item: Object): number => item.id }
           dataSource={ mergeList }
           pagination={{
-            pageSize: mergeList.length,
-            showQuickJumper: false
+            pageSize: mergeList.length
           }}
         />
       </div>
