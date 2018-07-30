@@ -4,7 +4,7 @@ const process = require('process');
 function output(env){
   switch(env){
     case 'development': // 开发环境
-      return '[path][name]__[local]___[hash:base64:15]';
+      return '[path][name]__[local]___[hash:base64:5]';
     case 'production':  // 生产环境
       return '_[hash:base64:5]';
   }
