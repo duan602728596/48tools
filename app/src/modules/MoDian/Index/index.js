@@ -190,6 +190,9 @@ class MoDian extends Component{
             <b className={ style.tishi }>结果生成到一个Excel中</b>
           </div>
           <div className={ publicStyle.fr }>
+            <Link to="/MoDian/TotalRanking">
+              <Button className={ publicStyle.mr10 } type="primary" icon="dot-chart">计算总排行</Button>
+            </Link>
             <Link to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>

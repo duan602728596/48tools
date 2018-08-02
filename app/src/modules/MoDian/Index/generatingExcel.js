@@ -23,6 +23,7 @@ function format(list0: Array, list1: Array): Array{
     all += Number(item.backer_money);
     res.push([
       index + 1,                        // 序号
+      item.user_id,                     // user的id
       item.nickname,                    // 昵称
       item.backer_money,                // 打卡金额
       l1.get(item.nickname)             // 打卡时间
@@ -44,9 +45,10 @@ function paihangbang(item: Object): Promise{
       data: Array,
       all: number
     } = format(result[0], result[1]);
-    data.push([null], [`总金额（元）：${ all.toFixed(2) }`]);
+    data.push([null], [`总金额（元）：${ all.toFixed(2) }`], [`摩点ID：${ item.modianid }`]);
     data.unshift([item.modiantitle], [null], [
       '序号',
+      '用户ID',
       '昵称',
       '金额（元）',
       '时间（天）'
@@ -61,12 +63,12 @@ function paihangbang(item: Object): Promise{
 }
 
 // 写入excel
-function writeExcel(title: string, buffer: any): Promise{
+function writeExcel(title: string, buffer: Buffer): Promise{
   const t: string = title.replace(/[/\\*\[\]?"']/g, '.');
   return new Promise((resolve: Function, reject: Function): void=>{
     fs.writeFile(`${ option.output }/【集资统计】${ t }_${ time('YY-MM-DD-hh-mm-ss') }.xlsx`, buffer, {
       'flag': 'w'
-    }, (err: any): void=>{
+    }, (err: Error): void=>{
       if(err){
         reject(err);
       }else{
