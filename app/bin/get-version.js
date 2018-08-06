@@ -1,5 +1,16 @@
 const https = require('https');
+const yargs = require('yargs');
 const packageJson = require('../package.json');
+
+const { argv } = yargs.options({
+  registry: {
+    alias: 'r',
+    demand: false,
+    describe: 'Npm包信息地址。0：Npm，1：Yarn，2：CNpm。',
+    type: 'number',
+    default: 0
+  }
+});
 
 /**
  * 对象转数组
@@ -22,8 +33,14 @@ function objectToArray(obj){
  */
 function requestPackageInformation(packageName){
   return new Promise((resolve, reject)=>{
+    // 用来判断当前的npm包信息地址
+    const packageHost = [
+      'registry.npmjs.org',   // npm
+      'registry.yarnpkg.com', // yarn
+      'r.cnpmjs.org'          // cnpm
+    ];
     const req = https.request({
-      hostname: 'registry.npmjs.org',
+      hostname: packageHost[argv.registry],
       path: `/${ packageName }`,
       port: null,
       method: 'GET',
@@ -102,6 +119,9 @@ async function getVersionFromNpm(packageArray){
       if('dist-tags' in version[i] && 'rc' in version[i]['dist-tags']){
         packageArray[i].rc = version[i]['dist-tags'].rc;
       }
+      if('dist-tags' in version[i] && 'canary' in version[i]['dist-tags']){
+        packageArray[i].canary = version[i]['dist-tags'].canary;
+      }
     }
   }catch(err){
     console.error(err);
@@ -119,7 +139,8 @@ function consoleLogText(packageArray){
     const isLatestNew = isVersionEqual(item.version, item.latest);
     const isNextNew = isVersionEqual(item.version, item.next);
     const isRcNew = isVersionEqual(item.version, item.rc);
-    consoleText += `${ isLatestNew || isNextNew || isRcNew ? '  ' : '* ' }${ item.name }:\n`;
+    const isCanaryNew = isVersionEqual(item.version, item.canary);
+    consoleText += `${ isLatestNew || isNextNew || isRcNew || isCanaryNew ? '  ' : '* ' }${ item.name }:\n`;
     consoleText += `    version: ${ item.version }\n`;
     if(item.latest){
       consoleText += `    latest : ${ formatVersion(item.version, item.latest) }\n`;
@@ -129,6 +150,9 @@ function consoleLogText(packageArray){
     }
     if(item.rc){
       consoleText += `    rc     : ${ formatVersion(item.version, item.rc) }\n`;
+    }
+    if(item.canary){
+      consoleText += `    canary : ${ formatVersion(item.version, item.canary) }\n`;
     }
   }
   return consoleText;
