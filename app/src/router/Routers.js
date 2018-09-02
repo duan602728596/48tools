@@ -2,25 +2,16 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncModule from './asyncModule';
 import Index from '../modules/Index/Layout';
-import LiveCatch from 'bundle-loader?lazy&name=livecatch!../modules/LiveCatch/Layout';
-import PlayBackDownload from 'bundle-loader?lazy&name=playbackdownload!../modules/PlayBackDownload/Layout';
-import BiliBili from 'bundle-loader?lazy&name=bilibili!../modules/Bilibili/Layout';
-import Cut from 'bundle-loader?lazy&name=cut!../modules/Cut/Layout';
-import MergeVideo from 'bundle-loader?lazy&name=mergevideo!../modules/MergeVideo/Layout';
-import MoDian from 'bundle-loader?lazy&name=modian!../modules/MoDian/Layout';
-import LiveDownload from 'bundle-loader?lazy&name=livedownload!../modules/LiveDownload/Layout';
-import InLive48 from 'bundle-loader?lazy&name=inlive48!../modules/InLive48/Layout';
-import AvDownload from 'bundle-loader?lazy&name=avdownload!../modules/AvDownload/Layout';
 
-const LiveCatchBundle: Function = asyncModule(LiveCatch);
-const PlayBackDownloadBundle: Function = asyncModule(PlayBackDownload);
-const BiliBiliBundle: Function = asyncModule(BiliBili);
-const CutBundle: Function = asyncModule(Cut);
-const MergeVideoBundle: Function = asyncModule(MergeVideo);
-const MoDianBundle: Function = asyncModule(MoDian);
-const LiveDownloadBundle: Function = asyncModule(LiveDownload);
-const InLive48Bundle: Function = asyncModule(InLive48);
-const AvDownloadBundle: Function = asyncModule(AvDownload);
+const LiveCatchBundle: Function = asyncModule((): Promise => import('../modules/LiveCatch/Layout'));
+const PlayBackDownloadBundle: Function = asyncModule((): Promise => import('../modules/PlayBackDownload/Layout'));
+const BiliBiliBundle: Function = asyncModule((): Promise => import('../modules/Bilibili/Layout'));
+const CutBundle: Function = asyncModule((): Promise => import('../modules/Cut/Layout'));
+const MergeVideoBundle: Function = asyncModule((): Promise => import('../modules/MergeVideo/Layout'));
+const MoDianBundle: Function = asyncModule((): Promise => import('../modules/MoDian/Layout'));
+const LiveDownloadBundle: Function = asyncModule((): Promise => import('../modules/LiveDownload/Layout'));
+const InLive48Bundle: Function = asyncModule((): Promise => import('../modules/InLive48/Layout'));
+const AvDownloadBundle: Function = asyncModule((): Promise => import('../modules/AvDownload/Layout'));
 
 /* 路由模块 */
 class Routers extends Component{

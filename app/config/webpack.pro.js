@@ -2,6 +2,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
@@ -11,8 +12,8 @@ const lessConfig = require('./less.config');
 module.exports = config({
   output: {
     path: path.join(__dirname, '../build'),
-    filename: 'script/[name].[chunkhash:5].js',
-    chunkFilename: 'script/[name].[chunkhash:5].js'
+    filename: 'script/[chunkhash:5].js',
+    chunkFilename: 'script/[chunkhash:5].js'
   },
   module: {
     rules: [
@@ -28,8 +29,8 @@ module.exports = config({
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'style/[name].[chunkhash:5].css',
-      chunkFilename: 'style/[name].[chunkhash:5].css'
+      filename: 'style/[chunkhash:5].css',
+      chunkFilename: 'style/[chunkhash:5].css'
     }),
     new OptimizeCssAssets()
   ],
@@ -37,6 +38,7 @@ module.exports = config({
     splitChunks: {
       chunks: 'all',
       automaticNameDelimiter: '.'
-    }
+    },
+    minimizer: [new TerserPlugin()]
   }
 });

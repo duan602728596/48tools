@@ -14,7 +14,6 @@ module.exports = config({
     filename: 'script/[name].js',
     chunkFilename: 'script/[name].js'
   },
-  devtool: 'cheap-module-source-map',
   module: {
     rules: [
       { // sass

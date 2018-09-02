@@ -5,8 +5,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const babelConfig = require('./babel.config');
 
 function config(options){
+  const { NODE_ENV } = process.env;
+  const isDevelopment = NODE_ENV === 'development';
+  const fileName = isDevelopment ? '[name].[ext]' : '[hash:5].[ext]';
   const conf = {
-    mode: process.env.NODE_ENV,
+    mode: NODE_ENV,
+    devtool: isDevelopment ? 'cheap-module-source-map' : 'none',
     entry: {
       app: [path.join(__dirname, '../src/app.js')],
       videoPlay: [path.join(__dirname, '../src/modules/VideoPlay/videoPlay.js')]
@@ -28,21 +32,26 @@ function config(options){
             {
               loader: 'file-loader',
               options: {
-                name: '[name].[hash:5].[ext]',
+                name: fileName,
                 outputPath: 'script/'
               }
             }
           ]
         },
         { // 图片
-          test: /^.*\.(jpg|png|gif)$/,
+          test: /^.*\.(jpe?g|png|gif)$/,
           use: [
             {
               loader: 'url-loader',
               options: {
-                limit: 3000,
-                name: '[name].[hash:5].[ext]',
-                outputPath: 'image/',
+                limit: 8192,
+                fallback: {
+                  loader: 'file-loader',
+                  options: {
+                    name: fileName,
+                    outputPath: 'image/'
+                  }
+                }
               }
             }
           ]
@@ -53,7 +62,7 @@ function config(options){
             {
               loader: 'file-loader',
               options: {
-                name: '[name].[hash:5].[ext]',
+                name: fileName,
                 outputPath: 'file/'
               }
             }
@@ -65,7 +74,7 @@ function config(options){
             {
               loader: 'pug-loader',
               options: {
-                pretty: process.env.NODE_ENV === 'development',
+                pretty: isDevelopment,
                 name: '[name].html'
               }
             }
@@ -80,14 +89,14 @@ function config(options){
         inject: true,
         template: path.join(__dirname, '../src/index.pug'),
         excludeChunks: ['videoPlay'],
-        NODE_ENV: process.env.NODE_ENV
+        NODE_ENV
       }),
       new HtmlWebpackPlugin({
         filename: 'videoPlay.html',
         inject: true,
         template: path.join(__dirname, '../src/modules/VideoPlay/videoPlay.pug'),
         excludeChunks: ['app'],
-        NODE_ENV: process.env.NODE_ENV
+        NODE_ENV
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
@@ -97,7 +106,6 @@ function config(options){
   conf.module.rules = conf.module.rules.concat(options.module.rules);       // 合并rules
   conf.plugins = conf.plugins.concat(options.plugins);                      // 合并插件
   conf.output = options.output;                                             // 合并输出目录
-  if('devtool' in options) conf.devtool = options.devtool;                  // 合并source-map配置
   if('optimization' in options) conf.optimization = options.optimization;   // 合并optimization
 
   return conf;
