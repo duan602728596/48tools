@@ -18,7 +18,7 @@ module.exports = config({
   module: {
     rules: [
       { // sass
-        test: /^.*\.sass$/,
+        test: /^.*\.s(a|c)ss$/,
         use: [MiniCssExtractPlugin.loader, cssConfig, sassConfig]
       },
       { // less, css
