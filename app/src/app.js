@@ -5,12 +5,12 @@ import { Provider } from 'react-redux';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Routers from './router/Routers';
-import store from './store/store';
+import { storeFactory } from './store/store';
 import './common.sass';
 
 /* app */
 ReactDOM.render(
-  <Provider store={ store }>
+  <Provider store={ storeFactory(window.__INITIAL_STATE__ || {}) }>
     <LocaleProvider locale={ zhCN }>
       <HashRouter>
         <Routers />
