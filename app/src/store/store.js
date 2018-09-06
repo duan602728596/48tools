@@ -7,9 +7,6 @@ import { createReducer } from './reducers';
 /* reducer列表 */
 const reducer: Function = createReducer({});
 
-/* initialState */
-const $$initialState: Immutable.Map = Map();
-
 /* 中间件 */
 const middlewares: Function = applyMiddleware(thunk);
 
