@@ -198,7 +198,7 @@ class List extends Component{
     });
   }
   // 清除已下载
-  handleClear(event: Event): void{
+  handleClearClick(event: Event): void{
     this.props.downloadList.forEach((value: Object, key: number): void=>{
       if(value.state !== 1){
         this.props.downloadList.delete(key);
@@ -214,7 +214,7 @@ class List extends Component{
       <Affix key="affix" className={ publicStyle.affix }>
         <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fr }>
-            <Button icon="close-square" onClick={ this.handleClear.bind(this) }>全部清除</Button>
+            <Button icon="close-square" onClick={ this.handleClearClick.bind(this) }>全部清除</Button>
             <Link to="/PlayBackDownload">
               <Button className={ publicStyle.ml10 } type="danger" icon="poweroff">返回</Button>
             </Link>

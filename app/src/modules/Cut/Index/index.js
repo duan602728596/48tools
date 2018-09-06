@@ -126,21 +126,21 @@ class Cut extends Component{
             if(m.child.exitCode !== null){
               return [
                 <b key="stop" className={ publicStyle.mr10 }>任务结束</b>,
-                <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTask.bind(this, item) }>
+                <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTaskClick.bind(this, item) }>
                   <Button type="danger" icon="delete">删除任务</Button>
                 </Popconfirm>
               ];
             }else{
               return (
-                <Popconfirm title="确认停止任务吗？" onConfirm={ this.handleStopTask.bind(this, item) }>
+                <Popconfirm title="确认停止任务吗？" onConfirm={ this.handleStopTaskClick.bind(this, item) }>
                   <Button type="danger" icon="close-circle">停止任务</Button>
                 </Popconfirm>
               );
             }
           }else{
             return [
-              <Button key="start" className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.handleStartTask.bind(this, item) }>开始任务</Button>,
-              <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTask.bind(this, item) }>
+              <Button key="start" className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.handleStartTaskClick.bind(this, item) }>开始任务</Button>,
+              <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTaskClick.bind(this, item) }>
                 <Button type="danger" icon="delete">删除任务</Button>
               </Popconfirm>
             ];
@@ -175,11 +175,11 @@ class Cut extends Component{
     });
   }
   // 点击input
-  handleClickInput(id: string, event: Event): void{
+  handleClickInputClick(id: string, event: Event): void{
     $(`#${ id }`).click();
   }
   // 添加到队列
-  handleAddQueue(event: Event): void{
+  handleAddQueueClick(event: Event): void{
     event.preventDefault();
     this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
       if(!err){
@@ -227,7 +227,7 @@ class Cut extends Component{
     });
   }
   // 删除任务
-  handleDeleteTask(item: Object, event: Event): void{
+  handleDeleteTaskClick(item: Object, event: Event): void{
     const index: number = this.props.cutList.indexOf(item);
     this.props.cutList.splice(index, 1);
     this.props.action.cutList({
@@ -254,7 +254,7 @@ class Cut extends Component{
     message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 开始任务
-  handleStartTask(item: Object, event: Event): void{
+  handleStartTaskClick(item: Object, event: Event): void{
     const { starthh, startmm, startss, endhh, endmm, endss }: {
       starthh: number,
       startmm: number,
@@ -311,7 +311,7 @@ class Cut extends Component{
     message.info(`开始剪切【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 停止任务
-  handleStopTask(item: Object, event: Event): void{
+  handleStopTaskClick(item: Object, event: Event): void{
     const m: Object = this.props.cutMap.get(item.id);
     m.child.kill();
   }
@@ -323,7 +323,7 @@ class Cut extends Component{
         <div className={ classNames(publicStyle.toolsBox, style.toolsBox, 'clearfix') }>
           <div className={ publicStyle.fl }>
             <p className={ style.tishi }>提示：文件保存成“gif”格式可导出动图。</p>
-            <Form layout="inline" onSubmit={ this.handleAddQueue.bind(this) }>
+            <Form layout="inline" onSubmit={ this.handleAddQueueClick.bind(this) }>
               <div className={ style.fileGroup }>
                 <Form.Item label="文件地址">
                   {
@@ -336,7 +336,7 @@ class Cut extends Component{
                       ]
                     })(
                       <div>
-                        <Button size="default" onClick={ this.handleClickInput.bind(this, 'cut-file') }>选择视频文件</Button>
+                        <Button size="default" onClick={ this.handleClickInputClick.bind(this, 'cut-file') }>选择视频文件</Button>
                         <span className={ style.path }>{ this.state.file ? this.state.file.path : '' }</span>
                         <input className={ style.disNone } id="cut-file" type="file" onChange={ this.handleFileChange.bind(this) } />
                       </div>
@@ -356,7 +356,7 @@ class Cut extends Component{
                       ]
                     })(
                       <div>
-                        <Button size="default" onClick={ this.handleClickInput.bind(this, 'cut-save') }>选择保存位置</Button>
+                        <Button size="default" onClick={ this.handleClickInputClick.bind(this, 'cut-save') }>选择保存位置</Button>
                         <span className={ style.path }>{ this.state.saveFile ? this.state.saveFile.path : '' }</span>
                         <input className={ style.disNone }
                           id="cut-save"

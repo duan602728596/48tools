@@ -46,7 +46,7 @@ class BiliBiliOption extends Component{
     };
   }
   // 添加
-  async handleAdd(event: Event): Promise<void>{
+  async handleAddClick(event: Event): Promise<void>{
     event.preventDefault();
     this.setState({
       loading: true,
@@ -85,7 +85,7 @@ class BiliBiliOption extends Component{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return (
       <div className={ style.body }>
-        <Form className={ style.form } layout="horizontal" onSubmit={ this.handleAdd.bind(this) }>
+        <Form className={ style.form } layout="horizontal" onSubmit={ this.handleAddClick.bind(this) }>
           <div>
             <Spin spinning={ this.state.loading } tip="加载中...">
               <Form.Item label="直播间名称">

@@ -82,7 +82,7 @@ class BiliBili extends Component{
           return [
             this.props.catching.has(item.roomid)
               ? (
-                <Popconfirm key="catchStop" title="确认停止录制吗？" onConfirm={ this.handleCatchStop.bind(this, item) }>
+                <Popconfirm key="catchStop" title="确认停止录制吗？" onConfirm={ this.handleCatchStopClick.bind(this, item) }>
                   <Button className={ classNames(publicStyle.ml10, publicStyle.btn) } type="primary" icon="minus-circle">停止</Button>
                 </Popconfirm>
               ) : (
@@ -90,12 +90,12 @@ class BiliBili extends Component{
                   className={ classNames(publicStyle.ml10, publicStyle.btn) }
                   type="primary"
                   icon="step-forward"
-                  onClick={ this.handleCatch.bind(this, item) }
+                  onClick={ this.handleCatchClick.bind(this, item) }
                 >
                   录制
                 </Button>
               ),
-            <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.handleDelete.bind(this, item) }>
+            <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.handleDeleteClick.bind(this, item) }>
               <Button className={ publicStyle.ml10 } type="danger" icon="close-square" disabled={ this.props.catching.has(item.roomid) }>删除</Button>
             </Popconfirm>
           ];
@@ -115,7 +115,7 @@ class BiliBili extends Component{
     });
   }
   // 录制
-  async handleCatch(item: Object, event: Event): Promise<void>{
+  async handleCatchClick(item: Object, event: Event): Promise<void>{
     const url: string = await getUrl(item.roomid);
     const urlList: Object = JSON.parse(url);
     const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
@@ -142,13 +142,13 @@ class BiliBili extends Component{
     message.success(`开始录制【${ item.roomname }】！`);
   }
   // 停止
-  handleCatchStop(item: Object, event: Event): void{
+  handleCatchStopClick(item: Object, event: Event): void{
     const m: Object = this.props.catching.get(item.roomid);
     m.child.kill();
     message.warn(`停止录制【${ item.roomname }】！`);
   }
   // 删除
-  async handleDelete(item: Object, event: Event): Promise<void>{
+  async handleDeleteClick(item: Object, event: Event): Promise<void>{
     try{
       await this.props.action.deleteBilibiliLiveRoom({
         query: item.roomid

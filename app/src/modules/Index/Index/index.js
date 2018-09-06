@@ -43,7 +43,7 @@ class Index extends Component{
     });
   }
   // 清除缓存
-  handleClearCache(event: Event): void{
+  handleClearCacheClick(event: Event): void{
     gui.App.clearCache();
     message.success('缓存清除成功！');
   }
@@ -66,7 +66,7 @@ class Index extends Component{
           <Checkbox checked={ this.props.test } onChange={ this.handleCheckChange.bind(this) }>
             <span>显示测试功能。（某些功能正在测试，功能不稳定）</span>
           </Checkbox>
-          <Button className={ style.clearCache } onClick={ this.handleClearCache.bind(this) }>清除缓存</Button>
+          <Button className={ style.clearCache } onClick={ this.handleClearCacheClick.bind(this) }>清除缓存</Button>
         </div>
         <Row type="flex" align="top" justify="start">
           <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>

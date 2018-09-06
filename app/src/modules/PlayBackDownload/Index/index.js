@@ -180,7 +180,7 @@ class PlayBackDownload extends Component{
     });
   }
   // 下载
-  handleDownload(item: Object, event: Event): void{
+  handleDownloadClick(item: Object, event: Event): void{
     const urlInfo: Object = url.parse(item.streamPath);
     const pathInfo: Object = path.parse(urlInfo.pathname);
 
@@ -208,7 +208,7 @@ class PlayBackDownload extends Component{
     });
   }
   // 搜索事件（点击按钮 + input回车）
-  handleSearchInput(event: Event): void{
+  handleSearchInputClick(event: Event): void{
     const { value }: { value: string } = this.playBackDownloadSearchInput.current.input;
     let reg: ?RegExp = null;
     if(!/^\s*$/.test(value)){
@@ -224,13 +224,13 @@ class PlayBackDownload extends Component{
     });
   }
   // 重置
-  handleReset(event: Event): void{
+  handleResetClick(event: Event): void{
     this.setState({
       keyword: ''
     });
   }
   // 加载和刷新列表
-  async handlePlayBackListLoad(type: string, event: Event): Promise<void>{
+  async handlePlayBackListLoadClick(type: string, event: Event): Promise<void>{
     this.setState({
       loading: true
     });
@@ -271,21 +271,21 @@ class PlayBackDownload extends Component{
               className={ style.searchInput }
               id="playBackDownload-searchInput"
               placeholder="多个关键字用空格分割"
-              onPressEnter={ this.handleSearchInput.bind(this) }
+              onPressEnter={ this.handleSearchInputClick.bind(this) }
             />
-            <Button className={ publicStyle.mr10 } icon="search" onClick={ this.handleSearchInput.bind(this) }>搜索</Button>
-            <Button icon="close" onClick={ this.handleReset.bind(this) }>重置</Button>
+            <Button className={ publicStyle.mr10 } icon="search" onClick={ this.handleSearchInputClick.bind(this) }>搜索</Button>
+            <Button icon="close" onClick={ this.handleResetClick.bind(this) }>重置</Button>
           </div>
           <div className={ publicStyle.fr }>
             <Button type="primary"
               icon="cloud-download-o"
-              onClick={ this.handlePlayBackListLoad.bind(this, '加载') }
+              onClick={ this.handlePlayBackListLoadClick.bind(this, '加载') }
             >
               加载列表
             </Button>
             <Button className={ publicStyle.ml10 }
               icon="loading-3-quarters"
-              onClick={ this.handlePlayBackListLoad.bind(this, '刷新') }
+              onClick={ this.handlePlayBackListLoadClick.bind(this, '刷新') }
             >
               刷新列表
             </Button>

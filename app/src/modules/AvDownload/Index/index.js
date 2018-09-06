@@ -90,11 +90,11 @@ class AvDownload extends Component{
               type="primary"
               icon="video-camera"
               loading={ isLoading }
-              onClick={ this.handleDownloadDFlv.bind(this, item, index) }
+              onClick={ this.handleDownloadFlvClick.bind(this, item, index) }
             >
               下载
             </Button>,
-            <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.handleDelete.bind(this, item, index) }>
+            <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.handleDeleteClick.bind(this, item, index) }>
               <Button type="danger" icon="delete" loading={ isLoading }>删除</Button>
             </Popconfirm>
           ];
@@ -104,14 +104,14 @@ class AvDownload extends Component{
     return columus;
   }
   // 删除
-  handleDelete(item: Object, index: number, event: Event): void{
+  handleDeleteClick(item: Object, index: number, event: Event): void{
     this.props.avList.splice(index, 1);
     this.props.action.avList({
       avList: this.props.avList
     });
   }
   // 下载
-  async handleDownloadDFlv(item: Object, index: number, event: Event): Promise{
+  async handleDownloadFlvClick(item: Object, index: number, event: Event): Promise{
     this.props.avList[index].status = 1;
     this.props.action.avList({
       avList: this.props.avList
@@ -192,7 +192,7 @@ class AvDownload extends Component{
     });
   }
   // 抓取页面
-  handleGetPage: Function = async(event: Event): void=>{
+  handleGetPageClick: Function = async(event: Event): void=>{
     try{
       const $avNumber: jQuery = $('#av-number');
       const $avPage: jQuery = $('#av-page');
@@ -247,7 +247,7 @@ class AvDownload extends Component{
               <Input className={ classNames(publicStyle.mr10, style.input) } id="av-number" />
               <label htmlFor="av-page">视频page: </label>
               <Input className={ classNames(publicStyle.mr10, style.page) } id="av-page" />
-              <Button type="primary" icon="down-square" onClick={ this.handleGetPage }>添加队列</Button>
+              <Button type="primary" icon="down-square" onClick={ this.handleGetPageClick }>添加队列</Button>
             </div>
             <div className={ publicStyle.fr }>
               <Link to="/">

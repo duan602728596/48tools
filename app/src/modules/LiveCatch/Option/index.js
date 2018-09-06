@@ -67,7 +67,7 @@ class LiveCatchOption extends Component{
     }
   }
   // 修改
-  handleRevise(event: Event): void{
+  handleReviseClick(event: Event): void{
     event.preventDefault();
     this.setState({
       loading: true,
@@ -114,7 +114,7 @@ class LiveCatchOption extends Component{
     const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
     return (
       <div className={ style.body }>
-        <Form layout="horizontal" onSubmit={ this.handleRevise.bind(this) }>
+        <Form layout="horizontal" onSubmit={ this.handleReviseClick.bind(this) }>
           <div>
             <Spin spinning={ this.state.loading }>
               <Form.Item label={

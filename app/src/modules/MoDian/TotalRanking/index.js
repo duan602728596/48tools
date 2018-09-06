@@ -132,7 +132,7 @@ class TotalRanking extends Component{
     return newData;
   }
   // 计算并重新写入文件
-  async handleWriteXlsx(filePath: string): Promise<void>{
+  async writeXlsx(filePath: string): Promise<void>{
     try{
       const buffer: Buffer = await this.readFile(filePath);
       const data: [] = xlsx.parse(buffer);
@@ -161,7 +161,7 @@ class TotalRanking extends Component{
       const filePath: string = event.target.files[0].path;
       const fileInfor: Object = path.parse(filePath);
       if(fileInfor.ext === '.xlsx'){
-        this.handleWriteXlsx(filePath);
+        this.writeXlsx(filePath);
       }else{
         message.warn('必须上传xlsx格式的文件。');
       }

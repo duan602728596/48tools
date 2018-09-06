@@ -89,10 +89,10 @@ class InLive48 extends Component{
           return [
             item.child.killed === false && item.child.exitCode === null
               ? [
-                <Button key="stop" type="danger" icon="close-square" onClick={ this.handleStop.bind(this, item) }>取消下载</Button>
+                <Button key="stop" type="danger" icon="close-square" onClick={ this.handleStopClick.bind(this, item) }>取消下载</Button>
               ] : [
                 <b key="isStop" className={ publicStyle.mr10 }>已停止</b>,
-                <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.handleDelete.bind(this, item) }>
+                <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.handleDeleteClick.bind(this, item) }>
                   <Button type="danger" icon="delete">删除</Button>
                 </Popconfirm>
               ]
@@ -148,7 +148,7 @@ class InLive48 extends Component{
     });
   }
   // 点击录制事件
-  async handleDownLoadLive(event: Event): Promise<void | boolean>{
+  async handleDownLoadLiveClick(event: Event): Promise<void | boolean>{
     const inliveUrl: string = await this.getInliveUrl();
     const html: string = await this.getHtml(IN_LIVE_URL[this.state.group] + inliveUrl);
     const xml: any = cheerio.load(html);
@@ -186,11 +186,11 @@ class InLive48 extends Component{
     });
   }
   // 停止下载
-  handleStop(item: Object, event: Event): void{
+  handleStopClick(item: Object, event: Event): void{
     item.child.kill();
   }
   // 删除
-  handleDelete(item: Object, event: Event): void{
+  handleDeleteClick(item: Object, event: Event): void{
     const index: number = this.props.inLiveList.indexOf(item);
     const ils: Array = this.props.inLiveList;
     ils.splice(index, 1);
@@ -227,7 +227,7 @@ class InLive48 extends Component{
                 <Select.Option key="chao_url" value="chao_url">超清</Select.Option>
                 <Select.Option key="liuchang_url" value="liuchang_url">流畅</Select.Option>
               </Select>
-              <Button type="primary" icon="cloud-download" onClick={ this.handleDownLoadLive.bind(this) }>录制官方源</Button>
+              <Button type="primary" icon="cloud-download" onClick={ this.handleDownLoadLiveClick.bind(this) }>录制官方源</Button>
             </div>
             <div className={ publicStyle.fr }>
               <Link to="/">
