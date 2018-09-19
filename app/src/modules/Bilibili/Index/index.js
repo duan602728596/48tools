@@ -89,7 +89,7 @@ class BiliBili extends Component{
                 <Button key="catch"
                   className={ classNames(publicStyle.ml10, publicStyle.btn) }
                   type="primary"
-                  icon="step-forward"
+                  icon="laptop"
                   onClick={ this.handleCatchClick.bind(this, item) }
                 >
                   录制
