@@ -152,7 +152,7 @@ class PlayBackDownload extends Component{
             <Button key="download"
               className={ publicStyle.ml10 }
               icon="fork"
-              onClick={ this.handleDownload.bind(this, item) }
+              onClick={ this.handleDownloadClick.bind(this, item) }
             >
               下载
             </Button>

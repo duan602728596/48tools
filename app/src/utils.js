@@ -1,4 +1,5 @@
 /* 公共函数 */
+const gui: Object = global.require('nw.gui');
 
 /**
  * 自动补0
@@ -34,4 +35,10 @@ export function time(modules: string, timeStr: ?number): string{
     .replace(/h{2}/, patchZero(hh))
     .replace(/m{2}/, patchZero(mm))
     .replace(/s{2}/, patchZero(ss));
+}
+
+/* 在浏览器上打开页面 */
+export function handleOpenBrowser(href: string, event: Event): void{
+  event.preventDefault();
+  gui.Shell.openExternal(href);
 }

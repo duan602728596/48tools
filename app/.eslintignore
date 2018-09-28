@@ -1,6 +1,5 @@
 node_modules
-config
-bin
 .dll
 appInit.js
 build
+.sweetrc.js

@@ -9,6 +9,7 @@ import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
 import style from './style.sass';
 import { test } from '../store/reducer';
 import '../../../components/indexedDB/initIndexedDB';
+import { handleOpenBrowser } from '../../../utils';
 const gui: Object = global.require('nw.gui');
 
 /* 初始化数据 */
@@ -58,8 +59,12 @@ class Index extends Component{
         </p>
         <p className={ style.text }>
           源代码托管地址：
-          <Icon type="github" />
-          <span className={ style.url }>https://github.com/duan602728596/48tools</span>
+          <Icon type="github" theme="filled" />
+          <a className={ style.url }
+            onClick={ handleOpenBrowser.bind(this, 'https://github.com/duan602728596/48tools') }
+          >
+            https://github.com/duan602728596/48tools
+          </a>
           。
         </p>
         <div className={ style.test }>
