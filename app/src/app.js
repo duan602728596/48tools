@@ -17,5 +17,5 @@ ReactDOM.render(
       </HashRouter>
     </LocaleProvider>
   </Provider>,
-  document.getElementById('react-app')
+  document.getElementById('app')
 );

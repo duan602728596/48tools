@@ -10,5 +10,5 @@ ReactDOM.render(
   <LocaleProvider locale={ zhCN }>
     <VideoPlay />
   </LocaleProvider>,
-  document.getElementById('react-app')
+  document.getElementById('app')
 );

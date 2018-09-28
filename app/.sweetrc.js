@@ -22,7 +22,8 @@ export default {
     'rc-queue-anim'
   ],
   entry: {
-    app: [path.join(__dirname, 'src/app.js')]
+    app: [path.join(__dirname, 'src/app.js')],
+    videoPlay: [path.join(__dirname, 'src/modules/VideoPlay/videoPlay.js')]
   },
   output: {
     path: path.join(__dirname, 'build'),
