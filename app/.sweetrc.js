@@ -25,11 +25,6 @@ export default {
     app: [path.join(__dirname, 'src/app.js')],
     videoPlay: [path.join(__dirname, 'src/modules/VideoPlay/videoPlay.js')]
   },
-  output: {
-    path: path.join(__dirname, 'build'),
-    filename: isDevelopment ? 'script/[name].js' : 'script/[chunkhash:5].js',
-    chunkFilename: isDevelopment ? 'script/[name].js' : 'script/[chunkhash:5].js'
-  },
   externals: {
     jquery: 'window.jQuery',
     flvjs: 'window.flvjs'
