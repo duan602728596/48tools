@@ -14,7 +14,6 @@ import { child_process_stdout, child_process_stderr, child_process_exit, child_p
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
 const child_process: Object = global.require('child_process');
-const http: Object = global.require('http');
 
 /* 初始化数据 */
 const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('bilibili')
