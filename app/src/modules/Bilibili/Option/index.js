@@ -126,11 +126,7 @@ class BiliBiliOption extends Component{
               </Form.Item>
               <Form.Item>
                 <p className={ style.tishi }>
-                  <del>ROOMID查看方式：进入B站直播间 -> 右键 -> 查看源代码 -> 第24行</del>
-                  <br />
-                  B站直播已改版，ROOMID获取方式如下：
-                  <br />
-                  https://api.live.bilibili.com/room/v1/Room/room_init?id={ '{{ ID }}' }，GET请求。
+                  ROOMID查看方式：https://api.live.bilibili.com/room/v1/Room/room_init?id={ '{{ ID }}' }，GET请求。
                 </p>
               </Form.Item>
             </Spin>
