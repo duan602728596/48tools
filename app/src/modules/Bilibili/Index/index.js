@@ -40,7 +40,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class BiliBili extends Component{
+class Index extends Component{
   state: {
     loading: boolean
   };
@@ -191,4 +191,4 @@ class BiliBili extends Component{
   }
 }
 
-export default BiliBili;
+export default Index;

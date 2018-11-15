@@ -78,7 +78,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @withRouter
 @connect(state, dispatch)
-class PlayBackDownload extends Component{
+class Index extends Component{
   state: {
     loading: boolean,
     keyword: string,
@@ -317,4 +317,4 @@ class PlayBackDownload extends Component{
   }
 }
 
-export default PlayBackDownload;
+export default Index;

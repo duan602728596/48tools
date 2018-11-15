@@ -41,7 +41,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class InLive48 extends Component{
+class Index extends Component{
   state: {
     group: string,
     quality: string
@@ -252,4 +252,4 @@ class InLive48 extends Component{
   }
 }
 
-export default InLive48;
+export default Index;

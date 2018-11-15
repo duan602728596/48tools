@@ -1,5 +1,5 @@
 /* 口袋48直播抓取 */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -50,7 +50,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class LiveCatch extends Component{
+class Index extends Component{
   state: {
     loading: boolean
   };
@@ -333,59 +333,66 @@ class LiveCatch extends Component{
       loading: false
     });
   }
-  render(): React.ChildrenArray<React.Element>{
-    return [
-      /* 功能区 */
-      <Affix key="affix" className={ publicStyle.affix }>
-        <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
-          <div className={ publicStyle.fl }>
-            {
-              this.props.autoRecording
-                ? (
-                  <Button className={ publicStyle.mr10 }
-                    type="danger"
-                    icon="close-square"
-                    onClick={ this.handleStopAutoRecordingClick.bind(this) }
-                  >
-                    停止自动录制
-                  </Button>
-                ) : (
-                  <Button className={ publicStyle.mr10 }
-                    type="primary"
-                    icon="play-circle"
-                    onClick={ this.handleAutoRecordingClick.bind(this) }
-                  >
-                    开始自动录制
-                  </Button>
-                )
-            }
-            <Link to="/LiveCatch/Option">
-              <Button icon="setting" disabled={ this.props.autoRecording }>自动录制配置</Button>
-            </Link>
+  render(): React.Element{
+    return (
+      <Fragment>
+        {/* 功能区 */}
+        <Affix key="affix" className={ publicStyle.affix }>
+          <div className={ classNames(publicStyle.toolsBox, 'clearfix') }>
+            <div className={ publicStyle.fl }>
+              {
+                this.props.autoRecording
+                  ? (
+                    <Button className={ publicStyle.mr10 }
+                      type="danger"
+                      icon="close-square"
+                      onClick={ this.handleStopAutoRecordingClick.bind(this) }
+                    >
+                      停止自动录制
+                    </Button>
+                  ) : (
+                    <Button className={ publicStyle.mr10 }
+                      type="primary"
+                      icon="play-circle"
+                      onClick={ this.handleAutoRecordingClick.bind(this) }
+                    >
+                      开始自动录制
+                    </Button>
+                  )
+              }
+              <Link className={ publicStyle.mr10 } to="/LiveCatch/Option">
+                <Button icon="setting" disabled={ this.props.autoRecording }>自动录制配置</Button>
+              </Link>
+              <p className={ style.tishi }>
+                友情提示：为了小偶像着想，避免留下黑历史，请在录制完直播后审核一下再上传，
+                <br />
+                避免出现不文明、色情、政治等相关内容，被人抓住把柄。
+              </p>
+            </div>
+            <div className={ publicStyle.fr }>
+              <Button icon="loading-3-quarters" onClick={ this.handleGetLiveListClick.bind(this) }>刷新列表</Button>
+              <Link className={ publicStyle.ml10 } to="/">
+                <Button type="danger" icon="poweroff">返回</Button>
+              </Link>
+            </div>
           </div>
-          <div className={ publicStyle.fr }>
-            <Button icon="loading-3-quarters" onClick={ this.handleGetLiveListClick.bind(this) }>刷新列表</Button>
-            <Link className={ publicStyle.ml10 } to="/">
-              <Button type="danger" icon="poweroff">返回</Button>
-            </Link>
-          </div>
+        </Affix>
+        {/* 显示列表 */}
+        <div key="tableBox" className={ publicStyle.tableBox }>
+          <Table loading={ this.state.loading }
+            bordered={ true }
+            columns={ this.columus() }
+            rowKey={ (item: Object): number => item.liveId }
+            dataSource={ this.props.liveList }
+            pagination={{
+              pageSize: 20,
+              showQuickJumper: true
+            }}
+          />
         </div>
-      </Affix>,
-      /* 显示列表 */
-      <div key="tableBox" className={ publicStyle.tableBox }>
-        <Table loading={ this.state.loading }
-          bordered={ true }
-          columns={ this.columus() }
-          rowKey={ (item: Object): number => item.liveId }
-          dataSource={ this.props.liveList }
-          pagination={{
-            pageSize: 20,
-            showQuickJumper: true
-          }}
-        />
-      </div>
-    ];
+      </Fragment>
+    );
   }
 }
 
-export default LiveCatch;
+export default Index;

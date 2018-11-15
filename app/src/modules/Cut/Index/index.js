@@ -50,7 +50,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @Form.create()
 @connect(state, dispatch)
-class Cut extends Component{
+class Index extends Component{
   dir: string;
   state: {
     file: ?Object,
@@ -503,4 +503,4 @@ class Cut extends Component{
   }
 }
 
-export default Cut;
+export default Index;

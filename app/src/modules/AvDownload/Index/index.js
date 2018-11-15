@@ -32,7 +32,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class AvDownload extends Component{
+class Index extends Component{
   static propTypes: Object = {
     avList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
@@ -272,4 +272,4 @@ class AvDownload extends Component{
   }
 }
 
-export default AvDownload;
+export default Index;

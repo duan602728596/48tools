@@ -55,7 +55,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class LiveDownload extends Component{
+class Index extends Component{
   state: {
     loading: boolean
   };
@@ -235,4 +235,4 @@ class LiveDownload extends Component{
   }
 }
 
-export default LiveDownload;
+export default Index;

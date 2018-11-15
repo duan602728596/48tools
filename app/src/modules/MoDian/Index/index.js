@@ -29,7 +29,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class MoDian extends Component{
+class Index extends Component{
   state: {
     btnLoading: boolean,
     modianid: string,
@@ -215,4 +215,4 @@ class MoDian extends Component{
   }
 }
 
-export default MoDian;
+export default Index;

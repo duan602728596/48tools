@@ -6,7 +6,7 @@ import style from './style.sass';
 const querystring: Object = global.require('querystring');
 const path: Object = global.require('path');
 
-class VideoPlay extends Component{
+class Index extends Component{
   item: {
     title: string,
     subTitle: string,
@@ -50,4 +50,4 @@ class VideoPlay extends Component{
   }
 }
 
-export default VideoPlay;
+export default Index;

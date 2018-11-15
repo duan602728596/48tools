@@ -49,7 +49,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class Merge extends Component{
+class Index extends Component{
   static propTypes: Object = {
     mergeList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
@@ -234,4 +234,4 @@ class Merge extends Component{
   }
 }
 
-export default Merge;
+export default Index;
