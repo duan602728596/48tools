@@ -36,10 +36,7 @@ export default {
         { loader: 'babel-loader' },
         {
           loader: '@svgr/webpack',
-          options: {
-            babel: false,
-            icon: true,
-          }
+          options: { babel: false, icon: true }
         }
       ]
     }
