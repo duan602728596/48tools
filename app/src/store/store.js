@@ -29,12 +29,15 @@ export default store;
 
 /* 注入store */
 export function injectReducers(asyncReducer: Object): void{
-  // 获取reducer的key值，并将reducer保存起来
-  const name: string = Object.keys(asyncReducer)[0];
+  for(const key: string in asyncReducer){
+    const item: Object = asyncReducer[key];
+
+    // 获取reducer的key值，并将reducer保存起来
+    if(!(key in store.asyncReducers)){
+      store.asyncReducers[key] = item;
+    }
+  }
 
   // 异步注入reducer
-  if(!(name in store.asyncReducers)){
-    store.asyncReducers[name] = asyncReducer[name];
-    store.replaceReducer(createReducer(store.asyncReducers));
-  }
+  store.replaceReducer(createReducer(store.asyncReducers));
 }
