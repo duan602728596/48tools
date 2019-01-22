@@ -44,26 +44,24 @@ class Index extends Component{
       {
         title: 'av号',
         key: 'number',
-        dataIndex: 'number',
-        width: '10%'
+        dataIndex: 'number'
       },
       {
         title: 'page',
         key: 'page',
-        dataIndex: 'page',
-        width: '10%'
+        dataIndex: 'page'
       },
       {
         title: '视频地址',
         key: 'uri',
         dataIndex: 'uri',
-        width: '50%'
+        width: '500px',
+        render: (value: string, item: Object, index: number): React.Element => <div className={ style.uri }>{ value }</div>
       },
       {
         title: '状态',
         key: 'status',
         dataIndex: 'status',
-        width: '10%',
         render: (value: number, item: Object, index: number): React.Element=>{
           switch(value){
             case 0:
@@ -157,7 +155,7 @@ class Index extends Component{
               break;
             }
           }
-          resolve(infor?.durl || []);
+          resolve(infor?.data?.durl || []);
         },
         error(err: any): void{
           reject(err);
@@ -198,21 +196,28 @@ class Index extends Component{
       const $avPage: jQuery = $('#av-page');
       const number: string = $avNumber.val();
       let page: string = $avPage.val();
+
       if(!/^[0-9]+$/.test(number)){
         message.info('请输入av号！');
         return void 0;
       }
+
       if(!/^[0-9]+$/.test(page)){
         page = 1;
       }
+
       const durl: { url: string }[] = await this.getUrl(number, page);
+
       if(durl.length === 0){
         message.info('视频不存在！');
         return void 0;
       }
+
       const arr: [] = [];
+
       for(let i: number = 0, j: number = durl.length; i < j; i++){
         const item: Object = durl[i];
+
         arr.push({
           number,
           page,
@@ -222,11 +227,10 @@ class Index extends Component{
           status: 0
         });
       }
+
       const avList: [] = this.props.avList;
       avList.push(...arr);
-      this.props.action.avList({
-        avList
-      });
+      this.props.action.avList({ avList });
       message.success('获取地址成功！');
       $avNumber.val('');
       $avPage.val('');
