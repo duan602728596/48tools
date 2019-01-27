@@ -1,16 +1,36 @@
-/* 软件首页 */
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
-import { Link } from 'react-router-dom';
-import { Row, Col, Icon, Checkbox, Button, message } from 'antd';
+import { Icon, Checkbox, Switch } from 'antd';
 import style from './style.sass';
 import { test } from '../store/reducer';
 import '../../../components/indexedDB/initIndexedDB';
 import { handleOpenBrowser } from '../../../utils';
-const gui: Object = global.require('nw.gui');
+import Navs from './Navs';
+
+/* 升级提示组件 */
+function UpgradeReminder(props: Object): React.Element{
+  const upgradeReminder: string = localStorage.getItem('upgradeReminder');
+  const [isUpgradeReminder, setUpgradeReminder]: [boolean, Function] = useState(
+    upgradeReminder === 'true' || !upgradeReminder
+  );
+
+  // 状态变化
+  function handleUpgradeReminderChange(event: Event): void{
+    localStorage.setItem('upgradeReminder', String(!isUpgradeReminder));
+
+    setUpgradeReminder(!isUpgradeReminder);
+  }
+
+  return (
+    <div className={ style.update }>
+      <Switch checked={ isUpgradeReminder } onChange={ handleUpgradeReminderChange } />
+      <label className={ style.updateLabel }>软件升级提醒</label>
+    </div>
+  );
+}
 
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
@@ -34,19 +54,11 @@ class Index extends Component{
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void{
-    super(...arguments);
-  }
   // check
   handleCheckChange(event: Event): void{
     this.props.action.test({
       test: event.target.checked
     });
-  }
-  // 清除缓存
-  handleClearCacheClick(event: Event): void{
-    gui.App.clearCache();
-    message.success('缓存清除成功！');
   }
   render(): React.Element{
     return (
@@ -71,118 +83,9 @@ class Index extends Component{
           <Checkbox checked={ this.props.test } onChange={ this.handleCheckChange.bind(this) }>
             <span>显示测试功能。（某些功能正在测试，功能不稳定）</span>
           </Checkbox>
-          <Button className={ style.clearCache } onClick={ this.handleClearCacheClick.bind(this) }>清除缓存</Button>
         </div>
-        <Row type="flex" align="top" justify="start">
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/LiveCatch" title="口袋48直播抓取">
-                  <img src={ require('../image/hty1.webp') } alt="口袋48直播抓取" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/LiveCatch">直播抓取</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/PlayBackDownload" title="口袋48录播下载">
-                  <img src={ require('../image/xsy1.webp') } alt="口袋48录播下载" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/PlayBackDownload">录播下载</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/BiliBili" title="B站直播抓取">
-                  <img src={ require('../image/lyy1.webp') } alt="B站直播抓取" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/BiliBili">B站直播抓取</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/Cut" title="视频剪切">
-                  <img src={ require('../image/lxh1.webp') } alt="视频剪切" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/Cut">视频剪切</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/MergeVideo" title="视频合并">
-                  <img src={ require('../image/tsl1.webp') } alt="视频合并" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/MergeVideo">视频合并</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/MoDian" title="摩点项目集资统计">
-                  <img src={ require('../image/llf1.webp') } alt="摩点项目集资统计" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/MoDian">摩点项目集资统计</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/LiveDownload" title="公演录播下载">
-                  <img src={ require('../image/zmh1.webp') } alt="公演录播下载" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/LiveDownload">公演录播下载</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/InLive48" title="公演官方直播抓取">
-                  <img src={ require('../image/rxy1.webp') } alt="公演官方直播抓取" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/InLive48">公演官方直播抓取</Link>
-              </dd>
-            </dl>
-          </Col>
-          <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
-            <dl className={ style.linkGroup }>
-              <dt className={ style.bPro }>
-                <Link to="/AvDownload" title="B站视频下载">
-                  <img src={ require('../image/ler1.webp') } alt="B站视频下载" />
-                </Link>
-              </dt>
-              <dd>
-                <Link to="/AvDownload">B站视频下载</Link>
-              </dd>
-            </dl>
-          </Col>
-        </Row>
+        <UpgradeReminder />
+        <Navs test={ this.props.test } />
       </div>
     );
   }
