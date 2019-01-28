@@ -24,7 +24,8 @@
     "width": 1200,
     "height": 600,
     "fullscreen": false,
-    "show_in_taskbar": true
+    "show_in_taskbar": true,
+    "icon": "./titleBarIcon.png"
   },
   "author": {
     "name": "段昊辰",
