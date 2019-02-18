@@ -14,7 +14,7 @@ import RoomId from './RoomId';
 const state: Function = createStructuredSelector({});
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     putBilibiliLiveRoom
   }, dispatch)
@@ -22,7 +22,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @Form.create()
 @connect(state, dispatch)
-class BiliBiliOption extends Component{
+class BiliBiliOption extends Component {
   state: {
     loading: boolean,
     btnLoading: boolean,
@@ -35,32 +35,32 @@ class BiliBiliOption extends Component{
     form: PropTypes.object
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
-      loading: false,      // 加载动画
-      btnLoading: false,   // 按钮加载动画
-      roomid: '',          // 直播间id
-      roomname: ''         // 直播间名称
+      loading: false, // 加载动画
+      btnLoading: false, // 按钮加载动画
+      roomid: '', // 直播间id
+      roomname: '' // 直播间名称
     };
   }
   // 添加
-  async handleAddClick(event: Event): Promise<void>{
+  handleAddClick(event: Event): void {
     event.preventDefault();
     this.setState({
       loading: true,
       btnLoading: true
     });
 
-    this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
-      if(!err){
+    this.props.form.validateFields(async (err: ?any, value: any): Promise<void> => {
+      if (!err) {
         const { roomname, roomid }: {
           roomname: string,
           roomid: string
         } = value;
 
-        try{
+        try {
           await this.props.action.putBilibiliLiveRoom({
             data: {
               roomid: Number(roomid),
@@ -69,10 +69,10 @@ class BiliBiliOption extends Component{
           });
           message.success('添加成功！');
           this.props.form.resetFields();
-        }catch(err){
+        } catch (err) {
           message.error('添加失败！');
         }
-      }else{
+      } else {
         message.error('添加失败！');
       }
       this.setState({
@@ -81,8 +81,9 @@ class BiliBiliOption extends Component{
       });
     });
   }
-  render(): React.Element{
-    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
+  render(): React.Element {
+    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form; // 包装表单控件
+
     return (
       <div className={ style.body }>
         <Form className={ style.form } layout="horizontal" onSubmit={ this.handleAddClick.bind(this) }>

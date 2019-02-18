@@ -14,8 +14,8 @@ const InLive48Bundle: Function = asyncModule((): Promise => import('../modules/I
 const AvDownloadBundle: Function = asyncModule((): Promise => import('../modules/AvDownload/Layout'));
 
 /* 路由模块 */
-class Routers extends Component{
-  render(): React.Element{
+class Routers extends Component {
+  render(): React.Element {
     return (
       <Switch>
         {/* 首页 */}

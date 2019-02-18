@@ -10,27 +10,29 @@ export const autoRecording: Function = createAction('自动录制');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     const ll: Array = action.payload.liveList;
     const s$ll: Array = $$state.has('liveList') ? $$state.get('liveList').toJS() : [];
     const s$lc: Map = $$state.get('liveCatch');
     // 获取旧的直播录制列表
     const oa: Array = oldArray(s$ll, ll, s$lc);
+
     return $$state.set('liveList', List([...ll, ...oa]));
   },
-  [liveCatch]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [liveCatch]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('liveCatch', action.payload.map);
   },
-  [liveChange]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [liveChange]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     const ll: Array = action.payload.liveList;
     const s$ll: Array = $$state.has('liveList') ? $$state.get('liveList').toJS() : [];
     const s$lc: Map = $$state.get('liveCatch');
     // 获取旧的直播录制列表
     const oa: Array = oldArray(s$ll, ll, s$lc);
+
     return $$state.set('liveList', List([...ll, ...oa]))
       .set('liveCatch', action.payload.map);
   },
-  [autoRecording]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [autoRecording]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('autoRecording', action.payload.autoRecording);
   }
 }, {});

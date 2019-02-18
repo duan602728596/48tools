@@ -9,8 +9,8 @@ const initData: {
   fnReady: boolean
 } = {
   index: {},
-  downloadList: new Map(),   // 下载列表
-  fnReady: false             // 函数是否已绑定
+  downloadList: new Map(), // 下载列表
+  fnReady: false // 函数是否已绑定
 };
 
 /* Action */
@@ -19,13 +19,13 @@ export const fnReady: Function = createAction('下载监听函数初始化');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('downloadList', action.payload.downloadList);
   },
-  [fnReady]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [fnReady]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('fnReady', action.payload.fnReady);
   }
 }, fromJS(initData));

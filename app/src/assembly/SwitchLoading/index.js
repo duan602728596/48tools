@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Spin } from 'antd';
 import style from './style.sass';
 
-function SwitchLoading(props: Object): React.Element{
+function SwitchLoading(props: Object): React.Element {
   return (
     <div className={ style.loading }>
       <Spin size="large" tip="Loading..." />

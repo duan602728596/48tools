@@ -14,10 +14,10 @@ const initData: {
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [combineActions(...Object.values(optionAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [combineActions(...Object.values(optionAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('option', optionReducer($$state.get('option'), action));
   }
 }, fromJS(initData));

@@ -7,9 +7,10 @@ const MD5: Object = global.require('md5.js');
  */
 const P: string = 'das41aq6';
 
-function sign(queryStr: string): void{
+function sign(queryStr: string): void {
   const signStr: string = new MD5().update(queryStr + '&p=' + P).digest('hex');
   const sign: string = signStr.substr(5, 16);
+
   return queryStr + `&sign=${ sign }`;
 }
 
@@ -17,43 +18,46 @@ function sign(queryStr: string): void{
  * 获取摩点项目的相关信息
  * @param { string } modianId: 摩点ID
  */
-export function searchTitle(modianId: string): Promise{
+export function searchTitle(modianId: string): Promise {
   // 计算签名
   const data: string = sign(`pro_id=${ modianId }`);
-  return new Promise((resolve: Function, reject: Function): void=>{
+
+  return new Promise((resolve: Function, reject: Function): void => {
     $.ajax({
       type: 'POST',
       url: 'https://wds.modian.com/api/project/detail',
       cache: true,
       data,
       dataType: 'json',
-      success(data: string, status: string, xhr: XMLHttpRequest): void{
-        if(data.status !== '0'){
+      success(data: string, status: string, xhr: XMLHttpRequest): void {
+        if (data.status !== '0') {
           resolve({
             title: null
           });
-        }else{
+        } else {
           const data2: Object = data.data[0];
+
           resolve({
             title: data2.pro_name,
             already_raised: data2.already_raised
           });
         }
       },
-      error(err: any): void{
+      error(err: any): void {
         reject(err);
       }
     });
-  }).catch((err: any): void=>{
+  }).catch((err: any): void => {
     console.error(err);
   });
 }
 
 /* 获取排行榜 */
-export function paiHang(modianid: string, page: number, type: number): void{
+export function paiHang(modianid: string, page: number, type: number): void {
   // 计算签名
   const data: string = sign(`page=${ page }&pro_id=${ modianid }&type=${ type }`);
-  return new Promise((resolve: Function, reject: Function): void=>{
+
+  return new Promise((resolve: Function, reject: Function): void => {
     $.ajax({
       type: 'POST',
       url: 'https://wds.modian.com/api/project/rankings',
@@ -63,35 +67,37 @@ export function paiHang(modianid: string, page: number, type: number): void{
         'Cache-Control': 'no-cache',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      success(data: string, status: string, xhr: XMLHttpRequest): void{
+      success(data: string, status: string, xhr: XMLHttpRequest): void {
         resolve(data);
       },
-      error(err: any): void{
+      error(err: any): void {
         reject(err);
       }
     });
-  }).catch((err: any): void=>{
+  }).catch((err: any): void => {
     console.error(err);
   });
 }
 
 /* 摩点接口，每次只能返回二十条数据 */
-export function paiHang2(modianid: string, type: number): Promise{
-  return new Promise(async(resolve: Function, reject: Function): Promise<void>=>{
+export function paiHang2(modianid: string, type: number): Promise {
+  return new Promise(async (resolve: Function, reject: Function): Promise<void> => {
     const _CONTINUE: boolean = true;
     let data: Array = [];
     let i: number = 1;
-    while(_CONTINUE){
+
+    while (_CONTINUE) {
       const rt: Object = await paiHang(modianid, i, type);
-      if(rt.data.length === 0){
+
+      if (rt.data.length === 0) {
         break;
-      }else{
+      } else {
         data = data.concat(rt.data);
         i += 1;
       }
     }
     resolve(data);
-  }).catch((err: any): void=>{
+  }).catch((err: any): void => {
     console.error(err);
   });
 }

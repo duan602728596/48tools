@@ -15,21 +15,21 @@ import generatingExcel from './generatingExcel';
 
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
-  modianList: createSelector(         // 当前查询列表
+  modianList: createSelector( // 当前查询列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('modian') ? $$state.get('modian') : null,
     ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('modianList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     modianList
   }, dispatch)
 });
 
 @connect(state, dispatch)
-class Index extends Component{
+class Index extends Component {
   state: {
     btnLoading: boolean,
     modianid: string,
@@ -41,17 +41,17 @@ class Index extends Component{
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(props: Object): void{
+  constructor(props: Object): void {
     super(...arguments);
 
     this.state = {
-      btnLoading: false,  // 按钮加载动画
-      modianid: '',       // 摩点id
-      modiantitle: ''     // 摩点标题
+      btnLoading: false, // 按钮加载动画
+      modianid: '', // 摩点id
+      modiantitle: '' // 摩点标题
     };
   }
   // 配置
-  columus(): Array{
+  columus(): Array {
     const columus: Array = [
       {
         title: '摩点项目ID',
@@ -69,7 +69,7 @@ class Index extends Component{
         title: '操作',
         dataIndex: 'handle',
         width: '33%',
-        render: (value: any, item: Object): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object): React.ChildrenArray<React.Element> => {
           return [
             <Button key="excel"
               className={ publicStyle.mr10 }
@@ -86,39 +86,42 @@ class Index extends Component{
         }
       }
     ];
+
     return columus;
   }
   // 查询标题
-  async handleSearchTitleClick(event: Event): Promise<void>{
+  async handleSearchTitleClick(event: Event): Promise<void> {
     this.setState({
       btnLoading: true
     });
     const { title }: { title: ?string } = await searchTitle(this.state.modianid);
+
     this.setState({
       modiantitle: title,
       btnLoading: false
     });
-    if(!title) message.info('项目不存在！');
+    if (!title) message.info('项目不存在！');
   }
   // input change
-  handleMoDianIdChange(event: Event): void{
+  handleMoDianIdChange(event: Event): void {
     this.setState({
       modianid: event.target.value,
       modiantitle: ''
     });
   }
   // 删除
-  handleDeleteClick(item: Object, event: Event): void{
+  handleDeleteClick(item: Object, event: Event): void {
     const index: number = this.props.modianList.indexOf(item);
     const c: Array = this.props.modianList;
+
     c.splice(index, 1);
     this.props.action.modianList({
       modianList: c
     });
   }
   // 添加到列表
-  handleAddClick(event: Event): void{
-    if(this.state.modiantitle){
+  handleAddClick(event: Event): void {
+    if (this.state.modiantitle) {
       this.props.modianList.push({
         modianid: this.state.modianid,
         modiantitle: this.state.modiantitle
@@ -131,21 +134,21 @@ class Index extends Component{
         modianid: '',
         modiantitle: ''
       });
-    }else{
+    } else {
       message.info('项目不存在！');
     }
   }
   // 导入到excel
-  handleToExcelClick(item: Object, event: Event): void{
+  handleToExcelClick(item: Object, event: Event): void {
     generatingExcel([item], item.modiantitle);
     message.info('正在生成Excel！');
   }
   // 全部导入到excel
-  handleToExcelAllClick(event: Event): void{
+  handleToExcelAllClick(event: Event): void {
     generatingExcel(this.props.modianList, '');
     message.info('正在生成Excel！');
   }
-  render(): React.ChildrenArray<React.Element>{
+  render(): React.ChildrenArray<React.Element> {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>

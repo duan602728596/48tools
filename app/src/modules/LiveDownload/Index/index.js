@@ -22,30 +22,30 @@ const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.h
   ? $$state.get('liveDownload').get('index') : null;
 
 const state: Function = createStructuredSelector({
-  liveList: createSelector(         // 当前公演录播列表
+  liveList: createSelector( // 当前公演录播列表
     getIndex,
     ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
-  page: createSelector(             // 当前页码
+  page: createSelector( // 当前页码
     getIndex,
     ($$data: ?Immutable.Map): number => $$data !== null && $$data.has('page') ? $$data.get('page') : 1
   ),
-  pageLen: createSelector(          // 当前页数
+  pageLen: createSelector( // 当前页数
     getIndex,
     ($$data: ?Immutable.Map): number => $$data !== null && $$data.has('pageLen') ? $$data.get('pageLen') : 1
   ),
   group: createSelector(
-    getIndex,                       // 选择团
+    getIndex, // 选择团
     ($$data: ?Immutable.Map): string => $$data !== null && $$data.has('group') ? $$data.get('group') : 'SNH48'
   ),
-  downloadList: createSelector(     // 下载列表
+  downloadList: createSelector( // 下载列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
     ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('downloadList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     liveList,
     liveListInit,
@@ -55,7 +55,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class Index extends Component{
+class Index extends Component {
   state: {
     loading: boolean
   };
@@ -69,7 +69,7 @@ class Index extends Component{
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
@@ -77,7 +77,7 @@ class Index extends Component{
     };
   }
   // 表格配置
-  columus(): Array{
+  columus(): Array {
     const columus: Array = [
       {
         title: 'ID',
@@ -88,7 +88,7 @@ class Index extends Component{
       {
         title: '标题',
         key: 'title',
-        render: (value: any, item: Object): string=>{
+        render: (value: any, item: Object): string => {
           return (
             <div>
               <b className={ style.title }>{ item.title }</b>
@@ -101,7 +101,7 @@ class Index extends Component{
         title: '视频下载',
         key: 'handle',
         width: '20%',
-        render: (value: any, item: Object): Array=>{
+        render: (value: any, item: Object): Array => {
           return [
             <Button key="chao" className={ publicStyle.mr10 } onClick={ this.handleDownloadClick.bind(this, item, 'chao') }>超清</Button>,
             <Button key="gao" className={ publicStyle.mr10 } onClick={ this.handleDownloadClick.bind(this, item, 'gao') }>高清</Button>,
@@ -110,19 +110,20 @@ class Index extends Component{
         }
       }
     ];
+
     return columus;
   }
-  handleGroupSelect(value: string, option: Object): void{
+  handleGroupSelect(value: string, option: Object): void {
     this.props.action.changeGroup({
       group: value
     });
   }
   // 加载列表
-  async handleLoadListClick(page: number, pageSize: number, event: Event): Promise<void>{
+  async handleLoadListClick(page: number, pageSize: number, event: Event): Promise<void> {
     this.setState({
       loading: true
     });
-    try{
+    try {
       const html: string = await loadList(this.props.group, page);
       const _qh: {
         result: Array,
@@ -130,13 +131,14 @@ class Index extends Component{
       } = queryHtml(html);
       const result: Array = _qh.result;
       const pageLen: number = _qh.pageLen;
+
       this.props.action.liveListInit({
         liveList: result,
         pageLen,
         page
       });
       message.success('加载成功');
-    }catch(err){
+    } catch (err) {
       console.error(err);
       message.error('加载失败');
     }
@@ -145,13 +147,13 @@ class Index extends Component{
     });
   }
   // 公演下载
-  async handleDownloadClick(item: Object, quality: string, event: Event): Promise<void>{
-    try{
-      const m3u8Url: string = await getM3U8(this.props.group, item.id, quality);   // m3u8地址
-      const dlm: string = await downloadM3U8(m3u8Url);                             // m3u8文本
+  async handleDownloadClick(item: Object, quality: string, event: Event): Promise<void> {
+    try {
+      const m3u8Url: string = await getM3U8(this.props.group, item.id, quality); // m3u8地址
+      const dlm: string = await downloadM3U8(m3u8Url); // m3u8文本
       const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`
         .replace(/\s/g, '');
-      const pSave: string = await saveM3U8(title, dlm);                            // m3u8本地保存路径
+      const pSave: string = await saveM3U8(title, dlm); // m3u8本地保存路径
       const child: Object = child_process.spawn(option.ffmpeg, [
         '-protocol_whitelist',
         'file,http,https,tcp,tls',
@@ -165,6 +167,7 @@ class Index extends Component{
         'mp4',
         `${ option.output }/${ title }.mp4`
       ]);
+
       child.stdout.on('data', child_process_stdout);
       child.stderr.on('data', child_process_stderr);
       child.on('close', child_process_exit);
@@ -180,12 +183,12 @@ class Index extends Component{
         downloadList: this.props.downloadList
       });
       message.info('正在下载！');
-    }catch(err){
+    } catch (err) {
       console.log(err);
       message.error('下载失败！');
     }
   }
-  render(): React.ChildrenArray<React.Element>{
+  render(): React.ChildrenArray<React.Element> {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>

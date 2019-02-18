@@ -13,7 +13,7 @@ export const modianList: Function = createAction('摩点项目查询列表');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [modianList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [modianList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('modianList', List(action.payload.modianList));
   }
 }, fromJS(initData));

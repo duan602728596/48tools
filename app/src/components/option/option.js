@@ -10,12 +10,14 @@ const os: Object = global.require('os');
 export const type: string = os.type();
 export const execPath: string = do{
   let ep: string = '';
-  switch(type){
+
+  switch (type) {
     // mac
     case 'Darwin':
       // 兼容开发环境
       const p: ?string[] = process.execPath.match(/^[^\.]+\.app/);
       const p2: [] = p ? p[0].split(/\//) : [];
+
       ep = path.join(p2.join('/'), 'Contents');
       break;
     // win32
@@ -55,8 +57,8 @@ const option: {
     version: 2,
     objectStore: {
       liveCatch: {
-        name: 'liveCatch',         // 视频直播页面
-        key: 'function',           // liveCacheOption 视频自动抓取配置
+        name: 'liveCatch', // 视频直播页面
+        key: 'function', // liveCacheOption 视频自动抓取配置
         data: [
           {
             name: 'option',
@@ -65,7 +67,7 @@ const option: {
         ]
       },
       bilibili: {
-        name: 'bilibili',          // B站直播间抓取
+        name: 'bilibili', // B站直播间抓取
         key: 'roomid',
         data: [
           {
@@ -79,11 +81,12 @@ const option: {
   // ffmpeg
   ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg`,
   output: do{
-    if(type === 'Darwin'){
+    if (type === 'Darwin') {
       // 获取downloads文件夹路径
       const username: string = fs.readdirSync('/Users');
+
       path.join('/Users', username[username.length - 1], '/Downloads');
-    }else{
+    } else {
       `${ execPath }/output`;
     }
   }

@@ -18,7 +18,7 @@ const child_process: Object = global.require('child_process');
 const cheerio: Object = global.require('cheerio');
 
 const IN_LIVE_URL: Object = {
-  SNH48: 'http://zhibo.ckg48.com',   // 48直播地址重定向
+  SNH48: 'http://zhibo.ckg48.com', // 48直播地址重定向
   BEJ48: 'http://live.bej48.com',
   GNZ48: 'http://live.gnz48.com',
   SHY48: 'http://live.shy48.com',
@@ -27,21 +27,21 @@ const IN_LIVE_URL: Object = {
 
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
-  inLiveList: createSelector(         // 当前查询列表
+  inLiveList: createSelector( // 当前查询列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('inLive48') ? $$state.get('inLive48') : null,
     ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('inLiveList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     inLiveList
   }, dispatch)
 });
 
 @connect(state, dispatch)
-class Index extends Component{
+class Index extends Component {
   state: {
     group: string,
     quality: string
@@ -52,7 +52,7 @@ class Index extends Component{
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
@@ -61,7 +61,7 @@ class Index extends Component{
     };
   }
   // 表格配置
-  columus(): Array{
+  columus(): Array {
     const columus: Array = [
       {
         title: '团名称',
@@ -85,7 +85,7 @@ class Index extends Component{
         title: '操作',
         key: 'handle',
         width: '25%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
           return [
             item.child.killed === false && item.child.exitCode === null
               ? [
@@ -100,62 +100,66 @@ class Index extends Component{
         }
       }
     ];
+
     return columus;
   }
   // select选择
-  handleSelect(key: string, value: string, option: any): void{
+  handleSelect(key: string, value: string, option: any): void {
     this.setState({
       [key]: value
     });
   }
   // 获取页面信息
-  getHtml(url: string): Promise{
-    return new Promise((resolve: Function, reject: Function): void=>{
+  getHtml(url: string): Promise {
+    return new Promise((resolve: Function, reject: Function): void => {
       $.ajax({
         url,
         type: 'GET',
         cache: true,
         dataType: 'text',
-        success(data: string, status: string, xhr: XMLHttpRequest): void{
+        success(data: string, status: string, xhr: XMLHttpRequest): void {
           resolve(data);
         },
-        error(xhr: XMLHttpRequest, err: any): void{
+        error(xhr: XMLHttpRequest, err: any): void {
           reject(err);
         }
       });
-    }).catch((err: any): void=>{
+    }).catch((err: any): void => {
       console.error(err);
     });
   }
   // 获取直播间地址（新的直播间地址，其他地方使用旧的直播间地址）
-  getInliveUrl(): Promise{
-    return new Promise((resolve: Function, reject: Function): void=>{
+  getInliveUrl(): Promise {
+    return new Promise((resolve: Function, reject: Function): void => {
       $.ajax({
         url: IN_LIVE_URL[this.state.group],
         type: 'GET',
         cache: true,
         dataType: 'text',
-        success(data: string, status: string, xhr: XMLHttpRequest): void{
+        success(data: string, status: string, xhr: XMLHttpRequest): void {
           const xml: any = cheerio.load(data);
+
           resolve(xml('.v-img a').attr('href'));
         },
-        error(xhr: XMLHttpRequest, err: any): void{
+        error(xhr: XMLHttpRequest, err: any): void {
           reject(err);
         }
       });
-    }).catch((err: any): void=>{
+    }).catch((err: any): void => {
       console.error(err);
     });
   }
   // 点击录制事件
-  async handleDownLoadLiveClick(event: Event): Promise<void | boolean>{
+  async handleDownLoadLiveClick(event: Event): Promise<void | boolean> {
     const inliveUrl: string = await this.getInliveUrl();
     const html: string = await this.getHtml(IN_LIVE_URL[this.state.group] + inliveUrl);
     const xml: any = cheerio.load(html);
     const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
     const urlInput: any = xml(`#${ this.state.quality }`);
-    if(urlInput.length === 0){
+
+    if (urlInput.length === 0) {
       message.warn('直播未开始！');
+
       return false;
     }
 
@@ -167,12 +171,14 @@ class Index extends Component{
       'copy',
       `${ option.output }/${ title }.flv`
     ]);
+
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);
     child.on('close', child_process_exit);
     child.on('error', child_process_error);
 
     const ils: Array = this.props.inLiveList;
+
     ils.push({
       child,
       title,
@@ -186,19 +192,20 @@ class Index extends Component{
     });
   }
   // 停止下载
-  handleStopClick(item: Object, event: Event): void{
+  handleStopClick(item: Object, event: Event): void {
     item.child.kill();
   }
   // 删除
-  handleDeleteClick(item: Object, event: Event): void{
+  handleDeleteClick(item: Object, event: Event): void {
     const index: number = this.props.inLiveList.indexOf(item);
     const ils: Array = this.props.inLiveList;
+
     ils.splice(index, 1);
     this.props.action.inLiveList({
       inLiveList: ils
     });
   }
-  render(): React.Element{
+  render(): React.Element {
     return (
       <Fragment>
         {/* 功能区 */}

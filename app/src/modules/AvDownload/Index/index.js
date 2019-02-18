@@ -18,28 +18,28 @@ const path: Object = global.require('path');
 
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
-  avList: createSelector(         // B站视频下载列表
+  avList: createSelector( // B站视频下载列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('avDownload') ? $$state.get('avDownload') : null,
     ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('avList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     avList
   }, dispatch)
 });
 
 @connect(state, dispatch)
-class Index extends Component{
+class Index extends Component {
   static propTypes: Object = {
     avList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
   // 配置
-  columus(): Array{
+  columus(): Array {
     const columus: Array = [
       {
         title: 'av号',
@@ -62,8 +62,8 @@ class Index extends Component{
         title: '状态',
         key: 'status',
         dataIndex: 'status',
-        render: (value: number, item: Object, index: number): React.Element=>{
-          switch(value){
+        render: (value: number, item: Object, index: number): React.Element => {
+          switch (value) {
             case 0:
               return <span className={ style.status0 }>未下载</span>;
             case 1:
@@ -80,8 +80,9 @@ class Index extends Component{
         title: '操作',
         dataIndex: 'handle',
         width: '20%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
           const isLoading: boolean = item.status === 1;
+
           return [
             <Button key="download"
               className={ publicStyle.mr10 }
@@ -99,28 +100,30 @@ class Index extends Component{
         }
       }
     ];
+
     return columus;
   }
   // 删除
-  handleDeleteClick(item: Object, index: number, event: Event): void{
+  handleDeleteClick(item: Object, index: number, event: Event): void {
     this.props.avList.splice(index, 1);
     this.props.action.avList({
       avList: this.props.avList
     });
   }
   // 下载
-  async handleDownloadFlvClick(item: Object, index: number, event: Event): Promise{
+  async handleDownloadFlvClick(item: Object, index: number, event: Event): Promise<void> {
     this.props.avList[index].status = 1;
     this.props.action.avList({
       avList: this.props.avList
     });
-    try{
+    try {
       const data: Buffer = await this.downloadFlv(item.uri, item.number);
-      fs.writeFile(path.join(option.output, `av${ item.number }_${ item.page }_${ item.index }_${ item.time }.flv`), data, (err: Error): void=>{
-        if(err){
+
+      fs.writeFile(path.join(option.output, `av${ item.number }_${ item.page }_${ item.index }_${ item.time }.flv`), data, (err: Error): void => {
+        if (err) {
           message.error('视频下载失败！');
           this.props.avList[index].status = 3;
-        }else{
+        } else {
           message.success('视频下载成功！');
           this.props.avList[index].status = 2;
         }
@@ -128,7 +131,7 @@ class Index extends Component{
           avList: this.props.avList
         });
       });
-    }catch(err){
+    } catch (err) {
       console.error(err);
       message.error('视频下载失败！');
       this.props.avList[index].status = 3;
@@ -138,36 +141,38 @@ class Index extends Component{
     }
   }
   // 获取下载地址
-  getUrl(number: string, page: string): Promise{
-    return new Promise((resolve: Function, reject: Function): void=>{
+  getUrl(number: string, page: string): Promise {
+    return new Promise((resolve: Function, reject: Function): void => {
       $.ajax({
         url: `https://www.bilibili.com/video/av${ number }/?p=${ page }`,
         method: 'GET',
-        success(data: string, status: string, xhr: XMLHttpRequest): void{
+        success(data: string, status: string, xhr: XMLHttpRequest): void {
           const xml: string = cheerio.load(data);
           const scripts: [] = xml('script');
-          let infor: ?Object = null;  // 视频地址：infor.durl[0].url
-          for(let i: number = 0, j: number = scripts.length; i < j; i++){
+          let infor: ?Object = null; // 视频地址：infor.durl[0].url
+
+          for (let i: number = 0, j: number = scripts.length; i < j; i++) {
             const children: string = scripts[i].children;
+
             // 获取 window.__playinfo__ 信息
-            if(children.length > 0 && /^window\._{2}playinfo_{2}=.+$/.test(children[0].data)){
+            if (children.length > 0 && /^window\._{2}playinfo_{2}=.+$/.test(children[0].data)) {
               infor = JSON.parse(children[0].data.replace(/window\.__playinfo__=/, ''));
               break;
             }
           }
           resolve(infor?.data?.durl || []);
         },
-        error(err: any): void{
+        error(err: any): void {
           reject(err);
         }
       });
-    }).catch((err: any): void=>{
+    }).catch((err: any): void => {
       console.error(err);
     });
   }
   // 下载
-  downloadFlv(uri: string, number: string): Promise{
-    return new Promise((resolve: Function, reject: Function): void=>{
+  downloadFlv(uri: string, number: string): Promise {
+    return new Promise((resolve: Function, reject: Function): void => {
       request({
         uri,
         method: 'GET',
@@ -178,44 +183,46 @@ class Index extends Component{
           Range: 'bytes=0-'
         },
         encoding: null
-      }, (err: any, res: Object, data: Buffer): void=>{
-        if(err){
+      }, (err: any, res: Object, data: Buffer): void => {
+        if (err) {
           reject(err);
-        }else{
+        } else {
           resolve(data);
         }
       });
-    }).catch((err: any): void=>{
+    }).catch((err: any): void => {
       console.error(err);
     });
   }
   // 抓取页面
-  handleGetPageClick: Function = async(event: Event): void=>{
-    try{
+  handleGetPageClick: Function = async (event: Event): void => {
+    try {
       const $avNumber: jQuery = $('#av-number');
       const $avPage: jQuery = $('#av-page');
       const number: string = $avNumber.val();
       let page: string = $avPage.val();
 
-      if(!/^[0-9]+$/.test(number)){
+      if (!/^[0-9]+$/.test(number)) {
         message.info('请输入av号！');
+
         return void 0;
       }
 
-      if(!/^[0-9]+$/.test(page)){
+      if (!/^[0-9]+$/.test(page)) {
         page = 1;
       }
 
       const durl: { url: string }[] = await this.getUrl(number, page);
 
-      if(durl.length === 0){
+      if (durl.length === 0) {
         message.info('视频不存在！');
+
         return void 0;
       }
 
       const arr: [] = [];
 
-      for(let i: number = 0, j: number = durl.length; i < j; i++){
+      for (let i: number = 0, j: number = durl.length; i < j; i++) {
         const item: Object = durl[i];
 
         arr.push({
@@ -229,18 +236,20 @@ class Index extends Component{
       }
 
       const avList: [] = this.props.avList;
+
       avList.push(...arr);
       this.props.action.avList({ avList });
       message.success('获取地址成功！');
       $avNumber.val('');
       $avPage.val('');
-    }catch(err){
+    } catch (err) {
       console.error(err);
       message.error('获取地址失败！');
     }
   };
-  render(): React.Element{
+  render(): React.Element {
     const { avList }: { avList: [] } = this.props;
+
     return (
       <Fragment>
         {/* 功能区 */}

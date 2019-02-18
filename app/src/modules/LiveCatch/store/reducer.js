@@ -21,13 +21,14 @@ const opt: {
 } = {
   objectStoreName: option.indexeddb.objectStore.liveCatch.name
 };
-export const getAutoRecordingOption: Function = db.getAction(opt);  // 获取自动录制配置
-export const addAutoRecordingOption: Function = db.addAction(opt);  // 添加自动录制配置
-export const putAutoRecordingOption: Function = db.putAction(opt);  // 更新自动录制配置
+
+export const getAutoRecordingOption: Function = db.getAction(opt); // 获取自动录制配置
+export const addAutoRecordingOption: Function = db.addAction(opt); // 添加自动录制配置
+export const putAutoRecordingOption: Function = db.putAction(opt); // 更新自动录制配置
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('index', indexReducer($$state.get('index'), action));
   }
 }, fromJS(initData));

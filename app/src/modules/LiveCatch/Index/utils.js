@@ -5,22 +5,26 @@
  * @param { ?Map } catchMap    : 正在录制
  * @return { Array }           : 返回正在录制的旧数据
  */
-export function oldArray(oldRawArray: Array, newRawArray: Array, catchMap: ?Map): Array{
+export function oldArray(oldRawArray: Array, newRawArray: Array, catchMap: ?Map): Array {
   // 将新数据内的liveId提取成数组
   const newIdList: string[] = [];
-  for(let i: number = 0, j: number = newRawArray.length; i < j; i++){
+
+  for (let i: number = 0, j: number = newRawArray.length; i < j; i++) {
     newIdList.push(newRawArray[i].liveId);
   }
   // 循环旧数组
   const oldList: Array = [];
-  if(oldRawArray){
-    for(let i: number = 0, j: number = oldRawArray.length; i < j; i++){
+
+  if (oldRawArray) {
+    for (let i: number = 0, j: number = oldRawArray.length; i < j; i++) {
       const item: Object = oldRawArray[i];
-      if(!newIdList.includes(item.liveId) && catchMap && catchMap.has(item.liveId)){
+
+      if (!newIdList.includes(item.liveId) && catchMap && catchMap.has(item.liveId)) {
         item._end = true;
         oldList.push(item);
       }
     }
   }
+
   return oldList;
 }

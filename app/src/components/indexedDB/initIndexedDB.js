@@ -4,17 +4,18 @@ import option from '../option/option';
 
 /* 初始化所有的数据库 */
 IndexedDB(option.indexeddb.name, option.indexeddb.version, {
-  success(et: Object, event: Event): void{
+  success(et: Object, event: Event): void {
     this.close();
   },
-  upgradeneeded(et: Object, event: Event): void{
+  upgradeneeded(et: Object, event: Event): void {
     { // 存储的是直播抓取页面的自动录制配置
       const { name, key, data }: {
         name: string,
         key: string,
         data: Array
       } = option.indexeddb.objectStore.liveCatch;
-      if(!this.hasObjectStore(name)){
+
+      if (!this.hasObjectStore(name)) {
         this.createObjectStore(name, key, data);
       }
     }
@@ -24,7 +25,8 @@ IndexedDB(option.indexeddb.name, option.indexeddb.version, {
         key: string,
         data: Array
       } = option.indexeddb.objectStore.bilibili;
-      if(!this.hasObjectStore(name)){
+
+      if (!this.hasObjectStore(name)) {
         this.createObjectStore(name, key, data);
       }
     }

@@ -20,18 +20,18 @@ const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.h
   ? $$state.get('bilibili').get('index') : null;
 
 const state: Function = createStructuredSelector({
-  liveList: createSelector(  // 直播间信息
+  liveList: createSelector( // 直播间信息
     getIndex,
     ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
-  catching: createSelector(  // 正在直播
+  catching: createSelector( // 正在直播
     getIndex,
     ($$data: ?Immutable.Map): Map => $$data !== null && $$data.has('catching') ? $$data.get('catching') : new Map()
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     cursorBilibiliLiveRoom,
     deleteBilibiliLiveRoom,
@@ -40,7 +40,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class Index extends Component{
+class Index extends Component {
   state: {
     loading: boolean
   };
@@ -51,15 +51,15 @@ class Index extends Component{
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
-      loading: true     // 加载动画
+      loading: true // 加载动画
     };
   }
   // 表格配置
-  columus(): Array{
+  columus(): Array {
     const columns: Array = [
       {
         title: '直播间名称',
@@ -77,7 +77,7 @@ class Index extends Component{
         title: '操作',
         key: 'handle',
         width: '36%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
           return [
             this.props.catching.has(item.roomid)
               ? (
@@ -101,9 +101,10 @@ class Index extends Component{
         }
       }
     ];
+
     return columns;
   }
-  async UNSAFE_componentWillMount(): Promise<void>{
+  async UNSAFE_componentWillMount(): Promise<void> {
     await this.props.action.cursorBilibiliLiveRoom({
       query: {
         indexName: 'roomname'
@@ -114,7 +115,7 @@ class Index extends Component{
     });
   }
   // 录制
-  async handleCatchClick(item: Object, event: Event): Promise<void>{
+  async handleCatchClick(item: Object, event: Event): Promise<void> {
     const url: string = await getUrl(item.roomid);
     const urlList: Object = JSON.parse(url);
     const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
@@ -125,6 +126,7 @@ class Index extends Component{
       'copy',
       `${ option.output }/${ title }.flv`
     ]);
+
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);
     child.on('close', child_process_exit);
@@ -141,23 +143,24 @@ class Index extends Component{
     message.success(`开始录制【${ item.roomname }】！`);
   }
   // 停止
-  handleCatchStopClick(item: Object, event: Event): void{
+  handleCatchStopClick(item: Object, event: Event): void {
     const m: Object = this.props.catching.get(item.roomid);
+
     m.child.kill();
     message.warn(`停止录制【${ item.roomname }】！`);
   }
   // 删除
-  async handleDeleteClick(item: Object, event: Event): Promise<void>{
-    try{
+  async handleDeleteClick(item: Object, event: Event): Promise<void> {
+    try {
       await this.props.action.deleteBilibiliLiveRoom({
         query: item.roomid
       });
       message.success('删除成功！');
-    }catch(err){
+    } catch (err) {
       message.error('删除失败！');
     }
   }
-  render(): React.ChildrenArray<React.Element>{
+  render(): React.ChildrenArray<React.Element> {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>

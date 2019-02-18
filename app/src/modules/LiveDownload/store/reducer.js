@@ -16,10 +16,10 @@ export const downloadList: Function = createAction('公演下载列表');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('downloadList', List(action.payload.downloadList));
   }
 }, fromJS(initData));

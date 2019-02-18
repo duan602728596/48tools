@@ -5,8 +5,8 @@ import reducer from './store/reducer';
 import Index from './Index/index';
 
 @loadReducer(reducer)
-class ModuleLayout extends Component{
-  render(): React.Element{
+class ModuleLayout extends Component {
+  render(): React.Element {
     return (
       <Switch>
         <Route path="/AvDownload" component={ Index } exact={ true } />

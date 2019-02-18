@@ -18,11 +18,11 @@ const child_process: Object = global.require('child_process');
 const path: Object = global.require('path');
 
 /* 子进程监听 */
-function child_process_stdout(data: any): void{
+function child_process_stdout(data: any): void {
   // console.log(data.toString());
 }
 
-function child_process_stderr(data: any): void{
+function child_process_stderr(data: any): void {
   // console.log(data.toString());
 }
 
@@ -30,18 +30,18 @@ function child_process_stderr(data: any): void{
 const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('cut') ? $$state.get('cut') : null;
 
 const state: Function = createStructuredSelector({
-  cutList: createSelector(         // 剪切队列
+  cutList: createSelector( // 剪切队列
     getState,
     ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('cutList').toJS() : []
   ),
-  cutMap: createSelector(          // 正在剪切
+  cutMap: createSelector( // 正在剪切
     getState,
     ($$data: ?Immutable.Map): Map => $$data !== null ? $$data.get('cutMap') : new Map()
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     cutList,
     taskChange
@@ -50,7 +50,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @Form.create()
 @connect(state, dispatch)
-class Index extends Component{
+class Index extends Component {
   dir: string;
   state: {
     file: ?Object,
@@ -64,17 +64,17 @@ class Index extends Component{
     form: PropTypes.object
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.dir = option.output.replace(/\//g, '\\');
     this.state = {
-      file: null,      // 选择文件
-      saveFile: null   // 保存文件
+      file: null, // 选择文件
+      saveFile: null // 保存文件
     };
   }
   // 表格配置
-  columus(): Array{
+  columus(): Array {
     const columus: Array = [
       {
         title: '视频文件地址',
@@ -87,12 +87,13 @@ class Index extends Component{
         title: '开始时间',
         key: 'startTime',
         width: '10%',
-        render: (value: any, item: Object, index: number): string=>{
+        render: (value: any, item: Object, index: number): string => {
           const { starthh, startmm, startss }: {
             starthh: number,
             startmm: number,
             startss: number
           } = item;
+
           return `${ patchZero(Number(starthh)) } : ${ patchZero(Number(startmm)) } : ${ patchZero(Number(startss)) }`;
         }
       },
@@ -100,12 +101,13 @@ class Index extends Component{
         title: '结束时间',
         key: 'endTime',
         width: '10%',
-        render: (value: any, item: Object, index: number): string=>{
+        render: (value: any, item: Object, index: number): string => {
           const { endhh, endmm, endss }: {
             endhh: number,
             endmm: number,
             endss: number
           } = item;
+
           return `${ patchZero(Number(endhh)) } : ${ patchZero(Number(endmm)) } : ${ patchZero(Number(endss)) }`;
         }
       },
@@ -120,24 +122,25 @@ class Index extends Component{
         title: '操作',
         key: 'handle',
         width: '20%',
-        render: (value: any, item: Object, index: number): React.Element | React.ChildrenArray<React.Element>=>{
-          if(this.props.cutMap.has(item.id)){
+        render: (value: any, item: Object, index: number): React.Element | React.ChildrenArray<React.Element> => {
+          if (this.props.cutMap.has(item.id)) {
             const m: Map = this.props.cutMap.get(item.id);
-            if(m.child.exitCode !== null){
+
+            if (m.child.exitCode !== null) {
               return [
                 <b key="stop" className={ publicStyle.mr10 }>任务结束</b>,
                 <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTaskClick.bind(this, item) }>
                   <Button type="danger" icon="delete">删除任务</Button>
                 </Popconfirm>
               ];
-            }else{
+            } else {
               return (
                 <Popconfirm title="确认停止任务吗？" onConfirm={ this.handleStopTaskClick.bind(this, item) }>
                   <Button type="danger" icon="close-circle">停止任务</Button>
                 </Popconfirm>
               );
             }
-          }else{
+          } else {
             return [
               <Button key="start" className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.handleStartTaskClick.bind(this, item) }>开始任务</Button>,
               <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTaskClick.bind(this, item) }>
@@ -148,18 +151,21 @@ class Index extends Component{
         }
       }
     ];
+
     return columus;
   }
   // 选择文件的change事件
-  handleFileChange(event: Event): void{
+  handleFileChange(event: Event): void {
     const save: any = document.getElementById('cut-save');
     const file: ?Object = event.target.files[0] || null;
     let title: string = '';
-    if(file){
+
+    if (file) {
       const { name, ext }: {
         name: string,
         ext: string
       } = path.parse(file.path);
+
       title = '【视频剪切】' + name + '_' + time('YY-MM-DD-hh-mm-ss') + ext;
     }
     this.setState({
@@ -168,21 +174,22 @@ class Index extends Component{
     save.nwsaveas = title;
   }
   // 储存文件的change事件
-  handleSaveChange(event: Event): void{
+  handleSaveChange(event: Event): void {
     const file: ?Object = event.target.files[0] || null;
+
     this.setState({
       saveFile: file
     });
   }
   // 点击input
-  handleClickInputClick(id: string, event: Event): void{
+  handleClickInputClick(id: string, event: Event): void {
     $(`#${ id }`).click();
   }
   // 添加到队列
-  handleAddQueueClick(event: Event): void{
+  handleAddQueueClick(event: Event): void {
     event.preventDefault();
-    this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
-      if(!err){
+    this.props.form.validateFields((err: any, value: any): void => {
+      if (!err) {
         const cutList: Array = this.props.cutList.slice();
         const { file, saveFile }: {
           file: Object,
@@ -196,6 +203,7 @@ class Index extends Component{
           endmm: ?string,
           endss: ?string
         } = value;
+
         cutList.push({
           id: new Date().getTime(),
           file,
@@ -213,12 +221,13 @@ class Index extends Component{
         });
         this.props.form.resetFields(); // 重置表单
         this.setState({
-          file: null,      // 选择文件
-          saveFile: null   // 保存文件
+          file: null, // 选择文件
+          saveFile: null // 保存文件
         });
         {
           const $file: any = $('#cut-file');
           const $save: any = $('#cut-save');
+
           $file.val('');
           $save.val('');
           $save.prop('nwsaveas', '');
@@ -227,8 +236,9 @@ class Index extends Component{
     });
   }
   // 删除任务
-  handleDeleteTaskClick(item: Object, event: Event): void{
+  handleDeleteTaskClick(item: Object, event: Event): void {
     const index: number = this.props.cutList.indexOf(item);
+
     this.props.cutList.splice(index, 1);
     this.props.action.cutList({
       cutList: this.props.cutList.slice()
@@ -238,23 +248,23 @@ class Index extends Component{
    * 子进程监听
    * 子进程关闭时自动删除itemId对应的Map
    */
-  child_process_exit(item: Object, code: any, data: any): void{
+  child_process_exit(item: Object, code: any, data: any): void {
     console.log('exit: ' + code + ' ' + data);
     this.child_process_cb(item);
   }
-  child_process_error(item: Object, err: any): void{
+  child_process_error(item: Object, err: any): void {
     console.error('error: \n' + err);
     this.child_process_cb(item);
   }
   // 子进程关闭
-  async child_process_cb(item: Object): Promise<void>{
+  child_process_cb(item: Object): void {
     this.props.action.cutList({
       cutList: this.props.cutList
     });
     message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 开始任务
-  handleStartTaskClick(item: Object, event: Event): void{
+  handleStartTaskClick(item: Object, event: Event): void {
     const { starthh, startmm, startss, endhh, endmm, endss }: {
       starthh: number,
       startmm: number,
@@ -293,6 +303,7 @@ class Index extends Component{
     ];
 
     const child: Object = child_process.spawn(option.ffmpeg, arg);
+
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);
     child.on('exit', this.child_process_exit.bind(this, item));
@@ -311,12 +322,14 @@ class Index extends Component{
     message.info(`开始剪切【${ item.file.path } => ${ item.saveFile.path }】`);
   }
   // 停止任务
-  handleStopTaskClick(item: Object, event: Event): void{
+  handleStopTaskClick(item: Object, event: Event): void {
     const m: Object = this.props.cutMap.get(item.id);
+
     m.child.kill();
   }
-  render(): React.ChildrenArray<React.Element>{
-    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
+  render(): React.ChildrenArray<React.Element> {
+    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form; // 包装表单控件
+
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
@@ -379,7 +392,7 @@ class Index extends Component{
                           message: '时间格式错误',
                           type: 'number',
                           min: 0,
-                          transform: (value: string = ''): number=>Number(value)
+                          transform: (value: string = ''): number => Number(value)
                         }
                       ]
                     })(
@@ -397,7 +410,7 @@ class Index extends Component{
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number=>Number(value)
+                          transform: (value: string = ''): number => Number(value)
                         }
                       ]
                     })(
@@ -415,7 +428,7 @@ class Index extends Component{
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number=>Number(value)
+                          transform: (value: string = ''): number => Number(value)
                         }
                       ]
                     })(
@@ -431,7 +444,7 @@ class Index extends Component{
                           message: '时间格式错误',
                           type: 'number',
                           min: 0,
-                          transform: (value: string = ''): number=>Number(value)
+                          transform: (value: string = ''): number => Number(value)
                         }
                       ]
                     })(
@@ -449,7 +462,7 @@ class Index extends Component{
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number=>Number(value)
+                          transform: (value: string = ''): number => Number(value)
                         }
                       ]
                     })(
@@ -467,7 +480,7 @@ class Index extends Component{
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number=>Number(value)
+                          transform: (value: string = ''): number => Number(value)
                         }
                       ]
                     })(

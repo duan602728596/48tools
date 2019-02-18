@@ -14,31 +14,32 @@ import { downloadList } from '../store/reducer';
 
 /* 初始化数据 */
 const state: Function = createStructuredSelector({
-  downloadList: createSelector(     // 下载列表
+  downloadList: createSelector( // 下载列表
     ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
     ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('downloadList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     downloadList
   }, dispatch)
 });
 
 @connect(state, dispatch)
-class List extends Component{
+class List extends Component {
   static propTypes: Object = {
     downloadList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
   // 清除列表
-  handleClearClick(event: Event): void{
-    for(let i: number = this.props.downloadList.length - 1; i >= 0; i--){
+  handleClearClick(event: Event): void {
+    for (let i: number = this.props.downloadList.length - 1; i >= 0; i--) {
       const item: Object = this.props.downloadList[i];
-      if(!(item.child.killed === false && item.child.exitCode === null)){
+
+      if (!(item.child.killed === false && item.child.exitCode === null)) {
         this.props.downloadList.splice(i, 1);
       }
     }
@@ -47,11 +48,11 @@ class List extends Component{
     });
   }
   // 取消下载
-  handleStopClick(item: Object, event: Event): void{
+  handleStopClick(item: Object, event: Event): void {
     item.child.kill();
   }
-  downloadList(): React.ChildrenArray<React.Element>{
-    return this.props.downloadList.map((item: Object, index: number): React.Element=>{
+  downloadList(): React.ChildrenArray<React.Element> {
+    return this.props.downloadList.map((item: Object, index: number): React.Element => {
       return (
         <li key={ item.id }>
           <h4>
@@ -71,7 +72,7 @@ class List extends Component{
       );
     });
   }
-  render(): React.Element{
+  render(): React.Element {
     return (
       <div>
         {/* 功能区 */}

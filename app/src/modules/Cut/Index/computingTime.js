@@ -4,7 +4,7 @@
  * @param { Array } endTime  : 结束时间
  * @return { Array }
  */
-function computingTime(startTime: number[], endTime: number[]): number[]{
+function computingTime(startTime: number[], endTime: number[]): number[] {
   const startS: number = (startTime[0] * 3600) + (startTime[1] * 60) + startTime[2];
   const endS: number = (endTime[0] * 3600) + (endTime[1] * 60) + endTime[2];
   const cha: number = endS - startS;
@@ -12,6 +12,7 @@ function computingTime(startTime: number[], endTime: number[]): number[]{
   const hp: number = cha % 3600;
   const m: number = Number(`${ hp / 60 }`.match(/\d+/g)[0]);
   const s: number = hp % 60;
+
   return [h, m, s];
 }
 

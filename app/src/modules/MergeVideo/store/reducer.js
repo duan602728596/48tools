@@ -9,11 +9,11 @@ const initData: {
 };
 
 /* Action */
-export const mergeList: Function = createAction('合并视频列表');      // 剪切队列
+export const mergeList: Function = createAction('合并视频列表'); // 剪切队列
 
 /* reducer */
 const reducer: Function = handleActions({
-  [mergeList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [mergeList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('mergeList', List(action.payload.mergeList));
   }
 }, fromJS(initData));

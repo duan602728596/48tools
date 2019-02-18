@@ -11,7 +11,7 @@
     "npmi": "npm install --production",
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
-    "eslint": "eslint ./src",
+    "eslint": "eslint ./src --fix",
     "update": "milktea update"
   },
   "main": "./build/index.html",

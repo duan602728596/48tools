@@ -19,25 +19,25 @@ const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.h
   ? $$state.get('playBackDownload') : null;
 
 const state: Function = createStructuredSelector({
-  downloadList: createSelector(         // 下载列表
+  downloadList: createSelector( // 下载列表
     getState,
     ($$data: ?Immutable.Map): Map => $$data !== null ? $$data.get('downloadList') : new Map()
   ),
-  fnReady: createSelector(              // 下载事件监听
+  fnReady: createSelector( // 下载事件监听
     getState,
     ($$data: ?Immutable.Map): boolean => $$data !== null ? $$data.get('fnReady') : false
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     downloadList,
     fnReady
   }, dispatch)
 });
 
-class ListOne extends Component{
+class ListOne extends Component {
   state: {
     timer: ?number,
     percent: number
@@ -47,39 +47,42 @@ class ListOne extends Component{
     detail: PropTypes.array
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
-      timer: null,  // 定时器
-      percent: 0    // 进度条
+      timer: null, // 定时器
+      percent: 0 // 进度条
     };
   }
-  componentDidMount(): void{
+  componentDidMount(): void {
     // 进度条的定时器
     const { detail }: { detail: Array } = this.props;
     const { state }: { state: number } = detail[1];
-    if(state && state === 1){
+
+    if (state && state === 1) {
       this.setState({
         timer: requestAnimationFrame(this.timer.bind(this))
       });
     }
   }
-  timer(): void{
+  timer(): void {
     const { detail }: { detail: Array } = this.props;
     const { current, infor, state }: {
       current: string,
       infor: Object,
       state: number
     } = detail[1];
-    fs.stat(current + '.crdownload', (err: ?any, state2: Object): void=>{
-      if(state !== 1){
+
+    fs.stat(current + '.crdownload', (err: ?any, state2: Object): void => {
+      if (state !== 1) {
         this.setState({
           timer: null,
           percent: 100
         });
-      }else{
+      } else {
         const percent: number = Number((state2.size / infor.totalBytes * 100).toFixed(0));
+
         this.setState({
           timer: requestAnimationFrame(this.timer.bind(this)),
           percent
@@ -87,15 +90,16 @@ class ListOne extends Component{
       }
     });
   }
-  componentWillUnmount(): void{
-    if(this.state.timer){
+  componentWillUnmount(): void {
+    if (this.state.timer) {
       cancelAnimationFrame(this.state.timer);
     }
   }
-  stateView(): ?React.Element{
+  stateView(): ?React.Element {
     const { detail }: { detail: Array } = this.props;
     const { state }: { state: number } = detail[1];
-    switch(state){
+
+    switch (state) {
       case 1:
         return (
           <Button className={ publicStyle.fr }
@@ -123,23 +127,25 @@ class ListOne extends Component{
     }
   }
   // 取消下载
-  handleCancelDownload(id: number, event: Event): void{
+  handleCancelDownload(id: number, event: Event): void {
     chrome.downloads.cancel(id);
   }
-  render(): ?React.Element{
+  render(): ?React.Element {
     const { detail }: { detail: Array } = this.props;
     const { current, item, state }: {
       current: string,
       item: Object,
       state: number
     } = detail[1];
+
     // 判断文件状态，避免渲染bug
-    if(state && state !== 0){
+    if (state && state !== 0) {
       const { streamPath, title, subTitle }: {
         streamPath: string,
         title: string,
         subTitle: string
       } = item;
+
       return (
         <div>
           <div className="clearfix">
@@ -147,7 +153,7 @@ class ListOne extends Component{
               <p className={ style.line }>【{ title }】{ subTitle }：{ streamPath }</p>
               <p className={ style.line }>{ current }</p>
             </div>
-            {  this.stateView() }
+            { this.stateView() }
           </div>
           {
             /* 判断是否显示进度条 */
@@ -157,7 +163,7 @@ class ListOne extends Component{
           }
         </div>
       );
-    }else{
+    } else {
       return null;
     }
   }
@@ -165,7 +171,7 @@ class ListOne extends Component{
 
 @withRouter
 @connect(state, dispatch)
-class List extends Component{
+class List extends Component {
   static propTypes: Object = {
     downloadList: PropTypes.object,
     fnReady: PropTypes.bool,
@@ -176,8 +182,8 @@ class List extends Component{
   };
   
   // 组件挂载之前监听chrome下载事件
-  UNSAFE_componentWillMount(): void{
-    if(this.props.fnReady === false){
+  UNSAFE_componentWillMount(): void {
+    if (this.props.fnReady === false) {
       chrome.downloads.onCreated.addListener(handleChromeDownloadsCreated);
       chrome.downloads.onChanged.addListener(handleChromeDownloadsChanged);
       // 函数已监听的标识
@@ -186,9 +192,9 @@ class List extends Component{
       });
     }
   }
-  listOne(): React.ChildrenArray<React.Element>{
-    return Array.from(this.props.downloadList).map((item: Array, index: number): React.Element=>{
-      if(item[1].state !== 0){
+  listOne(): React.ChildrenArray<React.Element> {
+    return Array.from(this.props.downloadList).map((item: Array, index: number): React.Element => {
+      if (item[1].state !== 0) {
         return (
           <li key={ item[0] }>
             <ListOne detail={ item } />
@@ -198,9 +204,9 @@ class List extends Component{
     });
   }
   // 清除已下载
-  handleClearClick(event: Event): void{
-    this.props.downloadList.forEach((value: Object, key: number): void=>{
-      if(value.state !== 1){
+  handleClearClick(event: Event): void {
+    this.props.downloadList.forEach((value: Object, key: number): void => {
+      if (value.state !== 1) {
         this.props.downloadList.delete(key);
       }
     });
@@ -208,7 +214,7 @@ class List extends Component{
       downloadList: new Map(Array.from(this.props.downloadList))
     });
   }
-  render(): React.ChildrenArray<React.Element>{
+  render(): React.ChildrenArray<React.Element> {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>

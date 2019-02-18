@@ -6,34 +6,36 @@ import style from './style.sass';
 const querystring: Object = global.require('querystring');
 const path: Object = global.require('path');
 
-class Index extends Component{
+class Index extends Component {
   item: {
     title: string,
     subTitle: string,
     streamPath: string
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     const search: string = location.search.replace(/^\?{1}/, ''); // 获取信息
 
     this.item = querystring.parse(search);
   }
-  componentDidMount(): void{
+  componentDidMount(): void {
     const type: string = path.parse(this.item.streamPath).ext.replace(/^\.{1}/, '');
+
     // 初始化flv.js
-    if(flvjs.isSupported()){
+    if (flvjs.isSupported()) {
       const videoElement: Element = document.getElementById('video-element');
       const flvPlayer: flvjs = flvjs.createPlayer({
         type,
         url: this.item.streamPath
       });
+
       flvPlayer.attachMediaElement(videoElement);
       flvPlayer.load();
     }
   }
-  render(): React.Element{
+  render(): React.Element {
     return (
       <Card className={ style.card } cover={
         <div className={ style.videobox }>

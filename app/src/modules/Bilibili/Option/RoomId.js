@@ -5,13 +5,13 @@ import $ from 'jquery';
 import style from './style.sass';
 const url: Object = global.require('url');
 
-class RoomId extends Component{
+class RoomId extends Component {
   state: {
     url: string,
     roomId: string
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
@@ -20,47 +20,52 @@ class RoomId extends Component{
     };
   }
   // 复制
-  handleCopy(event: Event): void{
+  handleCopy(event: Event): void {
     const range: Object = document.createRange();
+
     range.selectNode(document.getElementById('roomId'));
     const selection: Object = window.getSelection();
-    if(selection.rangeCount > 0) selection.removeAllRanges();
+
+    if (selection.rangeCount > 0) selection.removeAllRanges();
     selection.addRange(range);
     document.execCommand('copy');
   }
   // change
-  handleChange(event: Event): void{
+  handleChange(event: Event): void {
     this.setState({
       url: event.target.value,
       roomId: ''
     });
   }
   // 搜索
-  handleSearch(event: Event): void{
+  handleSearch(event: Event): void {
     const _this: this = this;
     const u: Object = url.parse(this.state.url);
-    if(u.host !== 'live.bilibili.com'){
+
+    if (u.host !== 'live.bilibili.com') {
       message.warn('直播间地址错误！');
+
       return false;
     }
     const id: string[] = this.state.url.split(/\//g);
     const id2: string = id[id.length - 1];
+
     $.ajax({
       url: `https://api.live.bilibili.com/room/v1/Room/room_init?id=${ id2 }`,
       type: 'GET',
       dataType: 'json',
-      success(data: Object, status: string, xhr: XMLHttpRequest): void{
-        if(data.code === 0 && xhr.status === 200){
+      success(data: Object, status: string, xhr: XMLHttpRequest): void {
+        if (data.code === 0 && xhr.status === 200) {
           _this.setState({
             roomId: data.data.room_id
           });
-        }else{
+        } else {
           message.error(data.msg);
         }
       }
     });
   }
-  render(): Array{
+  render(): Array {
     return [
       <h3 key="title" className={ style.title }>RoomId查找</h3>,
       <div key="search" className={ style.group }>

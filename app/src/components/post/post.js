@@ -32,24 +32,25 @@ const options: {
 };
 
 /* post数据 */
-function postData(number: number): string{
+function postData(number: number): string {
   return `{"lastTime":${ number },"limit":20,"groupId":0,"memberId":0,"type":0,"giftUpdTime":1490857731000}`;
 }
 
-function post(number: number = 0): Promise{
-  return new Promise((resolve: Function, reject: Function): void=>{
-    const req: Object = https.request(options, (res: Object): void=>{
+function post(number: number = 0): Promise {
+  return new Promise((resolve: Function, reject: Function): void => {
+    const req: Object = https.request(options, (res: Object): void => {
       let getData: string = '';
+
       res.setEncoding('utf8');
-      res.on('data', function(chunk: any): void{
+      res.on('data', function(chunk: any): void {
         getData += chunk;
       });
-      res.on('end', function(): void{
+      res.on('end', function(): void {
         resolve(getData);
       });
     });
 
-    req.on('error', function(err: any): void{
+    req.on('error', function(err: any): void {
       console.log('错误：' + err.message);
     });
 

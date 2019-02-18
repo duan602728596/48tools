@@ -13,7 +13,7 @@ import { getAutoRecordingOption, addAutoRecordingOption, putAutoRecordingOption 
 const state: Function = createStructuredSelector({});
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     getAutoRecordingOption,
     addAutoRecordingOption,
@@ -23,7 +23,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 
 @Form.create()
 @connect(state, dispatch)
-class LiveCatchOption extends Component{
+class LiveCatchOption extends Component {
   state: {
     loading: boolean,
     btnLoading: boolean,
@@ -36,58 +36,60 @@ class LiveCatchOption extends Component{
     form: PropTypes.object
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
-      loading: true,      // 加载动画
-      btnLoading: false,  // 按钮加载动画
-      time: null,         // 间隔时间
-      humans: null        // 成员
+      loading: true, // 加载动画
+      btnLoading: false, // 按钮加载动画
+      time: null, // 间隔时间
+      humans: null // 成员
     };
   }
-  async UNSAFE_componentWillMount(): Promise<void>{
+  async UNSAFE_componentWillMount(): Promise<void> {
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
     const data: Object = qr.result;
     let time: ?number = null,
       humans: ?string[] = null;
-    if(data){
+
+    if (data) {
       [time, humans] = [data.option.time, data.option.humans];
       this.setState({
         time,
         humans: humans.join(', '),
         loading: false
       });
-    }else{
+    } else {
       this.setState({
         loading: false
       });
     }
   }
   // 修改
-  handleReviseClick(event: Event): void{
+  handleReviseClick(event: Event): void {
     event.preventDefault();
     this.setState({
       loading: true,
       btnLoading: true
     });
-    this.props.form.validateFields(async(err: ?any, value: any): Promise<void>=>{
-      if(!err){
+    this.props.form.validateFields(async (err: ?any, value: any): Promise<void> => {
+      if (!err) {
         const { time, humans }: {
           time: ?string,
           humans: ?string
         } = value;
 
         const humansArray: Array = (humans ? humans : '').replace(/\s+/g, '').split(/\s*,\s*/g);
-        for(let j: number = humansArray.length - 1; j >= 0; j--){
-          if(humansArray[j] === ''){
+
+        for (let j: number = humansArray.length - 1; j >= 0; j--) {
+          if (humansArray[j] === '') {
             humansArray.splice(j, 1);
           }
         }
         // 修改配置
-        try{
+        try {
           await this.props.action.putAutoRecordingOption({
             data: {
               function: 'liveCatchOption',
@@ -98,10 +100,10 @@ class LiveCatchOption extends Component{
             }
           });
           message.success('配置修改成功！');
-        }catch(err){
+        } catch (err) {
           message.error('配置修改失败！');
         }
-      }else{
+      } else {
         message.error('配置修改失败！');
       }
       this.setState({
@@ -110,8 +112,9 @@ class LiveCatchOption extends Component{
       });
     });
   }
-  render(): React.Element{
-    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form;  // 包装表单控件
+  render(): React.Element {
+    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form; // 包装表单控件
+
     return (
       <div className={ style.body }>
         <Form layout="horizontal" onSubmit={ this.handleReviseClick.bind(this) }>
@@ -131,7 +134,7 @@ class LiveCatchOption extends Component{
                         message: '时间必须大于等于一分钟',
                         type: 'number',
                         min: 1,
-                        transform: (value: string): number=>Number(value)
+                        transform: (value: string): number => Number(value)
                       }
                     ]
                   })(

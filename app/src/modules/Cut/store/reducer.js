@@ -11,15 +11,15 @@ const initData: {
 };
 
 /* Action */
-export const cutList: Function = createAction('剪切队列');      // 剪切队列
-export const taskChange: Function = createAction('剪切任务');   // 剪切任务
+export const cutList: Function = createAction('剪切队列'); // 剪切队列
+export const taskChange: Function = createAction('剪切任务'); // 剪切任务
 
 /* reducer */
 const reducer: Function = handleActions({
-  [cutList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [cutList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('cutList', List(action.payload.cutList));
   },
-  [taskChange]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [taskChange]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('cutList', List(action.payload.cutList))
       .set('cutMap', action.payload.cutMap);
   }

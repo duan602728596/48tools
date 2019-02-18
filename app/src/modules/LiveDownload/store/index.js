@@ -13,20 +13,21 @@ type ll = {
   secondTitle: string
 }[];
 const reducer: Function = handleActions({
-  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('liveList', List(action.payload.liveList));
   },
-  [liveListInit]: ($$state: Object, action: Object): Immutable.Map=>{
+  [liveListInit]: ($$state: Object, action: Object): Immutable.Map => {
     const { liveList, page, pageLen }: {
       liveList: ll,
       page: number,
       pageLen: number
     } = action.payload;
+
     return $$state.set('liveList', List(liveList))
       .set('page', page)
       .set('pageLen', pageLen);
   },
-  [changeGroup]: ($$state: Object, action: Object): Immutable.Map=>{
+  [changeGroup]: ($$state: Object, action: Object): Immutable.Map => {
     return $$state.set('group', action.payload.group);
   }
 }, {});

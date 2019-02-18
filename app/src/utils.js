@@ -6,10 +6,10 @@ const gui: Object = global.require('nw.gui');
  * @param { number } num
  * @return { string }
  */
-export function patchZero(num: number): string{
-  if(num < 10){
+export function patchZero(num: number): string {
+  if (num < 10) {
     return `0${ num }`;
-  }else{
+  } else {
     return `${ num }`;
   }
 }
@@ -20,7 +20,7 @@ export function patchZero(num: number): string{
  * @param { ?number } timeStr: 时间字符串
  * @return { string }
  */
-export function time(modules: string, timeStr: ?number): string{
+export function time(modules: string, timeStr: ?number): string {
   const date: Object = timeStr ? new Date(timeStr) : new Date();
   const YY: number = date.getFullYear(),
     MM: number = date.getMonth() + 1,
@@ -38,7 +38,7 @@ export function time(modules: string, timeStr: ?number): string{
 }
 
 /* 在浏览器上打开页面 */
-export function handleOpenBrowser(href: string, event: Event): void{
+export function handleOpenBrowser(href: string, event: Event): void {
   event.preventDefault();
   gui.Shell.openExternal(href);
 }

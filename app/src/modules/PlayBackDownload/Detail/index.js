@@ -10,37 +10,39 @@ import { time } from '../../../utils';
 const path: Object = global.require('path');
 
 @withRouter
-class Detail extends Component{
+class Detail extends Component {
   static propTypes: Object = {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object
   };
 
-  UNSAFE_componentWillMount(): void{
+  UNSAFE_componentWillMount(): void {
     // 如果没有传参，就返回到“/PlayBackDownload”页面
-    if(!('query' in this.props.location && 'detail' in this.props.location.query)){
+    if (!('query' in this.props.location && 'detail' in this.props.location.query)) {
       this.props.history.push('/PlayBackDownload');
     }
   }
-  componentDidMount(): void{
+  componentDidMount(): void {
     const { streamPath }: { streamPath: string } = this.props.location.query.detail;
     const { ext }: { ext: string } = path.parse(streamPath);
     const ext2: string = ext.replace(/^\./, '');
-    if(flvjs.isSupported()){
+
+    if (flvjs.isSupported()) {
       const videoElement: Element = document.getElementById('videoElement');
       const flvPlayer: flvjs = flvjs.createPlayer({
         type: ext2,
         url: streamPath
       });
+
       flvPlayer.attachMediaElement(videoElement);
       flvPlayer.load();
     }
   }
-  componentWillUnmount(): void{
+  componentWillUnmount(): void {
     $('#videoElement').remove();
   }
-  render(): React.Element{
+  render(): React.Element {
     // 直播id，成员id，开始时间，下载地址，直播标题，直播间标题
     const { liveId, memberId, startTime, streamPath, picPath, subTitle, title }: {
       liveId: string,

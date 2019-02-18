@@ -9,11 +9,11 @@ const initData: {
 };
 
 /* Action */
-export const test: Function = createAction('是否开启测试功能');  // 是否开启测试功能
+export const test: Function = createAction('是否开启测试功能'); // 是否开启测试功能
 
 /* reducer */
 const reducer: Function = handleActions({
-  [test]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [test]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('test', action.payload.test);
   }
 }, fromJS(initData));

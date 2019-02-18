@@ -7,8 +7,8 @@ import List from './List/index';
 import Detail from './Detail/index';
 
 @loadReducer(reducer)
-class ModuleLayout extends Component{
-  render(): React.Element{
+class ModuleLayout extends Component {
+  render(): React.Element {
     return (
       <Switch>
         <Route path="/PlayBackDownload" component={ Index } exact={ true } />

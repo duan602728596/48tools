@@ -6,8 +6,8 @@ import Index from './Index/index';
 import List from './List/index';
 
 @loadReducer(reducer)
-class ModuleLayout extends Component{
-  render(): React.Element{
+class ModuleLayout extends Component {
+  render(): React.Element {
     return (
       <Switch>
         <Route path="/LiveDownload" component={ Index } exact={ true } />

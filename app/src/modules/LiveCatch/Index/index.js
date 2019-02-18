@@ -24,22 +24,22 @@ const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.h
   ? $$state.get('liveCatch').get('index') : null;
 
 const state: Function = createStructuredSelector({
-  liveList: createSelector(         // 当前直播
+  liveList: createSelector( // 当前直播
     getIndex,
     ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
-  liveCatch: createSelector(        // 当前直播录制
+  liveCatch: createSelector( // 当前直播录制
     getIndex,
     ($$data: ?Immutable.Map): Map => $$data !== null && $$data.has('liveCatch') ? $$data.get('liveCatch') : new Map()
   ),
-  autoRecording: createSelector(    // 自动抓取直播定时器
+  autoRecording: createSelector( // 自动抓取直播定时器
     getIndex,
     ($$data: ?Immutable.Map): ?number => $$data !== null && $$data.has('autoRecording') ? $$data.get('autoRecording') : null
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object=>({
+const dispatch: Function = (dispatch: Function): Object => ({
   action: bindActionCreators({
     liveList,
     liveCatch,
@@ -50,7 +50,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
 });
 
 @connect(state, dispatch)
-class Index extends Component{
+class Index extends Component {
   state: {
     loading: boolean
   };
@@ -62,25 +62,25 @@ class Index extends Component{
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void{
+  constructor(): void {
     super(...arguments);
 
     this.state = {
-      loading: false       // 表格的加载动画
+      loading: false // 表格的加载动画
     };
   }
   // 表格配置
-  columus(): Array{
+  columus(): Array {
     const columns: Array = [
       {
         title: '直播间',
         dataIndex: 'title',
         key: 'title',
         width: '15%',
-        render: (value: string, item: Object, index: number): React.Element | string=>{
-          if(item._end === true){
+        render: (value: string, item: Object, index: number): React.Element | string => {
+          if (item._end === true) {
             return <span className={ style.overdue }>{ value }</span>;
-          }else{
+          } else {
             return value;
           }
         }
@@ -90,10 +90,10 @@ class Index extends Component{
         dataIndex: 'subTitle',
         key: 'subTitle',
         width: '20%',
-        render: (value: string, item: Object, index: number): React.Element | string=>{
-          if(item._end === true){
+        render: (value: string, item: Object, index: number): React.Element | string => {
+          if (item._end === true) {
             return <span className={ style.overdue }>{ value }</span>;
-          }else{
+          } else {
             return value;
           }
         }
@@ -103,10 +103,10 @@ class Index extends Component{
         dataIndex: 'streamPath',
         key: 'streamPath',
         width: '30%',
-        render: (value: string, item: Object, index: number): React.Element | string=>{
-          if(item._end === true){
+        render: (value: string, item: Object, index: number): React.Element | string => {
+          if (item._end === true) {
             return <span className={ style.overdue }>{ value }</span>;
-          }else{
+          } else {
             return value;
           }
         }
@@ -116,11 +116,12 @@ class Index extends Component{
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (value: string, item: Object, index: number): React.Element | string=>{
+        render: (value: string, item: Object, index: number): React.Element | string => {
           const t: string = time('YY-MM-DD hh:mm:ss', value);
-          if(item._end === true){
+
+          if (item._end === true) {
             return <span className={ style.overdue }>{ t }</span>;
-          }else{
+          } else {
             return t;
           }
         }
@@ -130,26 +131,29 @@ class Index extends Component{
         dataIndex: 'liveId',
         key: 'handle',
         width: '20%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element>=>{
+        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
           let btn: Object = null;
-          if(this.props.liveCatch.has(value)){
+
+          if (this.props.liveCatch.has(value)) {
             const m: Object = this.props.liveCatch.get(value);
-            if(m.child.exitCode === null){
+
+            if (m.child.exitCode === null) {
               btn = (
                 <Popconfirm key="stop" title="确认停止录制吗？" onConfirm={ this.handleStopRecordingClick.bind(this, item) }>
                   <Button type="danger" icon="close-square">停止录制</Button>
                 </Popconfirm>
               );
-            }else{
+            } else {
               btn = (
                 <Button key="record" type="primary" icon="play-circle-o" onClick={ this.handleRecordingClick.bind(this, item) }>录制</Button>
               );
             }
-          }else{
+          } else {
             btn = (
               <Button key="record" type="primary" icon="play-circle-o" onClick={ this.handleRecordingClick.bind(this, item) }>录制</Button>
             );
           }
+
           return [
             btn,
             <Button key="camera"
@@ -163,16 +167,18 @@ class Index extends Component{
         }
       }
     ];
+
     return columns;
   }
   // 打开新窗口看直播
-  handleVideoPlayClick(item: Object, event: Event): void{
+  handleVideoPlayClick(item: Object, event: Event): void {
     const qs: Object = {
       title: item.title,
       subTitle: item.subTitle,
       streamPath: item.streamPath
     };
     const u: string = './build/videoPlay.html?' + querystring.stringify(qs);
+
     gui.Window.open(u, {
       position: 'center',
       width: 400,
@@ -182,7 +188,7 @@ class Index extends Component{
     });
   }
   // 录制视频
-  handleRecordingClick(item: Object, event: Event): void{
+  handleRecordingClick(item: Object, event: Event): void {
     const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title
                         + '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
                         + '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
@@ -193,6 +199,7 @@ class Index extends Component{
       'copy',
       `${ option.output }/${ title }.flv`
     ]);
+
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);
     child.on('close', child_process_exit);
@@ -208,16 +215,17 @@ class Index extends Component{
     });
   }
   // 停止录制视频
-  handleStopRecordingClick(item: Object, event: Event): void{
+  handleStopRecordingClick(item: Object, event: Event): void {
     const m: Object = this.props.liveCatch.get(item.liveId);
+
     m.child.kill();
   }
   /**
    * 录制
    * 使用Promise进行了包装
    */
-  recordingPromise(item: Object): Promise{
-    return new Promise((resolve: Function, reject: Function): void=>{
+  recordingPromise(item: Object): Promise {
+    return new Promise((resolve: Function, reject: Function): void => {
       const title: string = '【口袋48直播】' + '_' + item.title
                           + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
                           + '_录制时间_' + time('YY-MM-DD-hh-mm-ss')
@@ -229,6 +237,7 @@ class Index extends Component{
         'copy',
         `${ option.output }/${ title }.flv`
       ]);
+
       child.stdout.on('data', child_process_stdout);
       child.stderr.on('data', child_process_stderr);
       child.on('close', child_process_exit);
@@ -239,12 +248,12 @@ class Index extends Component{
         item
       });
       resolve();
-    }).catch((err: any): void=>{
+    }).catch((err: any): void => {
       console.error(err);
     });
   }
   // 自动录制的进程
-  async autoRecordingProcess(humans: string[]): Promise<void>{
+  async autoRecordingProcess(humans: string[]): Promise<void> {
     this.setState({
       loading: true
     });
@@ -252,25 +261,28 @@ class Index extends Component{
     const _this: Object = this;
     const data: string = await post(0);
     const data2: Object = JSON.parse(data);
-    if(data2.status === 200){
+
+    if (data2.status === 200) {
       message.success('请求成功');
       const liveList: Array = 'liveList' in data2.content ? data2.content.liveList : [];
 
       // 获取列表成功后开始构建录制进程
-      const queue: Array = [];                                                 // Promise.all进程
-      const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i');  // 正则
-      for(const item: Object of liveList){
+      const queue: Array = []; // Promise.all进程
+      const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i'); // 正则
+
+      for (const item: Object of liveList) {
         // 用正则表达式判断指定的成员
-        if(humanRegExp.test(item.title)){
+        if (humanRegExp.test(item.title)) {
           // 有录制的进程
-          if(_this.props.liveCatch.has(item.liveId)){
+          if (_this.props.liveCatch.has(item.liveId)) {
             const m: Object = _this.props.liveCatch.get(item.liveId);
+
             // 录制由于特殊原因已经结束，如断线等
-            if(m.child.exitCode !== null){
+            if (m.child.exitCode !== null) {
               queue.push(_this.recordingPromise(item));
             }
             // 没有录制进程
-          }else{
+          } else {
             queue.push(_this.recordingPromise(item));
           }
         }
@@ -281,7 +293,7 @@ class Index extends Component{
         map: this.props.liveCatch,
         liveList
       });
-    }else{
+    } else {
       message.error('请求失败');
     }
     this.setState({
@@ -289,14 +301,15 @@ class Index extends Component{
     });
   }
   // 自动录制
-  async handleAutoRecordingClick(event: Event): Promise<void>{
+  async handleAutoRecordingClick(event: Event): Promise<void> {
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
     const data: Object = qr.result;
     let time: ?number = null,
       humans: ?Array = null;
-    if(data){
+
+    if (data) {
       [time, humans] = [data.option.time, data.option.humans];
     }
     this.autoRecordingProcess(humans ? humans : []);
@@ -308,32 +321,33 @@ class Index extends Component{
     });
   }
   // 停止自动录制（停止的是定时器，已经录制的不会停止）
-  handleStopAutoRecordingClick(event: Event): void{
+  handleStopAutoRecordingClick(event: Event): void {
     global.clearInterval(this.props.autoRecording);
     this.props.action.autoRecording({
       autoRecording: null
     });
   }
   // 获取录制列表
-  async handleGetLiveListClick(event: Event): Promise<void>{
+  async handleGetLiveListClick(event: Event): Promise<void> {
     this.setState({
       loading: true
     });
     const data: string = await post(0);
     const data2: Object = JSON.parse(data);
-    if(data2.status === 200){
+
+    if (data2.status === 200) {
       message.success('请求成功');
       this.props.action.liveList({
         liveList: 'liveList' in data2.content ? data2.content.liveList : []
       });
-    }else{
+    } else {
       message.error('请求失败');
     }
     this.setState({
       loading: false
     });
   }
-  render(): React.Element{
+  render(): React.Element {
     return (
       <Fragment>
         {/* 功能区 */}

@@ -13,7 +13,7 @@ export const avList: Function = createAction('B站视频下载列表');
 
 /* reducer */
 const reducer: Function = handleActions({
-  [avList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
+  [avList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     return $$state.set('avList', List(action.payload.avList));
   }
 }, fromJS(initData));
