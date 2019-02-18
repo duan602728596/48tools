@@ -1,21 +1,23 @@
-import React, { Component } from 'react';
+// @flow
+import * as React from 'react';
+import { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncModule from './asyncModule';
 import Index from '../modules/Index/Layout';
 
-const LiveCatchBundle: Function = asyncModule((): Promise => import('../modules/LiveCatch/Layout'));
-const PlayBackDownloadBundle: Function = asyncModule((): Promise => import('../modules/PlayBackDownload/Layout'));
-const BiliBiliBundle: Function = asyncModule((): Promise => import('../modules/Bilibili/Layout'));
-const CutBundle: Function = asyncModule((): Promise => import('../modules/Cut/Layout'));
-const MergeVideoBundle: Function = asyncModule((): Promise => import('../modules/MergeVideo/Layout'));
-const MoDianBundle: Function = asyncModule((): Promise => import('../modules/MoDian/Layout'));
-const LiveDownloadBundle: Function = asyncModule((): Promise => import('../modules/LiveDownload/Layout'));
-const InLive48Bundle: Function = asyncModule((): Promise => import('../modules/InLive48/Layout'));
-const AvDownloadBundle: Function = asyncModule((): Promise => import('../modules/AvDownload/Layout'));
+const LiveCatchBundle: Function = asyncModule((): Promise<Function> => import('../modules/LiveCatch/Layout'));
+const PlayBackDownloadBundle: Function = asyncModule((): Promise<Function> => import('../modules/PlayBackDownload/Layout'));
+const BiliBiliBundle: Function = asyncModule((): Promise<Function> => import('../modules/Bilibili/Layout'));
+const CutBundle: Function = asyncModule((): Promise<Function> => import('../modules/Cut/Layout'));
+const MergeVideoBundle: Function = asyncModule((): Promise<Function> => import('../modules/MergeVideo/Layout'));
+const MoDianBundle: Function = asyncModule((): Promise<Function> => import('../modules/MoDian/Layout'));
+const LiveDownloadBundle: Function = asyncModule((): Promise<Function> => import('../modules/LiveDownload/Layout'));
+const InLive48Bundle: Function = asyncModule((): Promise<Function> => import('../modules/InLive48/Layout'));
+const AvDownloadBundle: Function = asyncModule((): Promise<Function> => import('../modules/AvDownload/Layout'));
 
 /* 路由模块 */
-class Routers extends Component {
-  render(): React.Element {
+class Routers extends Component<{}> {
+  render(): React.Node {
     return (
       <Switch>
         {/* 首页 */}

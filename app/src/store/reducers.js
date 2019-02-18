@@ -1,9 +1,10 @@
-/* reducers */
+// @flow
 import { combineReducers } from 'redux-immutable';
-import index from '../modules/Index/store/reducer';
+import indexReducer from '../modules/Index/store/reducer';
 
+/* reducers */
 const reducers: Object = {
-  ...index
+  ...indexReducer
 };
 
 /* 创建reducer */

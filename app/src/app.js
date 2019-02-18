@@ -1,4 +1,5 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -17,5 +18,6 @@ ReactDOM.render(
       </HashRouter>
     </LocaleProvider>
   </Provider>,
+  // $FlowFixMe
   document.getElementById('app')
 );
