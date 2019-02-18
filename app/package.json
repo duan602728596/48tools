@@ -12,6 +12,7 @@
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
     "eslint": "eslint ./src --fix",
+    "flow:check": "flow ckeck",
     "update": "milktea update"
   },
   "main": "./build/index.html",
@@ -53,6 +54,7 @@
     "eslint": "^5.14.0",
     "eslint-plugin-flowtype": "^3.4.2",
     "eslint-plugin-react": "^7.12.4",
+    "flow-bin": "^0.93.0",
     "flv.js": "^1.5.0",
     "husky": "^1.3.1",
     "immutable": "^4.0.0-rc.12",
