@@ -5,9 +5,9 @@
   "license": "GNU General Public License v3.0",
   "scripts": {
     "dll": "milktea dll",
-    "start": "npm run cleanbuild && cross-env NODE_ENV=development milktea start",
-    "build": "npm run cleanbuild && cross-env NODE_ENV=production milktea build",
-    "cleanbuild": "rimraf ./build",
+    "start": "npm run clean:build && cross-env NODE_ENV=development milktea start",
+    "build": "npm run clean:build && cross-env NODE_ENV=production milktea build",
+    "clean:build": "rimraf ./build",
     "npmi": "npm install --production",
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
