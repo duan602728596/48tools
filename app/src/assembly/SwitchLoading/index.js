@@ -1,11 +1,13 @@
 /**
  * 异步加载时显示loading
+ *
+ * @flow
  */
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Spin } from 'antd';
 import style from './style.sass';
 
-function SwitchLoading(props: Object): React.Element {
+function SwitchLoading(props: Object): React.Node {
   return (
     <div className={ style.loading }>
       <Spin size="large" tip="Loading..." />

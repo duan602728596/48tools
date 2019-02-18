@@ -1,4 +1,8 @@
-/* 配置文件 */
+/**
+ * 配置文件
+ *
+ * @flow
+ */
 const fs: Object = global.require('fs');
 const path: Object = global.require('path');
 const process: Object = global.require('process');
@@ -8,7 +12,7 @@ const os: Object = global.require('os');
  * 获取运行地址
  */
 export const type: string = os.type();
-export const execPath: string = do{
+export const execPath: string = /* ::` */ do /* ::`; */ {
   let ep: string = '';
 
   switch (type) {
@@ -16,7 +20,7 @@ export const execPath: string = do{
     case 'Darwin':
       // 兼容开发环境
       const p: ?string[] = process.execPath.match(/^[^\.]+\.app/);
-      const p2: [] = p ? p[0].split(/\//) : [];
+      const p2: string[] = p ? p[0].split(/\//) : [];
 
       ep = path.join(p2.join('/'), 'Contents');
       break;
@@ -28,7 +32,7 @@ export const execPath: string = do{
   ep;
 };
 
-type inforMap = {
+type InforMap = {
   name: string,
   key: string,
   data: {
@@ -37,17 +41,17 @@ type inforMap = {
   }[]
 };
 
-type indexeddbMap = {
+type IndexeddbMap = {
   name: string,
   version: number,
   objectStore: {
-    liveCatch: inforMap,
-    bilibili: inforMap
+    liveCatch: InforMap,
+    bilibili: InforMap
   }
 };
 
 const option: {
-  indexeddb: indexeddbMap,
+  indexeddb: IndexeddbMap,
   ffmpeg: string,
   output: string
 } = {
@@ -80,16 +84,20 @@ const option: {
   },
   // ffmpeg
   ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg`,
-  output: do{
-    if (type === 'Darwin') {
-      // 获取downloads文件夹路径
-      const username: string = fs.readdirSync('/Users');
+  output: ((): string => {
+    const outputPathFile: string = /* ::` */ do /* ::`; */ {
+      if (type === 'Darwin') {
+        // 获取downloads文件夹路径
+        const username: string = fs.readdirSync('/Users');
 
-      path.join('/Users', username[username.length - 1], '/Downloads');
-    } else {
-      `${ execPath }/output`;
-    }
-  }
+        path.join('/Users', username[username.length - 1], '/Downloads');
+      } else {
+        `${ execPath }/output`;
+      }
+    };
+
+    return outputPathFile;
+  })()
 };
 
 export default option;
