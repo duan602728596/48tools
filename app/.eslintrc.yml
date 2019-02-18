@@ -12,6 +12,9 @@ parserOptions:
 plugins:
   - react
   - flowtype
+settings:
+  react:
+    version: '16.8'
 rules:
   # Possible Errors
   no-cond-assign:                                     # 禁止条件表达式中出现赋值操作符
@@ -37,6 +40,9 @@ rules:
   valid-typeof: error                                 # 强制 typeof 表达式与有效的字符串进行比较
   # Best Practices
   block-scoped-var: error                             # 强制把变量的使用限制在其定义的作用域范围内
+  curly:                                              # 要求遵循大括号约定
+    - error
+    - multi-line
   dot-location:                                       # 强制在点号之前和之后一致的换行
     - error
     - property
@@ -45,7 +51,9 @@ rules:
     - always
   no-empty-function: error                            # 禁止出现空函数
   no-eval: error                                      # 禁用 eval()
-  no-new-func: error 	                              # 禁止对 Function 对象使用 new 操作符
+  no-implied-eval: error                              # 禁用隐式的eval()
+  no-multi-spaces: error                              # 禁止出现多个空格
+  no-new-func: error                                  # 禁止对 Function 对象使用 new 操作符
   no-new-wrappers: error                              # 禁止对 String，Number 和 Boolean 使用 new 操作符
   no-param-reassign: error                            # 禁止对 function 的参数进行重新赋值
   no-redeclare: error                                 # 禁止多次声明同一变量
@@ -53,13 +61,15 @@ rules:
   no-self-assign: error                               # 禁止自我赋值
   no-self-compare: error                              # 禁止自身比较
   no-sequences: error                                 # 禁用逗号操作符
+  require-await: error                                # 禁止使用不带 await 表达式的 async 函数
   # Variables
   no-delete-var: error                                # 禁止删除变量
+  no-use-before-define: error                         # 禁止定义前使用
   # Node.js and CommonJS
   no-new-require: error                               # 禁止调用 require 时使用 new 操作符
   # Stylistic Issues
   array-bracket-spacing: error                        # 强制数组方括号中使用一致的空格
-  block-spacing: error                                # 强制在单行代码块中使用一致的空格
+  block-spacing: error                                # 禁止或强制在代码块中开括号前和闭括号后有空格
   brace-style: error                                  # 强制在代码块中使用一致的大括号风格
   comma-dangle:                                       # 要求或禁止末尾逗号
     - error
@@ -75,7 +85,7 @@ rules:
     - beforeColon: false
       afterColon: true
       mode: strict
-  keyword-spacing: off                                # 强制在关键字前后使用一致的空格
+  keyword-spacing: error                              # 强制在关键字前后使用一致的空格
   no-mixed-operators: error                           # 禁止混合使用不同的操作符
   no-mixed-spaces-and-tabs: error                     # 禁止空格和 tab 的混合缩进
   no-multiple-empty-lines:                            # 禁止出现多行空行
@@ -83,6 +93,8 @@ rules:
     - max: 3
       maxEOF: 0
       maxBOF: 0
+  no-new-object: error                                # 禁用 Object 的构造函数
+  no-tabs: error                                      # 禁用 tab
   no-trailing-spaces:                                 # 禁用行尾空格
     - error
     - skipBlankLines: true
@@ -94,6 +106,26 @@ rules:
   operator-linebreak:                                 # 强制操作符使用一致的换行符
     - error
     - before
+  padding-line-between-statements:                    # 要求或禁止在语句间填充空行
+    - error
+    - blankLine: always
+      prev:
+        - const
+        - let
+        - var
+      next: '*'
+    - blankLine: any
+      prev:
+        - const
+        - let
+        - var
+      next:
+        - const
+        - let
+        - var
+    - blankLine: always
+      prev: '*'
+      next: return
   quotes:                                             # 强制使用一致的反勾号、双引号或单引号
     - error
     - single
@@ -102,16 +134,25 @@ rules:
     - always
   space-before-blocks:                                # 强制在块之前使用一致的空格
     - error
-    - never
-  space-before-function-paren:                        # 强制在 function的左括号之前使用一致的空格
+    - always
+  space-before-function-paren:                        # 强制在 function 的左括号之前使用一致的空格
     - error
-    - never
+    - anonymous: never
+      named: never
+      asyncArrow: always
   space-infix-ops: error                              # 要求操作符周围有空格
+  space-unary-ops:                                    # 要求或禁止在一元操作符之前或之后存在空格
+    - error
+    - words: true
   spaced-comment: error                               # 强制在注释中 // 或 /* 使用一致的空格
   # ECMAScript 6
   arrow-parens:                                       # 要求箭头函数的参数使用圆括号
     - error
     - always
+  arrow-spacing:                                      # 强制箭头函数的箭头前后使用一致的空格
+    - error
+    - before: true
+      after: true
   constructor-super: error                            # 要求在构造函数中有 super() 的调用
   no-this-before-super: error                         # 禁止在构造函数中，在调用 super() 之前使用 this 或 super
   no-var: error                                       # 要求使用 let 或 const 而不是 var
@@ -153,27 +194,32 @@ rules:
       beforeSelfClosing: always
       afterOpening: never
       beforeClosing: never
-  # flow
-  flowtype/boolean-style:                             # 强制布尔类型注释的特定样式
-    - error
-    - boolean
-  flowtype/delimiter-dangle:                          # 强制在Object和Tuple注释中一致使用尾随逗号
-    - error
-    - never
-  flowtype/generic-spacing: error                     # 在泛型类型注释参数中强制保持一致的间距
-  flowtype/no-dupe-keys: error                        # 检查对象注释中的重复属性
-  flowtype/no-primitive-constructor-types: error      # 不允许使用基本构造函数作为类型，如Boolean，Number和String
-  flowtype/object-type-delimiter:                     # 强制Flow对象类型中的属性之间保持一致的分隔符
-    - error
-    - comma
-  flowtype/require-parameter-type: error              # 要求所有的函数参数都有类型注释
-  flowtype/require-return-type:                       # 要求该函数具有返回类型注释
-    - error
-    - always
-    - annotateUndefined: always
-  flowtype/require-variable-type: error               # 要求所有变量声明符都有类型注释
-  flowtype/semi: error                                # 在类型别名后强制使用分号
-  flowtype/space-after-type-colon: error              # 在类型注释冒号后强制一致的间距
-  flowtype/space-before-generic-bracket: error        # 在泛型类型注释参数之前强制一致的间距
-  flowtype/space-before-type-colon: error             # 在类型注释冒号之前强制一致的间距
-  flowtype/union-intersection-spacing: error          # 在联合和相交类型分隔符周围实施一致的间距
+overrides:
+  - files:
+      - '*.js'
+      - '*.jsx'
+    rules:
+      # flow
+      flowtype/boolean-style:                             # 强制布尔类型注释的特定样式
+        - error
+        - boolean
+      flowtype/delimiter-dangle:                          # 强制在Object和Tuple注释中一致使用尾随逗号
+        - error
+        - never
+      flowtype/generic-spacing: error                     # 在泛型类型注释参数中强制保持一致的间距
+      flowtype/no-dupe-keys: error                        # 检查对象注释中的重复属性
+      flowtype/no-primitive-constructor-types: error      # 不允许使用基本构造函数作为类型，如Boolean，Number和String
+      flowtype/object-type-delimiter:                     # 强制Flow对象类型中的属性之间保持一致的分隔符
+        - error
+        - comma
+      flowtype/require-parameter-type: error              # 要求所有的函数参数都有类型注释
+      flowtype/require-return-type:                       # 要求该函数具有返回类型注释
+        - error
+        - always
+        - annotateUndefined: always
+      flowtype/require-variable-type: error               # 要求所有变量声明符都有类型注释
+      flowtype/semi: error                                # 在类型别名后强制使用分号
+      flowtype/space-after-type-colon: error              # 在类型注释冒号后强制一致的间距
+      flowtype/space-before-generic-bracket: error        # 在泛型类型注释参数之前强制一致的间距
+      flowtype/space-before-type-colon: error             # 在类型注释冒号之前强制一致的间距
+      flowtype/union-intersection-spacing: error          # 在联合和相交类型分隔符周围实施一致的间距

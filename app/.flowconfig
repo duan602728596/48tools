@@ -1,0 +1,17 @@
+[ignore]
+.*/build/.*
+.*/\.dll/.*
+
+[options]
+esproposal.class_instance_fields=ignore
+esproposal.class_static_fields=ignore
+esproposal.decorators=ignore
+esproposal.optional_chaining=enable
+lazy_mode=ide
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.mjs
+module.file_ext=.json
+module.file_ext=.sass
+module.file_ext=.css
+server.max_workers=1
