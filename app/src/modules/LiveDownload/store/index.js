@@ -8,9 +8,9 @@ export const changeGroup: Function = createAction('公演录播选择团队');
 
 /* reducer */
 type ll = {
-  id: string,
-  title: string,
-  secondTitle: string
+  id: string;
+  title: string;
+  secondTitle: string;
 }[];
 const reducer: Function = handleActions({
   [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
@@ -18,9 +18,9 @@ const reducer: Function = handleActions({
   },
   [liveListInit]: ($$state: Object, action: Object): Immutable.Map => {
     const { liveList, page, pageLen }: {
-      liveList: ll,
-      page: number,
-      pageLen: number
+      liveList: ll;
+      page: number;
+      pageLen: number;
     } = action.payload;
 
     return $$state.set('liveList', List(liveList))

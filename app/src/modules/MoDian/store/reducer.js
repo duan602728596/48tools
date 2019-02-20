@@ -3,7 +3,7 @@ import { fromJS, List } from 'immutable';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  modianList: Immutable.List
+  modianList: Immutable.List;
 } = {
   modianList: List([])
 };

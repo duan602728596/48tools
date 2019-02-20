@@ -3,8 +3,8 @@ import { fromJS, List } from 'immutable';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  cutList: Immutable.List,
-  cutMap: Map
+  cutList: Immutable.List;
+  cutMap: Map;
 } = {
   cutList: List([]),
   cutMap: new Map()

@@ -24,10 +24,10 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @connect(state, dispatch)
 class BiliBiliOption extends Component {
   state: {
-    loading: boolean,
-    btnLoading: boolean,
-    roomid: string,
-    roomname: string
+    loading: boolean;
+    btnLoading: boolean;
+    roomid: string;
+    roomname: string;
   };
 
   static propTypes: Object = {
@@ -56,8 +56,8 @@ class BiliBiliOption extends Component {
     this.props.form.validateFields(async (err: ?any, value: any): Promise<void> => {
       if (!err) {
         const { roomname, roomid }: {
-          roomname: string,
-          roomid: string
+          roomname: string;
+          roomid: string;
         } = value;
 
         try {

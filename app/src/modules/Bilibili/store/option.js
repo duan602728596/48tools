@@ -3,9 +3,9 @@ import option from '../../../components/option/option';
 import { db } from '../../../components/indexedDB/initIndexedDB';
 
 const opt: {
-  name: string,
-  version: number,
-  objectStoreName: string
+  name: string;
+  version: number;
+  objectStoreName: string;
 } = {
   name: option.indexeddb.name,
   version: option.indexeddb.version,

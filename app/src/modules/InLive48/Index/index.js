@@ -43,8 +43,8 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @connect(state, dispatch)
 class Index extends Component {
   state: {
-    group: string,
-    quality: string
+    group: string;
+    quality: string;
   };
 
   static propTypes: Object = {

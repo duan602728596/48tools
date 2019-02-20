@@ -4,9 +4,9 @@ import indexReducer, * as indexAction from './index';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  index: Object,
-  downloadList: Map,
-  fnReady: boolean
+  index: Object;
+  downloadList: Map;
+  fnReady: boolean;
 } = {
   index: {},
   downloadList: new Map(), // 下载列表

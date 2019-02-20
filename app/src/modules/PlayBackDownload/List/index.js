@@ -39,8 +39,8 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 class ListOne extends Component {
   state: {
-    timer: ?number,
-    percent: number
+    timer: ?number;
+    percent: number;
   };
   
   static propTypes: Object = {
@@ -69,9 +69,9 @@ class ListOne extends Component {
   timer(): void {
     const { detail }: { detail: Array } = this.props;
     const { current, infor, state }: {
-      current: string,
-      infor: Object,
-      state: number
+      current: string;
+      infor: Object;
+      state: number;
     } = detail[1];
 
     fs.stat(current + '.crdownload', (err: ?any, state2: Object): void => {
@@ -133,17 +133,17 @@ class ListOne extends Component {
   render(): ?React.Element {
     const { detail }: { detail: Array } = this.props;
     const { current, item, state }: {
-      current: string,
-      item: Object,
-      state: number
+      current: string;
+      item: Object;
+      state: number;
     } = detail[1];
 
     // 判断文件状态，避免渲染bug
     if (state && state !== 0) {
       const { streamPath, title, subTitle }: {
-        streamPath: string,
-        title: string,
-        subTitle: string
+        streamPath: string;
+        title: string;
+        subTitle: string;
       } = item;
 
       return (

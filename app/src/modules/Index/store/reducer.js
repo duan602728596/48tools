@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  test: boolean
+  test: boolean;
 } = {
   test: true
 };

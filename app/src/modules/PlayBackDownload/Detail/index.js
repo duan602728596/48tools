@@ -45,13 +45,13 @@ class Detail extends Component {
   render(): React.Element {
     // 直播id，成员id，开始时间，下载地址，直播标题，直播间标题
     const { liveId, memberId, startTime, streamPath, picPath, subTitle, title }: {
-      liveId: string,
-      memberId: string,
-      startTime: number,
-      streamPath: string,
-      picPath: string,
-      subTitle: string,
-      title: string
+      liveId: string;
+      memberId: string;
+      startTime: number;
+      streamPath: string;
+      picPath: string;
+      subTitle: string;
+      title: string;
     } = this.props.location.query.detail;
 
     const { current }: { current: number } = this.props.location.query;

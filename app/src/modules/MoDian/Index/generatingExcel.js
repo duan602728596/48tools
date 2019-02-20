@@ -41,10 +41,10 @@ function paihangbang(item: Object): Promise {
   return Promise.all([
     paiHang2(item.modianid, 1),
     paiHang2(item.modianid, 2)
-  ]).then((result: Array): { name: string, data: Array } => {
+  ]).then((result: Array): { name: string; data: Array } => {
     const { data, all }: {
-      data: Array,
-      all: number
+      data: Array;
+      all: number;
     } = format(result[0], result[1]);
 
     data.push([null], [`总金额（元）：${ all.toFixed(2) }`], [`摩点ID：${ item.modianid }`]);
@@ -84,7 +84,7 @@ function writeExcel(title: string, buffer: Buffer): Promise {
   });
 }
 
-async function generatingExcel(modianList: { modianid: string, modiantitle: string }[], pathname: string): Promise<void> {
+async function generatingExcel(modianList: { modianid: string; modiantitle: string }[], pathname: string): Promise<void> {
   try {
     const queue: Array = [];
 

@@ -31,9 +31,9 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @connect(state, dispatch)
 class Index extends Component {
   state: {
-    btnLoading: boolean,
-    modianid: string,
-    modiantitle: string
+    btnLoading: boolean;
+    modianid: string;
+    modiantitle: string;
   };
 
   static propTypes: Object = {

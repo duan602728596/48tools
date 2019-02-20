@@ -7,8 +7,8 @@ const url: Object = global.require('url');
 
 class RoomId extends Component {
   state: {
-    url: string,
-    roomId: string
+    url: string;
+    roomId: string;
   };
 
   constructor(): void {

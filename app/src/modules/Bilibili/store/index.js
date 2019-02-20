@@ -37,8 +37,8 @@ const reducer: Function = handleActions({
   },
   [catching]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
     const { liveList, catching }: {
-      liveList: Array,
-      catching: Map
+      liveList: Array;
+      catching: Map;
     } = action.payload;
 
     return $$state.set('liveList', List(liveList))

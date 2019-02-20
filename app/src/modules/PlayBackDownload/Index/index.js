@@ -81,9 +81,9 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @connect(state, dispatch)
 class Index extends Component {
   state: {
-    loading: boolean,
-    keyword: string,
-    current: number
+    loading: boolean;
+    keyword: string;
+    current: number;
   };
 
   static propTypes: Object = {

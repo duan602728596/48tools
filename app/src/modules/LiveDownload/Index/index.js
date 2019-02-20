@@ -57,7 +57,7 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @connect(state, dispatch)
 class Index extends Component {
   state: {
-    loading: boolean
+    loading: boolean;
   };
 
   static propTypes: Object = {
@@ -126,8 +126,8 @@ class Index extends Component {
     try {
       const html: string = await loadList(this.props.group, page);
       const _qh: {
-        result: Array,
-        pageLen: number
+        result: Array;
+        pageLen: number;
       } = queryHtml(html);
       const result: Array = _qh.result;
       const pageLen: number = _qh.pageLen;

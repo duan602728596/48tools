@@ -9,11 +9,11 @@ const headers: Object = {
 function getUrl(roomid: number): Promise {
   return new Promise((resolve: Function, reject: Function): void => {
     const options: {
-      hostname: string,
-      port: ?number,
-      path: string,
-      method: string,
-      headers: Object
+      hostname: string;
+      port: ?number;
+      path: string;
+      method: string;
+      headers: Object;
     } = {
       hostname: 'api.live.bilibili.com',
       port: null,

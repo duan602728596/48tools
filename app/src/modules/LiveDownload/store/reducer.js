@@ -4,8 +4,8 @@ import indexReducer, * as indexAction from './index';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  index: Object,
-  downloadList: Immutable.List
+  index: Object;
+  downloadList: Immutable.List;
 } = {
   index: {},
   downloadList: List([])

@@ -33,27 +33,27 @@ export const execPath: string = /* ::` */ do /* ::`; */ {
 };
 
 type InforMap = {
-  name: string,
-  key: string,
+  name: string;
+  key: string;
   data: {
-    name: string,
-    index: string
-  }[]
+    name: string;
+    index: string;
+  }[];
 };
 
 type IndexeddbMap = {
-  name: string,
-  version: number,
+  name: string;
+  version: number;
   objectStore: {
-    liveCatch: InforMap,
-    bilibili: InforMap
-  }
+    liveCatch: InforMap;
+    bilibili: InforMap;
+  };
 };
 
 const option: {
-  indexeddb: IndexeddbMap,
-  ffmpeg: string,
-  output: string
+  indexeddb: IndexeddbMap;
+  ffmpeg: string;
+  output: string;
 } = {
   // 数据库
   indexeddb: {

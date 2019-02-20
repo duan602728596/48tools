@@ -116,7 +116,7 @@ export function downloadM3U8(m3u8Url: string): Promise {
         reject(err);
       }
     });
-  }).then((text: string): { host: string, m3u8: string } => {
+  }).then((text: string): { host: string; m3u8: string } => {
     /* 使用正则解析网址 */
     const u: string = text.match(/\n[^#\n]*\n/g)[0].replace(/\n/g, '');
     let host: string = null;
@@ -138,7 +138,7 @@ export function downloadM3U8(m3u8Url: string): Promise {
       host,
       m3u8: text
     };
-  }).then(({ host, m3u8 }: { host: string, m3u8: string }): void => {
+  }).then(({ host, m3u8 }: { host: string; m3u8: string }): void => {
     /* 使用正则替换网址 */
     return m3u8.replace(/\n[^#\n]*\n/g, (str: string): string => {
       return '\n' + host + str.replace(/\n/g, '') + '\n';

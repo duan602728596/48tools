@@ -25,10 +25,10 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @connect(state, dispatch)
 class LiveCatchOption extends Component {
   state: {
-    loading: boolean,
-    btnLoading: boolean,
-    time: number,
-    humans: string
+    loading: boolean;
+    btnLoading: boolean;
+    time: number;
+    humans: string;
   };
 
   static propTypes: Object = {
@@ -77,8 +77,8 @@ class LiveCatchOption extends Component {
     this.props.form.validateFields(async (err: ?any, value: any): Promise<void> => {
       if (!err) {
         const { time, humans }: {
-          time: ?string,
-          humans: ?string
+          time: ?string;
+          humans: ?string;
         } = value;
 
         const humansArray: Array = (humans ? humans : '').replace(/\s+/g, '').split(/\s*,\s*/g);

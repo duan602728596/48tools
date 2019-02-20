@@ -167,11 +167,17 @@ rules:
   react/prefer-es6-class:                             # 使用ES5创建反应类模块或新的ES6类系统
     - error
     - always
+  react/void-dom-elements-no-children: error          # 防止接收子节点的无效DOM元素（例如<img />，<br />）
   # JSX
   react/jsx-boolean-value:                            # 在JSX中使用布尔属性时，可以将属性值设置为true或省略值
     - error
     - always
   react/jsx-closing-tag-location: error               # 验证JSX中的结束标签位置
+  react/jsx-curly-spacing:                            # 在JSX属性和表达式中强制或禁止花括号内的空格
+    - error
+    - when: always
+      spacing:
+        objectLiterals: never
   react/jsx-equals-spacing: error                     # 强制或禁止JSX属性中的等号周围的空格
   react/jsx-first-prop-new-line:                      # 此规则检查所有JSX元素的第一个属性是否正确放置
     - error
@@ -185,9 +191,13 @@ rules:
   react/jsx-key: error                                # 在数组或迭代器中验证JSX具有key属性
   react/jsx-no-comment-textnodes: error               # 防止将注释插入为文本节点
   react/jsx-no-duplicate-props: error                 # 在JSX中防止重复的props
+  react/jsx-no-target-blank:                          # 创建具有标记的JSX元素时，通常需要使用target='_ blank'属性在新选项卡中打开链接。
+    - error
+    - enforceDynamicLinks: never
   react/jsx-curly-brace-presence:                     # 强制使用大括号或不使用不必要的大括号
     - error
     - never
+  react/jsx-props-no-multi-spaces: error              # 禁止内联JSX之间的多个空格
   react/jsx-tag-spacing:                              # 验证JSX左右括号中的空格
     - error
     - closingSlash: never
@@ -205,13 +215,13 @@ overrides:
         - boolean
       flowtype/delimiter-dangle:                          # 强制在Object和Tuple注释中一致使用尾随逗号
         - error
-        - never
+        - always-multiline
       flowtype/generic-spacing: error                     # 在泛型类型注释参数中强制保持一致的间距
       flowtype/no-dupe-keys: error                        # 检查对象注释中的重复属性
       flowtype/no-primitive-constructor-types: error      # 不允许使用基本构造函数作为类型，如Boolean，Number和String
       flowtype/object-type-delimiter:                     # 强制Flow对象类型中的属性之间保持一致的分隔符
         - error
-        - comma
+        - semicolon
       flowtype/require-parameter-type: error              # 要求所有的函数参数都有类型注释
       flowtype/require-return-type:                       # 要求该函数具有返回类型注释
         - error

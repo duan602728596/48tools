@@ -18,11 +18,11 @@ const headers: Object = {
 };
 
 const options: {
-  hostname: string,
-  port: ?number,
-  path: string,
-  method: string,
-  headers: Object
+  hostname: string;
+  port: ?number;
+  path: string;
+  method: string;
+  headers: Object;
 } = {
   hostname: 'plive.48.cn',
   port: null,

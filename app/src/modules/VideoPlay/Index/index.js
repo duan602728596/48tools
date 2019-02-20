@@ -8,9 +8,9 @@ const path: Object = global.require('path');
 
 class Index extends Component {
   item: {
-    title: string,
-    subTitle: string,
-    streamPath: string
+    title: string;
+    subTitle: string;
+    streamPath: string;
   };
 
   constructor(): void {

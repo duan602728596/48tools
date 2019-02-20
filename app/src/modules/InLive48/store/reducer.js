@@ -3,7 +3,7 @@ import { fromJS, List } from 'immutable';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  inLiveList: Immutable.List
+  inLiveList: Immutable.List;
 } = {
   inLiveList: List([])
 };

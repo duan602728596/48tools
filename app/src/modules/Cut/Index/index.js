@@ -53,8 +53,8 @@ const dispatch: Function = (dispatch: Function): Object => ({
 class Index extends Component {
   dir: string;
   state: {
-    file: ?Object,
-    saveFile: ?Object
+    file: ?Object;
+    saveFile: ?Object;
   };
 
   static propTypes: Object = {
@@ -89,9 +89,9 @@ class Index extends Component {
         width: '10%',
         render: (value: any, item: Object, index: number): string => {
           const { starthh, startmm, startss }: {
-            starthh: number,
-            startmm: number,
-            startss: number
+            starthh: number;
+            startmm: number;
+            startss: number;
           } = item;
 
           return `${ patchZero(Number(starthh)) } : ${ patchZero(Number(startmm)) } : ${ patchZero(Number(startss)) }`;
@@ -103,9 +103,9 @@ class Index extends Component {
         width: '10%',
         render: (value: any, item: Object, index: number): string => {
           const { endhh, endmm, endss }: {
-            endhh: number,
-            endmm: number,
-            endss: number
+            endhh: number;
+            endmm: number;
+            endss: number;
           } = item;
 
           return `${ patchZero(Number(endhh)) } : ${ patchZero(Number(endmm)) } : ${ patchZero(Number(endss)) }`;
@@ -162,8 +162,8 @@ class Index extends Component {
 
     if (file) {
       const { name, ext }: {
-        name: string,
-        ext: string
+        name: string;
+        ext: string;
       } = path.parse(file.path);
 
       title = '【视频剪切】' + name + '_' + time('YY-MM-DD-hh-mm-ss') + ext;
@@ -192,16 +192,16 @@ class Index extends Component {
       if (!err) {
         const cutList: Array = this.props.cutList.slice();
         const { file, saveFile }: {
-          file: Object,
-          saveFile: Object
+          file: Object;
+          saveFile: Object;
         } = this.state;
         const { starthh, startmm, startss, endhh, endmm, endss }: {
-          starthh: ?string,
-          startmm: ?string,
-          startss: ?string,
-          endhh: ?string,
-          endmm: ?string,
-          endss: ?string
+          starthh: ?string;
+          startmm: ?string;
+          startss: ?string;
+          endhh: ?string;
+          endmm: ?string;
+          endss: ?string;
         } = value;
 
         cutList.push({
@@ -266,12 +266,12 @@ class Index extends Component {
   // 开始任务
   handleStartTaskClick(item: Object, event: Event): void {
     const { starthh, startmm, startss, endhh, endmm, endss }: {
-      starthh: number,
-      startmm: number,
-      startss: number,
-      endhh: number,
-      endmm: number,
-      endss: number
+      starthh: number;
+      startmm: number;
+      startss: number;
+      endhh: number;
+      endmm: number;
+      endss: number;
     } = item;
     const [h, m, s]: number[] = computingTime(
       [Number(starthh), Number(startmm), Number(startss)],

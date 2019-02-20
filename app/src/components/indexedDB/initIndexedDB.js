@@ -11,9 +11,9 @@ IndexedDB(option.indexeddb.name, option.indexeddb.version, {
   upgradeneeded(et: IDBDatabase, event: Event): void {
     { // 存储的是直播抓取页面的自动录制配置
       const { name, key, data }: {
-        name: string,
-        key: string,
-        data: Array<any>
+        name: string;
+        key: string;
+        data: Array<any>;
       } = option.indexeddb.objectStore.liveCatch;
 
       if (!this.hasObjectStore(name)) {
@@ -22,9 +22,9 @@ IndexedDB(option.indexeddb.name, option.indexeddb.version, {
     }
     { // 储存B站直播间信息
       const { name, key, data }: {
-        name: string,
-        key: string,
-        data: Array<any>
+        name: string;
+        key: string;
+        data: Array<any>;
       } = option.indexeddb.objectStore.bilibili;
 
       if (!this.hasObjectStore(name)) {

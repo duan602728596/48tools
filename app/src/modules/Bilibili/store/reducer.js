@@ -5,8 +5,8 @@ import optionReducer, * as optionAction from './option';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  index: Object,
-  option: Object
+  index: Object;
+  option: Object;
 } = {
   index: {},
   option: {}

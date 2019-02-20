@@ -6,9 +6,9 @@ import { db } from '../../../components/indexedDB/initIndexedDB';
 
 /* 使用immutable初始化基础数据 */
 const initData: {
-  index: Object,
-  time: number,
-  humans: Array
+  index: Object;
+  time: number;
+  humans: Array;
 } = {
   index: {},
   time: 1,
@@ -17,7 +17,7 @@ const initData: {
 
 /* Action */
 const opt: {
-  objectStoreName: string
+  objectStoreName: string;
 } = {
   objectStoreName: option.indexeddb.objectStore.liveCatch.name
 };

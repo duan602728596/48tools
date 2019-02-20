@@ -52,7 +52,7 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @connect(state, dispatch)
 class Index extends Component {
   state: {
-    loading: boolean
+    loading: boolean;
   };
 
   static propTypes: Object = {
