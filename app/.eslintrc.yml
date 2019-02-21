@@ -3,10 +3,12 @@ env:
   commonjs: true
   es6: true
   node: true
+  worker: true
+  jquery: true
 parser: babel-eslint
 parserOptions:
+  ecmaVersion: 9
   ecmaFeatures:
-    experimentalObjectRestSpread: true
     jsx: true
   sourceType: module
 plugins:
