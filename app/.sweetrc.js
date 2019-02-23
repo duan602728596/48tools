@@ -58,10 +58,7 @@ export default {
     plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
     exclude: /(dll\.js|appInit\.js|jquery|flv\.min|node_modules)/
   },
-  sass: {
-    include: /src/,
-    publicPath: '../'
-  },
+  sass: { include: /src/ },
   css: {
     modules: false,
     modifyVars: {
