@@ -18,11 +18,11 @@ const child_process: Object = global.require('child_process');
 const cheerio: Object = global.require('cheerio');
 
 const IN_LIVE_URL: Object = {
-  SNH48: 'http://zhibo.ckg48.com', // 48直播地址重定向
-  BEJ48: 'http://live.bej48.com',
-  GNZ48: 'http://live.gnz48.com',
-  SHY48: 'http://live.shy48.com',
-  CKG48: 'http://live.ckg48.com'
+  SNH48: 'https://live.48.cn/Index/main/club/1',
+  BEJ48: 'https://live.48.cn/Index/main/club/2',
+  GNZ48: 'https://live.48.cn/Index/main/club/3',
+  SHY48: 'https://live.48.cn/Index/main/club/4',
+  CKG48: 'https://live.48.cn/Index/main/club/5'
 };
 
 /* 初始化数据 */
