@@ -22,7 +22,7 @@ export default {
     'rc-queue-anim'
   ],
   entry: {
-    app: [path.join(__dirname, 'src/app.js')],
+    index: [path.join(__dirname, 'src/index.js')],
     videoPlay: [path.join(__dirname, 'src/modules/VideoPlay/videoPlay.js')]
   },
   externals: {
@@ -43,7 +43,7 @@ export default {
   },
   rules: [
     {
-      test: /(dll\.js|appInit\.js|jquery|flv\.min)/,
+      test: /(dll\.js|init\.js|jquery|flv\.min)/,
       use: [{
         loader: 'file-loader',
         options: {
