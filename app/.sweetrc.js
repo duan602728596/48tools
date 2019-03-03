@@ -27,7 +27,7 @@ export default {
   },
   externals: {
     jquery: 'window.jQuery',
-    flvjs: 'window.flvjs'
+    'flv.js': 'window.flvjs'
   },
   loaders: {
     svg: {

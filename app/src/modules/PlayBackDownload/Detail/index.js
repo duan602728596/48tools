@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { Button } from 'antd';
 import $ from 'jquery';
-import flvjs from 'flvjs';
+import flvjs from 'flv.js';
 import style from './style.sass';
 import { time } from '../../../utils';
 const path: Object = global.require('path');

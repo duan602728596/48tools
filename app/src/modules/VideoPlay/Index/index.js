@@ -1,12 +1,17 @@
-/* 新窗口播放视频 */
-import React, { Component } from 'react';
+/**
+ * 新窗口播放视频
+ *
+ * @flow
+ */
+import * as React from 'react';
+import { Component } from 'react';
 import { Card } from 'antd';
-import flvjs from 'flvjs';
+import flvjs from 'flv.js';
 import style from './style.sass';
-const querystring: Object = global.require('querystring');
+const queryString: Object = global.require('querystring');
 const path: Object = global.require('path');
 
-class Index extends Component {
+class Index extends Component<{}> {
   item: {
     title: string;
     subTitle: string;
@@ -18,35 +23,43 @@ class Index extends Component {
 
     const search: string = location.search.replace(/^\?{1}/, ''); // 获取信息
 
-    this.item = querystring.parse(search);
+    this.item = queryString.parse(search);
   }
+
   componentDidMount(): void {
     const type: string = path.parse(this.item.streamPath).ext.replace(/^\.{1}/, '');
 
     // 初始化flv.js
     if (flvjs.isSupported()) {
-      const videoElement: Element = document.getElementById('video-element');
-      const flvPlayer: flvjs = flvjs.createPlayer({
-        type,
-        url: this.item.streamPath
-      });
+      const videoElement: HTMLElement | null = document.getElementById('video-element');
 
-      flvPlayer.attachMediaElement(videoElement);
-      flvPlayer.load();
+      if (videoElement) {
+        const flvPlayer: flvjs = flvjs.createPlayer({
+          type,
+          url: this.item.streamPath
+        });
+
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+      }
     }
   }
-  render(): React.Element {
+
+  render(): React.Node {
     return (
       <Card className={ style.card } cover={
         <div className={ style.videobox }>
           <video className={ style.video } id="video-element" controls={ true } />
         </div>
       }>
-        <Card.Meta className={ style.meta } title={
-          <span>{ this.item.title }</span>
-        } description={
-          <span className={ style.subTitle }>{ this.item.subTitle }</span>
-        } />
+        <Card.Meta className={ style.meta }
+          title={
+            <span>{ this.item.title }</span>
+          }
+          description={
+            <span className={ style.subTitle }>{ this.item.subTitle }</span>
+          }
+        />
       </Card>
     );
   }
