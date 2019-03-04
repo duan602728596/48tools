@@ -1,12 +1,12 @@
 /* 公共函数 */
-const gui: Object = global.require('nw.gui');
+const gui = global.require('nw.gui');
 
 /**
  * 自动补0
  * @param { number } num
  * @return { string }
  */
-export function patchZero(num: number): string {
+export function patchZero(num) {
   if (num < 10) {
     return `0${ num }`;
   } else {
@@ -20,14 +20,14 @@ export function patchZero(num: number): string {
  * @param { ?number } timeStr: 时间字符串
  * @return { string }
  */
-export function time(modules: string, timeStr: ?number): string {
-  const date: Object = timeStr ? new Date(timeStr) : new Date();
-  const YY: number = date.getFullYear(),
-    MM: number = date.getMonth() + 1,
-    DD: number = date.getDate(),
-    hh: number = date.getHours(),
-    mm: number = date.getMinutes(),
-    ss: number = date.getSeconds();
+export function time(modules, timeStr) {
+  const date = timeStr ? new Date(timeStr) : new Date();
+  const YY = date.getFullYear(),
+    MM = date.getMonth() + 1,
+    DD = date.getDate(),
+    hh = date.getHours(),
+    mm = date.getMinutes(),
+    ss = date.getSeconds();
 
   return modules.replace(/Y{2}/, YY)
     .replace(/M{2}/, patchZero(MM))
@@ -38,7 +38,7 @@ export function time(modules: string, timeStr: ?number): string {
 }
 
 /* 在浏览器上打开页面 */
-export function handleOpenBrowser(href: string, event: Event): void {
+export function handleOpenBrowser(href, event) {
   event.preventDefault();
   gui.Shell.openExternal(href);
 }
