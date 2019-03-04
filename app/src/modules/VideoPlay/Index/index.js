@@ -1,51 +1,40 @@
 /**
  * 新窗口播放视频
- *
- * @flow
  */
 import * as React from 'react';
 import { Component } from 'react';
 import { Card } from 'antd';
 import flvjs from 'flv.js';
 import style from './style.sass';
-const queryString: Object = global.require('querystring');
-const path: Object = global.require('path');
+const queryString = global.require('querystring');
+const path = global.require('path');
 
-class Index extends Component<{}> {
-  item: {
-    title: string;
-    subTitle: string;
-    streamPath: string;
-  };
-
-  constructor(): void {
+class Index extends Component {
+  constructor() {
     super(...arguments);
 
-    const search: string = location.search.replace(/^\?{1}/, ''); // 获取信息
+    const search = location.search.replace(/^\?{1}/, ''); // 获取信息
 
     this.item = queryString.parse(search);
   }
 
-  componentDidMount(): void {
-    const type: string = path.parse(this.item.streamPath).ext.replace(/^\.{1}/, '');
+  componentDidMount() {
+    const type = path.parse(this.item.streamPath).ext.replace(/^\.{1}/, '');
 
     // 初始化flv.js
     if (flvjs.isSupported()) {
-      const videoElement: HTMLElement | null = document.getElementById('video-element');
+      const videoElement = document.getElementById('video-element');
+      const flvPlayer = flvjs.createPlayer({
+        type,
+        url: this.item.streamPath
+      });
 
-      if (videoElement) {
-        const flvPlayer: flvjs = flvjs.createPlayer({
-          type,
-          url: this.item.streamPath
-        });
-
-        flvPlayer.attachMediaElement(videoElement);
-        flvPlayer.load();
-      }
+      flvPlayer.attachMediaElement(videoElement);
+      flvPlayer.load();
     }
   }
 
-  render(): React.Node {
+  render() {
     return (
       <Card className={ style.card } cover={
         <div className={ style.videobox }>
