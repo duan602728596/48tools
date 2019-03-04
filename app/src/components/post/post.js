@@ -3,9 +3,9 @@
  * url   : https://plive.48.cn/livesystem/api/live/v1/memberLivePage
  * method: POST
  */
-const https: Object = global.require('https');
+const https = global.require('https');
 
-const headers: Object = {
+const headers = {
   os: 'android',
   'User-Agent': 'Mobile_Pocket',
   IMEI: '864394020228161',
@@ -17,13 +17,7 @@ const headers: Object = {
   'Accept-Encoding': 'gzip'
 };
 
-const options: {
-  hostname: string;
-  port: ?number;
-  path: string;
-  method: string;
-  headers: Object;
-} = {
+const options = {
   hostname: 'plive.48.cn',
   port: null,
   path: '/livesystem/api/live/v1/memberLivePage',
@@ -32,25 +26,25 @@ const options: {
 };
 
 /* post数据 */
-function postData(number: number): string {
+function postData(number) {
   return `{"lastTime":${ number },"limit":20,"groupId":0,"memberId":0,"type":0,"giftUpdTime":1490857731000}`;
 }
 
-function post(number: number = 0): Promise {
-  return new Promise((resolve: Function, reject: Function): void => {
-    const req: Object = https.request(options, (res: Object): void => {
-      let getData: string = '';
+function post(number = 0) {
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, (res) => {
+      let getData = '';
 
       res.setEncoding('utf8');
-      res.on('data', function(chunk: any): void {
+      res.on('data', function(chunk) {
         getData += chunk;
       });
-      res.on('end', function(): void {
+      res.on('end', function() {
         resolve(getData);
       });
     });
 
-    req.on('error', function(err: any): void {
+    req.on('error', function(err) {
       console.log('错误：' + err.message);
     });
 

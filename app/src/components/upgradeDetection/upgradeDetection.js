@@ -1,15 +1,15 @@
 import { notification } from 'antd';
 import packageJson from '../../../package.json';
-const request: Function = global.require('request');
+const request = global.require('request');
 
 /* 软件升级检测 */
-const { version }: { version: string } = packageJson;
-const uri: string = 'https://raw.githubusercontent.com/duan602728596/48tools/master/app/package.json';
-const isUpgradeReminder: string = localStorage.getItem('upgradeReminder');
+const { version } = packageJson;
+const uri = 'https://raw.githubusercontent.com/duan602728596/48tools/master/app/package.json';
+const isUpgradeReminder = localStorage.getItem('upgradeReminder');
 
-function update(): void {
-  request({ uri }, function(err: Error, response: Object, body: string): void {
-    const newPackageJson: Object = JSON.parse(body);
+function update() {
+  request({ uri }, function(err, response, body) {
+    const newPackageJson = JSON.parse(body);
 
     if (version !== newPackageJson.version) {
       notification.warning({

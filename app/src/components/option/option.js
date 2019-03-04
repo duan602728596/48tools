@@ -1,26 +1,24 @@
 /**
  * 配置文件
- *
- * @flow
  */
-const fs: Object = global.require('fs');
-const path: Object = global.require('path');
-const process: Object = global.require('process');
-const os: Object = global.require('os');
+const fs = global.require('fs');
+const path = global.require('path');
+const process = global.require('process');
+const os = global.require('os');
 
 /**
  * 获取运行地址
  */
-export const type: string = os.type();
-export const execPath: string = /* ::` */ do /* ::`; */ {
-  let ep: string = '';
+export const type = os.type();
+export const execPath = do {
+  let ep = '';
 
   switch (type) {
     // mac
     case 'Darwin':
       // 兼容开发环境
-      const p: ?string[] = process.execPath.match(/^[^\.]+\.app/);
-      const p2: string[] = p ? p[0].split(/\//) : [];
+      const p = process.execPath.match(/^[^\.]+\.app/);
+      const p2 = p ? p[0].split(/\//) : [];
 
       ep = path.join(p2.join('/'), 'Contents');
       break;
@@ -32,29 +30,7 @@ export const execPath: string = /* ::` */ do /* ::`; */ {
   ep;
 };
 
-type InforMap = {
-  name: string;
-  key: string;
-  data: {
-    name: string;
-    index: string;
-  }[];
-};
-
-type IndexeddbMap = {
-  name: string;
-  version: number;
-  objectStore: {
-    liveCatch: InforMap;
-    bilibili: InforMap;
-  };
-};
-
-const option: {
-  indexeddb: IndexeddbMap;
-  ffmpeg: string;
-  output: string;
-} = {
+const option = {
   // 数据库
   indexeddb: {
     name: '48tools',
@@ -84,11 +60,11 @@ const option: {
   },
   // ffmpeg
   ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg`,
-  output: ((): string => {
-    const outputPathFile: string = /* ::` */ do /* ::`; */ {
+  output: (() => {
+    const outputPathFile = do {
       if (type === 'Darwin') {
         // 获取downloads文件夹路径
-        const username: string = fs.readdirSync('/Users');
+        const username = fs.readdirSync('/Users');
 
         path.join('/Users', username[username.length - 1], '/Downloads');
       } else {
