@@ -12,7 +12,6 @@
     "yarni": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
     "eslint": "eslint ./src --fix",
-    "flow:check": "flow check",
     "update": "milktea update"
   },
   "main": "./build/index.html",

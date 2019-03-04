@@ -13,7 +13,6 @@ parserOptions:
   sourceType: module
 plugins:
   - react
-  - flowtype
 settings:
   react:
     version: '16.8'
@@ -206,32 +205,3 @@ rules:
       beforeSelfClosing: always
       afterOpening: never
       beforeClosing: never
-overrides:
-  - files:
-      - '*.js'
-      - '*.jsx'
-    rules:
-      # flow
-      flowtype/boolean-style:                             # 强制布尔类型注释的特定样式
-        - error
-        - boolean
-      flowtype/delimiter-dangle:                          # 强制在Object和Tuple注释中一致使用尾随逗号
-        - error
-        - always-multiline
-      flowtype/generic-spacing: error                     # 在泛型类型注释参数中强制保持一致的间距
-      flowtype/no-dupe-keys: error                        # 检查对象注释中的重复属性
-      flowtype/no-primitive-constructor-types: error      # 不允许使用基本构造函数作为类型，如Boolean，Number和String
-      flowtype/object-type-delimiter:                     # 强制Flow对象类型中的属性之间保持一致的分隔符
-        - error
-        - semicolon
-      flowtype/require-parameter-type: error              # 要求所有的函数参数都有类型注释
-      flowtype/require-return-type:                       # 要求该函数具有返回类型注释
-        - error
-        - always
-        - annotateUndefined: always
-      flowtype/require-variable-type: error               # 要求所有变量声明符都有类型注释
-      flowtype/semi: error                                # 在类型别名后强制使用分号
-      flowtype/space-after-type-colon: error              # 在类型注释冒号后强制一致的间距
-      flowtype/space-before-generic-bracket: error        # 在泛型类型注释参数之前强制一致的间距
-      flowtype/space-before-type-colon: error             # 在类型注释冒号之前强制一致的间距
-      flowtype/union-intersection-spacing: error          # 在联合和相交类型分隔符周围实施一致的间距
