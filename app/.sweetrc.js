@@ -29,6 +29,11 @@ export default {
     jquery: 'window.jQuery',
     'flv.js': 'window.flvjs'
   },
+  resolve: {
+    alias: {
+      'indexeddb-tools': 'indexeddb-tools/build/indexedDB-tools.js'
+    }
+  },
   loaders: {
     svg: {
       test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
