@@ -1,4 +1,4 @@
-import React, { Component, Fragment, createRef } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -11,21 +11,21 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import style from './style.sass';
 import { avList } from '../store/reducer';
 import option from '../../../components/option/option';
-const cheerio: Object = global.require('cheerio');
-const request: Function = global.require('request');
-const fs: Object = global.require('fs');
-const path: Object = global.require('path');
+const cheerio = global.require('cheerio');
+const request = global.require('request');
+const fs = global.require('fs');
+const path = global.require('path');
 
 /* 初始化数据 */
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   avList: createSelector( // B站视频下载列表
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('avDownload') ? $$state.get('avDownload') : null,
-    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('avList').toJS() : []
+    ($$state) => $$state.has('avDownload') ? $$state.get('avDownload') : null,
+    ($$data) => $$data !== null ? $$data.get('avList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     avList
   }, dispatch)
@@ -33,14 +33,14 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  static propTypes: Object = {
+  static propTypes = {
     avList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
   // 配置
-  columus(): Array {
-    const columus: Array = [
+  columus() {
+    const columus = [
       {
         title: 'av号',
         key: 'number',
@@ -56,13 +56,13 @@ class Index extends Component {
         key: 'uri',
         dataIndex: 'uri',
         width: '500px',
-        render: (value: string, item: Object, index: number): React.Element => <div className={ style.uri }>{ value }</div>
+        render: (value, item, index) => <div className={ style.uri }>{ value }</div>
       },
       {
         title: '状态',
         key: 'status',
         dataIndex: 'status',
-        render: (value: number, item: Object, index: number): React.Element => {
+        render: (value, item, index) => {
           switch (value) {
             case 0:
               return <span className={ style.status0 }>未下载</span>;
@@ -80,8 +80,8 @@ class Index extends Component {
         title: '操作',
         dataIndex: 'handle',
         width: '20%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
-          const isLoading: boolean = item.status === 1;
+        render: (value, item, index) => {
+          const isLoading = item.status === 1;
 
           return [
             <Button key="download"
@@ -103,23 +103,25 @@ class Index extends Component {
 
     return columus;
   }
+
   // 删除
-  handleDeleteClick(item: Object, index: number, event: Event): void {
+  handleDeleteClick(item, index, event) {
     this.props.avList.splice(index, 1);
     this.props.action.avList({
       avList: this.props.avList
     });
   }
+
   // 下载
-  async handleDownloadFlvClick(item: Object, index: number, event: Event): Promise<void> {
+  async handleDownloadFlvClick(item, index, event) {
     this.props.avList[index].status = 1;
     this.props.action.avList({
       avList: this.props.avList
     });
     try {
-      const data: Buffer = await this.downloadFlv(item.uri, item.number);
+      const data = await this.downloadFlv(item.uri, item.number);
 
-      fs.writeFile(path.join(option.output, `av${ item.number }_${ item.page }_${ item.index }_${ item.time }.flv`), data, (err: Error): void => {
+      fs.writeFile(path.join(option.output, `av${ item.number }_${ item.page }_${ item.index }_${ item.time }.flv`), data, (err) => {
         if (err) {
           message.error('视频下载失败！');
           this.props.avList[index].status = 3;
@@ -140,19 +142,20 @@ class Index extends Component {
       });
     }
   }
+
   // 获取下载地址
-  getUrl(number: string, page: string): Promise {
-    return new Promise((resolve: Function, reject: Function): void => {
+  getUrl(number, page) {
+    return new Promise((resolve, reject) => {
       $.ajax({
         url: `https://www.bilibili.com/video/av${ number }/?p=${ page }`,
         method: 'GET',
-        success(data: string, status: string, xhr: XMLHttpRequest): void {
-          const xml: string = cheerio.load(data);
-          const scripts: [] = xml('script');
-          let infor: ?Object = null; // 视频地址：infor.durl[0].url
+        success(data, status, xhr) {
+          const xml = cheerio.load(data);
+          const scripts = xml('script');
+          let infor = null; // 视频地址：infor.durl[0].url
 
-          for (let i: number = 0, j: number = scripts.length; i < j; i++) {
-            const children: string = scripts[i].children;
+          for (let i = 0, j = scripts.length; i < j; i++) {
+            const children = scripts[i].children;
 
             // 获取 window.__playinfo__ 信息
             if (children.length > 0 && /^window\._{2}playinfo_{2}=.+$/.test(children[0].data)) {
@@ -162,17 +165,18 @@ class Index extends Component {
           }
           resolve(infor?.data?.durl || []);
         },
-        error(err: any): void {
+        error(err) {
           reject(err);
         }
       });
-    }).catch((err: any): void => {
+    }).catch((err) => {
       console.error(err);
     });
   }
+
   // 下载
-  downloadFlv(uri: string, number: string): Promise {
-    return new Promise((resolve: Function, reject: Function): void => {
+  downloadFlv(uri, number) {
+    return new Promise((resolve, reject) => {
       request({
         uri,
         method: 'GET',
@@ -183,24 +187,25 @@ class Index extends Component {
           Range: 'bytes=0-'
         },
         encoding: null
-      }, (err: any, res: Object, data: Buffer): void => {
+      }, (err, res, data) => {
         if (err) {
           reject(err);
         } else {
           resolve(data);
         }
       });
-    }).catch((err: any): void => {
+    }).catch((err) => {
       console.error(err);
     });
   }
+
   // 抓取页面
-  handleGetPageClick: Function = async (event: Event): void => {
+  handleGetPageClick = async (event) => {
     try {
-      const $avNumber: jQuery = $('#av-number');
-      const $avPage: jQuery = $('#av-page');
-      const number: string = $avNumber.val();
-      let page: string = $avPage.val();
+      const $avNumber = $('#av-number');
+      const $avPage = $('#av-page');
+      const number = $avNumber.val();
+      let page = $avPage.val();
 
       if (!/^[0-9]+$/.test(number)) {
         message.info('请输入av号！');
@@ -212,7 +217,7 @@ class Index extends Component {
         page = 1;
       }
 
-      const durl: { url: string }[] = await this.getUrl(number, page);
+      const durl = await this.getUrl(number, page);
 
       if (durl.length === 0) {
         message.info('视频不存在！');
@@ -220,10 +225,10 @@ class Index extends Component {
         return void 0;
       }
 
-      const arr: [] = [];
+      const arr = [];
 
-      for (let i: number = 0, j: number = durl.length; i < j; i++) {
-        const item: Object = durl[i];
+      for (let i = 0, j = durl.length; i < j; i++) {
+        const item = durl[i];
 
         arr.push({
           number,
@@ -235,7 +240,7 @@ class Index extends Component {
         });
       }
 
-      const avList: [] = this.props.avList;
+      const avList = this.props.avList;
 
       avList.push(...arr);
       this.props.action.avList({ avList });
@@ -247,8 +252,9 @@ class Index extends Component {
       message.error('获取地址失败！');
     }
   };
-  render(): React.Element {
-    const { avList }: { avList: [] } = this.props;
+  
+  render() {
+    const { avList } = this.props;
 
     return (
       <Fragment>
@@ -273,7 +279,7 @@ class Index extends Component {
           <Table bordered={ true }
             size="small"
             columns={ this.columus() }
-            rowKey={ (item: Object): number => item.time }
+            rowKey={ (item) => item.time }
             dataSource={ avList }
             pagination={{
               pageSize: avList.length

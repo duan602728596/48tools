@@ -27,6 +27,7 @@ function loadReducer(reducer) {
           injectReducers(reducer);
         }
       }
+
       render() {
         return <Module />;
       }
