@@ -1,23 +1,21 @@
-// @flow
-import * as React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncModule from './asyncModule';
 import Index from '../modules/Index/Layout';
 
-const LiveCatchBundle: Function = asyncModule((): Promise<Function> => import('../modules/LiveCatch/Layout'));
-const PlayBackDownloadBundle: Function = asyncModule((): Promise<Function> => import('../modules/PlayBackDownload/Layout'));
-const BiliBiliBundle: Function = asyncModule((): Promise<Function> => import('../modules/Bilibili/Layout'));
-const CutBundle: Function = asyncModule((): Promise<Function> => import('../modules/Cut/Layout'));
-const MergeVideoBundle: Function = asyncModule((): Promise<Function> => import('../modules/MergeVideo/Layout'));
-const MoDianBundle: Function = asyncModule((): Promise<Function> => import('../modules/MoDian/Layout'));
-const LiveDownloadBundle: Function = asyncModule((): Promise<Function> => import('../modules/LiveDownload/Layout'));
-const InLive48Bundle: Function = asyncModule((): Promise<Function> => import('../modules/InLive48/Layout'));
-const AvDownloadBundle: Function = asyncModule((): Promise<Function> => import('../modules/AvDownload/Layout'));
+const LiveCatchBundle = asyncModule(() => import('../modules/LiveCatch/Layout'));
+const PlayBackDownloadBundle = asyncModule(() => import('../modules/PlayBackDownload/Layout'));
+const BiliBiliBundle = asyncModule(() => import('../modules/Bilibili/Layout'));
+const CutBundle = asyncModule(() => import('../modules/Cut/Layout'));
+const MergeVideoBundle = asyncModule(() => import('../modules/MergeVideo/Layout'));
+const MoDianBundle = asyncModule(() => import('../modules/MoDian/Layout'));
+const LiveDownloadBundle = asyncModule(() => import('../modules/LiveDownload/Layout'));
+const InLive48Bundle = asyncModule(() => import('../modules/InLive48/Layout'));
+const AvDownloadBundle = asyncModule(() => import('../modules/AvDownload/Layout'));
 
 /* 路由模块 */
-class Routers extends Component<{}> {
-  render(): React.Node {
+class Routers extends Component {
+  render() {
     return (
       <Switch>
         {/* 首页 */}
