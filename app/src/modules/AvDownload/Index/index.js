@@ -252,7 +252,7 @@ class Index extends Component {
       message.error('获取地址失败！');
     }
   };
-  
+
   render() {
     const { avList } = this.props;
 
