@@ -206,7 +206,13 @@ class Index extends Component {
               <Select.Option key="SHY48" value="SHY48">SHY48</Select.Option>
               <Select.Option key="CKG48" value="CKG48">CKG48</Select.Option>
             </Select>
-            <Button className={ publicStyle.ml10 } type="primary" icon="cloud" onClick={ this.handleLoadListClick.bind(this, 1, 15) }>刷新公演录播列表</Button>
+            <Button className={ publicStyle.ml10 }
+              type="primary"
+              icon="cloud"
+              onClick={ this.handleLoadListClick.bind(this, 1, 15) }
+            >
+              刷新公演录播列表
+            </Button>
           </div>
           <div className={ publicStyle.fr }>
             <Link to="/LiveDownload/List">

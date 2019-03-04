@@ -17,7 +17,7 @@ class Detail extends Component {
     match: PropTypes.object
   };
 
-  UNSAFE_componentWillMount(): void {
+  componentDidMount(): void {
     // 如果没有传参，就返回到“/PlayBackDownload”页面
     if (!('query' in this.props.location && 'detail' in this.props.location.query)) {
       this.props.history.push('/PlayBackDownload');

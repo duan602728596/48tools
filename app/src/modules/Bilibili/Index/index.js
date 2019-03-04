@@ -104,7 +104,7 @@ class Index extends Component {
 
     return columns;
   }
-  async UNSAFE_componentWillMount(): Promise<void> {
+  async componentDidMount(): Promise<void> {
     await this.props.action.cursorBilibiliLiveRoom({
       query: {
         indexName: 'roomname'

@@ -46,7 +46,7 @@ class LiveCatchOption extends Component {
       humans: null // 成员
     };
   }
-  async UNSAFE_componentWillMount(): Promise<void> {
+  async componentDidMount(): Promise<void> {
     const qr: Object = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });

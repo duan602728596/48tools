@@ -182,7 +182,7 @@ class List extends Component {
   };
   
   // 组件挂载之前监听chrome下载事件
-  UNSAFE_componentWillMount(): void {
+  componentDidMount(): void {
     if (this.props.fnReady === false) {
       chrome.downloads.onCreated.addListener(handleChromeDownloadsCreated);
       chrome.downloads.onChanged.addListener(handleChromeDownloadsChanged);

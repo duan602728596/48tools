@@ -1,7 +1,7 @@
 import path from 'path';
 import process from 'process';
 
-const isDevelopment: boolean = process.env.NODE_ENV === 'development';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 export default {
   frame: 'react',
@@ -55,6 +55,7 @@ export default {
   ],
   js: {
     ecmascript: true,
+    presets: ['@babel/preset-flow'],
     plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
     exclude: /(dll\.js|appInit\.js|jquery|flv\.min|node_modules)/
   },
