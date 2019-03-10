@@ -55,6 +55,7 @@ class Index extends Component {
       quality: 'gao_url'
     };
   }
+
   // 表格配置
   columus() {
     const columus = [
@@ -104,12 +105,14 @@ class Index extends Component {
 
     return columus;
   }
+
   // select选择
   handleSelect(key, value, option) {
     this.setState({
       [key]: value
     });
   }
+
   // 获取页面信息
   getHtml(url) {
     return new Promise((resolve, reject) => {
@@ -129,6 +132,7 @@ class Index extends Component {
       console.error(err);
     });
   }
+
   // 获取直播间地址（新的直播间地址，其他地方使用旧的直播间地址）
   getInliveUrl() {
     return new Promise((resolve, reject) => {
@@ -150,6 +154,7 @@ class Index extends Component {
       console.error(err);
     });
   }
+
   // 点击录制事件
   async handleDownLoadLiveClick(event) {
     const inliveUrl = await this.getInliveUrl();
@@ -192,10 +197,12 @@ class Index extends Component {
       inLiveList: ils
     });
   }
+
   // 停止下载
   handleStopClick(item, event) {
     item.child.kill();
   }
+
   // 删除
   handleDeleteClick(item, event) {
     const index = this.props.inLiveList.indexOf(item);
@@ -206,6 +213,7 @@ class Index extends Component {
       inLiveList: ils
     });
   }
+  
   render() {
     return (
       <Fragment>
