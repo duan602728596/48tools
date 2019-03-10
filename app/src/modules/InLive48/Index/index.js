@@ -152,7 +152,7 @@ class Index extends Component {
   // 点击录制事件
   async handleDownLoadLiveClick(event: Event): Promise<void | boolean> {
     const inliveUrl: string = await this.getInliveUrl();
-    const html: string = await this.getHtml(IN_LIVE_URL[this.state.group] + inliveUrl);
+    const html: string = await this.getHtml(`https://live.48.cn${ inliveUrl }`);
     const xml: any = cheerio.load(html);
     const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
     const urlInput: any = xml(`#${ this.state.quality }`);
