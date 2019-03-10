@@ -14,10 +14,10 @@ import style from './style.sass';
 import { inLiveList } from '../store/reducer';
 import { time } from '../../../utils';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
-const child_process: Object = global.require('child_process');
-const cheerio: Object = global.require('cheerio');
+const child_process = global.require('child_process');
+const cheerio = global.require('cheerio');
 
-const IN_LIVE_URL: Object = {
+const IN_LIVE_URL = {
   SNH48: 'https://live.48.cn/Index/main/club/1',
   BEJ48: 'https://live.48.cn/Index/main/club/2',
   GNZ48: 'https://live.48.cn/Index/main/club/3',
@@ -26,15 +26,15 @@ const IN_LIVE_URL: Object = {
 };
 
 /* 初始化数据 */
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   inLiveList: createSelector( // 当前查询列表
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('inLive48') ? $$state.get('inLive48') : null,
-    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('inLiveList').toJS() : []
+    ($$state) => $$state.has('inLive48') ? $$state.get('inLive48') : null,
+    ($$data) => $$data !== null ? $$data.get('inLiveList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     inLiveList
   }, dispatch)
@@ -42,17 +42,12 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  state: {
-    group: string;
-    quality: string;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     inLiveList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
@@ -61,8 +56,8 @@ class Index extends Component {
     };
   }
   // 表格配置
-  columus(): Array {
-    const columus: Array = [
+  columus() {
+    const columus = [
       {
         title: '团名称',
         dataIndex: 'group',
@@ -85,11 +80,17 @@ class Index extends Component {
         title: '操作',
         key: 'handle',
         width: '25%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
+        render: (value, item, index) => {
           return [
             item.child.killed === false && item.child.exitCode === null
               ? [
-                <Button key="stop" type="danger" icon="close-square" onClick={ this.handleStopClick.bind(this, item) }>取消下载</Button>
+                <Button key="stop"
+                  type="danger"
+                  icon="close-square"
+                  onClick={ this.handleStopClick.bind(this, item) }
+                >
+                  取消下载
+                </Button>
               ] : [
                 <b key="isStop" className={ publicStyle.mr10 }>已停止</b>,
                 <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.handleDeleteClick.bind(this, item) }>
@@ -104,58 +105,58 @@ class Index extends Component {
     return columus;
   }
   // select选择
-  handleSelect(key: string, value: string, option: any): void {
+  handleSelect(key, value, option) {
     this.setState({
       [key]: value
     });
   }
   // 获取页面信息
-  getHtml(url: string): Promise {
-    return new Promise((resolve: Function, reject: Function): void => {
+  getHtml(url) {
+    return new Promise((resolve, reject) => {
       $.ajax({
         url,
         type: 'GET',
         cache: true,
         dataType: 'text',
-        success(data: string, status: string, xhr: XMLHttpRequest): void {
+        success(data, status, xhr) {
           resolve(data);
         },
-        error(xhr: XMLHttpRequest, err: any): void {
+        error(xhr, err) {
           reject(err);
         }
       });
-    }).catch((err: any): void => {
+    }).catch((err) => {
       console.error(err);
     });
   }
   // 获取直播间地址（新的直播间地址，其他地方使用旧的直播间地址）
-  getInliveUrl(): Promise {
-    return new Promise((resolve: Function, reject: Function): void => {
+  getInliveUrl() {
+    return new Promise((resolve, reject) => {
       $.ajax({
         url: IN_LIVE_URL[this.state.group],
         type: 'GET',
         cache: true,
         dataType: 'text',
-        success(data: string, status: string, xhr: XMLHttpRequest): void {
-          const xml: any = cheerio.load(data);
+        success(data, status, xhr) {
+          const xml = cheerio.load(data);
 
           resolve(xml('.v-img a').attr('href'));
         },
-        error(xhr: XMLHttpRequest, err: any): void {
+        error(xhr, err) {
           reject(err);
         }
       });
-    }).catch((err: any): void => {
+    }).catch((err) => {
       console.error(err);
     });
   }
   // 点击录制事件
-  async handleDownLoadLiveClick(event: Event): Promise<void | boolean> {
-    const inliveUrl: string = await this.getInliveUrl();
-    const html: string = await this.getHtml(`https://live.48.cn${ inliveUrl }`);
-    const xml: any = cheerio.load(html);
-    const title: string = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
-    const urlInput: any = xml(`#${ this.state.quality }`);
+  async handleDownLoadLiveClick(event) {
+    const inliveUrl = await this.getInliveUrl();
+    const html = await this.getHtml(`https://live.48.cn${ inliveUrl }`);
+    const xml = cheerio.load(html);
+    const title = `【官方源】${ this.state.group }_${ time('YY.MM.DD_hh.mm.ss') }`;
+    const urlInput = xml(`#${ this.state.quality }`);
 
     if (urlInput.length === 0) {
       message.warn('直播未开始！');
@@ -163,8 +164,8 @@ class Index extends Component {
       return false;
     }
 
-    const liveUrl: string = urlInput.attr('value');
-    const child: Object = child_process.spawn(option.ffmpeg, [
+    const liveUrl = urlInput.attr('value');
+    const child = child_process.spawn(option.ffmpeg, [
       '-i',
       `${ liveUrl }`,
       '-c',
@@ -177,7 +178,7 @@ class Index extends Component {
     child.on('close', child_process_exit);
     child.on('error', child_process_error);
 
-    const ils: Array = this.props.inLiveList;
+    const ils = this.props.inLiveList;
 
     ils.push({
       child,
@@ -192,20 +193,20 @@ class Index extends Component {
     });
   }
   // 停止下载
-  handleStopClick(item: Object, event: Event): void {
+  handleStopClick(item, event) {
     item.child.kill();
   }
   // 删除
-  handleDeleteClick(item: Object, event: Event): void {
-    const index: number = this.props.inLiveList.indexOf(item);
-    const ils: Array = this.props.inLiveList;
+  handleDeleteClick(item, event) {
+    const index = this.props.inLiveList.indexOf(item);
+    const ils = this.props.inLiveList;
 
     ils.splice(index, 1);
     this.props.action.inLiveList({
       inLiveList: ils
     });
   }
-  render(): React.Element {
+  render() {
     return (
       <Fragment>
         {/* 功能区 */}
@@ -247,7 +248,7 @@ class Index extends Component {
         <Table className={ publicStyle.tableBox }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): string => item.title }
+          rowKey={ (item) => item.title }
           dataSource={ this.props.inLiveList }
           pagination={{
             pageSize: 20,
