@@ -13,15 +13,15 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { downloadList } from '../store/reducer';
 
 /* 初始化数据 */
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   downloadList: createSelector( // 下载列表
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
-    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('downloadList').toJS() : []
+    ($$state) => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
+    ($$data) => $$data !== null ? $$data.get('downloadList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     downloadList
   }, dispatch)
@@ -29,15 +29,15 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class List extends Component {
-  static propTypes: Object = {
+  static propTypes = {
     downloadList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
   // 清除列表
-  handleClearClick(event: Event): void {
-    for (let i: number = this.props.downloadList.length - 1; i >= 0; i--) {
-      const item: Object = this.props.downloadList[i];
+  handleClearClick(event) {
+    for (let i = this.props.downloadList.length - 1; i >= 0; i--) {
+      const item = this.props.downloadList[i];
 
       if (!(item.child.killed === false && item.child.exitCode === null)) {
         this.props.downloadList.splice(i, 1);
@@ -47,12 +47,14 @@ class List extends Component {
       downloadList: this.props.downloadList
     });
   }
+
   // 取消下载
-  handleStopClick(item: Object, event: Event): void {
+  handleStopClick(item, event) {
     item.child.kill();
   }
-  downloadList(): React.ChildrenArray<React.Element> {
-    return this.props.downloadList.map((item: Object, index: number): React.Element => {
+
+  downloadList() {
+    return this.props.downloadList.map((item, index) => {
       return (
         <li key={ item.id }>
           <h4>
@@ -63,7 +65,13 @@ class List extends Component {
           {
             item.child.killed === false && item.child.exitCode === null
               ? (
-                <Button className={ style.ar } type="danger" icon="close-square" onClick={ this.handleStopClick.bind(this, item) }>取消下载</Button>
+                <Button className={ style.ar }
+                  type="danger"
+                  icon="close-square"
+                  onClick={ this.handleStopClick.bind(this, item) }
+                >
+                  取消下载
+                </Button>
               ) : (
                 <b className={ classNames(style.ar, style.cancelText) }>已停止</b>
               )
@@ -72,7 +80,8 @@ class List extends Component {
       );
     });
   }
-  render(): React.Element {
+
+  render() {
     return (
       <div>
         {/* 功能区 */}

@@ -15,37 +15,37 @@ import { loadList, queryHtml, getM3U8, downloadM3U8, saveM3U8 } from './loadList
 import { time } from '../../../utils';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import option from '../../../components/option/option';
-const child_process: Object = global.require('child_process');
+const child_process = global.require('child_process');
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload')
+const getIndex = ($$state) => $$state.has('liveDownload')
   ? $$state.get('liveDownload').get('index') : null;
 
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   liveList: createSelector( // 当前公演录播列表
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
+    ($$data) => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
   page: createSelector( // 当前页码
     getIndex,
-    ($$data: ?Immutable.Map): number => $$data !== null && $$data.has('page') ? $$data.get('page') : 1
+    ($$data) => $$data !== null && $$data.has('page') ? $$data.get('page') : 1
   ),
   pageLen: createSelector( // 当前页数
     getIndex,
-    ($$data: ?Immutable.Map): number => $$data !== null && $$data.has('pageLen') ? $$data.get('pageLen') : 1
+    ($$data) => $$data !== null && $$data.has('pageLen') ? $$data.get('pageLen') : 1
   ),
   group: createSelector(
     getIndex, // 选择团
-    ($$data: ?Immutable.Map): string => $$data !== null && $$data.has('group') ? $$data.get('group') : 'SNH48'
+    ($$data) => $$data !== null && $$data.has('group') ? $$data.get('group') : 'SNH48'
   ),
   downloadList: createSelector( // 下载列表
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
-    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('downloadList').toJS() : []
+    ($$state) => $$state.has('liveDownload') ? $$state.get('liveDownload') : null,
+    ($$data) => $$data !== null ? $$data.get('downloadList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     liveList,
     liveListInit,
@@ -56,11 +56,7 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  state: {
-    loading: boolean;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     liveList: PropTypes.array,
     page: PropTypes.number,
     pageLen: PropTypes.number,
@@ -69,16 +65,17 @@ class Index extends Component {
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
       loading: false
     };
   }
+
   // 表格配置
-  columus(): Array {
-    const columus: Array = [
+  columus() {
+    const columus = [
       {
         title: 'ID',
         dataIndex: 'id',
@@ -88,7 +85,7 @@ class Index extends Component {
       {
         title: '标题',
         key: 'title',
-        render: (value: any, item: Object): string => {
+        render: (value, item) => {
           return (
             <div>
               <b className={ style.title }>{ item.title }</b>
@@ -101,7 +98,7 @@ class Index extends Component {
         title: '视频下载',
         key: 'handle',
         width: '20%',
-        render: (value: any, item: Object): Array => {
+        render: (value, item) => {
           return [
             <Button key="chao" className={ publicStyle.mr10 } onClick={ this.handleDownloadClick.bind(this, item, 'chao') }>超清</Button>,
             <Button key="gao" className={ publicStyle.mr10 } onClick={ this.handleDownloadClick.bind(this, item, 'gao') }>高清</Button>,
@@ -113,24 +110,24 @@ class Index extends Component {
 
     return columus;
   }
-  handleGroupSelect(value: string, option: Object): void {
+
+  handleGroupSelect(value, option) {
     this.props.action.changeGroup({
       group: value
     });
   }
+
   // 加载列表
-  async handleLoadListClick(page: number, pageSize: number, event: Event): Promise<void> {
+  async handleLoadListClick(page, pageSize, event) {
     this.setState({
       loading: true
     });
+
     try {
-      const html: string = await loadList(this.props.group, page);
-      const _qh: {
-        result: Array;
-        pageLen: number;
-      } = queryHtml(html);
-      const result: Array = _qh.result;
-      const pageLen: number = _qh.pageLen;
+      const html = await loadList(this.props.group, page);
+      const _qh = queryHtml(html);
+      const result = _qh.result;
+      const pageLen = _qh.pageLen;
 
       this.props.action.liveListInit({
         liveList: result,
@@ -146,18 +143,16 @@ class Index extends Component {
       loading: false
     });
   }
+
   // 公演下载
-  async handleDownloadClick(item: Object, quality: string, event: Event): Promise<void> {
+  async handleDownloadClick(item, quality, event) {
     try {
-      const m3u8Url: string = await getM3U8(this.props.group, item.id, quality); // m3u8地址
-
-      return console.log(m3u8Url);
-
-      const dlm: string = await downloadM3U8(m3u8Url); // m3u8文本
-      const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`
+      const m3u8Url = await getM3U8(this.props.group, item.id, quality); // m3u8地址
+      const dlm = await downloadM3U8(m3u8Url); // m3u8文本
+      const title = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`
         .replace(/\s/g, '');
-      const pSave: string = await saveM3U8(title, dlm); // m3u8本地保存路径
-      const child: Object = child_process.spawn(option.ffmpeg, [
+      const pSave = await saveM3U8(title, dlm); // m3u8本地保存路径
+      const child = child_process.spawn(option.ffmpeg, [
         '-protocol_whitelist',
         'file,http,https,tcp,tls',
         '-i',
@@ -191,7 +186,8 @@ class Index extends Component {
       message.error('下载失败！');
     }
   }
-  render(): React.ChildrenArray<React.Element> {
+
+  render() {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
@@ -232,7 +228,7 @@ class Index extends Component {
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number => item.id }
+          rowKey={ (item) => item.id }
           dataSource={ this.props.liveList }
           pagination={{
             pageSize: 15,
