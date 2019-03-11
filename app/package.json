@@ -1,6 +1,6 @@
 {
   "name": "48tools",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "48应援工具，提供各种常用功能。",
   "license": "GNU General Public License v3.0",
   "scripts": {
@@ -17,7 +17,7 @@
   "main": "./build/index.html",
   "nodejs": true,
   "window": {
-    "title": "48工具（v1.7.1）",
+    "title": "48工具（v1.7.2）",
     "position": "center",
     "toolbar": true,
     "frame": true,
