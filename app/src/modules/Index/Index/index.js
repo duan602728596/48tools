@@ -11,14 +11,14 @@ import { handleOpenBrowser } from '../../../utils';
 import Navs from './Navs';
 
 /* 升级提示组件 */
-function UpgradeReminder(props: Object): React.Element {
-  const upgradeReminder: string = localStorage.getItem('upgradeReminder');
-  const [isUpgradeReminder, setUpgradeReminder]: [boolean, Function] = useState(
+function UpgradeReminder(props) {
+  const upgradeReminder = localStorage.getItem('upgradeReminder');
+  const [isUpgradeReminder, setUpgradeReminder] = useState(
     upgradeReminder === 'true' || !upgradeReminder
   );
 
   // 状态变化
-  function handleUpgradeReminderChange(event: Event): void {
+  function handleUpgradeReminderChange(event) {
     localStorage.setItem('upgradeReminder', String(!isUpgradeReminder));
 
     setUpgradeReminder(!isUpgradeReminder);
@@ -33,15 +33,15 @@ function UpgradeReminder(props: Object): React.Element {
 }
 
 /* 初始化数据 */
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   test: createSelector(
-    (state: Immutable.Map): Immutable.Map => state.get('index'),
-    (data: Immutable.Map): boolean => data.get('test')
+    (state) => state.get('index'),
+    (data) => data.get('test')
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     test
   }, dispatch)
@@ -49,18 +49,18 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  static propTypes: Object = {
+  static propTypes = {
     test: PropTypes.bool,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
   // check
-  handleCheckChange(event: Event): void {
+  handleCheckChange(event) {
     this.props.action.test({
       test: event.target.checked
     });
   }
-  render(): React.Element {
+  render() {
     return (
       <div className={ style.body }>
         <h1 className={ style.title }>48应援工具</h1>

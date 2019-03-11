@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Row, Col } from 'antd';
 import style from './style.sass';
 
-function Navs(props: Object): React.Element {
+function Navs(props) {
   return (
     <Row type="flex" align="top" justify="start">
       <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
