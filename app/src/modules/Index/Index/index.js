@@ -60,6 +60,7 @@ class Index extends Component {
       test: event.target.checked
     });
   }
+
   render() {
     return (
       <div className={ style.body }>
