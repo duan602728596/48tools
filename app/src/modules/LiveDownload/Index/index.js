@@ -150,6 +150,9 @@ class Index extends Component {
   async handleDownloadClick(item: Object, quality: string, event: Event): Promise<void> {
     try {
       const m3u8Url: string = await getM3U8(this.props.group, item.id, quality); // m3u8地址
+
+      return console.log(m3u8Url);
+
       const dlm: string = await downloadM3U8(m3u8Url); // m3u8文本
       const title: string = `【公演】${ item.id }_${ item.title }_${ item.secondTitle }_${ time('YY-MM-DD_hh-mm-ss') }`
         .replace(/\s/g, '');
