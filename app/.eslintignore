@@ -1,5 +1,9 @@
+# node
 node_modules
-.dll
-init.js
+
+# build
 build
-.sweetrc.js
+buildServer
+
+# cache
+.dll
