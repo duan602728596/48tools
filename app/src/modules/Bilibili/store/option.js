@@ -2,20 +2,16 @@ import { createAction, handleActions } from 'redux-actions';
 import option from '../../../components/option/option';
 import { db } from '../../../components/indexedDB/initIndexedDB';
 
-const opt: {
-  name: string;
-  version: number;
-  objectStoreName: string;
-} = {
+const opt = {
   name: option.indexeddb.name,
   version: option.indexeddb.version,
   objectStoreName: option.indexeddb.objectStore.bilibili.name
 };
 
 /* Action */
-export const putBilibiliLiveRoom: Function = db.putAction(opt);
+export const putBilibiliLiveRoom = db.putAction(opt);
 
 /* reducer */
-const reducer: Function = handleActions({}, {});
+const reducer = handleActions({}, {});
 
 export default reducer;

@@ -13,25 +13,25 @@ import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
-const child_process: Object = global.require('child_process');
+const child_process = global.require('child_process');
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('bilibili')
+const getIndex = ($$state) => $$state.has('bilibili')
   ? $$state.get('bilibili').get('index') : null;
 
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   liveList: createSelector( // 直播间信息
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
+    ($$data) => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
   catching: createSelector( // 正在直播
     getIndex,
-    ($$data: ?Immutable.Map): Map => $$data !== null && $$data.has('catching') ? $$data.get('catching') : new Map()
+    ($$data) => $$data !== null && $$data.has('catching') ? $$data.get('catching') : new Map()
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     cursorBilibiliLiveRoom,
     deleteBilibiliLiveRoom,
@@ -41,26 +41,23 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  state: {
-    loading: boolean;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     liveList: PropTypes.array,
     catching: PropTypes.object,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
       loading: true // 加载动画
     };
   }
+
   // 表格配置
-  columus(): Array {
-    const columns: Array = [
+  columus() {
+    const columns = [
       {
         title: '直播间名称',
         dataIndex: 'roomname',
@@ -77,7 +74,7 @@ class Index extends Component {
         title: '操作',
         key: 'handle',
         width: '36%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
+        render: (value, item, index) => {
           return [
             this.props.catching.has(item.roomid)
               ? (
@@ -104,7 +101,8 @@ class Index extends Component {
 
     return columns;
   }
-  async componentDidMount(): Promise<void> {
+
+  async componentDidMount() {
     await this.props.action.cursorBilibiliLiveRoom({
       query: {
         indexName: 'roomname'
@@ -114,12 +112,13 @@ class Index extends Component {
       loading: false
     });
   }
+
   // 录制
-  async handleCatchClick(item: Object, event: Event): Promise<void> {
-    const url: string = await getUrl(item.roomid);
-    const urlList: Object = JSON.parse(url);
-    const title: string = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
-    const child: Object = child_process.spawn(option.ffmpeg, [
+  async handleCatchClick(item, event) {
+    const url = await getUrl(item.roomid);
+    const urlList = JSON.parse(url);
+    const title = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
+    const child = child_process.spawn(option.ffmpeg, [
       '-i',
       `${ urlList.durl[0].url }`,
       '-c',
@@ -142,15 +141,17 @@ class Index extends Component {
     });
     message.success(`开始录制【${ item.roomname }】！`);
   }
+
   // 停止
-  handleCatchStopClick(item: Object, event: Event): void {
-    const m: Object = this.props.catching.get(item.roomid);
+  handleCatchStopClick(item, event) {
+    const m = this.props.catching.get(item.roomid);
 
     m.child.kill();
     message.warn(`停止录制【${ item.roomname }】！`);
   }
+
   // 删除
-  async handleDeleteClick(item: Object, event: Event): Promise<void> {
+  async handleDeleteClick(item, event) {
     try {
       await this.props.action.deleteBilibiliLiveRoom({
         query: item.roomid
@@ -160,7 +161,8 @@ class Index extends Component {
       message.error('删除失败！');
     }
   }
-  render(): React.ChildrenArray<React.Element> {
+
+  render() {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
@@ -182,7 +184,7 @@ class Index extends Component {
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number => item.roomid }
+          rowKey={ (item) => item.roomid }
           dataSource={ this.props.liveList }
           pagination={{
             pageSize: 20,

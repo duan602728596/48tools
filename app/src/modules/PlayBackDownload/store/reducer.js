@@ -3,29 +3,25 @@ import { fromJS } from 'immutable';
 import indexReducer, * as indexAction from './index';
 
 /* 使用immutable初始化基础数据 */
-const initData: {
-  index: Object;
-  downloadList: Map;
-  fnReady: boolean;
-} = {
+const initData = {
   index: {},
   downloadList: new Map(), // 下载列表
   fnReady: false // 函数是否已绑定
 };
 
 /* Action */
-export const downloadList: Function = createAction('下载列表');
-export const fnReady: Function = createAction('下载监听函数初始化');
+export const downloadList = createAction('下载列表');
+export const fnReady = createAction('下载监听函数初始化');
 
 /* reducer */
-const reducer: Function = handleActions({
-  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+const reducer = handleActions({
+  [combineActions(...Object.values(indexAction))]: ($$state, action) => {
     return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+  [downloadList]: ($$state, action) => {
     return $$state.set('downloadList', action.payload.downloadList);
   },
-  [fnReady]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+  [fnReady]: ($$state, action) => {
     return $$state.set('fnReady', action.payload.fnReady);
   }
 }, fromJS(initData));

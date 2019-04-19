@@ -7,7 +7,7 @@ import TotalRanking from './TotalRanking/index';
 
 @loadReducer(reducer)
 class ModuleLayout extends Component {
-  render(): React.Element {
+  render() {
     return (
       <Switch>
         <Route path="/MoDian" component={ Index } exact={ true } />

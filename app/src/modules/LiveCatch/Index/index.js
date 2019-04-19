@@ -15,31 +15,31 @@ import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import style from './style.sass';
 import option from '../../../components/option/option';
-const child_process: Object = global.require('child_process');
-const querystring: Object = global.require('querystring');
-const gui: Object = global.require('nw.gui');
+const child_process = global.require('child_process');
+const querystring = global.require('querystring');
+const gui = global.require('nw.gui');
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('liveCatch')
+const getIndex = ($$state) => $$state.has('liveCatch')
   ? $$state.get('liveCatch').get('index') : null;
 
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   liveList: createSelector( // 当前直播
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
+    ($$data) => $$data !== null && $$data.has('liveList') ? $$data.get('liveList').toJS() : []
   ),
   liveCatch: createSelector( // 当前直播录制
     getIndex,
-    ($$data: ?Immutable.Map): Map => $$data !== null && $$data.has('liveCatch') ? $$data.get('liveCatch') : new Map()
+    ($$data) => $$data !== null && $$data.has('liveCatch') ? $$data.get('liveCatch') : new Map()
   ),
   autoRecording: createSelector( // 自动抓取直播定时器
     getIndex,
-    ($$data: ?Immutable.Map): ?number => $$data !== null && $$data.has('autoRecording') ? $$data.get('autoRecording') : null
+    ($$data) => $$data !== null && $$data.has('autoRecording') ? $$data.get('autoRecording') : null
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     liveList,
     liveCatch,
@@ -51,33 +51,30 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  state: {
-    loading: boolean;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     liveList: PropTypes.array,
     liveCatch: PropTypes.object,
     autoRecording: PropTypes.number,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
       loading: false // 表格的加载动画
     };
   }
+
   // 表格配置
-  columus(): Array {
-    const columns: Array = [
+  columus() {
+    const columns = [
       {
         title: '直播间',
         dataIndex: 'title',
         key: 'title',
         width: '15%',
-        render: (value: string, item: Object, index: number): React.Element | string => {
+        render: (value, item, index) => {
           if (item._end === true) {
             return <span className={ style.overdue }>{ value }</span>;
           } else {
@@ -90,7 +87,7 @@ class Index extends Component {
         dataIndex: 'subTitle',
         key: 'subTitle',
         width: '20%',
-        render: (value: string, item: Object, index: number): React.Element | string => {
+        render: (value, item, index) => {
           if (item._end === true) {
             return <span className={ style.overdue }>{ value }</span>;
           } else {
@@ -103,7 +100,7 @@ class Index extends Component {
         dataIndex: 'streamPath',
         key: 'streamPath',
         width: '30%',
-        render: (value: string, item: Object, index: number): React.Element | string => {
+        render: (value, item, index) => {
           if (item._end === true) {
             return <span className={ style.overdue }>{ value }</span>;
           } else {
@@ -116,8 +113,8 @@ class Index extends Component {
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (value: string, item: Object, index: number): React.Element | string => {
-          const t: string = time('YY-MM-DD hh:mm:ss', value);
+        render: (value, item, index) => {
+          const t = time('YY-MM-DD hh:mm:ss', value);
 
           if (item._end === true) {
             return <span className={ style.overdue }>{ t }</span>;
@@ -131,11 +128,11 @@ class Index extends Component {
         dataIndex: 'liveId',
         key: 'handle',
         width: '20%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
-          let btn: Object = null;
+        render: (value, item, index) => {
+          let btn = null;
 
           if (this.props.liveCatch.has(value)) {
-            const m: Object = this.props.liveCatch.get(value);
+            const m = this.props.liveCatch.get(value);
 
             if (m.child.exitCode === null) {
               btn = (
@@ -170,14 +167,15 @@ class Index extends Component {
 
     return columns;
   }
+
   // 打开新窗口看直播
-  handleVideoPlayClick(item: Object, event: Event): void {
-    const qs: Object = {
+  handleVideoPlayClick(item, event) {
+    const qs = {
       title: item.title,
       subTitle: item.subTitle,
       streamPath: item.streamPath
     };
-    const u: string = './build/videoPlay.html?' + querystring.stringify(qs);
+    const u = './build/videoPlay.html?' + querystring.stringify(qs);
 
     gui.Window.open(u, {
       position: 'center',
@@ -187,12 +185,13 @@ class Index extends Component {
       title: item.title
     });
   }
+
   // 录制视频
-  handleRecordingClick(item: Object, event: Event): void {
-    const title: string = '【口袋48直播】_' + item.liveId + '_' + item.title
-                        + '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
-                        + '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
-    const child: Object = child_process.spawn(option.ffmpeg, [
+  handleRecordingClick(item, event) {
+    const title = '【口袋48直播】_' + item.liveId + '_' + item.title
+                + '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+                + '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
+    const child = child_process.spawn(option.ffmpeg, [
       '-i',
       `${ item.streamPath }`,
       '-c',
@@ -214,23 +213,25 @@ class Index extends Component {
       liveList: this.props.liveList
     });
   }
+
   // 停止录制视频
-  handleStopRecordingClick(item: Object, event: Event): void {
-    const m: Object = this.props.liveCatch.get(item.liveId);
+  handleStopRecordingClick(item, event) {
+    const m = this.props.liveCatch.get(item.liveId);
 
     m.child.kill();
   }
+
   /**
    * 录制
    * 使用Promise进行了包装
    */
-  recordingPromise(item: Object): Promise {
-    return new Promise((resolve: Function, reject: Function): void => {
-      const title: string = '【口袋48直播】' + '_' + item.title
-                          + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
-                          + '_录制时间_' + time('YY-MM-DD-hh-mm-ss')
-                          + '_' + item.liveId;
-      const child: Object = child_process.spawn(option.ffmpeg, [
+  recordingPromise(item) {
+    return new Promise((resolve, reject) => {
+      const title = '【口袋48直播】' + '_' + item.title
+                  + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+                  + '_录制时间_' + time('YY-MM-DD-hh-mm-ss')
+                  + '_' + item.liveId;
+      const child = child_process.spawn(option.ffmpeg, [
         '-i',
         `${ item.streamPath }`,
         '-c',
@@ -248,34 +249,35 @@ class Index extends Component {
         item
       });
       resolve();
-    }).catch((err: any): void => {
+    }).catch((err) => {
       console.error(err);
     });
   }
+
   // 自动录制的进程
-  async autoRecordingProcess(humans: string[]): Promise<void> {
+  async autoRecordingProcess(humans) {
     this.setState({
       loading: true
     });
     // 获取列表
-    const _this: Object = this;
-    const data: string = await post(0);
-    const data2: Object = JSON.parse(data);
+    const _this = this;
+    const data = await post(0);
+    const data2 = JSON.parse(data);
 
     if (data2.status === 200) {
       message.success('请求成功');
-      const liveList: Array = 'liveList' in data2.content ? data2.content.liveList : [];
+      const liveList = 'liveList' in data2.content ? data2.content.liveList : [];
 
       // 获取列表成功后开始构建录制进程
-      const queue: Array = []; // Promise.all进程
-      const humanRegExp: RegExp = new RegExp(`(${ humans.join('|') })`, 'i'); // 正则
+      const queue = []; // Promise.all进程
+      const humanRegExp = new RegExp(`(${ humans.join('|') })`, 'i'); // 正则
 
-      for (const item: Object of liveList) {
+      for (const item of liveList) {
         // 用正则表达式判断指定的成员
         if (humanRegExp.test(item.title)) {
           // 有录制的进程
           if (_this.props.liveCatch.has(item.liveId)) {
-            const m: Object = _this.props.liveCatch.get(item.liveId);
+            const m = _this.props.liveCatch.get(item.liveId);
 
             // 录制由于特殊原因已经结束，如断线等
             if (m.child.exitCode !== null) {
@@ -300,14 +302,15 @@ class Index extends Component {
       loading: false
     });
   }
+
   // 自动录制
-  async handleAutoRecordingClick(event: Event): Promise<void> {
-    const qr: Object = await this.props.action.getAutoRecordingOption({
+  async handleAutoRecordingClick(event) {
+    const qr = await this.props.action.getAutoRecordingOption({
       query: 'liveCatchOption'
     });
-    const data: Object = qr.result;
-    let time: ?number = null,
-      humans: ?Array = null;
+    const data = qr.result;
+    let time = null,
+      humans = null;
 
     if (data) {
       [time, humans] = [data.option.time, data.option.humans];
@@ -320,20 +323,22 @@ class Index extends Component {
       )
     });
   }
+
   // 停止自动录制（停止的是定时器，已经录制的不会停止）
-  handleStopAutoRecordingClick(event: Event): void {
+  handleStopAutoRecordingClick(event) {
     global.clearInterval(this.props.autoRecording);
     this.props.action.autoRecording({
       autoRecording: null
     });
   }
+
   // 获取录制列表
-  async handleGetLiveListClick(event: Event): Promise<void> {
+  async handleGetLiveListClick(event) {
     this.setState({
       loading: true
     });
-    const data: string = await post(0);
-    const data2: Object = JSON.parse(data);
+    const data = await post(0);
+    const data2 = JSON.parse(data);
 
     if (data2.status === 200) {
       message.success('请求成功');
@@ -347,7 +352,8 @@ class Index extends Component {
       loading: false
     });
   }
-  render(): React.Element {
+
+  render() {
     return (
       <Fragment>
         {/* 功能区 */}
@@ -396,7 +402,7 @@ class Index extends Component {
           <Table loading={ this.state.loading }
             bordered={ true }
             columns={ this.columus() }
-            rowKey={ (item: Object): number => item.liveId }
+            rowKey={ (item) => item.liveId }
             dataSource={ this.props.liveList }
             pagination={{
               pageSize: 20,

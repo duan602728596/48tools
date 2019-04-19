@@ -14,15 +14,15 @@ import { searchTitle } from './search';
 import generatingExcel from './generatingExcel';
 
 /* 初始化数据 */
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   modianList: createSelector( // 当前查询列表
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('modian') ? $$state.get('modian') : null,
-    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('modianList').toJS() : []
+    ($$state) => $$state.has('modian') ? $$state.get('modian') : null,
+    ($$data) => $$data !== null ? $$data.get('modianList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     modianList
   }, dispatch)
@@ -30,18 +30,12 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  state: {
-    btnLoading: boolean;
-    modianid: string;
-    modiantitle: string;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     modianList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
-  constructor(props: Object): void {
+  constructor(props) {
     super(...arguments);
 
     this.state = {
@@ -50,9 +44,10 @@ class Index extends Component {
       modiantitle: '' // 摩点标题
     };
   }
+
   // 配置
-  columus(): Array {
-    const columus: Array = [
+  columus() {
+    const columus = [
       {
         title: '摩点项目ID',
         key: 'modianid',
@@ -69,7 +64,7 @@ class Index extends Component {
         title: '操作',
         dataIndex: 'handle',
         width: '33%',
-        render: (value: any, item: Object): React.ChildrenArray<React.Element> => {
+        render: (value, item) => {
           return [
             <Button key="excel"
               className={ publicStyle.mr10 }
@@ -89,12 +84,13 @@ class Index extends Component {
 
     return columus;
   }
+
   // 查询标题
-  async handleSearchTitleClick(event: Event): Promise<void> {
+  async handleSearchTitleClick(event) {
     this.setState({
       btnLoading: true
     });
-    const { title }: { title: ?string } = await searchTitle(this.state.modianid);
+    const { title } = await searchTitle(this.state.modianid);
 
     this.setState({
       modiantitle: title,
@@ -102,25 +98,28 @@ class Index extends Component {
     });
     if (!title) message.info('项目不存在！');
   }
+
   // input change
-  handleMoDianIdChange(event: Event): void {
+  handleMoDianIdChange(event) {
     this.setState({
       modianid: event.target.value,
       modiantitle: ''
     });
   }
+
   // 删除
-  handleDeleteClick(item: Object, event: Event): void {
-    const index: number = this.props.modianList.indexOf(item);
-    const c: Array = this.props.modianList;
+  handleDeleteClick(item, event) {
+    const index = this.props.modianList.indexOf(item);
+    const c = this.props.modianList;
 
     c.splice(index, 1);
     this.props.action.modianList({
       modianList: c
     });
   }
+
   // 添加到列表
-  handleAddClick(event: Event): void {
+  handleAddClick(event) {
     if (this.state.modiantitle) {
       this.props.modianList.push({
         modianid: this.state.modianid,
@@ -138,17 +137,20 @@ class Index extends Component {
       message.info('项目不存在！');
     }
   }
+
   // 导入到excel
-  handleToExcelClick(item: Object, event: Event): void {
+  handleToExcelClick(item, event) {
     generatingExcel([item], item.modiantitle);
     message.info('正在生成Excel！');
   }
+
   // 全部导入到excel
-  handleToExcelAllClick(event: Event): void {
+  handleToExcelAllClick(event) {
     generatingExcel(this.props.modianList, '');
     message.info('正在生成Excel！');
   }
-  render(): React.ChildrenArray<React.Element> {
+
+  render() {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
@@ -206,7 +208,7 @@ class Index extends Component {
       <div key="tableBox" className={ publicStyle.tableBox }>
         <Table bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): string => item.modianid }
+          rowKey={ (item) => item.modianid }
           dataSource={ this.props.modianList }
           pagination={{
             pageSize: 20,

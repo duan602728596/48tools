@@ -11,10 +11,10 @@ import { putBilibiliLiveRoom } from '../store/option';
 import RoomId from './RoomId';
 
 /* 初始化数据 */
-const state: Function = createStructuredSelector({});
+const state = createStructuredSelector({});
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     putBilibiliLiveRoom
   }, dispatch)
@@ -23,19 +23,12 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @Form.create()
 @connect(state, dispatch)
 class BiliBiliOption extends Component {
-  state: {
-    loading: boolean;
-    btnLoading: boolean;
-    roomid: string;
-    roomname: string;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     action: PropTypes.objectOf(PropTypes.func),
     form: PropTypes.object
   };
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
@@ -45,20 +38,18 @@ class BiliBiliOption extends Component {
       roomname: '' // 直播间名称
     };
   }
+
   // 添加
-  handleAddClick(event: Event): void {
+  handleAddClick(event) {
     event.preventDefault();
     this.setState({
       loading: true,
       btnLoading: true
     });
 
-    this.props.form.validateFields(async (err: ?any, value: any): Promise<void> => {
+    this.props.form.validateFields(async (err, value) => {
       if (!err) {
-        const { roomname, roomid }: {
-          roomname: string;
-          roomid: string;
-        } = value;
+        const { roomname, roomid } = value;
 
         try {
           await this.props.action.putBilibiliLiveRoom({
@@ -81,8 +72,9 @@ class BiliBiliOption extends Component {
       });
     });
   }
-  render(): React.Element {
-    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form; // 包装表单控件
+
+  render() {
+    const { getFieldDecorator } = this.props.form; // 包装表单控件
 
     return (
       <div className={ style.body }>

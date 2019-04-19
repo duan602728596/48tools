@@ -14,34 +14,34 @@ import computingTime from './computingTime';
 import option from '../../../components/option/option';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
-const child_process: Object = global.require('child_process');
-const path: Object = global.require('path');
+const child_process = global.require('child_process');
+const path = global.require('path');
 
 /* 子进程监听 */
-function child_process_stdout(data: any): void {
+function child_process_stdout(data) {
   // console.log(data.toString());
 }
 
-function child_process_stderr(data: any): void {
+function child_process_stderr(data) {
   // console.log(data.toString());
 }
 
 /* 初始化数据 */
-const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('cut') ? $$state.get('cut') : null;
+const getState = ($$state) => $$state.has('cut') ? $$state.get('cut') : null;
 
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   cutList: createSelector( // 剪切队列
     getState,
-    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('cutList').toJS() : []
+    ($$data) => $$data !== null ? $$data.get('cutList').toJS() : []
   ),
   cutMap: createSelector( // 正在剪切
     getState,
-    ($$data: ?Immutable.Map): Map => $$data !== null ? $$data.get('cutMap') : new Map()
+    ($$data) => $$data !== null ? $$data.get('cutMap') : new Map()
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     cutList,
     taskChange
@@ -51,20 +51,14 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @Form.create()
 @connect(state, dispatch)
 class Index extends Component {
-  dir: string;
-  state: {
-    file: ?Object;
-    saveFile: ?Object;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     cutList: PropTypes.array,
     cutMap: PropTypes.object,
     action: PropTypes.objectOf(PropTypes.func),
     form: PropTypes.object
   };
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.dir = option.output.replace(/\//g, '\\');
@@ -73,26 +67,23 @@ class Index extends Component {
       saveFile: null // 保存文件
     };
   }
+
   // 表格配置
-  columus(): Array {
-    const columus: Array = [
+  columus() {
+    const columus = [
       {
         title: '视频文件地址',
         dataIndex: 'file',
         key: 'file',
         width: '30%',
-        render: (value: any, item: Object): string => item.file.path
+        render: (value, item) => item.file.path
       },
       {
         title: '开始时间',
         key: 'startTime',
         width: '10%',
-        render: (value: any, item: Object, index: number): string => {
-          const { starthh, startmm, startss }: {
-            starthh: number;
-            startmm: number;
-            startss: number;
-          } = item;
+        render: (value, item, index) => {
+          const { starthh, startmm, startss } = item;
 
           return `${ patchZero(Number(starthh)) } : ${ patchZero(Number(startmm)) } : ${ patchZero(Number(startss)) }`;
         }
@@ -101,12 +92,8 @@ class Index extends Component {
         title: '结束时间',
         key: 'endTime',
         width: '10%',
-        render: (value: any, item: Object, index: number): string => {
-          const { endhh, endmm, endss }: {
-            endhh: number;
-            endmm: number;
-            endss: number;
-          } = item;
+        render: (value, item, index) => {
+          const { endhh, endmm, endss } = item;
 
           return `${ patchZero(Number(endhh)) } : ${ patchZero(Number(endmm)) } : ${ patchZero(Number(endss)) }`;
         }
@@ -116,15 +103,15 @@ class Index extends Component {
         dataIndex: 'saveFile',
         key: 'saveFile',
         width: '30%',
-        render: (value: any, item: Object, index: number): string => item.saveFile.path
+        render: (value, item, index) => item.saveFile.path
       },
       {
         title: '操作',
         key: 'handle',
         width: '20%',
-        render: (value: any, item: Object, index: number): React.Element | React.ChildrenArray<React.Element> => {
+        render: (value, item, index) => {
           if (this.props.cutMap.has(item.id)) {
-            const m: Map = this.props.cutMap.get(item.id);
+            const m = this.props.cutMap.get(item.id);
 
             if (m.child.exitCode !== null) {
               return [
@@ -142,7 +129,13 @@ class Index extends Component {
             }
           } else {
             return [
-              <Button key="start" className={ publicStyle.mr10 } type="primary" icon="rocket" onClick={ this.handleStartTaskClick.bind(this, item) }>开始任务</Button>,
+              <Button key="start" className={ publicStyle.mr10 }
+                type="primary"
+                icon="rocket"
+                onClick={ this.handleStartTaskClick.bind(this, item) }
+              >
+                开始任务
+              </Button>,
               <Popconfirm key="delete" title="确认删除任务吗？" onConfirm={ this.handleDeleteTaskClick.bind(this, item) }>
                 <Button type="danger" icon="delete">删除任务</Button>
               </Popconfirm>
@@ -154,17 +147,15 @@ class Index extends Component {
 
     return columus;
   }
+
   // 选择文件的change事件
-  handleFileChange(event: Event): void {
-    const save: any = document.getElementById('cut-save');
-    const file: ?Object = event.target.files[0] || null;
-    let title: string = '';
+  handleFileChange(event) {
+    const save = document.getElementById('cut-save');
+    const file = event.target.files[0] || null;
+    let title = '';
 
     if (file) {
-      const { name, ext }: {
-        name: string;
-        ext: string;
-      } = path.parse(file.path);
+      const { name, ext } = path.parse(file.path);
 
       title = '【视频剪切】' + name + '_' + time('YY-MM-DD-hh-mm-ss') + ext;
     }
@@ -173,36 +164,29 @@ class Index extends Component {
     });
     save.nwsaveas = title;
   }
+
   // 储存文件的change事件
-  handleSaveChange(event: Event): void {
-    const file: ?Object = event.target.files[0] || null;
+  handleSaveChange(event) {
+    const file = event.target.files[0] || null;
 
     this.setState({
       saveFile: file
     });
   }
+
   // 点击input
-  handleClickInputClick(id: string, event: Event): void {
+  handleClickInputClick(id, event) {
     $(`#${ id }`).click();
   }
+
   // 添加到队列
-  handleAddQueueClick(event: Event): void {
+  handleAddQueueClick(event) {
     event.preventDefault();
-    this.props.form.validateFields((err: any, value: any): void => {
+    this.props.form.validateFields((err, value) => {
       if (!err) {
-        const cutList: Array = this.props.cutList.slice();
-        const { file, saveFile }: {
-          file: Object;
-          saveFile: Object;
-        } = this.state;
-        const { starthh, startmm, startss, endhh, endmm, endss }: {
-          starthh: ?string;
-          startmm: ?string;
-          startss: ?string;
-          endhh: ?string;
-          endmm: ?string;
-          endss: ?string;
-        } = value;
+        const cutList = this.props.cutList.slice();
+        const { file, saveFile } = this.state;
+        const { starthh, startmm, startss, endhh, endmm, endss } = value;
 
         cutList.push({
           id: new Date().getTime(),
@@ -225,8 +209,8 @@ class Index extends Component {
           saveFile: null // 保存文件
         });
         {
-          const $file: any = $('#cut-file');
-          const $save: any = $('#cut-save');
+          const $file = $('#cut-file');
+          const $save = $('#cut-save');
 
           $file.val('');
           $save.val('');
@@ -235,51 +219,49 @@ class Index extends Component {
       }
     });
   }
+
   // 删除任务
-  handleDeleteTaskClick(item: Object, event: Event): void {
-    const index: number = this.props.cutList.indexOf(item);
+  handleDeleteTaskClick(item, event) {
+    const index = this.props.cutList.indexOf(item);
 
     this.props.cutList.splice(index, 1);
     this.props.action.cutList({
       cutList: this.props.cutList.slice()
     });
   }
+
   /**
    * 子进程监听
    * 子进程关闭时自动删除itemId对应的Map
    */
-  child_process_exit(item: Object, code: any, data: any): void {
+  child_process_exit(item, code, data) {
     console.log('exit: ' + code + ' ' + data);
     this.child_process_cb(item);
   }
-  child_process_error(item: Object, err: any): void {
+
+  child_process_error(item, err) {
     console.error('error: \n' + err);
     this.child_process_cb(item);
   }
+
   // 子进程关闭
-  child_process_cb(item: Object): void {
+  child_process_cb(item) {
     this.props.action.cutList({
       cutList: this.props.cutList
     });
     message.success(`剪切成功【${ item.file.path } => ${ item.saveFile.path }】`);
   }
+
   // 开始任务
-  handleStartTaskClick(item: Object, event: Event): void {
-    const { starthh, startmm, startss, endhh, endmm, endss }: {
-      starthh: number;
-      startmm: number;
-      startss: number;
-      endhh: number;
-      endmm: number;
-      endss: number;
-    } = item;
-    const [h, m, s]: number[] = computingTime(
+  handleStartTaskClick(item, event) {
+    const { starthh, startmm, startss, endhh, endmm, endss } = item;
+    const [h, m, s] = computingTime(
       [Number(starthh), Number(startmm), Number(startss)],
       [Number(endhh), Number(endmm), Number(endss)]
     );
     // 根据文件扩展名判断是保存成gif还是视频
-    const { ext }: { ext: string } = path.parse(item.saveFile.path);
-    const arg: string[] = ext === '.gif' ? [
+    const { ext } = path.parse(item.saveFile.path);
+    const arg = ext === '.gif' ? [
       '-ss',
       `${ patchZero(Number(starthh)) }:${ patchZero(Number(startmm)) }:${ patchZero(Number(startss)) }`,
       '-t',
@@ -302,7 +284,7 @@ class Index extends Component {
       item.saveFile.path
     ];
 
-    const child: Object = child_process.spawn(option.ffmpeg, arg);
+    const child = child_process.spawn(option.ffmpeg, arg);
 
     child.stdout.on('data', child_process_stdout);
     child.stderr.on('data', child_process_stderr);
@@ -321,14 +303,16 @@ class Index extends Component {
 
     message.info(`开始剪切【${ item.file.path } => ${ item.saveFile.path }】`);
   }
+
   // 停止任务
-  handleStopTaskClick(item: Object, event: Event): void {
-    const m: Object = this.props.cutMap.get(item.id);
+  handleStopTaskClick(item, event) {
+    const m = this.props.cutMap.get(item.id);
 
     m.child.kill();
   }
-  render(): React.ChildrenArray<React.Element> {
-    const { getFieldDecorator }: { getFieldDecorator: Function } = this.props.form; // 包装表单控件
+
+  render() {
+    const { getFieldDecorator } = this.props.form; // 包装表单控件
 
     return [
       /* 功能区 */
@@ -392,7 +376,7 @@ class Index extends Component {
                           message: '时间格式错误',
                           type: 'number',
                           min: 0,
-                          transform: (value: string = ''): number => Number(value)
+                          transform: (value = '') => Number(value)
                         }
                       ]
                     })(
@@ -410,7 +394,7 @@ class Index extends Component {
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number => Number(value)
+                          transform: (value = '') => Number(value)
                         }
                       ]
                     })(
@@ -428,7 +412,7 @@ class Index extends Component {
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number => Number(value)
+                          transform: (value = '') => Number(value)
                         }
                       ]
                     })(
@@ -444,7 +428,7 @@ class Index extends Component {
                           message: '时间格式错误',
                           type: 'number',
                           min: 0,
-                          transform: (value: string = ''): number => Number(value)
+                          transform: (value = '') => Number(value)
                         }
                       ]
                     })(
@@ -462,7 +446,7 @@ class Index extends Component {
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number => Number(value)
+                          transform: (value = '') => Number(value)
                         }
                       ]
                     })(
@@ -480,7 +464,7 @@ class Index extends Component {
                           type: 'number',
                           min: 0,
                           max: 59,
-                          transform: (value: string = ''): number => Number(value)
+                          transform: (value = '') => Number(value)
                         }
                       ]
                     })(
@@ -504,7 +488,7 @@ class Index extends Component {
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number => item.id }
+          rowKey={ (item) => item.id }
           dataSource={ this.props.cutList }
           pagination={{
             pageSize: 20,

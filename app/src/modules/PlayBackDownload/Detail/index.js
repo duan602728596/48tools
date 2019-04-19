@@ -7,54 +7,47 @@ import $ from 'jquery';
 import flvjs from 'flv.js';
 import style from './style.sass';
 import { time } from '../../../utils';
-const path: Object = global.require('path');
+const path = global.require('path');
 
 @withRouter
 class Detail extends Component {
-  static propTypes: Object = {
+  static propTypes = {
     history: PropTypes.object,
     location: PropTypes.object,
     match: PropTypes.object
   };
 
-  componentDidMount(): void {
+  componentDidMount() {
     // 如果没有传参，就返回到“/PlayBackDownload”页面
     if (!('query' in this.props.location && 'detail' in this.props.location.query)) {
       this.props.history.push('/PlayBackDownload');
+    } else {
+      const { streamPath } = this.props.location.query.detail;
+      const { ext } = path.parse(streamPath);
+      const ext2 = ext.replace(/^\./, '');
+
+      if (flvjs.isSupported()) {
+        const videoElement = document.getElementById('videoElement');
+        const flvPlayer = flvjs.createPlayer({
+          type: ext2,
+          url: streamPath
+        });
+
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+      }
     }
   }
-  componentDidMount(): void {
-    const { streamPath }: { streamPath: string } = this.props.location.query.detail;
-    const { ext }: { ext: string } = path.parse(streamPath);
-    const ext2: string = ext.replace(/^\./, '');
 
-    if (flvjs.isSupported()) {
-      const videoElement: Element = document.getElementById('videoElement');
-      const flvPlayer: flvjs = flvjs.createPlayer({
-        type: ext2,
-        url: streamPath
-      });
-
-      flvPlayer.attachMediaElement(videoElement);
-      flvPlayer.load();
-    }
-  }
-  componentWillUnmount(): void {
+  componentWillUnmount() {
     $('#videoElement').remove();
   }
-  render(): React.Element {
-    // 直播id，成员id，开始时间，下载地址，直播标题，直播间标题
-    const { liveId, memberId, startTime, streamPath, picPath, subTitle, title }: {
-      liveId: string;
-      memberId: string;
-      startTime: number;
-      streamPath: string;
-      picPath: string;
-      subTitle: string;
-      title: string;
-    } = this.props.location.query.detail;
 
-    const { current }: { current: number } = this.props.location.query;
+  render() {
+    // 直播id，成员id，开始时间，下载地址，直播标题，直播间标题
+    const { liveId, memberId, startTime, streamPath, picPath, subTitle, title } = this.props.location.query.detail;
+
+    const { current } = this.props.location.query;
 
     return (
       <div className={ style.body }>

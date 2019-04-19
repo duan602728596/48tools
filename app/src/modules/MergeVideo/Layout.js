@@ -6,7 +6,7 @@ import Index from './Index/index';
 
 @loadReducer(reducer)
 class ModuleLayout extends Component {
-  render(): React.Element {
+  render() {
     return (
       <Switch>
         <Route path="/MergeVideo" component={ Index } exact={ true } />

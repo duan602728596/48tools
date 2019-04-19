@@ -4,20 +4,17 @@ import indexReducer, * as indexAction from './index';
 import optionReducer, * as optionAction from './option';
 
 /* 使用immutable初始化基础数据 */
-const initData: {
-  index: Object;
-  option: Object;
-} = {
+const initData = {
   index: {},
   option: {}
 };
 
 /* reducer */
-const reducer: Function = handleActions({
-  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+const reducer = handleActions({
+  [combineActions(...Object.values(indexAction))]: ($$state, action) => {
     return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [combineActions(...Object.values(optionAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+  [combineActions(...Object.values(optionAction))]: ($$state, action) => {
     return $$state.set('option', optionReducer($$state.get('option'), action));
   }
 }, fromJS(initData));

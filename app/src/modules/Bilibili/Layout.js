@@ -7,7 +7,7 @@ import Option from './Option/index';
 
 @loadReducer(reducer)
 class ModuleLayout extends Component {
-  render(): React.Element {
+  render() {
     return (
       <Switch>
         <Route path="/BiliBili" component={ Index } exact={ true } />

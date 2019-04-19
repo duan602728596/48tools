@@ -12,37 +12,37 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { time } from '../../../utils';
 import option, { type } from '../../../components/option/option';
 import { mergeList } from '../store/reducer';
-const fs: Object = global.require('fs');
-const path: Object = global.require('path');
-const child_process: Object = global.require('child_process');
+const fs = global.require('fs');
+const path = global.require('path');
+const child_process = global.require('child_process');
 
 /* 子进程监听 */
-function child_process_stdout(data: any): void {
+function child_process_stdout(data) {
   console.log(data.toString());
 }
 
-function child_process_stderr(data: any): void {
+function child_process_stderr(data) {
   console.log(data.toString());
 }
 
-function child_process_exit(code: any, data: any): void {
+function child_process_exit(code, data) {
   message.success('任务完成！');
 }
 
-function child_process_error(err: any): void {
+function child_process_error(err) {
   message.error('发生错误，任务中断！');
 }
 
 /* 初始化数据 */
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   mergeList: createSelector( // 当前公演录播列表
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('mergeVideo') ? $$state.get('mergeVideo') : null,
-    ($$data: ?Immutable.Map): Array => $$data !== null ? $$data.get('mergeList').toJS() : []
+    ($$state) => $$state.has('mergeVideo') ? $$state.get('mergeVideo') : null,
+    ($$data) => $$data !== null ? $$data.get('mergeList').toJS() : []
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     mergeList
   }, dispatch)
@@ -50,14 +50,14 @@ const dispatch: Function = (dispatch: Function): Object => ({
 
 @connect(state, dispatch)
 class Index extends Component {
-  static propTypes: Object = {
+  static propTypes = {
     mergeList: PropTypes.array,
     action: PropTypes.objectOf(PropTypes.func)
   };
 
   // 表格配置
-  columus(): Array {
-    const len: number = this.props.mergeList.length - 1;
+  columus() {
+    const len = this.props.mergeList.length - 1;
 
     return [
       {
@@ -70,7 +70,7 @@ class Index extends Component {
         title: '操作',
         key: 'handle',
         width: '40%',
-        render: (value: any, item: Object, index: number): React.ChildrenArray<React.Element> => {
+        render: (value, item, index) => {
           return [
             <Popconfirm key="delete" title="确认要删除吗？" onConfirm={ this.handleDeleteClick.bind(this, index) }>
               <Button className={ publicStyle.mr10 } type="danger" size="small">删除</Button>
@@ -94,11 +94,12 @@ class Index extends Component {
       }
     ];
   }
-  // 选择视频
-  handleFileChange(event: Event): void {
-    const x: Object[] = [];
 
-    for (const item: Object of event.target.files) {
+  // 选择视频
+  handleFileChange(event) {
+    const x = [];
+
+    for (const item of event.target.files) {
       x.push({
         id: Math.random(),
         path: item.path,
@@ -109,51 +110,56 @@ class Index extends Component {
       mergeList: this.props.mergeList.concat(x)
     });
   }
+
   // 点击选择视频
-  handleChooseClick(id: string, event: Event): void {
+  handleChooseClick(id, event) {
     $(`#${ id }`).click();
   }
+
   // 清空列表
-  handleClearClick(event: Event): void {
+  handleClearClick(event) {
     this.props.action.mergeList({
       mergeList: []
     });
     message.info('已清空列表！');
   }
+
   // 删除一个视频
-  handleDeleteClick(index: number, event: Event): void {
+  handleDeleteClick(index, event) {
     this.props.mergeList.splice(index, 1);
     this.props.action.mergeList({
       mergeList: this.props.mergeList
     });
   }
-  // 合并
-  handleMergeVideosClick(event: Event): void {
-    if (this.props.mergeList.length > 0) {
-      const fi: Object = path.parse(this.props.mergeList[0].path);
-      let title: string = '【视频合并】';
-      let text: string = '';
 
-      for (const item: Object of this.props.mergeList) {
+  // 合并
+  handleMergeVideosClick(event) {
+    if (this.props.mergeList.length > 0) {
+      const fi = path.parse(this.props.mergeList[0].path);
+      let title = '【视频合并】';
+      let text = '';
+
+      for (const item of this.props.mergeList) {
         title += item.name.match(/.{1,3}/g)[0] + '_';
-        const p: string = type === 'Darwin' ? item.path : item.path.replace(/\\/g, '\\');
+        const p = type === 'Darwin' ? item.path : item.path.replace(/\\/g, '\\');
 
         text += `file '${ p }' \n`;
       }
       title += time('YYMMDDhhmmss') + fi.ext;
       text = '# ' + title + '\n' + text;
+
       // 写文件
-      const textTitle: string = title + '.txt';
-      const tp: string = option.output + '/' + textTitle;
-      const textPath: string = type === 'Darwin' ? tp : tp.replace(/\//g, '\\');
+      const textTitle = title + '.txt';
+      const tp = option.output + '/' + textTitle;
+      const textPath = type === 'Darwin' ? tp : tp.replace(/\//g, '\\');
 
       fs.writeFile(textPath, text, {
         encoding: 'utf8',
         flag: 'w'
-      }, (err: Error): void => {
+      }, (err) => {
         if (err) return message.error('合并失败！');
         // 命令
-        const child: Object = child_process.spawn(option.ffmpeg, [
+        const child = child_process.spawn(option.ffmpeg, [
           '-f',
           'concat',
           '-safe',
@@ -174,9 +180,10 @@ class Index extends Component {
       message.warn('没有视频！');
     }
   }
+
   // 视频上移
-  handleUpIndexClick(index: number, event: Event): void {
-    const middle: Object = this.props.mergeList[index - 1];
+  handleUpIndexClick(index, event) {
+    const middle = this.props.mergeList[index - 1];
 
     this.props.mergeList[index - 1] = this.props.mergeList[index];
     this.props.mergeList[index] = middle;
@@ -184,9 +191,10 @@ class Index extends Component {
       mergeList: this.props.mergeList
     });
   }
+
   // 视频下移
-  handleDownIndexClick(index: number, event: Event): void {
-    const middle: Object = this.props.mergeList[index + 1];
+  handleDownIndexClick(index, event) {
+    const middle = this.props.mergeList[index + 1];
 
     this.props.mergeList[index + 1] = this.props.mergeList[index];
     this.props.mergeList[index] = middle;
@@ -194,8 +202,9 @@ class Index extends Component {
       mergeList: this.props.mergeList
     });
   }
-  render(): React.ChildrenArray<React.Element> {
-    const { mergeList }: { mergeList: [] } = this.props;
+
+  render() {
+    const { mergeList } = this.props;
 
     return [
       /* 功能区 */
@@ -232,7 +241,7 @@ class Index extends Component {
         <Table bordered={ true }
           size="small"
           columns={ this.columus() }
-          rowKey={ (item: Object): number => item.id }
+          rowKey={ (item) => item.id }
           dataSource={ mergeList }
           pagination={{
             pageSize: mergeList.length

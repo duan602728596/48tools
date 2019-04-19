@@ -14,8 +14,8 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import post from '../../../components/post/post';
 import { time } from '../../../utils';
 import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
-const url: Object = global.require('url');
-const path: Object = global.require('path');
+const url = global.require('url');
+const path = global.require('path');
 
 /**
  * 搜索的过滤函数
@@ -26,7 +26,7 @@ const path: Object = global.require('path');
  * @param { number } to     : 查找范围
  * @return { Array }
  */
-function filter(array: Array, keyword: ?RegExp, key: string, from: number, to: number): Array {
+function filter(array, keyword, key, from, to) {
   // 如果没有搜索字符串，返回所有数组
   if (!keyword || array.length === 0) {
     return array;
@@ -36,40 +36,40 @@ function filter(array: Array, keyword: ?RegExp, key: string, from: number, to: n
     return keyword.test(array[from][key]) ? [array[from]] : [];
   }
   // 拆分数组
-  const middle: number = Math.floor((to - from) / 2) + from;
-  const left: Array = filter(array, keyword, key, from, middle);
-  const right: Array = filter(array, keyword, key, middle + 1, to);
+  const middle = Math.floor((to - from) / 2) + from;
+  const left = filter(array, keyword, key, from, middle);
+  const right = filter(array, keyword, key, middle + 1, to);
 
   return left.concat(right);
 }
 
 /* 初始化数据 */
-const getIndex: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload')
+const getIndex = ($$state) => $$state.has('playBackDownload')
   ? $$state.get('playBackDownload').get('index') : null;
-const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload')
+const getState = ($$state) => $$state.has('playBackDownload')
   ? $$state.get('playBackDownload') : null;
 
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   playBackList: createSelector( // 当前录播
     getIndex,
-    ($$data: ?Immutable.Map): Array => $$data !== null && $$data.has('playBackList') ? $$data.get('playBackList').toJS() : []
+    ($$data) => $$data !== null && $$data.has('playBackList') ? $$data.get('playBackList').toJS() : []
   ),
   giftUpdTime: createSelector( // 加载时间戳
     getIndex,
-    ($$data: ?Immutable.Map): number => $$data !== null && $$data.has('giftUpdTime') ? $$data.get('giftUpdTime') : 0
+    ($$data) => $$data !== null && $$data.has('giftUpdTime') ? $$data.get('giftUpdTime') : 0
   ),
   downloadList: createSelector( // 下载列表
     getState,
-    ($$data: ?Immutable.Map): Map => $$data !== null ? $$data.get('downloadList') : new Map()
+    ($$data) => $$data !== null ? $$data.get('downloadList') : new Map()
   ),
   fnReady: createSelector( // 下载事件监听
     getState,
-    ($$data: ?Immutable.Map): boolean => $$data !== null ? $$data.get('fnReady') : false
+    ($$data) => $$data !== null ? $$data.get('fnReady') : false
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     playBackList,
     downloadList,
@@ -80,13 +80,7 @@ const dispatch: Function = (dispatch: Function): Object => ({
 @withRouter
 @connect(state, dispatch)
 class Index extends Component {
-  state: {
-    loading: boolean;
-    keyword: string;
-    current: number;
-  };
-
-  static propTypes: Object = {
+  static propTypes = {
     playBackList: PropTypes.array,
     giftUpdTime: PropTypes.number,
     downloadList: PropTypes.object,
@@ -96,9 +90,9 @@ class Index extends Component {
     location: PropTypes.object,
     match: PropTypes.object
   };
-  playBackDownloadSearchInput: Object = createRef();
+  playBackDownloadSearchInput = createRef();
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
@@ -107,9 +101,10 @@ class Index extends Component {
       current: this?.props?.location?.query?.current || 1 // 分页
     };
   }
+
   // 表格配置
-  columus(): Array {
-    const columns: Array = [
+  columus() {
+    const columns = [
       {
         title: '直播ID',
         dataIndex: 'liveId',
@@ -133,13 +128,13 @@ class Index extends Component {
         dataIndex: 'startTime',
         key: 'startTime',
         width: '15%',
-        render: (value: any, item: Object): string => time('YY-MM-DD hh:mm:ss', value)
+        render: (value, item) => time('YY-MM-DD hh:mm:ss', value)
       },
       {
         title: '操作',
         key: 'handle',
         width: '30%',
-        render: (value: any, item: Object): React.ChildrenArray<React.Element> => {
+        render: (value, item) => {
           return [
             <Link key="link" to={{
               pathname: '/PlayBackDownload/Detail',
@@ -164,8 +159,9 @@ class Index extends Component {
 
     return columns;
   }
+
   // 组件挂载之前监听chrome下载事件
-  componentDidMount(): void {
+  componentDidMount() {
     if (this.props.fnReady === false) {
       chrome.downloads.onCreated.addListener(handleChromeDownloadsCreated);
       chrome.downloads.onChanged.addListener(handleChromeDownloadsChanged);
@@ -175,21 +171,23 @@ class Index extends Component {
       });
     }
   }
+
   // 分页变化
-  handlePageChange(page: number, pageSize: number): void {
+  handlePageChange(page, pageSize) {
     this.setState({
       current: page
     });
   }
-  // 下载
-  handleDownloadClick(item: Object, event: Event): void {
-    const urlInfo: Object = url.parse(item.streamPath);
-    const pathInfo: Object = path.parse(urlInfo.pathname);
 
-    const title: string = '【口袋48录播】' + '_' + item.title
-                        + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
-                        + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
-                        + '_' + item.liveId;
+  // 下载
+  handleDownloadClick(item, event) {
+    const urlInfo = url.parse(item.streamPath);
+    const pathInfo = path.parse(urlInfo.pathname);
+
+    const title = '【口袋48录播】' + '_' + item.title
+                + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+                + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
+                + '_' + item.liveId;
 
     chrome.downloads.download({
       url: item.streamPath,
@@ -197,9 +195,9 @@ class Index extends Component {
       conflictAction: 'prompt',
       saveAs: true,
       method: 'GET'
-    }, (downloadId: number): void => {
+    }, (downloadId) => {
       // 此处需要添加item详细信息
-      const obj: Object = this.props.downloadList.get(downloadId);
+      const obj = this.props.downloadList.get(downloadId);
 
       obj.item = item;
       // 更新数据
@@ -210,15 +208,16 @@ class Index extends Component {
       });
     });
   }
+
   // 搜索事件（点击按钮 + input回车）
-  handleSearchInputClick(event: Event): void {
-    const { value }: { value: string } = this.playBackDownloadSearchInput.current.input;
-    let reg: ?RegExp = null;
+  handleSearchInputClick(event) {
+    const { value } = this.playBackDownloadSearchInput.current.input;
+    let reg = null;
 
     if (!/^\s*$/.test(value)) {
-      const str: string[] = value.split(/\s+/);
+      const str = value.split(/\s+/);
 
-      for (let i: number = str.length - 1; i >= 0; i--) {
+      for (let i = str.length - 1; i >= 0; i--) {
         if (str[i] === '') str.splice(i, 1);
       }
       reg = new RegExp(`(${ str.join('|') })`, 'i');
@@ -228,46 +227,52 @@ class Index extends Component {
       keyword: reg
     });
   }
+
   // 重置
-  handleResetClick(event: Event): void {
+  handleResetClick(event) {
     this.setState({
       keyword: ''
     });
   }
+
   // 加载和刷新列表
-  async handlePlayBackListLoadClick(type: string, event: Event): Promise<void> {
+  async handlePlayBackListLoadClick(type, event) {
     this.setState({
       loading: true
     });
     // 判断是加载还是刷新
-    let pl: ?Array = null;
-    let giftUpdTime: ?number = null;
+    let pl = null;
+    let giftUpdTime = null;
 
     switch (type) {
       case '加载':
         pl = this.props.playBackList;
         giftUpdTime = this.props.giftUpdTime;
         break;
+
       case '刷新':
         pl = [];
         giftUpdTime = 0;
         break;
     }
+
     // 获取数据
-    const data: string = await post(giftUpdTime);
-    const data2: Object = JSON.parse(data);
+    const data = await post(giftUpdTime);
+    const data2 = JSON.parse(data);
 
     // 更新列表
     this.props.action.playBackList({
       playBackList: pl.concat(data2.content.reviewList),
       giftUpdTime: data2.content.reviewList[data2.content.reviewList.length - 1].startTime
     });
+
     this.setState({
       loading: false
     });
+
     message.success('录播加载成功！');
   }
-  render(): React.ChildrenArray<React.Element> {
+  render() {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
@@ -310,7 +315,7 @@ class Index extends Component {
         <Table loading={ this.state.loading }
           bordered={ true }
           columns={ this.columus() }
-          rowKey={ (item: Object): number => item.liveId }
+          rowKey={ (item) => item.liveId }
           dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
           pagination={{
             pageSize: 20,

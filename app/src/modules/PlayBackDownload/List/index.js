@@ -12,25 +12,25 @@ import { downloadList, fnReady } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
-const fs: Object = global.require('fs');
+const fs = global.require('fs');
 
 /* 初始化数据 */
-const getState: Function = ($$state: Immutable.Map): ?Immutable.Map => $$state.has('playBackDownload')
+const getState = ($$state) => $$state.has('playBackDownload')
   ? $$state.get('playBackDownload') : null;
 
-const state: Function = createStructuredSelector({
+const state = createStructuredSelector({
   downloadList: createSelector( // 下载列表
     getState,
-    ($$data: ?Immutable.Map): Map => $$data !== null ? $$data.get('downloadList') : new Map()
+    ($$data) => $$data !== null ? $$data.get('downloadList') : new Map()
   ),
   fnReady: createSelector( // 下载事件监听
     getState,
-    ($$data: ?Immutable.Map): boolean => $$data !== null ? $$data.get('fnReady') : false
+    ($$data) => $$data !== null ? $$data.get('fnReady') : false
   )
 });
 
 /* dispatch */
-const dispatch: Function = (dispatch: Function): Object => ({
+const dispatch = (dispatch) => ({
   action: bindActionCreators({
     downloadList,
     fnReady
@@ -38,16 +38,11 @@ const dispatch: Function = (dispatch: Function): Object => ({
 });
 
 class ListOne extends Component {
-  state: {
-    timer: ?number;
-    percent: number;
-  };
-  
-  static propTypes: Object = {
+  static propTypes = {
     detail: PropTypes.array
   };
 
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
@@ -55,10 +50,11 @@ class ListOne extends Component {
       percent: 0 // 进度条
     };
   }
-  componentDidMount(): void {
+
+  componentDidMount() {
     // 进度条的定时器
-    const { detail }: { detail: Array } = this.props;
-    const { state }: { state: number } = detail[1];
+    const { detail } = this.props;
+    const { state } = detail[1];
 
     if (state && state === 1) {
       this.setState({
@@ -66,22 +62,19 @@ class ListOne extends Component {
       });
     }
   }
-  timer(): void {
-    const { detail }: { detail: Array } = this.props;
-    const { current, infor, state }: {
-      current: string;
-      infor: Object;
-      state: number;
-    } = detail[1];
 
-    fs.stat(current + '.crdownload', (err: ?any, state2: Object): void => {
+  timer() {
+    const { detail } = this.props;
+    const { current, infor, state } = detail[1];
+
+    fs.stat(current + '.crdownload', (err, state2) => {
       if (state !== 1) {
         this.setState({
           timer: null,
           percent: 100
         });
       } else {
-        const percent: number = Number((state2.size / infor.totalBytes * 100).toFixed(0));
+        const percent = Number((state2.size / infor.totalBytes * 100).toFixed(0));
 
         this.setState({
           timer: requestAnimationFrame(this.timer.bind(this)),
@@ -90,14 +83,16 @@ class ListOne extends Component {
       }
     });
   }
-  componentWillUnmount(): void {
+
+  componentWillUnmount() {
     if (this.state.timer) {
       cancelAnimationFrame(this.state.timer);
     }
   }
-  stateView(): ?React.Element {
-    const { detail }: { detail: Array } = this.props;
-    const { state }: { state: number } = detail[1];
+
+  stateView() {
+    const { detail } = this.props;
+    const { state } = detail[1];
 
     switch (state) {
       case 1:
@@ -126,25 +121,19 @@ class ListOne extends Component {
         return null;
     }
   }
+
   // 取消下载
-  handleCancelDownload(id: number, event: Event): void {
+  handleCancelDownload(id, event) {
     chrome.downloads.cancel(id);
   }
-  render(): ?React.Element {
-    const { detail }: { detail: Array } = this.props;
-    const { current, item, state }: {
-      current: string;
-      item: Object;
-      state: number;
-    } = detail[1];
+
+  render() {
+    const { detail } = this.props;
+    const { current, item, state } = detail[1];
 
     // 判断文件状态，避免渲染bug
     if (state && state !== 0) {
-      const { streamPath, title, subTitle }: {
-        streamPath: string;
-        title: string;
-        subTitle: string;
-      } = item;
+      const { streamPath, title, subTitle } = item;
 
       return (
         <div>
@@ -172,7 +161,7 @@ class ListOne extends Component {
 @withRouter
 @connect(state, dispatch)
 class List extends Component {
-  static propTypes: Object = {
+  static propTypes = {
     downloadList: PropTypes.object,
     fnReady: PropTypes.bool,
     action: PropTypes.objectOf(PropTypes.func),
@@ -180,9 +169,9 @@ class List extends Component {
     location: PropTypes.object,
     match: PropTypes.object
   };
-  
+
   // 组件挂载之前监听chrome下载事件
-  componentDidMount(): void {
+  componentDidMount() {
     if (this.props.fnReady === false) {
       chrome.downloads.onCreated.addListener(handleChromeDownloadsCreated);
       chrome.downloads.onChanged.addListener(handleChromeDownloadsChanged);
@@ -192,8 +181,9 @@ class List extends Component {
       });
     }
   }
-  listOne(): React.ChildrenArray<React.Element> {
-    return Array.from(this.props.downloadList).map((item: Array, index: number): React.Element => {
+
+  listOne() {
+    return Array.from(this.props.downloadList).map((item, index) => {
       if (item[1].state !== 0) {
         return (
           <li key={ item[0] }>
@@ -203,18 +193,21 @@ class List extends Component {
       }
     });
   }
+
   // 清除已下载
-  handleClearClick(event: Event): void {
-    this.props.downloadList.forEach((value: Object, key: number): void => {
+  handleClearClick(event) {
+    this.props.downloadList.forEach((value, key) => {
       if (value.state !== 1) {
         this.props.downloadList.delete(key);
       }
     });
+
     this.props.action.downloadList({
       downloadList: new Map(Array.from(this.props.downloadList))
     });
   }
-  render(): React.ChildrenArray<React.Element> {
+
+  render() {
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>

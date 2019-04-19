@@ -3,15 +3,10 @@ import React, { Component } from 'react';
 import { Input, Button, message } from 'antd';
 import $ from 'jquery';
 import style from './style.sass';
-const url: Object = global.require('url');
+const url = global.require('url');
 
 class RoomId extends Component {
-  state: {
-    url: string;
-    roomId: string;
-  };
-
-  constructor(): void {
+  constructor() {
     super(...arguments);
 
     this.state = {
@@ -19,42 +14,45 @@ class RoomId extends Component {
       roomId: ''
     };
   }
+
   // 复制
-  handleCopy(event: Event): void {
-    const range: Object = document.createRange();
+  handleCopy(event) {
+    const range = document.createRange();
 
     range.selectNode(document.getElementById('roomId'));
-    const selection: Object = window.getSelection();
+    const selection = window.getSelection();
 
     if (selection.rangeCount > 0) selection.removeAllRanges();
     selection.addRange(range);
     document.execCommand('copy');
   }
+
   // change
-  handleChange(event: Event): void {
+  handleChange(event) {
     this.setState({
       url: event.target.value,
       roomId: ''
     });
   }
+
   // 搜索
-  handleSearch(event: Event): void {
-    const _this: this = this;
-    const u: Object = url.parse(this.state.url);
+  handleSearch(event) {
+    const _this = this;
+    const u = url.parse(this.state.url);
 
     if (u.host !== 'live.bilibili.com') {
       message.warn('直播间地址错误！');
 
       return false;
     }
-    const id: string[] = this.state.url.split(/\//g);
-    const id2: string = id[id.length - 1];
+    const id = this.state.url.split(/\//g);
+    const id2 = id[id.length - 1];
 
     $.ajax({
       url: `https://api.live.bilibili.com/room/v1/Room/room_init?id=${ id2 }`,
       type: 'GET',
       dataType: 'json',
-      success(data: Object, status: string, xhr: XMLHttpRequest): void {
+      success(data, status, xhr) {
         if (data.code === 0 && xhr.status === 200) {
           _this.setState({
             roomId: data.data.room_id
@@ -65,7 +63,8 @@ class RoomId extends Component {
       }
     });
   }
-  render(): Array {
+
+  render() {
     return [
       <h3 key="title" className={ style.title }>RoomId查找</h3>,
       <div key="search" className={ style.group }>

@@ -4,30 +4,30 @@ import option from '../../../components/option/option';
 import { db } from '../../../components/indexedDB/initIndexedDB';
 
 /* Action */
-export const liveList: Function = createAction('B站直播列表');
-export const liveList_delete: Function = createAction('B站直播列表-删除');
-export const catching: Function = createAction('B站直播抓取');
+export const liveList = createAction('B站直播列表');
+export const liveList_delete = createAction('B站直播列表-删除');
+export const catching = createAction('B站直播抓取');
 
-export const cursorBilibiliLiveRoom: Function = db.cursorAction({
+export const cursorBilibiliLiveRoom = db.cursorAction({
   objectStoreName: option.indexeddb.objectStore.bilibili.name,
   successAction: liveList
 });
-export const deleteBilibiliLiveRoom: Function = db.deleteAction({
+export const deleteBilibiliLiveRoom = db.deleteAction({
   objectStoreName: option.indexeddb.objectStore.bilibili.name,
   successAction: liveList_delete
 });
 
 /* reducer */
-const reducer: Function = handleActions({
-  [liveList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+const reducer = handleActions({
+  [liveList]: ($$state, action) => {
     return $$state.set('liveList', List(action.payload.result));
   },
-  [liveList_delete]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
-    const arg: Object = action.payload;
-    const data: Array = arg.query instanceof Array ? arg.query : [arg.query];
-    const liveList: Array = $$state.get('liveList').toJS();
+  [liveList_delete]: ($$state, action) => {
+    const arg = action.payload;
+    const data = arg.query instanceof Array ? arg.query : [arg.query];
+    const liveList = $$state.get('liveList').toJS();
 
-    for (let i: number = liveList.length - 1; i >= 0; i--) {
+    for (let i = liveList.length - 1; i >= 0; i--) {
       if (data.indexOf(liveList[i].roomid) > -1) {
         liveList.splice(i, 1);
       }
@@ -35,11 +35,8 @@ const reducer: Function = handleActions({
 
     return $$state.set('liveList', List(liveList));
   },
-  [catching]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
-    const { liveList, catching }: {
-      liveList: Array;
-      catching: Map;
-    } = action.payload;
+  [catching]: ($$state, action) => {
+    const { liveList, catching } = action.payload;
 
     return $$state.set('liveList', List(liveList))
       .set('catching', catching);
