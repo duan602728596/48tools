@@ -3,23 +3,20 @@ import { fromJS, List } from 'immutable';
 import indexReducer, * as indexAction from './index';
 
 /* 使用immutable初始化基础数据 */
-const initData: {
-  index: Object;
-  downloadList: Immutable.List;
-} = {
+const initData = {
   index: {},
   downloadList: List([])
 };
 
 /* Action */
-export const downloadList: Function = createAction('公演下载列表');
+export const downloadList = createAction('公演下载列表');
 
 /* reducer */
-const reducer: Function = handleActions({
-  [combineActions(...Object.values(indexAction))]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+const reducer = handleActions({
+  [combineActions(...Object.values(indexAction))]: ($$state, action) => {
     return $$state.set('index', indexReducer($$state.get('index'), action));
   },
-  [downloadList]: ($$state: Immutable.Map, action: Object): Immutable.Map => {
+  [downloadList]: ($$state, action) => {
     return $$state.set('downloadList', List(action.payload.downloadList));
   }
 }, fromJS(initData));

@@ -129,7 +129,7 @@ class LiveCatchOption extends Component {
                         message: '时间必须大于等于一分钟',
                         type: 'number',
                         min: 1,
-                        transform: (value: string): number => Number(value)
+                        transform: (value) => Number(value)
                       }
                     ]
                   })(

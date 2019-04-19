@@ -34,25 +34,13 @@ module.exports = {
       'indexeddb-tools': 'indexeddb-tools/build/indexedDB-tools.js'
     }
   },
-  loaders: {
-    svg: {
-      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-      use: [
-        { loader: 'babel-loader' },
-        {
-          loader: '@svgr/webpack',
-          options: { babel: false, icon: true }
-        }
-      ]
-    }
-  },
   rules: [
     {
-      test: /(dll\.js|init\.js|jquery|flv\.min)/,
+      test: /(init\.js|jquery|flv\.min)/,
       use: [{
         loader: 'file-loader',
         options: {
-          name: isDevelopment ? '[name].[ext]' : '[hash:5].[ext]',
+          name: isDevelopment ? '[name].[hash:5].[ext]' : '[hash:5].[ext]',
           outputPath: 'script/'
         }
       }]
@@ -60,7 +48,6 @@ module.exports = {
   ],
   js: {
     ecmascript: true,
-    presets: ['@babel/preset-flow'],
     plugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],
     exclude: /(dll\.js|appInit\.js|jquery|flv\.min|node_modules)/
   },
@@ -73,8 +60,7 @@ module.exports = {
       '@layout-body-background': '#fff',
       '@layout-header-background': '@primary-color'
     },
-    include: /node_modules[\\/]antd/,
-    publicPath: '../'
+    include: /node_modules[\\/]antd/
   },
   html: [
     { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['videoPlay'] },
