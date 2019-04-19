@@ -138,7 +138,7 @@ class LiveCatchOption extends Component {
                 }
               </Form.Item>
               <Form.Item label={
-                <span>请输入想要监控的成员，以","分割，没有配置则为全部</span>
+                <span>请输入想要监控的成员或成员id，以","分割，没有配置则为全部</span>
               }>
                 {
                   getFieldDecorator('humans', {
@@ -151,7 +151,14 @@ class LiveCatchOption extends Component {
             </Spin>
           </div>
           <Form.Item>
-            <Button className={ style.btn } type="primary" htmlType="submit" size="default" loading={ this.state.btnLoading }>修改</Button>
+            <Button className={ style.btn }
+              type="primary"
+              htmlType="submit"
+              size="default"
+              loading={ this.state.btnLoading }
+            >
+              修改
+            </Button>
             <Link to="/LiveCatch">
               <Button className={ style.btn } type="danger" size="default" loading={ this.state.btnLoading }>返回</Button>
             </Link>

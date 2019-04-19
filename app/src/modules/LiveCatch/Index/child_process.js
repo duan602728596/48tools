@@ -14,13 +14,12 @@ async function child_process_cb() {
   });
 
   const data = await post(0);
-  const data2 = JSON.parse(data);
 
   store.dispatch({
     type: liveChange.toString(),
     payload: {
       map: m,
-      liveList: 'liveList' in data2.content ? data2.content.liveList : []
+      liveList: 'liveList' in data.content ? data.content.liveList : []
     }
   });
 }

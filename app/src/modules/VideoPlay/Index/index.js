@@ -1,9 +1,8 @@
 /**
  * 新窗口播放视频
  */
-import * as React from 'react';
-import { Component } from 'react';
-import { Card } from 'antd';
+import React, { Component } from 'react';
+import { Card, Tag } from 'antd';
 import flvjs from 'flv.js';
 import style from './style.sass';
 const queryString = global.require('querystring');
@@ -14,6 +13,8 @@ class Index extends Component {
     super(...arguments);
 
     const search = location.search.replace(/^\?{1}/, ''); // 获取信息
+
+    console.log(search);
 
     this.item = queryString.parse(search);
   }
@@ -35,6 +36,9 @@ class Index extends Component {
   }
 
   render() {
+    const { title, nickname, liveType, streamPath } = this.item;
+    const isZhibo = Number(liveType) === 1;
+
     return (
       <Card className={ style.card } cover={
         <div className={ style.videobox }>
@@ -43,11 +47,13 @@ class Index extends Component {
       }>
         <Card.Meta className={ style.meta }
           title={
-            <span>{ this.item.title }</span>
+            [
+              <b key="title" className={ style.title }>{ title }</b>,
+              <span key="nickname" className={ style.nickname }>{ nickname }</span>,
+              <Tag key="liveType" color={ isZhibo ? '#f50' : '#2db7f5' }>{ isZhibo ? '直播' : '电台' }</Tag>
+            ]
           }
-          description={
-            <span className={ style.subTitle }>{ this.item.subTitle }</span>
-          }
+          description={ streamPath }
         />
       </Card>
     );

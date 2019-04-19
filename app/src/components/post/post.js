@@ -1,55 +1,76 @@
 /**
  * 获取直播和录播信息数据
- * url   : https://plive.48.cn/livesystem/api/live/v1/memberLivePage
+ * url   : https://pocketapi.48.cn/live/api/v1/live/getLiveList
  * method: POST
  */
-const https = global.require('https');
+const request = global.require('request');
 
-const headers = {
-  os: 'android',
-  'User-Agent': 'Mobile_Pocket',
-  IMEI: '864394020228161',
-  token: '0',
-  version: '4.0.4',
-  'Content-Type': 'application/json;charset=utf-8',
-  Host: 'plive.48.cn',
-  Connection: 'Keep-Alive',
-  'Accept-Encoding': 'gzip'
-};
-
-const options = {
-  hostname: 'plive.48.cn',
-  port: null,
-  path: '/livesystem/api/live/v1/memberLivePage',
-  method: 'POST',
-  headers
-};
-
-/* post数据 */
-function postData(number) {
-  return `{"lastTime":${ number },"limit":20,"groupId":0,"memberId":0,"type":0,"giftUpdTime":1490857731000}`;
+function createHeaders() {
+  return {
+    'Content-Type': 'application/json;charset=utf-8',
+    appInfo: JSON.stringify({
+      vendor: 'apple',
+      deviceId: `${ Math.floor(Math.random() * (10 ** 10)) }`,
+      appVersion: '6.0.0',
+      appBuild: '190409',
+      osVersion: '11.4.1',
+      osType: 'ios',
+      deviceName: 'iPhone 6s',
+      os: 'ios'
+    })
+  };
 }
 
-function post(number = 0) {
+/**
+ * 获取单个直播间的信息
+ * @param { string } liveId
+ */
+export function getLiveInfo(liveId) {
   return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      let getData = '';
-
-      res.setEncoding('utf8');
-      res.on('data', function(chunk) {
-        getData += chunk;
-      });
-      res.on('end', function() {
-        resolve(getData);
-      });
+    request({
+      uri: 'https://pocketapi.48.cn/live/api/v1/live/getLiveOne',
+      method: 'POST',
+      headers: createHeaders(),
+      json: true,
+      body: { liveId }
+    }, function(err, res, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
     });
+  });
+}
 
-    req.on('error', function(err) {
-      console.log('错误：' + err.message);
+/**
+ * 获取直播列表
+ * @param { number } number
+ * @param { boolean } inLive
+ */
+function post(number = 0, inLive) {
+  return new Promise((resolve, reject) => {
+    const body = {
+      debug: true,
+      next: 0,
+      record: false
+    };
+
+    if (inLive) body.groupId = 0;
+
+    request({
+      uri: 'https://pocketapi.48.cn/live/api/v1/live/getLiveList',
+      method: 'POST',
+      headers: createHeaders(),
+      json: true,
+      body
+    }, function(err, res, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
     });
-
-    req.write(postData(number));
-    req.end();
   });
 }
 
