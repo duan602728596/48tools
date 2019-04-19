@@ -1,20 +1,23 @@
 /* common css */
 body, dl, dd, p, pre, h1, h2, h3, h4, h5, h6, hr, figure
   margin: 0
+
 th, td, input, button
   padding: 0
+
 ol, ul
   margin: 0
   padding: 0
   list-style: none
+
 a
   text-decoration: none
+
   &:hover
     text-decoration: underline
-  img
-    border: none
-\:global(.clearfix)
-  &:after
+
+\:global
+  .clearfix:after
     content: '\200B'
     display: block
     height: 0
