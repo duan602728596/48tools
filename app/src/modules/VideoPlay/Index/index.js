@@ -14,8 +14,6 @@ class Index extends Component {
 
     const search = location.search.replace(/^\?{1}/, ''); // 获取信息
 
-    console.log(search);
-
     this.item = queryString.parse(search);
   }
 

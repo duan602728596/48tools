@@ -15,6 +15,7 @@ import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import style from './style.sass';
 import option from '../../../components/option/option';
+import StreamPath from './StreamPath';
 const child_process = global.require('child_process');
 const querystring = global.require('querystring');
 const gui = global.require('nw.gui');
@@ -73,7 +74,7 @@ class Index extends Component {
         title: '直播标题',
         dataIndex: 'title',
         key: 'title',
-        width: '30%',
+        width: '20%',
         render: (value, item, index) => {
           const isZhibo = item.liveType === 1;
           const tag = (
@@ -93,10 +94,19 @@ class Index extends Component {
         }
       },
       {
+        title: '直播地址',
+        dataIndex: 'liveId',
+        key: 'liveId',
+        width: '35%',
+        render: (value, item, index) => {
+          return <StreamPath liveId={ value } />;
+        }
+      },
+      {
         title: '直播人',
         dataIndex: 'userInfo.nickname',
         key: 'userInfo.nickname',
-        width: '20%',
+        width: '10%',
         render: (value, item, index) => {
           if (item._end === true) {
             return <span className={ style.overdue }>{ value }</span>;
@@ -109,7 +119,7 @@ class Index extends Component {
         title: '开始时间',
         dataIndex: 'ctime',
         key: 'ctime',
-        width: '25%',
+        width: '15%',
         render: (value, item, index) => {
           const t = time('YY-MM-DD hh:mm:ss', Number(value));
 
@@ -124,7 +134,7 @@ class Index extends Component {
         title: '操作',
         dataIndex: 'liveId',
         key: 'handle',
-        width: '25%',
+        width: '20%',
         render: (value, item, index) => {
           let btn = null;
 
