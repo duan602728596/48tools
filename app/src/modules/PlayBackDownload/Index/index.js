@@ -22,24 +22,23 @@ const path = global.require('path');
  * 搜索的过滤函数
  * @param { Array } array   : 需要过滤的数组
  * @param { RegExp } keyword: 关键字的正则表达式
- * @param { string } key    : 参考键值
  * @param { number } from   : 查找范围
  * @param { number } to     : 查找范围
  * @return { Array }
  */
-function filter(array, keyword, key, from, to) {
+function filter(array, keyword, from, to) {
   // 如果没有搜索字符串，返回所有数组
   if (!keyword || array.length === 0) {
     return array;
   }
   // 判断当前是否满足搜索匹配
   if (from === to) {
-    return keyword.test(array[from][key]) ? [array[from]] : [];
+    return keyword.test(array[from].userInfo.nickname) ? [array[from]] : [];
   }
   // 拆分数组
   const middle = Math.floor((to - from) / 2) + from;
-  const left = filter(array, keyword, key, from, middle);
-  const right = filter(array, keyword, key, middle + 1, to);
+  const left = filter(array, keyword, from, middle);
+  const right = filter(array, keyword, middle + 1, to);
 
   return left.concat(right);
 }
@@ -326,7 +325,7 @@ class Index extends Component {
           bordered={ true }
           columns={ this.columus() }
           rowKey={ (item) => item.liveId }
-          dataSource={ filter(playBackList, keyword, 'title', 0, playBackList.length - 1) }
+          dataSource={ filter(playBackList, keyword, 0, playBackList.length - 1) }
           pagination={{
             pageSize: 20,
             showQuickJumper: true,
