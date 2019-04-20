@@ -143,7 +143,7 @@ class Index extends Component {
           if (this.props.liveCatch.has(value)) {
             const m = this.props.liveCatch.get(value);
 
-            if (m.child.exitCode === null) {
+            if (m && m.child.exitCode === null) {
               btn = (
                 <Popconfirm key="stop" title="确认停止录制吗？" onConfirm={ this.handleStopRecordingClick.bind(this, item) }>
                   <Button type="danger" icon="close-square">停止录制</Button>
@@ -218,7 +218,7 @@ class Index extends Component {
   // 录制视频
   async handleRecordingClick(item, event) {
     const title = '【口袋48直播】_' + item.liveId + '_' + item.title
-                + '_starttime_' + time('YY-MM-DD-hh-mm-ss', item.ctime)
+                + '_starttime_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
                 + '_recordtime_' + time('YY-MM-DD-hh-mm-ss');
     const liveInfo = await getLiveInfo(item.liveId);
 
@@ -230,17 +230,18 @@ class Index extends Component {
         'copy',
         `${ option.output }/${ title }.flv`
       ]);
+      const { downloadList, liveCatch, liveList } = this.props;
 
       child.stdout.on('data', child_process_stdout);
       child.stderr.on('data', child_process_stderr);
       child.on('close', child_process_exit);
       child.on('error', child_process_error);
 
-      this.props.liveCatch.set(item.liveId, { child, item });
+      downloadList.set(item.liveId, { child, item });
 
       this.props.action.liveChange({
-        map: this.props.liveCatch,
-        liveList: this.props.liveList
+        map: liveCatch,
+        liveList
       });
     }
   }
@@ -258,7 +259,7 @@ class Index extends Component {
    */
   async recordingPromise(item) {
     const title = '【口袋48直播】' + '_' + item.title
-      + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+      + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
       + '_录制时间_' + time('YY-MM-DD-hh-mm-ss')
       + '_' + item.liveId;
     const liveInfo = await getLiveInfo(item.liveId);
@@ -279,7 +280,6 @@ class Index extends Component {
 
       this.props.liveCatch.set(item.liveId, { child, item });
     }
-
   }
 
   // 自动录制的进程

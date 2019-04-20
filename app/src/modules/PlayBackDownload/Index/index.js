@@ -5,18 +5,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Affix, message, Input, Tag } from 'antd';
+import { Button, Table, Affix, message, Input, Tag, Popconfirm } from 'antd';
 import classNames from 'classnames';
 import { playBackList } from '../store/index';
-import { downloadList, fnReady } from '../store/reducer';
+import { downloadList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
-import post from '../../../components/post/post';
+import post, { getLiveInfo } from '../../../components/post/post';
 import { time } from '../../../utils';
-import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
 import StreamPath from '../../../components/post/StreamPath';
+import { child_process_error, child_process_exit, child_process_stderr, child_process_stdout } from './child_process';
+import option from '../../../components/option/option';
 const url = global.require('url');
-const path = global.require('path');
+const child_process = global.require('child_process');
 
 /**
  * 搜索的过滤函数
@@ -61,10 +62,6 @@ const state = createStructuredSelector({
   downloadList: createSelector( // 下载列表
     getState,
     ($$data) => $$data !== null ? $$data.get('downloadList') : new Map()
-  ),
-  fnReady: createSelector( // 下载事件监听
-    getState,
-    ($$data) => $$data !== null ? $$data.get('fnReady') : false
   )
 });
 
@@ -72,8 +69,7 @@ const state = createStructuredSelector({
 const dispatch = (dispatch) => ({
   action: bindActionCreators({
     playBackList,
-    downloadList,
-    fnReady
+    downloadList
   }, dispatch)
 });
 
@@ -147,17 +143,28 @@ class Index extends Component {
       },
       {
         title: '操作',
+        dataIndex: 'liveId',
         key: 'handle',
         width: '15%',
         render: (value, item, index) => {
-          return (
-            <Button key="download"
-              icon="fork"
-              onClick={ this.handleDownloadClick.bind(this, item) }
-            >
-              下载
-            </Button>
-          );
+          const m = this.props.downloadList.get(value);
+
+          if (m && m.child.exitCode === null) {
+            return (
+              <Popconfirm key="stop" title="确认停止下载吗？" onConfirm={ this.handleStopRecordingClick.bind(this, item) }>
+                <Button type="danger" icon="close-square">停止下载</Button>
+              </Popconfirm>
+            );
+          } else {
+            return (
+              <Button key="download"
+                icon="fork"
+                onClick={ this.handleDownloadClick.bind(this, item) }
+              >
+                下载
+              </Button>
+            );
+          }
         }
       }
     ];
@@ -165,16 +172,11 @@ class Index extends Component {
     return columns;
   }
 
-  // 组件挂载之前监听chrome下载事件
-  componentDidMount() {
-    if (this.props.fnReady === false) {
-      chrome.downloads.onCreated.addListener(handleChromeDownloadsCreated);
-      chrome.downloads.onChanged.addListener(handleChromeDownloadsChanged);
-      // 函数已监听的标识
-      this.props.action.fnReady({
-        fnReady: true
-      });
-    }
+  // 停止录制视频
+  handleStopRecordingClick(item, event) {
+    const m = this.props.downloadList.get(item.liveId);
+
+    m.child.kill();
   }
 
   // 分页变化
@@ -185,33 +187,35 @@ class Index extends Component {
   }
 
   // 下载
-  handleDownloadClick(item, event) {
+  async handleDownloadClick(item, event) {
     const urlInfo = url.parse(item.streamPath);
-    const pathInfo = path.parse(urlInfo.pathname);
-
     const title = '【口袋48录播】' + '_' + item.title
-                + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', item.startTime)
+                + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
                 + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
                 + '_' + item.liveId;
+    const liveInfo = await getLiveInfo(item.liveId);
 
-    chrome.downloads.download({
-      url: item.streamPath,
-      filename: title + pathInfo.ext,
-      conflictAction: 'prompt',
-      saveAs: true,
-      method: 'GET'
-    }, (downloadId) => {
-      // 此处需要添加item详细信息
-      const obj = this.props.downloadList.get(downloadId);
+    if (liveInfo.status === 200) {
+      const child = child_process.spawn(option.ffmpeg, [
+        '-i',
+        `${ liveInfo.content.playStreamPath }`,
+        '-c',
+        'copy',
+        `${ option.output }/${ title }.flv`
+      ]);
+      const { playBackList, giftUpdTime, downloadList } = this.props;
 
-      obj.item = item;
-      // 更新数据
-      this.props.downloadList.set(downloadId, obj);
-      // 更新store内的数据
-      this.props.action.downloadList({
-        downloadList: this.props.downloadList
+      child.stdout.on('data', child_process_stdout);
+      child.stderr.on('data', child_process_stderr);
+      child.on('close', child_process_exit);
+      child.on('error', child_process_error);
+
+      downloadList.set(item.liveId, { child, item });
+      this.props.action.playBackList({
+        giftUpdTime,
+        playBackList
       });
-    });
+    }
   }
 
   // 搜索事件（点击按钮 + input回车）
@@ -264,8 +268,6 @@ class Index extends Component {
     // 获取数据
     const data = await post(giftUpdTime);
 
-    console.log(pl, data.content.liveList, data.content.next);
-
     // 更新列表
     this.props.action.playBackList({
       playBackList: pl.concat(data.content.liveList),
@@ -310,9 +312,6 @@ class Index extends Component {
             >
               刷新列表
             </Button>
-            <Link to="/PlayBackDownload/List">
-              <Button className={ publicStyle.ml10 } icon="bars">下载列表</Button>
-            </Link>
             <Link className={ publicStyle.ml10 } to="/">
               <Button type="danger" icon="poweroff">返回</Button>
             </Link>
