@@ -64,6 +64,6 @@ module.exports = {
   },
   html: [
     { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['videoPlay'] },
-    { template: path.join(__dirname, 'src/modules/VideoPlay/videoPlay.pug'), excludeChunks: ['app'] }
+    { template: path.join(__dirname, 'src/modules/VideoPlay/videoPlay.pug'), excludeChunks: ['index'] }
   ]
 };
