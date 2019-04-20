@@ -188,7 +188,6 @@ class Index extends Component {
 
   // 下载
   async handleDownloadClick(item, event) {
-    const urlInfo = url.parse(item.streamPath);
     const title = '【口袋48录播】' + '_' + item.title
                 + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
                 + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')

@@ -225,19 +225,20 @@ class Index extends Component {
     if (liveInfo.status === 200) {
       const child = child_process.spawn(option.ffmpeg, [
         '-i',
-        `${ liveInfo.content.playStreamPath }`,
+        liveInfo.content.playStreamPath,
         '-c',
         'copy',
         `${ option.output }/${ title }.flv`
       ]);
-      const { downloadList, liveCatch, liveList } = this.props;
+
+      const { liveCatch, liveList } = this.props;
 
       child.stdout.on('data', child_process_stdout);
       child.stderr.on('data', child_process_stderr);
       child.on('close', child_process_exit);
       child.on('error', child_process_error);
 
-      downloadList.set(item.liveId, { child, item });
+      liveCatch.set(item.liveId, { child, item });
 
       this.props.action.liveChange({
         map: liveCatch,
@@ -413,9 +414,9 @@ class Index extends Component {
                 <Button icon="setting" disabled={ this.props.autoRecording }>自动录制配置</Button>
               </Link>
               <p className={ style.tishi }>
-                友情提示：为了小偶像着想，避免留下黑历史，请在录制完直播后审核一下再上传，
+                友情提示：为了小偶像着想，避免留下黑历史，请在录制完直播后审核一下再上传，避免出现不文明、色情、政治等相关内容，被人抓住把柄。
                 <br />
-                避免出现不文明、色情、政治等相关内容，被人抓住把柄。
+                在录制直播过程中，如果发现录的视频没有声音和画面，那么说明直播有问题，无法使用ffmpeg下载。
               </p>
             </div>
             <div className={ publicStyle.fr }>

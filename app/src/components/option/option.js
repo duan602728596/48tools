@@ -59,9 +59,7 @@ const option = {
     }
   },
   // ffmpeg
-  ffmpeg: process.env.NODE_ENV === 'development'
-    ? '/Users/duanhaochen/Documents/工程/ffmpeg' // debug
-    : `${ execPath }/dependent/ffmpeg/ffmpeg`,
+  ffmpeg: '/Users/duanhaochen/Documents/工程/ffmpeg/ffmpeg', // `${ execPath }/dependent/ffmpeg/ffmpeg`,
   output: (() => {
     const outputPathFile = do {
       if (type === 'Darwin') {
