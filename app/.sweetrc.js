@@ -56,7 +56,7 @@ module.exports = {
     modules: false,
     modifyVars: {
       // https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
-      '@primary-color': '#f5222d',
+      '@primary-color': '#eb2f96',
       '@layout-body-background': '#fff',
       '@layout-header-background': '@primary-color'
     },
