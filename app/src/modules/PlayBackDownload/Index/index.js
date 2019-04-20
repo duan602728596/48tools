@@ -7,8 +7,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Tag, Popconfirm } from 'antd';
 import classNames from 'classnames';
-import { playBackList } from '../store/index';
-import { downloadList } from '../store/reducer';
+import { downloadList, playBackList } from '../store/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import post, { getLiveInfo } from '../../../components/post/post';
@@ -16,8 +15,10 @@ import { time } from '../../../utils';
 import StreamPath from '../../../components/post/StreamPath';
 import { child_process_error, child_process_exit, child_process_stderr, child_process_stdout } from './child_process';
 import option from '../../../components/option/option';
-const url = global.require('url');
 const child_process = global.require('child_process');
+const fs = global.require('fs');
+const url = global.require('url');
+const request = global.require('request');
 
 /**
  * 搜索的过滤函数
@@ -45,18 +46,16 @@ function filter(array, keyword, from, to) {
 }
 
 /* 初始化数据 */
-const getIndex = ($$state) => $$state.has('playBackDownload')
-  ? $$state.get('playBackDownload').get('index') : null;
 const getState = ($$state) => $$state.has('playBackDownload')
   ? $$state.get('playBackDownload') : null;
 
 const state = createStructuredSelector({
   playBackList: createSelector( // 当前录播
-    getIndex,
+    getState,
     ($$data) => $$data !== null && $$data.has('playBackList') ? $$data.get('playBackList').toJS() : []
   ),
   giftUpdTime: createSelector( // 加载时间戳
-    getIndex,
+    getState,
     ($$data) => $$data !== null && $$data.has('giftUpdTime') ? $$data.get('giftUpdTime') : 0
   ),
   downloadList: createSelector( // 下载列表
@@ -186,34 +185,88 @@ class Index extends Component {
     });
   }
 
+  // 格式化m3u8中的ts地址
+  formatTsUrl(data) {
+    const strArr = data.split('\n');
+    const newStrArr = [];
+
+    for (const item of strArr) {
+      if (!/^#/.test(item)) {
+        const { pathname } = url.parse(item);
+
+        if (/\.ts$/.test(pathname)) {
+          newStrArr.push(`http://cychengyuan-vod.48.cn${ item }`);
+        } else {
+          newStrArr.push(item);
+        }
+      } else {
+        newStrArr.push(item);
+      }
+    }
+
+    return newStrArr.join('\n');
+  }
+
+  // 下载m3u8文件
+  downloadM3u8(m3u8, title) {
+    return new Promise((resolve, reject) => {
+      request({
+        uri: m3u8
+      }, (err, res, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          const downloadFile = `${ option.output }/${ title }.m3u8`;
+
+          fs.writeFile(downloadFile, this.formatTsUrl(data.toString()), (err2) => {
+            if (err2) {
+              reject(err2);
+            } else {
+              resolve(downloadFile);
+            }
+          });
+        }
+      });
+    });
+  }
+
   // 下载
   async handleDownloadClick(item, event) {
-    const title = '【口袋48录播】' + '_' + item.title
-                + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
-                + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
-                + '_' + item.liveId;
-    const liveInfo = await getLiveInfo(item.liveId);
+    try {
+      const title = '【口袋48录播】' + '_' + item.title
+        + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
+        + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
+        + '_' + item.liveId;
+      const liveInfo = await getLiveInfo(item.liveId);
 
-    if (liveInfo.status === 200) {
-      const child = child_process.spawn(option.ffmpeg, [
-        '-i',
-        `${ liveInfo.content.playStreamPath }`,
-        '-c',
-        'copy',
-        `${ option.output }/${ title }.flv`
-      ]);
-      const { playBackList, giftUpdTime, downloadList } = this.props;
+      if (liveInfo.status === 200) {
+        const m3u8 = await this.downloadM3u8(liveInfo.content.playStreamPath, title);
+        const child = child_process.spawn(option.ffmpeg, [
+          '-protocol_whitelist',
+          'file,http,https,tcp,tls',
+          '-i',
+          `${ m3u8 }`,
+          '-c',
+          'copy',
+          '-f',
+          'mp4',
+          `${ option.output }/${ title }.mp4`
+        ]);
+        const { playBackList, giftUpdTime, downloadList } = this.props;
 
-      child.stdout.on('data', child_process_stdout);
-      child.stderr.on('data', child_process_stderr);
-      child.on('close', child_process_exit);
-      child.on('error', child_process_error);
+        child.stdout.on('data', child_process_stdout);
+        child.stderr.on('data', child_process_stderr);
+        child.on('close', child_process_exit);
+        child.on('error', child_process_error);
 
-      downloadList.set(item.liveId, { child, item });
-      this.props.action.playBackList({
-        giftUpdTime,
-        playBackList
-      });
+        downloadList.set(item.liveId, { child, item });
+        this.props.action.playBackList({
+          giftUpdTime,
+          playBackList
+        });
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -297,6 +350,11 @@ class Index extends Component {
             />
             <Button className={ publicStyle.mr10 } icon="search" onClick={ this.handleSearchInputClick.bind(this) }>搜索</Button>
             <Button icon="close" onClick={ this.handleResetClick.bind(this) }>重置</Button>
+            <p className={ style.tishi }>
+              如果下载后的视频出现播放不出来的情况，请换个播放器试试。
+              <br />
+              如果出现下载卡死的情况，说明视频源有问题。
+            </p>
           </div>
           <div className={ publicStyle.fr }>
             <Button type="primary"

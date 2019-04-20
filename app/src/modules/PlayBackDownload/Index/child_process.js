@@ -1,10 +1,11 @@
 import store from '../../../store/store';
-import { downloadList } from '../store/reducer';
+import { renderList } from '../store/reducer';
 
 // 子进程关闭
 function child_process_cb() {
   const s = store.getState().get('playBackDownload');
   const m = s.get('downloadList');
+  const playBackList = s.get('playBackList');
 
   m.forEach((value, key) => {
     if (value.child.exitCode !== null || value.child.killed) {
@@ -13,8 +14,9 @@ function child_process_cb() {
   });
 
   store.dispatch({
-    type: downloadList.toString(),
+    type: renderList.toString(),
     payload: {
+      playBackList: [...playBackList],
       downloadList: m
     }
   });
