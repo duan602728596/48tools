@@ -6,7 +6,7 @@ import { Card, Tag } from 'antd';
 import flvjs from 'flv.js';
 import style from './style.sass';
 const queryString = global.require('querystring');
-const path = global.require('path');
+const url = global.require('url');
 
 class Index extends Component {
   constructor() {
@@ -18,14 +18,16 @@ class Index extends Component {
   }
 
   componentDidMount() {
-    const type = path.parse(this.item.streamPath).ext.replace(/^\.{1}/, '');
+    const { streamPath } = this.item;
+    const info = url.parse(streamPath);
 
     // 初始化flv.js
     if (flvjs.isSupported()) {
       const videoElement = document.getElementById('video-element');
       const flvPlayer = flvjs.createPlayer({
-        type,
-        url: this.item.streamPath
+        type: /mp4/i.test(info.hostname) ? 'mp4' : 'flv',
+        isLive: true,
+        url: streamPath
       });
 
       flvPlayer.attachMediaElement(videoElement);
