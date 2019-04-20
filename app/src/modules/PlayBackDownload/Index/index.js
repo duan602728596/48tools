@@ -126,7 +126,7 @@ class Index extends Component {
         title: '直播地址',
         dataIndex: 'liveId',
         key: 'liveId',
-        width: '30%',
+        width: '35%',
         render: (value, item, index) => {
           const isZhibo = item.liveType === 1;
 
@@ -137,7 +137,7 @@ class Index extends Component {
         title: '直播人',
         dataIndex: 'userInfo.nickname',
         key: 'userInfo.nickname',
-        width: '10%'
+        width: '15%'
       },
       {
         title: '开始时间',
@@ -149,7 +149,7 @@ class Index extends Component {
       {
         title: '操作',
         key: 'handle',
-        width: '25%',
+        width: '15%',
         render: (value, item, index) => {
           return (
             <Button key="download"
@@ -264,6 +264,8 @@ class Index extends Component {
 
     // 获取数据
     const data = await post(giftUpdTime);
+
+    console.log(pl, data.content.liveList, data.content.next);
 
     // 更新列表
     this.props.action.playBackList({

@@ -45,14 +45,14 @@ export function getLiveInfo(liveId) {
 
 /**
  * 获取直播列表
- * @param { number } number
+ * @param { number } next
  * @param { boolean } inLive
  */
-function post(number = 0, inLive) {
+function post(next = 0, inLive = false) {
   return new Promise((resolve, reject) => {
     const body = {
       debug: true,
-      next: 0
+      next
     };
 
     if (inLive) {
