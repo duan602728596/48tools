@@ -52,11 +52,13 @@ function post(number = 0, inLive) {
   return new Promise((resolve, reject) => {
     const body = {
       debug: true,
-      next: 0,
-      record: false
+      next: 0
     };
 
-    if (inLive) body.groupId = 0;
+    if (inLive) {
+      body.groupId = 0;
+      body.record = false;
+    }
 
     request({
       uri: 'https://pocketapi.48.cn/live/api/v1/live/getLiveList',

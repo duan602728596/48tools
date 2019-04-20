@@ -15,7 +15,7 @@ import { getAutoRecordingOption } from '../store/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import style from './style.sass';
 import option from '../../../components/option/option';
-import StreamPath from './StreamPath';
+import StreamPath from '../../../components/post/StreamPath';
 const child_process = global.require('child_process');
 const querystring = global.require('querystring');
 const gui = global.require('nw.gui');
@@ -97,9 +97,11 @@ class Index extends Component {
         title: '直播地址',
         dataIndex: 'liveId',
         key: 'liveId',
-        width: '35%',
+        width: '30%',
         render: (value, item, index) => {
-          return <StreamPath liveId={ value } />;
+          const isZhibo = item.liveType === 1;
+
+          return <StreamPath key="streamPath" liveId={ value } isZhibo={ isZhibo } />;
         }
       },
       {
@@ -134,7 +136,7 @@ class Index extends Component {
         title: '操作',
         dataIndex: 'liveId',
         key: 'handle',
-        width: '20%',
+        width: '25%',
         render: (value, item, index) => {
           let btn = null;
 
@@ -288,7 +290,7 @@ class Index extends Component {
 
     // 获取列表
     const _this = this;
-    const data = await post(0);
+    const data = await post(0, true);
 
     if (data.status === 200) {
       message.success('请求成功');
@@ -365,7 +367,7 @@ class Index extends Component {
     this.setState({
       loading: true
     });
-    const data = await post(0);
+    const data = await post(0, true);
 
     if (data.status === 200) {
       message.success('请求成功');

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getLiveInfo } from '../../../components/post/post';
+import { Tag } from 'antd';
+import { getLiveInfo } from './post';
 
+/* streamPath地址渲染 */
 class StreamPath extends Component {
   static propTypes = {
-    liveId: PropTypes.string
+    liveId: PropTypes.string,
+    isZhibo: PropTypes.bool
   };
 
   constructor() {
@@ -38,7 +41,14 @@ class StreamPath extends Component {
   }
 
   render() {
-    return this.state.streamPath;
+    const { isZhibo, liveId } = this.props;
+
+    return [
+      <div key="tag">
+        <Tag color={ isZhibo ? 'magenta' : 'geekblue' }>{ liveId }</Tag>
+      </div>,
+      this.state.streamPath
+    ];
   }
 }
 

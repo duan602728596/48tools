@@ -13,7 +13,7 @@ async function child_process_cb() {
     }
   });
 
-  const data = await post(0);
+  const data = await post(0, true);
 
   store.dispatch({
     type: liveChange.toString(),

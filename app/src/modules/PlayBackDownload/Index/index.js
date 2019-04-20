@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Table, Affix, message, Input } from 'antd';
+import { Button, Table, Affix, message, Input, Tag } from 'antd';
 import classNames from 'classnames';
 import { playBackList } from '../store/index';
 import { downloadList, fnReady } from '../store/reducer';
@@ -14,6 +14,7 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import post from '../../../components/post/post';
 import { time } from '../../../utils';
 import { handleChromeDownloadsCreated, handleChromeDownloadsChanged } from '../chromeFunction';
+import StreamPath from '../../../components/post/StreamPath';
 const url = global.require('url');
 const path = global.require('path');
 
@@ -106,53 +107,58 @@ class Index extends Component {
   columus() {
     const columns = [
       {
-        title: '直播ID',
-        dataIndex: 'liveId',
-        key: 'liveId',
-        width: '17%'
-      },
-      {
-        title: '直播间',
+        title: '直播标题',
         dataIndex: 'title',
         key: 'title',
-        width: '13%'
+        width: '20%',
+        render: (value, item, index) => {
+          const isZhibo = item.liveType === 1;
+
+          return [
+            <Tag key="liveType" className={ style.tag } color={ isZhibo ? '#f50' : '#2db7f5' }>
+              { isZhibo ? '直播' : '电台' }
+            </Tag>,
+            value
+          ];
+        }
       },
       {
-        title: '直播标题',
-        dataIndex: 'subTitle',
-        key: 'subTitle',
-        width: '35%'
+        title: '直播地址',
+        dataIndex: 'liveId',
+        key: 'liveId',
+        width: '30%',
+        render: (value, item, index) => {
+          const isZhibo = item.liveType === 1;
+
+          return <StreamPath key="streamPath" liveId={ value } isZhibo={ isZhibo } />;
+        }
+      },
+      {
+        title: '直播人',
+        dataIndex: 'userInfo.nickname',
+        key: 'userInfo.nickname',
+        width: '10%'
       },
       {
         title: '开始时间',
-        dataIndex: 'startTime',
-        key: 'startTime',
+        dataIndex: 'ctime',
+        key: 'ctime',
         width: '15%',
-        render: (value, item) => time('YY-MM-DD hh:mm:ss', value)
+        render: (value, item) => time('YY-MM-DD hh:mm:ss', Number(value))
       },
       {
         title: '操作',
         key: 'handle',
-        width: '30%',
-        render: (value, item) => {
-          return [
-            <Link key="link" to={{
-              pathname: '/PlayBackDownload/Detail',
-              query: {
-                detail: item,
-                current: this.state.current
-              }
-            }}>
-              <Button className={ publicStyle.ml10 } icon="eye">查看</Button>
-            </Link>,
+        width: '25%',
+        render: (value, item, index) => {
+          return (
             <Button key="download"
-              className={ publicStyle.ml10 }
               icon="fork"
               onClick={ this.handleDownloadClick.bind(this, item) }
             >
               下载
             </Button>
-          ];
+          );
         }
       }
     ];
@@ -258,12 +264,11 @@ class Index extends Component {
 
     // 获取数据
     const data = await post(giftUpdTime);
-    const data2 = JSON.parse(data);
 
     // 更新列表
     this.props.action.playBackList({
-      playBackList: pl.concat(data2.content.reviewList),
-      giftUpdTime: data2.content.reviewList[data2.content.reviewList.length - 1].startTime
+      playBackList: pl.concat(data.content.liveList),
+      giftUpdTime: Number(data.content.next)
     });
 
     this.setState({
@@ -273,6 +278,9 @@ class Index extends Component {
     message.success('录播加载成功！');
   }
   render() {
+    const { playBackList } = this.props;
+    const { loading, keyword } = this.state;
+
     return [
       /* 功能区 */
       <Affix key="affix" className={ publicStyle.affix }>
@@ -312,11 +320,11 @@ class Index extends Component {
       </Affix>,
       /* 显示列表 */
       <div key="tableBox" className={ publicStyle.tableBox }>
-        <Table loading={ this.state.loading }
+        <Table loading={ loading }
           bordered={ true }
           columns={ this.columus() }
           rowKey={ (item) => item.liveId }
-          dataSource={ filter(this.props.playBackList, this.state.keyword, 'title', 0, this.props.playBackList.length - 1) }
+          dataSource={ filter(playBackList, keyword, 'title', 0, playBackList.length - 1) }
           pagination={{
             pageSize: 20,
             showQuickJumper: true,
