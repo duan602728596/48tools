@@ -50,6 +50,7 @@
     "commitizen": "^3.1.0",
     "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",
+    "es-module-path-case-check": "^1.4.0",
     "eslint": "^5.16.0",
     "eslint-plugin-react": "^7.12.4",
     "flv.js": "^1.5.0",
