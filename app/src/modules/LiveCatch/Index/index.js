@@ -259,7 +259,7 @@ class Index extends Component {
    * 使用Promise进行了包装
    */
   async recordingPromise(item) {
-    const title = '【口袋48直播】' + '_' + item.title
+    const title = '【口袋48直播】' + '_' + item.title + '_' + item.userInfo.nickname
       + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
       + '_录制时间_' + time('YY-MM-DD-hh-mm-ss')
       + '_' + item.liveId;
