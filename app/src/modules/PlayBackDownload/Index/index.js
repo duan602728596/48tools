@@ -233,10 +233,10 @@ class Index extends Component {
   // 下载
   async handleDownloadClick(item, event) {
     try {
-      const title = '【口袋48录播】' + '_' + item.userInfo.nickname
-        + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
-        + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
-        + '_' + item.liveId;
+      const isZhibo = item.liveType === 1;
+      const title = `【口袋48${ isZhibo ? '直播' : '电台' }】_${ item.userInfo.nickname }`
+        + `_直播时间_${ time('YY-MM-DD-hh-mm-ss', Number(item.ctime)) }`
+        + `_录制时间_${ time('YY-MM-DD-hh-mm-ss') }_${ item.liveId }`;
       const liveInfo = await getLiveInfo(item.liveId);
 
       if (liveInfo.status === 200) {
