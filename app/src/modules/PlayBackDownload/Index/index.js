@@ -233,7 +233,7 @@ class Index extends Component {
   // 下载
   async handleDownloadClick(item, event) {
     try {
-      const title = '【口袋48录播】' + '_' + item.title + '_' + item.userInfo.nickname
+      const title = '【口袋48录播】' + '_' + item.userInfo.nickname
         + '_直播时间_' + time('YY-MM-DD-hh-mm-ss', Number(item.ctime))
         + '_下载时间_' + time('YY-MM-DD-hh-mm-ss')
         + '_' + item.liveId;
