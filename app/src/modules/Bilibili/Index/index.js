@@ -9,11 +9,11 @@ import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import classNames from 'classnames';
 import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../reducer/index';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
-import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
 const child_process = global.require('child_process');
+const request = global.require('request');
 
 /* 初始化数据 */
 const getIndex = ($$state) => $$state.has('bilibili')
@@ -119,10 +119,33 @@ class Index extends Component {
     });
   }
 
+  getUrl(roomid) {
+    return new Promise((resolve, reject) => {
+      request({
+        uri: `https://api.live.bilibili.com/api/playurl?cid=${ roomid }&otype=json&quality=0&platform=web`,
+        method: 'GET',
+        json: true,
+        headers: {
+          Host: 'live.bilibili.com',
+          'X-Requested-With': 'ShockwaveFlash/25.0.0.148',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      + 'Chrome/58.0.3029.81 Safari/537.36'
+        }
+      }, function(err, res, data) {
+        if (err) {
+          console.error(err);
+        } else {
+          resolve(data);
+        }
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
   // 录制
   async handleCatchClick(item, event) {
-    const url = await getUrl(item.roomid);
-    const urlList = JSON.parse(url);
+    const urlList = await this.getUrl(item.roomid);
     const title = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
     const child = child_process.spawn(option.ffmpeg, [
       '-i',
