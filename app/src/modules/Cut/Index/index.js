@@ -9,7 +9,7 @@ import { Button, Table, Affix, message, Input, Popconfirm, Form } from 'antd';
 import classNames from 'classnames';
 import $ from 'jquery';
 import { time, patchZero } from '../../../utils';
-import { cutList, taskChange } from '../store/reducer';
+import { cutList, taskChange } from '../reducer/reducer';
 import computingTime from './computingTime';
 import option from '../../../components/option/option';
 import style from './style.sass';
@@ -40,8 +40,8 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     cutList,
     taskChange
@@ -49,7 +49,7 @@ const dispatch = (dispatch) => ({
 });
 
 @Form.create()
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     cutList: PropTypes.array,

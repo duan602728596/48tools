@@ -7,8 +7,8 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Select } from 'antd';
 import classNames from 'classnames';
-import { liveList, liveListInit, changeGroup } from '../store/index';
-import { downloadList } from '../store/reducer';
+import { liveList, liveListInit, changeGroup } from '../reducer/index';
+import { downloadList } from '../reducer/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { loadList, queryHtml, getM3U8, downloadM3U8, saveM3U8 } from './loadList';
@@ -44,8 +44,8 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     liveList,
     liveListInit,
@@ -54,7 +54,7 @@ const dispatch = (dispatch) => ({
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     liveList: PropTypes.array,

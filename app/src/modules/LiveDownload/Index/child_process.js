@@ -1,5 +1,5 @@
 import store from '../../../store/store';
-import { downloadList } from '../store/reducer';
+import { downloadList } from '../reducer/reducer';
 
 // 子进程关闭
 function child_process_cb() {

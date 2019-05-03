@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Icon, Checkbox, Switch } from 'antd';
 import style from './style.sass';
-import { test } from '../store/reducer';
+import { test } from '../reducer/reducer';
 import '../../../components/indexedDB/initIndexedDB';
 import { handleOpenBrowser } from '../../../utils';
 import Navs from './Navs';
@@ -40,14 +40,14 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     test
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     test: PropTypes.bool,

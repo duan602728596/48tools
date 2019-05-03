@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import $ from 'jquery';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import style from './style.sass';
-import { avList } from '../store/reducer';
+import { avList } from '../reducer/reducer';
 import option from '../../../components/option/option';
 const cheerio = global.require('cheerio');
 const request = global.require('request');
@@ -24,14 +24,14 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     avList
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     avList: PropTypes.array,

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux-immutable';
-import indexReducer from '../modules/Index/store/reducer';
+import indexReducer from '../modules/Index/reducer/reducer';
 
 /* reducers */
 const reducers = {

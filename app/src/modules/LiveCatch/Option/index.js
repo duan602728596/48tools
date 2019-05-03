@@ -7,13 +7,13 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Input, Button, message, Spin, Form } from 'antd';
 import style from './style.sass';
-import { getAutoRecordingOption, addAutoRecordingOption, putAutoRecordingOption } from '../store/reducer';
+import { getAutoRecordingOption, addAutoRecordingOption, putAutoRecordingOption } from '../reducer/reducer';
 
 /* 初始化数据 */
 const state = createStructuredSelector({});
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     getAutoRecordingOption,
     addAutoRecordingOption,
@@ -22,7 +22,7 @@ const dispatch = (dispatch) => ({
 });
 
 @Form.create()
-@connect(state, dispatch)
+@connect(state, actions)
 class LiveCatchOption extends Component {
   static propTypes = {
     action: PropTypes.objectOf(PropTypes.func),

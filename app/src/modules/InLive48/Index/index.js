@@ -11,7 +11,7 @@ import $ from 'jquery';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import option from '../../../components/option/option';
 import style from './style.sass';
-import { inLiveList } from '../store/reducer';
+import { inLiveList } from '../reducer/reducer';
 import { time } from '../../../utils';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 const child_process = global.require('child_process');
@@ -33,14 +33,14 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     inLiveList
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     inLiveList: PropTypes.array,

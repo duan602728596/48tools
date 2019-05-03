@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import QueueAnim from 'rc-queue-anim';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
-import { downloadList } from '../store/reducer';
+import { downloadList } from '../reducer/reducer';
 
 /* 初始化数据 */
 const state = createStructuredSelector({
@@ -20,14 +20,14 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     downloadList
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class List extends Component {
   static propTypes = {
     downloadList: PropTypes.array,

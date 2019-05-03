@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 import store from '../../../store/store';
-import { catching } from '../store/index';
+import { catching } from '../reducer/index';
 
 // 子进程关闭
 function child_process_cb() {

@@ -7,7 +7,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm } from 'antd';
 import classNames from 'classnames';
-import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../store/index';
+import { cursorBilibiliLiveRoom, deleteBilibiliLiveRoom, catching } from '../reducer/index';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import getUrl from './getUrl';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
@@ -30,8 +30,8 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     cursorBilibiliLiveRoom,
     deleteBilibiliLiveRoom,
@@ -39,7 +39,7 @@ const dispatch = (dispatch) => ({
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     liveList: PropTypes.array,

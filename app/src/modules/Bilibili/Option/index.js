@@ -7,21 +7,21 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Input, Button, message, Spin, Form } from 'antd';
 import style from './style.sass';
-import { putBilibiliLiveRoom } from '../store/option';
+import { putBilibiliLiveRoom } from '../reducer/option';
 import RoomId from './RoomId';
 
 /* 初始化数据 */
 const state = createStructuredSelector({});
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     putBilibiliLiveRoom
   }, dispatch)
 });
 
 @Form.create()
-@connect(state, dispatch)
+@connect(state, actions)
 class BiliBiliOption extends Component {
   static propTypes = {
     action: PropTypes.objectOf(PropTypes.func),

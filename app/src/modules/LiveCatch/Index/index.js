@@ -7,11 +7,11 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Popconfirm, Tag } from 'antd';
 import classNames from 'classnames';
-import { liveList, liveCatch, liveChange, autoRecording } from '../store/index';
+import { liveList, liveCatch, liveChange, autoRecording } from '../reducer/index';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import post, { getLiveInfo } from '../../../components/post/post';
 import { time } from '../../../utils';
-import { getAutoRecordingOption } from '../store/reducer';
+import { getAutoRecordingOption } from '../reducer/reducer';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import style from './style.sass';
 import option from '../../../components/option/option';
@@ -39,8 +39,8 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     liveList,
     liveCatch,
@@ -50,7 +50,7 @@ const dispatch = (dispatch) => ({
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     liveList: PropTypes.array,

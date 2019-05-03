@@ -1,5 +1,5 @@
 import store from '../../../store/store';
-import { liveChange } from '../store/index';
+import { liveChange } from '../reducer/index';
 import post from '../../../components/post/post';
 
 // 子进程关闭

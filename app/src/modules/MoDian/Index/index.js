@@ -7,7 +7,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Popconfirm } from 'antd';
 import classNames from 'classnames';
-import { modianList } from '../store/reducer';
+import { modianList } from '../reducer/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { searchTitle } from './search';
@@ -21,14 +21,14 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     modianList
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     modianList: PropTypes.array,

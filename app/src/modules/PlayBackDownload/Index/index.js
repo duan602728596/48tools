@@ -7,7 +7,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Table, Affix, message, Input, Tag, Popconfirm } from 'antd';
 import classNames from 'classnames';
-import { downloadList, playBackList } from '../store/reducer';
+import { downloadList, playBackList } from '../reducer/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import post, { getLiveInfo } from '../../../components/post/post';
@@ -64,8 +64,8 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     playBackList,
     downloadList
@@ -73,7 +73,7 @@ const dispatch = (dispatch) => ({
 });
 
 @withRouter
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     playBackList: PropTypes.array,

@@ -11,7 +11,7 @@ import $ from 'jquery';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { time } from '../../../utils';
 import option, { type } from '../../../components/option/option';
-import { mergeList } from '../store/reducer';
+import { mergeList } from '../reducer/reducer';
 const fs = global.require('fs');
 const path = global.require('path');
 const child_process = global.require('child_process');
@@ -41,14 +41,14 @@ const state = createStructuredSelector({
   )
 });
 
-/* dispatch */
-const dispatch = (dispatch) => ({
+/* actions */
+const actions = (dispatch) => ({
   action: bindActionCreators({
     mergeList
   }, dispatch)
 });
 
-@connect(state, dispatch)
+@connect(state, actions)
 class Index extends Component {
   static propTypes = {
     mergeList: PropTypes.array,
