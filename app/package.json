@@ -40,6 +40,7 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "@48/modian-query-sign": "github:duan602728596/modian-query-sign",
     "@sweet/milktea": "github:duan602728596/sweet#build-milktea",
     "@sweet/milktea-cli": "github:duan602728596/sweet#build-milktea-cli",
     "@sweet/util-tools": "github:duan602728596/sweet#build-util-tools",

@@ -1,18 +1,5 @@
 import $ from 'jquery';
-const MD5 = global.require('md5.js');
-
-/**
- * 摩点请求加密方法
- * @param { string } queryStr
- */
-const P = 'das41aq6';
-
-function sign(queryStr) {
-  const signStr = new MD5().update(queryStr + '&p=' + P).digest('hex');
-  const sign = signStr.substr(5, 16);
-
-  return queryStr + `&sign=${ sign }`;
-}
+import modianQuerySign from '@48/modian-query-sign';
 
 /**
  * 获取摩点项目的相关信息
@@ -20,14 +7,19 @@ function sign(queryStr) {
  */
 export function searchTitle(modianId) {
   // 计算签名
-  const data = sign(`pro_id=${ modianId }`);
+  const data = {
+    pro_id: modianId
+  };
 
   return new Promise((resolve, reject) => {
     $.ajax({
       type: 'POST',
       url: 'https://wds.modian.com/api/project/detail',
       cache: true,
-      data,
+      data: {
+        ...data,
+        sign: modianQuerySign(data)
+      },
       dataType: 'json',
       success(data, status, xhr) {
         if (data.status !== '0') {
@@ -55,13 +47,20 @@ export function searchTitle(modianId) {
 /* 获取排行榜 */
 export function paiHang(modianid, page, type) {
   // 计算签名
-  const data = sign(`page=${ page }&pro_id=${ modianid }&type=${ type }`);
+  const data = {
+    pro_id: modianid,
+    page,
+    type
+  };
 
   return new Promise((resolve, reject) => {
     $.ajax({
       type: 'POST',
       url: 'https://wds.modian.com/api/project/rankings',
-      data,
+      data: {
+        ...data,
+        sign: modianQuerySign(data)
+      },
       dataType: 'json',
       headers: {
         'Cache-Control': 'no-cache',
