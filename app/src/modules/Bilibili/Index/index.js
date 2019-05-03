@@ -92,7 +92,13 @@ class Index extends Component {
                 </Button>
               ),
             <Popconfirm key="delete" title="确定要删除吗？" onConfirm={ this.handleDeleteClick.bind(this, item) }>
-              <Button className={ publicStyle.ml10 } type="danger" icon="close-square" disabled={ this.props.catching.has(item.roomid) }>删除</Button>
+              <Button className={ publicStyle.ml10 }
+                type="danger"
+                icon="close-square"
+                disabled={ this.props.catching.has(item.roomid) }
+              >
+                删除
+              </Button>
             </Popconfirm>
           ];
         }
