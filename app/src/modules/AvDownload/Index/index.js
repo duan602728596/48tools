@@ -143,6 +143,58 @@ class Index extends Component {
     }
   }
 
+  // 获取cid
+  getCid(number, page) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `https://www.bilibili.com/video/av${ number }/?p=${ page }`,
+        method: 'GET',
+        success(data, status, xhr) {
+          const xml = cheerio.load(data);
+          const scripts = xml('script');
+          let infor = null;
+
+          for (let i = 0, j = scripts.length; i < j; i++) {
+            const children = scripts[i].children;
+
+            // 获取 window.__INITIAL_STATE__ 信息
+            if (children.length > 0 && /^window\._{2}INITIAL_STATE_{2}\s*=\s*.+$/.test(children[0].data)) {
+              const str = children[0].data.replace(/window\._{2}INITIAL_STATE_{2}\s*=\s*/, '')
+                .replace(/;\(function\(\){var s;.+$/i, '');
+
+              infor = JSON.parse(str);
+              break;
+            }
+          }
+          resolve(infor?.videoData?.pages[page - 1].cid || null);
+        },
+        error(err) {
+          reject(err);
+        }
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
+  // 获取m4s的真正下载地址
+  getM4sUrl(number, cid) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `https://api.bilibili.com/x/player/playurl?avid=${ number }&cid=${ cid }&otype=json`,
+        method: 'GET',
+        success(data, status, xhr) {
+          resolve(data?.data?.durl);
+        },
+        error(err) {
+          reject(err);
+        }
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
   // 获取下载地址
   getUrl(number, page) {
     return new Promise((resolve, reject) => {
@@ -217,8 +269,23 @@ class Index extends Component {
         page = 1;
       }
 
-      const durl = await this.getUrl(number, page);
+      const cid = await this.getCid(number, page);
 
+      if (!cid) {
+        message.info('视频不存在！');
+
+        return void 0;
+      }
+
+      // 请求新的m4s的接口
+      let durl = await this.getM4sUrl(number, cid);
+
+      // 如果新街口没有数据，就用旧的接口
+      if (durl.length === 0) {
+        durl = await this.getUrl(number, page);
+      }
+
+      // 判断视频是否存在
       if (durl.length === 0) {
         message.info('视频不存在！');
 
@@ -234,7 +301,9 @@ class Index extends Component {
           number,
           page,
           index: i,
-          uri: item.url,
+          uri: item.backup_url && item.backup_url.length > 0
+            ? item.backup_url[item.backup_url.length - 1]
+            : item.url,
           time: new Date().getTime(),
           status: 0
         });
