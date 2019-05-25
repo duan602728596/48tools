@@ -11,13 +11,13 @@ yarn-error.log
 .idea
 app/.idea
 
-# webpack
-.happypack
-.dll
+# build
 build
+buildServer
 
-# babel
+# cache
+.dll
 .babelCache
-
-# terser
 .terserCache
+.logs
+.webpackCache
