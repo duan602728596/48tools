@@ -11,10 +11,10 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import style from './style.sass';
 import { avList } from '../reducer/reducer';
 import option from '../../../components/option/option';
-const cheerio = global.require('cheerio');
-const request = global.require('request');
 const fs = global.require('fs');
 const path = global.require('path');
+const cheerio = global.require('cheerio');
+const request = global.require('request');
 
 /* 初始化数据 */
 const state = createStructuredSelector({

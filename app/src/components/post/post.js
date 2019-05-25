@@ -3,6 +3,7 @@
  * url   : https://pocketapi.48.cn/live/api/v1/live/getLiveList
  * method: POST
  */
+import { getProxyIp } from '../proxy/index';
 const request = global.require('request');
 
 function createHeaders() {
@@ -32,7 +33,9 @@ export function getLiveInfo(liveId) {
       method: 'POST',
       headers: createHeaders(),
       json: true,
-      body: { liveId }
+      body: { liveId },
+      timeout: 30000,
+      proxy: getProxyIp()
     }, function(err, res, data) {
       if (err) {
         reject(err);
@@ -65,7 +68,9 @@ function post(next = 0, inLive = false) {
       method: 'POST',
       headers: createHeaders(),
       json: true,
-      body
+      body,
+      timeout: 30000,
+      proxy: getProxyIp()
     }, function(err, res, data) {
       if (err) {
         reject(err);

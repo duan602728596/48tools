@@ -9,6 +9,7 @@ import { test } from '../reducer/reducer';
 import '../../../components/indexedDB/initIndexedDB';
 import { handleOpenBrowser } from '../../../utils';
 import Navs from './Navs';
+import Proxy from '../../../components/proxy/Proxy';
 
 /* 升级提示组件 */
 function UpgradeReminder(props) {
@@ -26,8 +27,12 @@ function UpgradeReminder(props) {
 
   return (
     <div className={ style.update }>
-      <Switch checked={ isUpgradeReminder } onChange={ handleUpgradeReminderChange } />
-      <label className={ style.updateLabel }>软件升级提醒</label>
+      <div className={ style.mb10 }>
+        <Switch checked={ isUpgradeReminder } onChange={ handleUpgradeReminderChange } />
+        <label className={ style.updateLabel }>软件升级提醒</label>
+      </div>
+      {/* 配置代理 */}
+      <Proxy />
     </div>
   );
 }
