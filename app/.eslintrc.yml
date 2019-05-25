@@ -53,7 +53,9 @@ rules:
   no-empty-function: error                            # 禁止出现空函数
   no-eval: error                                      # 禁用 eval()
   no-implied-eval: error                              # 禁用隐式的eval()
-  no-multi-spaces: error                              # 禁止出现多个空格
+  no-multi-spaces:                                    # 禁止出现多个空格
+    - error
+    - ignoreEOLComments: true
   no-new-func: error                                  # 禁止对 Function 对象使用 new 操作符
   no-new-wrappers: error                              # 禁止对 String，Number 和 Boolean 使用 new 操作符
   no-param-reassign: error                            # 禁止对 function 的参数进行重新赋值

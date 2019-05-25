@@ -4,5 +4,9 @@ linters:
 ignore:
   - node_modules
   - .dll
+  - .babelCache
+  - .terserCache
+  - .logs
+  - .webpackCache
   - build
   - buildServer

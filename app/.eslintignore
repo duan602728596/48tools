@@ -7,3 +7,7 @@ buildServer
 
 # cache
 .dll
+.babelCache
+.terserCache
+.logs
+.webpackCache
