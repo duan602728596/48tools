@@ -41,7 +41,7 @@ module.exports = {
         loader: 'file-loader',
         options: {
           name: isDevelopment ? '[name].[hash:5].[ext]' : '[hash:5].[ext]',
-          outputPath: 'script/'
+          outputPath: 'scripts/'
         }
       }]
     }
