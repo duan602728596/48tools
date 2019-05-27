@@ -6,19 +6,35 @@
 import { getProxyIp } from '../proxy/index';
 const request = global.require('request');
 
+function rStr(len) {
+  const str = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890';
+  let result = '';
+
+  for (let i = 0; i < len; i++) {
+    const rIndex = Math.floor(Math.random() * str.length);
+
+    result += str[rIndex];
+  }
+
+  return result;
+}
+
 function createHeaders() {
   return {
     'Content-Type': 'application/json;charset=utf-8',
     appInfo: JSON.stringify({
       vendor: 'apple',
-      deviceId: `${ Math.floor(Math.random() * (10 ** 10)) }`,
-      appVersion: '6.0.0',
-      appBuild: '190409',
+      deviceId: `${ rStr(8) }-${ rStr(4) }-${ rStr(4) }-${ rStr(4) }-${ rStr(12) }`,
+      appVersion: '6.0.1',
+      appBuild: '190420',
       osVersion: '11.4.1',
       osType: 'ios',
       deviceName: 'iPhone 6s',
       os: 'ios'
-    })
+    }),
+    'User-Agent': 'PocketFans201807/6.0.1 (iPhone; iOS 11.4.1; Scale/2.00)',
+    'Accept-Language': 'zh-Hans-AW;q=1',
+    Host: 'pocketapi.48.cn'
   };
 }
 
