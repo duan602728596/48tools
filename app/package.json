@@ -18,7 +18,7 @@
   "main": "./build/index.html",
   "nodejs": true,
   "window": {
-    "title": "48工具（v2.0.1）",
+    "title": "48工具（v2.1.0）",
     "position": "center",
     "toolbar": true,
     "frame": true,
