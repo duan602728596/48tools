@@ -40,7 +40,7 @@ module.exports = {
       use: [{
         loader: 'file-loader',
         options: {
-          name: isDevelopment ? '[name].[hash:5].[ext]' : '[hash:5].[ext]',
+          name: isDevelopment ? '[name]_[hash:5].[ext]' : '[hash:15].[ext]',
           outputPath: 'scripts/'
         }
       }]
