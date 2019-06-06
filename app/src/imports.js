@@ -2,7 +2,7 @@
 
 if (process.env.NODE_ENV === 'development') {
   module.exports = {
-    dll: require('../.dll/dll')
+    dll: require('../.sweet/dll/dll')
   };
 } else {
   module.exports = {};

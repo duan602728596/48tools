@@ -7,7 +7,7 @@
     "dll": "milktea dll",
     "start": "npm run clean:build && cross-env NODE_ENV=development milktea start",
     "build": "npm run clean:build && cross-env NODE_ENV=production milktea build",
-    "clean:build": "rimraf ./build",
+    "clean:build": "rimraf ./dist",
     "npm:i": "npm install --production",
     "yarn:i": "yarn install --production=true --pure-lockfile",
     "clean": "node-modules-clean --ext \".opts|.map|.ts|.yml|.png|.dot|.jpg\" --file \"test.js\"",
@@ -15,7 +15,7 @@
     "case-check": "case-check --dir=\"./src\" --css",
     "update": "milktea update"
   },
-  "main": "./build/index.html",
+  "main": "./dist/index.html",
   "nodejs": true,
   "window": {
     "title": "48工具（v2.1.0）",

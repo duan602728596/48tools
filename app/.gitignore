@@ -12,12 +12,7 @@ yarn-error.log
 app/.idea
 
 # build
-build
-buildServer
+dist
 
 # cache
-.dll
-.babelCache
-.terserCache
-.logs
-.webpackCache
+.sweet/*

@@ -3,10 +3,5 @@ linters:
   service/**/*.{js,jsx}: eslint
 ignore:
   - node_modules
-  - .dll
-  - .babelCache
-  - .terserCache
-  - .logs
-  - .webpackCache
-  - build
-  - buildServer
+  - .sweet
+  - dist

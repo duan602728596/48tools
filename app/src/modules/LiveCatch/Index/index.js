@@ -201,7 +201,7 @@ class Index extends Component {
         liveType: item.liveType
       };
 
-      const u = './build/videoPlay.html?' + querystring.stringify(qs);
+      const u = './dist/videoPlay.html?' + querystring.stringify(qs);
 
       gui.Window.open(u, {
         position: 'center',

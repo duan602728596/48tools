@@ -2,12 +2,7 @@
 node_modules
 
 # build
-build
-buildServer
+dist
 
 # cache
-.dll
-.babelCache
-.terserCache
-.logs
-.webpackCache
+.sweet/*
