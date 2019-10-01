@@ -1,10 +1,13 @@
+// eslint-disable-next-line no-use-before-define
 /**
  * 配置文件
  */
 const fs = global.require('fs');
 const path = global.require('path');
-const process = global.require('process');
+const nodeProcess = global.require('process');
 const os = global.require('os');
+
+const isDevelopment = process.env.NODE_ENV === 'development'; // 由于process模块的原因，在这里定义
 
 /**
  * 获取运行地址
@@ -17,14 +20,14 @@ export const execPath = do {
     // mac
     case 'Darwin':
       // 兼容开发环境
-      const p = process.execPath.match(/^[^\.]+\.app/);
+      const p = nodeProcess.execPath.match(/^[^\.]+\.app/);
       const p2 = p ? p[0].split(/\//) : [];
 
       ep = path.join(p2.join('/'), 'Contents');
       break;
     // win32
     default:
-      ep = path.dirname(process.execPath).replace(/\\/g, '/');
+      ep = path.dirname(nodeProcess.execPath).replace(/\\/g, '/');
       break;
   }
   ep;
@@ -59,7 +62,7 @@ const option = {
     }
   },
   // ffmpeg
-  ffmpeg: `${ execPath }/dependent/ffmpeg/ffmpeg`, // '/Users/duanhaochen/Documents/工程/ffmpeg/ffmpeg',
+  ffmpeg: isDevelopment ? 'ffmpeg' : `${ execPath }/dependent/ffmpeg/ffmpeg`,
   output: (() => {
     const outputPathFile = do {
       if (type === 'Darwin') {

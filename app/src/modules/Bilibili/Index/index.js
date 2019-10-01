@@ -12,6 +12,7 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
+
 const child_process = global.require('child_process');
 const request = global.require('request');
 
@@ -149,7 +150,7 @@ class Index extends Component {
     const title = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
     const child = child_process.spawn(option.ffmpeg, [
       '-i',
-      `${ urlList.durl[0].url }`,
+      `${ urlList.durl[urlList.durl.length - 1].url }`,
       '-c',
       'copy',
       `${ option.output }/${ title }.flv`
