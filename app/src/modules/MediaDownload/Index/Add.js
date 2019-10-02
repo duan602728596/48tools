@@ -198,7 +198,7 @@ function Add(props) {
       </Form.Item>
       <div className={ style.textRight }>
         <Link to="/">
-          <Button type="danger">返回</Button>
+          <Button className={ style.back } type="danger">返回</Button>
         </Link>
         <Button type="primary" htmlType="submit">添加</Button>
       </div>
