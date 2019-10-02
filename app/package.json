@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "fs-extra": "^8.1.0",
     "node-xlsx": "^0.14.1",
     "request": "^2.88.0"
   },
