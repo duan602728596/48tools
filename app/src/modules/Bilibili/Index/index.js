@@ -149,6 +149,8 @@ class Index extends Component {
     const urlList = await this.getUrl(item.roomid);
     const title = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
     const child = child_process.spawn(option.ffmpeg, [
+      '-user_agent',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36',
       '-i',
       `${ urlList.durl[urlList.durl.length - 1].url }`,
       '-c',

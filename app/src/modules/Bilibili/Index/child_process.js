@@ -24,11 +24,11 @@ function child_process_cb() {
 
 /* 子进程监听 */
 export function child_process_stdout(data) {
-  // console.log(data.toString());
+  console.log(data.toString());
 }
 
 export function child_process_stderr(data) {
-  // console.log(data.toString());
+  console.log(data.toString());
 }
 
 export function child_process_exit(code, data) {
