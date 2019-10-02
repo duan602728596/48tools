@@ -60,6 +60,8 @@
     "indexeddb-tools-redux": "^3.0.0",
     "jquery": "^3.4.1",
     "lint-staged": "^8.1.7",
+    "lodash-es": "^4.17.15",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "rc-queue-anim": "^1.6.12",
     "react": "^16.8.6",

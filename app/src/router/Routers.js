@@ -11,7 +11,7 @@ const MergeVideoBundle = asyncModule(() => import('../modules/MergeVideo/Layout'
 const MoDianBundle = asyncModule(() => import('../modules/MoDian/Layout'));
 const LiveDownloadBundle = asyncModule(() => import('../modules/LiveDownload/Layout'));
 const InLive48Bundle = asyncModule(() => import('../modules/InLive48/Layout'));
-const AvDownloadBundle = asyncModule(() => import('../modules/AvDownload/Layout'));
+const MediaDownloadBundle = asyncModule(() => import('../modules/MediaDownload/Layout'));
 
 /* 路由模块 */
 class Routers extends Component {
@@ -37,7 +37,7 @@ class Routers extends Component {
         {/* 公演官方直播抓取 */}
         <Route path="/InLive48" component={ InLive48Bundle } />
         {/* B站的视频下载 */}
-        <Route path="/AvDownload" component={ AvDownloadBundle } />
+        <Route path="/MediaDownload" component={ MediaDownloadBundle } />
       </Switch>
     );
   }

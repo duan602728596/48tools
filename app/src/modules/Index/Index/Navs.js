@@ -105,12 +105,12 @@ function Navs(props) {
       <Col xl={ 4 } lg={ 4 } md={ 6 } sm={ 8 } xs={ 12 }>
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
-            <Link to="/AvDownload" title="B站视频下载">
+            <Link to="/MediaDownload" title="B站视频下载">
               <img src={ require('../image/ler1.webp') } alt="B站视频下载" />
             </Link>
           </dt>
           <dd>
-            <Link to="/AvDownload">B站视频下载</Link>
+            <Link to="/MediaDownload">B站视频下载</Link>
           </dd>
         </dl>
       </Col>
