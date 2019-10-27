@@ -7,9 +7,7 @@ import modianQuerySign from '@48/modian-query-sign';
  */
 export function searchTitle(modianId) {
   // 计算签名
-  const data = {
-    pro_id: modianId
-  };
+  const data = { pro_id: modianId };
 
   return new Promise((resolve, reject) => {
     $.ajax({
@@ -44,14 +42,36 @@ export function searchTitle(modianId) {
   });
 }
 
+export function searchTitleNoIdol(modianId) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      type: 'POST',
+      url: 'http://sapi.modian.com/v45/main/productInfo',
+      cache: true,
+      data: `pro_id=${ modianId }`,
+      dataType: 'json',
+      success(data, status, xhr) {
+        const data2 = data.data.product_info;
+
+        resolve({
+          title: data2.name,                  // 标题
+          already_raised: data2.backer_money, // 已打赏金额
+          moxiId: data2.moxi_post_id
+        });
+      },
+      error(err) {
+        reject(err);
+      }
+    });
+  }).catch((err) => {
+    console.error(err);
+  });
+}
+
 /* 获取排行榜 */
 export function paiHang(modianid, page, type) {
   // 计算签名
-  const data = {
-    pro_id: modianid,
-    page,
-    type
-  };
+  const data = { pro_id: modianid, page, type };
 
   return new Promise((resolve, reject) => {
     $.ajax({

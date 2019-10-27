@@ -5,12 +5,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
-import { Button, Table, Affix, message, Input, Popconfirm } from 'antd';
+import { Button, Table, Affix, message, Input, Popconfirm, Checkbox } from 'antd';
 import classNames from 'classnames';
 import { modianList } from '../reducer/reducer';
 import style from './style.sass';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
-import { searchTitle } from './search';
+import { searchTitle, searchTitleNoIdol } from './search';
 import generatingExcel from './generatingExcel';
 
 /* 初始化数据 */
@@ -40,8 +40,10 @@ class Index extends Component {
 
     this.state = {
       btnLoading: false, // 按钮加载动画
-      modianid: '', // 摩点id
-      modiantitle: '' // 摩点标题
+      modianid: '',      // 摩点id
+      modiantitle: '',   // 摩点标题
+      noIdol: false,     // 是否为偶像应援项目
+      moxiId: ''         // moxiId
     };
   }
 
@@ -87,13 +89,15 @@ class Index extends Component {
 
   // 查询标题
   async handleSearchTitleClick(event) {
-    this.setState({
-      btnLoading: true
-    });
-    const { title } = await searchTitle(this.state.modianid);
+    this.setState({ btnLoading: true });
+
+    const { title, moxiId } = this.state.noIdol
+      ? await searchTitleNoIdol(this.state.modianid)
+      : await searchTitle(this.state.modianid);
 
     this.setState({
       modiantitle: title,
+      moxiId,
       btnLoading: false
     });
     if (!title) message.info('项目不存在！');
@@ -104,6 +108,13 @@ class Index extends Component {
     this.setState({
       modianid: event.target.value,
       modiantitle: ''
+    });
+  }
+
+  // checkbox
+  handleCheckboxChange(event) {
+    this.setState({
+      noIdol: event.target.checked
     });
   }
 
@@ -123,7 +134,9 @@ class Index extends Component {
     if (this.state.modiantitle) {
       this.props.modianList.push({
         modianid: this.state.modianid,
-        modiantitle: this.state.modiantitle
+        modiantitle: this.state.modiantitle,
+        noIdol: this.state.noIdol,
+        moxiId: this.state.moxiId
       });
 
       this.props.action.modianList({
@@ -131,7 +144,9 @@ class Index extends Component {
       });
       this.setState({
         modianid: '',
-        modiantitle: ''
+        modiantitle: '',
+        noIdol: false,
+        moxiId: ''
       });
     } else {
       message.info('项目不存在！');
@@ -168,6 +183,8 @@ class Index extends Component {
               readOnly={ true }
               value={ this.state.modiantitle }
             />
+            <Checkbox checked={ this.state.noIdol } onChange={ this.handleCheckboxChange.bind(this) } />
+            <span className={ style.noIdolText }>非偶像应援项目</span>
             <Button loading={ this.state.btnLoading }
               icon="search"
               disabled={ !/^\s*[0-9]+\s*$/.test(this.state.modianid) }

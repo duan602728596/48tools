@@ -37,29 +37,27 @@ function format(list0, list1) {
 }
 
 // 查询排行
-function paihangbang(item) {
-  return Promise.all([
+async function paihangbang(item) {
+  const result = await Promise.all([
     paiHang2(item.modianid, 1),
     paiHang2(item.modianid, 2)
-  ]).then((result) => {
-    const { data, all } = format(result[0], result[1]);
+  ]);
 
-    data.push([null], [`总金额（元）：${ all.toFixed(2) }`], [`摩点ID：${ item.modianid }`]);
-    data.unshift([item.modiantitle], [null], [
-      '序号',
-      '用户ID',
-      '昵称',
-      '金额（元）',
-      '时间（天）'
-    ]);
+  const { data, all } = format(result[0], result[1]);
 
-    return {
-      name: item.modiantitle.replace(/[/\\*\[\]?"']/g, '.'),
-      data
-    };
-  }).catch((err) => {
-    console.error(err);
-  });
+  data.push([null], [`总金额（元）：${ all.toFixed(2) }`], [`摩点ID：${ item.modianid }`]);
+  data.unshift([item.modiantitle], [null], [
+    '序号',
+    '用户ID',
+    '昵称',
+    '金额（元）',
+    '时间（天）'
+  ]);
+
+  return {
+    name: item.modiantitle.replace(/[/\\*\[\]?"']/g, '.'),
+    data
+  };
 }
 
 // 写入excel
