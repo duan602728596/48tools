@@ -1,7 +1,7 @@
 /* 生成xlsx */
 import React, { Component } from 'react';
 import { message } from 'antd';
-import { paiHang2 } from './search';
+import { paiHang2, paiHang2Noidol } from './search';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
 const fs = global.require('fs');
@@ -60,6 +60,25 @@ async function paihangbang(item) {
   };
 }
 
+async function paihangbangNoIdol(item) {
+  const result = await paiHang2Noidol(item.modianid, item.moxiId);
+  const { data, all } = format(result, []);
+
+  data.push([null], [`总金额（元）：${ all.toFixed(2) }`], [`摩点ID：${ item.modianid }`]);
+  data.unshift([item.modiantitle], [null], [
+    '序号',
+    '用户ID',
+    '昵称',
+    '金额（元）',
+    '时间（天）'
+  ]);
+
+  return {
+    name: item.modiantitle.replace(/[/\\*\[\]?"']/g, '.'),
+    data
+  };
+}
+
 // 写入excel
 function writeExcel(title, buffer) {
   const t = title.replace(/[/\\*\[\]?"']/g, '.');
@@ -85,7 +104,7 @@ async function generatingExcel(modianList, pathname) {
 
     // 计算排行榜
     modianList.map((item, index) => {
-      queue.push(paihangbang(item));
+      queue.push((item.noIdol ? paihangbangNoIdol : paihangbang)(item));
     });
 
     const result = await Promise.all(queue);

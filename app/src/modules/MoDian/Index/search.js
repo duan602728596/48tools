@@ -93,30 +93,85 @@ export function paiHang(modianid, page, type) {
         reject(err);
       }
     });
-  }).catch((err) => {
-    console.error(err);
+  });
+}
+
+export function paiHangNoIdol(modianid, moxiId, page) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      type: 'GET',
+      url: 'http://mapi.modian.com/v45/product/comment_list',
+      data: {
+        json_type: 1,
+        pro_id: modianid,
+        moxi_post_id: moxiId,
+        page_index: page * 10,
+        page_rows: 10
+      },
+      dataType: 'json',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      success(data, status, xhr) {
+        resolve(data);
+      },
+      error(err) {
+        reject(err);
+      }
+    });
   });
 }
 
 /* 摩点接口，每次只能返回二十条数据 */
-export function paiHang2(modianid, type) {
-  return new Promise(async (resolve, reject) => {
-    const _CONTINUE = true;
-    let data = [];
-    let i = 1;
+export async function paiHang2(modianid, type) {
+  const _CONTINUE = true;
+  let data = [];
+  let i = 1;
 
-    while (_CONTINUE) {
-      const rt = await paiHang(modianid, i, type);
+  while (_CONTINUE) {
+    const rt = await paiHang(modianid, i, type);
 
-      if (rt.data.length === 0) {
-        break;
-      } else {
-        data = data.concat(rt.data);
-        i += 1;
-      }
+    if (rt.data.length === 0) {
+      break;
+    } else {
+      data = data.concat(rt.data);
+      i += 1;
     }
-    resolve(data);
-  }).catch((err) => {
-    console.error(err);
-  });
+  }
+
+  return data;
+}
+
+export async function paiHang2Noidol(modianid, moxiId) {
+  const _CONTINUE = true;
+  let data = [];
+  let i = 0;
+
+  while (_CONTINUE) {
+    const rt = await paiHangNoIdol(modianid, moxiId, i);
+
+    if (rt.status === '0' && rt.data && rt.data.length > 0) {
+      const formatData = [];
+
+      for (const item of rt.data) {
+        if (item.pay_amount !== '' || item.pay_amount !== 0 || item.pay_amount !== '0') {
+          const pay_amount = Number(item.pay_amount) / 100;
+
+          formatData.push({
+            user_id: item.user_id,
+            backer_money: pay_amount,
+            nickname: item.user_info.username
+          });
+        }
+      }
+
+      data = data.concat(formatData);
+      i += 1;
+    } else {
+      break;
+    }
+  }
+
+  return data;
 }
