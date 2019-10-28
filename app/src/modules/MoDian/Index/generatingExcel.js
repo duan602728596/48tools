@@ -1,9 +1,11 @@
 /* 生成xlsx */
 import React, { Component } from 'react';
 import { message } from 'antd';
+import orderBy from 'lodash-es/orderBy';
 import { paiHang2, paiHang2Noidol } from './search';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
+
 const fs = global.require('fs');
 const xlsx = global.require('node-xlsx');
 
@@ -22,10 +24,10 @@ function format(list0, list1) {
   list0.map((item, index) => {
     all += Number(item.backer_money);
     res.push([
-      index + 1, // 序号
-      item.user_id, // user的id
-      item.nickname, // 昵称
-      item.backer_money, // 打卡金额
+      index + 1,            // 序号
+      item.user_id,         // user的id
+      item.nickname,        // 昵称
+      item.backer_money,    // 打卡金额
       l1.get(item.nickname) // 打卡时间
     ]);
   });
@@ -62,7 +64,7 @@ async function paihangbang(item) {
 
 async function paihangbangNoIdol(item) {
   const result = await paiHang2Noidol(item.modianid, item.moxiId);
-  const { data, all } = format(result, []);
+  const { data, all } = format(orderBy(result, ['backer_money'], ['desc']), []);
 
   data.push([null], [`总金额（元）：${ all.toFixed(2) }`], [`摩点ID：${ item.modianid }`]);
   data.unshift([item.modiantitle], [null], [
