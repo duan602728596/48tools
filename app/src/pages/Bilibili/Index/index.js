@@ -12,9 +12,11 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
+import { getLiveHtml } from '../services';
 
 const child_process = global.require('child_process');
 const request = global.require('request');
+const cheerio = global.require('cheerio');
 
 /* 初始化数据 */
 const getIndex = ($$state) => $$state.has('bilibili')
@@ -120,39 +122,36 @@ class Index extends Component {
     });
   }
 
-  getUrl(roomid) {
-    return new Promise((resolve, reject) => {
-      request({
-        uri: `https://api.live.bilibili.com/api/playurl?cid=${ roomid }&otype=json&quality=0&platform=web`,
-        method: 'GET',
-        json: true,
-        headers: {
-          Host: 'live.bilibili.com',
-          'X-Requested-With': 'ShockwaveFlash/25.0.0.148',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-                      + 'Chrome/58.0.3029.81 Safari/537.36'
-        }
-      }, function(err, res, data) {
-        if (err) {
-          console.error(err);
-        } else {
-          resolve(data);
-        }
-      });
-    }).catch((err) => {
-      console.error(err);
-    });
+  // 获取playInfo
+  formatPlayInfo($) {
+    const scripts = $('script');
+    let playInfo = null;
+
+    for (let i = 0, j = scripts.length; i < j; i++) {
+      const { children } = scripts[i];
+
+      // 获取 window.__NEPTUNE_IS_MY_WAIFU__ 信息
+      if (children.length > 0 && /^window\._{2}NEPTUNE_IS_MY_WAIFU_{2}=.+$/.test(children[0].data)) {
+        playInfo = JSON.parse(children[0].data.replace(/window\.__NEPTUNE_IS_MY_WAIFU__=/, ''));
+        break;
+      }
+    }
+
+    return playInfo;
   }
 
   // 录制
   async handleCatchClick(item, event) {
-    const urlList = await this.getUrl(item.roomid);
+    const html = await getLiveHtml(item.roomid);
+    const $ = cheerio.load(html);
+    const playInfo = this.formatPlayInfo($);
+    const { durl } = playInfo.roomInitRes.data.play_url;
     const title = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
     const child = child_process.spawn(option.ffmpeg, [
       '-user_agent',
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36',
       '-i',
-      `${ urlList.durl[urlList.durl.length - 1].url }`,
+      `${ durl[0].url }`,
       '-c',
       'copy',
       `${ option.output }/${ title }.flv`
