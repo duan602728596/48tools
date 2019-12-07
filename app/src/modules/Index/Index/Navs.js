@@ -10,7 +10,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/LiveCatch" title="口袋48直播抓取">
-              <img src={ require('../image/hty1.webp') } alt="口袋48直播抓取" />
+              <img src={ require('../image/hty1.webp').default } alt="口袋48直播抓取" />
             </Link>
           </dt>
           <dd>
@@ -22,7 +22,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/PlayBackDownload" title="口袋48录播下载">
-              <img src={ require('../image/xsy1.webp') } alt="口袋48录播下载" />
+              <img src={ require('../image/xsy1.webp').default } alt="口袋48录播下载" />
             </Link>
           </dt>
           <dd>
@@ -34,7 +34,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/BiliBili" title="B站直播抓取">
-              <img src={ require('../image/lyy1.webp') } alt="B站直播抓取" />
+              <img src={ require('../image/lyy1.webp').default } alt="B站直播抓取" />
             </Link>
           </dt>
           <dd>
@@ -46,7 +46,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/Cut" title="视频剪切">
-              <img src={ require('../image/lxh1.webp') } alt="视频剪切" />
+              <img src={ require('../image/lxh1.webp').default } alt="视频剪切" />
             </Link>
           </dt>
           <dd>
@@ -58,7 +58,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/MergeVideo" title="视频合并">
-              <img src={ require('../image/tsl1.webp') } alt="视频合并" />
+              <img src={ require('../image/tsl1.webp').default } alt="视频合并" />
             </Link>
           </dt>
           <dd>
@@ -70,7 +70,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/MoDian" title="摩点项目集资统计">
-              <img src={ require('../image/llf1.webp') } alt="摩点项目集资统计" />
+              <img src={ require('../image/llf1.webp').default } alt="摩点项目集资统计" />
             </Link>
           </dt>
           <dd>
@@ -82,7 +82,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/LiveDownload" title="公演录播下载">
-              <img src={ require('../image/zmh1.webp') } alt="公演录播下载" />
+              <img src={ require('../image/zmh1.webp').default } alt="公演录播下载" />
             </Link>
           </dt>
           <dd>
@@ -94,7 +94,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/InLive48" title="公演官方直播抓取">
-              <img src={ require('../image/rxy1.webp') } alt="公演官方直播抓取" />
+              <img src={ require('../image/rxy1.webp').default } alt="公演官方直播抓取" />
             </Link>
           </dt>
           <dd>
@@ -106,7 +106,7 @@ function Navs(props) {
         <dl className={ style.linkGroup }>
           <dt className={ style.bPro }>
             <Link to="/MediaDownload" title="B站视频下载">
-              <img src={ require('../image/ler1.webp') } alt="B站视频下载" />
+              <img src={ require('../image/ler1.webp').default } alt="B站视频下载" />
             </Link>
           </dt>
           <dd>

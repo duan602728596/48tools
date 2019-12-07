@@ -7,9 +7,9 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1')
   body
     div.app#app
-    script(type='text/javascript' src=require('./init'))
-    script(type='text/javascript' src=require('jquery/dist/jquery.min'))
-    script(type='text/javascript' src=require('flv.js/dist/flv.min'))
+    script(type='text/javascript' src=require('./init').default)
+    script(type='text/javascript' src=require('jquery/dist/jquery.min').default)
+    script(type='text/javascript' src=require('flv.js/dist/flv.min').default)
 
     if htmlWebpackPlugin.options.mode === 'development'
       script(type='text/javascript' src=imports.dll)
