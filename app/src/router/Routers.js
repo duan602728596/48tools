@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncModule from './asyncModule';
-import Index from '../modules/Index/Layout';
+import Index from '../pages/Index/Layout';
 
-const LiveCatchBundle = asyncModule(() => import('../modules/LiveCatch/Layout'));
-const PlayBackDownloadBundle = asyncModule(() => import('../modules/PlayBackDownload/Layout'));
-const BiliBiliBundle = asyncModule(() => import('../modules/Bilibili/Layout'));
-const CutBundle = asyncModule(() => import('../modules/Cut/Layout'));
-const MergeVideoBundle = asyncModule(() => import('../modules/MergeVideo/Layout'));
-const MoDianBundle = asyncModule(() => import('../modules/MoDian/Layout'));
-const LiveDownloadBundle = asyncModule(() => import('../modules/LiveDownload/Layout'));
-const InLive48Bundle = asyncModule(() => import('../modules/InLive48/Layout'));
-const MediaDownloadBundle = asyncModule(() => import('../modules/MediaDownload/Layout'));
+const LiveCatchBundle = asyncModule(() => import('../pages/LiveCatch/Layout'));
+const PlayBackDownloadBundle = asyncModule(() => import('../pages/PlayBackDownload/Layout'));
+const BiliBiliBundle = asyncModule(() => import('../pages/Bilibili/Layout'));
+const CutBundle = asyncModule(() => import('../pages/Cut/Layout'));
+const MergeVideoBundle = asyncModule(() => import('../pages/MergeVideo/Layout'));
+const MoDianBundle = asyncModule(() => import('../pages/MoDian/Layout'));
+const LiveDownloadBundle = asyncModule(() => import('../pages/LiveDownload/Layout'));
+const InLive48Bundle = asyncModule(() => import('../pages/InLive48/Layout'));
+const MediaDownloadBundle = asyncModule(() => import('../pages/MediaDownload/Layout'));
 
 /* 路由模块 */
 class Routers extends Component {

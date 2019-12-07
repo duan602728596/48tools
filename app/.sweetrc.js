@@ -23,7 +23,7 @@ module.exports = {
   ],
   entry: {
     index: [path.join(__dirname, 'src/index.js')],
-    videoPlay: [path.join(__dirname, 'src/modules/VideoPlay/videoPlay.js')]
+    videoPlay: [path.join(__dirname, 'src/pages/VideoPlay/videoPlay.js')]
   },
   externals: {
     jquery: 'window.jQuery',
@@ -64,6 +64,6 @@ module.exports = {
   },
   html: [
     { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['videoPlay'] },
-    { template: path.join(__dirname, 'src/modules/VideoPlay/videoPlay.pug'), excludeChunks: ['index'] }
+    { template: path.join(__dirname, 'src/pages/VideoPlay/videoPlay.pug'), excludeChunks: ['index'] }
   ]
 };
