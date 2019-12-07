@@ -12,11 +12,9 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 import { time } from '../../../utils';
 import option from '../../../components/option/option';
-import { getLiveHtml } from '../services';
+import { getLiveUrl } from '../services';
 
 const child_process = global.require('child_process');
-const request = global.require('request');
-const cheerio = global.require('cheerio');
 
 /* 初始化数据 */
 const getIndex = ($$state) => $$state.has('bilibili')
@@ -122,30 +120,10 @@ class Index extends Component {
     });
   }
 
-  // 获取playInfo
-  formatPlayInfo($) {
-    const scripts = $('script');
-    let playInfo = null;
-
-    for (let i = 0, j = scripts.length; i < j; i++) {
-      const { children } = scripts[i];
-
-      // 获取 window.__NEPTUNE_IS_MY_WAIFU__ 信息
-      if (children.length > 0 && /^window\._{2}NEPTUNE_IS_MY_WAIFU_{2}=.+$/.test(children[0].data)) {
-        playInfo = JSON.parse(children[0].data.replace(/window\.__NEPTUNE_IS_MY_WAIFU__=/, ''));
-        break;
-      }
-    }
-
-    return playInfo;
-  }
-
   // 录制
   async handleCatchClick(item, event) {
-    const html = await getLiveHtml(item.roomid);
-    const $ = cheerio.load(html);
-    const playInfo = this.formatPlayInfo($);
-    const { durl } = playInfo.roomInitRes.data.play_url;
+    const info = await getLiveUrl(item.roomid);
+    const { durl } = info.data;
     const title = `【B站直播抓取】_${ item.roomname }_${ item.roomid }_${ time('YY-MM-DD-hh-mm-ss') }`;
     const child = child_process.spawn(option.ffmpeg, [
       '-user_agent',

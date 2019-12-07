@@ -1,18 +1,13 @@
 import $ from 'jquery';
 
-const request = global.require('request');
-
-const ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36'
-  + ' (KHTML, like Gecko) Chrome/79.0.3945.45 Safari/537.36 Edg/79.0.309.30';
-
 /**
- * 获取html
+ * 获取url
  * @param { string } roomid: 房间id
  */
-export function getLiveHtml(roomid) {
+export function getLiveUrl(roomid) {
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: `https://live.bilibili.com/${ roomid }`,
+      url: `https://api.live.bilibili.com/room/v1/Room/playUrl?cid=${ roomid }&qn=10000&platform=web`,
       type: 'GET',
       async: true,
       success(result, status, xhr) {
