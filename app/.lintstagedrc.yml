@@ -1,7 +1,0 @@
-linters:
-  src/**/*.{js,jsx}: eslint
-  service/**/*.{js,jsx}: eslint
-ignore:
-  - node_modules
-  - .sweet
-  - dist
