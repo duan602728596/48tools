@@ -224,14 +224,21 @@ class Index extends Component {
     const liveInfo = await getLiveInfo(item.liveId);
 
     if (liveInfo.status === 200) {
-      const child = child_process.spawn(option.ffmpeg, [
+      const args = isZhibo ? [
         '-i',
         liveInfo.content.playStreamPath,
         '-c',
         'copy',
         `${ option.output }/${ title }.flv`
-      ]);
+      ] : [
+        '-i',
+        liveInfo.content.playStreamPath,
+        '-acodec',
+        'copy',
+        `${ option.output }/${ title }.mp4`
+      ];
 
+      const child = child_process.spawn(option.ffmpeg, args);
       const { liveCatch, liveList } = this.props;
 
       child.stdout.on('data', child_process_stdout);
