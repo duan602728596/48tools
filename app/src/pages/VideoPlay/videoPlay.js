@@ -1,13 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { LocaleProvider } from 'antd';
+import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import VideoPlay from './Index/index';
 
 /* app */
 render(
-  <LocaleProvider locale={ zhCN }>
+  <ConfigProvider locale={ zhCN }>
     <VideoPlay />
-  </LocaleProvider>,
+  </ConfigProvider>,
   document.getElementById('app')
 );
