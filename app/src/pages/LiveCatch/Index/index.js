@@ -198,7 +198,8 @@ class Index extends Component {
         title: item.title,
         nickname: item.userInfo.nickname,
         streamPath: liveInfo.content.playStreamPath,
-        liveType: item.liveType
+        liveType: item.liveType,
+        id: item.liveId
       };
 
       const u = './dist/videoPlay.html?' + querystring.stringify(qs);

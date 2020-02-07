@@ -7,6 +7,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Routers from './router/Routers';
 import { storeFactory } from './store/store';
 import './components/upgradeDetection/upgradeDetection';
+import './components/nodeMediaServerInit/index';
 
 /* app */
 render(
