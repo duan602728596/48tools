@@ -97,6 +97,12 @@ function Add(props) {
 
       try {
         if (value.type === 'au') {
+          if (!/^[0-9]+$/.test(value.cid)) {
+            message.error('必须输入数字！');
+
+            return;
+          }
+
           // 音频
           const res = await getAudioPlayUrl(value.cid);
           const audio = res.data.cdns[0];
@@ -123,8 +129,11 @@ function Add(props) {
             const { dash } = playInfo.data;
             const video = dash.video[0].baseUrl;
             const audio = dash.audio[0].baseUrl;
+            // 保存原始音频，音频可能会有错误
+            const audio1 = dash.audio.map((item, index) => item.baseUrl);
 
-            mediaDownloadList.push({ video, audio, initialState, playInfo, pid, ...value });
+            audio1.splice(0, 1);
+            mediaDownloadList.push({ video, audio, audio1, initialState, playInfo, pid, ...value });
           }
         }
 
@@ -144,22 +153,19 @@ function Add(props) {
 
   return (
     <Form className={ style.form } onSubmit={ handleDownloadVideoSubmit }>
-      <Form.Item label="AV/AU">
+      <Form.Item label="BV/AV/AU">
         {
           getFieldDecorator('cid', {
             rules: [
               {
                 required: true,
-                message: '请输入av/au号',
+                message: '请输入BV/av/au号',
                 whitespace: true
-              },
-              {
-                pattern: /^[0-9]*$/,
-                message: 'av/au号必须是数字'
               }
             ]
           })(<Input />)
         }
+        <i>BV号不包含"BV"字母。比如"BV1QJ411U74V"，只填入"1QJ411U74V"。</i>
       </Form.Item>
       <Form.Item label="Page">
         {

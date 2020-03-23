@@ -15,6 +15,7 @@ import store from '../../../store/store';
 const url = global.require('url');
 const path = global.require('path');
 const childProcess = global.require('child_process');
+const fs = global.require('fs');
 const fse = global.require('fs-extra');
 
 /* 从store内获取ffmpegProject */
@@ -98,7 +99,7 @@ function DownloadList(props) {
       child.stdout.on('data', handleChildProcessStdout.bind(this, record));
       child.stderr.on('data', handleChildProcessStderr.bind(this, record));
       child.on('close', () => resolve());
-      child.on('error', (err) => reject(err) );
+      child.on('error', (err) => console.error(err) && reject(err) );
     }).catch((err) => {
       console.error(err);
     });
@@ -128,13 +129,44 @@ function DownloadList(props) {
       // 合并成一个文件
       await ffmpegMergeVideo(videoFile, audioFile, title, record);
 
-      // 删除临时文件
-      await Promise.all([
-        fse.remove(videoFile),
-        fse.remove(audioFile)
-      ]);
+      const outMp4 = path.join(option.output, `${ title }.mp4`);
 
-      message.success(`${ record.type }${ record.cid }-${ record.page }：下载成功！`);
+      if (fs.existsSync(outMp4)) {
+        // 删除临时文件
+        await Promise.all([
+          fse.remove(videoFile),
+          fse.remove(audioFile)
+        ]);
+
+        message.success(`${ record.type }${ record.cid }-${ record.page }：下载成功！`);
+
+        return;
+      }
+
+      // 如果下载失败就重新下载
+      const audio1Len = record.audio1.length;
+      let index = 0;
+
+      await fse.remove(audioFile);
+
+      while (index < audio1Len) {
+        const audioData1 = await downloadMedia(record.audio1[index], record.cid);
+
+        await fse.outputFile(audioFile, audioData1);
+        await ffmpegMergeVideo(videoFile, audioFile, title, record);
+
+        if (fs.existsSync(outMp4)) {
+          await Promise.all([
+            fse.remove(videoFile),
+            fse.remove(audioFile)
+          ]);
+
+          break;
+        } else {
+          await fse.remove(audioFile);
+          index++;
+        }
+      }
     } catch (err) {
       console.error(err);
       message.error(`${ record.type }${ record.cid }-${ record.page }：下载失败！`);
@@ -192,7 +224,7 @@ function DownloadList(props) {
 
   const columns = [
     {
-      title: 'av/au Id',
+      title: 'BV/av/au Id',
       dataIndex: 'cid'
     },
     {

@@ -9,8 +9,14 @@ const ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) '
  * @param { number } page: 页数
  */
 export function getVideoHtml(av, page = 1) {
+  let bv = `BV${ av }`;
+
+  if (/^[0-9]*$/.test(av)) {
+    bv = `av${ av }`;
+  }
+
   const options = {
-    uri: `https://www.bilibili.com/video/av${ av }/`,
+    uri: `https://www.bilibili.com/video/${ bv }/`,
     method: 'GET',
     qs: { p: page },
     headers: {
@@ -120,6 +126,7 @@ export function downloadMedia(uri, cid, type = 'video') {
   return new Promise((resolve, reject) => {
     request(options, function(err, res, data) {
       if (err) {
+        console.error(err);
         reject(err);
       } else {
         resolve(data);
