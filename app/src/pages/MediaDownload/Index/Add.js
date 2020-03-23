@@ -120,10 +120,27 @@ function Add(props) {
 
           if (playInfo === null || !playInfo.data.dash) {
             // 旧视频
-            const playUrl = await getPlayUrl(value.cid, cid, value.sessdata);
-            const video = playUrl.data.durl[0].url;
+            const playUrl = await getPlayUrl(
+              /^[0-9]+$/.test(value.cid) ? value.cid : initialState.aid,
+              cid,
+              value.sessdata
+            );
 
-            mediaDownloadList.push({ video, initialState, playInfo, pid, ...value });
+            if (playUrl.data.durl) {
+              const video = playUrl.data.durl[0].url;
+
+              mediaDownloadList.push({ video, initialState, playInfo, pid, ...value });
+            } else {
+              // m4s新视频，合并视频和音频
+              const { dash } = playUrl.data;
+              const video = dash.video[0].baseUrl;
+              const audio = dash.audio[0].baseUrl;
+              // 保存原始音频，音频可能会有错误
+              const audio1 = dash.audio.map((item, index) => item.baseUrl);
+
+              audio1.splice(0, 1);
+              mediaDownloadList.push({ video, audio, audio1, initialState, playInfo, pid, ...value });
+            }
           } else {
             // m4s新视频，合并视频和音频
             const { dash } = playInfo.data;
