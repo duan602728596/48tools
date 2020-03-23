@@ -1,6 +1,6 @@
 {
   "name": "48tools",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "48应援工具，提供各种常用功能。",
   "license": "GNU General Public License v3.0",
   "scripts": {
@@ -18,7 +18,7 @@
   "main": "./dist/index.html",
   "nodejs": true,
   "window": {
-    "title": "48工具（v2.5.0）",
+    "title": "48工具（v2.6.0）",
     "position": "center",
     "toolbar": true,
     "frame": true,
