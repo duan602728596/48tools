@@ -18,6 +18,7 @@ import option from '../../../components/option/option';
 const child_process = global.require('child_process');
 const fs = global.require('fs');
 const url = global.require('url');
+const path = global.require('path');
 const request = global.require('request');
 
 /**
@@ -148,22 +149,25 @@ class Index extends Component {
         render: (value, item, index) => {
           const m = this.props.downloadList.get(value);
 
-          if (m && m.child.exitCode === null) {
-            return (
-              <Popconfirm key="stop" title="确认停止下载吗？" onConfirm={ this.handleStopRecordingClick.bind(this, item) }>
-                <Button type="danger" icon="close-square">停止下载</Button>
-              </Popconfirm>
-            );
-          } else {
-            return (
-              <Button key="download"
-                icon="fork"
-                onClick={ this.handleDownloadClick.bind(this, item) }
-              >
-                下载
-              </Button>
-            );
-          }
+          return (
+            <Button.Group>
+              {
+                m && m.child.exitCode === null ? (
+                  <Popconfirm key="stop" title="确认停止下载吗？" onConfirm={ this.handleStopRecordingClick.bind(this, item) }>
+                    <Button type="danger" icon="close-square">停止下载</Button>
+                  </Popconfirm>
+                ) : (
+                  <Button key="download"
+                    icon="fork"
+                    onClick={ this.handleDownloadClick.bind(this, item) }
+                  >
+                    下载
+                  </Button>
+                )
+              }
+              <Button onClick={ this.handleDownloadLrc.bind(this, item) }>下载弹幕</Button>
+            </Button.Group>
+          );
         }
       }
     ];
@@ -268,6 +272,18 @@ class Index extends Component {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  // 下载弹幕
+  async handleDownloadLrc(item, event) {
+    const liveInfo = await getLiveInfo(item.liveId);
+    const msgFilePath = liveInfo.content.msgFilePath; // 弹幕地址
+    const parseResult = path.parse(msgFilePath);
+
+    chrome.downloads.download({
+      url: msgFilePath,
+      filename: parseResult.base
+    });
   }
 
   // 搜索事件（点击按钮 + input回车）
