@@ -16,6 +16,7 @@ import { time } from '../../../utils';
 import { child_process_stdout, child_process_stderr, child_process_exit, child_process_error } from './child_process';
 const child_process = global.require('child_process');
 const cheerio = global.require('cheerio');
+const request = global.require('request');
 
 const IN_LIVE_URL = {
   SNH48: 'https://live.48.cn/Index/main/club/1',
@@ -24,6 +25,20 @@ const IN_LIVE_URL = {
   SHY48: 'https://live.48.cn/Index/main/club/4',
   CKG48: 'https://live.48.cn/Index/main/club/5'
 };
+
+let browser = null;
+
+function randomString(len = 32) {
+  const $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz012345678_@';
+  const maxPos = $chars.length;
+  let pwd = '';
+
+  for (let i = 0; i < len; i++) {
+    pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+
+  return `liveweb${ pwd }`;
+}
 
 /* 初始化数据 */
 const state = createStructuredSelector({
@@ -155,6 +170,35 @@ class Index extends Component {
     });
   }
 
+  // 获取地址
+  getStreamInfo(param, videoId, suid, id) {
+    if (browser === null) {
+      browser = randomString(8);
+    }
+
+    return new Promise((resolve, reject) => {
+      request({
+        uri: 'https://live.48.cn/Index/get_streaminfo',
+        method: 'POST',
+        json: true,
+        headers: {
+          Host: 'live.48.cn',
+          Referer: `https://live.48.cn/Index/inlive/id/${ id }`,
+          Origin: 'https://live.48.cn',
+          Cookie: `browser=${ browser }`
+        },
+        form: { param, video_id: videoId, suid, id },
+        timeout: 5000
+      }, (err, res, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
+
   // 点击录制事件
   async handleDownLoadLiveClick(event) {
     const inliveUrl = await this.getInliveUrl();
@@ -169,10 +213,16 @@ class Index extends Component {
       return false;
     }
 
-    const liveUrl = urlInput.attr('value');
+    // 添加的验证信息
+    const param = xml('#param').val();
+    const videoId = xml('#vedio_id').val();
+    const suid = xml('#suid').val();
+    const id = xml('#id').val();
+    const data = await this.getStreamInfo(param, videoId, suid, id);
+
     const child = child_process.spawn(option.ffmpeg, [
       '-i',
-      `${ liveUrl }`,
+      `${ data.url }`,
       '-c',
       'copy',
       `${ option.output }/${ title }.flv`
@@ -213,7 +263,7 @@ class Index extends Component {
       inLiveList: ils
     });
   }
-  
+
   render() {
     return (
       <Fragment>
