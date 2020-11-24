@@ -1,0 +1,15 @@
+{
+  "name": "@48tools/main",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "npm run clean && cross-env NODE_ENV=development tsc --watch",
+    "dev": "npm run clean && cross-env NODE_ENV=development tsc",
+    "build": "npm run clean && cross-env NODE_ENV=production gulp",
+    "clean": "rimraf ./lib"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-terser": "^2.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1"
+  }
+}

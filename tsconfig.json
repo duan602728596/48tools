@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "locale": "zh-CN",
+    "target": "ES2019",
+    "newLine": "LF",
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
