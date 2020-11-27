@@ -1,5 +1,8 @@
-import { ipcRenderer, shell } from 'electron';
+import { ipcRenderer } from 'electron';
 import type { ReactElement, MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { Button, Divider, Space, Image } from 'antd';
+import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import style from './index.sass';
 
 /* 首页 */
@@ -9,13 +12,22 @@ function Index(props: {}): ReactElement {
     ipcRenderer.send('developer-tools');
   }
 
-  // 打开使用说明
-  function handleOpenHelpClick(event: MouseEvent): void {
-    shell.openExternal('https://github.com/duan602728596/qqtools/blob/next/README.md');
-  }
-
   return (
-    <div className={ style.main }></div>
+    <div className={ style.main }>
+      <nav>
+        <Link className={ style.navItemLink } to="/">
+          <Button>直播抓取</Button>
+        </Link>
+        <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+      </nav>
+      <Divider />
+      {/* 二维码 */}
+      <p>欢迎打赏：</p>
+      <Space>
+        <Image className={ style.dashangImage } src={ require('./images/zfb.avif').default } />
+        <Image className={ style.dashangImage } src={ require('./images/wx.avif').default } />
+      </Space>
+    </div>
   );
 }
 
