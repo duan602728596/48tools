@@ -27,7 +27,7 @@ function createWindow(): void {
 
   win.loadURL(url.format({
     pathname: isDevelopment
-      ? path.join(__dirname, '../../qqtools/dist/index.html')
+      ? path.join(__dirname, '../../48tools/dist/index.html')
       : path.join(__dirname, '../../dist/index.html'),
     protocol: 'file:',
     slashes: true
