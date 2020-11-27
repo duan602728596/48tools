@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import type { ReactElement, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image } from 'antd';
-import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
+import { ToolTwoTone as IconToolTwoTone, ThunderboltOutlined as IconThunderboltOutlined } from '@ant-design/icons';
 import style from './index.sass';
 
 /* 首页 */
@@ -18,8 +18,12 @@ function Index(props: {}): ReactElement {
         <Link className={ style.navItemLink } to="/">
           <Button>直播抓取</Button>
         </Link>
-        <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
       </nav>
+      <Divider />
+      <div>
+        <Button icon={ <IconThunderboltOutlined /> }>FFMpeg地址配置</Button>
+        <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+      </div>
       <Divider />
       {/* 二维码 */}
       <p>欢迎打赏：</p>
