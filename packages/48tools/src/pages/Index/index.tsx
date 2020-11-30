@@ -2,8 +2,9 @@ import { ipcRenderer } from 'electron';
 import type { ReactElement, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image } from 'antd';
-import { ToolTwoTone as IconToolTwoTone, ThunderboltOutlined as IconThunderboltOutlined } from '@ant-design/icons';
+import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import style from './index.sass';
+import FFmpegOption from './FFmpegOption';
 
 /* 首页 */
 function Index(props: {}): ReactElement {
@@ -21,7 +22,7 @@ function Index(props: {}): ReactElement {
       </nav>
       <Divider />
       <div>
-        <Button icon={ <IconThunderboltOutlined /> }>FFMpeg地址配置</Button>
+        <FFmpegOption />
         <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
       </div>
       <Divider />

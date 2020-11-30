@@ -42,8 +42,9 @@ export default function(info: object): { [key: string]: any } {
     externals: {
       SDK: 'window.SDK',
       ...nodeExternals([
+        'fs',
         'electron',
-        'got',
+        'got'
       ])
     },
     js: {
