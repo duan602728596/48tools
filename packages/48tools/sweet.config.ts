@@ -37,12 +37,14 @@ export default function(info: object): { [key: string]: any } {
       'history'
     ],
     entry: {
-      index: [path.join(__dirname, 'src/index.tsx')]
+      index: [path.join(__dirname, 'src/index.tsx')],
+      player: [path.join(__dirname, 'src/pages/48/Player/Player.tsx')]
     },
     externals: {
       SDK: 'window.SDK',
       ...nodeExternals([
         'fs',
+        'url',
         'electron',
         'got'
       ])
@@ -78,7 +80,10 @@ export default function(info: object): { [key: string]: any } {
       },
       include: /node_modules[\\/]_?antd/
     },
-    html: [{ template: path.join(__dirname, 'src/index.pug') }]
+    html: [
+      { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'] },
+      { template: path.join(__dirname, 'src/pages/48/Player/player.pug'), excludeChunks: ['index'] }
+    ]
   };
 
   return config;

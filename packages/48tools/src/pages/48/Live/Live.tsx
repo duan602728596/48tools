@@ -29,6 +29,11 @@ function Live(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
+  // 打开新窗口播放视频
+  function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+    window.open(`player.html?id=${ record.liveId }`);
+  }
+
   // 点击刷新直播列表
   async function handleRefreshLiveListClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
     setLoading(true);
@@ -53,6 +58,17 @@ function Live(props: {}): ReactElement {
       dataIndex: 'liveType',
       render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => value === 2
         ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
+        return (
+          <Button.Group>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleOpenPlayerClick(record, event) }>播放</Button>
+          </Button.Group>
+        );
+      }
     }
   ];
 
