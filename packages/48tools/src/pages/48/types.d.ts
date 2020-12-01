@@ -27,3 +27,20 @@ export interface LiveData {
   status: number;
   success: boolean;
 }
+
+// 直播间信息
+export interface LiveRoomInfo {
+  content: {
+    liveId: string;
+    roomId: string;
+    systemMsg: string;
+    user: {
+      userAvatar: string;
+      userId: string;
+      userName: string;
+    };
+  };
+  message: string;
+  status: number;
+  success: boolean;
+}

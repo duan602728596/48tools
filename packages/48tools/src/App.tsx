@@ -6,7 +6,7 @@ import zhCN from 'antd/es/locale-provider/zh_CN';
 import { storeFactory } from './store/store';
 import Routers from './router/Routers';
 
-/* App */
+/* PlayerApp */
 function App(props: {}): ReactElement {
   return (
     <Provider store={ storeFactory() }>

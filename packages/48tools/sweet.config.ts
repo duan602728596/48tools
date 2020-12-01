@@ -45,8 +45,10 @@ export default function(info: object): { [key: string]: any } {
       ...nodeExternals([
         'fs',
         'url',
+        'querystring',
         'electron',
-        'got'
+        'got',
+        'node-media-server'
       ])
     },
     js: {

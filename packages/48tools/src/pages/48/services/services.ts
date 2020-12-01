@@ -1,6 +1,6 @@
 import got, { Response as GotResponse } from 'got';
 import { rStr } from '../../../utils/utils';
-import type { LiveData } from '../types';
+import type { LiveData, LiveRoomInfo } from '../types';
 
 /* 创建请求头 */
 function createHeaders(): { [key: string]: string } {
@@ -20,6 +20,21 @@ function createHeaders(): { [key: string]: string } {
     'Accept-Language': 'zh-Hans-AW;q=1',
     Host: 'pocketapi.48.cn'
   };
+}
+
+/**
+ * 获取单个直播间的信息
+ * @param { string } id: 直播间id
+ */
+export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
+  const res: GotResponse<LiveRoomInfo> = await got('https://pocketapi.48.cn/live/api/v1/live/getLiveOne', {
+    method: 'POST',
+    headers: createHeaders(),
+    responseType: 'json',
+    json: { liveId: id }
+  });
+
+  return res.body;
 }
 
 /**

@@ -1,3 +1,6 @@
+import * as url from 'url';
+import * as querystring from 'querystring';
+import { ipcRenderer, remote, BrowserWindow, IpcRendererEvent } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,8 +9,9 @@ import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import style from '../index.sass';
-import { requestLiveList } from '../services/services';
+import { requestLiveList, requestLiveRoomInfo } from '../services/services';
 import { setLiveList, L48InitialState } from '../reducers/reducers';
+import { rStr } from '../../../utils/utils';
 import type { LiveData, LiveInfo } from '../types';
 
 /* state */
@@ -31,7 +35,31 @@ function Live(props: {}): ReactElement {
 
   // 打开新窗口播放视频
   function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    window.open(`player.html?id=${ record.liveId }`);
+    ipcRenderer.on('player.html-return', function(event: IpcRendererEvent, ...args: any[]): void {
+      const randomId: string = rStr(30);
+      const query: string = querystring.stringify({
+        coverPath: record.coverPath, // 头像
+        title: record.title,         // 直播间标题
+        liveId: record.liveId,       // 直播id
+        id: randomId                 // rtmp服务器id
+      });
+      const win: BrowserWindow = new remote.BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+          nodeIntegration: true,
+          nodeIntegrationInWorker: true,
+          webSecurity: false,
+          enableRemoteModule: true,
+          devTools: process.env.NODE_ENV === 'development'
+        },
+        title: record.title
+      });
+
+      win.loadFile(args[0], { search: query });
+    });
+
+    ipcRenderer.send('player.html');
   }
 
   // 点击刷新直播列表

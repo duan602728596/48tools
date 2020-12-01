@@ -8,6 +8,7 @@
   },
   "main": "bin/lib/main.js",
   "dependencies": {
-    "got": "^10.7.0"
+    "got": "^10.7.0",
+    "node-media-server": "^2.2.4"
   }
 }

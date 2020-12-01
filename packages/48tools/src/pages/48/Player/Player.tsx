@@ -1,8 +1,13 @@
 import { render } from 'react-dom';
-import App from './App';
+import PlayerApp from './PlayerApp';
 
 /* app */
 render(
-  <App />,
+  <PlayerApp />,
   document.getElementById('app')
 );
+
+if (process.env.NODE_ENV === 'development') {
+  const VConsole: any = require('vconsole');
+  const vconsole: any = new VConsole();
+}
