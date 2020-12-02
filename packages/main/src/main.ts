@@ -1,6 +1,5 @@
 import * as process from 'process';
 import * as path from 'path';
-import * as url from 'url';
 import { app, BrowserWindow, Menu } from 'electron';
 import ipc from './ipc';
 
@@ -25,13 +24,11 @@ function createWindow(): void {
     win.webContents.openDevTools();
   }
 
-  win.loadURL(url.format({
-    pathname: isDevelopment
+  win.loadFile(
+    isDevelopment
       ? path.join(__dirname, '../../48tools/dist/index.html')
-      : path.join(__dirname, '../../dist/index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+      : path.join(__dirname, '../../dist/index.html')
+  );
 
   // 去掉顶层菜单
   Menu.setApplicationMenu(null);
