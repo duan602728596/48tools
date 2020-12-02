@@ -82,6 +82,7 @@ function Live(props: {}): ReactElement {
     });
 
     cs.on('close', function(...args: string[]): void {
+      console.log(...args);
       endCallback(record);
     });
     cs.on('error', function(err: Error): void {
