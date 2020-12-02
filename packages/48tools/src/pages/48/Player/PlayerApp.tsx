@@ -1,11 +1,24 @@
 import * as querystring from 'querystring';
 import type { ParsedUrlQuery } from 'querystring';
-import { useState, useEffect, useMemo, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S } from 'react';
+import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  ReactElement,
+  ReactNodeArray,
+  Dispatch as D,
+  SetStateAction as S,
+  RefObject
+} from 'react';
 import { ConfigProvider, Avatar } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';
+import flvjs from 'flv.js';
 import style from './playerApp.sass';
 import { requestLiveRoomInfo } from '../services/services';
 import type { LiveRoomInfo } from '../types';
+import { getFFmpeg } from '../../../utils/utils';
 
 interface Search {
   coverPath: string;
@@ -15,6 +28,18 @@ interface Search {
 }
 
 const SOURCE_HOST: string = 'https://source3.48.cn/'; // 静态文件地址
+
+function handleChildProcessStdoutOrStderr(data: Buffer): void {
+  // console.log(data.toString());
+}
+
+function handleChildProcessClose(): void {
+  // nothing
+}
+
+function handleChildProcessError(err: Error): void {
+  console.error(err);
+}
 
 /* PlayerApp */
 function PlayerApp(props: {}): ReactElement {
@@ -29,6 +54,56 @@ function PlayerApp(props: {}): ReactElement {
     };
   }, []);
   const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
+  const childRef: RefObject<ChildProcessWithoutNullStreams> = useRef(null);
+  const videoRef: RefObject<HTMLVideoElement> = useRef(null);
+
+  // 加载视频
+  function loadVideo(): void {
+    if (videoRef.current && info) {
+      const flvPlayer: flvjs.Player = flvjs.createPlayer({
+        type: 'flv',
+        isLive: true,
+        url: `http://localhost:25001/live/${ search.id }.flv`
+      });
+
+      flvPlayer.attachMediaElement(videoRef.current);
+      flvPlayer.load();
+    }
+  }
+
+  // 流推送
+  function rtmpInit(): void {
+    if (!info) return;
+
+    const args: Array<string> = [
+      '-re',
+      '-i',
+      info.content.playStreamPath,
+      '-c:v',
+      'libx264',
+      '-preset',
+      'superfast',
+      '-tune',
+      'zerolatency',
+      '-c:a',
+      'aac',
+      '-ar',
+      '44100',
+      '-f',
+      'flv',
+      `rtmp://localhost:25000/live/${ search.id }`
+    ];
+    const child: ChildProcessWithoutNullStreams = spawn(getFFmpeg(), args);
+
+    child.stdout.on('data', handleChildProcessStdoutOrStderr);
+    child.stderr.on('data', handleChildProcessStdoutOrStderr);
+    child.on('close', handleChildProcessClose);
+    child.on('error', handleChildProcessError);
+
+    // @ts-ignore
+    childRef['current'] = child;
+    loadVideo();
+  }
 
   // 请求直播间信息
   async function getLiveRoomInfo(): Promise<void> {
@@ -59,6 +134,16 @@ function PlayerApp(props: {}): ReactElement {
     getLiveRoomInfo();
   }, []);
 
+  useEffect(function(): () => void {
+    rtmpInit();
+
+    return function(): void {
+      if (childRef.current) {
+        childRef.current.kill();
+      }
+    };
+  }, [info, search]);
+
   return (
     <ConfigProvider locale={ zhCN }>
       <div className={ style.content }>
@@ -66,6 +151,11 @@ function PlayerApp(props: {}): ReactElement {
           <h1 className={ style.title }>{ search.title }</h1>
           { infoRender() }
         </header>
+        <video ref={ videoRef }
+          className={ style.video }
+          controls={ true }
+          poster={ `${ SOURCE_HOST }${ search.coverPath }` }
+        />
       </div>
     </ConfigProvider>
   );

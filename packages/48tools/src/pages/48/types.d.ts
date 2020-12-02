@@ -33,6 +33,7 @@ export interface LiveRoomInfo {
   content: {
     liveId: string;
     roomId: string;
+    playStreamPath: string;
     systemMsg: string;
     user: {
       userAvatar: string;

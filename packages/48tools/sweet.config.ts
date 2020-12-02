@@ -43,8 +43,10 @@ export default function(info: object): { [key: string]: any } {
     externals: {
       SDK: 'window.SDK',
       ...nodeExternals([
+        'child_process',
         'fs',
         'url',
+        'process',
         'querystring',
         'electron',
         'got',

@@ -1,4 +1,4 @@
-import * as url from 'url';
+import * as process from 'process';
 import * as querystring from 'querystring';
 import { ipcRenderer, remote, BrowserWindow, IpcRendererEvent } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
@@ -27,6 +27,8 @@ const state: Selector<any, SelectorRData> = createStructuredSelector({
   )
 });
 
+let win: BrowserWindow | undefined = undefined;
+
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
   const { liveList }: SelectorRData = useSelector(state);
@@ -36,6 +38,7 @@ function Live(props: {}): ReactElement {
   // 打开新窗口播放视频
   function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
     ipcRenderer.on('player.html-return', function(event: IpcRendererEvent, ...args: any[]): void {
+      const isDevelopment: boolean = process.env.NODE_ENV === 'development';
       const randomId: string = rStr(30);
       const query: string = querystring.stringify({
         coverPath: record.coverPath, // 头像
@@ -43,20 +46,28 @@ function Live(props: {}): ReactElement {
         liveId: record.liveId,       // 直播id
         id: randomId                 // rtmp服务器id
       });
-      const win: BrowserWindow = new remote.BrowserWindow({
-        width: 800,
-        height: 600,
+
+      // TODO: mac下的问题，总是会激活已经打开的窗口，无解
+      win = new remote.BrowserWindow({
+        width: 400,
+        height: 700,
         webPreferences: {
           nodeIntegration: true,
           nodeIntegrationInWorker: true,
           webSecurity: false,
-          enableRemoteModule: true,
-          devTools: process.env.NODE_ENV === 'development'
+          enableRemoteModule: true
         },
         title: record.title
       });
-
       win.loadFile(args[0], { search: query });
+
+      if (isDevelopment) {
+        win.webContents.openDevTools();
+      }
+
+      win.on('closed', (): void => {
+        win = undefined;
+      });
     });
 
     ipcRenderer.send('player.html');
