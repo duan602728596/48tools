@@ -6,10 +6,12 @@ const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 
 /* ipc通信 */
 function ipc(win: BrowserWindow): void {
+  // 打开开发者工具
   ipcMain.on('developer-tools', function(event: IpcMainEvent, ...args: any[]): void {
     win.webContents.openDevTools();
   });
 
+  // 获取其他路由的文件的绝对路径
   ipcMain.on('player.html', function(event: IpcMainEvent, ...args: any[]): void {
     event.reply(
       'player.html-return',
