@@ -2,21 +2,23 @@ import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
 import type { LiveInfo } from '../types';
 
+export interface LiveChildItem {
+  id: string;
+  child: ChildProcessWithoutNullStreams;
+}
+
 export interface L48InitialState {
   liveList: Array<LiveInfo>;
-  liveChildList: Array<string>;
+  liveChildList: Array<LiveChildItem>;
 }
 
 type CaseReducers = SliceCaseReducers<L48InitialState>;
-
-// 记录下载的child，避免immer导致无法监听close事件
-export const liveChildMap: { [key: string]: ChildProcessWithoutNullStreams } = {};
 
 const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
   name: 'l48',
   initialState: {
     liveList: [],     // 直播信息
-    liveChildList: [] // 直播下载（只记录id）
+    liveChildList: [] // 直播下载
   },
   reducers: {
     // 直播信息
@@ -27,7 +29,9 @@ const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
     },
 
     // 直播下载
-    setLiveChildList(state: L48InitialState, action: PayloadAction<Array<string>>): L48InitialState {
+    setLiveChildList(state: L48InitialState, action: PayloadAction<Array<LiveChildItem>>): L48InitialState {
+      console.log(action.payload);
+
       state.liveChildList = action.payload;
 
       return state;
