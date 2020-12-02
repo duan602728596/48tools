@@ -12,7 +12,7 @@ import {
   SetStateAction as S,
   RefObject
 } from 'react';
-import { ConfigProvider, Avatar } from 'antd';
+import { ConfigProvider, Avatar, Tag } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
@@ -25,6 +25,7 @@ interface Search {
   title: string;
   liveId: string;
   id: string;
+  liveType: number;
 }
 
 const SOURCE_HOST: string = 'https://source3.48.cn/'; // 静态文件地址
@@ -50,7 +51,8 @@ function PlayerApp(props: {}): ReactElement {
       coverPath: s.coverPath as string,
       title: s.title as string,
       liveId: s.liveId as string,
-      id: s.id as string
+      id: s.id as string,
+      liveType: Number(s.liveType)
     };
   }, []);
   const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
@@ -149,13 +151,20 @@ function PlayerApp(props: {}): ReactElement {
       <div className={ style.content }>
         <header className={ style.header }>
           <h1 className={ style.title }>{ search.title }</h1>
-          { infoRender() }
+          {
+            search.liveType === 2
+              ? <Tag color="volcano">电台</Tag>
+              : <Tag color="purple">视频</Tag>
+          }
+          <div>{ infoRender() }</div>
         </header>
-        <video ref={ videoRef }
-          className={ style.video }
-          controls={ true }
-          poster={ `${ SOURCE_HOST }${ search.coverPath }` }
-        />
+        <div>
+          <video ref={ videoRef }
+            className={ style.video }
+            controls={ true }
+            poster={ `${ SOURCE_HOST }${ search.coverPath }` }
+          />
+        </div>
       </div>
     </ConfigProvider>
   );

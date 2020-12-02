@@ -39,7 +39,8 @@ function Live(props: {}): ReactElement {
       coverPath: record.coverPath, // 头像
       title: record.title,         // 直播间标题
       liveId: record.liveId,       // 直播id
-      id: randomId                 // rtmp服务器id
+      id: randomId,                // rtmp服务器id
+      liveType: record.liveType    // 直播类型
     });
 
     ipcRenderer.send('player.html', record.title, query);

@@ -11,8 +11,8 @@ const isDevelopment: boolean = process.env.NODE_ENV === 'development';
  */
 function openPlayerHtml(title: string, query: string): void {
   let win: BrowserWindow | null = new BrowserWindow({
-    width: 400,
-    height: 700,
+    width: 300,
+    height: 680,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
