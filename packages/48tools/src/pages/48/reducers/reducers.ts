@@ -30,8 +30,6 @@ const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
 
     // 直播下载
     setLiveChildList(state: L48InitialState, action: PayloadAction<Array<LiveChildItem>>): L48InitialState {
-      console.log(action.payload);
-
       state.liveChildList = action.payload;
 
       return state;
