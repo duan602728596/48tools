@@ -8,11 +8,12 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex } from 'lodash';
+import { findIndex, pick } from 'lodash';
 import style from '../index.sass';
 import { requestLiveList, requestLiveRoomInfo } from '../services/services';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
+import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../types';
 
 /* state */
@@ -101,15 +102,21 @@ function Live(props: {}): ReactElement {
   }
 
   // 打开新窗口播放视频
-  function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+  async function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const randomId: string = rStr(30);
-    const query: string = querystring.stringify({
-      coverPath: record.coverPath, // 头像
-      title: record.title,         // 直播间标题
-      liveId: record.liveId,       // 直播id
-      id: randomId,                // rtmp服务器id
-      liveType: record.liveType    // 直播类型
-    });
+    const port: NetMediaServerPort = await getNetMediaServerPort();
+    const query: string = querystring.stringify(Object.assign(
+      {
+        id: randomId, // rtmp服务器id
+        ...port       // 端口号
+      },
+      pick(record, [
+        'coverPath', // 头像
+        'title',     // 直播间标题
+        'liveId',    // 直播id
+        'liveType'   // 直播类型
+      ])
+    ));
 
     ipcRenderer.send('player.html', record.title, query);
   }
@@ -161,7 +168,7 @@ function Live(props: {}): ReactElement {
                 </Button>
               )
             }
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleOpenPlayerClick(record, event) }>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleOpenPlayerClick(record, event) }>
               播放
             </Button>
           </Button.Group>

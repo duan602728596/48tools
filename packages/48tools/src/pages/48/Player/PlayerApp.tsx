@@ -26,6 +26,8 @@ interface Search {
   liveId: string;
   id: string;
   liveType: number;
+  rtmpPort: number;
+  httpPort: number;
 }
 
 const SOURCE_HOST: string = 'https://source3.48.cn/'; // 静态文件地址
@@ -52,7 +54,9 @@ function PlayerApp(props: {}): ReactElement {
       title: s.title as string,
       liveId: s.liveId as string,
       id: s.id as string,
-      liveType: Number(s.liveType)
+      liveType: Number(s.liveType),
+      rtmpPort: Number(s.rtmpPort),
+      httpPort: Number(s.httpPort)
     };
   }, []);
   const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
@@ -65,7 +69,7 @@ function PlayerApp(props: {}): ReactElement {
       const flvPlayer: flvjs.Player = flvjs.createPlayer({
         type: 'flv',
         isLive: true,
-        url: `http://localhost:25001/live/${ search.id }.flv`
+        url: `http://localhost:${ search.httpPort }/live/${ search.id }.flv`
       });
 
       flvPlayer.attachMediaElement(videoRef.current);
@@ -93,7 +97,7 @@ function PlayerApp(props: {}): ReactElement {
       '44100',
       '-f',
       'flv',
-      `rtmp://localhost:25000/live/${ search.id }`
+      `rtmp://localhost:${ search.rtmpPort }/live/${ search.id }`
     ];
     const child: ChildProcessWithoutNullStreams = spawn(getFFmpeg(), args);
 
@@ -151,11 +155,7 @@ function PlayerApp(props: {}): ReactElement {
       <div className={ style.content }>
         <header className={ style.header }>
           <h1 className={ style.title }>{ search.title }</h1>
-          {
-            search.liveType === 2
-              ? <Tag color="volcano">电台</Tag>
-              : <Tag color="purple">视频</Tag>
-          }
+          { search.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
           <div>{ infoRender() }</div>
         </header>
         <div>
