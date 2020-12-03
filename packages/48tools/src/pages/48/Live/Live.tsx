@@ -74,10 +74,11 @@ function Live(props: {}): ReactElement {
       result.filePath
     ]);
 
-    cs.stdout.on('data', (data: Buffer): void => {
+    cs.stdout.on('data', function(data: Buffer): void {
       // console.log(data.toString());
     });
-    cs.stderr.on('data', (data: Buffer): void => {
+
+    cs.stderr.on('data', function(data: Buffer): void {
       // console.log(data.toString());
     });
 
@@ -85,6 +86,7 @@ function Live(props: {}): ReactElement {
       console.log(...args);
       endCallback(record);
     });
+
     cs.on('error', function(err: Error): void {
       message.error(`视频：${ record.title } 下载失败！`);
       endCallback(record);
