@@ -45,6 +45,7 @@ export default function(info: object): { [key: string]: any } {
       ...nodeExternals([
         'child_process',
         'fs',
+        'net',
         'url',
         'process',
         'querystring',
