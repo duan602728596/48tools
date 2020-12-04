@@ -1,5 +1,4 @@
 import * as querystring from 'querystring';
-import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import { ipcRenderer, remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch, Store } from 'redux';
@@ -9,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash';
+import DownloadWorker from 'worker-loader!./download.worker';
 import style from '../index.sass';
 import { requestLiveList, requestLiveRoomInfo } from '../services/services';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
@@ -43,7 +43,7 @@ function Live(props: {}): ReactElement {
     const index: number = findIndex(liveChildList, { id: record.liveId });
 
     if (index >= 0) {
-      liveChildList[index].child.kill('SIGTERM');
+      liveChildList[index].worker.postMessage({ type: 'stop' });
     }
   }
 
@@ -67,36 +67,38 @@ function Live(props: {}): ReactElement {
     if (result.canceled || !result.filePath) return;
 
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-    const cs: ChildProcessWithoutNullStreams = spawn(getFFmpeg(), [
-      '-i',
-      `${ resInfo.content.playStreamPath }`,
-      '-c',
-      'copy',
-      result.filePath
-    ]);
+    const worker: Worker = new DownloadWorker();
 
-    cs.stdout.on('data', function(data: Buffer): void {
-      // console.log(data.toString());
-    });
+    type EventData = {
+      type: 'close' | 'error';
+      error?: Error;
+    };
 
-    cs.stderr.on('data', function(data: Buffer): void {
-      // console.log(data.toString());
-    });
+    worker.addEventListener('message', function(event: MessageEvent<EventData>) {
+      const { type, error }: EventData = event.data;
 
-    cs.on('close', function(...args: string[]): void {
-      console.log(...args);
-      endCallback(record);
-    });
+      if (type === 'close' || type === 'error') {
+        if (type === 'error') {
+          message.error(`视频：${ record.title } 下载失败！`);
+        }
 
-    cs.on('error', function(err: Error): void {
-      message.error(`视频：${ record.title } 下载失败！`);
-      endCallback(record);
+        worker.terminate();
+        endCallback(record);
+      }
+    }, false);
+
+    worker.postMessage({
+      type: 'start',
+      playStreamPath: resInfo.content.playStreamPath,
+      filePath: result.filePath,
+      liveId: record.liveId,
+      ffmpeg: getFFmpeg()
     });
 
     dispatch(setLiveChildList(
       liveChildList.concat([{
         id: record.liveId,
-        child: cs
+        worker
       }])
     ));
   }

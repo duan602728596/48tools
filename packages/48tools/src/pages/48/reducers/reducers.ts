@@ -1,10 +1,9 @@
-import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
 import type { LiveInfo } from '../types';
 
 export interface LiveChildItem {
   id: string;
-  child: ChildProcessWithoutNullStreams;
+  worker: Worker;
 }
 
 export interface L48InitialState {
