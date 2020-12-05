@@ -42,10 +42,10 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
  * @param { string | number } next: 录播id分页
  * @param { boolean } inLive: 是否在直播中
  */
-export async function requestLiveList(next: number | string, inLive: boolean): Promise<LiveData> {
+export async function requestLiveList(next: string, inLive: boolean): Promise<LiveData> {
   const body: {
     debug: boolean;
-    next: string | number;
+    next: string;
     groupId?: number;
     record?: boolean;
   } = { debug: true, next };

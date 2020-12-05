@@ -20,7 +20,7 @@ import flvjs from 'flv.js';
 import style from './playerApp.sass';
 import { requestLiveRoomInfo } from '../services/services';
 import type { LiveRoomInfo } from '../types';
-import { getFFmpeg } from '../../../utils/utils';
+import { getFFmpeg, source } from '../../../utils/utils';
 
 interface Search {
   coverPath: string;
@@ -135,7 +135,7 @@ function PlayerApp(props: {}): ReactElement {
       const { content }: LiveRoomInfo = info;
 
       return [
-        <Avatar key="avatar" src={ `${ SOURCE_HOST }${ content.user.userAvatar }` } />,
+        <Avatar key="avatar" src={ source(content.user.userAvatar) } />,
         <span key="username" className={ style.user }>{ content.user.userName }</span>
       ];
     } else {
@@ -174,7 +174,7 @@ function PlayerApp(props: {}): ReactElement {
           <video ref={ videoRef }
             className={ style.video }
             controls={ true }
-            poster={ `${ SOURCE_HOST }${ search.coverPath }` }
+            poster={ source(search.coverPath) }
           />
         </div>
       </div>

@@ -24,3 +24,8 @@ export function rStr(len: number): string {
 
   return result;
 }
+
+/* 拼接静态文件地址 */
+export function source(pathname: string): string {
+  return `https://source3.48.cn/${ pathname }`;
+}

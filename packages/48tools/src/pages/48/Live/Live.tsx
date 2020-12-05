@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash';
+import * as moment from 'moment';
 import DownloadWorker from 'worker-loader!./download.worker';
 import style from '../index.sass';
 import { requestLiveList, requestLiveRoomInfo } from '../services/services';
@@ -17,7 +18,9 @@ import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMe
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../types';
 
 /* state */
-const state: Selector<any, L48InitialState> = createStructuredSelector({
+type RSelector = Pick<L48InitialState, 'liveList' | 'liveChildList'>;
+
+const state: Selector<any, RSelector> = createStructuredSelector({
   // 直播列表
   liveList: createSelector(
     ({ l48 }: { l48: L48InitialState }): Array<LiveInfo> => l48.liveList,
@@ -33,7 +36,7 @@ const state: Selector<any, L48InitialState> = createStructuredSelector({
 
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
-  const { liveList, liveChildList }: L48InitialState = useSelector(state);
+  const { liveList, liveChildList }: RSelector = useSelector(state);
   const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
@@ -128,7 +131,7 @@ function Live(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const res: LiveData = await requestLiveList(0, true);
+      const res: LiveData = await requestLiveList('0', true);
 
       dispatch(setLiveList(res.content.liveList));
     } catch (err) {
@@ -147,6 +150,11 @@ function Live(props: {}): ReactElement {
       dataIndex: 'liveType',
       render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => value === 2
         ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>
+    },
+    {
+      title: '时间',
+      dataIndex: 'ctime',
+      render: (value: string, record: LiveInfo, index: number): string => moment(Number(value)).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       title: '操作',
@@ -191,7 +199,16 @@ function Live(props: {}): ReactElement {
           <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
         </div>
       </header>
-      <Table size="middle" columns={ columns } dataSource={ liveList } bordered={ true } loading={ loading } rowKey="liveId" />
+      <Table size="middle"
+        columns={ columns }
+        dataSource={ liveList }
+        bordered={ true }
+        loading={ loading }
+        rowKey="liveId"
+        pagination={{
+          showQuickJumper: true
+        }}
+      />
     </Fragment>
   );
 }
