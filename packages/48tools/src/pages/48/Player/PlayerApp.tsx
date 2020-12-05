@@ -1,6 +1,7 @@
 import * as querystring from 'querystring';
 import type { ParsedUrlQuery } from 'querystring';
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import { ipcRenderer } from 'electron';
 import {
   useState,
   useEffect,
@@ -10,10 +11,11 @@ import {
   ReactNodeArray,
   Dispatch as D,
   SetStateAction as S,
-  RefObject
+  RefObject, MouseEvent
 } from 'react';
-import { ConfigProvider, Avatar, Tag } from 'antd';
+import { ConfigProvider, Avatar, Tag, Button } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';
+import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
 import { requestLiveRoomInfo } from '../services/services';
@@ -62,6 +64,11 @@ function PlayerApp(props: {}): ReactElement {
   const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
   const childRef: RefObject<ChildProcessWithoutNullStreams> = useRef(null);
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
+
+  // 打开开发者工具
+  function handleOpenDeveloperToolsClick(event: MouseEvent): void {
+    ipcRenderer.send('player-developer-tools', search.id);
+  }
 
   // 加载视频
   function loadVideo(): void {
@@ -156,7 +163,12 @@ function PlayerApp(props: {}): ReactElement {
         <header className={ style.header }>
           <h1 className={ style.title }>{ search.title }</h1>
           { search.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
-          <div>{ infoRender() }</div>
+          <div className={ style.flex }>
+            <div className={ style.userBox }>{ infoRender() }</div>
+            <div className={ style.tools }>
+              <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+            </div>
+          </div>
         </header>
         <div>
           <video ref={ videoRef }
