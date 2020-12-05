@@ -1,6 +1,11 @@
+import { promisify } from 'util';
+import { pipeline } from 'stream';
+import * as fs from 'fs';
 import got, { Response as GotResponse } from 'got';
 import { rStr } from '../../../utils/utils';
 import type { LiveData, LiveRoomInfo } from '../types';
+
+const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
 /* 创建请求头 */
 function createHeaders(): { [key: string]: string } {
@@ -63,4 +68,13 @@ export async function requestLiveList(next: string, inLive: boolean): Promise<Li
   });
 
   return res.body;
+}
+
+/**
+ * 下载弹幕文件
+ * @param { string } lrcUrl: 弹幕文件
+ * @param { string } filename: 保存的文件
+ */
+export async function requestDownloadLrc(lrcUrl: string, filename: string): Promise<void> {
+  await pipelineP(got.stream(lrcUrl), fs.createWriteStream(filename));
 }

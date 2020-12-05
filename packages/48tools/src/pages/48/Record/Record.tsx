@@ -1,3 +1,6 @@
+import * as path from 'path';
+import type { ParsedPath } from 'path';
+import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch, Store } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
@@ -8,8 +11,8 @@ import type { ColumnsType } from 'antd/es/table';
 import * as moment from 'moment';
 import style from '../index.sass';
 import { setRecordList, L48InitialState } from '../reducers/reducers';
-import { requestLiveList, requestLiveRoomInfo } from '../services/services';
-import type { LiveData, LiveInfo } from '../types';
+import { requestLiveList, requestLiveRoomInfo, requestDownloadLrc } from '../services/services';
+import type { LiveData, LiveInfo, LiveRoomInfo } from '../types';
 
 /* state */
 type RSelector = Pick<L48InitialState, 'recordList' | 'recordNext'>;
@@ -34,6 +37,25 @@ function Record(props: {}): ReactElement {
   const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
+
+  // 下载弹幕
+  async function handleDownloadLrc(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    try {
+      const res: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+      const { base }: ParsedPath = path.parse(res.content.msgFilePath);
+      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+        defaultPath: base
+      });
+
+      if (result.canceled || !result.filePath) return;
+
+      await requestDownloadLrc(res.content.msgFilePath, result.filePath);
+      message.success('弹幕文件下载成功！');
+    } catch (err) {
+      message.error('弹幕文件下载失败！');
+      console.error(err);
+    }
+  }
 
   // 加载列表
   async function handleLoadRecordListClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -93,6 +115,19 @@ function Record(props: {}): ReactElement {
       dataIndex: 'ctime',
       render: (value: string, record: LiveInfo, index: number): string => {
         return moment(Number(value)).format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
+        return (
+          <Button.Group>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrc(record, event) }>
+              下载弹幕
+            </Button>
+          </Button.Group>
+        );
       }
     }
   ];

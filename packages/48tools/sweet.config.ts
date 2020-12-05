@@ -47,8 +47,11 @@ export default function(info: object): { [key: string]: any } {
         'fs',
         'net',
         'url',
+        'path',
         'process',
         'querystring',
+        'stream',
+        'util',
         'electron',
         'got',
         'node-media-server'

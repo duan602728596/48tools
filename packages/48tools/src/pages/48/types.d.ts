@@ -1,5 +1,3 @@
-import type { ChildProcessWithoutNullStreams } from 'child_process';
-
 // 当前的用户信息
 export interface UserInfo {
   avatar: string;
@@ -37,6 +35,7 @@ export interface LiveRoomInfo {
     roomId: string;
     playStreamPath: string;
     systemMsg: string;
+    msgFilePath: string;
     user: {
       userAvatar: string;
       userId: string;
