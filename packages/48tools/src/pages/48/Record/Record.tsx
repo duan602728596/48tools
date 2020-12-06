@@ -2,13 +2,14 @@ import * as path from 'path';
 import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
 import { remote, SaveDialogReturnValue } from 'electron';
-import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch, Store } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash';
 import * as moment from 'moment';
 import DownloadWorker from 'worker-loader!./downloadM3u8.worker';
@@ -26,6 +27,7 @@ import {
   requestDownloadFile
 } from '../services/services';
 import { getFFmpeg } from '../../../utils/utils';
+import SearchForm from './SearchForm';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../types';
 
 /**
@@ -76,6 +78,21 @@ function Record(props: {}): ReactElement {
   const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
+  const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
+  const recordListQueryResult: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
+    if (query && !/^\s*$/.test(query)) {
+      const regexp: RegExp = new RegExp(query, 'i');
+
+      return recordList.filter((o: LiveInfo): boolean => regexp.test(o.userInfo.nickname));
+    } else {
+      return recordList;
+    }
+  }, [query, recordList]);
+
+  // 搜索
+  function onSubmit(value: FormStore): void {
+    setQuery(value.q);
+  }
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
@@ -265,6 +282,7 @@ function Record(props: {}): ReactElement {
           <Link to="/">
             <Button type="primary" danger={ true }>返回</Button>
           </Link>
+          <SearchForm onSubmit={ onSubmit } />
         </div>
         <div>
           <Button.Group>
@@ -275,7 +293,7 @@ function Record(props: {}): ReactElement {
       </header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ recordList }
+        dataSource={ recordListQueryResult }
         bordered={ true }
         loading={ loading }
         rowKey="liveId"
