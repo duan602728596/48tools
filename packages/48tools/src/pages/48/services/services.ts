@@ -82,7 +82,6 @@ export async function requestDownloadFileByStream(fileUrl: string, filename: str
 /**
  * 下载文件
  * @param { string } fileUrl: 文件url地址
- * @param { string } filename: 文件本地地址
  */
 export async function requestDownloadFile(fileUrl: string): Promise<string> {
   const res: GotResponse<string> = await got(fileUrl, {
