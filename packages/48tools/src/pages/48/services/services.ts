@@ -71,10 +71,24 @@ export async function requestLiveList(next: string, inLive: boolean): Promise<Li
 }
 
 /**
- * 下载弹幕文件
- * @param { string } lrcUrl: 弹幕文件
- * @param { string } filename: 保存的文件
+ * 下载文件
+ * @param { string } fileUrl: 文件url地址
+ * @param { string } filename: 文件本地地址
  */
-export async function requestDownloadLrc(lrcUrl: string, filename: string): Promise<void> {
-  await pipelineP(got.stream(lrcUrl), fs.createWriteStream(filename));
+export async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
+  await pipelineP(got.stream(fileUrl), fs.createWriteStream(filename));
+}
+
+/**
+ * 下载文件
+ * @param { string } fileUrl: 文件url地址
+ * @param { string } filename: 文件本地地址
+ */
+export async function requestDownloadFile(fileUrl: string): Promise<string> {
+  const res: GotResponse<string> = await got(fileUrl, {
+    method: 'GET',
+    responseType: 'text'
+  });
+
+  return res.body;
 }

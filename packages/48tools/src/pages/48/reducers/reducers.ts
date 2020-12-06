@@ -11,6 +11,7 @@ export interface L48InitialState {
   liveChildList: Array<LiveChildItem>;
   recordList: Array<LiveInfo>;
   recordNext: string;
+  recordChildList: Array<LiveChildItem>;
 }
 
 type CaseReducers = SliceCaseReducers<L48InitialState>;
@@ -18,10 +19,11 @@ type CaseReducers = SliceCaseReducers<L48InitialState>;
 const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
   name: 'l48',
   initialState: {
-    liveList: [],      // 直播信息
-    liveChildList: [], // 直播下载
-    recordList: [],    // 录播信息
-    recordNext: '0'    // 记录录播分页位置
+    liveList: [],       // 直播信息
+    liveChildList: [],  // 直播下载
+    recordList: [],     // 录播信息
+    recordNext: '0',    // 记录录播分页位置
+    recordChildList: [] // 录播下载
   },
   reducers: {
     // 直播信息
@@ -44,9 +46,21 @@ const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
       state.recordNext = action.payload.next;
 
       return state;
+    },
+
+    // 录播下载
+    setRecordChildList(state: L48InitialState, action: PayloadAction<Array<LiveChildItem>>): L48InitialState {
+      state.recordChildList = action.payload;
+
+      return state;
     }
   }
 });
 
-export const { setLiveList, setLiveChildList, setRecordList }: CaseReducerActions<CaseReducers> = actions;
+export const {
+  setLiveList,
+  setLiveChildList,
+  setRecordList,
+  setRecordChildList
+}: CaseReducerActions<CaseReducers> = actions;
 export default { l48: reducer };

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
+import { promises as fsP } from 'fs';
 import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch, Store } from 'redux';
@@ -8,14 +9,46 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { findIndex } from 'lodash';
 import * as moment from 'moment';
+import DownloadWorker from 'worker-loader!./downloadM3u8.worker';
 import style from '../index.sass';
-import { setRecordList, L48InitialState } from '../reducers/reducers';
-import { requestLiveList, requestLiveRoomInfo, requestDownloadLrc } from '../services/services';
+import {
+  setRecordList,
+  setRecordChildList,
+  L48InitialState,
+  LiveChildItem
+} from '../reducers/reducers';
+import {
+  requestLiveList,
+  requestLiveRoomInfo,
+  requestDownloadFileByStream,
+  requestDownloadFile
+} from '../services/services';
+import { getFFmpeg } from '../../../utils/utils';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../types';
 
+/**
+ * 格式化m3u8文件内视频的地址
+ * @param { string } data: m3u8文件内容
+ */
+function formatTsUrl(data: string): string {
+  const dataArr: string[] = data.split('\n');
+  const newStrArr: string[] = [];
+
+  for (const item of dataArr) {
+    if (/^\/fragments.*\.ts$/.test(item)) {
+      newStrArr.push(`http://cychengyuan-vod.48.cn${ item }`);
+    } else {
+      newStrArr.push(item);
+    }
+  }
+
+  return newStrArr.join('\n');
+}
+
 /* state */
-type RSelector = Pick<L48InitialState, 'recordList' | 'recordNext'>;
+type RSelector = Pick<L48InitialState, 'recordList' | 'recordNext' | 'recordChildList'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 录播信息
@@ -28,18 +61,94 @@ const state: Selector<any, RSelector> = createStructuredSelector({
   recordNext: createSelector(
     ({ l48 }: { l48: L48InitialState }): string => l48.recordNext,
     (data: string): string => data
+  ),
+
+  // 录播下载
+  recordChildList: createSelector(
+    ({ l48 }: { l48: L48InitialState }): Array<LiveChildItem> => l48.recordChildList,
+    (data: Array<LiveChildItem>): Array<LiveChildItem> => data
   )
 });
 
 /* 录播列表 */
 function Record(props: {}): ReactElement {
-  const { recordList, recordNext }: RSelector = useSelector(state);
+  const { recordList, recordNext, recordChildList }: RSelector = useSelector(state);
   const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
+  // 停止
+  function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+    const index: number = findIndex(recordChildList, { id: record.liveId });
+
+    if (index >= 0) {
+      recordChildList[index].worker.postMessage({ type: 'stop' });
+    }
+  }
+
+  // 停止后的回调函数
+  function endCallback(record: LiveInfo): void {
+    const list: Array<LiveChildItem> = [...store.getState().l48.recordChildList];
+    const index: number = findIndex(list, { id: record.liveId });
+
+    if (index >= 0) {
+      list.splice(index, 1);
+      dispatch(setRecordChildList([...list]));
+    }
+  }
+
+  // 下载视频
+  async function handleDownloadM3u8Click(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+      defaultPath: `${ record.userInfo.nickname }_${ record.liveId }.ts`
+    });
+
+    if (result.canceled || !result.filePath) return;
+
+    const m3u8File: string = `${ result.filePath }.m3u8`;
+    const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
+
+    await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data));
+
+    const worker: Worker = new DownloadWorker();
+
+    type EventData = {
+      type: 'close' | 'error';
+      error?: Error;
+    };
+
+    worker.addEventListener('message', function(event: MessageEvent<EventData>) {
+      const { type, error }: EventData = event.data;
+
+      if (type === 'close' || type === 'error') {
+        if (type === 'error') {
+          message.error(`视频：${ record.title } 下载失败！`);
+        }
+
+        worker.terminate();
+        endCallback(record);
+      }
+    }, false);
+
+    worker.postMessage({
+      type: 'start',
+      playStreamPath: m3u8File,
+      filePath: result.filePath,
+      liveId: record.liveId,
+      ffmpeg: getFFmpeg()
+    });
+
+    dispatch(setRecordChildList(
+      recordChildList.concat([{
+        id: record.liveId,
+        worker
+      }])
+    ));
+  }
+
   // 下载弹幕
-  async function handleDownloadLrc(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadLrcClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const res: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const { base }: ParsedPath = path.parse(res.content.msgFilePath);
@@ -49,7 +158,7 @@ function Record(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      await requestDownloadLrc(res.content.msgFilePath, result.filePath);
+      await requestDownloadFileByStream(res.content.msgFilePath, result.filePath);
       message.success('弹幕文件下载成功！');
     } catch (err) {
       message.error('弹幕文件下载失败！');
@@ -121,9 +230,26 @@ function Record(props: {}): ReactElement {
       title: '操作',
       key: 'action',
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
+        const idx: number = findIndex(recordChildList, { id: record.liveId });
+
         return (
           <Button.Group>
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrc(record, event) }>
+            {
+              idx >= 0 ? (
+                <Button type="primary"
+                  danger={ true }
+                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                >
+                  停止下载
+                </Button>
+              ) : (
+                <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadM3u8Click(record, event) }>
+                  下载视频
+                </Button>
+              )
+            }
+
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrcClick(record, event) }>
               下载弹幕
             </Button>
           </Button.Group>
