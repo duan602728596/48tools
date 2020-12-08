@@ -2,6 +2,7 @@ import { Fragment, ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import style from '../../48/index.sass';
+import AddForm from './AddForm';
 
 /* 视频下载 */
 function Download(props: {}): ReactElement {
@@ -12,6 +13,9 @@ function Download(props: {}): ReactElement {
           <Link to="/">
             <Button type="primary" danger={ true }>返回</Button>
           </Link>
+        </div>
+        <div>
+          <AddForm />
         </div>
       </header>
     </Fragment>

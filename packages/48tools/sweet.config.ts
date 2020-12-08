@@ -54,6 +54,7 @@ export default function(info: object): { [key: string]: any } {
         'util',
         'electron',
         'got',
+        'jsdom',
         'node-media-server'
       ])
     },

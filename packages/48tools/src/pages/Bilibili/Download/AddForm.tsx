@@ -1,0 +1,65 @@
+import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { Button, Modal, Form, Input, Select, InputNumber } from 'antd';
+import type { FormInstance } from 'antd/es/form';
+import type { Store } from 'antd/es/form/interface';
+import style from './addForm.sass';
+
+/* 添加下载信息 */
+function AddForm(props: {}): ReactElement {
+  const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
+  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [form]: [FormInstance] = Form.useForm();
+
+  // 确定添加视频
+  async function handleAddDownloadQueueClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    let formValue: Store;
+
+    try {
+      formValue = await form.validateFields();
+    } catch (err) {
+      return console.error(err);
+    }
+  }
+
+  // 打开弹出层
+  function handleOpenAddModalClick(event: MouseEvent<HTMLButtonElement>): void {
+    setVisible(true);
+  }
+
+  // 关闭弹出层
+  function handleCloseAddModalClick(event: MouseEvent<HTMLButtonElement>): void {
+    setVisible(false);
+  }
+
+  return (
+    <Fragment>
+      <Button type="primary" onClick={ handleOpenAddModalClick }>添加下载任务</Button>
+      <Modal visible={ visible }
+        title="添加下载任务"
+        width={ 400 }
+        centered={ true }
+        maskClosable={ false }
+        onOk={ handleAddDownloadQueueClick }
+        onCancel={ handleCloseAddModalClick }
+      >
+        <Form className={ style.formContent } initialValues={{ type: 'bv' }} labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+          <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
+            <Input />
+          </Form.Item>
+          <Form.Item name="type" label="下载类型">
+            <Select>
+              <Select.Option value="bv">视频（bv）</Select.Option>
+              <Select.Option value="av">视频（av）</Select.Option>
+              <Select.Option value="au">音频</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name="page" label="Page">
+            <InputNumber />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </Fragment>
+  );
+}
+
+export default AddForm;
