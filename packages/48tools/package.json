@@ -22,6 +22,7 @@
     "indexeddb-tools-redux": "^3.0.0",
     "jsdom": "^16.4.0",
     "lodash": "^4.17.20",
+    "md5": "^2.3.0",
     "moment": "^2.29.1",
     "node-media-server": "^2.2.4",
     "prop-types": "^15.7.2",

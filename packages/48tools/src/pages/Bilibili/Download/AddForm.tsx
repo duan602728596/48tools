@@ -1,8 +1,9 @@
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
-import { Button, Modal, Form, Input, Select, InputNumber } from 'antd';
+import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
 import style from './addForm.sass';
+import { parseVideoUrl } from './parseBilibiliUrl';
 
 /* 添加下载信息 */
 function AddForm(props: {}): ReactElement {
@@ -19,6 +20,23 @@ function AddForm(props: {}): ReactElement {
     } catch (err) {
       return console.error(err);
     }
+
+    setLoading(true);
+
+    try {
+      const result: string | void = await parseVideoUrl(formValue.type, formValue.id, formValue.page);
+
+      if (result) {
+
+      } else {
+        message.warn('没有获取到媒体地址！');
+      }
+    } catch (err) {
+      message.error('地址解析失败！');
+      console.error(err);
+    }
+
+    setLoading(false);
   }
 
   // 打开弹出层
@@ -39,10 +57,11 @@ function AddForm(props: {}): ReactElement {
         width={ 400 }
         centered={ true }
         maskClosable={ false }
+        confirmLoading={ loading }
         onOk={ handleAddDownloadQueueClick }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form className={ style.formContent } initialValues={{ type: 'bv' }} labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+        <Form className={ style.formContent } form={ form } initialValues={{ type: 'bv' }} labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
           <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
             <Input />
           </Form.Item>

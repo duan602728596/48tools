@@ -5,3 +5,26 @@ export interface DownloadItem {
   page: number;             // 分页
   durl: string;             // 下载地址
 }
+
+// b站页面上的视频信息
+export interface InitialState {
+  aid: number;
+  videoData: {
+    aid: number;  // av号
+    bvid: string; // bv号
+    pages: Array<{
+      cid: number;
+      part: string; // 分part的标题
+    }>;
+    title: string;
+  };
+}
+
+// 接口请求到的视频信息
+export interface VideoInfo {
+  durl?: Array<{
+    backup_url: string;
+    url: string;
+  }>;
+  format: string;
+}

@@ -1,4 +1,5 @@
 import got, { Response } from 'got';
+import type { VideoInfo } from '../types';
 
 const USER_AGENT: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) '
   + 'Chrome/84.0.4147.38 Safari/537.36 Edg/84.0.522.15';
@@ -11,6 +12,19 @@ export async function requestBilibiliHtml(url: string): Promise<string> {
       Host: 'www.bilibili.com',
       'User-Agent': USER_AGENT
     }
+  });
+
+  return res.body;
+}
+
+/**
+ * 请求视频信息
+ * @param { string } payload: 查询参数
+ * @param { string } sign: 加密后的sign
+ */
+export async function requestVideoInfo(payload: string, sign: string): Promise<VideoInfo> {
+  const res: Response<VideoInfo> = await got.get(`https://interface.bilibili.com/v2/playurl?${ payload }&sign=${ sign }`, {
+    responseType: 'json'
   });
 
   return res.body;
