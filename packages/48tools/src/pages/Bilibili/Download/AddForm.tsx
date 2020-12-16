@@ -3,7 +3,9 @@ import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
 import style from './addForm.sass';
-import { parseVideoUrl } from './parseBilibiliUrl';
+import { rStr } from '../../../utils/utils';
+import { parseVideoUrl, parseAudioUrl } from './parseBilibiliUrl';
+import { setDownloadList } from '../reducers/reducers';
 
 /* 添加下载信息 */
 function AddForm(props: {}): ReactElement {
@@ -24,7 +26,9 @@ function AddForm(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const result: string | void = await parseVideoUrl(formValue.type, formValue.id, formValue.page);
+      const result: string | void = formValue.type === 'au'
+        ? await parseAudioUrl(formValue.id)
+        : await parseVideoUrl(formValue.type, formValue.id, formValue.page);
 
       if (result) {
 

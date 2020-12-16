@@ -1,7 +1,7 @@
 import { JSDOM, DOMWindow } from 'jsdom';
 import * as md5 from 'md5';
-import { requestBilibiliHtml, requestVideoInfo } from '../services/download';
-import type { InitialState, VideoInfo } from '../types';
+import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo } from '../services/download';
+import type { InitialState, VideoInfo, AudioInfo } from '../types';
 
 // b站请求接口需要的key
 const APP_KEY: string = 'iVGUTjsxvpLeuDCf';
@@ -74,4 +74,14 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
   }
 
   return flvUrl;
+}
+
+/**
+ * 解析音频地址
+ * @param { string } id: 音频id
+ */
+export async function parseAudioUrl(id: string): Promise<string | void> {
+  const res: AudioInfo = await requestAudioInfo(id);
+
+  return res.data.cdns?.[0];
 }
