@@ -14,7 +14,7 @@ import type { DownloadItem } from '../types';
 /* state */
 type RSelector = Pick<BilibiliInitialState, 'downloadList'>;
 
-const state: Selector<any, BilibiliInitialState> = createStructuredSelector({
+const state: Selector<any, RSelector> = createStructuredSelector({
   downloadList: createSelector(
     ({ bilibili }: { bilibili: BilibiliInitialState }): Array<DownloadItem> => bilibili.downloadList,
     (data: Array<DownloadItem>): Array<DownloadItem> => data

@@ -37,3 +37,9 @@ export interface AudioInfo {
   };
   message: string;
 }
+
+export interface ProgressEventData {
+  percent: number;
+  transferred: number;
+  total: number;
+}
