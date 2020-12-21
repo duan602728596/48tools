@@ -1,9 +1,11 @@
-import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import type { DownloadItem } from '../types';
+import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
+import dbRedux, { bilibiliLiveObjectStoreName } from '../../../utils/idb/dbRedux';
+import type { DownloadItem, LiveItem } from '../types';
 
 export interface BilibiliInitialState {
   downloadList: Array<DownloadItem>;
   downloadProgress: { [key: string]: number };
+  bilibiliLiveList: Array<LiveItem>;
 }
 
 type CaseReducers = SliceCaseReducers<BilibiliInitialState>;
@@ -11,8 +13,9 @@ type CaseReducers = SliceCaseReducers<BilibiliInitialState>;
 const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReducers>({
   name: 'bilibili',
   initialState: {
-    downloadList: [],    // 下载列表
-    downloadProgress: {} // 下载进度
+    downloadList: [],     // 下载列表
+    downloadProgress: {}, // 下载进度
+    bilibiliLiveList: []  // 数据库内获取的直播间列表
   },
   reducers: {
     // 设置下载列表
@@ -27,9 +30,27 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
       state.downloadProgress = action.payload;
 
       return state;
+    },
+
+    // 直播间列表
+    setBilibiliLiveList(state: BilibiliInitialState, action: PayloadAction<{ data: LiveItem }>): BilibiliInitialState {
+      state.bilibiliLiveList = state.bilibiliLiveList.concat([action.payload.data]);
+      
+      return state;
     }
   }
 });
 
-export const { setDownloadList, setDownloadProgress }: CaseReducerActions<CaseReducers> = actions;
+export const {
+  setDownloadList,
+  setDownloadProgress,
+  setBilibiliLiveList
+}: CaseReducerActions<CaseReducers> = actions;
+
+// 保存数据
+export const saveFormData: ActionCreator<any> = dbRedux.putAction({
+  objectStoreName: bilibiliLiveObjectStoreName,
+  successAction: setBilibiliLiveList
+});
+
 export default { bilibili: reducer };

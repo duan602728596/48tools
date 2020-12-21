@@ -38,8 +38,16 @@ export interface AudioInfo {
   message: string;
 }
 
+// 进度条信息
 export interface ProgressEventData {
   percent: number;
   transferred: number;
   total: number;
+}
+
+// 直播间信息
+export interface LiveItem {
+  id: string;
+  description: string;
+  roomId: string;
 }
