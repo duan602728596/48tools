@@ -1,5 +1,5 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import type { LiveInfo } from '../types';
+import type { LiveInfo } from '../interface';
 
 export interface LiveChildItem {
   id: string;

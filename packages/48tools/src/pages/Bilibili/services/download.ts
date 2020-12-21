@@ -2,7 +2,8 @@ import { promisify } from 'util';
 import { pipeline } from 'stream';
 import * as fs from 'fs';
 import got, { Response } from 'got';
-import type { VideoInfo, AudioInfo, ProgressEventData } from '../types';
+import type { ProgressEventData } from '../types';
+import type { VideoInfo, AudioInfo } from '../interface';
 
 const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 

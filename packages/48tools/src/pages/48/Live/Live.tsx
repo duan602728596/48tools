@@ -15,7 +15,7 @@ import { requestLiveList, requestLiveRoomInfo } from '../services/services';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer';
-import type { LiveData, LiveInfo, LiveRoomInfo } from '../types';
+import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /* state */
 type RSelector = Pick<L48InitialState, 'liveList' | 'liveChildList'>;

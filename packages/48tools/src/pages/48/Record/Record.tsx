@@ -28,7 +28,7 @@ import {
 } from '../services/services';
 import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
-import type { LiveData, LiveInfo, LiveRoomInfo } from '../types';
+import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /**
  * 格式化m3u8文件内视频的地址

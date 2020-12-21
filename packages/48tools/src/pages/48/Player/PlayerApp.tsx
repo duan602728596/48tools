@@ -19,7 +19,7 @@ import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
 import { requestLiveRoomInfo } from '../services/services';
-import type { LiveRoomInfo } from '../types';
+import type { LiveRoomInfo } from '../interface';
 import { getFFmpeg, source } from '../../../utils/utils';
 
 interface Search {
