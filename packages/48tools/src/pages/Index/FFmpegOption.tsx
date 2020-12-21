@@ -27,7 +27,7 @@ function FFmpegOption(props: {}): ReactElement {
 
   // 确认
   async function handleSetFFmpegClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    let formValue: Store | null = null;
+    let formValue: Store;
 
     try {
       formValue = await form.validateFields();

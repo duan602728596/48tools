@@ -1,20 +1,20 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
 import * as url from 'url';
-import { ipcRenderer, remote, SaveDialogReturnValue } from 'electron';
+import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
 import type { Store, Dispatch } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
-import { Button, Table, Progress } from 'antd';
+import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash';
 import style from '../../48/index.sass';
 import AddForm from './AddForm';
 import { setDownloadList, setDownloadProgress, BilibiliInitialState } from '../reducers/reducers';
-import { requestDownloadFileByStream } from '../services/download';
-import type { DownloadItem, ProgressEventData } from '../types';
+import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
+import type { DownloadItem } from '../types';
 
 /* state */
 const state: Selector<any, BilibiliInitialState> = createStructuredSelector({
@@ -46,15 +46,34 @@ function Download(props: {}): ReactElement {
 
     if (result.canceled || !result.filePath) return;
 
-    await requestDownloadFileByStream(item.durl, result.filePath, function(e: ProgressEventData): void {
-      const downloadProgress: { [key: string]: number } = { ...store.getState().bilibili.downloadProgress };
+    const worker: Worker = new DownloadBilibiliVideoWorker();
 
-      if (e.percent >= 1) {
-        delete downloadProgress[item.qid]; // 下载完成
-      } else {
-        downloadProgress[item.qid] = Math.floor(e.percent * 100);
+    type EventData = {
+      type: 'success' | 'progress';
+      qid: string;
+      data: number;
+    };
+
+    worker.addEventListener('message', function(event: MessageEvent<EventData>): void {
+      const downloadProgress: { [key: string]: number } = { ...store.getState().bilibili.downloadProgress };
+      const { type, qid, data }: EventData = event.data;
+
+      if (type === 'progress') {
+        downloadProgress[qid] = data;
+      } else if (type === 'success') {
+        message.success('下载完成！');
+        delete downloadProgress[qid]; // 下载完成
       }
+
       dispatch(setDownloadProgress(downloadProgress));
+      (type === 'success') && worker.terminate();
+    });
+
+    worker.postMessage({
+      type: 'start',
+      filePath: result.filePath,
+      durl: item.durl,
+      qid: item.qid
     });
   }
 
