@@ -65,6 +65,7 @@ function AddForm(props: {}): ReactElement {
           <Form.Item name="roomId" label="直播间ID" rules={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }>
             <Input />
           </Form.Item>
+          <p className={ style.tips }>直播间ID支持配置短ID。</p>
         </Form>
       </Modal>
     </Fragment>

@@ -35,7 +35,7 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
     // 直播间列表
     setBilibiliLiveList(state: BilibiliInitialState, action: PayloadAction<{ data: LiveItem }>): BilibiliInitialState {
       state.bilibiliLiveList = state.bilibiliLiveList.concat([action.payload.data]);
-      
+
       return state;
     }
   }
