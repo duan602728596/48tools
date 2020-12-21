@@ -9,7 +9,7 @@ import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash';
 import * as moment from 'moment';
-import DownloadWorker from 'worker-loader!./download.worker';
+import DownloadWorker from 'worker-loader!./downloadLiveFlv.worker';
 import style from '../index.sass';
 import { requestLiveList, requestLiveRoomInfo } from '../services/services';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
