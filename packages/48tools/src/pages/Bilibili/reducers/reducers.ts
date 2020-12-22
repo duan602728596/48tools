@@ -1,4 +1,5 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
+import { findIndex } from 'lodash';
 import dbRedux, { bilibiliLiveObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { DownloadItem, LiveItem } from '../types';
 
@@ -37,6 +38,27 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
       state.bilibiliLiveList = state.bilibiliLiveList.concat([action.payload.data]);
 
       return state;
+    },
+
+    // 获取直播间列表
+    setBilibiliLiveList(state: BilibiliInitialState, action: PayloadAction<{ result: Array<LiveItem> }>): BilibiliInitialState {
+      state.bilibiliLiveList = action.payload.result;
+
+      return state;
+    },
+
+    // 直播间列表内删除一个直播间
+    setBilibiliLiveListDeleteRoom(state: BilibiliInitialState, action: PayloadAction<{ query: string }>): BilibiliInitialState {
+      const index: number = findIndex(state.bilibiliLiveList, { id: action.payload.query });
+
+      if (index >= 0) {
+        const newBilibiliLiveList: Array<LiveItem> = [...state.bilibiliLiveList];
+
+        newBilibiliLiveList.splice(index, 1);
+        state.bilibiliLiveList = newBilibiliLiveList;
+      }
+
+      return state;
     }
   }
 });
@@ -44,13 +66,27 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
 export const {
   setDownloadList,
   setDownloadProgress,
-  setBilibiliLiveListAddRoom
+  setBilibiliLiveListAddRoom,
+  setBilibiliLiveList,
+  setBilibiliLiveListDeleteRoom
 }: CaseReducerActions<CaseReducers> = actions;
 
 // 保存数据
 export const saveFormData: ActionCreator<any> = dbRedux.putAction({
   objectStoreName: bilibiliLiveObjectStoreName,
   successAction: setBilibiliLiveListAddRoom
+});
+
+// 请求所有列表
+export const cursorFormData: ActionCreator<any> = dbRedux.cursorAction({
+  objectStoreName: bilibiliLiveObjectStoreName,
+  successAction: setBilibiliLiveList
+});
+
+// 删除
+export const deleteFormData: ActionCreator<any> = dbRedux.deleteAction({
+  objectStoreName: bilibiliLiveObjectStoreName,
+  successAction: setBilibiliLiveListDeleteRoom
 });
 
 export default { bilibili: reducer };
