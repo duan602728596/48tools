@@ -32,8 +32,8 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
       return state;
     },
 
-    // 直播间列表
-    setBilibiliLiveList(state: BilibiliInitialState, action: PayloadAction<{ data: LiveItem }>): BilibiliInitialState {
+    // 直播间列表内添加一个直播间
+    setBilibiliLiveListAddRoom(state: BilibiliInitialState, action: PayloadAction<{ data: LiveItem }>): BilibiliInitialState {
       state.bilibiliLiveList = state.bilibiliLiveList.concat([action.payload.data]);
 
       return state;
@@ -44,13 +44,13 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
 export const {
   setDownloadList,
   setDownloadProgress,
-  setBilibiliLiveList
+  setBilibiliLiveListAddRoom
 }: CaseReducerActions<CaseReducers> = actions;
 
 // 保存数据
 export const saveFormData: ActionCreator<any> = dbRedux.putAction({
   objectStoreName: bilibiliLiveObjectStoreName,
-  successAction: setBilibiliLiveList
+  successAction: setBilibiliLiveListAddRoom
 });
 
 export default { bilibili: reducer };
