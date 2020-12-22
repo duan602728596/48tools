@@ -3,10 +3,16 @@ import { findIndex } from 'lodash';
 import dbRedux, { bilibiliLiveObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { DownloadItem, LiveItem } from '../types';
 
+export interface LiveChildItem {
+  id: string;
+  worker: Worker;
+}
+
 export interface BilibiliInitialState {
   downloadList: Array<DownloadItem>;
   downloadProgress: { [key: string]: number };
   bilibiliLiveList: Array<LiveItem>;
+  liveChildList: Array<LiveChildItem>;
 }
 
 type CaseReducers = SliceCaseReducers<BilibiliInitialState>;
@@ -16,7 +22,8 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
   initialState: {
     downloadList: [],     // 下载列表
     downloadProgress: {}, // 下载进度
-    bilibiliLiveList: []  // 数据库内获取的直播间列表
+    bilibiliLiveList: [], // 数据库内获取的直播间列表
+    liveChildList: []     // 直播下载
   },
   reducers: {
     // 设置下载列表
@@ -59,6 +66,13 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
       }
 
       return state;
+    },
+
+    // 下载
+    setLiveChildList(state: BilibiliInitialState, action: PayloadAction<Array<LiveChildItem>>): BilibiliInitialState {
+      state.liveChildList = action.payload;
+
+      return state;
     }
   }
 });
@@ -68,7 +82,8 @@ export const {
   setDownloadProgress,
   setBilibiliLiveListAddRoom,
   setBilibiliLiveList,
-  setBilibiliLiveListDeleteRoom
+  setBilibiliLiveListDeleteRoom,
+  setLiveChildList
 }: CaseReducerActions<CaseReducers> = actions;
 
 // 保存数据

@@ -17,6 +17,14 @@ export function createReducer(asyncReducers: ReducersMapObject): Reducer {
 }
 
 export const ignoreOptions: any = {
-  ignoredPaths: ['l48.liveChildList', 'l48.recordChildList'],
-  ignoredActions: ['l48/setLiveChildList', 'l48/setRecordChildList']
+  ignoredPaths: [
+    'l48.liveChildList',
+    'l48.recordChildList',
+    'bilibili.liveChildList'
+  ],
+  ignoredActions: [
+    'l48/setLiveChildList',
+    'l48/setRecordChildList',
+    'bilibili/setLiveChildList'
+  ]
 };
