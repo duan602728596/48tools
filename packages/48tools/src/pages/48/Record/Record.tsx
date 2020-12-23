@@ -29,6 +29,7 @@ import {
 } from '../services/services';
 import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
+import downloadImages from '../Live/downloadImages';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /**
@@ -113,6 +114,13 @@ function Record(props: {}): ReactElement {
       list.splice(index, 1);
       dispatch(setRecordChildList([...list]));
     }
+  }
+
+  // 下载图片
+  async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+
+    downloadImages(record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
   // 下载视频
@@ -247,6 +255,7 @@ function Record(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
+      width: 290,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = findIndex(recordChildList, { id: record.liveId });
 
@@ -269,6 +278,9 @@ function Record(props: {}): ReactElement {
 
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrcClick(record, event) }>
               下载弹幕
+            </Button>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
+              下载图片
             </Button>
           </Button.Group>
         );
