@@ -12,7 +12,7 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from '../index.sass';
-import { requestLiveList, requestLiveRoomInfo } from '../services/services';
+import { requestLiveList, requestLiveRoomInfo } from '../services/live';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer';

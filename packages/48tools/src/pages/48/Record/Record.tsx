@@ -26,7 +26,7 @@ import {
   requestLiveRoomInfo,
   requestDownloadFileByStream,
   requestDownloadFile
-} from '../services/services';
+} from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Live/downloadImages';
