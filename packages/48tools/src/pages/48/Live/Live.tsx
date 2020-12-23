@@ -9,7 +9,8 @@ import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash';
 import * as moment from 'moment';
-import DownloadWorker from 'worker-loader!./downloadLiveFlv.worker';
+import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
+import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from '../index.sass';
 import { requestLiveList, requestLiveRoomInfo } from '../services/services';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
@@ -70,15 +71,10 @@ function Live(props: {}): ReactElement {
     if (result.canceled || !result.filePath) return;
 
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-    const worker: Worker = new DownloadWorker();
+    const worker: Worker = new FFMpegDownloadWorker();
 
-    type EventData = {
-      type: 'close' | 'error';
-      error?: Error;
-    };
-
-    worker.addEventListener('message', function(event: MessageEvent<EventData>) {
-      const { type, error }: EventData = event.data;
+    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
+      const { type, error }: MessageEventData = event.data;
 
       if (type === 'close' || type === 'error') {
         if (type === 'error') {
@@ -94,7 +90,6 @@ function Live(props: {}): ReactElement {
       type: 'start',
       playStreamPath: resInfo.content.playStreamPath,
       filePath: result.filePath,
-      liveId: record.liveId,
       ffmpeg: getFFmpeg()
     });
 

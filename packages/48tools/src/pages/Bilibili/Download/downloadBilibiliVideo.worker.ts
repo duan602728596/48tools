@@ -1,11 +1,17 @@
 import { requestDownloadFileByStream } from '../services/download';
 import type { ProgressEventData } from '../types';
 
-type EventData = {
+type WorkerEventData = {
   type: 'start';
   filePath: string;
   durl: string;
   qid: string;
+};
+
+export type MessageEventData = {
+  type: 'success' | 'progress';
+  qid: string;
+  data: number;
 };
 
 /**
@@ -30,8 +36,8 @@ function download(qid: string, durl: string, filePath: string): void {
   });
 }
 
-addEventListener('message', function(event: MessageEvent<EventData>): void {
-  const { type, filePath, durl, qid }: EventData = event.data;
+addEventListener('message', function(event: MessageEvent<WorkerEventData>): void {
+  const { type, filePath, durl, qid }: WorkerEventData = event.data;
 
   if (type === 'start') {
     download(qid, durl, filePath);

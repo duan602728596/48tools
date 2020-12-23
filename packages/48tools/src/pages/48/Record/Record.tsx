@@ -12,7 +12,8 @@ import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash';
 import * as moment from 'moment';
-import DownloadWorker from 'worker-loader!./downloadM3u8.worker';
+import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
+import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from '../index.sass';
 import {
   setRecordList,
@@ -128,15 +129,10 @@ function Record(props: {}): ReactElement {
 
     await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data));
 
-    const worker: Worker = new DownloadWorker();
+    const worker: Worker = new FFMpegDownloadWorker();
 
-    type EventData = {
-      type: 'close' | 'error';
-      error?: Error;
-    };
-
-    worker.addEventListener('message', function(event: MessageEvent<EventData>) {
-      const { type, error }: EventData = event.data;
+    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
+      const { type, error }: MessageEventData = event.data;
 
       if (type === 'close' || type === 'error') {
         if (type === 'error') {
@@ -152,8 +148,8 @@ function Record(props: {}): ReactElement {
       type: 'start',
       playStreamPath: m3u8File,
       filePath: result.filePath,
-      liveId: record.liveId,
-      ffmpeg: getFFmpeg()
+      ffmpeg: getFFmpeg(),
+      protocolWhitelist: true
     });
 
     dispatch(setRecordChildList(

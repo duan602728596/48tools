@@ -14,6 +14,7 @@ import style from '../../48/index.sass';
 import AddForm from './AddForm';
 import { setDownloadList, setDownloadProgress, BilibiliInitialState } from '../reducers/reducers';
 import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
+import type { MessageEventData } from './downloadBilibiliVideo.worker';
 import type { DownloadItem } from '../types';
 
 /* state */
@@ -50,15 +51,9 @@ function Download(props: {}): ReactElement {
 
     const worker: Worker = new DownloadBilibiliVideoWorker();
 
-    type EventData = {
-      type: 'success' | 'progress';
-      qid: string;
-      data: number;
-    };
-
-    worker.addEventListener('message', function(event: MessageEvent<EventData>): void {
+    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
       const downloadProgress: { [key: string]: number } = { ...store.getState().bilibili.downloadProgress };
-      const { type, qid, data }: EventData = event.data;
+      const { type, qid, data }: MessageEventData = event.data;
 
       if (type === 'progress') {
         downloadProgress[qid] = data;

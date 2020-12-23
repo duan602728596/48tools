@@ -1,4 +1,4 @@
-import { ipcRenderer, remote, SaveDialogReturnValue } from 'electron';
+import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, ReactElement, useEffect, MouseEvent } from 'react';
 import type { Store, Dispatch } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
@@ -8,7 +8,8 @@ import { Button, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash';
 import * as moment from 'moment';
-import BilibiliLiveWorker from 'worker-loader!./bilibiliLive.worker';
+import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
+import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from '../../48/index.sass';
 import AddForm from './AddForm';
 import { cursorFormData, deleteFormData, setLiveBilibiliChildList, BilibiliInitialState, LiveChildItem } from '../reducers/reducers';
@@ -72,15 +73,10 @@ function Live(props: {}): ReactElement {
     try {
       const resInit: RoomInit = await requestRoomInitData(record.roomId);
       const resPlayUrl: RoomPlayUrl = await requestRoomPlayerUrl(`${ resInit.data.room_id }`);
-      const worker: Worker = new BilibiliLiveWorker();
+      const worker: Worker = new FFMpegDownloadWorker();
 
-      type EventData = {
-        type: 'close' | 'error';
-        error?: Error;
-      };
-
-      worker.addEventListener('message', function(event: MessageEvent<EventData>) {
-        const { type, error }: EventData = event.data;
+      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
+        const { type, error }: MessageEventData = event.data;
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
@@ -97,7 +93,8 @@ function Live(props: {}): ReactElement {
         playStreamPath: resPlayUrl.data.durl[0].url,
         filePath: result.filePath,
         id: record.id,
-        ffmpeg: getFFmpeg()
+        ffmpeg: getFFmpeg(),
+        ua: true
       });
 
       dispatch(setLiveBilibiliChildList(
