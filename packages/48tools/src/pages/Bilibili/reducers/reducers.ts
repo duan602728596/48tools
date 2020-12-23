@@ -69,7 +69,7 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
     },
 
     // 下载
-    setLiveChildList(state: BilibiliInitialState, action: PayloadAction<Array<LiveChildItem>>): BilibiliInitialState {
+    setLiveBilibiliChildList(state: BilibiliInitialState, action: PayloadAction<Array<LiveChildItem>>): BilibiliInitialState {
       state.liveChildList = action.payload;
 
       return state;
@@ -83,7 +83,7 @@ export const {
   setBilibiliLiveListAddRoom,
   setBilibiliLiveList,
   setBilibiliLiveListDeleteRoom,
-  setLiveChildList
+  setLiveBilibiliChildList
 }: CaseReducerActions<CaseReducers> = actions;
 
 // 保存数据

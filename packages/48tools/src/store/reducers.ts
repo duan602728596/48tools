@@ -25,6 +25,6 @@ export const ignoreOptions: any = {
   ignoredActions: [
     'l48/setLiveChildList',
     'l48/setRecordChildList',
-    'bilibili/setLiveChildList'
+    'bilibili/setLiveBilibiliChildList'
   ]
 };

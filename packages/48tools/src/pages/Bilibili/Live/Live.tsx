@@ -11,7 +11,7 @@ import * as moment from 'moment';
 import BilibiliLiveWorker from 'worker-loader!./bilibiliLive.worker';
 import style from '../../48/index.sass';
 import AddForm from './AddForm';
-import { cursorFormData, deleteFormData, setLiveChildList, BilibiliInitialState, LiveChildItem } from '../reducers/reducers';
+import { cursorFormData, deleteFormData, setLiveBilibiliChildList, BilibiliInitialState, LiveChildItem } from '../reducers/reducers';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
@@ -56,7 +56,7 @@ function Live(props: {}): ReactElement {
 
     if (index >= 0) {
       list.splice(index, 1);
-      dispatch(setLiveChildList([...list]));
+      dispatch(setLiveBilibiliChildList([...list]));
     }
   }
 
@@ -94,13 +94,13 @@ function Live(props: {}): ReactElement {
 
       worker.postMessage({
         type: 'start',
-        playStreamPath: resPlayUrl.data.durl[0],
+        playStreamPath: resPlayUrl.data.durl[0].url,
         filePath: result.filePath,
         id: record.id,
         ffmpeg: getFFmpeg()
       });
 
-      dispatch(setLiveChildList(
+      dispatch(setLiveBilibiliChildList(
         liveChildList.concat([{
           id: record.id,
           worker
