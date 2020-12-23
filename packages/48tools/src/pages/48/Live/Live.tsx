@@ -16,6 +16,7 @@ import { requestLiveList, requestLiveRoomInfo } from '../services/services';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer';
+import downloadImages from './downloadImages';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /* state */
@@ -41,6 +42,13 @@ function Live(props: {}): ReactElement {
   const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
+
+  // 下载图片
+  async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+
+    downloadImages(record.coverPath, resInfo.content?.carousels?.carousels);
+  }
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
@@ -154,6 +162,7 @@ function Live(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
+      width: 250,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = findIndex(liveChildList, { id: record.liveId });
 
@@ -175,6 +184,9 @@ function Live(props: {}): ReactElement {
             }
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleOpenPlayerClick(record, event) }>
               播放
+            </Button>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
+              下载图片
             </Button>
           </Button.Group>
         );

@@ -31,6 +31,10 @@ export interface LiveData {
 // 直播间信息
 export interface LiveRoomInfo {
   content: {
+    carousels?: {
+      carouselTime: number;
+      carousels: Array<string>;
+    };
     liveId: string;
     roomId: string;
     playStreamPath: string;
