@@ -72,41 +72,46 @@ function Live(props: {}): ReactElement {
 
   // 录制
   async function handleGetVideoClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-      defaultPath: `${ record.userInfo.nickname }_${ record.liveId }.flv`
-    });
+    try {
+      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+        defaultPath: `${ record.userInfo.nickname }_${ record.liveId }.flv`
+      });
 
-    if (result.canceled || !result.filePath) return;
+      if (result.canceled || !result.filePath) return;
 
-    const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-    const worker: Worker = new FFMpegDownloadWorker();
+      const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+      const worker: Worker = new FFMpegDownloadWorker();
 
-    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
-      const { type, error }: MessageEventData = event.data;
+      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
+        const { type, error }: MessageEventData = event.data;
 
-      if (type === 'close' || type === 'error') {
-        if (type === 'error') {
-          message.error(`视频：${ record.title } 下载失败！`);
+        if (type === 'close' || type === 'error') {
+          if (type === 'error') {
+            message.error(`视频：${ record.title } 下载失败！`);
+          }
+
+          worker.terminate();
+          endCallback(record);
         }
+      }, false);
 
-        worker.terminate();
-        endCallback(record);
-      }
-    }, false);
+      worker.postMessage({
+        type: 'start',
+        playStreamPath: resInfo.content.playStreamPath,
+        filePath: result.filePath,
+        ffmpeg: getFFmpeg()
+      });
 
-    worker.postMessage({
-      type: 'start',
-      playStreamPath: resInfo.content.playStreamPath,
-      filePath: result.filePath,
-      ffmpeg: getFFmpeg()
-    });
-
-    dispatch(setLiveChildList(
-      liveChildList.concat([{
-        id: record.liveId,
-        worker
-      }])
-    ));
+      dispatch(setLiveChildList(
+        liveChildList.concat([{
+          id: record.liveId,
+          worker
+        }])
+      ));
+    } catch (err) {
+      console.error(err);
+      message.error('直播录制失败！');
+    }
   }
 
   // 打开新窗口播放视频

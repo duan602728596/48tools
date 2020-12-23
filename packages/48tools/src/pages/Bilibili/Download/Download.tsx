@@ -41,37 +41,42 @@ function Download(props: {}): ReactElement {
 
   // 下载
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const urlResult: url.URL = new url.URL(item.durl);
-    const parseResult: ParsedPath = path.parse(urlResult.pathname);
-    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-      defaultPath: `${ item.id }_${ item.page }${ parseResult.ext }`
-    });
+    try {
+      const urlResult: url.URL = new url.URL(item.durl);
+      const parseResult: ParsedPath = path.parse(urlResult.pathname);
+      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+        defaultPath: `${ item.id }_${ item.page }${ parseResult.ext }`
+      });
 
-    if (result.canceled || !result.filePath) return;
+      if (result.canceled || !result.filePath) return;
 
-    const worker: Worker = new DownloadBilibiliVideoWorker();
+      const worker: Worker = new DownloadBilibiliVideoWorker();
 
-    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
-      const downloadProgress: { [key: string]: number } = { ...store.getState().bilibili.downloadProgress };
-      const { type, qid, data }: MessageEventData = event.data;
+      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
+        const downloadProgress: { [key: string]: number } = { ...store.getState().bilibili.downloadProgress };
+        const { type, qid, data }: MessageEventData = event.data;
 
-      if (type === 'progress') {
-        downloadProgress[qid] = data;
-      } else if (type === 'success') {
-        message.success('下载完成！');
-        delete downloadProgress[qid]; // 下载完成
-      }
+        if (type === 'progress') {
+          downloadProgress[qid] = data;
+        } else if (type === 'success') {
+          message.success('下载完成！');
+          delete downloadProgress[qid]; // 下载完成
+        }
 
-      dispatch(setDownloadProgress(downloadProgress));
-      (type === 'success') && worker.terminate();
-    });
+        dispatch(setDownloadProgress(downloadProgress));
+        (type === 'success') && worker.terminate();
+      });
 
-    worker.postMessage({
-      type: 'start',
-      filePath: result.filePath,
-      durl: item.durl,
-      qid: item.qid
-    });
+      worker.postMessage({
+        type: 'start',
+        filePath: result.filePath,
+        durl: item.durl,
+        qid: item.qid
+      });
+    } catch (err) {
+      console.error(err);
+      message.error('视频下载失败！');
+    }
   }
 
   // 删除一个任务

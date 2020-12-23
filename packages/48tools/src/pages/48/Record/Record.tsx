@@ -117,47 +117,52 @@ function Record(props: {}): ReactElement {
 
   // 下载视频
   async function handleDownloadM3u8Click(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-      defaultPath: `${ record.userInfo.nickname }_${ record.liveId }.ts`
-    });
+    try {
+      const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+        defaultPath: `${ record.userInfo.nickname }_${ record.liveId }.ts`
+      });
 
-    if (result.canceled || !result.filePath) return;
+      if (result.canceled || !result.filePath) return;
 
-    const m3u8File: string = `${ result.filePath }.m3u8`;
-    const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
+      const m3u8File: string = `${ result.filePath }.m3u8`;
+      const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
 
-    await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data));
+      await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data));
 
-    const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = new FFMpegDownloadWorker();
 
-    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
-      const { type, error }: MessageEventData = event.data;
+      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
+        const { type, error }: MessageEventData = event.data;
 
-      if (type === 'close' || type === 'error') {
-        if (type === 'error') {
-          message.error(`视频：${ record.title } 下载失败！`);
+        if (type === 'close' || type === 'error') {
+          if (type === 'error') {
+            message.error(`视频：${ record.title } 下载失败！`);
+          }
+
+          worker.terminate();
+          endCallback(record);
         }
+      }, false);
 
-        worker.terminate();
-        endCallback(record);
-      }
-    }, false);
+      worker.postMessage({
+        type: 'start',
+        playStreamPath: m3u8File,
+        filePath: result.filePath,
+        ffmpeg: getFFmpeg(),
+        protocolWhitelist: true
+      });
 
-    worker.postMessage({
-      type: 'start',
-      playStreamPath: m3u8File,
-      filePath: result.filePath,
-      ffmpeg: getFFmpeg(),
-      protocolWhitelist: true
-    });
-
-    dispatch(setRecordChildList(
-      recordChildList.concat([{
-        id: record.liveId,
-        worker
-      }])
-    ));
+      dispatch(setRecordChildList(
+        recordChildList.concat([{
+          id: record.liveId,
+          worker
+        }])
+      ));
+    } catch (err) {
+      console.error(err);
+      message.error('录播下载失败！');
+    }
   }
 
   // 下载弹幕
