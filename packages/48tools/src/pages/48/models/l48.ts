@@ -1,4 +1,4 @@
-import { observable, makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { findIndex } from 'lodash';
 import type { LiveInfo } from '../interface';
 
