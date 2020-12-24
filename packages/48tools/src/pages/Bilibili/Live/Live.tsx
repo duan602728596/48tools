@@ -91,45 +91,43 @@ function Live(props: {}): ReactElement {
       title: '操作',
       key: 'handle',
       width: 155,
-      render: (value: undefined, record: LiveItem, index: number): ReactElement => {
-        return (
-          <Button.Group>
-            <Observer>
-              {
-                (): ReactElement => {
-                  const idx: number = findIndex(bilibiliStore.liveChildList, { id: record.id });
+      render: (value: undefined, record: LiveItem, index: number): ReactElement => (
+        <Button.Group>
+          <Observer>
+            {
+              (): ReactElement => {
+                const idx: number = findIndex(bilibiliStore.liveChildList, { id: record.id });
 
-                  return (
-                    <Fragment>
-                      {
-                        idx >= 0 ? (
-                          <Button type="primary"
-                            danger={ true }
-                            onClick={ (event: MouseEvent<HTMLButtonElement> ): void => handleStopClick(record, event) }
-                          >
-                            停止录制
-                          </Button>
-                        ) : (
-                          <Button onClick={ (event: MouseEvent<HTMLButtonElement> ): Promise<void> => handleRecordClick(record, event) }>
-                            开始录制
-                          </Button>
-                        )
-                      }
-                      <Button type="primary"
-                        danger={ true }
-                        disabled={ idx >= 0 }
-                        onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteRoomIdClick(record, event) }
-                      >
-                        删除
-                      </Button>
-                    </Fragment>
-                  );
-                }
+                return (
+                  <Fragment>
+                    {
+                      idx >= 0 ? (
+                        <Button type="primary"
+                          danger={ true }
+                          onClick={ (event: MouseEvent<HTMLButtonElement> ): void => handleStopClick(record, event) }
+                        >
+                          停止录制
+                        </Button>
+                      ) : (
+                        <Button onClick={ (event: MouseEvent<HTMLButtonElement> ): Promise<void> => handleRecordClick(record, event) }>
+                          开始录制
+                        </Button>
+                      )
+                    }
+                    <Button type="primary"
+                      danger={ true }
+                      disabled={ idx >= 0 }
+                      onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteRoomIdClick(record, event) }
+                    >
+                      删除
+                    </Button>
+                  </Fragment>
+                );
               }
-            </Observer>
-          </Button.Group>
-        );
-      }
+            }
+          </Observer>
+        </Button.Group>
+      )
     }
   ];
 

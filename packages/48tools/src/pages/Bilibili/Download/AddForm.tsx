@@ -1,30 +1,14 @@
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
-import type { Dispatch } from 'redux';
-import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import style from './addForm.sass';
+import bilibiliStore from '../models/bilibili';
 import { rStr } from '../../../utils/utils';
 import { parseVideoUrl, parseAudioUrl } from './parseBilibiliUrl';
-import { setDownloadList, BilibiliInitialState } from '../reducers/reducers';
-import type { DownloadItem } from '../types';
-
-/* state */
-type RSelector = Pick<BilibiliInitialState, 'downloadList'>;
-
-const state: Selector<any, RSelector> = createStructuredSelector({
-  downloadList: createSelector(
-    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<DownloadItem> => bilibili.downloadList,
-    (data: Array<DownloadItem>): Array<DownloadItem> => data
-  )
-});
 
 /* 添加下载信息 */
 function AddForm(props: {}): ReactElement {
-  const { downloadList }: RSelector = useSelector(state);
-  const dispatch: Dispatch = useDispatch();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
@@ -47,15 +31,13 @@ function AddForm(props: {}): ReactElement {
         : await parseVideoUrl(formValue.type, formValue.id, formValue.page);
 
       if (result) {
-        dispatch(setDownloadList(
-          downloadList.concat([{
-            qid: rStr(30),
-            durl: result,
-            type: formValue.type,
-            id: formValue.id,
-            page: formValue.page ?? 1
-          }])
-        ));
+        bilibiliStore.setAddDownloadList({
+          qid: rStr(30),
+          durl: result,
+          type: formValue.type,
+          id: formValue.id,
+          page: formValue.page ?? 1
+        });
         setVisible(false);
       } else {
         message.warn('没有获取到媒体地址！');

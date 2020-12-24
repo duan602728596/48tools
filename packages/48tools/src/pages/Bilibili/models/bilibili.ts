@@ -10,8 +10,10 @@ export interface LiveChildItem {
 }
 
 class Bilibili {
-  public bilibiliLiveList: Array<LiveItem> = [];   // 数据库内获取的直播间列表
-  public liveChildList: Array<LiveChildItem> = []; // 直播下载
+  public bilibiliLiveList: Array<LiveItem> = [];           // 数据库内获取的直播间列表
+  public liveChildList: Array<LiveChildItem> = [];         // 直播下载
+  public downloadList: Array<DownloadItem> = [];           // 下载列表
+  public downloadProgress: { [key: string]: number } = {}; // 下载进度条
 
   constructor() {
     makeAutoObservable(this);
@@ -93,6 +95,30 @@ class Bilibili {
 
     if (index >= 0) {
       this.liveChildList.splice(index, 1);
+    }
+  }
+
+  // 添加下载列表
+  setAddDownloadList(payload: DownloadItem): void {
+    this.downloadList = this.downloadList.concat([payload]);
+  }
+
+  // 删除下载任务
+  setDeleteDownloadListTask(payload: DownloadItem): void {
+    const index: number = findIndex(this.downloadList, { qid: payload.qid });
+
+    if (index >= 0) {
+      this.downloadList.splice(index, 1);
+      this.downloadList = [...this.downloadList];
+    }
+  }
+
+  // 设置下载进度
+  setDownloadprogress(qid: string, data: number, isDelete?: boolean): void {
+    if (isDelete) {
+      delete this.downloadProgress[qid];
+    } else {
+      this.downloadProgress[qid] = data;
     }
   }
 }
