@@ -19,18 +19,27 @@ import type { RoomInit, RoomPlayUrl } from '../interface';
 
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
+  const {
+    bilibiliLiveList,
+    liveChildList,
+    dbQueryAllLiveList,
+    dbDeleteLiveListData,
+    setAddLiveChildList,
+    setDeleteLiveChildList
+  }: typeof bilibiliStore = bilibiliStore;
+
   // 停止
   function handleStopClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(bilibiliStore.liveChildList, { id: record.id });
+    const index: number = findIndex(liveChildList, { id: record.id });
 
     if (index >= 0) {
-      bilibiliStore.liveChildList[index].worker.postMessage({ type: 'stop' });
+      liveChildList[index].worker.postMessage({ type: 'stop' });
     }
   }
 
   // 停止后的回调函数
   function endCallback(record: LiveItem): void {
-    bilibiliStore.setDeleteLiveChildList(record);
+    setDeleteLiveChildList(record);
   }
 
   // 开始录制
@@ -69,7 +78,7 @@ function Live(props: {}): ReactElement {
         ua: true
       });
 
-      bilibiliStore.setAddLiveChildList({
+      setAddLiveChildList({
         id: record.id,
         worker
       });
@@ -81,7 +90,7 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
-    bilibiliStore.dbDeleteLiveListData(record);
+    dbDeleteLiveListData(record);
   }
 
   const columns: ColumnsType<LiveItem> = [
@@ -96,7 +105,7 @@ function Live(props: {}): ReactElement {
           <Observer>
             {
               (): ReactElement => {
-                const idx: number = findIndex(bilibiliStore.liveChildList, { id: record.id });
+                const idx: number = findIndex(liveChildList, { id: record.id });
 
                 return (
                   <Fragment>
@@ -132,7 +141,7 @@ function Live(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    bilibiliStore.dbQueryAllLiveList();
+    dbQueryAllLiveList();
   }, []);
 
   return (
@@ -149,7 +158,7 @@ function Live(props: {}): ReactElement {
       </header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ bilibiliStore.bilibiliLiveList }
+        dataSource={ bilibiliLiveList }
         bordered={ true }
         rowKey={ dbConfig.objectStore[0].key }
         pagination={{

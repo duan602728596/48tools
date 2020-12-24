@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, action } from 'mobx';
 import { findIndex } from 'lodash';
 import type { LiveInfo } from '../interface';
 
@@ -16,7 +16,7 @@ class L48 {
   public recordChildList: Array<LiveChildItem> = []; // 录播下载队列
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, undefined, { autoBind: true });
   }
 
   // 设置直播信息

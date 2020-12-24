@@ -16,6 +16,8 @@ import type { DownloadItem } from '../types';
 
 /* 视频下载 */
 function Download(props: {}): ReactElement {
+  const { downloadList, downloadProgress, setDeleteDownloadListTask, setDownloadProgress }: typeof bilibiliStore = bilibiliStore;
+
   // 下载
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
@@ -33,10 +35,10 @@ function Download(props: {}): ReactElement {
         const { type, qid, data }: MessageEventData = event.data;
 
         if (type === 'progress') {
-          bilibiliStore.setDownloadprogress(qid, data);
+          setDownloadProgress(qid, data);
         } else if (type === 'success') {
           message.success('下载完成！');
-          bilibiliStore.setDownloadprogress(qid, 0, true); // 下载完成
+          setDownloadProgress(qid, 0, true); // 下载完成
           worker.terminate();
         }
       });
@@ -55,7 +57,7 @@ function Download(props: {}): ReactElement {
 
   // 删除一个任务
   function handleDeleteTaskClick(record: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
-    bilibiliStore.setDeleteDownloadListTask(record);
+    setDeleteDownloadListTask(record);
   }
 
   const columns: ColumnsType<DownloadItem> = [
@@ -68,8 +70,8 @@ function Download(props: {}): ReactElement {
       render: (value: string, record: DownloadItem, index: number): ReactNode => (
         <Observer>
           {
-            (): ReactElement => (value in bilibiliStore.downloadProgress)
-              ? <Progress type="circle" width={ 30 } percent={ bilibiliStore.downloadProgress[value] } />
+            (): ReactElement => (value in downloadProgress)
+              ? <Progress type="circle" width={ 30 } percent={ downloadProgress[value] } />
               : <span>等待下载</span>
           }
         </Observer>
@@ -83,7 +85,7 @@ function Download(props: {}): ReactElement {
         <Observer>
           {
             (): ReactElement => {
-              const inDownload: boolean = record.qid in bilibiliStore.downloadProgress;
+              const inDownload: boolean = record.qid in downloadProgress;
 
               return (
                 <Button.Group>
@@ -122,7 +124,7 @@ function Download(props: {}): ReactElement {
       </header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ bilibiliStore.downloadList }
+        dataSource={ downloadList }
         bordered={ true }
         rowKey="qid"
         pagination={{

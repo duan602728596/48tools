@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import IndexedDB from 'indexeddb-tools';
 import { findIndex } from 'lodash';
 import dbConfig from '../../../utils/idb/dbConfig';
@@ -16,7 +16,7 @@ class Bilibili {
   public downloadProgress: { [key: string]: number } = {}; // 下载进度条
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, undefined, { autoBind: true });
   }
 
   // 请求所有列表
@@ -37,7 +37,9 @@ class Bilibili {
           resultArr.push(result['value']);
           result.continue();
         } else {
-          self.bilibiliLiveList = resultArr;
+          runInAction(function(): void {
+            self.bilibiliLiveList = resultArr;
+          });
           self1.close();
         }
       });
@@ -56,7 +58,9 @@ class Bilibili {
       const store: any = this.getObjectStore(dbConfig.objectStore[0].name, true);
 
       store.put(payload);
-      self.bilibiliLiveList = self.bilibiliLiveList.concat([payload]);
+      runInAction(function(): void {
+        self.bilibiliLiveList = self.bilibiliLiveList.concat([payload]);
+      });
     }
 
     IndexedDB(dbConfig.name, dbConfig.version, { success: handleDBSuccess });
@@ -76,8 +80,10 @@ class Bilibili {
       const index: number = findIndex(self.bilibiliLiveList, { id: payload.id });
 
       if (index >= 0) {
-        self.bilibiliLiveList.splice(index, 1);
-        self.bilibiliLiveList = [...self.bilibiliLiveList];
+        runInAction(function(): void {
+          self.bilibiliLiveList.splice(index, 1);
+          self.bilibiliLiveList = [...self.bilibiliLiveList];
+        });
       }
     }
 
@@ -114,7 +120,7 @@ class Bilibili {
   }
 
   // 设置下载进度
-  setDownloadprogress(qid: string, data: number, isDelete?: boolean): void {
+  setDownloadProgress(qid: string, data: number, isDelete?: boolean): void {
     if (isDelete) {
       delete this.downloadProgress[qid];
     } else {

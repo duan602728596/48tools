@@ -19,6 +19,7 @@ import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
+  const { liveList, liveChildList, setLiveList, setAddLiveChildList, setDeleteLiveChildList }: typeof l48Store = l48Store;
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
   // 下载图片
@@ -30,16 +31,16 @@ function Live(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(l48Store.liveChildList, { id: record.liveId });
+    const index: number = findIndex(liveChildList, { id: record.liveId });
 
     if (index >= 0) {
-      l48Store.liveChildList[index].worker.postMessage({ type: 'stop' });
+      liveChildList[index].worker.postMessage({ type: 'stop' });
     }
   }
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    l48Store.setDeleteLiveChildList(record);
+    setDeleteLiveChildList(record);
   }
 
   // 录制
@@ -74,7 +75,7 @@ function Live(props: {}): ReactElement {
         ffmpeg: getFFmpeg()
       });
 
-      l48Store.setAddLiveChildList({
+      setAddLiveChildList({
         id: record.liveId,
         worker
       });
@@ -111,7 +112,7 @@ function Live(props: {}): ReactElement {
     try {
       const res: LiveData = await requestLiveList('0', true);
 
-      l48Store.setLiveList(res.content.liveList);
+      setLiveList(res.content.liveList);
     } catch (err) {
       message.error('直播列表加载失败！');
       console.error(err);
@@ -144,7 +145,7 @@ function Live(props: {}): ReactElement {
             <Observer>
               {
                 (): ReactElement => {
-                  const idx: number = findIndex(l48Store.liveChildList, { id: record.liveId });
+                  const idx: number = findIndex(liveChildList, { id: record.liveId });
 
                   return idx >= 0 ? (
                     <Button type="primary"
@@ -187,7 +188,7 @@ function Live(props: {}): ReactElement {
       </header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ l48Store.liveList }
+        dataSource={ liveList }
         bordered={ true }
         loading={ loading }
         rowKey="liveId"

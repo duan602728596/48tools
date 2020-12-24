@@ -9,6 +9,7 @@ import { parseVideoUrl, parseAudioUrl } from './parseBilibiliUrl';
 
 /* 添加下载信息 */
 function AddForm(props: {}): ReactElement {
+  const { setAddDownloadList }: typeof bilibiliStore = bilibiliStore;
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
@@ -31,7 +32,7 @@ function AddForm(props: {}): ReactElement {
         : await parseVideoUrl(formValue.type, formValue.id, formValue.page);
 
       if (result) {
-        bilibiliStore.setAddDownloadList({
+        setAddDownloadList({
           qid: rStr(30),
           durl: result,
           type: formValue.type,

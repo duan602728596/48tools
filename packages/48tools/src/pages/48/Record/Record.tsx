@@ -46,17 +46,25 @@ function formatTsUrl(data: string): string {
 
 /* 录播列表 */
 function Record(props: {}): ReactElement {
+  const {
+    recordList,
+    recordNext,
+    recordChildList,
+    setRecordList,
+    setAddRecordChildList,
+    setDeleteRecordChildList
+  }: typeof l48Store = l48Store;
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
   const recordListQueryResult: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
     if (query && !/^\s*$/.test(query)) {
       const regexp: RegExp = new RegExp(query, 'i');
 
-      return l48Store.recordList.filter((o: LiveInfo): boolean => regexp.test(o.userInfo.nickname));
+      return recordList.filter((o: LiveInfo): boolean => regexp.test(o.userInfo.nickname));
     } else {
-      return l48Store.recordList;
+      return recordList;
     }
-  }, [query, l48Store.recordList]);
+  }, [query, recordList]);
 
   // 搜索
   function onSubmit(value: FormStore): void {
@@ -65,16 +73,16 @@ function Record(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(l48Store.recordChildList, { id: record.liveId });
+    const index: number = findIndex(recordChildList, { id: record.liveId });
 
     if (index >= 0) {
-      l48Store.recordChildList[index].worker.postMessage({ type: 'stop' });
+      recordChildList[index].worker.postMessage({ type: 'stop' });
     }
   }
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    l48Store.setDeleteRecordChildList(record);
+    setDeleteRecordChildList(record);
   }
 
   // 下载图片
@@ -122,7 +130,7 @@ function Record(props: {}): ReactElement {
         protocolWhitelist: true
       });
 
-      l48Store.setAddRecordChildList({
+      setAddRecordChildList({
         id: record.liveId,
         worker
       });
@@ -156,10 +164,10 @@ function Record(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const res: LiveData = await requestLiveList(l48Store.recordNext, false);
-      const data: Array<LiveInfo> = l48Store.recordList.concat(res.content.liveList);
+      const res: LiveData = await requestLiveList(recordNext, false);
+      const data: Array<LiveInfo> = recordList.concat(res.content.liveList);
 
-      l48Store.setRecordList(res.content.next, data);
+      setRecordList(res.content.next, data);
     } catch (err) {
       message.error('录播列表加载失败！');
       console.error(err);
@@ -175,7 +183,7 @@ function Record(props: {}): ReactElement {
     try {
       const res: LiveData = await requestLiveList('0', false);
 
-      l48Store.setRecordList(res.content.next, res.content.liveList);
+      setRecordList(res.content.next, res.content.liveList);
     } catch (err) {
       message.error('录播列表加载失败！');
       console.error(err);
@@ -215,7 +223,7 @@ function Record(props: {}): ReactElement {
             <Observer>
               {
                 (): ReactElement => {
-                  const idx: number = findIndex(l48Store.recordChildList, { id: record.liveId });
+                  const idx: number = findIndex(recordChildList, { id: record.liveId });
 
                   return idx >= 0 ? (
                     <Button type="primary"
