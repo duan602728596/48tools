@@ -78,6 +78,7 @@ function Download(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
+      width: 155,
       render: (value: undefined, record: DownloadItem, index: number): ReactElement => (
         <Observer>
           {
