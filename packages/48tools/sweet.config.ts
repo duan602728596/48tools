@@ -29,9 +29,8 @@ export default function(info: object): { [key: string]: any } {
       'react',
       'react-dom',
       'prop-types',
-      '@reduxjs/toolkit',
-      'react-redux',
-      'reselect',
+      'mobx',
+      'mobx-react',
       'react-router',
       'react-router-dom',
       'history'
