@@ -37,6 +37,30 @@ class L48 {
       this.liveChildList.splice(index, 1);
     }
   }
+
+  /**
+   * 设置录播信息
+   * @param { string } next
+   * @param { Array<LiveInfo> } data
+   */
+  setRecordList(next: string, data: Array<LiveInfo>): void {
+    this.recordList = data;
+    this.recordNext = next;
+  }
+
+  // 录播下载队列添加一个新队列
+  setAddRecordChildList(payload: LiveChildItem): void {
+    this.recordChildList.push(payload);
+  }
+
+  // 录播下载队列删除一个新队列
+  setDeleteRecordChildList(payload: LiveInfo): void {
+    const index: number = findIndex(this.recordChildList, { id: payload.liveId });
+
+    if (index >= 0) {
+      this.recordChildList.splice(index, 1);
+    }
+  }
 }
 
 const l48Store: L48 = new L48();

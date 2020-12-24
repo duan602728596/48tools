@@ -140,38 +140,34 @@ function Live(props: {}): ReactElement {
       width: 250,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         return (
-          <Observer>
-            {
-              (): ReactElement => {
-                const idx: number = findIndex(l48Store.liveChildList, { id: record.liveId });
+          <Button.Group>
+            <Observer>
+              {
+                (): ReactElement => {
+                  const idx: number = findIndex(l48Store.liveChildList, { id: record.liveId });
 
-                return (
-                  <Button.Group>
-                    {
-                      idx >= 0 ? (
-                        <Button type="primary"
-                          danger={ true }
-                          onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
-                        >
-                          停止
-                        </Button>
-                      ) : (
-                        <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, event) }>
-                          录制
-                        </Button>
-                      )
-                    }
-                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleOpenPlayerClick(record, event) }>
-                      播放
+                  return idx >= 0 ? (
+                    <Button type="primary"
+                      danger={ true }
+                      onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                    >
+                      停止
                     </Button>
-                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
-                      下载图片
+                  ) : (
+                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, event) }>
+                      录制
                     </Button>
-                  </Button.Group>
-                );
+                  );
+                }
               }
-            }
-          </Observer>
+            </Observer>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleOpenPlayerClick(record, event) }>
+              播放
+            </Button>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
+              下载图片
+            </Button>
+          </Button.Group>
         );
       }
     }

@@ -1,10 +1,8 @@
 import { combineReducers, ReducersMapObject, Reducer } from '@reduxjs/toolkit';
-import l48Reducers from '../pages/48/reducers/reducers';
 import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
 
 /* reducers */
 const reducers: ReducersMapObject = {
-  ...l48Reducers,
   ...bilibiliReducers
 };
 
