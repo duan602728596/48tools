@@ -1,9 +1,7 @@
 import * as querystring from 'querystring';
 import { ipcRenderer, remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
-import type { Dispatch, Store } from 'redux';
-import { useStore, useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { observer, Observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -12,35 +10,15 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from '../index.sass';
+import l48Store from '../models/l48';
 import { requestLiveList, requestLiveRoomInfo } from '../services/live';
-import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer';
 import downloadImages from './downloadImages';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
-/* state */
-type RSelector = Pick<L48InitialState, 'liveList' | 'liveChildList'>;
-
-const state: Selector<any, RSelector> = createStructuredSelector({
-  // 直播列表
-  liveList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<LiveInfo> => l48.liveList,
-    (data: Array<LiveInfo>): Array<LiveInfo> => data
-  ),
-
-  // 直播下载
-  liveChildList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<LiveChildItem> => l48.liveChildList,
-    (data: Array<LiveChildItem>): Array<LiveChildItem> => data
-  )
-});
-
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
-  const { liveList, liveChildList }: RSelector = useSelector(state);
-  const store: Store = useStore();
-  const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
   // 下载图片
@@ -52,22 +30,16 @@ function Live(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(liveChildList, { id: record.liveId });
+    const index: number = findIndex(l48Store.liveChildList, { id: record.liveId });
 
     if (index >= 0) {
-      liveChildList[index].worker.postMessage({ type: 'stop' });
+      l48Store.liveChildList[index].worker.postMessage({ type: 'stop' });
     }
   }
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    const list: Array<LiveChildItem> = [...store.getState().l48.liveChildList];
-    const index: number = findIndex(list, { id: record.liveId });
-
-    if (index >= 0) {
-      list.splice(index, 1);
-      dispatch(setLiveChildList([...list]));
-    }
+    l48Store.setDeleteLiveChildList(record);
   }
 
   // 录制
@@ -102,12 +74,10 @@ function Live(props: {}): ReactElement {
         ffmpeg: getFFmpeg()
       });
 
-      dispatch(setLiveChildList(
-        liveChildList.concat([{
-          id: record.liveId,
-          worker
-        }])
-      ));
+      l48Store.setAddLiveChildList({
+        id: record.liveId,
+        worker
+      });
     } catch (err) {
       console.error(err);
       message.error('直播录制失败！');
@@ -141,7 +111,7 @@ function Live(props: {}): ReactElement {
     try {
       const res: LiveData = await requestLiveList('0', true);
 
-      dispatch(setLiveList(res.content.liveList));
+      l48Store.setLiveList(res.content.liveList);
     } catch (err) {
       message.error('直播列表加载失败！');
       console.error(err);
@@ -169,31 +139,39 @@ function Live(props: {}): ReactElement {
       key: 'action',
       width: 250,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
-        const idx: number = findIndex(liveChildList, { id: record.liveId });
-
         return (
-          <Button.Group>
+          <Observer>
             {
-              idx >= 0 ? (
-                <Button type="primary"
-                  danger={ true }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
-                >
-                  停止
-                </Button>
-              ) : (
-                <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, event) }>
-                  录制
-                </Button>
-              )
+              (): ReactElement => {
+                const idx: number = findIndex(l48Store.liveChildList, { id: record.liveId });
+
+                return (
+                  <Button.Group>
+                    {
+                      idx >= 0 ? (
+                        <Button type="primary"
+                          danger={ true }
+                          onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                        >
+                          停止
+                        </Button>
+                      ) : (
+                        <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, event) }>
+                          录制
+                        </Button>
+                      )
+                    }
+                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleOpenPlayerClick(record, event) }>
+                      播放
+                    </Button>
+                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
+                      下载图片
+                    </Button>
+                  </Button.Group>
+                );
+              }
             }
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleOpenPlayerClick(record, event) }>
-              播放
-            </Button>
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
-              下载图片
-            </Button>
-          </Button.Group>
+          </Observer>
         );
       }
     }
@@ -213,7 +191,7 @@ function Live(props: {}): ReactElement {
       </header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ liveList }
+        dataSource={ l48Store.liveList }
         bordered={ true }
         loading={ loading }
         rowKey="liveId"
@@ -225,4 +203,4 @@ function Live(props: {}): ReactElement {
   );
 }
 
-export default Live;
+export default observer(Live);

@@ -23,6 +23,8 @@
     "jsdom": "^16.4.0",
     "lodash": "^4.17.20",
     "md5": "^2.3.0",
+    "mobx": "^6.0.4",
+    "mobx-react": "^7.0.5",
     "moment": "^2.29.1",
     "node-media-server": "^2.2.4",
     "prop-types": "^15.7.2",
