@@ -3,7 +3,9 @@ import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
 import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
-import { observer, Observer } from 'mobx-react';
+import type { Dispatch, Store } from 'redux';
+import { useStore, useSelector, useDispatch } from 'react-redux';
+import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -13,7 +15,12 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from '../index.sass';
-import l48Store from '../models/l48';
+import {
+  setRecordList,
+  setRecordChildList,
+  L48InitialState,
+  LiveChildItem
+} from '../reducers/reducers';
 import {
   requestLiveList,
   requestLiveRoomInfo,
@@ -44,16 +51,34 @@ function formatTsUrl(data: string): string {
   return newStrArr.join('\n');
 }
 
+/* state */
+type RSelector = Pick<L48InitialState, 'recordList' | 'recordNext' | 'recordChildList'>;
+
+const state: Selector<any, RSelector> = createStructuredSelector({
+  // 录播信息
+  recordList: createSelector(
+    ({ l48 }: { l48: L48InitialState }): Array<LiveInfo> => l48.recordList,
+    (data: Array<LiveInfo>): Array<LiveInfo> => data
+  ),
+
+  // 记录录播分页位置
+  recordNext: createSelector(
+    ({ l48 }: { l48: L48InitialState }): string => l48.recordNext,
+    (data: string): string => data
+  ),
+
+  // 录播下载
+  recordChildList: createSelector(
+    ({ l48 }: { l48: L48InitialState }): Array<LiveChildItem> => l48.recordChildList,
+    (data: Array<LiveChildItem>): Array<LiveChildItem> => data
+  )
+});
+
 /* 录播列表 */
 function Record(props: {}): ReactElement {
-  const {
-    recordList,
-    recordNext,
-    recordChildList,
-    setRecordList,
-    setAddRecordChildList,
-    setDeleteRecordChildList
-  }: typeof l48Store = l48Store;
+  const { recordList, recordNext, recordChildList }: RSelector = useSelector(state);
+  const store: Store = useStore();
+  const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
   const recordListQueryResult: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
@@ -82,7 +107,13 @@ function Record(props: {}): ReactElement {
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    setDeleteRecordChildList(record);
+    const list: Array<LiveChildItem> = [...store.getState().l48.recordChildList];
+    const index: number = findIndex(list, { id: record.liveId });
+
+    if (index >= 0) {
+      list.splice(index, 1);
+      dispatch(setRecordChildList([...list]));
+    }
   }
 
   // 下载图片
@@ -130,10 +161,12 @@ function Record(props: {}): ReactElement {
         protocolWhitelist: true
       });
 
-      setAddRecordChildList({
-        id: record.liveId,
-        worker
-      });
+      dispatch(setRecordChildList(
+        recordChildList.concat([{
+          id: record.liveId,
+          worker
+        }])
+      ));
     } catch (err) {
       console.error(err);
       message.error('录播下载失败！');
@@ -167,7 +200,10 @@ function Record(props: {}): ReactElement {
       const res: LiveData = await requestLiveList(recordNext, false);
       const data: Array<LiveInfo> = recordList.concat(res.content.liveList);
 
-      setRecordList(res.content.next, data);
+      dispatch(setRecordList({
+        next: res.content.next,
+        data
+      }));
     } catch (err) {
       message.error('录播列表加载失败！');
       console.error(err);
@@ -183,7 +219,10 @@ function Record(props: {}): ReactElement {
     try {
       const res: LiveData = await requestLiveList('0', false);
 
-      setRecordList(res.content.next, res.content.liveList);
+      dispatch(setRecordList({
+        next: res.content.next,
+        data: res.content.liveList
+      }));
     } catch (err) {
       message.error('录播列表加载失败！');
       console.error(err);
@@ -218,28 +257,25 @@ function Record(props: {}): ReactElement {
       key: 'action',
       width: 290,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
+        const idx: number = findIndex(recordChildList, { id: record.liveId });
+
         return (
           <Button.Group>
-            <Observer>
-              {
-                (): ReactElement => {
-                  const idx: number = findIndex(recordChildList, { id: record.liveId });
+            {
+              idx >= 0 ? (
+                <Button type="primary"
+                  danger={ true }
+                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                >
+                  停止下载
+                </Button>
+              ) : (
+                <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadM3u8Click(record, event) }>
+                  下载视频
+                </Button>
+              )
+            }
 
-                  return idx >= 0 ? (
-                    <Button type="primary"
-                      danger={ true }
-                      onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
-                    >
-                      停止下载
-                    </Button>
-                  ) : (
-                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadM3u8Click(record, event) }>
-                      下载视频
-                    </Button>
-                  );
-                }
-              }
-            </Observer>
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrcClick(record, event) }>
               下载弹幕
             </Button>
@@ -283,4 +319,4 @@ function Record(props: {}): ReactElement {
   );
 }
 
-export default observer(Record);
+export default Record;

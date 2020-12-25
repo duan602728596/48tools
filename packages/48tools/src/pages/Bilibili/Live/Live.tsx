@@ -1,6 +1,8 @@
 import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, ReactElement, useEffect, MouseEvent } from 'react';
-import { observer, Observer } from 'mobx-react';
+import type { Store, Dispatch } from 'redux';
+import { useStore, useSelector, useDispatch } from 'react-redux';
+import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -9,24 +11,35 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from '../../48/index.sass';
-import bilibiliStore from '../models/bilibili';
 import AddForm from './AddForm';
+import { cursorFormData, deleteFormData, setLiveBilibiliChildList, BilibiliInitialState, LiveChildItem } from '../reducers/reducers';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../interface';
 
+/* state */
+type RSelector = Pick<BilibiliInitialState, 'bilibiliLiveList' | 'liveChildList'>;
+
+const state: Selector<any, RSelector> = createStructuredSelector({
+  // 直播间列表
+  bilibiliLiveList: createSelector(
+    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<LiveItem> => bilibili.bilibiliLiveList,
+    (data: Array<LiveItem>): Array<LiveItem> => data
+  ),
+  // 直播下载
+  liveChildList: createSelector(
+    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<LiveChildItem> => bilibili.liveChildList,
+    (data: Array<LiveChildItem>): Array<LiveChildItem> => data
+  )
+});
+
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
-  const {
-    bilibiliLiveList,
-    liveChildList,
-    dbQueryAllLiveList,
-    dbDeleteLiveListData,
-    setAddLiveChildList,
-    setDeleteLiveChildList
-  }: typeof bilibiliStore = bilibiliStore;
+  const { bilibiliLiveList, liveChildList }: RSelector = useSelector(state);
+  const store: Store = useStore();
+  const dispatch: Dispatch = useDispatch();
 
   // 停止
   function handleStopClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
@@ -39,7 +52,13 @@ function Live(props: {}): ReactElement {
 
   // 停止后的回调函数
   function endCallback(record: LiveItem): void {
-    setDeleteLiveChildList(record);
+    const list: Array<LiveChildItem> = [...store.getState().bilibili.liveChildList];
+    const index: number = findIndex(list, { id: record.id });
+
+    if (index >= 0) {
+      list.splice(index, 1);
+      dispatch(setLiveBilibiliChildList([...list]));
+    }
   }
 
   // 开始录制
@@ -78,10 +97,12 @@ function Live(props: {}): ReactElement {
         ua: true
       });
 
-      setAddLiveChildList({
-        id: record.id,
-        worker
-      });
+      dispatch(setLiveBilibiliChildList(
+        liveChildList.concat([{
+          id: record.id,
+          worker
+        }])
+      ));
     } catch (err) {
       console.error(err);
       message.error('录制失败！');
@@ -90,7 +111,9 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
-    dbDeleteLiveListData(record);
+    dispatch(deleteFormData({
+      query: record.id
+    }));
   }
 
   const columns: ColumnsType<LiveItem> = [
@@ -100,48 +123,42 @@ function Live(props: {}): ReactElement {
       title: '操作',
       key: 'handle',
       width: 155,
-      render: (value: undefined, record: LiveItem, index: number): ReactElement => (
-        <Button.Group>
-          <Observer>
-            {
-              (): ReactElement => {
-                const idx: number = findIndex(liveChildList, { id: record.id });
+      render: (value: undefined, record: LiveItem, index: number): ReactElement => {
+        const idx: number = findIndex(liveChildList, { id: record.id });
 
-                return (
-                  <Fragment>
-                    {
-                      idx >= 0 ? (
-                        <Button type="primary"
-                          danger={ true }
-                          onClick={ (event: MouseEvent<HTMLButtonElement> ): void => handleStopClick(record, event) }
-                        >
-                          停止录制
-                        </Button>
-                      ) : (
-                        <Button onClick={ (event: MouseEvent<HTMLButtonElement> ): Promise<void> => handleRecordClick(record, event) }>
-                          开始录制
-                        </Button>
-                      )
-                    }
-                    <Button type="primary"
-                      danger={ true }
-                      disabled={ idx >= 0 }
-                      onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteRoomIdClick(record, event) }
-                    >
-                      删除
-                    </Button>
-                  </Fragment>
-                );
-              }
+        return (
+          <Button.Group>
+            {
+              idx >= 0 ? (
+                <Button type="primary"
+                  danger={ true }
+                  onClick={ (event: MouseEvent<HTMLButtonElement> ): void => handleStopClick(record, event) }
+                >
+                  停止录制
+                </Button>
+              ) : (
+                <Button onClick={ (event: MouseEvent<HTMLButtonElement> ): Promise<void> => handleRecordClick(record, event) }>
+                  开始录制
+                </Button>
+              )
             }
-          </Observer>
-        </Button.Group>
-      )
+            <Button type="primary"
+              danger={ true }
+              disabled={ idx >= 0 }
+              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteRoomIdClick(record, event) }
+            >
+              删除
+            </Button>
+          </Button.Group>
+        );
+      }
     }
   ];
 
   useEffect(function(): void {
-    dbQueryAllLiveList();
+    dispatch(cursorFormData({
+      query: { indexName: dbConfig.objectStore[0].data[1] }
+    }));
   }, []);
 
   return (
@@ -169,4 +186,4 @@ function Live(props: {}): ReactElement {
   );
 }
 
-export default observer(Live);
+export default Live;

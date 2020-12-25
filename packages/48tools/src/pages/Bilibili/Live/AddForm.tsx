@@ -1,15 +1,16 @@
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import type { Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 import { Button, Form, Modal, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
 import style from './addForm.sass';
-import bilibiliStore from '../models/bilibili';
 import { rStr } from '../../../utils/utils';
-import type { LiveItem } from '../types';
+import { saveFormData } from '../reducers/reducers';
 
 /* 添加一个直播间 */
 function AddForm(props: {}): ReactElement {
-  const { dbPutLiveListData }: typeof bilibiliStore = bilibiliStore;
+  const dispatch: Dispatch = useDispatch();
   const [form]: [FormInstance] = Form.useForm();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
 
@@ -23,10 +24,12 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    dbPutLiveListData({
-      ...formValue,
-      id: rStr(30)
-    } as LiveItem);
+    dispatch(saveFormData({
+      data: {
+        ...formValue,
+        id: rStr(30)
+      }
+    }));
     setVisible(false);
   }
 
