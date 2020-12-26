@@ -3,8 +3,8 @@ import type { ParsedPath } from 'path';
 import * as url from 'url';
 import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
-import type { Store, Dispatch } from 'redux';
-import { useStore, useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -34,7 +34,6 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 视频下载 */
 function Download(props: {}): ReactElement {
-  const store: Store = useStore();
   const { downloadList, downloadProgress }: RSelector = useSelector(state);
   const dispatch: Dispatch = useDispatch();
 
@@ -52,18 +51,14 @@ function Download(props: {}): ReactElement {
       const worker: Worker = new DownloadBilibiliVideoWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
-        const downloadProgress: { [key: string]: number } = { ...store.getState().bilibili.downloadProgress };
-        const { type, qid, data }: MessageEventData = event.data;
+        const { type }: MessageEventData = event.data;
 
-        if (type === 'progress') {
-          downloadProgress[qid] = data;
-        } else if (type === 'success') {
+        dispatch(setDownloadProgress(event.data));
+
+        if (type === 'success') {
           message.success('下载完成！');
-          delete downloadProgress[qid]; // 下载完成
+          worker.terminate();
         }
-
-        dispatch(setDownloadProgress(downloadProgress));
-        (type === 'success') && worker.terminate();
       });
 
       worker.postMessage({

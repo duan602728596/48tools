@@ -1,7 +1,7 @@
 import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, ReactElement, useEffect, MouseEvent } from 'react';
-import type { Store, Dispatch } from 'redux';
-import { useStore, useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -11,7 +11,13 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
-import { cursorFormData, deleteFormData, setLiveBilibiliChildList, BilibiliInitialState } from '../reducers/reducers';
+import {
+  cursorFormData,
+  deleteFormData,
+  setAddLiveBilibiliChildList,
+  setDeleteLiveBilibiliChildList,
+  BilibiliInitialState
+} from '../reducers/reducers';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
@@ -38,7 +44,6 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
   const { bilibiliLiveList, liveChildList }: RSelector = useSelector(state);
-  const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
 
   // 停止
@@ -47,17 +52,6 @@ function Live(props: {}): ReactElement {
 
     if (index >= 0) {
       liveChildList[index].worker.postMessage({ type: 'stop' });
-    }
-  }
-
-  // 停止后的回调函数
-  function endCallback(record: LiveItem): void {
-    const list: Array<WebWorkerChildItem> = [...store.getState().bilibili.liveChildList];
-    const index: number = findIndex(list, { id: record.id });
-
-    if (index >= 0) {
-      list.splice(index, 1);
-      dispatch(setLiveBilibiliChildList([...list]));
     }
   }
 
@@ -84,7 +78,7 @@ function Live(props: {}): ReactElement {
           }
 
           worker.terminate();
-          endCallback(record);
+          dispatch(setDeleteLiveBilibiliChildList(record));
         }
       }, false);
 
@@ -97,12 +91,10 @@ function Live(props: {}): ReactElement {
         ua: true
       });
 
-      dispatch(setLiveBilibiliChildList(
-        liveChildList.concat([{
-          id: record.id,
-          worker
-        }])
-      ));
+      dispatch(setAddLiveBilibiliChildList({
+        id: record.id,
+        worker
+      }));
     } catch (err) {
       console.error(err);
       message.error('录制失败！');

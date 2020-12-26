@@ -33,6 +33,7 @@ export const ignoreOptions: any = {
     'live48/setAddInLiveList',
     'live48/setStopInLiveList',
     'live48/setDeleteInLiveList',
-    'bilibili/setLiveBilibiliChildList'
+    'bilibili/setAddLiveBilibiliChildList',
+    'bilibili/setDeleteLiveBilibiliChildList'
   ]
 };
