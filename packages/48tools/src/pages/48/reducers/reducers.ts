@@ -1,17 +1,13 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
+import type { WebWorkerChildItem } from '../../../types';
 import type { LiveInfo } from '../interface';
-
-export interface LiveChildItem {
-  id: string;
-  worker: Worker;
-}
 
 export interface L48InitialState {
   liveList: Array<LiveInfo>;
-  liveChildList: Array<LiveChildItem>;
+  liveChildList: Array<WebWorkerChildItem>;
   recordList: Array<LiveInfo>;
   recordNext: string;
-  recordChildList: Array<LiveChildItem>;
+  recordChildList: Array<WebWorkerChildItem>;
 }
 
 type CaseReducers = SliceCaseReducers<L48InitialState>;
@@ -34,7 +30,7 @@ const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
     },
 
     // 直播下载
-    setLiveChildList(state: L48InitialState, action: PayloadAction<Array<LiveChildItem>>): L48InitialState {
+    setLiveChildList(state: L48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): L48InitialState {
       state.liveChildList = action.payload;
 
       return state;
@@ -49,7 +45,7 @@ const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
     },
 
     // 录播下载
-    setRecordChildList(state: L48InitialState, action: PayloadAction<Array<LiveChildItem>>): L48InitialState {
+    setRecordChildList(state: L48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): L48InitialState {
       state.recordChildList = action.payload;
 
       return state;

@@ -11,10 +11,11 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
-import { cursorFormData, deleteFormData, setLiveBilibiliChildList, BilibiliInitialState, LiveChildItem } from '../reducers/reducers';
+import { cursorFormData, deleteFormData, setLiveBilibiliChildList, BilibiliInitialState } from '../reducers/reducers';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
+import type { WebWorkerChildItem } from '../../../types';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../interface';
 
@@ -29,8 +30,8 @@ const state: Selector<any, RSelector> = createStructuredSelector({
   ),
   // 直播下载
   liveChildList: createSelector(
-    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<LiveChildItem> => bilibili.liveChildList,
-    (data: Array<LiveChildItem>): Array<LiveChildItem> => data
+    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<WebWorkerChildItem> => bilibili.liveChildList,
+    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
   )
 });
 
@@ -51,7 +52,7 @@ function Live(props: {}): ReactElement {
 
   // 停止后的回调函数
   function endCallback(record: LiveItem): void {
-    const list: Array<LiveChildItem> = [...store.getState().bilibili.liveChildList];
+    const list: Array<WebWorkerChildItem> = [...store.getState().bilibili.liveChildList];
     const index: number = findIndex(list, { id: record.id });
 
     if (index >= 0) {

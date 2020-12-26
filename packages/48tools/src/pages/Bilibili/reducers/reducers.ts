@@ -1,18 +1,14 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
 import { findIndex } from 'lodash';
 import dbRedux, { bilibiliLiveObjectStoreName } from '../../../utils/idb/dbRedux';
+import type { WebWorkerChildItem } from '../../../types';
 import type { DownloadItem, LiveItem } from '../types';
-
-export interface LiveChildItem {
-  id: string;
-  worker: Worker;
-}
 
 export interface BilibiliInitialState {
   downloadList: Array<DownloadItem>;
   downloadProgress: { [key: string]: number };
   bilibiliLiveList: Array<LiveItem>;
-  liveChildList: Array<LiveChildItem>;
+  liveChildList: Array<WebWorkerChildItem>;
 }
 
 type CaseReducers = SliceCaseReducers<BilibiliInitialState>;
@@ -69,7 +65,7 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
     },
 
     // 下载
-    setLiveBilibiliChildList(state: BilibiliInitialState, action: PayloadAction<Array<LiveChildItem>>): BilibiliInitialState {
+    setLiveBilibiliChildList(state: BilibiliInitialState, action: PayloadAction<Array<WebWorkerChildItem>>): BilibiliInitialState {
       state.liveChildList = action.payload;
 
       return state;

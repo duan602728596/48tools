@@ -14,21 +14,12 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
-import {
-  setRecordList,
-  setRecordChildList,
-  L48InitialState,
-  LiveChildItem
-} from '../reducers/reducers';
-import {
-  requestLiveList,
-  requestLiveRoomInfo,
-  requestDownloadFileByStream,
-  requestDownloadFile
-} from '../services/live';
+import { setRecordList, setRecordChildList, L48InitialState } from '../reducers/reducers';
+import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Live/downloadImages';
+import type { WebWorkerChildItem } from '../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /**
@@ -68,8 +59,8 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
   // 录播下载
   recordChildList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<LiveChildItem> => l48.recordChildList,
-    (data: Array<LiveChildItem>): Array<LiveChildItem> => data
+    ({ l48 }: { l48: L48InitialState }): Array<WebWorkerChildItem> => l48.recordChildList,
+    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
   )
 });
 
@@ -106,7 +97,7 @@ function Record(props: {}): ReactElement {
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    const list: Array<LiveChildItem> = [...store.getState().l48.recordChildList];
+    const list: Array<WebWorkerChildItem> = [...store.getState().l48.recordChildList];
     const index: number = findIndex(list, { id: record.liveId });
 
     if (index >= 0) {

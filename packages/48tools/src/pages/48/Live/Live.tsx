@@ -12,10 +12,11 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
 import { requestLiveList, requestLiveRoomInfo } from '../services/live';
-import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
+import { setLiveList, setLiveChildList, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
+import type { WebWorkerChildItem } from '../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /* state */
@@ -30,8 +31,8 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
   // 直播下载
   liveChildList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<LiveChildItem> => l48.liveChildList,
-    (data: Array<LiveChildItem>): Array<LiveChildItem> => data
+    ({ l48 }: { l48: L48InitialState }): Array<WebWorkerChildItem> => l48.liveChildList,
+    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
   )
 });
 
@@ -60,7 +61,7 @@ function Live(props: {}): ReactElement {
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    const list: Array<LiveChildItem> = [...store.getState().l48.liveChildList];
+    const list: Array<WebWorkerChildItem> = [...store.getState().l48.liveChildList];
     const index: number = findIndex(list, { id: record.liveId });
 
     if (index >= 0) {
