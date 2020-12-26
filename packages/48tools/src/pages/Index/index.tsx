@@ -23,6 +23,14 @@ function Index(props: {}): ReactElement {
           <Link className={ style.navItemLink } to="/48/Pocket48Record">
             <Button>口袋48录播下载</Button>
           </Link>
+          <Link className={ style.navItemLink } to="/48/Live48">
+            <Button>官方公演直播抓取</Button>
+          </Link>
+        </Space>
+      </nav>
+      <Divider />
+      <nav>
+        <Space size={ 16 }>
           <Link className={ style.navItemLink } to="/Bilibili/Download">
             <Button>B站视频下载</Button>
           </Link>
