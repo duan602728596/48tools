@@ -1,4 +1,4 @@
-import { ipcRenderer, remote, SaveDialogReturnValue } from 'electron';
+import { remote, SaveDialogReturnValue } from 'electron';
 import { useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from './parseLive48Website';
-import { setAddInLiveList, setDeleteInLiveList } from '../reducers/live48';
+import { setAddInLiveList, setStopInLiveList, setDeleteInLiveList } from '../reducers/live48';
 import { getFFmpeg, rStr } from '../../../utils/utils';
 
 /* 抓取直播信息表单 */
@@ -53,7 +53,7 @@ function GetLiveUrl(props: {}): ReactElement {
         }
 
         worker.terminate();
-        dispatch(setDeleteInLiveList(id));
+        dispatch(setStopInLiveList(id));
       }
     }, false);
 

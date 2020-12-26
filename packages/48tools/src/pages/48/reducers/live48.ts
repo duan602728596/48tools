@@ -21,6 +21,18 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
       return state;
     },
 
+    // 当前直播设置为停止
+    setStopInLiveList(state: Live48InitialState, action: PayloadAction<string>): Live48InitialState {
+      const index: number = findIndex(state.inLiveList, { id: action.payload });
+
+      if (index >= 0) {
+        state.inLiveList[index].status = 0;
+        state.inLiveList = [...state.inLiveList];
+      }
+
+      return state;
+    },
+
     // 删除当前抓取的直播列表
     setDeleteInLiveList(state: Live48InitialState, action: PayloadAction<string>): Live48InitialState {
       const index: number = findIndex(state.inLiveList, { id: action.payload });
@@ -35,5 +47,5 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
   }
 });
 
-export const { setAddInLiveList, setDeleteInLiveList }: CaseReducerActions<CaseReducers> = actions;
+export const { setAddInLiveList, setStopInLiveList, setDeleteInLiveList }: CaseReducerActions<CaseReducers> = actions;
 export default { live48: reducer };

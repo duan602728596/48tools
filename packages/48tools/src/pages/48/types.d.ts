@@ -7,4 +7,5 @@ export interface InLiveWebWorkerItem extends WebWorkerChildItem {
   live: string;
   quality: string;
   playStreamPath: string;
+  status?: number;
 }
