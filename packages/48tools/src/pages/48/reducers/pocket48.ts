@@ -2,7 +2,7 @@ import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerAction
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveInfo } from '../interface';
 
-export interface L48InitialState {
+export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;
   liveChildList: Array<WebWorkerChildItem>;
   recordList: Array<LiveInfo>;
@@ -10,10 +10,10 @@ export interface L48InitialState {
   recordChildList: Array<WebWorkerChildItem>;
 }
 
-type CaseReducers = SliceCaseReducers<L48InitialState>;
+type CaseReducers = SliceCaseReducers<Pocket48InitialState>;
 
-const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
-  name: 'l48',
+const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReducers>({
+  name: 'pocket48',
   initialState: {
     liveList: [],       // 直播信息
     liveChildList: [],  // 直播下载
@@ -23,21 +23,21 @@ const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
   },
   reducers: {
     // 直播信息
-    setLiveList(state: L48InitialState, action: PayloadAction<Array<LiveInfo>>): L48InitialState {
+    setLiveList(state: Pocket48InitialState, action: PayloadAction<Array<LiveInfo>>): Pocket48InitialState {
       state.liveList = action.payload;
 
       return state;
     },
 
     // 直播下载
-    setLiveChildList(state: L48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): L48InitialState {
+    setLiveChildList(state: Pocket48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): Pocket48InitialState {
       state.liveChildList = action.payload;
 
       return state;
     },
 
     // 录播加载
-    setRecordList(state: L48InitialState, action: PayloadAction<{ next: string; data: Array<LiveInfo> }>): L48InitialState {
+    setRecordList(state: Pocket48InitialState, action: PayloadAction<{ next: string; data: Array<LiveInfo> }>): Pocket48InitialState {
       state.recordList = action.payload.data;
       state.recordNext = action.payload.next;
 
@@ -45,7 +45,7 @@ const { actions, reducer }: Slice = createSlice<L48InitialState, CaseReducers>({
     },
 
     // 录播下载
-    setRecordChildList(state: L48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): L48InitialState {
+    setRecordChildList(state: Pocket48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): Pocket48InitialState {
       state.recordChildList = action.payload;
 
       return state;
@@ -59,4 +59,4 @@ export const {
   setRecordList,
   setRecordChildList
 }: CaseReducerActions<CaseReducers> = actions;
-export default { l48: reducer };
+export default { pocket48: reducer };

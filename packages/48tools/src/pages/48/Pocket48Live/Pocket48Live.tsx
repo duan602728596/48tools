@@ -12,7 +12,7 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
 import { requestLiveList, requestLiveRoomInfo } from '../services/live';
-import { setLiveList, setLiveChildList, L48InitialState } from '../reducers/reducers';
+import { setLiveList, setLiveChildList, Pocket48InitialState } from '../reducers/pocket48';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
@@ -20,24 +20,24 @@ import type { WebWorkerChildItem } from '../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
 /* state */
-type RSelector = Pick<L48InitialState, 'liveList' | 'liveChildList'>;
+type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 直播列表
   liveList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<LiveInfo> => l48.liveList,
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.liveList,
     (data: Array<LiveInfo>): Array<LiveInfo> => data
   ),
 
   // 直播下载
   liveChildList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<WebWorkerChildItem> => l48.liveChildList,
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.liveChildList,
     (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
   )
 });
 
 /* 直播抓取 */
-function Live(props: {}): ReactElement {
+function Pocket48Live(props: {}): ReactElement {
   const { liveList, liveChildList }: RSelector = useSelector(state);
   const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
@@ -61,7 +61,7 @@ function Live(props: {}): ReactElement {
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    const list: Array<WebWorkerChildItem> = [...store.getState().l48.liveChildList];
+    const list: Array<WebWorkerChildItem> = [...store.getState().pocket48.liveChildList];
     const index: number = findIndex(list, { id: record.liveId });
 
     if (index >= 0) {
@@ -218,4 +218,4 @@ function Live(props: {}): ReactElement {
   );
 }
 
-export default Live;
+export default Pocket48Live;

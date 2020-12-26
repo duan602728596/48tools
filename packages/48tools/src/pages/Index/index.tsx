@@ -17,10 +17,10 @@ function Index(props: {}): ReactElement {
     <div className={ style.main }>
       <nav>
         <Space size={ 16 }>
-          <Link className={ style.navItemLink } to="/48/Live">
+          <Link className={ style.navItemLink } to="/48/Pocket48Live">
             <Button>口袋48直播抓取</Button>
           </Link>
-          <Link className={ style.navItemLink } to="/48/Record">
+          <Link className={ style.navItemLink } to="/48/Pocket48Record">
             <Button>口袋48录播下载</Button>
           </Link>
           <Link className={ style.navItemLink } to="/Bilibili/Download">

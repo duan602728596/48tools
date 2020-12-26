@@ -14,11 +14,11 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
-import { setRecordList, setRecordChildList, L48InitialState } from '../reducers/reducers';
+import { setRecordList, setRecordChildList, Pocket48InitialState } from '../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
-import downloadImages from '../Live/downloadImages';
+import downloadImages from '../Pocket48Live/downloadImages';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 
@@ -42,30 +42,30 @@ function formatTsUrl(data: string): string {
 }
 
 /* state */
-type RSelector = Pick<L48InitialState, 'recordList' | 'recordNext' | 'recordChildList'>;
+type RSelector = Pick<Pocket48InitialState, 'recordList' | 'recordNext' | 'recordChildList'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 录播信息
   recordList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<LiveInfo> => l48.recordList,
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.recordList,
     (data: Array<LiveInfo>): Array<LiveInfo> => data
   ),
 
   // 记录录播分页位置
   recordNext: createSelector(
-    ({ l48 }: { l48: L48InitialState }): string => l48.recordNext,
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): string => pocket48.recordNext,
     (data: string): string => data
   ),
 
   // 录播下载
   recordChildList: createSelector(
-    ({ l48 }: { l48: L48InitialState }): Array<WebWorkerChildItem> => l48.recordChildList,
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.recordChildList,
     (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
   )
 });
 
 /* 录播列表 */
-function Record(props: {}): ReactElement {
+function Pocket48Record(props: {}): ReactElement {
   const { recordList, recordNext, recordChildList }: RSelector = useSelector(state);
   const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
@@ -97,7 +97,7 @@ function Record(props: {}): ReactElement {
 
   // 停止后的回调函数
   function endCallback(record: LiveInfo): void {
-    const list: Array<WebWorkerChildItem> = [...store.getState().l48.recordChildList];
+    const list: Array<WebWorkerChildItem> = [...store.getState().pocket48.recordChildList];
     const index: number = findIndex(list, { id: record.liveId });
 
     if (index >= 0) {
@@ -302,4 +302,4 @@ function Record(props: {}): ReactElement {
   );
 }
 
-export default Record;
+export default Pocket48Record;
