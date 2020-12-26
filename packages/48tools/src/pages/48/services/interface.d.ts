@@ -1,3 +1,4 @@
+/* ========== pocket48 ========== */
 // 当前的用户信息
 export interface UserInfo {
   avatar: string;
@@ -49,4 +50,13 @@ export interface LiveRoomInfo {
   message: string;
   status: number;
   success: boolean;
+}
+
+/* ========== live48 ========== */
+export interface LiveStreamInfo {
+  lc_url: string;
+  status: number;
+  suid: string;
+  token: string;
+  url: string;
 }

@@ -1,5 +1,6 @@
 import { JSDOM, DOMWindow } from 'jsdom';
-import { requestFetchHtml } from '../services/live48';
+import { requestFetchHtml, requestStreamInfo } from '../services/live48';
+import type { LiveStreamInfo } from '../services/interface';
 
 const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48'];
 
@@ -52,5 +53,14 @@ export async function parseLiveUrl(id: string, quality: string): Promise<string 
     return null;
   }
 
-  return urlInput.getAttribute('value');
+  const param: string = document.getElementById('param')!.getAttribute('value')!;
+  const video_id: string = document.getElementById('vedio_id')!.getAttribute('value')!;
+  const suid: string = document.getElementById('suid')!.getAttribute('value')!;
+  const res: LiveStreamInfo = await requestStreamInfo(param, video_id, suid, id);
+
+  if (quality === 'liuchang') {
+    return res.lc_url;
+  } else {
+    return res.url;
+  }
 }

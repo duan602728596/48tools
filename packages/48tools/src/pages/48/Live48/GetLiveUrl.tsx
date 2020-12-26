@@ -20,6 +20,7 @@ function GetLiveUrl(props: {}): ReactElement {
     Array<{ label: string; value: string }>,
     D<S<Array<{ label: string; value: string }>>>
   ] = useState([]);
+  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 获取直播地址时的loading状态
 
   // 开始直播录制
   async function handleStartInLiveSubmit(value: { type?: string; live?: string; quality: string }): Promise<void> {
@@ -36,7 +37,7 @@ function GetLiveUrl(props: {}): ReactElement {
     // 开始录制
     const time: string = moment().format('YYYY_MM_DD_HH_mm_ss');
     const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-      defaultPath: `${ value.type }.${ value.live }.${ value.quality }.${ time }.flv`
+      defaultPath: `[公演直播]${ value.type }.${ value.live }.${ value.quality }.${ time }.flv`
     });
 
     if (result.canceled || !result.filePath) return;
@@ -69,12 +70,23 @@ function GetLiveUrl(props: {}): ReactElement {
 
   // 选择团体后获取公演直播信息
   async function handleLiveTypeSelect(value: string): Promise<void> {
-    const liveInfo: Array<{ label: string; value: string }> = await parseInLive(value);
+    setLoading(true);
 
-    setLiveUrlInfo(liveInfo);
-    form.resetFields(['live']);
+    try {
+      const liveInfo: Array<{ label: string; value: string }> = await parseInLive(value);
 
-    if (liveInfo.length === 0) message.warn('当前没有公演！');
+      setLiveUrlInfo(liveInfo);
+      form.resetFields(['live']);
+
+      if (liveInfo.length === 0) {
+        message.warn('当前没有公演！');
+      }
+    } catch (err) {
+      console.error(err);
+      message.error('获取公演信息失败！');
+    }
+
+    setLoading(false);
   }
 
   // 渲染公演的选择
@@ -95,7 +107,7 @@ function GetLiveUrl(props: {}): ReactElement {
         </Select>
       </Form.Item>
       <Form.Item name="live" noStyle={ true }>
-        <Select className={ style.liveSelect } placeholder="选择公演">{ liveSelectOptionRender() }</Select>
+        <Select className={ style.liveSelect } loading={ loading } placeholder="选择公演">{ liveSelectOptionRender() }</Select>
       </Form.Item>
       <Form.Item name="quality" noStyle={ true }>
         <Select className={ style.qualitySelect } placeholder="画质">
