@@ -118,7 +118,7 @@ function Pocket48Record(props: {}): ReactElement {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: `${ record.userInfo.nickname }_${ record.liveId }.ts`
+        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ record.liveId }.ts`
       });
 
       if (result.canceled || !result.filePath) return;

@@ -74,7 +74,7 @@ function Pocket48Live(props: {}): ReactElement {
   async function handleGetVideoClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: `${ record.userInfo.nickname }_${ record.liveId }.flv`
+        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ record.liveId }.flv`
       });
 
       if (result.canceled || !result.filePath) return;

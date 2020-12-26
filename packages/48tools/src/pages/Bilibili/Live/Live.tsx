@@ -65,7 +65,7 @@ function Live(props: {}): ReactElement {
   async function handleRecordClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const time: string = moment().format('YYYY_MM_DD_HH_mm_ss');
     const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-      defaultPath: `${ record.roomId }_${ time }.flv`
+      defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
     });
 
     if (result.canceled || !result.filePath) return;

@@ -44,7 +44,7 @@ function Download(props: {}): ReactElement {
       const urlResult: url.URL = new url.URL(item.durl);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: `${ item.id }_${ item.page }${ parseResult.ext }`
+        defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${ parseResult.ext }`
       });
 
       if (result.canceled || !result.filePath) return;
