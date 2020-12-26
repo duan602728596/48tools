@@ -17,7 +17,7 @@ import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveItem } from '../types';
-import type { RoomInit, RoomPlayUrl } from '../interface';
+import type { RoomInit, RoomPlayUrl } from '../services/interface';
 
 /* state */
 type RSelector = Pick<BilibiliInitialState, 'bilibiliLiveList' | 'liveChildList'>;

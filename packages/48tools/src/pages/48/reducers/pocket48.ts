@@ -1,6 +1,6 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
 import type { WebWorkerChildItem } from '../../../types';
-import type { LiveInfo } from '../interface';
+import type { LiveInfo } from '../services/interface';
 
 export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;

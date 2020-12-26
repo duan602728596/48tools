@@ -20,7 +20,7 @@ import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages';
 import type { WebWorkerChildItem } from '../../../types';
-import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
+import type { LiveData, LiveInfo, LiveRoomInfo } from '../services/interface';
 
 /**
  * 格式化m3u8文件内视频的地址

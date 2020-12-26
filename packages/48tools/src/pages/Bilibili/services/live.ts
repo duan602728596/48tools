@@ -1,5 +1,5 @@
 import got, { Response } from 'got';
-import type { RoomInit, RoomPlayUrl } from '../interface';
+import type { RoomInit, RoomPlayUrl } from './interface';
 
 /**
  * 获取直播间的初始信息

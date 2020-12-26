@@ -17,7 +17,7 @@ import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
 import type { WebWorkerChildItem } from '../../../types';
-import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
+import type { LiveData, LiveInfo, LiveRoomInfo } from '../services/interface';
 
 /* state */
 type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList'>;

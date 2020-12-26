@@ -1,3 +1,4 @@
+/* ========== Download ========== */
 export interface DownloadItem {
   qid: string;              // 当前的下载id，随机
   type: 'bv' | 'av' | 'au'; // 下载类型
@@ -27,6 +28,7 @@ export interface ProgressEventData {
   total: number;
 }
 
+/* ========== Live ========== */
 // 直播间信息
 export interface LiveItem {
   id: string;

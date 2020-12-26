@@ -3,7 +3,7 @@ import { pipeline } from 'stream';
 import * as fs from 'fs';
 import got, { Response as GotResponse } from 'got';
 import { rStr } from '../../../utils/utils';
-import type { LiveData, LiveRoomInfo } from '../interface';
+import type { LiveData, LiveRoomInfo } from './interface';
 
 const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 

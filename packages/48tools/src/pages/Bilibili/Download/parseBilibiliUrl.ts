@@ -2,7 +2,7 @@ import { JSDOM, DOMWindow } from 'jsdom';
 import * as md5 from 'md5';
 import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo } from '../services/download';
 import type { InitialState } from '../types';
-import type { VideoInfo, AudioInfo } from '../interface';
+import type { VideoInfo, AudioInfo } from '../services/interface';
 
 // b站请求接口需要的key
 const APP_KEY: string = 'iVGUTjsxvpLeuDCf';

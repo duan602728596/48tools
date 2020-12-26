@@ -1,3 +1,4 @@
+/* ========== Download ========== */
 // 接口请求到的视频信息
 export interface VideoInfo {
   durl?: Array<{
@@ -16,6 +17,7 @@ export interface AudioInfo {
   message: string;
 }
 
+/* ========== Live ========== */
 // 直播间信息
 export interface RoomInit {
   code: number;
