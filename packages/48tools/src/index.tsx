@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import App from './App';
-import { netMediaServerInit } from './utils/nodeMediaServer';
+import { netMediaServerInit } from './utils/nodeMediaServer/nodeMediaServer';
 import dbInit from './utils/idb/dbInit';
 
 /* app */

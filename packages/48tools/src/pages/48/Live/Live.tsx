@@ -15,7 +15,7 @@ import style from '../index.sass';
 import { requestLiveList, requestLiveRoomInfo } from '../services/live';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
-import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer';
+import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../interface';
 

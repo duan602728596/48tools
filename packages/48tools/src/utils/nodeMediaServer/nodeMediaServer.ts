@@ -1,7 +1,7 @@
 import * as net from 'net';
 import type { Server as NetServer } from 'net';
 import * as NodeMediaServer from 'node-media-server';
-import { getFFmpeg } from './utils';
+import { getFFmpeg } from '../utils';
 
 /* 端口号 */
 export interface NetMediaServerPort {
