@@ -35,3 +35,22 @@ export async function parseInLive(type: string): Promise<Array<{ label: string; 
 
   return result;
 }
+
+/**
+ * 获取直播地址
+ * @param { string } id: 直播id
+ * @param { string } quality: 直播画质
+ */
+export async function parseLiveUrl(id: string, quality: string): Promise<string | null> {
+  const html: string = await requestFetchHtml(`https://live.48.cn/Index/inlive/id/${ id }`);
+  const { window }: JSDOM = new JSDOM(html);
+  const { document }: DOMWindow = window;
+  const urlInput: HTMLElement | null = document.getElementById(`${ quality }_url`);
+
+  // 没有直播
+  if (!urlInput) {
+    return null;
+  }
+
+  return urlInput.getAttribute('value');
+}

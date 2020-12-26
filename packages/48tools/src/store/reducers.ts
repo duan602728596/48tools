@@ -1,10 +1,12 @@
 import { combineReducers, ReducersMapObject, Reducer } from '@reduxjs/toolkit';
 import pocket48Reducers from '../pages/48/reducers/pocket48';
+import live48Reducers from '../pages/48/reducers/live48';
 import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
 
 /* reducers */
 const reducers: ReducersMapObject = {
   ...pocket48Reducers,
+  ...live48Reducers,
   ...bilibiliReducers
 };
 
@@ -20,11 +22,14 @@ export const ignoreOptions: any = {
   ignoredPaths: [
     'pocket48.liveChildList',
     'pocket48.recordChildList',
+    'live48.inLiveList',
     'bilibili.liveChildList'
   ],
   ignoredActions: [
     'pocket48/setLiveChildList',
     'pocket48/setRecordChildList',
+    'live48/setAddInLiveList',
+    'live48/setDeleteInLiveList',
     'bilibili/setLiveBilibiliChildList'
   ]
 };
