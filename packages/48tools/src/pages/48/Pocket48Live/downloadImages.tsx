@@ -5,7 +5,7 @@ import type { ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import { Modal, message } from 'antd';
 import style from './downloadImages.sass';
 import { source } from '../../../utils/utils';
-import { requestDownloadFileByStream } from '../services/live';
+import { requestDownloadFileByStream } from '../services/pocket48';
 
 interface DownloadImagesProps {
   coverPath: string;

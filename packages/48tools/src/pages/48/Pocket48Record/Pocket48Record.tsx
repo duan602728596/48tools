@@ -15,7 +15,7 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
 import { setRecordList, setRecordChildList, Pocket48InitialState } from '../reducers/pocket48';
-import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../services/live';
+import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../services/pocket48';
 import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages';

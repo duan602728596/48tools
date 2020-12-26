@@ -18,7 +18,7 @@ import zhCN from 'antd/es/locale-provider/zh_CN';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
-import { requestLiveRoomInfo } from '../services/live';
+import { requestLiveRoomInfo } from '../services/pocket48';
 import type { LiveRoomInfo } from '../services/interface';
 import { getFFmpeg, source } from '../../../utils/utils';
 

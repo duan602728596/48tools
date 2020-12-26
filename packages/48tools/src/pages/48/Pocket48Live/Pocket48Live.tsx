@@ -11,7 +11,7 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
-import { requestLiveList, requestLiveRoomInfo } from '../services/live';
+import { requestLiveList, requestLiveRoomInfo } from '../services/pocket48';
 import { setLiveList, setLiveChildList, Pocket48InitialState } from '../reducers/pocket48';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer/nodeMediaServer';
