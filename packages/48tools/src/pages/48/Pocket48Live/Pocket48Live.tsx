@@ -1,8 +1,8 @@
 import * as querystring from 'querystring';
 import { ipcRenderer, remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
-import type { Dispatch, Store } from 'redux';
-import { useStore, useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -12,7 +12,7 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
 import { requestLiveList, requestLiveRoomInfo } from '../services/pocket48';
-import { setLiveList, setLiveChildList, Pocket48InitialState } from '../reducers/pocket48';
+import { setLiveList, setAddLiveChildList, setDeleteLiveChildList, Pocket48InitialState } from '../reducers/pocket48';
 import { rStr, getFFmpeg } from '../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
@@ -28,7 +28,6 @@ const state: Selector<any, RSelector> = createStructuredSelector({
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.liveList,
     (data: Array<LiveInfo>): Array<LiveInfo> => data
   ),
-
   // 直播下载
   liveChildList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.liveChildList,
@@ -39,7 +38,6 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 /* 直播抓取 */
 function Pocket48Live(props: {}): ReactElement {
   const { liveList, liveChildList }: RSelector = useSelector(state);
-  const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
@@ -56,17 +54,6 @@ function Pocket48Live(props: {}): ReactElement {
 
     if (index >= 0) {
       liveChildList[index].worker.postMessage({ type: 'stop' });
-    }
-  }
-
-  // 停止后的回调函数
-  function endCallback(record: LiveInfo): void {
-    const list: Array<WebWorkerChildItem> = [...store.getState().pocket48.liveChildList];
-    const index: number = findIndex(list, { id: record.liveId });
-
-    if (index >= 0) {
-      list.splice(index, 1);
-      dispatch(setLiveChildList([...list]));
     }
   }
 
@@ -91,7 +78,7 @@ function Pocket48Live(props: {}): ReactElement {
           }
 
           worker.terminate();
-          endCallback(record);
+          dispatch(setDeleteLiveChildList(record));
         }
       }, false);
 
@@ -102,12 +89,10 @@ function Pocket48Live(props: {}): ReactElement {
         ffmpeg: getFFmpeg()
       });
 
-      dispatch(setLiveChildList(
-        liveChildList.concat([{
-          id: record.liveId,
-          worker
-        }])
-      ));
+      dispatch(setAddLiveChildList({
+        id: record.liveId,
+        worker
+      }));
     } catch (err) {
       console.error(err);
       message.error('直播录制失败！');

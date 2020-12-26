@@ -3,8 +3,8 @@ import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
 import { remote, SaveDialogReturnValue } from 'electron';
 import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
-import type { Dispatch, Store } from 'redux';
-import { useStore, useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -14,7 +14,7 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
-import { setRecordList, setRecordChildList, Pocket48InitialState } from '../reducers/pocket48';
+import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../services/pocket48';
 import { getFFmpeg } from '../../../utils/utils';
 import SearchForm from './SearchForm';
@@ -50,13 +50,11 @@ const state: Selector<any, RSelector> = createStructuredSelector({
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.recordList,
     (data: Array<LiveInfo>): Array<LiveInfo> => data
   ),
-
   // 记录录播分页位置
   recordNext: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): string => pocket48.recordNext,
     (data: string): string => data
   ),
-
   // 录播下载
   recordChildList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.recordChildList,
@@ -67,7 +65,6 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 /* 录播列表 */
 function Pocket48Record(props: {}): ReactElement {
   const { recordList, recordNext, recordChildList }: RSelector = useSelector(state);
-  const store: Store = useStore();
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
@@ -92,17 +89,6 @@ function Pocket48Record(props: {}): ReactElement {
 
     if (index >= 0) {
       recordChildList[index].worker.postMessage({ type: 'stop' });
-    }
-  }
-
-  // 停止后的回调函数
-  function endCallback(record: LiveInfo): void {
-    const list: Array<WebWorkerChildItem> = [...store.getState().pocket48.recordChildList];
-    const index: number = findIndex(list, { id: record.liveId });
-
-    if (index >= 0) {
-      list.splice(index, 1);
-      dispatch(setRecordChildList([...list]));
     }
   }
 
@@ -139,7 +125,7 @@ function Pocket48Record(props: {}): ReactElement {
           }
 
           worker.terminate();
-          endCallback(record);
+          dispatch(setDeleteRecordChildList(record));
         }
       }, false);
 
@@ -151,12 +137,10 @@ function Pocket48Record(props: {}): ReactElement {
         protocolWhitelist: true
       });
 
-      dispatch(setRecordChildList(
-        recordChildList.concat([{
-          id: record.liveId,
-          worker
-        }])
-      ));
+      dispatch(setAddRecordChildList({
+        id: record.liveId,
+        worker
+      }));
     } catch (err) {
       console.error(err);
       message.error('录播下载失败！');

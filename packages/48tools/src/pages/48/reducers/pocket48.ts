@@ -1,4 +1,5 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
+import { findIndex } from 'lodash';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveInfo } from '../services/interface';
 
@@ -29,9 +30,21 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
       return state;
     },
 
-    // 直播下载
-    setLiveChildList(state: Pocket48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): Pocket48InitialState {
-      state.liveChildList = action.payload;
+    // 添加直播下载
+    setAddLiveChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): Pocket48InitialState {
+      state.liveChildList = state.liveChildList.concat([action.payload]);
+
+      return state;
+    },
+
+    // 删除直播下载
+    setDeleteLiveChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): Pocket48InitialState {
+      const index: number = findIndex(state.liveChildList, { id: action.payload.liveId });
+
+      if (index >= 0) {
+        state.liveChildList.splice(index, 1);
+        state.liveChildList = [...state.liveChildList];
+      }
 
       return state;
     },
@@ -44,9 +57,21 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
       return state;
     },
 
-    // 录播下载
-    setRecordChildList(state: Pocket48InitialState, action: PayloadAction<Array<WebWorkerChildItem>>): Pocket48InitialState {
-      state.recordChildList = action.payload;
+    // 添加录播下载
+    setAddRecordChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): Pocket48InitialState {
+      state.recordChildList = state.recordChildList.concat([action.payload]);
+
+      return state;
+    },
+
+    // 删除录播下载
+    setDeleteRecordChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): Pocket48InitialState {
+      const index: number = findIndex(state.recordChildList, { id: action.payload.liveId });
+
+      if (index >= 0) {
+        state.recordChildList.splice(index, 1);
+        state.recordChildList = [...state.recordChildList];
+      }
 
       return state;
     }
@@ -55,8 +80,10 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
 
 export const {
   setLiveList,
-  setLiveChildList,
+  setAddLiveChildList,
+  setDeleteLiveChildList,
   setRecordList,
-  setRecordChildList
+  setAddRecordChildList,
+  setDeleteRecordChildList
 }: CaseReducerActions<CaseReducers> = actions;
 export default { pocket48: reducer };
