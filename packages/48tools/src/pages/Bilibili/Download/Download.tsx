@@ -6,11 +6,10 @@ import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
 import type { Store, Dispatch } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Link } from 'react-router-dom';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash';
-import style from '../../48/index.sass';
+import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
 import { setDownloadList, setDownloadProgress, BilibiliInitialState } from '../reducers/reducers';
 import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
@@ -137,16 +136,9 @@ function Download(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <header className={ style.header }>
-        <div className={ style.headerLeft }>
-          <Link to="/">
-            <Button type="primary" danger={ true }>返回</Button>
-          </Link>
-        </div>
-        <div>
-          <AddForm />
-        </div>
-      </header>
+      <Header>
+        <AddForm />
+      </Header>
       <Table size="middle"
         columns={ columns }
         dataSource={ downloadList }

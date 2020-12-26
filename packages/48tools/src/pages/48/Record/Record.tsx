@@ -6,7 +6,6 @@ import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateActio
 import type { Dispatch, Store } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
@@ -14,7 +13,7 @@ import { findIndex } from 'lodash';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
-import style from '../index.sass';
+import Header from '../../../components/Header/Header';
 import {
   setRecordList,
   setRecordChildList,
@@ -290,20 +289,13 @@ function Record(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <header className={ style.header }>
-        <div className={ style.headerLeft }>
-          <Link to="/">
-            <Button type="primary" danger={ true }>返回</Button>
-          </Link>
-          <SearchForm onSubmit={ onSubmit } />
-        </div>
-        <div>
-          <Button.Group>
-            <Button onClick={ handleLoadRecordListClick }>加载列表</Button>
-            <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
-          </Button.Group>
-        </div>
-      </header>
+      <Header>
+        <SearchForm onSubmit={ onSubmit } />
+        <Button.Group>
+          <Button onClick={ handleLoadRecordListClick }>加载列表</Button>
+          <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+        </Button.Group>
+      </Header>
       <Table size="middle"
         columns={ columns }
         dataSource={ recordListQueryResult }

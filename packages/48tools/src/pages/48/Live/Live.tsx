@@ -4,14 +4,13 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import type { Dispatch, Store } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
-import style from '../index.sass';
+import Header from '../../../components/Header/Header';
 import { requestLiveList, requestLiveRoomInfo } from '../services/live';
 import { setLiveList, setLiveChildList, LiveChildItem, L48InitialState } from '../reducers/reducers';
 import { rStr, getFFmpeg } from '../../../utils/utils';
@@ -201,16 +200,9 @@ function Live(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <header className={ style.header }>
-        <div className={ style.headerLeft }>
-          <Link to="/">
-            <Button type="primary" danger={ true }>返回</Button>
-          </Link>
-        </div>
-        <div>
-          <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
-        </div>
-      </header>
+      <Header>
+        <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+      </Header>
       <Table size="middle"
         columns={ columns }
         dataSource={ liveList }

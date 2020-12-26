@@ -3,14 +3,13 @@ import { Fragment, ReactElement, useEffect, MouseEvent } from 'react';
 import type { Store, Dispatch } from 'redux';
 import { useStore, useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Link } from 'react-router-dom';
 import { Button, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
-import style from '../../48/index.sass';
+import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
 import { cursorFormData, deleteFormData, setLiveBilibiliChildList, BilibiliInitialState, LiveChildItem } from '../reducers/reducers';
 import dbConfig from '../../../utils/idb/dbConfig';
@@ -163,16 +162,9 @@ function Live(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <header className={ style.header }>
-        <div className={ style.headerLeft }>
-          <Link to="/">
-            <Button type="primary" danger={ true }>返回</Button>
-          </Link>
-        </div>
-        <div>
-          <AddForm />
-        </div>
-      </header>
+      <Header>
+        <AddForm />
+      </Header>
       <Table size="middle"
         columns={ columns }
         dataSource={ bilibiliLiveList }

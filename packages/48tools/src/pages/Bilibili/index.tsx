@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { useRoutes } from 'react-router-dom';
-import style from '../48/index.sass';
+import Content from '../../components/Content/Content';
 import Download from './Download/Download';
 import Live from './Live/Live';
 
@@ -11,7 +11,7 @@ function Index(props: {}): ReactElement {
     { path: 'Live', element: <Live /> }
   ]);
 
-  return <div className={ style.content }>{ routes }</div>;
+  return <Content>{ routes }</Content>;
 }
 
 export default Index;
