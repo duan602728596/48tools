@@ -3,7 +3,7 @@ import { useRoutes } from 'react-router-dom';
 import Content from '../../components/Content/Content';
 import Pocket48Live from './Pocket48/Pocket48Live/Pocket48Live';
 import Pocket48Record from './Pocket48/Pocket48Record/Pocket48Record';
-import InLive from './Live48/Live48/InLive';
+import InLive from './Live48/InLive/InLive';
 
 /* 直播和录播下载 */
 function Index(props: {}): ReactElement | null {
