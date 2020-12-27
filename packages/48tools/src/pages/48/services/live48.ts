@@ -1,6 +1,4 @@
-import * as querystring from 'querystring';
-import got, { Response as GotResponse } from 'got';
-import { rStr } from '../../../utils/utils';
+import Live48Worker from 'worker-loader!./live48.worker';
 import type { LiveStreamInfo } from './interface';
 
 /**
@@ -21,19 +19,15 @@ export async function requestFetchHtml(uri: string): Promise<string> {
  * @param { string } suid
  * @param { string } id
  */
-export async function requestStreamInfo(param: string, video_id: string, suid: string, id: string): Promise<LiveStreamInfo> {
-  const res: GotResponse<string> = await got('https://live.48.cn/Index/get_streaminfo', {
-    method: 'POST',
-    responseType: 'text',
-    body: querystring.stringify({ param, video_id, suid, id }),
-    headers: {
-      Host: 'live.48.cn',
-      Referer: `https://live.48.cn/Index/inlive/id/${ id }`,
-      Origin: 'https://live.48.cn',
-      Cookie: `browser=${ rStr(8) }`,
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    }
-  });
+export function requestStreamInfo(param: string, video_id: string, suid: string, id: string): Promise<LiveStreamInfo> {
+  return new Promise((resolve: Function, reject: Function): void => {
+    const worker: Worker = new Live48Worker();
 
-  return JSON.parse(res.body);
+    worker.addEventListener('message', function(event: MessageEvent<LiveStreamInfo>) {
+      resolve(event.data);
+      worker.terminate();
+    }, false);
+
+    worker.postMessage({ param, video_id, suid, id });
+  });
 }
