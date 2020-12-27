@@ -38,7 +38,7 @@ export default function(info: object): { [key: string]: any } {
     ],
     entry: {
       index: [path.join(__dirname, 'src/index.tsx')],
-      player: [path.join(__dirname, 'src/pages/48/Player/Player.tsx')]
+      player: [path.join(__dirname, 'src/pages/48/Pocket48/Player/Player.tsx')]
     },
     externals: {
       SDK: 'window.SDK',
@@ -91,7 +91,7 @@ export default function(info: object): { [key: string]: any } {
     },
     html: [
       { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'] },
-      { template: path.join(__dirname, 'src/pages/48/Player/player.pug'), excludeChunks: ['index'] }
+      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), excludeChunks: ['index'] }
     ]
   };
 

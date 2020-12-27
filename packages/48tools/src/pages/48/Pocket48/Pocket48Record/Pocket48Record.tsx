@@ -11,16 +11,16 @@ import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash';
 import * as moment from 'moment';
-import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
-import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
-import Header from '../../../components/Header/Header';
-import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../reducers/pocket48';
-import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../services/pocket48';
-import { getFFmpeg } from '../../../utils/utils';
+import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
+import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
+import Header from '../../../../components/Header/Header';
+import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../../reducers/pocket48';
+import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../../services/pocket48';
+import { getFFmpeg } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages';
-import type { WebWorkerChildItem } from '../../../types';
-import type { LiveData, LiveInfo, LiveRoomInfo } from '../services/interface';
+import type { WebWorkerChildItem } from '../../../../types';
+import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
 /**
  * 格式化m3u8文件内视频的地址

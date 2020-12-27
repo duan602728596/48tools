@@ -8,16 +8,16 @@ import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash';
 import * as moment from 'moment';
-import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
-import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
-import Header from '../../../components/Header/Header';
-import { requestLiveList, requestLiveRoomInfo } from '../services/pocket48';
-import { setLiveList, setAddLiveChildList, setDeleteLiveChildList, Pocket48InitialState } from '../reducers/pocket48';
-import { rStr, getFFmpeg } from '../../../utils/utils';
-import { getNetMediaServerPort, NetMediaServerPort } from '../../../utils/nodeMediaServer/nodeMediaServer';
+import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
+import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
+import Header from '../../../../components/Header/Header';
+import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
+import { setLiveList, setAddLiveChildList, setDeleteLiveChildList, Pocket48InitialState } from '../../reducers/pocket48';
+import { rStr, getFFmpeg } from '../../../../utils/utils';
+import { getNetMediaServerPort, NetMediaServerPort } from '../../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
-import type { WebWorkerChildItem } from '../../../types';
-import type { LiveData, LiveInfo, LiveRoomInfo } from '../services/interface';
+import type { WebWorkerChildItem } from '../../../../types';
+import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
 /* state */
 type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList'>;
