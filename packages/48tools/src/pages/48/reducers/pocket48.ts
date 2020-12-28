@@ -80,7 +80,10 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
 });
 
 // 获取配置项目
-export const getPocket48LiveOptions: ActionCreator<any> = dbRedux.getAction({ objectStoreName: optionsObjectStoreName });
+export const idbGetPocket48LiveOptions: ActionCreator<any> = dbRedux.getAction({ objectStoreName: optionsObjectStoreName });
+
+// 保存
+export const idbSavePocket48LiveOptions: ActionCreator<any> = dbRedux.putAction({ objectStoreName: optionsObjectStoreName });
 
 export const {
   setLiveList,

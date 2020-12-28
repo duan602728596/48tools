@@ -9,3 +9,11 @@ export interface InLiveWebWorkerItem extends WebWorkerChildItem {
   playStreamPath: string;
   status?: number;
 }
+
+/* ========== pocket48 ========== */
+// 直播自动录制配置
+export interface Pocket48LiveAutoGrabOptions {
+  time: number;
+  users: string;
+  dir: string;
+}
