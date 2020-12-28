@@ -12,8 +12,8 @@ import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Work
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
 import {
-  cursorFormData,
-  deleteFormData,
+  idbCursorBilibiliLiveList,
+  idbDeleteBilibiliLiveList,
   setAddLiveBilibiliChildList,
   setDeleteLiveBilibiliChildList,
   BilibiliInitialState
@@ -103,7 +103,7 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
-    dispatch(deleteFormData({
+    dispatch(idbDeleteBilibiliLiveList({
       query: record.id
     }));
   }
@@ -148,7 +148,7 @@ function Live(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(cursorFormData({
+    dispatch(idbCursorBilibiliLiveList({
       query: { indexName: dbConfig.objectStore[0].data[1] }
     }));
   }, []);

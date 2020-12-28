@@ -105,19 +105,19 @@ export const {
 }: CaseReducerActions<CaseReducers> = actions;
 
 // 保存数据
-export const saveFormData: ActionCreator<any> = dbRedux.putAction({
+export const idbSaveBilibiliLiveList: ActionCreator<any> = dbRedux.putAction({
   objectStoreName: bilibiliLiveObjectStoreName,
   successAction: setBilibiliLiveListAddRoom
 });
 
 // 请求所有列表
-export const cursorFormData: ActionCreator<any> = dbRedux.cursorAction({
+export const idbCursorBilibiliLiveList: ActionCreator<any> = dbRedux.cursorAction({
   objectStoreName: bilibiliLiveObjectStoreName,
   successAction: setBilibiliLiveList
 });
 
 // 删除
-export const deleteFormData: ActionCreator<any> = dbRedux.deleteAction({
+export const idbDeleteBilibiliLiveList: ActionCreator<any> = dbRedux.deleteAction({
   objectStoreName: bilibiliLiveObjectStoreName,
   successAction: setBilibiliLiveListDeleteRoom
 });

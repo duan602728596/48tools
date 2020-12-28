@@ -6,7 +6,7 @@ import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
 import style from './addForm.sass';
 import { rStr } from '../../../utils/utils';
-import { saveFormData } from '../reducers/reducers';
+import { idbSaveBilibiliLiveList } from '../reducers/reducers';
 
 /* 添加一个直播间 */
 function AddForm(props: {}): ReactElement {
@@ -24,7 +24,7 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    dispatch(saveFormData({
+    dispatch(idbSaveBilibiliLiveList({
       data: {
         ...formValue,
         id: rStr(30)
