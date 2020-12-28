@@ -1,5 +1,6 @@
-import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
 import { findIndex } from 'lodash';
+import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveInfo } from '../services/interface';
 
@@ -77,6 +78,9 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
     }
   }
 });
+
+// 获取配置项目
+export const getPocket48LiveOptions: ActionCreator<any> = dbRedux.getAction({ objectStoreName: optionsObjectStoreName });
 
 export const {
   setLiveList,

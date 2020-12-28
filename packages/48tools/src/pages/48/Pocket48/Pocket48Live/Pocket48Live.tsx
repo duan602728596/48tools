@@ -4,6 +4,7 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash';
@@ -187,7 +188,12 @@ function Pocket48Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+        <Button.Group>
+          <Button type="primary" onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+          <Link to="/48/LiveOptions">
+            <Button>自动抓取配置</Button>
+          </Link>
+        </Button.Group>
       </Header>
       <Table size="middle"
         columns={ columns }

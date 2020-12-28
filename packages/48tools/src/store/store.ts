@@ -7,7 +7,7 @@ const reducer: Reducer = createReducer({});
 const asyncReducers: ReducersMapObject = {}; // 异步的reducers
 
 /* store */
-let store: Store;
+export let store: Store;
 
 export function storeFactory(initialState: DeepPartial<any> = {}): Store {
   // 避免热替换导致redux的状态丢失
