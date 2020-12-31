@@ -2,7 +2,7 @@ import { JSDOM, DOMWindow } from 'jsdom';
 import { requestFetchHtml, requestStreamInfo } from '../../services/live48';
 import type { LiveStreamInfo } from '../../services/interface';
 
-const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48'];
+export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48'];
 
 /**
  * 获取网站首页地址

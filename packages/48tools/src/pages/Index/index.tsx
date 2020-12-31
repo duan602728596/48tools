@@ -26,6 +26,9 @@ function Index(props: {}): ReactElement {
           <Link className={ style.navItemLink } to="/48/InLive">
             <Button>官方公演直播抓取</Button>
           </Link>
+          <Link className={ style.navItemLink } to="/48/InVideo">
+            <Button>官方公演录播下载</Button>
+          </Link>
         </Space>
       </nav>
       <Divider />

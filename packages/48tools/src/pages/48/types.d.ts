@@ -17,3 +17,15 @@ export interface Pocket48LiveAutoGrabOptions {
   users: string;
   dir: string;
 }
+
+/* ========== inVideo ========== */
+export interface InVideoQuery {
+  page: number;     // 当前页数
+  total: number;    // 数据总数
+  liveType: number;
+}
+
+export interface InVideoItem {
+  title: string;
+  id: string;
+}
