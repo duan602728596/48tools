@@ -1,22 +1,16 @@
-import { combineReducers, ReducersMapObject, Reducer } from '@reduxjs/toolkit';
+import { ReducersMapObject } from '@reduxjs/toolkit';
 import pocket48Reducers from '../pages/48/reducers/pocket48';
 import live48Reducers from '../pages/48/reducers/live48';
 import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
 
 /* reducers */
-const reducers: ReducersMapObject = {
+export const reducers: ReducersMapObject = {
   ...pocket48Reducers,
   ...live48Reducers,
   ...bilibiliReducers
 };
 
-/* 创建reducer */
-export function createReducer(asyncReducers: ReducersMapObject): Reducer {
-  return combineReducers({
-    ...reducers,
-    ...asyncReducers
-  });
-}
+export const asyncReducers: ReducersMapObject = {}; // 异步的reducers
 
 export const ignoreOptions: any = {
   ignoredPaths: [

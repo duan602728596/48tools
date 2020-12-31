@@ -1,10 +1,17 @@
 /* 全局的store */
-import { configureStore, getDefaultMiddleware, ReducersMapObject, Reducer, Store, DeepPartial } from '@reduxjs/toolkit';
-import { createReducer, ignoreOptions } from './reducers';
+import {
+  configureStore,
+  combineReducers,
+  getDefaultMiddleware,
+  ReducersMapObject,
+  Reducer,
+  Store,
+  DeepPartial
+} from '@reduxjs/toolkit';
+import { reducers, asyncReducers, ignoreOptions } from './reducers';
 
 /* reducer列表 */
-const reducer: Reducer = createReducer({});
-const asyncReducers: ReducersMapObject = {}; // 异步的reducers
+const reducer: Reducer = combineReducers(reducers);
 
 /* store */
 export let store: Store;
@@ -38,5 +45,8 @@ export function injectReducers(asyncReducer: ReducersMapObject): void {
   }
 
   // 异步注入reducer
-  store.replaceReducer(createReducer(asyncReducers));
+  store.replaceReducer(combineReducers({
+    ...reducers,
+    ...asyncReducers
+  }));
 }
