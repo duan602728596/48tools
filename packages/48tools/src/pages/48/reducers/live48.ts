@@ -49,6 +49,13 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
       return state;
     },
 
+    // 设置分页的查询条件
+    setInVideoQuery(state: Live48InitialState, action: PayloadAction<InVideoQuery>): Live48InitialState {
+      state.inVideoQuery = action.payload;
+
+      return state;
+    },
+
     // 设置录播列表
     setInVideoList(state: Live48InitialState, action: PayloadAction<Array<InVideoItem>>): Live48InitialState {
       state.inVideoList = action.payload;
@@ -58,5 +65,11 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
   }
 });
 
-export const { setAddInLiveList, setStopInLiveList, setDeleteInLiveList }: CaseReducerActions<CaseReducers> = actions;
+export const {
+  setAddInLiveList,
+  setStopInLiveList,
+  setDeleteInLiveList,
+  setInVideoQuery,
+  setInVideoList
+}: CaseReducerActions<CaseReducers> = actions;
 export default { live48: reducer };
