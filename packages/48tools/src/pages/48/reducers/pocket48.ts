@@ -7,6 +7,7 @@ import type { LiveInfo } from '../services/interface';
 export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;
   liveChildList: Array<WebWorkerChildItem>;
+  autoGrabTimer: number | null;
   recordList: Array<LiveInfo>;
   recordNext: string;
   recordChildList: Array<WebWorkerChildItem>;
@@ -17,11 +18,12 @@ type CaseReducers = SliceCaseReducers<Pocket48InitialState>;
 const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReducers>({
   name: 'pocket48',
   initialState: {
-    liveList: [],       // 直播信息
-    liveChildList: [],  // 直播下载
-    recordList: [],     // 录播信息
-    recordNext: '0',    // 记录录播分页位置
-    recordChildList: [] // 录播下载
+    liveList: [],        // 直播信息
+    liveChildList: [],   // 直播下载
+    autoGrabTimer: null, // 自动抓取
+    recordList: [],      // 录播信息
+    recordNext: '0',     // 记录录播分页位置
+    recordChildList: []  // 录播下载
   },
   reducers: {
     // 直播信息
@@ -45,6 +47,21 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
       if (index >= 0) {
         state.liveChildList.splice(index, 1);
         state.liveChildList = [...state.liveChildList];
+      }
+
+      return state;
+    },
+
+    // 自动抓取定时器
+    setAutoGrab(state: Pocket48InitialState, action: PayloadAction<number | null>): Pocket48InitialState {
+      if (typeof action.payload === 'number') {
+        state.autoGrabTimer = action.payload;
+      } else {
+        if (typeof state.autoGrabTimer === 'number') {
+          clearInterval(state.autoGrabTimer);
+        }
+
+        state.autoGrabTimer = null;
       }
 
       return state;
@@ -89,6 +106,7 @@ export const {
   setLiveList,
   setAddLiveChildList,
   setDeleteLiveChildList,
+  setAutoGrab,
   setRecordList,
   setAddRecordChildList,
   setDeleteRecordChildList

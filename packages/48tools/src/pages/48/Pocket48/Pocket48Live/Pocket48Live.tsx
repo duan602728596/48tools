@@ -13,15 +13,25 @@ import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegD
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../../components/Header/Header';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
-import { setLiveList, setAddLiveChildList, setDeleteLiveChildList, Pocket48InitialState } from '../../reducers/pocket48';
+import {
+  setLiveList,
+  setAddLiveChildList,
+  setDeleteLiveChildList,
+  setAutoGrab,
+  idbGetPocket48LiveOptions,
+  Pocket48InitialState
+} from '../../reducers/pocket48';
 import { rStr, getFFmpeg } from '../../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
+import autoGrab from './autoGrab';
+import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
 import type { WebWorkerChildItem } from '../../../../types';
+import type { Pocket48LiveAutoGrabOptions } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
 /* state */
-type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList'>;
+type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList' | 'autoGrabTimer'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 直播列表
@@ -33,14 +43,47 @@ const state: Selector<any, RSelector> = createStructuredSelector({
   liveChildList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.liveChildList,
     (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+  ),
+  // 自动抓取的定时器
+  autoGrabTimer: createSelector(
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): number | null => pocket48.autoGrabTimer,
+    (data: number | null): number | null => data
   )
 });
 
 /* 直播抓取 */
 function Pocket48Live(props: {}): ReactElement {
-  const { liveList, liveChildList }: RSelector = useSelector(state);
+  const { liveList, liveChildList, autoGrabTimer }: RSelector = useSelector(state);
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
+
+  // 停止自动抓取
+  function handleStopAutoGrabClick(event: MouseEvent<HTMLButtonElement>): void {
+    dispatch(setAutoGrab(null));
+    message.info('停止自动抓取。');
+  }
+
+  // 开始自动抓取
+  async function handleStartAutoGrabClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    // 获取配置
+    const result: { query: string; result?: { name: string; value: Pocket48LiveAutoGrabOptions } }
+      = await dispatch(idbGetPocket48LiveOptions({ query: OPTIONS_NAME }));
+
+    if (!result.result) return;
+
+    // 格式化配置数据
+    const usersArr: string[] = result.result.value.users
+      .split(/\s*[,，]\s*/i)
+      .filter((o: string): boolean => o !== '');
+
+    if (usersArr.length === 0) return;
+
+    message.info('开始自动抓取。');
+    autoGrab(result.result.value.dir, usersArr);
+    dispatch(setAutoGrab(
+      setInterval(autoGrab, result.result.value.time * 60_000, result.result.value.dir, usersArr)
+    ));
+  }
 
   // 下载图片
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -190,6 +233,11 @@ function Pocket48Live(props: {}): ReactElement {
       <Header>
         <Button.Group>
           <Button type="primary" onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+          {
+            typeof autoGrabTimer === 'number'
+              ? <Button type="primary" danger={ true } onClick={ handleStopAutoGrabClick }>停止自动抓取</Button>
+              : <Button onClick={ handleStartAutoGrabClick }>开始自动抓取</Button>
+          }
           <Link to="/48/LiveOptions">
             <Button>自动抓取配置</Button>
           </Link>
