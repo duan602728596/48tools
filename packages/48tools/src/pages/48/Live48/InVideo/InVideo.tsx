@@ -36,7 +36,9 @@ function formatTsUrl(data: string, m3u8Url: string): string {
   const m3u8Pathname: string = m3u8Url.split(/\?/)[0].replace(/\/[^/]+$/, '');
 
   for (const item of dataArr) {
-    if (/^\//.test(item)) {
+    if (/^#/.test(item) || item === '') {
+      newStrArr.push(item);
+    } else if (/^\//.test(item)) {
       newStrArr.push(`https://ts.48.cn/${ item }`);
     } else {
       newStrArr.push(`${ m3u8Pathname }/${ item }`);
