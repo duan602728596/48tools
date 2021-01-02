@@ -51,14 +51,23 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
 
     // 设置分页的查询条件
     setInVideoQuery(state: Live48InitialState, action: PayloadAction<InVideoQuery>): Live48InitialState {
-      state.inVideoQuery = action.payload;
+      state.inVideoQuery = Object.assign(state.inVideoQuery ?? {}, action.payload);
 
       return state;
     },
 
     // 设置录播列表
-    setInVideoList(state: Live48InitialState, action: PayloadAction<Array<InVideoItem>>): Live48InitialState {
-      state.inVideoList = action.payload;
+    setInVideoList(
+      state: Live48InitialState,
+      action: PayloadAction<{ data: Array<InVideoItem>; page: number; total: number }>
+    ): Live48InitialState {
+      const { payload }: { payload: { data: Array<InVideoItem>; page: number; total: number } } = action;
+
+      state.inVideoList = payload.data;
+      state.inVideoQuery = Object.assign<any, any>(state.inVideoQuery ?? {}, {
+        page: payload.page,
+        total: payload.total
+      }) ;
 
       return state;
     }

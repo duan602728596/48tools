@@ -22,7 +22,7 @@ export interface Pocket48LiveAutoGrabOptions {
 export interface InVideoQuery {
   page: number;     // 当前页数
   total: number;    // 数据总数
-  liveType: number;
+  liveType: string;
 }
 
 export interface InVideoItem {

@@ -1,25 +1,16 @@
 import { JSDOM, DOMWindow } from 'jsdom';
-import { requestFetchHtml, requestStreamInfo } from '../../services/live48';
-import type { LiveStreamInfo } from '../../services/interface';
+import { requestFetchHtml, requestStreamInfo } from '../services/live48';
+import type { InVideoQuery, InVideoItem } from '../types';
+import type { LiveStreamInfo } from '../services/interface';
 
 export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48'];
-
-/**
- * 获取网站首页地址
- * @param { string } type: 团体
- */
-export function getLiveIndexUrl(type: string): string {
-  const index: number = LIVE_TYPE.indexOf(type) + 1;
-
-  return `https://live.48.cn/Index/main/club/${ index }`;
-}
 
 /**
  * 解析网站直播地址
  * @param { string } type: 团体
  */
 export async function parseInLive(type: string): Promise<Array<{ label: string; value: string }>> {
-  const indexUrl: string = getLiveIndexUrl(type);
+  const indexUrl: string = `https://live.48.cn/Index/main/club/${ LIVE_TYPE.indexOf(type) + 1 }`;
   const html: string = await requestFetchHtml(indexUrl);
   const { window }: JSDOM = new JSDOM(html);
   const { document }: DOMWindow = window;
@@ -63,4 +54,39 @@ export async function parseLiveUrl(id: string, quality: string): Promise<string 
   } else {
     return res.url;
   }
+}
+
+/**
+ * 解析网站录播地址
+ * @param { InVideoQuery } inVideoQuery: 查询条件
+ * @param { number } page: 分页
+ */
+export async function parseInVideoUrl(inVideoQuery: InVideoQuery | undefined, page?: number): Promise<{
+  data: Array<InVideoItem>;
+  total: number;
+}> {
+  const liveType: number = inVideoQuery?.liveType ? LIVE_TYPE.indexOf(inVideoQuery.liveType) : 0,
+    current: number = page ?? inVideoQuery?.page ?? 1;
+  const pageUrl: string = `https://live.48.cn/Index/main/club/${ liveType + 1 }/p/${ current }.html`; // 网站地址
+  const html: string = await requestFetchHtml(pageUrl);
+  const { window }: JSDOM = new JSDOM(html);
+  const { document }: DOMWindow = window;
+
+  // 获取当前数据总数
+  const totalStr: string | null = document.querySelector('.p-skip')!.innerHTML;
+  const total: number = Number(totalStr ? totalStr.match(/[0-9]+/g)?.[0] ?? '0' : '0') * 15;
+
+  // 获取数据列表
+  const videos: NodeListOf<HTMLLIElement> = document.querySelectorAll('.videolist .videos');
+  const data: Array<InVideoItem> = [];
+
+  for (const video of videos) {
+    const href: string = video.querySelector('a')!.getAttribute('href')!;
+    const idArr: string[] = href.split(/\//);
+    const id: string = idArr[idArr.length - 1];
+
+    data.push({ title: video.querySelector('h4')!.innerHTML, id });
+  }
+
+  return { total, data };
 }

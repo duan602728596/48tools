@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
 import style from './getLiveUrl.sass';
-import { parseInLive, parseLiveUrl } from './parseLive48Website';
+import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import { setAddInLiveList, setStopInLiveList, setDeleteInLiveList } from '../../reducers/live48';
 import { getFFmpeg, rStr } from '../../../../utils/utils';
 
