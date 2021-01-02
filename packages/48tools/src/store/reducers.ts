@@ -17,6 +17,7 @@ export const ignoreOptions: any = {
     'pocket48.liveChildList',
     'pocket48.recordChildList',
     'live48.inLiveList',
+    'live48.videoListChild',
     'bilibili.liveChildList'
   ],
   ignoredActions: [
@@ -27,6 +28,8 @@ export const ignoreOptions: any = {
     'live48/setAddInLiveList',
     'live48/setStopInLiveList',
     'live48/setDeleteInLiveList',
+    'live48/setVideoListChildAdd',
+    'live48/setVideoListChildDelete',
     'bilibili/setAddLiveBilibiliChildList',
     'bilibili/setDeleteLiveBilibiliChildList'
   ]

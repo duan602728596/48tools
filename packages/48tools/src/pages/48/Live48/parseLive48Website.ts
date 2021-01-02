@@ -57,7 +57,7 @@ export async function parseLiveUrl(id: string, quality: string): Promise<string 
 }
 
 /**
- * 解析网站录播地址
+ * 解析网站录播列表
  * @param { InVideoQuery } inVideoQuery: 查询条件
  * @param { number } page: 分页
  */
@@ -85,8 +85,28 @@ export async function parseInVideoUrl(inVideoQuery: InVideoQuery | undefined, pa
     const idArr: string[] = href.split(/\//);
     const id: string = idArr[idArr.length - 1];
 
-    data.push({ title: video.querySelector('h4')!.innerHTML, id });
+    data.push({ title: video.querySelector('h4')!.innerHTML, id, liveType: inVideoQuery?.liveType ?? 'snh48' });
   }
 
   return { total, data };
+}
+
+/**
+ * 解析视频地址
+ * @param { InVideoItem } record: 视频详情
+ * @param { string } quality: 视频品质
+ */
+export async function parseVideoItem(record: InVideoItem, quality: string): Promise<string | null> {
+  const liveType: number = LIVE_TYPE.indexOf(record.liveType);
+  const pageUrl: string = `https://live.48.cn/Index/invideo/club/${ liveType + 1 }/id/${ record.id }`; // 网站地址
+  const html: string = await requestFetchHtml(pageUrl);
+  const { window }: JSDOM = new JSDOM(html);
+  const { document }: DOMWindow = window;
+  const input: HTMLElement | null = document.getElementById(`${ quality }_url`);
+
+  if (input) {
+    return input.getAttribute('value');
+  } else {
+    return null;
+  }
 }

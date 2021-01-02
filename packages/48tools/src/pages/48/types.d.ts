@@ -28,4 +28,9 @@ export interface InVideoQuery {
 export interface InVideoItem {
   title: string;
   id: string;
+  liveType: string;
+}
+
+export interface InVideoWebWorkerItem extends WebWorkerChildItem {
+  liveType: string;
 }

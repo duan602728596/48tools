@@ -1,11 +1,12 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
 import { findIndex } from 'lodash';
-import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem } from '../types';
+import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 
 export interface Live48InitialState {
   inLiveList: Array<InLiveWebWorkerItem>;
   inVideoQuery?: InVideoQuery;
   inVideoList: Array<InVideoItem>;
+  videoListChild: Array<InVideoWebWorkerItem>;
 }
 
 type CaseReducers = SliceCaseReducers<Live48InitialState>;
@@ -15,7 +16,8 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
   initialState: {
     inLiveList: [],          // 当前抓取的直播列表
     inVideoQuery: undefined, // 录播分页的查询条件
-    inVideoList: []          // 当前的查找到的数据
+    inVideoList: [],         // 当前的查找到的数据
+    videoListChild: []       // 当前下载
   },
   reducers: {
     // 添加当前抓取的直播列表
@@ -70,6 +72,28 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
       }) ;
 
       return state;
+    },
+
+    // 添加视频下载
+    setVideoListChildAdd(state: Live48InitialState, action: PayloadAction<InVideoWebWorkerItem>): Live48InitialState {
+      state.videoListChild = state.videoListChild.concat([action.payload]);
+
+      return state;
+    },
+
+    // 删除视频下载
+    setVideoListChildDelete(state: Live48InitialState, action: PayloadAction<InVideoItem>): Live48InitialState {
+      const index: number = findIndex(state.videoListChild, {
+        id: action.payload.id,
+        liveType: action.payload.liveType
+      });
+
+      if (index >= 0) {
+        state.videoListChild.splice(index, 1);
+        state.videoListChild = [...state.videoListChild];
+      }
+
+      return state;
     }
   }
 });
@@ -79,6 +103,8 @@ export const {
   setStopInLiveList,
   setDeleteInLiveList,
   setInVideoQuery,
-  setInVideoList
+  setInVideoList,
+  setVideoListChildAdd,
+  setVideoListChildDelete
 }: CaseReducerActions<CaseReducers> = actions;
 export default { live48: reducer };
