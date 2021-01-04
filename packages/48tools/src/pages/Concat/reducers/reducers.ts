@@ -19,9 +19,16 @@ const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers
       state.concatList = state.concatList.concat(action.payload);
 
       return state;
+    },
+
+    // 设置合并队列
+    setConcatList(state: ConcatInitialState, action: PayloadAction<Array<ConcatItem>>): ConcatInitialState {
+      state.concatList = action.payload;
+
+      return state;
     }
   }
 });
 
-export const { setConcatListAdd }: CaseReducerActions<CaseReducers> = actions;
+export const { setConcatListAdd, setConcatList }: CaseReducerActions<CaseReducers> = actions;
 export default { concat: reducer };
