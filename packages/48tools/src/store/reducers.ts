@@ -2,12 +2,14 @@ import { ReducersMapObject } from '@reduxjs/toolkit';
 import pocket48Reducers from '../pages/48/reducers/pocket48';
 import live48Reducers from '../pages/48/reducers/live48';
 import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
+import concatReducers from '../pages/Concat/reducers/reducers';
 
 /* reducers */
 export const reducers: ReducersMapObject = {
   ...pocket48Reducers,
   ...live48Reducers,
-  ...bilibiliReducers
+  ...bilibiliReducers,
+  ...concatReducers
 };
 
 export const asyncReducers: ReducersMapObject = {}; // 异步的reducers

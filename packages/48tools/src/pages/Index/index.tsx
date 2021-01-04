@@ -40,11 +40,14 @@ function Index(props: {}): ReactElement {
           <Link className={ style.navItemLink } to="/Bilibili/Live">
             <Button>B站直播抓取</Button>
           </Link>
+          <Link className={ style.navItemLink } to="/Concat">
+            <Button>视频合并</Button>
+          </Link>
         </Space>
       </nav>
       <Divider />
       <div>
-        <Space>
+        <Space size={ 16 }>
           <FFmpegOption />
           <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
         </Space>
