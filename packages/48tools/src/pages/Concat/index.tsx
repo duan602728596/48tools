@@ -1,11 +1,12 @@
 import * as path from 'path';
 import { ParsedPath } from 'path';
-import { remote, OpenDialogReturnValue } from 'electron';
-import { useRef, ReactElement, ComponentClass, MouseEvent, RefObject } from 'react';
+import { promises as fsP } from 'fs';
+import { remote, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
+import { ReactElement, ComponentClass, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Button, List } from 'antd';
+import { Button, List, message } from 'antd';
 import { FileFilled as IconFileFilled, MenuOutlined as IconMenuOutlined } from '@ant-design/icons';
 import {
   SortableContainer,
@@ -17,11 +18,20 @@ import {
   SortEvent
 } from 'react-sortable-hoc';
 import * as arrayMove from 'array-move';
+import * as moment from 'moment';
+import ConcatVideoWorker from 'worker-loader!./concatVideo.worker';
+import type { MessageEventData } from './concatVideo.worker';
 import style from './index.sass';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
-import { setConcatListAdd, setConcatList, ConcatInitialState } from './reducers/reducers';
-import { rStr } from '../../utils/utils';
+import {
+  setConcatListAdd,
+  setConcatList,
+  setConcatListDelete,
+  setConcatWorker,
+  ConcatInitialState
+} from './reducers/reducers';
+import { getFFmpeg, rStr } from '../../utils/utils';
 import type { ConcatItem } from './types';
 
 /* 拖拽组件 */
@@ -41,31 +51,78 @@ const ListItem: ComponentClass<WrappedComponentProps & SortableElementProps> = S
   });
 
 /* state */
-type RSelector = Pick<ConcatInitialState, 'concatList'>;
+type RSelector = Pick<ConcatInitialState, 'concatList' | 'concatWorker'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 视频合并列表
   concatList: createSelector(
     ({ concat }: { concat: ConcatInitialState }): Array<ConcatItem> => concat.concatList,
     (data: Array<ConcatItem>): Array<ConcatItem> => data
+  ),
+  // 合并线程
+  concatWorker: createSelector(
+    ({ concat }: { concat: ConcatInitialState }): Worker | null => concat.concatWorker,
+    (data: Worker | null): Worker | null => data
   )
 });
 
 /* 视频合并 */
 function Index(props: {}): ReactElement {
-  const { concatList }: RSelector = useSelector(state);
+  const { concatList, concatWorker }: RSelector = useSelector(state);
   const dispatch: Dispatch = useDispatch();
-  const divRef: RefObject<HTMLDivElement> = useRef(null);
+
+  // 停止合并
+  function handleStopConcatVideoClick(event: MouseEvent<HTMLButtonElement>): void {
+    concatWorker?.postMessage({ type: 'stop' });
+  }
+
+  // 视频合并
+  async function handleConcatVideoClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    if (!concatList?.length) return;
+
+    const pathResult: ParsedPath = path.parse(concatList[0].value);
+    const time: string = moment().format('YYYY_MM_DD_HH_mm_ss');
+    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+      defaultPath: `[视频合并]${ time }${ pathResult.ext }`
+    });
+
+    if (result.canceled || !result.filePath) return;
+
+    // 写txt文件
+    const txt: string = concatList.map((o: ConcatItem): string => `file '${ o.value }'`).join('\n');
+    const txtFile: string = `${ result.filePath }.txt`;
+
+    await fsP.writeFile(txtFile, txt);
+
+    // 合并文件
+    const worker: Worker = new ConcatVideoWorker();
+
+    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
+      const { type, error }: MessageEventData = event.data;
+
+      if (type === 'close' || type === 'error') {
+        if (type === 'error') {
+          message.error('视频合并失败！');
+        }
+
+        worker.terminate();
+        dispatch(setConcatWorker(null));
+      }
+    }, false);
+
+    worker.postMessage({
+      type: 'start',
+      textPath: txtFile,
+      filePath: result.filePath,
+      ffmpeg: getFFmpeg()
+    });
+
+    dispatch(setConcatWorker(worker));
+  }
 
   // 拖拽挂载
   function helperContainer(): HTMLDivElement {
-    return divRef.current!.querySelector<HTMLDivElement>('.ant-list-items')!;
-  }
-
-  // 获取ref
-  function divRefCallback(r: any): void {
-    // @ts-ignore
-    divRef['current'] = r?.container ?? null;
+    return document.getElementById('container')!.querySelector<HTMLDivElement>('.ant-list-items')!;
   }
 
   // 拖拽完毕
@@ -94,13 +151,32 @@ function Index(props: {}): ReactElement {
     dispatch(setConcatListAdd(list));
   }
 
+  // 删除
+  function handleDeleteItemClick(item: ConcatItem, event: MouseEvent<HTMLButtonElement>): void {
+    dispatch(setConcatListDelete(item));
+  }
+
+  // 清空视频
+  function handleClearAllListClick(event: MouseEvent<HTMLButtonElement>): void {
+    dispatch(setConcatList([]));
+  }
+
   // 渲染单个组件
   function renderItem(item: ConcatItem, index: number): ReactElement {
     return (
       <ListItem key={ item.id } index={ index }>
         <List.Item key={ item.id }
           className={ style.helperItem }
-          actions={ [<Button key="delete" size="small" type="primary" danger={ true }>删除</Button>] }
+          actions={ [
+            <Button key="delete"
+              size="small"
+              type="primary"
+              danger={ true }
+              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteItemClick(item, event) }
+            >
+              删除
+            </Button>
+          ] }
         >
           <DragHandleComponent />
           { index + 1 }、{ item.filename }
@@ -114,13 +190,16 @@ function Index(props: {}): ReactElement {
       <Header>
         <Button.Group>
           <Button icon={ <IconFileFilled /> } onClick={ handleSelectVideosClick }>视频选择</Button>
-          <Button>清空视频</Button>
-          <Button type="primary">开始合并</Button>
+          <Button onClick={ handleClearAllListClick }>清空视频</Button>
+          {
+            concatWorker
+              ? <Button type="primary" danger={ true } onClick={ handleStopConcatVideoClick }>停止合并</Button>
+              : <Button type="primary" onClick={ handleConcatVideoClick }>开始合并</Button>
+          }
         </Button.Group>
       </Header>
-      <div className={ style.container }>
-        <ListContainer ref={ divRefCallback }
-          useDragHandle={ true }
+      <div className={ style.container } id="container">
+        <ListContainer useDragHandle={ true }
           helperContainer={ helperContainer }
           onSortEnd={ handleDragSortEnd }
         >

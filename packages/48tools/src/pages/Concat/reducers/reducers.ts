@@ -4,6 +4,7 @@ import type { ConcatItem } from '../types';
 
 export interface ConcatInitialState {
   concatList: Array<ConcatItem>;
+  concatWorker: Worker | null;
 }
 
 type CaseReducers = SliceCaseReducers<ConcatInitialState>;
@@ -11,7 +12,8 @@ type CaseReducers = SliceCaseReducers<ConcatInitialState>;
 const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers>({
   name: 'concat',
   initialState: {
-    concatList: []
+    concatList: [],    // 合并列表
+    concatWorker: null // 合并线程
   },
   reducers: {
     // 添加视频合并队列
@@ -26,9 +28,33 @@ const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers
       state.concatList = action.payload;
 
       return state;
+    },
+
+    // 删除
+    setConcatListDelete(state: ConcatInitialState, action: PayloadAction<ConcatItem>): ConcatInitialState {
+      const index: number = findIndex(state.concatList, { id: action.payload.id });
+
+      if (index >= 0) {
+        state.concatList.splice(index, 1);
+        state.concatList = [...state.concatList];
+      }
+
+      return state;
+    },
+
+    // 设置合并线程
+    setConcatWorker(state: ConcatInitialState, action: PayloadAction<Worker | null>): ConcatInitialState {
+      state.concatWorker = action.payload;
+
+      return state;
     }
   }
 });
 
-export const { setConcatListAdd, setConcatList }: CaseReducerActions<CaseReducers> = actions;
+export const {
+  setConcatListAdd,
+  setConcatList,
+  setConcatListDelete,
+  setConcatWorker
+}: CaseReducerActions<CaseReducers> = actions;
 export default { concat: reducer };
