@@ -242,7 +242,7 @@ function InVideo(props: {}): ReactElement {
           <Select.Option value="gnz48">GNZ48</Select.Option>
           <Select.Option value="ckg48">CKG48</Select.Option>
         </Select>
-        <Button disabled={ inVideoQuery === undefined } onClick={ handleGetVideoListClick }>加载录播</Button>
+        <Button type="primary" disabled={ inVideoQuery === undefined } onClick={ handleGetVideoListClick }>加载录播</Button>
       </Header>
       <Table size="middle"
         columns={ columns }

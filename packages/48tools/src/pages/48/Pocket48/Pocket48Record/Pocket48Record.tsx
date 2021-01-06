@@ -267,7 +267,7 @@ function Pocket48Record(props: {}): ReactElement {
       <Header>
         <SearchForm onSubmit={ onSubmit } />
         <Button.Group>
-          <Button onClick={ handleLoadRecordListClick }>加载列表</Button>
+          <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
           <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
         </Button.Group>
       </Header>
