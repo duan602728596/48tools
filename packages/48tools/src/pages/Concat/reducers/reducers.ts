@@ -1,4 +1,4 @@
-import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
+import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
 import { findIndex } from 'lodash';
 import type { ConcatItem } from '../types';
 

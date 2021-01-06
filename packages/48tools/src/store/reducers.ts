@@ -3,13 +3,15 @@ import pocket48Reducers from '../pages/48/reducers/pocket48';
 import live48Reducers from '../pages/48/reducers/live48';
 import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
 import concatReducers from '../pages/Concat/reducers/reducers';
+import videoCutReducers from '../pages/VideoCut/reducers/reducers';
 
 /* reducers */
 export const reducers: ReducersMapObject = {
   ...pocket48Reducers,
   ...live48Reducers,
   ...bilibiliReducers,
-  ...concatReducers
+  ...concatReducers,
+  ...videoCutReducers
 };
 
 export const asyncReducers: ReducersMapObject = {}; // 异步的reducers
