@@ -1,5 +1,5 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash';
+import { findIndex } from 'lodash-es';
 import dbRedux, { bilibiliLiveObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { WebWorkerChildItem } from '../../../types';
 import type { DownloadItem, LiveItem } from '../types';

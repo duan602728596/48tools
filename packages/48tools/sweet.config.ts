@@ -15,8 +15,7 @@ function nodeExternals(node: Array<string>): { [k: string]: string } {
 
 export default function(info: object): { [key: string]: any } {
   const plugins: Array<any> = [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
-    ['import', { libraryName: 'lodash', libraryDirectory: '', camel2DashComponentName: false }, 'lodash']
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]
   ];
 
   if (!isDev) {

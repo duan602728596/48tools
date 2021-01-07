@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex } from 'lodash';
+import { findIndex } from 'lodash-es';
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
 import { setDownloadList, setDownloadProgress, BilibiliInitialState } from '../reducers/reducers';

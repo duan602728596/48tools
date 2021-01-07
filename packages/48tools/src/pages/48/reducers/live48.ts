@@ -1,5 +1,5 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash';
+import { findIndex } from 'lodash-es';
 import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 
 export interface Live48InitialState {

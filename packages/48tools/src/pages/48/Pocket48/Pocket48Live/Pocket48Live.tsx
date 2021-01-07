@@ -7,7 +7,7 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex, pick } from 'lodash';
+import { findIndex, pick } from 'lodash-es';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';

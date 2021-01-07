@@ -2,7 +2,7 @@ import * as path from 'path';
 import type { Store } from 'redux';
 import { message } from 'antd';
 import * as moment from 'moment';
-import { findIndex } from 'lodash';
+import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
 import { store } from '../../../../store/store';
