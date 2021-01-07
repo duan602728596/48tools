@@ -4,11 +4,11 @@ import { message } from 'antd';
 import * as moment from 'moment';
 import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
-import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
 import { store } from '../../../../store/store';
 import { setLiveList, Pocket48InitialState, setDeleteLiveChildList, setAddLiveChildList } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
 import { getFFmpeg } from '../../../../utils/utils';
+import type { MessageEventData } from '../../../../types';
 import type { LiveData, LiveInfo, UserInfo, LiveRoomInfo } from '../../services/interface';
 
 /* 自动抓取 */

@@ -7,11 +7,6 @@ type WorkerEventData = {
   ffmpeg: string;   // ffmpeg地址
 };
 
-export type MessageEventData = {
-  type: 'close' | 'error';
-  error?: Error;
-};
-
 let child: ChildProcessWithoutNullStreams;
 
 /* 下载 */

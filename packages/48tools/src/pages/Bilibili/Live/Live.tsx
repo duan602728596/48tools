@@ -8,7 +8,6 @@ import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
-import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
 import {
@@ -21,7 +20,7 @@ import {
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
-import type { WebWorkerChildItem } from '../../../types';
+import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
 

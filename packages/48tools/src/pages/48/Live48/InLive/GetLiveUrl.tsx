@@ -6,11 +6,11 @@ import { Form, Select, message, Button } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
-import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
-import { setAddInLiveList, setStopInLiveList, setDeleteInLiveList } from '../../reducers/live48';
+import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
 import { getFFmpeg, rStr } from '../../../../utils/utils';
+import type { MessageEventData } from '../../../../types';
 
 /* 抓取直播信息表单 */
 function GetLiveUrl(props: {}): ReactElement {

@@ -8,7 +8,6 @@ import { Select, Button, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
-import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
 import style from './inVideo.sass';
 import Header from '../../../../components/Header/Header';
 import {
@@ -21,6 +20,7 @@ import {
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg } from '../../../../utils/utils';
+import type { MessageEventData } from '../../../../types';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
 /**

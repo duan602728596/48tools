@@ -7,7 +7,6 @@ import { Table, Button, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import CutWorker from 'worker-loader!./cut.worker';
-import type { MessageEventData } from './cut.worker';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
 import CutForm from './CutForm';
@@ -18,7 +17,7 @@ import {
   VideoCutInitialState
 } from './reducers/reducers';
 import { getFFmpeg } from '../../utils/utils';
-import type { WebWorkerChildItem } from '../../types';
+import type { WebWorkerChildItem, MessageEventData } from '../../types';
 import type { CutItem } from './types';
 
 /* state */
@@ -112,6 +111,7 @@ function Index(props: {}): ReactElement {
               hasChild ? (
                 <Button type="primary"
                   danger={ true }
+                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopCutClick(record, event) }
                 >
                   停止裁剪
                 </Button>

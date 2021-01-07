@@ -10,7 +10,6 @@ import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash-es';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
-import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../../components/Header/Header';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
 import {
@@ -26,7 +25,7 @@ import { getNetMediaServerPort, NetMediaServerPort } from '../../../../utils/nod
 import downloadImages from './downloadImages';
 import autoGrab from './autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
-import type { WebWorkerChildItem } from '../../../../types';
+import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 

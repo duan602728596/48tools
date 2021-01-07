@@ -20,7 +20,7 @@ import {
 import * as arrayMove from 'array-move';
 import * as moment from 'moment';
 import ConcatVideoWorker from 'worker-loader!./concatVideo.worker';
-import type { MessageEventData } from './concatVideo.worker';
+
 import style from './index.sass';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
@@ -32,6 +32,7 @@ import {
   ConcatInitialState
 } from './reducers/reducers';
 import { getFFmpeg, rStr } from '../../utils/utils';
+import type { MessageEventData } from '../../types';
 import type { ConcatItem } from './types';
 
 /* 拖拽组件 */
