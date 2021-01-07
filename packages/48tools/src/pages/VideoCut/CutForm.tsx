@@ -1,8 +1,12 @@
-import { remote, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
+import { remote, OpenDialogReturnValue } from 'electron';
 import type { ReactElement, MouseEvent } from 'react';
+import type { Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 import { Form, Button, Input, InputNumber, Card } from 'antd';
 import type { FormInstance, Rule } from 'antd/es/form';
 import style from './cutForm.sass';
+import { rStr } from '../../utils/utils';
+import type { CutItem } from './types';
 
 const timeRules: Rule[] = [{
   type: 'integer',
@@ -12,10 +16,21 @@ const timeRules: Rule[] = [{
   transform: (v: any): number => v ? Number(v) : 0
 }];
 
+interface FormValue {
+  file: string;
+  startH?: string | number;
+  startM?: string | number;
+  startS?: string | number;
+  endH?: string | number;
+  endM?: string | number;
+  endS?: string | number;
+}
+
 /* 裁剪表单 */
 function CutForm(props: {}): ReactElement {
+  const dispatch: Dispatch = useDispatch();
   const [form]: [FormInstance] = Form.useForm();
-  const { setFieldsValue }: FormInstance = form;
+  const { setFieldsValue, resetFields }: FormInstance = form;
 
   // 选择文件
   async function handleOpenVideoFileClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -28,9 +43,17 @@ function CutForm(props: {}): ReactElement {
     setFieldsValue({ file: result.filePaths[0] });
   }
 
+  // 添加到队列
+  function handleFormSubmit(value: FormValue): void {
+    // const data: CutItem = {
+    //   id: rStr(10),
+    //   file: value.file
+    // };
+  }
+
   return (
     <Card className={ style.card }>
-      <Form form={ form }>
+      <Form form={ form } onFinish={ handleFormSubmit }>
         <Form.Item label="选择需要裁剪的视频">
           <Form.Item name="file" rules={ [{ required: true, whitespace: true, message: '请选择视频文件' }] } noStyle={ true }>
             <Input className={ style.fileInput } readOnly={ true } />
@@ -64,7 +87,7 @@ function CutForm(props: {}): ReactElement {
           </Form.Item>
         </Form.Item>
         <Button.Group>
-          <Button>重置</Button>
+          <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => resetFields() }>重置</Button>
           <Button type="primary" htmlType="submit">添加到裁剪队列</Button>
         </Button.Group>
       </Form>

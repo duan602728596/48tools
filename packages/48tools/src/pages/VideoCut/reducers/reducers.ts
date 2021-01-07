@@ -12,8 +12,15 @@ const { actions, reducer }: Slice = createSlice<VideoCutInitialState, CaseReduce
   initialState: {
     cutList: [] // 视频裁剪队列
   },
-  reducers: {}
+  reducers: {
+    // 添加一个队列
+    setCutListAdd(state: VideoCutInitialState, action: PayloadAction<CutItem>): VideoCutInitialState {
+      state.cutList = state.cutList.concat([action.payload]);
+
+      return state;
+    }
+  }
 });
 
-export const {}: CaseReducerActions<CaseReducers> = actions;
+export const { setCutListAdd }: CaseReducerActions<CaseReducers> = actions;
 export default { videoCut: reducer };
