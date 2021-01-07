@@ -42,7 +42,7 @@ function cut(data: WorkerEventData): void {
 
   // 判断是否为gif或者webp
   if (/\.(gif|webp)$/i.test(filePath)) {
-    args.push('-loop', '0', '-i', playStreamPath, filePath);
+    args.push('-i', playStreamPath, '-loop', '0', filePath);
   } else {
     args.push('-accurate_seek', '-i', playStreamPath, '-c', 'copy', '-avoid_negative_ts', '1', filePath);
   }
