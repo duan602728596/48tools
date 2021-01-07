@@ -23,7 +23,8 @@ export const ignoreOptions: any = {
     'live48.inLiveList',
     'live48.videoListChild',
     'bilibili.liveChildList',
-    'concat.concatWorker'
+    'concat.concatWorker',
+    'videoCut.cutChildList'
   ],
   ignoredActions: [
     'pocket48/setAddLiveChildList',
@@ -37,6 +38,8 @@ export const ignoreOptions: any = {
     'live48/setVideoListChildDelete',
     'bilibili/setAddLiveBilibiliChildList',
     'bilibili/setDeleteLiveBilibiliChildList',
-    'concat/setConcatWorker'
+    'concat/setConcatWorker',
+    'videoCut/setCutChildListAdd',
+    'videoCut/setCutChildListDelete'
   ]
 };

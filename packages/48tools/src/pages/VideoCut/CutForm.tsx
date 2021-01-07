@@ -1,3 +1,5 @@
+import * as path from 'path';
+import type { ParsedPath } from 'path';
 import { remote, OpenDialogReturnValue } from 'electron';
 import type { ReactElement, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
@@ -6,6 +8,8 @@ import { Form, Button, Input, InputNumber, Card } from 'antd';
 import type { FormInstance, Rule } from 'antd/es/form';
 import style from './cutForm.sass';
 import { rStr } from '../../utils/utils';
+import { setCutListAdd } from './reducers/reducers';
+import { getFullTime } from './function';
 import type { CutItem } from './types';
 
 const timeRules: Rule[] = [{
@@ -45,10 +49,17 @@ function CutForm(props: {}): ReactElement {
 
   // 添加到队列
   function handleFormSubmit(value: FormValue): void {
-    // const data: CutItem = {
-    //   id: rStr(10),
-    //   file: value.file
-    // };
+    const parseResult: ParsedPath = path.parse(value.file);
+    const data: CutItem = {
+      id: rStr(10),
+      file: value.file,
+      name: parseResult.base,
+      startTime: getFullTime(value.startH, value.startM, value.startS),
+      endTime: getFullTime(value.endH, value.endM, value.endS)
+    };
+
+    dispatch(setCutListAdd(data));
+    resetFields();
   }
 
   return (
@@ -63,27 +74,27 @@ function CutForm(props: {}): ReactElement {
         <Form.Item label="裁剪时间">
           <label>开始时间：</label>
           <Form.Item name="startH" rules={ timeRules } noStyle={ true }>
-            <InputNumber />
+            <InputNumber placeholder="时" />
           </Form.Item>
           <span className={ style.maohao }>:</span>
           <Form.Item name="startM" rules={ timeRules } noStyle={ true }>
-            <InputNumber />
+            <InputNumber placeholder="分" />
           </Form.Item>
           <span className={ style.maohao }>:</span>
           <Form.Item name="startS" rules={ timeRules } noStyle={ true }>
-            <InputNumber />
+            <InputNumber placeholder="秒" />
           </Form.Item>
           <label className={ style.labelMarginLeft }>结束时间：</label>
           <Form.Item name="endH" rules={ timeRules } noStyle={ true }>
-            <InputNumber />
+            <InputNumber placeholder="时" />
           </Form.Item>
           <span className={ style.maohao }>:</span>
           <Form.Item name="endM" rules={ timeRules } noStyle={ true }>
-            <InputNumber />
+            <InputNumber placeholder="分" />
           </Form.Item>
           <span className={ style.maohao }>:</span>
           <Form.Item name="endS" rules={ timeRules } noStyle={ true }>
-            <InputNumber />
+            <InputNumber placeholder="秒" />
           </Form.Item>
         </Form.Item>
         <Button.Group>

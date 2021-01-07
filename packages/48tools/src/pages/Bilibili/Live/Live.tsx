@@ -114,7 +114,7 @@ function Live(props: {}): ReactElement {
     {
       title: '操作',
       key: 'handle',
-      width: 155,
+      width: 175,
       render: (value: undefined, record: LiveItem, index: number): ReactElement => {
         const idx: number = findIndex(liveChildList, { id: record.id });
 

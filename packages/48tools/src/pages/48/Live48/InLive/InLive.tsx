@@ -68,7 +68,7 @@ function InLive(props: {}): ReactElement {
     {
       title: '操作',
       key: 'handle',
-      width: 100,
+      width: 150,
       render: (value: undefined, record: InLiveWebWorkerItem, index: number): ReactElement => record.status === 0 ? (
         <Button type="primary"
           danger={ true }
