@@ -39,24 +39,21 @@ export default function(info: object): { [key: string]: any } {
       index: [path.join(__dirname, 'src/index.tsx')],
       player: [path.join(__dirname, 'src/pages/48/Pocket48/Player/Player.tsx')]
     },
-    externals: {
-      SDK: 'window.SDK',
-      ...nodeExternals([
-        'child_process',
-        'fs',
-        'net',
-        'url',
-        'path',
-        'process',
-        'querystring',
-        'stream',
-        'util',
-        'electron',
-        'got',
-        'jsdom',
-        'node-media-server'
-      ])
-    },
+    externals: nodeExternals([
+      'child_process',
+      'fs',
+      'net',
+      'path',
+      'process',
+      'querystring',
+      'stream',
+      'url',
+      'util',
+      'electron',
+      'got',
+      'jsdom',
+      'node-media-server'
+    ]),
     js: {
       ecmascript: true,
       plugins,

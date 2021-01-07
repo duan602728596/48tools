@@ -51,10 +51,6 @@ declare module '*.svg' {
   export default url;
 }
 
-declare module 'SDK' {
-  export default any;
-}
-
 declare module 'worker-loader!*' {
   class WorkerLoader extends Worker {
     constructor(): Worker;
