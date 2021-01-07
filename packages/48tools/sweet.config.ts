@@ -64,17 +64,6 @@ export default function(info: object): { [key: string]: any } {
       plugins,
       exclude: /node_modules/
     },
-    rules: [
-      {
-        test: /NIM_Web_SDK/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: isDev ? '[name]_[hash:5].[ext]' : '[name]_[hash:15].[ext]'
-          }
-        }]
-      }
-    ],
     sass: {
       include: /src/
     },
