@@ -4,7 +4,7 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Select, Button, Table, message } from 'antd';
+import { Select, Button, Table, message, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
@@ -236,13 +236,15 @@ function InVideo(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Select className={ style.typeSelect } value={ inVideoQuery?.liveType } onSelect={ handleLiveTypeSelect }>
-          <Select.Option value="snh48">SNH48</Select.Option>
-          <Select.Option value="bej48">BEJ48</Select.Option>
-          <Select.Option value="gnz48">GNZ48</Select.Option>
-          <Select.Option value="ckg48">CKG48</Select.Option>
-        </Select>
-        <Button type="primary" disabled={ inVideoQuery === undefined } onClick={ handleGetVideoListClick }>加载录播</Button>
+        <Space size={ 8 }>
+          <Select className={ style.typeSelect } value={ inVideoQuery?.liveType } onSelect={ handleLiveTypeSelect }>
+            <Select.Option value="snh48">SNH48</Select.Option>
+            <Select.Option value="bej48">BEJ48</Select.Option>
+            <Select.Option value="gnz48">GNZ48</Select.Option>
+            <Select.Option value="ckg48">CKG48</Select.Option>
+          </Select>
+          <Button type="primary" disabled={ inVideoQuery === undefined } onClick={ handleGetVideoListClick }>加载录播</Button>
+        </Space>
       </Header>
       <Table size="middle"
         columns={ columns }

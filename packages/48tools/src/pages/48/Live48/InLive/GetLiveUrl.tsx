@@ -2,7 +2,7 @@ import { remote, SaveDialogReturnValue } from 'electron';
 import { useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
-import { Form, Select, message, Button } from 'antd';
+import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
@@ -98,24 +98,26 @@ function GetLiveUrl(props: {}): ReactElement {
 
   return (
     <Form form={ form } initialValues={{ quality: 'chao' }} onFinish={ handleStartInLiveSubmit }>
-      <Form.Item name="type" noStyle={ true }>
-        <Select className={ style.typeSelect } placeholder="选择团体" onSelect={ handleLiveTypeSelect }>
-          <Select.Option value="snh48">SNH48</Select.Option>
-          <Select.Option value="bej48">BEJ48</Select.Option>
-          <Select.Option value="gnz48">GNZ48</Select.Option>
-          <Select.Option value="ckg48">CKG48</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item name="live" noStyle={ true }>
-        <Select className={ style.liveSelect } loading={ loading } placeholder="选择公演">{ liveSelectOptionRender() }</Select>
-      </Form.Item>
-      <Form.Item name="quality" noStyle={ true }>
-        <Select className={ style.qualitySelect } placeholder="画质">
-          <Select.Option value="chao">超清</Select.Option>
-          <Select.Option value="gao">高清</Select.Option>
-          <Select.Option value="liuchang">流畅</Select.Option>
-        </Select>
-      </Form.Item>
+      <Space size={ 8 }>
+        <Form.Item name="type" noStyle={ true }>
+          <Select className={ style.typeSelect } placeholder="选择团体" onSelect={ handleLiveTypeSelect }>
+            <Select.Option value="snh48">SNH48</Select.Option>
+            <Select.Option value="bej48">BEJ48</Select.Option>
+            <Select.Option value="gnz48">GNZ48</Select.Option>
+            <Select.Option value="ckg48">CKG48</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name="live" noStyle={ true }>
+          <Select className={ style.liveSelect } loading={ loading } placeholder="选择公演">{ liveSelectOptionRender() }</Select>
+        </Form.Item>
+        <Form.Item name="quality" noStyle={ true }>
+          <Select className={ style.qualitySelect } placeholder="画质">
+            <Select.Option value="chao">超清</Select.Option>
+            <Select.Option value="gao">高清</Select.Option>
+            <Select.Option value="liuchang">流畅</Select.Option>
+          </Select>
+        </Form.Item>
+      </Space>
       <Button className={ style.startBtn } type="primary" htmlType="submit">开始直播录制</Button>
     </Form>
   );

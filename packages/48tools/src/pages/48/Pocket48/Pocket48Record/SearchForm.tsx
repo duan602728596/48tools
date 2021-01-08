@@ -32,11 +32,12 @@ function SearchForm(props: { onSubmit: OnSubmitFunc }): ReactElement {
   return (
     <Form form={ form } component={ false }>
       <Form.Item name="q" noStyle={ true }>
-        <Input className={ style.searchInput }
-          allowClear={ true }
-          placeholder="输入小偶像名称搜索"
-          onPressEnter={ handleInputPressEnter }
-        />
+        <div className={ style.searchInput }>
+          <Input allowClear={ true }
+            placeholder="输入小偶像名称搜索"
+            onPressEnter={ handleInputPressEnter }
+          />
+        </div>
       </Form.Item>
     </Form>
   );

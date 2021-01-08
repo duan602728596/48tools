@@ -17,7 +17,7 @@ async function main() {
   });
 
   // 提取组件名称
-  let allComponents = [];
+  let allComponents = ['Pagination', 'Empty'];
 
   for (const file of files) {
     const components = await matchComponents(cwd48tools, file);
