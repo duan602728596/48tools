@@ -1,8 +1,8 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import { useContext, ReactElement, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
-import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
+import { ToolTwoTone as IconToolTwoTone, BugTwoTone as IconBugTwoTone } from '@ant-design/icons';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
 import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
@@ -11,8 +11,13 @@ import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
 function Index(props: {}): ReactElement {
   const theme: Theme = useContext(ThemeContext);
 
+  // 打开issues
+  function handleOpenIssuesClick(event: MouseEvent<HTMLButtonElement>): void {
+    shell.openExternal('https://github.com/duan602728596/48tools/issues');
+  }
+
   // 打开开发者工具
-  function handleOpenDeveloperToolsClick(event: MouseEvent): void {
+  function handleOpenDeveloperToolsClick(event: MouseEvent<HTMLButtonElement>): void {
     ipcRenderer.send('developer-tools');
   }
 
@@ -58,6 +63,9 @@ function Index(props: {}): ReactElement {
           { theme.ChangeThemeElement }
           <Tooltip title="开发者工具">
             <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+          </Tooltip>
+          <Tooltip title="问题反馈">
+            <Button type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
           </Tooltip>
         </Space>
       </div>
