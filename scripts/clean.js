@@ -12,7 +12,7 @@ const build = path.join(cwd, 'build');
 
 async function clean() {
   // 删除mac
-  const macFiles = await globPromise(path.join(build, 'mac/mac/mirai-login.app/Contents/Resources/*.lproj'));
+  const macFiles = await globPromise(path.join(build, 'mac/mac/48tools.app/Contents/Resources/*.lproj'));
   const macDeleteTasks = [];
 
   macFiles.forEach((o) => !/zh_CN/i.test(o) && macDeleteTasks.push(fse.remove(o)));
