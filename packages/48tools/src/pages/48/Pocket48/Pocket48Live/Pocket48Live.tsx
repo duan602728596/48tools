@@ -68,14 +68,18 @@ function Pocket48Live(props: {}): ReactElement {
     const result: { query: string; result?: { name: string; value: Pocket48LiveAutoGrabOptions } }
       = await dispatch(idbGetPocket48LiveOptions({ query: OPTIONS_NAME }));
 
-    if (!result.result) return;
+    if (!result.result) {
+      return message.warn('请先配置自动抓取相关配置。');
+    }
 
     // 格式化配置数据
     const usersArr: string[] = result.result.value.users
       .split(/\s*[,，]\s*/i)
       .filter((o: string): boolean => o !== '');
 
-    if (usersArr.length === 0) return;
+    if (usersArr.length === 0) {
+      return message.warn('请先配置自动抓取监听的成员直播。');
+    }
 
     message.info('开始自动抓取。');
     autoGrab(result.result.value.dir, usersArr);
