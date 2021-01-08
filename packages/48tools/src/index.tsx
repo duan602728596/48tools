@@ -5,6 +5,7 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';
 import { storeFactory } from './store/store';
 import Routers from './router/Routers';
+import ThemeProvider from './components/Theme/ThemeProvider';
 import { netMediaServerInit } from './utils/nodeMediaServer/nodeMediaServer';
 import dbInit from './utils/idb/dbInit';
 
@@ -12,9 +13,11 @@ import dbInit from './utils/idb/dbInit';
 render(
   <Provider store={ storeFactory() }>
     <ConfigProvider locale={ zhCN }>
-      <HashRouter>
-        <Routers />
-      </HashRouter>
+      <ThemeProvider>
+        <HashRouter>
+          <Routers />
+        </HashRouter>
+      </ThemeProvider>
     </ConfigProvider>
   </Provider>,
   document.getElementById('app')

@@ -18,6 +18,7 @@ import zhCN from 'antd/es/locale-provider/zh_CN';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
+import ThemeProvider from '../../../../components/Theme/ThemeProvider';
 import { requestLiveRoomInfo } from '../../services/pocket48';
 import type { LiveRoomInfo } from '../../services/interface';
 import { getFFmpeg, source } from '../../../../utils/utils';
@@ -31,8 +32,6 @@ interface Search {
   rtmpPort: number;
   httpPort: number;
 }
-
-const SOURCE_HOST: string = 'https://source3.48.cn/'; // 静态文件地址
 
 function handleChildProcessStdoutOrStderr(data: Buffer): void {
   // console.log(data.toString());
@@ -158,27 +157,29 @@ function PlayerApp(props: {}): ReactElement {
   }, [info, search]);
 
   return (
-    <ConfigProvider locale={ zhCN }>
-      <div className={ style.content }>
-        <header className={ style.header }>
-          <h1 className={ style.title }>{ search.title }</h1>
-          { search.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
-          <div className={ style.flex }>
-            <div className={ style.userBox }>{ infoRender() }</div>
-            <div className={ style.tools }>
-              <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+    <ThemeProvider isChildrenWindow={ true }>
+      <ConfigProvider locale={ zhCN }>
+        <div className={ style.content }>
+          <header className={ style.header }>
+            <h1 className={ style.title }>{ search.title }</h1>
+            { search.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
+            <div className={ style.flex }>
+              <div className={ style.userBox }>{ infoRender() }</div>
+              <div className={ style.tools }>
+                <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+              </div>
             </div>
+          </header>
+          <div>
+            <video ref={ videoRef }
+              className={ style.video }
+              controls={ true }
+              poster={ source(search.coverPath) }
+            />
           </div>
-        </header>
-        <div>
-          <video ref={ videoRef }
-            className={ style.video }
-            controls={ true }
-            poster={ source(search.coverPath) }
-          />
         </div>
-      </div>
-    </ConfigProvider>
+      </ConfigProvider>
+    </ThemeProvider>
   );
 }
 

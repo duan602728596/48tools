@@ -11,5 +11,7 @@ html
   body
     div.app#app
 
+    include ./components/Theme/themeInit.pug
+
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)

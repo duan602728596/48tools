@@ -1,0 +1,23 @@
+// 初始化主题
+style.
+  [theme="dark"] {
+    background-color: #000;
+  }
+
+script.
+  function themeInit() {
+    const { ipcRenderer } = globalThis.require('electron');
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkMatches = media.matches; // 判断当前是否为暗黑模式
+    const theme = localStorage.getItem('THEME_VALUE') ?? 'system'; // 判断当前的主题
+
+    if (theme !== 'system') {
+      ipcRenderer.send('nativeTheme:change', theme);
+    }
+
+    if ((theme === 'system' && darkMatches) || (theme === 'dark')) {
+      document.body.setAttribute('theme', 'dark');
+    }
+  }
+
+  themeInit();

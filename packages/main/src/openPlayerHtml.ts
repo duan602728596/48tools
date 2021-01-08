@@ -2,6 +2,8 @@ import * as path from 'path';
 import * as process from 'process';
 import * as querystring from 'querystring';
 import { ipcMain, BrowserWindow, IpcMainEvent } from 'electron';
+import ipcTheme from './ipcTheme';
+import { themeEvent, ThemeValue } from './ipcTheme';
 
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 
@@ -32,9 +34,18 @@ function openPlayerHtml(title: string, query: string): void {
       { search: query }
     );
 
+    const handleThemeEvent: Function = function(value: ThemeValue): void {
+      if (win) {
+        win.webContents.send('themeSource', value);
+      }
+    };
+
     win.on('closed', function(): void {
+      themeEvent['off']('themeSource', handleThemeEvent);
       win = null;
     });
+
+    themeEvent['on']('themeSource', handleThemeEvent);
   }
 
   // 开发者工具
@@ -43,6 +54,9 @@ function openPlayerHtml(title: string, query: string): void {
       win && win.webContents.openDevTools();
     }
   });
+
+  // 切换主题
+  ipcTheme();
 }
 
 export default openPlayerHtml;

@@ -1,14 +1,16 @@
 import { ipcRenderer } from 'electron';
-import type { ReactElement, MouseEvent } from 'react';
-import * as PropTypes from 'prop-types';
+import { useContext, ReactElement, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
+import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
 
 /* 首页 */
-function Index(props: { ChangeThemeElement: ReactElement }): ReactElement {
+function Index(props: {}): ReactElement {
+  const theme: Theme = useContext(ThemeContext);
+
   // 打开开发者工具
   function handleOpenDeveloperToolsClick(event: MouseEvent): void {
     ipcRenderer.send('developer-tools');
@@ -53,10 +55,10 @@ function Index(props: { ChangeThemeElement: ReactElement }): ReactElement {
       <div>
         <Space size={ 16 }>
           <FFmpegOption />
+          { theme.ChangeThemeElement }
           <Tooltip title="开发者工具">
             <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
           </Tooltip>
-          { props.ChangeThemeElement }
         </Space>
       </div>
       <Divider />
@@ -69,9 +71,5 @@ function Index(props: { ChangeThemeElement: ReactElement }): ReactElement {
     </div>
   );
 }
-
-Index.propTypes = {
-  ChangeThemeElement: PropTypes.node
-};
 
 export default Index;

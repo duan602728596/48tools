@@ -1,5 +1,6 @@
 import { ipcMain, BrowserWindow, IpcMainEvent } from 'electron';
 import openPlayerHtml from './openPlayerHtml';
+import ipcTheme from './ipcTheme';
 
 /* ipc通信 */
 function ipc(win: BrowserWindow): void {
@@ -12,6 +13,9 @@ function ipc(win: BrowserWindow): void {
   ipcMain.on('player.html', function(event: IpcMainEvent, title: string, query: string): void {
     openPlayerHtml(title, query);
   });
+
+  // 切换主题
+  ipcTheme();
 }
 
 export default ipc;
