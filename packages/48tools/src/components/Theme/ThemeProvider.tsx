@@ -97,7 +97,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
     } else {
       document.body.removeAttribute('theme');
     }
-  }, [theme, media, themeMatches]);
+  }, [theme, themeMatches]);
 
   if (isChildrenWindow) {
     useEffect(function(): void {
