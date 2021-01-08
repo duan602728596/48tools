@@ -1,0 +1,15 @@
+{
+  "name": "@48tools/dark-theme",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "rimraf ./dist && node src/index.js && postcss dist/antd-dark.css > dist/antd-dark.min.css"
+  },
+  "dependencies": {
+    "cssnano": "^4.1.10",
+    "glob": "^7.1.6",
+    "less": "^3.13.1",
+    "lodash": "^4.17.20",
+    "postcss": "^8.2.3",
+    "postcss-cli": "^8.3.1"
+  }
+}
