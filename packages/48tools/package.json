@@ -1,6 +1,6 @@
 {
   "name": "@48tools/48tools",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "main": "../main/lib/main.js",
   "scripts": {
     "runel": "cross-env NODE_ENV=development electron ./",
