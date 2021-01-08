@@ -3,7 +3,10 @@
 ## 软件下载链接
 进入到https://github.com/duan602728596/48tools/releases 或 https://github.com/duan602728596/document/blob/master/48/README.md下载
 
-## 功能
+## 软件功能
+
+> 在mac下需要先配置FFMpeg的位置
+
 * 成员直播录源
 * 成员录播下载
 * B站视频录源
