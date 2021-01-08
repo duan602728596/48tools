@@ -25,5 +25,12 @@ Pug + Sass + ECMAScript + React + AntD + Webpack + Electron。
 * darkTheme：提取暗黑主题的css文件
 * main：Electron主程序运行源代码
 
+## 编译
+* main模块：编译主程序源代码
+* darkTheme模块：编译暗黑主题的css文件
+* 48tools：编译软件源代码
+* 运行`scripts/unpack.js`，打包软件
+* 运行`scripts/clean.js`，删除软件中的无用的文件
+
 ## 源代码托管地址
 [https://github.com/duan602728596/48tools](https://github.com/duan602728596/48tools)
