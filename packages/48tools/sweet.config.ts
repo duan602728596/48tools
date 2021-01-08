@@ -72,8 +72,20 @@ export default function(info: object): { [key: string]: any } {
         // https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
         '@primary-color': '#13c2c2'
       },
-      include: /node_modules[\\/]_?antd/
+      include: /node_modules[\\/]_?antd/,
+      exclude: /dark-?Theme/i
     },
+    rules: [
+      {
+        test: /antd-dark\.(min\.)?css/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: isDev ? '[name]_[hash:5].[ext]' : '[name]_[hash:15].[ext]'
+          }
+        }]
+      }
+    ],
     html: [
       { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'] },
       { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), excludeChunks: ['index'] }
