@@ -17,7 +17,7 @@ function useTheme(): UseThemeReturn {
   const media: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');  // 暗黑模式媒体查询
   const [darkMatches, setDarkMatches]: [boolean, D<S<boolean>>] = useState(media.matches); // 是否为暗黑模式
   const [theme, setTheme]: [ThemeValue, D<S<ThemeValue>>]
-    = useState((localStorage.getItem(LOCALSTORAGE_THEME_NAME) ?? 'light') as ThemeValue);  // 当前使用的主题
+    = useState((localStorage.getItem(LOCALSTORAGE_THEME_NAME) ?? 'system') as ThemeValue);  // 当前使用的主题
 
   return {
     ChangeThemeElement: (
