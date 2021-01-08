@@ -102,8 +102,6 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   if (isChildrenWindow) {
     useEffect(function(): void {
       ipcRenderer.on('themeSource', function(event: IpcRendererEvent, value: ThemeValue): void {
-        console.log(value);
-
         setTheme(value);
       });
     }, []);
