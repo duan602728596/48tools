@@ -69,7 +69,7 @@ function LiveOptions(props: {}): ReactElement {
       >
         <InputNumber />
       </Form.Item>
-      <Form.Item label="成员姓名或ID">
+      <Form.Item label="成员姓名或ID" required={ true }>
         <Form.Item name="users" rules={ [{ required: true, message: '请填写成员姓名或ID', whitespace: true }] } noStyle={ true }>
           <Input.TextArea rows={ 7 } />
         </Form.Item>
@@ -77,7 +77,7 @@ function LiveOptions(props: {}): ReactElement {
           使用"<b className={ style.b }>,</b>"分隔姓名或ID
         </p>
       </Form.Item>
-      <Form.Item label="自动保存的目录">
+      <Form.Item label="自动保存的目录" required={ true }>
         <Form.Item name="dir" rules={ [{ required: true, message: '请选择自动保存的目录', whitespace: true }] } noStyle={ true }>
           <Input className={ style.dirInput } />
         </Form.Item>
