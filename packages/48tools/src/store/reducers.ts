@@ -1,17 +1,17 @@
 import { ReducersMapObject } from '@reduxjs/toolkit';
-import pocket48Reducers from '../pages/48/reducers/pocket48';
-import live48Reducers from '../pages/48/reducers/live48';
+import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
+import l48Live48Reducers from '../pages/48/reducers/live48';
 import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
-import concatReducers from '../pages/VideoEdit/reducers/concat';
-import videoCutReducers from '../pages/VideoEdit/reducers/videoCut';
+import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
+import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 
 /* reducers */
 export const reducers: ReducersMapObject = {
-  ...pocket48Reducers,
-  ...live48Reducers,
+  ...l48Pocket48Reducers,
+  ...l48Live48Reducers,
   ...bilibiliReducers,
-  ...concatReducers,
-  ...videoCutReducers
+  ...videoEditConcatReducers,
+  ...videoEditVideoCutReducers
 };
 
 export const asyncReducers: ReducersMapObject = {}; // 异步的reducers
