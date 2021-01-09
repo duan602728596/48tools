@@ -33,6 +33,7 @@ interface ThemeProviderProps {
 
 /**
  * 切换主题
+ * @param { boolean } props.isChildrenWindow: 子窗口的ui需要配置，监听来自副窗口的消息
  * @param { ReactNode } props.children: 子组件
  */
 function ThemeProvider(props: ThemeProviderProps): ReactElement {
@@ -131,6 +132,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
 }
 
 ThemeProvider.propTypes = {
+  isChildrenWindow: PropTypes.bool,
   children: PropTypes.node
 };
 
