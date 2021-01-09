@@ -66,9 +66,11 @@ function CutForm(props: {}): ReactElement {
     <Card className={ style.card }>
       <Form form={ form } onFinish={ handleFormSubmit }>
         <Form.Item label="选择需要裁剪的视频">
-          <Form.Item name="file" rules={ [{ required: true, whitespace: true, message: '请选择视频文件' }] } noStyle={ true }>
-            <Input className={ style.fileInput } readOnly={ true } />
-          </Form.Item>
+          <div className={ style.fileInput }>
+            <Form.Item name="file" rules={ [{ required: true, whitespace: true, message: '请选择视频文件' }] } noStyle={ true }>
+              <Input readOnly={ true } />
+            </Form.Item>
+          </div>
           <Button onClick={ handleOpenVideoFileClick }>选择文件</Button>
         </Form.Item>
         <Form.Item label="裁剪时间">

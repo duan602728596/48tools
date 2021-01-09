@@ -78,9 +78,11 @@ function LiveOptions(props: {}): ReactElement {
         </p>
       </Form.Item>
       <Form.Item label="自动保存的目录" required={ true }>
-        <Form.Item name="dir" rules={ [{ required: true, message: '请选择自动保存的目录', whitespace: true }] } noStyle={ true }>
-          <Input className={ style.dirInput } />
-        </Form.Item>
+        <div className={ style.dirInput }>
+          <Form.Item name="dir" rules={ [{ required: true, message: '请选择自动保存的目录', whitespace: true }] } noStyle={ true }>
+            <Input />
+          </Form.Item>
+        </div>
         <Button onClick={ handleChangeDirClick }>选择目录</Button>
       </Form.Item>
       <Button.Group>
