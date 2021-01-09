@@ -48,10 +48,10 @@ function Index(props: {}): ReactElement {
           <Link className={ style.navItemLink } to="/Bilibili/Live">
             <Button>B站直播抓取</Button>
           </Link>
-          <Link className={ style.navItemLink } to="/VideoCut">
+          <Link className={ style.navItemLink } to="/VideoEdit/VideoCut">
             <Button>视频裁剪</Button>
           </Link>
-          <Link className={ style.navItemLink } to="/Concat">
+          <Link className={ style.navItemLink } to="/VideoEdit/Concat">
             <Button>视频合并</Button>
           </Link>
         </Space>

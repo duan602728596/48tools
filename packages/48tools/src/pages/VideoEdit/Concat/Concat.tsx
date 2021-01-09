@@ -1,8 +1,8 @@
 import * as path from 'path';
-import { ParsedPath } from 'path';
+import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
 import { remote, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
-import { ReactElement, ComponentClass, MouseEvent } from 'react';
+import { Fragment, ReactElement, ComponentClass, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
@@ -20,20 +20,18 @@ import {
 import * as arrayMove from 'array-move';
 import * as moment from 'moment';
 import ConcatVideoWorker from 'worker-loader!./concatVideo.worker';
-
-import style from './index.sass';
-import Content from '../../components/Content/Content';
-import Header from '../../components/Header/Header';
+import style from './concat.sass';
+import Header from '../../../components/Header/Header';
 import {
   setConcatListAdd,
   setConcatList,
   setConcatListDelete,
   setConcatWorker,
   ConcatInitialState
-} from './reducers/reducers';
-import { getFFmpeg, rStr } from '../../utils/utils';
-import type { MessageEventData } from '../../types';
-import type { ConcatItem } from './types';
+} from '../reducers/concat';
+import { getFFmpeg, rStr } from '../../../utils/utils';
+import type { MessageEventData } from '../../../types';
+import type { ConcatItem } from '../types';
 
 /* 拖拽组件 */
 type WrappedComponentProps = { children: ReactElement };
@@ -68,7 +66,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 });
 
 /* 视频合并 */
-function Index(props: {}): ReactElement {
+function Concat(props: {}): ReactElement {
   const { concatList, concatWorker }: RSelector = useSelector(state);
   const dispatch: Dispatch = useDispatch();
 
@@ -187,7 +185,7 @@ function Index(props: {}): ReactElement {
   }
 
   return (
-    <Content>
+    <Fragment>
       <Header>
         <Button.Group>
           <Button icon={ <IconFileFilled /> } onClick={ handleSelectVideosClick }>视频选择</Button>
@@ -207,8 +205,8 @@ function Index(props: {}): ReactElement {
           <List dataSource={ concatList } renderItem={ renderItem } bordered={ true } />
         </ListContainer>
       </div>
-    </Content>
+    </Fragment>
   );
 }
 
-export default Index;
+export default Concat;

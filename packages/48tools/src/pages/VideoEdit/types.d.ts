@@ -1,3 +1,11 @@
+/* ========== Concat ========== */
+export interface ConcatItem {
+  id: string;
+  value: string;
+  filename: string;
+}
+
+/* ========== VideoCut ========== */
 export interface CutItem {
   id: string;
   file: string;       // 文件位置

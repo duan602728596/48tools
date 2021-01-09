@@ -7,10 +7,10 @@ import { useDispatch } from 'react-redux';
 import { Form, Button, Input, InputNumber, Card } from 'antd';
 import type { FormInstance, Rule } from 'antd/es/form';
 import style from './cutForm.sass';
-import { rStr } from '../../utils/utils';
-import { setCutListAdd } from './reducers/reducers';
+import { rStr } from '../../../utils/utils';
+import { setCutListAdd } from '../reducers/videoCut';
 import { getFullTime } from './function';
-import type { CutItem } from './types';
+import type { CutItem } from '../types';
 
 const timeRules: Rule[] = [{
   type: 'integer',

@@ -1,5 +1,5 @@
 import { remote, SaveDialogReturnValue } from 'electron';
-import type { ReactElement, MouseEvent } from 'react';
+import { Fragment, ReactElement, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
@@ -7,18 +7,17 @@ import { Table, Button, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import CutWorker from 'worker-loader!./cut.worker';
-import Content from '../../components/Content/Content';
-import Header from '../../components/Header/Header';
+import Header from '../../../components/Header/Header';
 import CutForm from './CutForm';
 import {
   setCutListDelete,
   setCutChildListAdd,
   setCutChildListDelete,
   VideoCutInitialState
-} from './reducers/reducers';
-import { getFFmpeg } from '../../utils/utils';
-import type { WebWorkerChildItem, MessageEventData } from '../../types';
-import type { CutItem } from './types';
+} from '../reducers/videoCut';
+import { getFFmpeg } from '../../../utils/utils';
+import type { WebWorkerChildItem, MessageEventData } from '../../../types';
+import type { CutItem } from '../types';
 
 /* state */
 type RSelector = Pick<VideoCutInitialState, 'cutList' | 'cutChildList'>;
@@ -135,7 +134,7 @@ function Index(props: {}): ReactElement {
   ];
 
   return (
-    <Content>
+    <Fragment>
       <Header />
       <CutForm />
       <Table size="middle"
@@ -147,7 +146,7 @@ function Index(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
-    </Content>
+    </Fragment>
   );
 }
 

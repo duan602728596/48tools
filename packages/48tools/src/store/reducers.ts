@@ -2,8 +2,8 @@ import { ReducersMapObject } from '@reduxjs/toolkit';
 import pocket48Reducers from '../pages/48/reducers/pocket48';
 import live48Reducers from '../pages/48/reducers/live48';
 import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
-import concatReducers from '../pages/Concat/reducers/reducers';
-import videoCutReducers from '../pages/VideoCut/reducers/reducers';
+import concatReducers from '../pages/VideoEdit/reducers/concat';
+import videoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 
 /* reducers */
 export const reducers: ReducersMapObject = {
