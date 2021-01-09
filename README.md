@@ -1,7 +1,7 @@
 # 口袋48工具
 
 ## 软件下载链接
-进入到https://github.com/duan602728596/48tools/releases 或 https://github.com/duan602728596/document/blob/master/48/README.md下载
+进入到https://github.com/duan602728596/48tools/releases 或 https://github.com/duan602728596/document/blob/master/48/README.md 下载
 
 ## 软件功能
 
