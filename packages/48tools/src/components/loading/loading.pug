@@ -1,0 +1,56 @@
+// 软件加载前的loading
+style.
+  .loadingBox {
+    margin-top: 220px;
+    width: 100%;
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .loading {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 2em;
+  }
+
+  .loadingItem {
+    width: 0.3em;
+    height: 1em;
+    background-color: #13c2c2;
+  }
+
+  .loadingItem0 {
+    animation: loadingGrow 1s -.45s ease-in-out infinite;
+  }
+
+  .loadingItem1 {
+    animation: loadingGrow 1s -.3s ease-in-out infinite;
+  }
+
+  .loadingItem2 {
+    animation: loadingGrow 1s -.15s ease-in-out infinite;
+  }
+
+  .loadingItem3 {
+    animation: loadingGrow 1s ease-in-out infinite;
+  }
+
+  @keyframes loadingGrow {
+    0%, 100% {
+      transform: scaleY(1);
+    }
+
+    50% {
+      transform: scaleY(2);
+    }
+  }
+
+div.loadingBox
+  div.loading
+    span.loadingItem.loadingItem0
+    span.loadingItem.loadingItem1
+    span.loadingItem.loadingItem2
+    span.loadingItem.loadingItem3
