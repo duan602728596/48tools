@@ -132,7 +132,7 @@ function AddForm(props: {}): ReactElement {
                 <Input />
               </Form.Item>
             </div>
-            <Alert type="info" message="B站Cookie中的SESSDATA字段。下载高清源或大会员专属番剧时填写。" />
+            <Alert type="info" message="B站Cookie中的SESSDATA字段的值。下载高清源或大会员专属番剧时填写。" />
           </Form.Item>
         </Form>
       </Modal>
