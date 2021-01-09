@@ -2,12 +2,12 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
+import { Button, Modal, Form, Input, Select, InputNumber, Alert, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import style from './addForm.sass';
 import { rStr } from '../../../utils/utils';
-import { parseVideoUrl, parseAudioUrl } from './parseBilibiliUrl';
+import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from './parseBilibiliUrl';
 import { setDownloadList, BilibiliInitialState } from '../reducers/reducers';
 import type { DownloadItem } from '../types';
 
@@ -42,9 +42,18 @@ function AddForm(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const result: string | void = formValue.type === 'au'
-        ? await parseAudioUrl(formValue.id)
-        : await parseVideoUrl(formValue.type, formValue.id, formValue.page);
+      let result: string | void;
+
+      if (formValue.type === 'au') {
+        // 下载音频
+        result = await parseAudioUrl(formValue.id);
+      } else if (formValue.type === 'ss' || formValue.type === 'ep') {
+        // 下载番剧
+        result = await parseBangumiVideo(formValue.type, formValue.id, formValue.SESSDATA);
+      } else {
+        // 下载av、bv视频
+        result = await parseVideoUrl(formValue.type, formValue.id, formValue.page);
+      }
 
       if (result) {
         dispatch(setDownloadList(
@@ -70,7 +79,7 @@ function AddForm(props: {}): ReactElement {
 
   // 关闭窗口后重置表单
   function handleAddModalClose(): void {
-    form.resetFields();
+    form.resetFields(['id', 'type', 'page']);
   }
 
   // 打开弹出层
@@ -88,7 +97,7 @@ function AddForm(props: {}): ReactElement {
       <Button type="primary" onClick={ handleOpenAddModalClick }>添加下载任务</Button>
       <Modal visible={ visible }
         title="添加下载任务"
-        width={ 400 }
+        width={ 480 }
         centered={ true }
         maskClosable={ false }
         confirmLoading={ loading }
@@ -96,7 +105,12 @@ function AddForm(props: {}): ReactElement {
         onOk={ handleAddDownloadQueueClick }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form className={ style.formContent } form={ form } initialValues={{ type: 'bv' }} labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+        <Form className={ style.formContent }
+          form={ form }
+          initialValues={{ type: 'bv' }}
+          labelCol={{ span: 5 }}
+          wrapperCol={{ span: 19 }}
+        >
           <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
             <Input />
           </Form.Item>
@@ -104,11 +118,21 @@ function AddForm(props: {}): ReactElement {
             <Select>
               <Select.Option value="bv">视频（bv）</Select.Option>
               <Select.Option value="av">视频（av）</Select.Option>
-              <Select.Option value="au">音频</Select.Option>
+              <Select.Option value="au">音频（av）</Select.Option>
+              <Select.Option value="ep">番剧（ep）</Select.Option>
+              <Select.Option value="ss">番剧（ss）</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item name="page" label="Page">
             <InputNumber />
+          </Form.Item>
+          <Form.Item label="SESSDATA">
+            <div className={ style.sessdataInput }>
+              <Form.Item name="SESSDATA" noStyle={ true }>
+                <Input />
+              </Form.Item>
+            </div>
+            <Alert type="info" message="B站Cookie中的SESSDATA字段。下载高清源或大会员专属番剧时填写。" />
           </Form.Item>
         </Form>
       </Modal>

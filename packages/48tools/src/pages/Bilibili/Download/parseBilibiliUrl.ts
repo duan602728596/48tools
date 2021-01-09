@@ -1,8 +1,8 @@
 import { JSDOM, DOMWindow } from 'jsdom';
 import * as md5 from 'md5';
-import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo } from '../services/download';
+import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo, requestBangumiVideoInfo } from '../services/download';
 import type { InitialState } from '../types';
-import type { VideoInfo, AudioInfo } from '../services/interface';
+import type { VideoInfo, AudioInfo, BangumiVideoInfo } from '../services/interface';
 
 // b站请求接口需要的key
 const APP_KEY: string = 'iVGUTjsxvpLeuDCf';
@@ -75,6 +75,32 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
   }
 
   return flvUrl;
+}
+
+/**
+ * 解析番剧的接口
+ * 参考：https://github.com/Henryhaohao/Bilibili_video_download/blob/master/bilibili_video_download_bangumi.py
+ * @param { string } type: 番剧类型
+ * @param { string } id: 番剧id
+ * @param { string } SESSDATA: cookie
+ */
+export async function parseBangumiVideo(type: string, id: string, SESSDATA: string): Promise<string | void> {
+  const videoUrl: string = `https://www.bilibili.com/bangumi/play/${ type }${ id }`;
+  const html: string = await requestBilibiliHtml(videoUrl);
+  const { initialState }: ParseHtmlResult = parseHtml(html);
+
+  if (!initialState) {
+    return undefined;
+  }
+
+  const { aid, cid }: { aid: number; cid: number } = initialState.epInfo;
+  const res: BangumiVideoInfo = await requestBangumiVideoInfo(aid, cid, SESSDATA);
+
+  if (res.data) {
+    return res.data.durl[0].url;
+  } else {
+    return undefined;
+  }
 }
 
 /**

@@ -19,6 +19,10 @@ export interface InitialState {
     }>;
     title: string;
   };
+  epInfo: {
+    aid: number;
+    cid: number;
+  };
 }
 
 // 进度条信息

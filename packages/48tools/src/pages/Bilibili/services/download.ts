@@ -3,24 +3,7 @@ import { pipeline } from 'stream';
 import * as fs from 'fs';
 import got, { Response } from 'got';
 import type { ProgressEventData } from '../types';
-
-// 接口请求到的视频信息
-export interface VideoInfo {
-  durl?: Array<{
-    backup_url: string;
-    url: string;
-  }>;
-  format: string;
-}
-
-// 接口请求到的音频信息
-export interface AudioInfo {
-  code: number;
-  data: {
-    cdns?: Array<string>;
-  };
-  message: string;
-}
+import type { VideoInfo, AudioInfo, BangumiVideoInfo } from './interface';
 
 const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
@@ -46,9 +29,33 @@ export async function requestBilibiliHtml(url: string): Promise<string> {
  * @param { string } sign: 加密后的sign
  */
 export async function requestVideoInfo(payload: string, sign: string): Promise<VideoInfo> {
-  const res: Response<VideoInfo> = await got.get(`https://interface.bilibili.com/v2/playurl?${ payload }&sign=${ sign }`, {
+  const apiUrl: string = `https://interface.bilibili.com/v2/playurl?${ payload }&sign=${ sign }`;
+  const res: Response<VideoInfo> = await got.get(apiUrl, {
     responseType: 'json'
   });
+
+  return res.body;
+}
+
+/**
+ * 请求番剧信息
+ * @param { number } aid
+ * @param { number } cid
+ * @param { string } SESSDATA: cookie
+ */
+export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA: string): Promise<BangumiVideoInfo> {
+  const apiUrl: string = `https://api.bilibili.com/x/player/playurl?avid=${ aid }&cid=${ cid }&qn=112`;
+  const options: any = {
+    responseType: 'json'
+  };
+
+  if (SESSDATA && !/^\s*$/.test(SESSDATA)) {
+    options.headers = {
+      Cookie: `SESSDATA=${ SESSDATA }`
+    };
+  }
+
+  const res: Response<BangumiVideoInfo> = await got.get(apiUrl, options);
 
   return res.body;
 }
@@ -58,7 +65,8 @@ export async function requestVideoInfo(payload: string, sign: string): Promise<V
  * @param { string } auid: 音频id
  */
 export async function requestAudioInfo(auid: string): Promise<AudioInfo> {
-  const res: Response<AudioInfo> = await got.get(`https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`, {
+  const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`;
+  const res: Response<AudioInfo> = await got.get(apiUrl, {
     responseType: 'json'
   });
 
@@ -71,7 +79,11 @@ export async function requestAudioInfo(auid: string): Promise<AudioInfo> {
  * @param { string } filename: 文件本地地址
  * @param { (e: ProgressEventData) => void } onProgress: 进度条
  */
-export async function requestDownloadFileByStream(fileUrl: string, filename: string, onProgress: (e: ProgressEventData) => void): Promise<void> {
+export async function requestDownloadFileByStream(
+  fileUrl: string,
+  filename: string,
+  onProgress: (e: ProgressEventData) => void
+): Promise<void> {
   await pipelineP(
     got.stream(fileUrl, {
       headers: {

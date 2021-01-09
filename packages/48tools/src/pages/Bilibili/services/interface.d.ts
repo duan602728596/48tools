@@ -17,6 +17,18 @@ export interface AudioInfo {
   message: string;
 }
 
+// 接口请求到的番剧信息
+export interface BangumiVideoInfo {
+  code: number;
+  messgae: string;
+  data: {
+    durl: Array<{
+      backup_url: string;
+      url: string;
+    }>;
+  } | null; // 非会员时查不到
+}
+
 /* ========== Live ========== */
 // 直播间信息
 export interface RoomInit {
