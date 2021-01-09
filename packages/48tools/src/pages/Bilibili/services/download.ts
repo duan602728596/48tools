@@ -43,7 +43,7 @@ export async function requestVideoInfo(payload: string, sign: string): Promise<V
  * @param { number } cid
  * @param { string } SESSDATA: cookie
  */
-export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA: string): Promise<BangumiVideoInfo> {
+export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA?: string): Promise<BangumiVideoInfo> {
   const apiUrl: string = `https://api.bilibili.com/x/player/playurl?avid=${ aid }&cid=${ cid }&qn=112`;
   const options: any = {
     responseType: 'json'

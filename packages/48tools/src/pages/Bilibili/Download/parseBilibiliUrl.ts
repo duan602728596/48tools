@@ -84,7 +84,7 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
  * @param { string } id: 番剧id
  * @param { string } SESSDATA: cookie
  */
-export async function parseBangumiVideo(type: string, id: string, SESSDATA: string): Promise<string | void> {
+export async function parseBangumiVideo(type: string, id: string, SESSDATA?: string): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/bangumi/play/${ type }${ id }`;
   const html: string = await requestBilibiliHtml(videoUrl);
   const { initialState }: ParseHtmlResult = parseHtml(html);
