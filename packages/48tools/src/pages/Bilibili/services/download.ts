@@ -10,6 +10,7 @@ const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream
 const USER_AGENT: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) '
   + 'Chrome/84.0.4147.38 Safari/537.36 Edg/84.0.522.15';
 
+// B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
 // 请求bilibili的html
 export async function requestBilibiliHtml(url: string): Promise<string> {
   const res: Response<string> = await got.get(url, {
