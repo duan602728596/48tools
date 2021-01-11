@@ -35,7 +35,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   // 清除cookie
   function handleClearBilibiliCookieClick(event: MouseEvent<HTMLButtonElement>): void {
     localStorage.removeItem(BILIBILI_COOKIE_KEY);
-    message.warn('B站Cookie已清除，清重新登陆。');
+    message.warn('B站Cookie已清除，请重新登陆。');
   }
 
   // 轮询，判断接口返回的值
