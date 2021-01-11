@@ -1,7 +1,8 @@
 import { ReducersMapObject } from '@reduxjs/toolkit';
 import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
-import bilibiliReducers from '../pages/Bilibili/reducers/reducers';
+import bilibiliDownloadReducers from '../pages/Bilibili/reducers/download';
+import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 
@@ -9,7 +10,8 @@ import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 export const reducers: ReducersMapObject = {
   ...l48Pocket48Reducers,
   ...l48Live48Reducers,
-  ...bilibiliReducers,
+  ...bilibiliDownloadReducers,
+  ...bilibiliLiveReducers,
   ...videoEditConcatReducers,
   ...videoEditVideoCutReducers
 };
@@ -22,7 +24,7 @@ export const ignoreOptions: any = {
     'pocket48.recordChildList',
     'live48.inLiveList',
     'live48.videoListChild',
-    'bilibili.liveChildList',
+    'bilibiliLive.liveChildList',
     'concat.concatWorker',
     'videoCut.cutChildList'
   ],
@@ -36,8 +38,8 @@ export const ignoreOptions: any = {
     'live48/setDeleteInLiveList',
     'live48/setVideoListChildAdd',
     'live48/setVideoListChildDelete',
-    'bilibili/setAddLiveBilibiliChildList',
-    'bilibili/setDeleteLiveBilibiliChildList',
+    'bilibiliLive/setAddLiveBilibiliChildList',
+    'bilibiliLive/setDeleteLiveBilibiliChildList',
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete'

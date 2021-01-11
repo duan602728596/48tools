@@ -8,15 +8,15 @@ import type { Store as FormStore } from 'antd/es/form/interface';
 import style from './addForm.sass';
 import { rStr } from '../../../utils/utils';
 import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from './parseBilibiliUrl';
-import { setDownloadList, BilibiliInitialState } from '../reducers/reducers';
+import { setDownloadList, BilibiliDownloadInitialState } from '../reducers/download';
 import type { DownloadItem } from '../types';
 
 /* state */
-type RSelector = Pick<BilibiliInitialState, 'downloadList'>;
+type RSelector = Pick<BilibiliDownloadInitialState, 'downloadList'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   downloadList: createSelector(
-    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<DownloadItem> => bilibili.downloadList,
+    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => bilibiliDownload.downloadList,
     (data: Array<DownloadItem>): Array<DownloadItem> => data
   )
 });

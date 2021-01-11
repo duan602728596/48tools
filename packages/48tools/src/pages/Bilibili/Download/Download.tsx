@@ -11,23 +11,23 @@ import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
-import { setDownloadList, setDownloadProgress, BilibiliInitialState } from '../reducers/reducers';
+import { setDownloadList, setDownloadProgress, BilibiliDownloadInitialState } from '../reducers/download';
 import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker';
 import type { DownloadItem } from '../types';
 
 /* state */
-type RSelector = Pick<BilibiliInitialState, 'downloadList' | 'downloadProgress'>;
+type RSelector = Pick<BilibiliDownloadInitialState, 'downloadList' | 'downloadProgress'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 下载任务列表
   downloadList: createSelector(
-    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<DownloadItem> => bilibili.downloadList,
+    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => bilibiliDownload.downloadList,
     (data: Array<DownloadItem>): Array<DownloadItem> => data
   ),
   // 进度条列表
   downloadProgress: createSelector(
-    ({ bilibili }: { bilibili: BilibiliInitialState }): { [key: string]: number } => bilibili.downloadProgress,
+    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): { [key: string]: number } => bilibiliDownload.downloadProgress,
     (data: { [key: string]: number }): { [key: string]: number } => data
   )
 });

@@ -2,65 +2,38 @@ import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerAction
 import { findIndex } from 'lodash-es';
 import dbRedux, { bilibiliLiveObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { WebWorkerChildItem } from '../../../types';
-import type { DownloadItem, LiveItem } from '../types';
-import type { MessageEventData } from '../Download/downloadBilibiliVideo.worker';
+import type { LiveItem } from '../types';
 
-export interface BilibiliInitialState {
-  downloadList: Array<DownloadItem>;
-  downloadProgress: { [key: string]: number };
+export interface BilibiliLiveInitialState {
   bilibiliLiveList: Array<LiveItem>;
   liveChildList: Array<WebWorkerChildItem>;
 }
 
-type CaseReducers = SliceCaseReducers<BilibiliInitialState>;
+type CaseReducers = SliceCaseReducers<BilibiliLiveInitialState>;
 
-const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReducers>({
-  name: 'bilibili',
+const { actions, reducer }: Slice = createSlice<BilibiliLiveInitialState, CaseReducers>({
+  name: 'bilibiliLive',
   initialState: {
-    downloadList: [],     // 下载列表
-    downloadProgress: {}, // 下载进度
     bilibiliLiveList: [], // 数据库内获取的直播间列表
     liveChildList: []     // 直播下载
   },
   reducers: {
-    // 设置下载列表
-    setDownloadList(state: BilibiliInitialState, action: PayloadAction<Array<DownloadItem>>): BilibiliInitialState {
-      state.downloadList = action.payload;
-
-      return state;
-    },
-
-    // 设置下载进度
-    setDownloadProgress(state: BilibiliInitialState, action: PayloadAction<MessageEventData>): BilibiliInitialState {
-      const { type, qid, data }: MessageEventData = action.payload;
-
-      if (type === 'progress') {
-        state.downloadProgress[qid] = data;
-      } else if (type === 'success') {
-        delete state.downloadProgress[qid]; // 下载完成
-      }
-
-      state.downloadProgress = { ...state.downloadProgress };
-
-      return state;
-    },
-
     // 获取直播间列表
-    setBilibiliLiveList(state: BilibiliInitialState, action: PayloadAction<{ result: Array<LiveItem> }>): BilibiliInitialState {
+    setBilibiliLiveList(state: BilibiliLiveInitialState, action: PayloadAction<{ result: Array<LiveItem> }>): BilibiliLiveInitialState {
       state.bilibiliLiveList = action.payload.result;
 
       return state;
     },
 
     // 直播间列表内添加一个直播间
-    setBilibiliLiveListAddRoom(state: BilibiliInitialState, action: PayloadAction<{ data: LiveItem }>): BilibiliInitialState {
+    setBilibiliLiveListAddRoom(state: BilibiliLiveInitialState, action: PayloadAction<{ data: LiveItem }>): BilibiliLiveInitialState {
       state.bilibiliLiveList = state.bilibiliLiveList.concat([action.payload.data]);
 
       return state;
     },
 
     // 直播间列表内删除一个直播间
-    setBilibiliLiveListDeleteRoom(state: BilibiliInitialState, action: PayloadAction<{ query: string }>): BilibiliInitialState {
+    setBilibiliLiveListDeleteRoom(state: BilibiliLiveInitialState, action: PayloadAction<{ query: string }>): BilibiliLiveInitialState {
       const index: number = findIndex(state.bilibiliLiveList, { id: action.payload.query });
 
       if (index >= 0) {
@@ -74,14 +47,14 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
     },
 
     // 添加一个直播下载队列
-    setAddLiveBilibiliChildList(state: BilibiliInitialState, action: PayloadAction<WebWorkerChildItem>): BilibiliInitialState {
+    setAddLiveBilibiliChildList(state: BilibiliLiveInitialState, action: PayloadAction<WebWorkerChildItem>): BilibiliLiveInitialState {
       state.liveChildList = state.liveChildList.concat([action.payload]);
 
       return state;
     },
 
     // 删除一个直播下载队列
-    setDeleteLiveBilibiliChildList(state: BilibiliInitialState, action: PayloadAction<LiveItem>): BilibiliInitialState {
+    setDeleteLiveBilibiliChildList(state: BilibiliLiveInitialState, action: PayloadAction<LiveItem>): BilibiliLiveInitialState {
       const index: number = findIndex(state.liveChildList, { id: action.payload.id });
 
       if (index >= 0) {
@@ -95,8 +68,6 @@ const { actions, reducer }: Slice = createSlice<BilibiliInitialState, CaseReduce
 });
 
 export const {
-  setDownloadList,
-  setDownloadProgress,
   setBilibiliLiveListAddRoom,
   setBilibiliLiveList,
   setBilibiliLiveListDeleteRoom,
@@ -122,4 +93,4 @@ export const idbDeleteBilibiliLiveList: ActionCreator<any> = dbRedux.deleteActio
   successAction: setBilibiliLiveListDeleteRoom
 });
 
-export default { bilibili: reducer };
+export default { bilibiliLive: reducer };

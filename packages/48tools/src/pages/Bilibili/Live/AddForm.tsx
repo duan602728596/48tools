@@ -6,7 +6,7 @@ import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
 import style from './addForm.sass';
 import { rStr } from '../../../utils/utils';
-import { idbSaveBilibiliLiveList } from '../reducers/reducers';
+import { idbSaveBilibiliLiveList } from '../reducers/live';
 
 /* 添加一个直播间 */
 function AddForm(props: {}): ReactElement {

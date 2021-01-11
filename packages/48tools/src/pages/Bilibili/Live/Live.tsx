@@ -15,8 +15,8 @@ import {
   idbDeleteBilibiliLiveList,
   setAddLiveBilibiliChildList,
   setDeleteLiveBilibiliChildList,
-  BilibiliInitialState
-} from '../reducers/reducers';
+  BilibiliLiveInitialState
+} from '../reducers/live';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg } from '../../../utils/utils';
@@ -25,17 +25,17 @@ import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
 
 /* state */
-type RSelector = Pick<BilibiliInitialState, 'bilibiliLiveList' | 'liveChildList'>;
+type RSelector = Pick<BilibiliLiveInitialState, 'bilibiliLiveList' | 'liveChildList'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 直播间列表
   bilibiliLiveList: createSelector(
-    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<LiveItem> => bilibili.bilibiliLiveList,
+    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<LiveItem> => bilibiliLive.bilibiliLiveList,
     (data: Array<LiveItem>): Array<LiveItem> => data
   ),
   // 直播下载
   liveChildList: createSelector(
-    ({ bilibili }: { bilibili: BilibiliInitialState }): Array<WebWorkerChildItem> => bilibili.liveChildList,
+    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<WebWorkerChildItem> => bilibiliLive.liveChildList,
     (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
   )
 });
