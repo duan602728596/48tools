@@ -111,17 +111,17 @@ function AddForm(props: {}): ReactElement {
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 19 }}
         >
-          <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
-            <Input />
-          </Form.Item>
           <Form.Item name="type" label="下载类型">
             <Select>
-              <Select.Option value="bv">视频（bv）</Select.Option>
+              <Select.Option value="bv">视频（BV）</Select.Option>
               <Select.Option value="av">视频（av）</Select.Option>
-              <Select.Option value="au">音频（av）</Select.Option>
+              <Select.Option value="au">音频（au）</Select.Option>
               <Select.Option value="ep">番剧（ep）</Select.Option>
               <Select.Option value="ss">番剧（ss）</Select.Option>
             </Select>
+          </Form.Item>
+          <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
+            <Input />
           </Form.Item>
           <Form.Item name="page" label="Page">
             <InputNumber />
