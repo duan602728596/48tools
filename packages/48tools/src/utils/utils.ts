@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { BILIBILI_COOKIE_KEY, BilibiliCookie } from '../components/BilibiliLogin/Qrcode';
 
 /* 获取ffmpeg的地址 */
 export function getFFmpeg(): string {
@@ -32,4 +33,17 @@ export function source(pathname: string): string {
   } else {
     return `https://source3.48.cn/${ pathname }`;
   }
+}
+
+/* 获取bilibili的cookie */
+export function getBilibiliCookie(): string | undefined {
+  const cookieStr: string | null = localStorage.getItem(BILIBILI_COOKIE_KEY);
+
+  if (!cookieStr) {
+    return undefined;
+  }
+
+  const cookie: BilibiliCookie = JSON.parse(cookieStr);
+
+  return cookie.cookie;
 }

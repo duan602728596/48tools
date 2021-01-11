@@ -2,6 +2,7 @@ import { promisify } from 'util';
 import { pipeline } from 'stream';
 import * as fs from 'fs';
 import got, { Response } from 'got';
+import { getBilibiliCookie } from '../../../utils/utils';
 import type { ProgressEventData } from '../types';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo } from './interface';
 
@@ -46,17 +47,12 @@ export async function requestVideoInfo(payload: string, sign: string): Promise<V
  */
 export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA?: string): Promise<BangumiVideoInfo> {
   const apiUrl: string = `https://api.bilibili.com/x/player/playurl?avid=${ aid }&cid=${ cid }&qn=112`;
-  const options: any = {
-    responseType: 'json'
-  };
-
-  if (SESSDATA && !/^\s*$/.test(SESSDATA)) {
-    options.headers = {
-      Cookie: `SESSDATA=${ SESSDATA }`
-    };
-  }
-
-  const res: Response<BangumiVideoInfo> = await got.get(apiUrl, options);
+  const res: Response<BangumiVideoInfo> = await got.get(apiUrl, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    }
+  });
 
   return res.body;
 }

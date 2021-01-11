@@ -9,6 +9,7 @@ import { findIndex } from 'lodash-es';
 import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.Worker';
 import Header from '../../../components/Header/Header';
+import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import AddForm from './AddForm';
 import {
   idbCursorBilibiliLiveList,
@@ -30,12 +31,16 @@ type RSelector = Pick<BilibiliLiveInitialState, 'bilibiliLiveList' | 'liveChildL
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 直播间列表
   bilibiliLiveList: createSelector(
-    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<LiveItem> => bilibiliLive.bilibiliLiveList,
+    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<LiveItem> => {
+      return bilibiliLive.bilibiliLiveList;
+    },
     (data: Array<LiveItem>): Array<LiveItem> => data
   ),
   // 直播下载
   liveChildList: createSelector(
-    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<WebWorkerChildItem> => bilibiliLive.liveChildList,
+    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<WebWorkerChildItem> => {
+      return bilibiliLive.liveChildList;
+    },
     (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
   )
 });
@@ -155,7 +160,10 @@ function Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <AddForm />
+        <Button.Group>
+          <BilibiliLogin />
+          <AddForm />
+        </Button.Group>
       </Header>
       <Table size="middle"
         columns={ columns }

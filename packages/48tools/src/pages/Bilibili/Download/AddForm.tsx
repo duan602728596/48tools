@@ -16,7 +16,9 @@ type RSelector = Pick<BilibiliDownloadInitialState, 'downloadList'>;
 
 const state: Selector<any, RSelector> = createStructuredSelector({
   downloadList: createSelector(
-    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => bilibiliDownload.downloadList,
+    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => {
+      return bilibiliDownload.downloadList;
+    },
     (data: Array<DownloadItem>): Array<DownloadItem> => data
   )
 });
@@ -49,7 +51,7 @@ function AddForm(props: {}): ReactElement {
         result = await parseAudioUrl(formValue.id);
       } else if (formValue.type === 'ss' || formValue.type === 'ep') {
         // 下载番剧
-        result = await parseBangumiVideo(formValue.type, formValue.id, formValue.SESSDATA);
+        result = await parseBangumiVideo(formValue.type, formValue.id);
       } else {
         // 下载av、bv视频
         result = await parseVideoUrl(formValue.type, formValue.id, formValue.page);
@@ -125,14 +127,6 @@ function AddForm(props: {}): ReactElement {
           </Form.Item>
           <Form.Item name="page" label="Page">
             <InputNumber />
-          </Form.Item>
-          <Form.Item label="SESSDATA">
-            <div className={ style.sessdataInput }>
-              <Form.Item name="SESSDATA" noStyle={ true }>
-                <Input />
-              </Form.Item>
-            </div>
-            <Alert type="info" message="B站Cookie中的SESSDATA字段的值。下载高清源或大会员专属番剧时填写。" />
           </Form.Item>
         </Form>
       </Modal>

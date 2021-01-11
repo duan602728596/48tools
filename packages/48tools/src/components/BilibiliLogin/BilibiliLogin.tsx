@@ -1,4 +1,4 @@
-import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S } from 'react';
+import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import { Button, Modal } from 'antd';
 import Icon from '@ant-design/icons';
 import style from './bilibiliLogin.sass';
@@ -9,10 +9,20 @@ import { ReactComponent as BilibiliSvgComponent } from './images/bilibili.svg';
 function BilibiliLogin(props: {}): ReactElement {
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
 
+  // 打开扫码弹出层
+  function handleOpenQrcodeClick(event: MouseEvent<HTMLButtonElement>): void {
+    setVisible(true);
+  }
+
+  // 关闭扫码弹出层
+  function handleCloseQrcodeClick(event: MouseEvent<HTMLButtonElement>): void {
+    setVisible(false);
+  }
+
   return (
     <Fragment>
-      <Button icon={ <Icon className={ style.bilibiliIcon }
-        component={ BilibiliSvgComponent } /> }
+      <Button icon={ <Icon className={ style.bilibiliIcon } component={ BilibiliSvgComponent } /> }
+        onClick={ handleOpenQrcodeClick }
       >
         B站账号扫码登陆
       </Button>
@@ -21,9 +31,11 @@ function BilibiliLogin(props: {}): ReactElement {
         width={ 600 }
         centered={ true }
         destroyOnClose={ true }
+        footer={ <Button onClick={ handleCloseQrcodeClick }>关闭</Button> }
+        onCancel={ handleCloseQrcodeClick }
       >
         <div className={ style.loginBox }>
-          <Qrcode />
+          <Qrcode onCancel={ handleCloseQrcodeClick } />
         </div>
       </Modal>
     </Fragment>
