@@ -9,11 +9,12 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
+import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
+import type { MessageEventData } from './downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
 import { setDownloadList, setDownloadProgress, BilibiliDownloadInitialState } from '../reducers/download';
-import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
-import type { MessageEventData } from './downloadBilibiliVideo.worker';
+import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import type { DownloadItem } from '../types';
 
 /* state */
@@ -132,7 +133,10 @@ function Download(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <AddForm />
+        <Button.Group>
+          <BilibiliLogin />
+          <AddForm />
+        </Button.Group>
       </Header>
       <Table size="middle"
         columns={ columns }
