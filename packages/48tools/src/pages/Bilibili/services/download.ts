@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 import { pipeline } from 'stream';
 import * as fs from 'fs';
-import got, { Response } from 'got';
+import got, { Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
 import type { ProgressEventData } from '../types';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo } from './interface';
@@ -14,7 +14,7 @@ const USER_AGENT: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) Appl
 // B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
 // 请求bilibili的html
 export async function requestBilibiliHtml(url: string): Promise<string> {
-  const res: Response<string> = await got.get(url, {
+  const res: GotResponse<string> = await got.get(url, {
     responseType: 'text',
     headers: {
       Host: 'www.bilibili.com',
@@ -32,7 +32,7 @@ export async function requestBilibiliHtml(url: string): Promise<string> {
  */
 export async function requestVideoInfo(payload: string, sign: string): Promise<VideoInfo> {
   const apiUrl: string = `https://interface.bilibili.com/v2/playurl?${ payload }&sign=${ sign }`;
-  const res: Response<VideoInfo> = await got.get(apiUrl, {
+  const res: GotResponse<VideoInfo> = await got.get(apiUrl, {
     responseType: 'json'
   });
 
@@ -47,7 +47,7 @@ export async function requestVideoInfo(payload: string, sign: string): Promise<V
  */
 export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA?: string): Promise<BangumiVideoInfo> {
   const apiUrl: string = `https://api.bilibili.com/x/player/playurl?avid=${ aid }&cid=${ cid }&qn=112`;
-  const res: Response<BangumiVideoInfo> = await got.get(apiUrl, {
+  const res: GotResponse<BangumiVideoInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
@@ -63,7 +63,7 @@ export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA
  */
 export async function requestAudioInfo(auid: string): Promise<AudioInfo> {
   const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`;
-  const res: Response<AudioInfo> = await got.get(apiUrl, {
+  const res: GotResponse<AudioInfo> = await got.get(apiUrl, {
     responseType: 'json'
   });
 
