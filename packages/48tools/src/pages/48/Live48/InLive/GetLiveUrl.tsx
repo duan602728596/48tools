@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import * as moment from 'moment';
-import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
+import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';

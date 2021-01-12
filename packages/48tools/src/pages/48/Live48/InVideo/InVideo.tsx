@@ -7,7 +7,7 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Select, Button, Table, message, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
-import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.Worker';
+import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './inVideo.sass';
 import Header from '../../../../components/Header/Header';
 import {
