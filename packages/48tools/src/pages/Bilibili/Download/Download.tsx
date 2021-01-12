@@ -8,12 +8,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex } from 'lodash-es';
 import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
 import AddForm from './AddForm';
-import { setDownloadList, setDownloadProgress, BilibiliDownloadInitialState } from '../reducers/download';
+import { setDeleteDownloadList, setDownloadProgress, BilibiliDownloadInitialState } from '../reducers/download';
 import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import type { DownloadItem } from '../types';
 
@@ -23,12 +22,16 @@ type RSelector = Pick<BilibiliDownloadInitialState, 'downloadList' | 'downloadPr
 const state: Selector<any, RSelector> = createStructuredSelector({
   // 下载任务列表
   downloadList: createSelector(
-    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => bilibiliDownload.downloadList,
+    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => {
+      return bilibiliDownload.downloadList;
+    },
     (data: Array<DownloadItem>): Array<DownloadItem> => data
   ),
   // 进度条列表
   downloadProgress: createSelector(
-    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): { [key: string]: number } => bilibiliDownload.downloadProgress,
+    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): { [key: string]: number } => {
+      return bilibiliDownload.downloadProgress;
+    },
     (data: { [key: string]: number }): { [key: string]: number } => data
   )
 });
@@ -76,14 +79,7 @@ function Download(props: {}): ReactElement {
 
   // 删除一个任务
   function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(downloadList, { qid: item.qid });
-
-    if (index >= 0) {
-      const newList: Array<DownloadItem> = [...downloadList];
-
-      newList.splice(index, 1);
-      dispatch(setDownloadList(newList));
-    }
+    dispatch(setDeleteDownloadList(item));
   }
 
   const columns: ColumnsType<DownloadItem> = [

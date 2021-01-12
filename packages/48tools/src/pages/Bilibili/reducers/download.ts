@@ -1,4 +1,5 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
+import { findIndex } from 'lodash-es';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../Download/downloadBilibiliVideo.worker';
 
@@ -16,9 +17,21 @@ const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, Ca
     downloadProgress: {} // 下载进度
   },
   reducers: {
-    // 设置下载列表
-    setDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<Array<DownloadItem>>): BilibiliDownloadInitialState {
-      state.downloadList = action.payload;
+    // 添加下载
+    setAddDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): BilibiliDownloadInitialState {
+      state.downloadList = state.downloadList.concat([action.payload]);
+
+      return state;
+    },
+
+    // 删除下载
+    setDeleteDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): BilibiliDownloadInitialState {
+      const index: number = findIndex(state.downloadList, { qid: action.payload.qid });
+
+      if (index >= 0) {
+        state.downloadList.splice(index, 1);
+        state.downloadList = [...state.downloadList];
+      }
 
       return state;
     },
@@ -40,5 +53,5 @@ const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, Ca
   }
 });
 
-export const { setDownloadList, setDownloadProgress }: CaseReducerActions<CaseReducers> = actions;
+export const { setAddDownloadList, setDeleteDownloadList, setDownloadProgress }: CaseReducerActions<CaseReducers> = actions;
 export default { bilibiliDownload: reducer };
