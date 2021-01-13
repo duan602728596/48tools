@@ -2,31 +2,67 @@ import { ipcRenderer, shell } from 'electron';
 import { useContext, ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
-import { ToolTwoTone as IconToolTwoTone, BugTwoTone as IconBugTwoTone } from '@ant-design/icons';
+import Icon, { ToolTwoTone as IconToolTwoTone, BugTwoTone as IconBugTwoTone } from '@ant-design/icons';
+import classNames from 'classnames';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
 import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
+import { ReactComponent as IconLiveSvgComponent } from './images/live.svg';
+import { ReactComponent as IconVideoSvgComponent } from './images/video.svg';
+import { ReactComponent as IconMicrophoneSvgComponent } from './images/microphone.svg';
+import { ReactComponent as IconRecordSvgComponent } from './images/record.svg';
+import { ReactComponent as IconBilibiliLogoSvgComponent } from './images/BILIBILI_LOGO.svg';
+import { ReactComponent as IconCutSvgComponent } from './images/cut.svg';
+import { ReactComponent as IconConcatSvgComponent } from './images/concat.svg';
 
 interface NativeItem {
   name: string;
   url: string;
+  icon?: ReactElement;
 }
+
+const IconBilibiliLogo: ReactElement
+  = <Icon className={ style.iconBilibili } component={ IconBilibiliLogoSvgComponent } />;
 
 /* 导航配置 */
 const navLinkConfig: Array<Array<NativeItem>> = [
   [
-    { name: '口袋48直播抓取', url: '/48/Pocket48Live' },
-    { name: '口袋48录播下载', url: '/48/Pocket48Record' },
-    { name: '官方公演直播抓取', url: '/48/InLive' },
-    { name: '官方公演录播下载', url: '/48/InVideo' }
+    {
+      name: '口袋48直播抓取',
+      url: '/48/Pocket48Live',
+      icon: <Icon className={ classNames(style.icon, style.iconV5) } component={ IconLiveSvgComponent } />
+    },
+    {
+      name: '口袋48录播下载',
+      url: '/48/Pocket48Record',
+      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconVideoSvgComponent } />
+    },
+    {
+      name: '官方公演直播抓取',
+      url: '/48/InLive',
+      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconMicrophoneSvgComponent } />
+    },
+    {
+      name: '官方公演录播下载',
+      url: '/48/InVideo',
+      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconRecordSvgComponent } />
+    }
   ],
   [
-    { name: 'B站视频下载', url: '/Bilibili/Download' },
-    { name: 'B站直播抓取', url: '/Bilibili/Live' }
+    { name: 'B站视频下载', url: '/Bilibili/Download', icon: IconBilibiliLogo },
+    { name: 'B站直播抓取', url: '/Bilibili/Live', icon: IconBilibiliLogo }
   ],
   [
-    { name: '视频裁剪', url: '/VideoEdit/VideoCut' },
-    { name: '视频合并', url: '/VideoEdit/Concat' }
+    {
+      name: '视频裁剪',
+      url: '/VideoEdit/VideoCut',
+      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconCutSvgComponent } />
+    },
+    {
+      name: '视频合并',
+      url: '/VideoEdit/Concat',
+      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconConcatSvgComponent } />
+    }
   ]
 ];
 
@@ -41,7 +77,7 @@ function nativeRender(): ReactNodeArray {
     for (const navItem of group) {
       groupElement.push(
         <Link key={ navItem.name } className={ style.navItemLink } to={ navItem.url }>
-          <Button>{ navItem.name }</Button>
+          <Button icon={ navItem.icon }>{ navItem.name }</Button>
         </Link>
       );
     }
