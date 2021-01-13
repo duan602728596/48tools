@@ -1,5 +1,10 @@
-import { requestDownloadFileByStream } from '../services/download';
+import { promisify } from 'util';
+import { pipeline } from 'stream';
+import * as fs from 'fs';
+import got from 'got';
 import type { ProgressEventData } from '../types';
+
+const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
 type WorkerEventData = {
   type: 'start';
@@ -13,6 +18,27 @@ export type MessageEventData = {
   qid: string;
   data: number;
 };
+
+/**
+ * 下载文件
+ * @param { string } fileUrl: 文件url地址
+ * @param { string } filename: 文件本地地址
+ * @param { (e: ProgressEventData) => void } onProgress: 进度条
+ */
+async function requestDownloadFileByStream(
+  fileUrl: string,
+  filename: string,
+  onProgress: (e: ProgressEventData) => void
+): Promise<void> {
+  await pipelineP(
+    got.stream(fileUrl, {
+      headers: {
+        referer: 'https://www.bilibili.com/'
+      }
+    }).on('downloadProgress', onProgress),
+    fs.createWriteStream(filename)
+  );
+}
 
 /**
  * 下载视频或者音频

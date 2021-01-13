@@ -29,23 +29,3 @@ export function getFullTime(h: InputNumberValue, m: InputNumberValue, s: InputNu
 
   return `${ hourStr }:${ minuteStr }:${ secondStr }`;
 }
-
-type Time = [number, number, number];
-
-/**
- * 计算时间差
- * @param { Time } startTime: 开始时间
- * @param { Time } endTime  : 结束时间
- * @return { Time }
- */
-export function computingTime(startTime: Time, endTime: Time): Time {
-  const startS: number = (startTime[0] * 3600) + (startTime[1] * 60) + startTime[2]; // 开始时间转换到秒
-  const endS: number = (endTime[0] * 3600) + (endTime[1] * 60) + endTime[2];         // 结束时间转换到秒
-  const cha: number = endS - startS;                                                 // 计算时间差
-  const h: number = Number(`${ cha / 3600 }`.match(/\d+/g)![0]);            // 时取整数
-  const hp: number = cha % 3600;                                                     // 时取余
-  const m: number = Number(`${ hp / 60 }`.match(/\d+/g)![0]);               // 分取整数
-  const s: number = hp % 60;                                                         // 分取余 => 秒
-
-  return [h, m, s];
-}
