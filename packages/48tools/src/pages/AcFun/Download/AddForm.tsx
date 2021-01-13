@@ -1,17 +1,13 @@
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
-import type { Dispatch } from 'redux';
-import { useDispatch } from 'react-redux';
-import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
+import { Button, Modal, Form, Select, Input, Alert, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import style from './addForm.sass';
-import { rStr } from '../../../utils/utils';
-import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from './parseBilibiliUrl';
-import { setAddDownloadList } from '../reducers/download';
+import { parseAcFunUrl } from './parseAcFunUrl';
+import type { Representation } from '../types';
 
-/* 添加下载信息 */
+/* 添加A站视频下载队列 */
 function AddForm(props: {}): ReactElement {
-  const dispatch: Dispatch = useDispatch();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
@@ -29,27 +25,9 @@ function AddForm(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      let result: string | void;
+      const representation: Array<Representation> | undefined = await parseAcFunUrl(formValue.type, formValue.id);
 
-      if (formValue.type === 'au') {
-        // 下载音频
-        result = await parseAudioUrl(formValue.id);
-      } else if (formValue.type === 'ss' || formValue.type === 'ep') {
-        // 下载番剧
-        result = await parseBangumiVideo(formValue.type, formValue.id);
-      } else {
-        // 下载av、bv视频
-        result = await parseVideoUrl(formValue.type, formValue.id, formValue.page);
-      }
-
-      if (result) {
-        dispatch(setAddDownloadList({
-          qid: rStr(30),
-          durl: result,
-          type: formValue.type,
-          id: formValue.id,
-          page: formValue.page ?? 1
-        }));
+      if (representation) {
         setVisible(false);
       } else {
         message.warn('没有获取到媒体地址！');
@@ -64,7 +42,7 @@ function AddForm(props: {}): ReactElement {
 
   // 关闭窗口后重置表单
   function handleAddModalClose(): void {
-    form.resetFields(['id', 'type', 'page']);
+    form.resetFields(['id', 'type']);
   }
 
   // 打开弹出层
@@ -79,7 +57,7 @@ function AddForm(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button type="primary" onClick={ handleOpenAddModalClick }>添加下载任务</Button>
+      <Button type="primary" onClick={ handleOpenAddModalClick }>添加下载队列</Button>
       <Modal visible={ visible }
         title="添加下载任务"
         width={ 480 }
@@ -92,25 +70,20 @@ function AddForm(props: {}): ReactElement {
       >
         <Form className={ style.formContent }
           form={ form }
-          initialValues={{ type: 'bv' }}
+          initialValues={{ type: 'ac' }}
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 20 }}
         >
           <Form.Item name="type" label="下载类型">
             <Select>
-              <Select.Option value="bv">视频（BV）</Select.Option>
-              <Select.Option value="av">视频（av）</Select.Option>
-              <Select.Option value="au">音频（au）</Select.Option>
-              <Select.Option value="ep">番剧（ep）</Select.Option>
-              <Select.Option value="ss">番剧（ss）</Select.Option>
+              <Select.Option value="ac">视频（ac）</Select.Option>
+              <Select.Option value="aa">番剧（aa）</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
             <Input />
           </Form.Item>
-          <Form.Item name="page" label="Page">
-            <InputNumber />
-          </Form.Item>
+          <Alert type="info" message="ID为ac后面的字符，包括页码等。" />
         </Form>
       </Modal>
     </Fragment>

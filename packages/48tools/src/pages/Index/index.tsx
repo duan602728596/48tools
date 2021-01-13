@@ -12,6 +12,7 @@ import { ReactComponent as IconVideoSvgComponent } from './images/video.svg';
 import { ReactComponent as IconMicrophoneSvgComponent } from './images/microphone.svg';
 import { ReactComponent as IconRecordSvgComponent } from './images/record.svg';
 import { ReactComponent as IconBilibiliLogoSvgComponent } from './images/BILIBILI_LOGO.svg';
+import { ReactComponent as IconAcFunLogoSvgComponent } from './images/CN_acfun.tv.svg';
 import { ReactComponent as IconCutSvgComponent } from './images/cut.svg';
 import { ReactComponent as IconConcatSvgComponent } from './images/concat.svg';
 
@@ -50,7 +51,12 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   ],
   [
     { name: 'B站视频下载', url: '/Bilibili/Download', icon: IconBilibiliLogo },
-    { name: 'B站直播抓取', url: '/Bilibili/Live', icon: IconBilibiliLogo }
+    { name: 'B站直播抓取', url: '/Bilibili/Live', icon: IconBilibiliLogo },
+    {
+      name: 'A站视频下载',
+      url: '/AcFun/Download',
+      icon: <Icon className={ style.iconAcFun } component={ IconAcFunLogoSvgComponent } />
+    }
   ],
   [
     {
