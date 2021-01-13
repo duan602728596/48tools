@@ -4,6 +4,7 @@ const rimraf = require('rimraf');
 const fse = require('fs-extra');
 const builder = require('electron-builder');
 const _ = require('lodash');
+const packageJson = require('../package.json');
 
 const rimrafPromise = util.promisify(rimraf);
 
@@ -59,6 +60,9 @@ async function unpack() {
     win: {
       target: 'dir',
       icon: path.join(staticsDir, 'titleBarIcon.ico')
+    },
+    electronDownload: {
+      version: packageJson.dependencies.electron
     }
   };
 
