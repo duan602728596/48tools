@@ -20,7 +20,7 @@
 本软件遵循**GNU General Public License v3.0**许可证。
 
 ## 技术栈
-Pug + Sass + ECMAScript + React + AntD + Webpack + Electron。
+Pug + Sass + TypeScript + React + antd + Webpack + Electron。
 
 ## 模块
 * 48tools: 软件源代码
