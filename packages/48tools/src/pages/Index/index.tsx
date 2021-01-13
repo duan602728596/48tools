@@ -1,11 +1,61 @@
 import { ipcRenderer, shell } from 'electron';
-import { useContext, ReactElement, MouseEvent } from 'react';
+import { useContext, ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import { ToolTwoTone as IconToolTwoTone, BugTwoTone as IconBugTwoTone } from '@ant-design/icons';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
 import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
+
+interface NativeItem {
+  name: string;
+  url: string;
+}
+
+/* 导航配置 */
+const navLinkConfig: Array<Array<NativeItem>> = [
+  [
+    { name: '口袋48直播抓取', url: '/48/Pocket48Live' },
+    { name: '口袋48录播下载', url: '/48/Pocket48Record' },
+    { name: '官方公演直播抓取', url: '/48/InLive' },
+    { name: '官方公演录播下载', url: '/48/InVideo' }
+  ],
+  [
+    { name: 'B站视频下载', url: '/Bilibili/Download' },
+    { name: 'B站直播抓取', url: '/Bilibili/Live' }
+  ],
+  [
+    { name: '视频裁剪', url: '/VideoEdit/VideoCut' },
+    { name: '视频合并', url: '/VideoEdit/Concat' }
+  ]
+];
+
+/* 导航渲染 */
+function nativeRender(): ReactNodeArray {
+  const element: ReactNodeArray = [];
+
+  for (let i: number = 0, j: number = navLinkConfig.length; i < j; i++) {
+    const group: Array<NativeItem> = navLinkConfig[i];
+    const groupElement: ReactNodeArray = [];
+
+    for (const navItem of group) {
+      groupElement.push(
+        <Link key={ navItem.name } className={ style.navItemLink } to={ navItem.url }>
+          <Button>{ navItem.name }</Button>
+        </Link>
+      );
+    }
+
+    element.push(
+      <nav key={ `nav-${ i }` }>
+        <Space size={ 16 }>{ groupElement }</Space>
+      </nav>,
+      <Divider key={ `divider-${ i }` } />
+    );
+  }
+
+  return element;
+}
 
 /* 首页 */
 function Index(props: {}): ReactElement {
@@ -23,45 +73,7 @@ function Index(props: {}): ReactElement {
 
   return (
     <div className={ style.main }>
-      <nav>
-        <Space size={ 16 }>
-          <Link className={ style.navItemLink } to="/48/Pocket48Live">
-            <Button>口袋48直播抓取</Button>
-          </Link>
-          <Link className={ style.navItemLink } to="/48/Pocket48Record">
-            <Button>口袋48录播下载</Button>
-          </Link>
-          <Link className={ style.navItemLink } to="/48/InLive">
-            <Button>官方公演直播抓取</Button>
-          </Link>
-          <Link className={ style.navItemLink } to="/48/InVideo">
-            <Button>官方公演录播下载</Button>
-          </Link>
-        </Space>
-      </nav>
-      <Divider />
-      <nav>
-        <Space size={ 16 }>
-          <Link className={ style.navItemLink } to="/Bilibili/Download">
-            <Button>B站视频下载</Button>
-          </Link>
-          <Link className={ style.navItemLink } to="/Bilibili/Live">
-            <Button>B站直播抓取</Button>
-          </Link>
-        </Space>
-      </nav>
-      <Divider />
-      <nav>
-        <Space size={ 16 }>
-          <Link className={ style.navItemLink } to="/VideoEdit/VideoCut">
-            <Button>视频裁剪</Button>
-          </Link>
-          <Link className={ style.navItemLink } to="/VideoEdit/Concat">
-            <Button>视频合并</Button>
-          </Link>
-        </Space>
-      </nav>
-      <Divider />
+      { nativeRender() }
       <div>
         <Space size={ 16 }>
           <FFmpegOption />
