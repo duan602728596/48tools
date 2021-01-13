@@ -93,8 +93,8 @@ function AddForm(props: {}): ReactElement {
         <Form className={ style.formContent }
           form={ form }
           initialValues={{ type: 'bv' }}
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 19 }}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 20 }}
         >
           <Form.Item name="type" label="下载类型">
             <Select>
