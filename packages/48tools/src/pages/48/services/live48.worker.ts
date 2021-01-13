@@ -1,6 +1,5 @@
 import * as querystring from 'querystring';
 import got, { Response as GotResponse } from 'got';
-import { rStr } from '../../../utils/utils';
 
 type MessageEventData = {
   param: string;
@@ -8,6 +7,23 @@ type MessageEventData = {
   suid: string;
   id: string;
 };
+
+/**
+ * 随机字符串
+ * TODO: webpack >= 5.13.0，主线程和worker线程同时引用会报错
+ */
+function rStr(len: number): string {
+  const str: string = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890';
+  let result: string = '';
+
+  for (let i: number = 0; i < len; i++) {
+    const rIndex: number = Math.floor(Math.random() * str.length);
+
+    result += str[rIndex];
+  }
+
+  return result;
+}
 
 /**
  * 新线程获取直播地址
