@@ -6,15 +6,17 @@ import { Modal, message } from 'antd';
 import style from './downloadImages.sass';
 import { source } from '../../../../utils/utils';
 import { requestDownloadFileByStream } from '../../services/pocket48';
+import type { LiveInfo } from '../../services/interface';
 
 interface DownloadImagesProps {
+  liveInfo: LiveInfo;
   coverPath: string;
   carousels?: Array<string>;
 }
 
 /* 图片下载 */
 function DownloadImages(props: DownloadImagesProps): ReactElement {
-  const { coverPath, carousels }: DownloadImagesProps = props;
+  const { liveInfo, coverPath, carousels }: DownloadImagesProps = props;
 
   // 下载图片
   async function handleDownloadClick(event: MouseEvent<HTMLAnchorElement>): Promise<void> {
@@ -24,7 +26,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
       const href: string = event.target['getAttribute']('href');
       const pathResult: ParsedPath = path.parse(href);
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: pathResult.base
+        defaultPath: `[口袋48图片]${ liveInfo.userInfo.nickname }_${ liveInfo.title }_${ pathResult.base }`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -70,15 +72,16 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
 
 /**
  * 弹出层打开图片下载
+ * @param { LiveInfo } liveInfo: 直播信息
  * @param { string } coverPath: 封面
  * @param { Array<string> } carousels?: 电台轮播图
  */
-function downloadImages(coverPath: string, carousels?: Array<string>): void {
+function downloadImages(liveInfo: LiveInfo, coverPath: string, carousels?: Array<string>): void {
   Modal.info({
     title: '图片下载',
     width: 420,
     centered: true,
-    content: <DownloadImages coverPath={ coverPath } carousels={ carousels } />
+    content: <DownloadImages liveInfo={ liveInfo } coverPath={ coverPath } carousels={ carousels } />
   });
 }
 

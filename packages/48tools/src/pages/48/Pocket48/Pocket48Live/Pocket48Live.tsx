@@ -92,7 +92,7 @@ function Pocket48Live(props: {}): ReactElement {
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
-    downloadImages(record.coverPath, resInfo.content?.carousels?.carousels);
+    downloadImages(record, record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
   // 停止

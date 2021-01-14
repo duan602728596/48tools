@@ -15,7 +15,7 @@ import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegD
 import Header from '../../../../components/Header/Header';
 import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../../services/pocket48';
-import { getFFmpeg } from '../../../../utils/utils';
+import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
@@ -95,15 +95,16 @@ function Pocket48Record(props: {}): ReactElement {
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
-    downloadImages(record.coverPath, resInfo.content?.carousels?.carousels);
+    downloadImages(record, record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
   // 下载视频
   async function handleDownloadM3u8Click(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+      const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ record.liveId }.ts`
+        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ record.title }_${ time }.ts`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -150,9 +151,10 @@ function Pocket48Record(props: {}): ReactElement {
   async function handleDownloadLrcClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const res: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const { base }: ParsedPath = path.parse(res.content.msgFilePath);
+      const time: string = getFileTime(record.ctime);
+      const { ext }: ParsedPath = path.parse(res.content.msgFilePath);
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: base
+        defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ record.title }_${ time }${ ext }`
       });
 
       if (result.canceled || !result.filePath) return;
