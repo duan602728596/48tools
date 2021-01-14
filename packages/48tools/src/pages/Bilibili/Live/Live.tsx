@@ -6,7 +6,6 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
-import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
@@ -20,7 +19,7 @@ import {
 } from '../reducers/live';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
-import { getFFmpeg } from '../../../utils/utils';
+import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
@@ -61,7 +60,7 @@ function Live(props: {}): ReactElement {
 
   // 开始录制
   async function handleRecordClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const time: string = moment().format('YYYY_MM_DD_HH_mm_ss');
+    const time: string = getFileTime();
     const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
       defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
     });
