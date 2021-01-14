@@ -18,3 +18,10 @@ export interface PageInfo {
     ksPlayJson: string;
   };
 }
+
+export interface DownloadItem {
+  qid: string;       // 当前的下载id，随机
+  type: 'ac' | 'aa'; // 下载类型
+  id: string;        // 视频id
+  representation: Array<Representation>; // 下载的列表
+}

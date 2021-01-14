@@ -3,18 +3,20 @@ import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/download';
 import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
+import acfunDownloadReducers from '../pages/AcFun/reducers/download';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 
 /* reducers */
-export const reducers: ReducersMapObject = {
-  ...l48Pocket48Reducers,
-  ...l48Live48Reducers,
-  ...bilibiliDownloadReducers,
-  ...bilibiliLiveReducers,
-  ...videoEditConcatReducers,
-  ...videoEditVideoCutReducers
-};
+export const reducers: ReducersMapObject = Object.assign({},
+  l48Pocket48Reducers,
+  l48Live48Reducers,
+  bilibiliDownloadReducers,
+  bilibiliLiveReducers,
+  acfunDownloadReducers,
+  videoEditConcatReducers,
+  videoEditVideoCutReducers
+);
 
 export const asyncReducers: ReducersMapObject = {}; // 异步的reducers
 

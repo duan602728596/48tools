@@ -1,13 +1,19 @@
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import type { Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 import { Button, Modal, Form, Select, Input, Alert, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
+import { pick } from 'lodash-es';
 import style from './addForm.sass';
 import { parseAcFunUrl } from './parseAcFunUrl';
+import { setAddDownloadList } from '../reducers/download';
+import { rStr } from '../../../utils/utils';
 import type { Representation } from '../types';
 
 /* 添加A站视频下载队列 */
 function AddForm(props: {}): ReactElement {
+  const dispatch: Dispatch = useDispatch();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
@@ -28,6 +34,12 @@ function AddForm(props: {}): ReactElement {
       const representation: Array<Representation> | undefined = await parseAcFunUrl(formValue.type, formValue.id);
 
       if (representation) {
+        dispatch(setAddDownloadList({
+          qid: rStr(10),
+          type: formValue.type,
+          id: formValue.id,
+          representation: representation.map((o: Representation): Representation => pick(o, ['m3u8Slice', 'url', 'qualityLabel']))
+        }));
         setVisible(false);
       } else {
         message.warn('没有获取到媒体地址！');
