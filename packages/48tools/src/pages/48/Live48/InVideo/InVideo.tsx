@@ -39,7 +39,7 @@ function formatTsUrl(data: string, m3u8Url: string): string {
     if (/^#/.test(item) || item === '') {
       newStrArr.push(item);
     } else if (/^\//.test(item)) {
-      newStrArr.push(`https://ts.48.cn/${ item }`);
+      newStrArr.push(`https://ts.48.cn${ item }`);
     } else {
       newStrArr.push(`${ m3u8Pathname }/${ item }`);
     }
@@ -87,22 +87,22 @@ function InVideo(props: {}): ReactElement {
   // 开始下载
   async function handleDownloadClick(record: InVideoItem, quality: string, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
-      const m3u8Url: string | null = await parseVideoItem(record, quality);
+      const m3u8Url: { url: string; title: string } | null = await parseVideoItem(record, quality);
 
       if (!m3u8Url) {
         return message.warn('视频不存在！');
       }
 
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: `[公演录播]${ record.liveType }_${ record.id }_${ quality }.ts`
+        defaultPath: `[48公演录播]${ record.liveType }_${ m3u8Url.title }_${ record.id }_${ quality }.ts`
       });
 
       if (result.canceled || !result.filePath) return;
 
       const m3u8File: string = `${ result.filePath }.m3u8`;
-      const m3u8Data: string = await requestDownloadFile(m3u8Url);
+      const m3u8Data: string = await requestDownloadFile(m3u8Url.url);
 
-      await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, m3u8Url));
+      await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, m3u8Url.url));
 
       const worker: Worker = new FFMpegDownloadWorker();
 

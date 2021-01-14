@@ -33,7 +33,7 @@ export async function parseInLive(type: string): Promise<Array<{ label: string; 
  * @param { string } id: 直播id
  * @param { string } quality: 直播画质
  */
-export async function parseLiveUrl(id: string, quality: string): Promise<string | null> {
+export async function parseLiveUrl(id: string, quality: string): Promise<{ url: string; title: string } | null> {
   const html: string = await requestFetchHtml(`https://live.48.cn/Index/inlive/id/${ id }`);
   const { window }: JSDOM = new JSDOM(html);
   const { document }: DOMWindow = window;
@@ -44,15 +44,16 @@ export async function parseLiveUrl(id: string, quality: string): Promise<string 
     return null;
   }
 
+  const title: string = document.querySelector('.titles .title1')!.innerHTML;
   const param: string = document.getElementById('param')!.getAttribute('value')!;
   const video_id: string = document.getElementById('vedio_id')!.getAttribute('value')!;
   const suid: string = document.getElementById('suid')!.getAttribute('value')!;
   const res: LiveStreamInfo = await requestStreamInfo(param, video_id, suid, id);
 
   if (quality === 'liuchang') {
-    return res.lc_url;
+    return { url: res.lc_url, title };
   } else {
-    return res.url;
+    return { url: res.url, title };
   }
 }
 
@@ -96,7 +97,7 @@ export async function parseInVideoUrl(inVideoQuery: InVideoQuery | undefined, pa
  * @param { InVideoItem } record: 视频详情
  * @param { string } quality: 视频品质
  */
-export async function parseVideoItem(record: InVideoItem, quality: string): Promise<string | null> {
+export async function parseVideoItem(record: InVideoItem, quality: string): Promise<{ url: string; title: string } | null> {
   const liveType: number = LIVE_TYPE.indexOf(record.liveType);
   const pageUrl: string = `https://live.48.cn/Index/invideo/club/${ liveType + 1 }/id/${ record.id }`; // 网站地址
   const html: string = await requestFetchHtml(pageUrl);
@@ -105,7 +106,10 @@ export async function parseVideoItem(record: InVideoItem, quality: string): Prom
   const input: HTMLElement | null = document.getElementById(`${ quality }_url`);
 
   if (input) {
-    return input.getAttribute('value');
+    return {
+      url: input.getAttribute('value')!,
+      title: document.querySelector('.titles .title1')!.innerHTML
+    };
   } else {
     return null;
   }

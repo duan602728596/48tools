@@ -4,12 +4,11 @@ import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
-import * as moment from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
-import { getFFmpeg, rStr } from '../../../../utils/utils';
+import { getFFmpeg, rStr, getFileTime } from '../../../../utils/utils';
 import type { MessageEventData } from '../../../../types';
 
 /* 抓取直播信息表单 */
@@ -28,16 +27,16 @@ function GetLiveUrl(props: {}): ReactElement {
       return message.warn('请选择直播！');
     }
 
-    const liveUrl: string | null = await parseLiveUrl(value.live, value.quality);
+    const liveUrl: { url: string; title: string } | null = await parseLiveUrl(value.live, value.quality);
 
     if (!liveUrl) {
       return message.warn('当前直播未开始！');
     }
 
     // 开始录制
-    const time: string = moment().format('YYYY_MM_DD_HH_mm_ss');
+    const time: string = getFileTime();
     const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-      defaultPath: `[公演直播]${ value.type }.${ value.live }.${ value.quality }.${ time }.flv`
+      defaultPath: `[48公演直播]${ value.type }_${ liveUrl.title }_${ value.live }_${ value.quality }_${ time }.flv`
     });
 
     if (result.canceled || !result.filePath) return;
@@ -60,7 +59,7 @@ function GetLiveUrl(props: {}): ReactElement {
 
     worker.postMessage({
       type: 'start',
-      playStreamPath: liveUrl,
+      playStreamPath: liveUrl.url,
       filePath: result.filePath,
       ffmpeg: getFFmpeg()
     });
