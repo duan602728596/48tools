@@ -20,7 +20,7 @@ import {
   idbGetPocket48LiveOptions,
   Pocket48InitialState
 } from '../../reducers/pocket48';
-import { rStr, getFFmpeg } from '../../../../utils/utils';
+import { rStr, getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages';
 import autoGrab from './autoGrab';
@@ -107,8 +107,9 @@ function Pocket48Live(props: {}): ReactElement {
   // 录制
   async function handleGetVideoClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
+      const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
-        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ record.liveId }.flv`
+        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ record.title }_${ time }.flv`
       });
 
       if (result.canceled || !result.filePath) return;

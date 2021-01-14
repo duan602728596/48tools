@@ -1,17 +1,23 @@
 import * as path from 'path';
+import { promises as fsP } from 'fs';
 import type { Store } from 'redux';
 import { message } from 'antd';
-import * as moment from 'moment';
 import { findIndex } from 'lodash-es';
+import * as moment from 'moment';
+import type { Moment } from 'moment';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import { store } from '../../../../store/store';
 import { setLiveList, Pocket48InitialState, setDeleteLiveChildList, setAddLiveChildList } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
-import { getFFmpeg } from '../../../../utils/utils';
+import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
 import type { MessageEventData } from '../../../../types';
 import type { LiveData, LiveInfo, UserInfo, LiveRoomInfo } from '../../services/interface';
 
-/* 自动抓取 */
+/**
+ * 自动抓取
+ * @param { string } dir: 保存录像的目录
+ * @param { Array<string> } usersArr: 监听的小偶像
+ */
 async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
   const { dispatch, getState }: Store = store;
   const res: LiveData = await requestLiveList('0', true);
@@ -29,8 +35,28 @@ async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
 
     // 正则匹配或者id完全匹配
     if ((humanRegExp.test(nickname) || usersArr.includes[userId]) && index < 0) {
-      const time: string = moment().format('YYYY_MM_DD_HH_mm_ss');
-      const filePath: string = path.join(dir, `[口袋48直播]${ item.userInfo.nickname }_${ item.liveId }.${ time }.flv`);
+      const cTimeMoment: Moment = moment(Number(item.ctime)),
+        cTime: string = cTimeMoment.format(fileTimeFormat), // 直播开始时间
+        rTimeMoment: Moment = moment(),
+        rTime: string = rTimeMoment.format(fileTimeFormat), // 文件创建时间
+        filename: string = `[口袋48直播]${ item.userInfo.nickname }_${ cTime }_${ item.liveId }_${ rTime }.flv`; // 文件名
+
+      try {
+        // 追加log
+        const log: string = path.join(dir, 'log.txt');
+        const logData: string = `直播标题：${ item.title }
+直播ID：${ item.liveId }
+直播人：${ item.userInfo.nickname }
+直播时间：${ cTimeMoment.format('YYYY-MM-DD HH:mm:ss') }
+输出文件：${ filename }
+创建时间：${ rTimeMoment.format('YYYY-MM-DD HH:mm:ss') }\n\n`;
+
+        await fsP.writeFile(log, logData, { encoding: 'utf8', flag: 'a' });
+      } catch (err) {
+        console.error(err);
+      }
+
+      const filePath: string = path.join(dir, filename);
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
       const worker: Worker = new FFMpegDownloadWorker();
 

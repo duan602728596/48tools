@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as moment from 'moment';
 import { BILIBILI_COOKIE_KEY, BilibiliCookie } from '../components/BilibiliLogin/Qrcode';
 
 /* 获取ffmpeg的地址 */
@@ -46,4 +47,18 @@ export function getBilibiliCookie(): string | undefined {
   const cookie: BilibiliCookie = JSON.parse(cookieStr);
 
   return cookie.cookie;
+}
+
+export const fileTimeFormat: string = 'YYYY-MM-DD~HH.mm.ss';
+
+/**
+ * 生成适合文件路径的时间
+ * @param { number | string } value: 时间戳
+ */
+export function getFileTime(value?: number | string): string {
+  if (value) {
+    return moment(typeof value === 'string' ? Number(value) : value).format(fileTimeFormat);
+  } else {
+    return moment().format(fileTimeFormat);
+  }
 }
