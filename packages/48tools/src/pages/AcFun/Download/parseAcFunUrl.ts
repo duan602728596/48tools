@@ -32,6 +32,7 @@ function getWindowPageInfo(html: string): PageInfo | undefined {
 
 /**
  * 解析acfun视频地址
+ * https://www.acfun.cn/v/ac21923704 高清视频测试
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
  */
