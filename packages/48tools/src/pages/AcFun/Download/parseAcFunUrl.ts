@@ -36,7 +36,7 @@ function getWindowPageInfo(html: string): PageInfo | undefined {
  * @param { string } id: 视频id
  */
 export async function parseAcFunUrl(type: string, id: string): Promise<Array<Representation> | undefined> {
-  const uri: string = `https://www.acfun.cn/${ type === 'aa' ? 'bangumi' : 'v' }/${ type }17610160_5`;
+  const uri: string = `https://www.acfun.cn/${ type === 'aa' ? 'bangumi' : 'v' }/${ type }${ id }`;
   const res: string = await requestAcFunHtml(uri);
   const pageInfo: PageInfo | undefined = getWindowPageInfo(res);
 
