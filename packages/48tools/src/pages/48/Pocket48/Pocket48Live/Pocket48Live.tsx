@@ -147,9 +147,9 @@ function Pocket48Live(props: {}): ReactElement {
   }
 
   // 打开新窗口播放视频
-  async function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
     const randomId: string = rStr(30);
-    const port: NetMediaServerPort = await getNetMediaServerPort();
+    const port: NetMediaServerPort = getNetMediaServerPort();
     const query: string = querystring.stringify(Object.assign(
       {
         id: randomId, // rtmp服务器id
@@ -219,7 +219,7 @@ function Pocket48Live(props: {}): ReactElement {
                 </Button>
               )
             }
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleOpenPlayerClick(record, event) }>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleOpenPlayerClick(record, event) }>
               播放
             </Button>
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
