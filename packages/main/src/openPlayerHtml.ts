@@ -34,18 +34,18 @@ function openPlayerHtml(title: string, query: string): void {
       { search: query }
     );
 
-    const handleThemeEvent: Function = function(value: ThemeValue): void {
+    const handleThemeEvent: (value: ThemeValue) => void = function(value: ThemeValue): void {
       if (win) {
         win.webContents.send('themeSource', value);
       }
     };
 
     win.on('closed', function(): void {
-      themeEvent['off']('themeSource', handleThemeEvent);
+      themeEvent.off('themeSource', handleThemeEvent);
       win = null;
     });
 
-    themeEvent['on']('themeSource', handleThemeEvent);
+    themeEvent.on('themeSource', handleThemeEvent);
   }
 
   // 开发者工具
