@@ -3,7 +3,6 @@ import { ipcMain, nativeTheme, IpcMainEvent } from 'electron';
 
 export type ThemeValue = 'light' | 'dark' | 'system';
 
-// @ts-ignore
 class ThemeSourceEvent extends EventEmitter {}
 export const themeEvent: ThemeSourceEvent = new ThemeSourceEvent();
 
