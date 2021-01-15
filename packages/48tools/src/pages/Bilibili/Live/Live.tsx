@@ -77,7 +77,7 @@ function Live(props: {}): ReactElement {
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
-            message.error(`${ record.description }[${ record.roomId }]录制失败！`);
+            message.error(`[${ record.description }[${ record.roomId }]录制失败！`);
           }
 
           worker.terminate();

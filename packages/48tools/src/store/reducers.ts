@@ -27,6 +27,7 @@ export const ignoreOptions: any = {
     'live48.inLiveList',
     'live48.videoListChild',
     'bilibiliLive.liveChildList',
+    'acfunDownload.ffmpegDownloadWorkers',
     'concat.concatWorker',
     'videoCut.cutChildList'
   ],
@@ -42,6 +43,8 @@ export const ignoreOptions: any = {
     'live48/setVideoListChildDelete',
     'bilibiliLive/setAddLiveBilibiliChildList',
     'bilibiliLive/setDeleteLiveBilibiliChildList',
+    'acfunDownload/setAddDownloadWorker',
+    'acfunDownload/setDeleteDownloadWorker',
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete'
