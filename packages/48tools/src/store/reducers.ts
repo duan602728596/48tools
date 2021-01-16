@@ -4,6 +4,7 @@ import l48Live48Reducers from '../pages/48/reducers/live48';
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/download';
 import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
 import acfunDownloadReducers from '../pages/AcFun/reducers/download';
+import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 
@@ -14,6 +15,7 @@ export const reducers: ReducersMapObject = Object.assign({},
   bilibiliDownloadReducers,
   bilibiliLiveReducers,
   acfunDownloadReducers,
+  acfunLiveReducers,
   videoEditConcatReducers,
   videoEditVideoCutReducers
 );
@@ -28,6 +30,7 @@ export const ignoreOptions: any = {
     'live48.videoListChild',
     'bilibiliLive.liveChildList',
     'acfunDownload.ffmpegDownloadWorkers',
+    'acfunLive.acfunLiveList',
     'concat.concatWorker',
     'videoCut.cutChildList'
   ],
@@ -45,6 +48,8 @@ export const ignoreOptions: any = {
     'bilibiliLive/setDeleteLiveBilibiliChildList',
     'acfunDownload/setAddDownloadWorker',
     'acfunDownload/setDeleteDownloadWorker',
+    'acfunLive/setAddLiveWorker',
+    'acfunLive/setDeleteLiveWorker',
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete'

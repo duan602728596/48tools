@@ -38,3 +38,10 @@ export interface LiveVideoPlayRes {
     representation: Array<LiveRepresentation>;
   }>;
 }
+
+// 直播间信息
+export interface LiveItem {
+  id: string;
+  description: string;
+  roomId: string;
+}
