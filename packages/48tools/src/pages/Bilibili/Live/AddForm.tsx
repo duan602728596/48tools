@@ -51,7 +51,7 @@ function AddForm(props: {}): ReactElement {
   return (
     <Fragment>
       <Button type="primary" onClick={ handleOpenAddModalClick }>添加直播间信息</Button>
-      <Modal title="添加直播间信息"
+      <Modal title="添加B站直播间信息"
         visible={ visible }
         width={ 500 }
         afterClose={ handleAddModalClose }
