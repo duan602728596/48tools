@@ -59,10 +59,16 @@ function AddForm(props: {}): ReactElement {
         onCancel={ handleCloseAddModalClick }
       >
         <Form className={ style.formContent } form={ form } labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
-          <Form.Item name="description" label="直播间说明" rules={ [{ required: true, message: '请填写直播间说明', whitespace: true }] }>
+          <Form.Item name="description"
+            label="直播间说明"
+            rules={ [{ required: true, message: '请填写直播间说明', whitespace: true }] }
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="roomId" label="直播间ID" rules={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }>
+          <Form.Item name="roomId"
+            label="直播间ID"
+            rules={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
+          >
             <Input />
           </Form.Item>
           <p className={ style.tips }>直播间ID支持配置短ID。</p>
