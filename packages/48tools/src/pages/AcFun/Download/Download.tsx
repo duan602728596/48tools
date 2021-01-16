@@ -9,6 +9,7 @@ import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
 import style from './download.sass';
 import Header from '../../../components/Header/Header';
+import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
 import AddForm from './AddForm';
 import {
   setDeleteDownloadList,
@@ -159,7 +160,10 @@ function Download(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <AddForm />
+        <Button.Group>
+          <AcFunLogin />
+          <AddForm />
+        </Button.Group>
       </Header>
       <Table size="middle"
         columns={ columns }

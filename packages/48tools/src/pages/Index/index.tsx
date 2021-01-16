@@ -12,7 +12,7 @@ import { ReactComponent as IconVideoSvgComponent } from './images/video.svg';
 import { ReactComponent as IconMicrophoneSvgComponent } from './images/microphone.svg';
 import { ReactComponent as IconRecordSvgComponent } from './images/record.svg';
 import { ReactComponent as IconBilibiliLogoSvgComponent } from './images/BILIBILI_LOGO.svg';
-import { ReactComponent as IconAcFunLogoSvgComponent } from './images/CN_acfun.tv.svg';
+import { ReactComponent as IconAcFunLogoSvgComponent } from './images/acfunlogo.svg';
 import { ReactComponent as IconCutSvgComponent } from './images/cut.svg';
 import { ReactComponent as IconConcatSvgComponent } from './images/concat.svg';
 
