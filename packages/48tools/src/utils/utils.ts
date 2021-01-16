@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as moment from 'moment';
 import { BILIBILI_COOKIE_KEY, BilibiliCookie } from '../components/BilibiliLogin/Qrcode';
+import { ACFUN_COOKIE_KEY, AcFunCookie } from '../components/AcFunLogin/Qrcode';
 
 /* 获取ffmpeg的地址 */
 export function getFFmpeg(): string {
@@ -49,6 +50,20 @@ export function getBilibiliCookie(): string | undefined {
   return cookie.cookie;
 }
 
+/* 获取acfun的cookie */
+export function getAcFuncCookie(): string | undefined {
+  const cookieStr: string | null = localStorage.getItem(ACFUN_COOKIE_KEY);
+
+  if (!cookieStr) {
+    return undefined;
+  }
+
+  const cookie: AcFunCookie = JSON.parse(cookieStr);
+
+  return cookie.cookie;
+}
+
+// 格式化文件的时间戳的格式
 export const fileTimeFormat: string = 'YYYY-MM-DD~HH.mm.ss';
 
 /**
