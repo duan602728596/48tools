@@ -25,3 +25,16 @@ export interface DownloadItem {
   id: string;        // 视频id
   representation: Array<Representation>; // 下载的列表
 }
+
+/* ========== Live ========== */
+export interface LiveRepresentation {
+  url: string;
+  name: string; // 清晰度
+}
+
+export interface LiveVideoPlayRes {
+  liveAdaptiveConfig: string;
+  liveAdaptiveManifest: Array<{
+    representation: Array<LiveRepresentation>;
+  }>;
+}
