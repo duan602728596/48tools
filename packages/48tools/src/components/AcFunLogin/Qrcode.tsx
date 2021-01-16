@@ -17,6 +17,23 @@ export interface AcFunCookie {
   cookie: string;
 }
 
+function clearData(): void {
+  if (scanResultRequest) {
+    scanResultRequest.cancel();
+    scanResultRequest = null;
+  }
+
+  if (acceptResultRequest) {
+    acceptResultRequest.cancel();
+    acceptResultRequest = null;
+  }
+
+  if (resetCreateQrcodeTimer) {
+    clearTimeout(resetCreateQrcodeTimer);
+    resetCreateQrcodeTimer = null;
+  }
+}
+
 /* 生成A站二维码 */
 function Qrcode(props: { onCancel: Function }): ReactElement {
   const [imageData, setImageData]: [string | undefined, D<S<string | undefined>>] = useState(undefined); // 二维码
@@ -34,21 +51,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
 
   // 生成二维码
   async function createQrcode(): Promise<void> {
-    if (scanResultRequest) {
-      scanResultRequest.cancel();
-      scanResultRequest = null;
-    }
-
-    if (acceptResultRequest) {
-      acceptResultRequest.cancel();
-      acceptResultRequest = null;
-    }
-
-    if (resetCreateQrcodeTimer) {
-      clearTimeout(resetCreateQrcodeTimer);
-      resetCreateQrcodeTimer = null;
-    }
-
+    clearData();
     resetCreateQrcodeTimer = setTimeout(createQrcode, 90_000); // 刷新二维码
 
     // 获取二维码图片
@@ -96,20 +99,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     createQrcode();
 
     return function(): void {
-      if (scanResultRequest) {
-        scanResultRequest.cancel();
-        scanResultRequest = null;
-      }
-
-      if (acceptResultRequest) {
-        acceptResultRequest.cancel();
-        acceptResultRequest = null;
-      }
-
-      if (resetCreateQrcodeTimer) {
-        clearTimeout(resetCreateQrcodeTimer);
-        resetCreateQrcodeTimer = null;
-      }
+      clearData();
     };
   }, []);
 
