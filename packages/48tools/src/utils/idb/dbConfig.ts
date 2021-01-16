@@ -13,11 +13,18 @@ export interface DbConfig {
 
 const dbConfig: DbConfig = {
   name: '48tools',
-  version: 2,
+  version: 3,
   objectStore: [
     // b站直播间信息
     {
       name: 'bilibili_live',
+      key: 'id',
+      data: ['description', 'roomId']
+    },
+
+    // a站直播间信息
+    {
+      name: 'acfun_live',
       key: 'id',
       data: ['description', 'roomId']
     },
