@@ -93,7 +93,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
 
   return (
     <Fragment>
-      <Alert type="info" message="下载付费直播或者大会员专属视频时需要登陆。" />
+      <Alert className={ style.alert } type="info" message="下载付费直播或者大会员专属视频时需要登陆。" />
       <div className={ style.qrcodeBox }>
         <canvas ref={ canvasRef } width={ 196 } height={ 196 } />
       </div>
