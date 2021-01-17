@@ -68,8 +68,6 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
     const sign: string = md5(`${ payload }${ BILIBILI_KEY }`);
     const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign);
 
-    console.log(videoInfoRes);
-
     if (videoInfoRes?.durl?.length) {
       flvUrl = videoInfoRes.durl[0].url;
       break;
