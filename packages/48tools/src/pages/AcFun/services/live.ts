@@ -1,25 +1,27 @@
 import * as querystring from 'querystring';
 import got, { Response as GotResponse } from 'got';
+import LiveWorker from 'worker-loader!./live.worker';
 import { getAcFuncCookie } from '../../../utils/utils';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from './interface';
 
-// 获取acfun直播的html和cookie
-export async function requestAcFunLiveHtml(uri: string): Promise<[string, string]> {
-  const res: GotResponse<string> = await got.get(uri, {
-    responseType: 'text',
-    headers: {
-      Cookie: getAcFuncCookie()
-    }
-  });
-  const cookie: string = res.headers['set-cookie']![0]
-    .split(/;\s*/)[0] // _did=
-    .split(/=/)[1];   // did的值
+/**
+ * 获取acfun直播的html和cookie
+ * @param { string } roomId: 直播间id
+ */
+export function requestAcFunLiveHtml(roomId: string): Promise<string> {
+  return new Promise((resolve: Function, reject: Function): void => {
+    const worker: Worker = new LiveWorker();
 
-  return [res.body, cookie]; // 获取cookie中的_did值
+    worker.addEventListener('message', function(event: MessageEvent<string>) {
+      resolve(event.data);
+      worker.terminate();
+    });
+    worker.postMessage({ roomId, cookie: getAcFuncCookie() });
+  });
 }
 
 /**
- * 未登陆时，获取acfun的token
+ * 未登陆时，获取acfun的token和userId
  * @param { string } didCookie: cookie中的_did值
  */
 export async function requestRestAppVisitorLogin(didCookie: string): Promise<AppVisitorLogin> {
@@ -57,28 +59,24 @@ export async function requestWebTokenGet(): Promise<WebToken> {
  * 获取地址
  * @param { string } didCookie: cookie里did的值
  * @param { string } st: 前面获取的token
+ * @param { number } userId: 用户id，未登陆时为临时获取的id
+ * @param { boolean } isVisitor: 是否为未登陆状态
  * @param { string } authorId: 直播间id
  */
-export async function requestPlayUrl(didCookie: string, st: string, authorId: string): Promise<LiveWebStartPlay> {
-  const acfunCookie: string | undefined = getAcFuncCookie();
-  let userId: string = '';
-
-  if (acfunCookie) {
-    for (const item of acfunCookie.split(/\s*;\s*/)) {
-      if (/auth_key/i.test(item)) {
-        userId = item.split(/=/)[1];
-        break;
-      }
-    }
-  }
-
+export async function requestPlayUrl(
+  didCookie: string,
+  st: string,
+  userId: number,
+  isVisitor: boolean,
+  authorId: string
+): Promise<LiveWebStartPlay> {
   const query: string = querystring.stringify({
     subBiz: 'mainApp',
     kpn: 'ACFUN_APP',
     kpf: 'PC_WEB',
-    userId, // 用户名，cookie里面的auth_key
+    userId,
     did: didCookie,
-    'acfun.midground.api_st': st
+    [isVisitor ? 'acfun.api.visitor_st' : 'acfun.midground.api_st']: st
   });
   const res: GotResponse<string> = await got(`https://api.kuaishouzt.com/rest/zt/live/web/startPlay?${ query }`, {
     method: 'POST',

@@ -35,7 +35,9 @@ export interface LiveRepresentation {
 export interface LiveVideoPlayRes {
   liveAdaptiveConfig: string;
   liveAdaptiveManifest: Array<{
-    representation: Array<LiveRepresentation>;
+    adaptationSet: {
+      representation: Array<LiveRepresentation>;
+    };
   }>;
 }
 

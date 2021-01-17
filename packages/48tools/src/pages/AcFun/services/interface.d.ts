@@ -2,7 +2,7 @@
 export interface AppVisitorLogin {
   result: number;
   acSecurity: string;
-  userId: string;
+  userId: number;
   'acfun.api.visitor_st': string; // 后面需要的token
 }
 
@@ -36,5 +36,6 @@ export interface LiveWebStartPlay {
     liveStartTime: number;
     panoramic: boolean;
   };
+  error_msg: string;
   host: string;
 }

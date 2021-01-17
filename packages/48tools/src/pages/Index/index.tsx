@@ -19,11 +19,12 @@ import { ReactComponent as IconConcatSvgComponent } from './images/concat.svg';
 interface NativeItem {
   name: string;
   url: string;
-  icon?: ReactElement;
+  icon: ReactElement;
+  hBtn?: boolean;
 }
 
-const IconBilibiliLogo: ReactElement
-  = <Icon className={ style.iconBilibili } component={ IconBilibiliLogoSvgComponent } />;
+const IconBilibiliLogo: ReactElement = <Icon className={ style.iconBilibili } component={ IconBilibiliLogoSvgComponent } />,
+  IconAcFunLogo: ReactElement = <Icon className={ style.iconAcFun } component={ IconAcFunLogoSvgComponent } />;
 
 /* 导航配置 */
 const navLinkConfig: Array<Array<NativeItem>> = [
@@ -50,13 +51,10 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     }
   ],
   [
-    { name: 'B站视频下载', url: '/Bilibili/Download', icon: IconBilibiliLogo },
-    { name: 'B站直播抓取', url: '/Bilibili/Live', icon: IconBilibiliLogo },
-    {
-      name: 'A站视频下载',
-      url: '/AcFun/Download',
-      icon: <Icon className={ style.iconAcFun } component={ IconAcFunLogoSvgComponent } />
-    }
+    { name: 'B站视频下载', url: '/Bilibili/Download', icon: IconBilibiliLogo, hBtn: true },
+    { name: 'B站直播抓取', url: '/Bilibili/Live', icon: IconBilibiliLogo, hBtn: true },
+    { name: 'A站视频下载', url: '/AcFun/Download', icon: IconAcFunLogo, hBtn: true },
+    { name: 'A站直播抓取', url: '/AcFun/Live', icon: IconAcFunLogo, hBtn: true }
   ],
   [
     {
@@ -83,7 +81,7 @@ function nativeRender(): ReactNodeArray {
     for (const navItem of group) {
       groupElement.push(
         <Link key={ navItem.name } className={ style.navItemLink } to={ navItem.url }>
-          <Button icon={ navItem.icon }>{ navItem.name }</Button>
+          <Button className={ navItem.hBtn ? style.hBtn : undefined } icon={ navItem.icon }>{ navItem.name }</Button>
         </Link>
       );
     }

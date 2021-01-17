@@ -30,7 +30,7 @@ export const ignoreOptions: any = {
     'live48.videoListChild',
     'bilibiliLive.liveChildList',
     'acfunDownload.ffmpegDownloadWorkers',
-    'acfunLive.acfunLiveList',
+    'acfunLive.liveWorkers',
     'concat.concatWorker',
     'videoCut.cutChildList'
   ],
