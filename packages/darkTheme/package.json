@@ -1,6 +1,8 @@
 {
   "name": "@48tools/dark-theme",
   "version": "3.0.0",
+  "description": "编译48tools的暗黑模式css文件",
+  "license": "GPL-3.0",
   "scripts": {
     "build": "rimraf ./dist && node src/index.js && postcss dist/antd-dark.css > dist/antd-dark.min.css"
   },

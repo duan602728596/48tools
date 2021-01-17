@@ -1,6 +1,8 @@
 {
   "name": "@48tools/48tools",
   "version": "3.0.0",
+  "description": "48tools的软件源代码",
+  "license": "GPL-3.0",
   "main": "../main/lib/main.js",
   "scripts": {
     "runel": "cross-env NODE_ENV=development electron ./",

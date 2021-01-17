@@ -1,6 +1,8 @@
 {
   "name": "@48tools/main",
   "version": "3.0.0",
+  "description": "Electron主程序运行源代码",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "npm run clean && cross-env NODE_ENV=development tsc --watch",
     "dev": "npm run clean && cross-env NODE_ENV=development tsc",
