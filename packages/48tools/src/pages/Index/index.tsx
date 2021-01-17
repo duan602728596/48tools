@@ -129,7 +129,7 @@ function Index(props: {}): ReactElement {
       <Divider />
       {/* 二维码 */}
       <p>欢迎打赏：</p>
-      <Space>
+      <Space size={ 8 }>
         <Image className={ style.dashangImage } src={ require('./images/zfb.avif').default } />
         <Image className={ style.dashangImage } src={ require('./images/wx.avif').default } />
       </Space>
