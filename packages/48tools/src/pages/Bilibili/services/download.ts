@@ -18,7 +18,8 @@ export async function requestBilibiliHtml(url: string): Promise<string> {
     responseType: 'text',
     headers: {
       Host: 'www.bilibili.com',
-      'User-Agent': USER_AGENT
+      'User-Agent': USER_AGENT,
+      Cookie: getBilibiliCookie()
     }
   });
 
@@ -33,7 +34,10 @@ export async function requestBilibiliHtml(url: string): Promise<string> {
 export async function requestVideoInfo(payload: string, sign: string): Promise<VideoInfo> {
   const apiUrl: string = `https://interface.bilibili.com/v2/playurl?${ payload }&sign=${ sign }`;
   const res: GotResponse<VideoInfo> = await got.get(apiUrl, {
-    responseType: 'json'
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    }
   });
 
   return res.body;
@@ -64,7 +68,10 @@ export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA
 export async function requestAudioInfo(auid: string): Promise<AudioInfo> {
   const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`;
   const res: GotResponse<AudioInfo> = await got.get(apiUrl, {
-    responseType: 'json'
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    }
   });
 
   return res.body;
@@ -84,7 +91,8 @@ export async function requestDownloadFileByStream(
   await pipelineP(
     got.stream(fileUrl, {
       headers: {
-        referer: 'https://www.bilibili.com/'
+        referer: 'https://www.bilibili.com/',
+        Cookie: getBilibiliCookie()
       }
     }).on('downloadProgress', onProgress),
     fs.createWriteStream(filename)

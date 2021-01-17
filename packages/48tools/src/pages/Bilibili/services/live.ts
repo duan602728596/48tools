@@ -9,7 +9,10 @@ import type { RoomInit, RoomPlayUrl } from './interface';
 export async function requestRoomInitData(roomId: string): Promise<RoomInit> {
   const apiUrl: string = `https://api.live.bilibili.com/room/v1/Room/room_init?id=${ roomId }`;
   const res: GotResponse<RoomInit> = await got(apiUrl, {
-    responseType: 'json'
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    }
   });
 
   return res.body;

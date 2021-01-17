@@ -9,7 +9,7 @@ const APP_KEY: string = 'iVGUTjsxvpLeuDCf';
 const BILIBILI_KEY: string = 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt';
 
 // 查询参数
-const QUERY_ARRAY: [string, string] = ['qn=80&quality=80&type=', 'quality=2&type=mp4'];
+const QUERY_ARRAY: [string, string] = ['qn=116&quality=80&type=', 'quality=2&type=mp4'];
 
 interface ParseHtmlResult {
   initialState?: InitialState;
@@ -67,6 +67,8 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
     const payload: string = `appkey=${ APP_KEY }&cid=${ cid }&otype=json&page=${ page }&${ query }`;
     const sign: string = md5(`${ payload }${ BILIBILI_KEY }`);
     const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign);
+
+    console.log(videoInfoRes);
 
     if (videoInfoRes?.durl?.length) {
       flvUrl = videoInfoRes.durl[0].url;
