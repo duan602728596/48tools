@@ -24,9 +24,8 @@ class ONION {
   createNext(ctx: { [key: string]: any }, i: number): Function {
     return async (): Promise<void> => {
       return await this.tasks[i](
-        ctx, i === (this.tasks.length - 1)
-          ? this.do(ctx)
-          : this.createNext(ctx, i + 1)
+        ctx,
+        i === (this.tasks.length - 1) ? this.do(ctx) : this.createNext(ctx, i + 1)
       );
     };
   }
