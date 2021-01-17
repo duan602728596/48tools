@@ -92,6 +92,8 @@ async function unpack() {
   await Promise.all([
     fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'mac/mac/LICENSE')),
     fse.copy(path.join(cwd, 'README.md'), path.join(build, 'mac/mac/README.md')),
+    fse.copy(path.join(cwd, 'win/win-unpacked/LICENSE.electron.txt'), path.join(build, 'mac/mac/LICENSE.electron.txt')),
+    fse.copy(path.join(cwd, 'win/win-unpacked/LICENSES.chromium.html'), path.join(build, 'mac/mac/LICENSES.chromium.html')),
 
     fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'win/win-unpacked/LICENSE')),
     fse.copy(path.join(cwd, 'README.md'), path.join(build, 'win/win-unpacked/README.md'))
