@@ -20,9 +20,7 @@ import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { CutItem } from '../types';
 
 /* state */
-type RSelector = Pick<VideoCutInitialState, 'cutList' | 'cutChildList'>;
-
-const state: Selector<any, RSelector> = createStructuredSelector({
+const state: Selector<any, VideoCutInitialState> = createStructuredSelector({
   // 裁剪队列
   cutList: createSelector(
     ({ videoCut }: { videoCut: VideoCutInitialState }): Array<CutItem> => videoCut.cutList,
@@ -37,7 +35,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 视频快速裁剪 */
 function Index(props: {}): ReactElement {
-  const { cutList, cutChildList }: RSelector = useSelector(state);
+  const { cutList, cutChildList }: VideoCutInitialState = useSelector(state);
   const dispatch: Dispatch = useDispatch();
 
   // 删除队列

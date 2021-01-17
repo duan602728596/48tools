@@ -17,9 +17,7 @@ import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import type { DownloadItem } from '../types';
 
 /* state */
-type RSelector = Pick<BilibiliDownloadInitialState, 'downloadList' | 'downloadProgress'>;
-
-const state: Selector<any, RSelector> = createStructuredSelector({
+const state: Selector<any, BilibiliDownloadInitialState> = createStructuredSelector({
   // 下载任务列表
   downloadList: createSelector(
     ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => {
@@ -38,7 +36,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 视频下载 */
 function Download(props: {}): ReactElement {
-  const { downloadList, downloadProgress }: RSelector = useSelector(state);
+  const { downloadList, downloadProgress }: BilibiliDownloadInitialState = useSelector(state);
   const dispatch: Dispatch = useDispatch();
 
   // 下载

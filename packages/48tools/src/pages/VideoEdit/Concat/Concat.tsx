@@ -50,9 +50,7 @@ const ListItem: ComponentClass<WrappedComponentProps & SortableElementProps> = S
   });
 
 /* state */
-type RSelector = Pick<ConcatInitialState, 'concatList' | 'concatWorker'>;
-
-const state: Selector<any, RSelector> = createStructuredSelector({
+const state: Selector<any, ConcatInitialState> = createStructuredSelector({
   // 视频合并列表
   concatList: createSelector(
     ({ concat }: { concat: ConcatInitialState }): Array<ConcatItem> => concat.concatList,
@@ -67,7 +65,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 视频合并 */
 function Concat(props: {}): ReactElement {
-  const { concatList, concatWorker }: RSelector = useSelector(state);
+  const { concatList, concatWorker }: ConcatInitialState = useSelector(state);
   const dispatch: Dispatch = useDispatch();
 
   // 停止合并
