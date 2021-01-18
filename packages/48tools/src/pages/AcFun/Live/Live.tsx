@@ -138,6 +138,7 @@ function Live(props: {}): ReactElement {
           width={ 400 }
           centered={ true }
           okText="开始录制"
+          getContainer={ (): HTMLDivElement => divElement! }
           afterClose={ afterClose }
           onOk={ handleOkClick }
           onCancel={ handleCloseClick }
