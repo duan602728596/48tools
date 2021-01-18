@@ -64,7 +64,7 @@ function AddForm(props: {}): ReactElement {
 
   // 关闭窗口后重置表单
   function handleAddModalClose(): void {
-    form.resetFields(['id', 'type', 'page']);
+    form.resetFields();
   }
 
   // 打开弹出层
