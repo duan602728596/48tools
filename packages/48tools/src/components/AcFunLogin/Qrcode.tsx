@@ -2,7 +2,7 @@ import { CancelableRequest, Response as GotResponse } from 'got';
 import { useState, useEffect, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Button, Empty, message } from 'antd';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
 import { requestPcDirectQr, requestPcDirectScanResult, requestPcDirectAcceptResult } from './services/acfunLogin';
 import type { PcDirectQr, ScanResult, AcceptResult } from './services/interface';
@@ -78,7 +78,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     acceptResultRequest = null;
 
     if (resAcceptResult.body.result === 0) {
-      const time: string = moment().format('YYYY-MM-DD HH:mm:ss');
+      const time: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const cookie: string = resAcceptResult.headers['set-cookie']!
         .map((o: string): string => o.split(/;\s*/)[0]).join('; ');
 

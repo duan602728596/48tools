@@ -3,8 +3,8 @@ import { promises as fsP } from 'fs';
 import type { Store } from 'redux';
 import { message } from 'antd';
 import { findIndex } from 'lodash-es';
-import * as moment from 'moment';
-import type { Moment } from 'moment';
+import * as dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import { store } from '../../../../store/store';
 import { setLiveList, Pocket48InitialState, setDeleteLiveChildList, setAddLiveChildList } from '../../reducers/pocket48';
@@ -35,10 +35,10 @@ async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
 
     // 正则匹配或者id完全匹配
     if ((humanRegExp.test(nickname) || usersArr.includes[userId]) && index < 0) {
-      const cTimeMoment: Moment = moment(Number(item.ctime)),
-        cTime: string = cTimeMoment.format(fileTimeFormat), // 直播开始时间
-        rTimeMoment: Moment = moment(),
-        rTime: string = rTimeMoment.format(fileTimeFormat), // 文件创建时间
+      const cTimeDay: Dayjs = dayjs(Number(item.ctime)),
+        cTime: string = cTimeDay.format(fileTimeFormat), // 直播开始时间
+        rTimeDay: Dayjs = dayjs(),
+        rTime: string = rTimeDay.format(fileTimeFormat), // 文件创建时间
         filename: string = `[口袋48直播]${ item.userInfo.nickname }_${ cTime }_${ item.liveId }_${ rTime }.flv`; // 文件名
 
       try {
@@ -47,9 +47,9 @@ async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
         const logData: string = `直播标题：${ item.title }
 直播ID：${ item.liveId }
 直播人：${ item.userInfo.nickname }
-直播时间：${ cTimeMoment.format('YYYY-MM-DD HH:mm:ss') }
+直播时间：${ cTimeDay.format('YYYY-MM-DD HH:mm:ss') }
 输出文件：${ filename }
-创建时间：${ rTimeMoment.format('YYYY-MM-DD HH:mm:ss') }\n\n`;
+创建时间：${ rTimeDay.format('YYYY-MM-DD HH:mm:ss') }\n\n`;
 
         await fsP.writeFile(log, logData, { encoding: 'utf8', flag: 'a' });
       } catch (err) {

@@ -1,5 +1,6 @@
 import * as process from 'process';
 import * as path from 'path';
+import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
 
@@ -39,6 +40,10 @@ export default function(info: object): { [key: string]: any } {
       index: [path.join(__dirname, 'src/index.tsx')],
       player: [path.join(__dirname, 'src/pages/48/Pocket48/Player/Player.tsx')]
     },
+    html: [
+      { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'] },
+      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), excludeChunks: ['index'] }
+    ],
     externals: nodeExternals([
       'child_process',
       'fs',
@@ -86,10 +91,7 @@ export default function(info: object): { [key: string]: any } {
         }]
       }
     ],
-    html: [
-      { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'] },
-      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), excludeChunks: ['index'] }
-    ]
+    plugins: [new AntdDayjsWebpackPlugin()]
   };
 
   return config;

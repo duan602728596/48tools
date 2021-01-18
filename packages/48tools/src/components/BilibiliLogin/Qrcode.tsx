@@ -3,7 +3,7 @@ import { Fragment, useMemo, useEffect, useRef, ReactElement, RefObject, MouseEve
 import * as PropTypes from 'prop-types';
 import { message, Button, Alert } from 'antd';
 import { toCanvas } from 'qrcode/lib/browser';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
 import { requestLoginUrl, requestLoginInfo } from './services/bilibiliLogin';
 import type { LoginUrl, LoginInfo } from './services/interface';
@@ -43,7 +43,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     const [res, cookieArr]: [LoginInfo, Array<string>] = await requestLoginInfo(oauthKey!);
 
     if (res.status) {
-      const time: string = moment().format('YYYY-MM-DD HH:mm:ss');
+      const time: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const cookie: string = cookieArr.map((o: string): string => o.split(/;\s*/)[0]).join('; ');
 
       localStorage.setItem(BILIBILI_COOKIE_KEY, JSON.stringify({ time, cookie }));

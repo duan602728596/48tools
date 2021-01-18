@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { BILIBILI_COOKIE_KEY, BilibiliCookie } from '../components/BilibiliLogin/Qrcode';
 import { ACFUN_COOKIE_KEY, AcFunCookie } from '../components/AcFunLogin/Qrcode';
 
@@ -72,8 +72,8 @@ export const fileTimeFormat: string = 'YYYY-MM-DD~HH.mm.ss';
  */
 export function getFileTime(value?: number | string): string {
   if (value) {
-    return moment(typeof value === 'string' ? Number(value) : value).format(fileTimeFormat);
+    return dayjs(typeof value === 'string' ? Number(value) : value).format(fileTimeFormat);
   } else {
-    return moment().format(fileTimeFormat);
+    return dayjs().format(fileTimeFormat);
   }
 }

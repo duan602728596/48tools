@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash-es';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
@@ -195,7 +195,7 @@ function Pocket48Live(props: {}): ReactElement {
     {
       title: '时间',
       dataIndex: 'ctime',
-      render: (value: string, record: LiveInfo, index: number): string => moment(Number(value)).format('YYYY-MM-DD HH:mm:ss')
+      render: (value: string, record: LiveInfo, index: number): string => dayjs(Number(value)).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       title: '操作',

@@ -18,7 +18,7 @@ import {
   SortEvent
 } from 'react-sortable-hoc';
 import * as arrayMove from 'array-move';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import ConcatVideoWorker from 'worker-loader!./concatVideo.worker';
 import style from './concat.sass';
 import Header from '../../../components/Header/Header';
@@ -78,7 +78,7 @@ function Concat(props: {}): ReactElement {
     if (!concatList?.length) return;
 
     const pathResult: ParsedPath = path.parse(concatList[0].value);
-    const time: string = moment().format('YYYY_MM_DD_HH_mm_ss');
+    const time: string = dayjs().format('YYYY_MM_DD_HH_mm_ss');
     const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
       defaultPath: `[视频合并]${ time }${ pathResult.ext }`
     });

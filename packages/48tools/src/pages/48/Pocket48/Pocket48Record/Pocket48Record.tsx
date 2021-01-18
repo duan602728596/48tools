@@ -10,7 +10,7 @@ import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash-es';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
 import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../../reducers/pocket48';
@@ -224,7 +224,7 @@ function Pocket48Record(props: {}): ReactElement {
       title: '时间',
       dataIndex: 'ctime',
       render: (value: string, record: LiveInfo, index: number): string => {
-        return moment(Number(value)).format('YYYY-MM-DD HH:mm:ss');
+        return dayjs(Number(value)).format('YYYY-MM-DD HH:mm:ss');
       }
     },
     {
