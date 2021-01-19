@@ -192,7 +192,13 @@ function InVideo(props: {}): ReactElement {
   }
 
   const columns: ColumnsType<InVideoItem> = [
+    { title: 'ID', dataIndex: 'id' },
     { title: '标题', dataIndex: 'title' },
+    {
+      title: '说明',
+      dataIndex: 'description',
+      render: (value: string, record: InVideoItem, index: number): ReactElement => <span dangerouslySetInnerHTML={{ __html: value }} />
+    },
     {
       title: '操作',
       key: 'handle',

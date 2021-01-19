@@ -28,6 +28,7 @@ export interface InVideoQuery {
 export interface InVideoItem {
   title: string;
   id: string;
+  description: string;
   liveType: string;
 }
 

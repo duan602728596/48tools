@@ -86,7 +86,12 @@ export async function parseInVideoUrl(inVideoQuery: InVideoQuery | undefined, pa
     const idArr: string[] = href.split(/\//);
     const id: string = idArr[idArr.length - 1];
 
-    data.push({ title: video.querySelector('h4')!.innerHTML, id, liveType: inVideoQuery?.liveType ?? 'snh48' });
+    data.push({
+      title: video.querySelector('h4')!.innerHTML,
+      description: video.querySelector('p')!.innerHTML,
+      id,
+      liveType: inVideoQuery?.liveType ?? 'snh48'
+    });
   }
 
   return { total, data };
