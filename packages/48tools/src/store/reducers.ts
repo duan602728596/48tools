@@ -9,7 +9,7 @@ import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 
 /* reducers */
-export const reducers: ReducersMapObject = Object.assign({},
+export const reducersMapObject: ReducersMapObject = Object.assign({},
   l48Pocket48Reducers,
   l48Live48Reducers,
   bilibiliDownloadReducers,
@@ -19,8 +19,6 @@ export const reducers: ReducersMapObject = Object.assign({},
   videoEditConcatReducers,
   videoEditVideoCutReducers
 );
-
-export const asyncReducers: ReducersMapObject = {}; // 异步的reducers
 
 export const ignoreOptions: any = {
   ignoredPaths: [

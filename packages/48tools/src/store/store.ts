@@ -3,15 +3,14 @@ import {
   configureStore,
   combineReducers,
   getDefaultMiddleware,
-  ReducersMapObject,
   Reducer,
   Store,
   DeepPartial
 } from '@reduxjs/toolkit';
-import { reducers, asyncReducers, ignoreOptions } from './reducers';
+import { reducersMapObject, ignoreOptions } from './reducers';
 
 /* reducer列表 */
-const reducer: Reducer = combineReducers(reducers);
+const reducer: Reducer = combineReducers(reducersMapObject);
 
 /* store */
 export let store: Store;
@@ -31,22 +30,4 @@ export function storeFactory(initialState: DeepPartial<any> = {}): Store {
   }
 
   return store;
-}
-
-/* 注入store */
-export function injectReducers(asyncReducer: ReducersMapObject): void {
-  for (const key in asyncReducer) {
-    // 获取reducer的key值，并将reducer保存起来
-    if (!(key in asyncReducers)) {
-      const item: Reducer = asyncReducer[key];
-
-      asyncReducers[key] = item;
-    }
-  }
-
-  // 异步注入reducer
-  store.replaceReducer(combineReducers({
-    ...reducers,
-    ...asyncReducers
-  }));
 }
