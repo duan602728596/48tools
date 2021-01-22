@@ -9,9 +9,9 @@
   "dependencies": {
     "cssnano": "^4.1.10",
     "glob": "^7.1.6",
-    "less": "^3.13.1",
+    "less": "^4.1.0",
     "lodash": "^4.17.20",
-    "postcss": "^8.2.3",
+    "postcss": "^8.2.4",
     "postcss-cli": "^8.3.1"
   }
 }
