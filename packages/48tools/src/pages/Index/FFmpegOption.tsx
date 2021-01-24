@@ -1,9 +1,13 @@
-import { remote, OpenDialogReturnValue } from 'electron';
+import { shell, remote, OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import { Button, Modal, Form, Input, message, Alert } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
-import { ThunderboltOutlined as IconThunderboltOutlined } from '@ant-design/icons';
+import {
+  ThunderboltOutlined as IconThunderboltOutlined,
+  DownloadOutlined as IconDownloadOutlined,
+  SwapLeftOutlined as IconSwapLeftOutlined
+} from '@ant-design/icons';
 import classNames from 'classnames';
 import style from './FFmpegOption.sass';
 
@@ -11,6 +15,11 @@ import style from './FFmpegOption.sass';
 function FFmpegOption(props: {}): ReactElement {
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 弹出层
   const [form]: [FormInstance] = Form.useForm();
+
+  // 下载ffmpeg
+  function handleOpenIssuesClick(event: MouseEvent<HTMLButtonElement>): void {
+    shell.openExternal('https://ffmpeg.org/download.html');
+  }
 
   // 打开配置弹出层
   function handleOpenFFmpegOptionClick(event: MouseEvent<HTMLButtonElement>): void {
@@ -65,7 +74,11 @@ function FFmpegOption(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button icon={ <IconThunderboltOutlined /> } onClick={ handleOpenFFmpegOptionClick }>FFMpeg配置</Button>
+      <Button icon={ <IconThunderboltOutlined /> } onClick={ handleOpenFFmpegOptionClick }>FFmpeg配置</Button>
+      <span className={ classNames(style.marginLeft, style.tips) }>
+        <IconSwapLeftOutlined className={ style.tipsIcon } />
+        使用前先配置FFmpeg
+      </span>
       <Modal title="FFmpeg配置"
         visible={ visible }
         width={ 600 }
@@ -79,7 +92,10 @@ function FFmpegOption(props: {}): ReactElement {
             <Input />
           </Form.Item>
           <div className={ classNames(style.textRight, style.marginBottom) }>
-            <Button type="primary" danger={ true } onClick={ handleResetFFmpegOptionClick }>清除配置</Button>
+            <Button icon={ <IconDownloadOutlined /> } onClick={ handleOpenIssuesClick }>FFmpeg下载</Button>
+            <Button className={ style.marginLeft } type="primary" danger={ true } onClick={ handleResetFFmpegOptionClick }>
+              清除配置
+            </Button>
             <Button className={ style.marginLeft } onClick={ handleSelectFFmpegClick }>选择文件</Button>
           </div>
           <Alert type="info" message="配置FFmpeg的地址，或自动使用环境变量的地址" />
