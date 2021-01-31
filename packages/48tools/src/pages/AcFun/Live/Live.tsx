@@ -7,6 +7,7 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, message, Modal, Select } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
+import { Onion } from '@bbkkbkk/q';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
 import style from './live.sass';
 import Header from '../../../components/Header/Header';
@@ -22,7 +23,6 @@ import {
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
-import ONION from '../../../utils/ONION';
 import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { LiveRepresentation, LiveVideoPlayRes, LiveItem } from '../types';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';
@@ -195,7 +195,7 @@ function Live(props: {}): ReactElement {
 
   // 开始录制
   async function handleRecordClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const onion: ONION = new ONION();
+    const onion: Onion = new Onion();
 
     onion.use(getLivePlayerUrlMiddleware);
     onion.use(selectPlayerUrlMiddleware);
