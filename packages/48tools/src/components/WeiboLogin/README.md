@@ -4,6 +4,7 @@
 
 * url: https://login.sina.com.cn/sso/qrcode/image?entry=weibo&size=180&callback=STK_16110205581241
 * response:
+  * retcode: 20000000 扫码成功
   * data.qrid: qrid
   * data.image: 二维码地址
   
