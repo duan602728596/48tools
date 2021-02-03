@@ -13,7 +13,7 @@ export interface DbConfig {
 
 const dbConfig: DbConfig = {
   name: '48tools',
-  version: 3,
+  version: 4,
   objectStore: [
     // b站直播间信息
     {
@@ -34,6 +34,13 @@ const dbConfig: DbConfig = {
       name: 'options',
       key: 'name',
       data: ['value']
+    },
+
+    // 微博登陆列表
+    {
+      name: 'weibo_login_list',
+      key: 'id',
+      data: ['username', 'cookie', 'lastLoginTime']
     }
   ]
 };
