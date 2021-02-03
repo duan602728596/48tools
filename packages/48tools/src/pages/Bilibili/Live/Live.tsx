@@ -24,8 +24,8 @@ import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
 
-/* state */
-const state: Selector<any, BilibiliLiveInitialState> = createStructuredSelector({
+/* redux selector */
+const selector: Selector<any, BilibiliLiveInitialState> = createStructuredSelector({
   // 直播间列表
   bilibiliLiveList: createSelector(
     ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<LiveItem> => {
@@ -44,7 +44,7 @@ const state: Selector<any, BilibiliLiveInitialState> = createStructuredSelector(
 
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
-  const { bilibiliLiveList, liveChildList }: BilibiliLiveInitialState = useSelector(state);
+  const { bilibiliLiveList, liveChildList }: BilibiliLiveInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
 
   // 停止

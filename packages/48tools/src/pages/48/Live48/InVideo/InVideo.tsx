@@ -48,10 +48,10 @@ function formatTsUrl(data: string, m3u8Url: string): string {
   return newStrArr.join('\n');
 }
 
-/* state */
+/* redux selector */
 type RSelector = Pick<Live48InitialState, 'inVideoQuery' | 'inVideoList' | 'videoListChild'>;
 
-const state: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<any, RSelector> = createStructuredSelector({
   // 查询条件
   inVideoQuery: createSelector(
     ({ live48 }: { live48: Live48InitialState }): InVideoQuery | undefined => live48?.inVideoQuery,
@@ -71,7 +71,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 录播下载 */
 function InVideo(props: {}): ReactElement {
-  const { inVideoQuery, inVideoList, videoListChild }: RSelector = useSelector(state);
+  const { inVideoQuery, inVideoList, videoListChild }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
 

@@ -40,10 +40,10 @@ function formatTsUrl(data: string): string {
   return newStrArr.join('\n');
 }
 
-/* state */
+/* redux selector */
 type RSelector = Pick<Pocket48InitialState, 'recordList' | 'recordNext' | 'recordChildList'>;
 
-const state: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<any, RSelector> = createStructuredSelector({
   // 录播信息
   recordList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.recordList,
@@ -63,7 +63,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 录播列表 */
 function Pocket48Record(props: {}): ReactElement {
-  const { recordList, recordNext, recordChildList }: RSelector = useSelector(state);
+  const { recordList, recordNext, recordChildList }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);

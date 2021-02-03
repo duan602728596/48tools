@@ -19,8 +19,8 @@ import { getFFmpeg } from '../../../utils/utils';
 import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { CutItem } from '../types';
 
-/* state */
-const state: Selector<any, VideoCutInitialState> = createStructuredSelector({
+/* redux selector */
+const selector: Selector<any, VideoCutInitialState> = createStructuredSelector({
   // 裁剪队列
   cutList: createSelector(
     ({ videoCut }: { videoCut: VideoCutInitialState }): Array<CutItem> => videoCut.cutList,
@@ -35,7 +35,7 @@ const state: Selector<any, VideoCutInitialState> = createStructuredSelector({
 
 /* 视频快速裁剪 */
 function Index(props: {}): ReactElement {
-  const { cutList, cutChildList }: VideoCutInitialState = useSelector(state);
+  const { cutList, cutChildList }: VideoCutInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
 
   // 删除队列

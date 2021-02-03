@@ -29,10 +29,10 @@ import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
-/* state */
+/* redux selector */
 type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList' | 'autoGrabTimer'>;
 
-const state: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<any, RSelector> = createStructuredSelector({
   // 直播列表
   liveList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.liveList,
@@ -52,7 +52,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 直播抓取 */
 function Pocket48Live(props: {}): ReactElement {
-  const { liveList, liveChildList, autoGrabTimer }: RSelector = useSelector(state);
+  const { liveList, liveChildList, autoGrabTimer }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
