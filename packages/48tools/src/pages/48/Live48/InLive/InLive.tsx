@@ -9,10 +9,10 @@ import GetLiveUrl from './GetLiveUrl';
 import { setDeleteInLiveList, Live48InitialState } from '../../reducers/live48';
 import type{ InLiveWebWorkerItem } from '../../types';
 
-/* state */
+/* redux selector */
 type RSelector = Pick<Live48InitialState, 'inLiveList'>;
 
-const state: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<any, RSelector> = createStructuredSelector({
   // 公演直播列表
   inLiveList: createSelector(
     ({ live48 }: { live48: Live48InitialState }): Array<InLiveWebWorkerItem> => live48.inLiveList,
@@ -22,7 +22,7 @@ const state: Selector<any, RSelector> = createStructuredSelector({
 
 /* 官网公演直播抓取 */
 function InLive(props: {}): ReactElement {
-  const { inLiveList }: RSelector = useSelector(state);
+  const { inLiveList }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
 
   // 删除

@@ -29,8 +29,8 @@ import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/in
 
 let divElement: HTMLDivElement | null = null;
 
-/* state */
-const state: Selector<any, AcFunLiveInitialState> = createStructuredSelector({
+/* redux selector */
+const selector: Selector<any, AcFunLiveInitialState> = createStructuredSelector({
   // 配置的acfun直播间信息
   acfunLiveList: createSelector(
     ({ acfunLive }: { acfunLive: AcFunLiveInitialState }): Array<LiveItem> => acfunLive.acfunLiveList,
@@ -45,7 +45,7 @@ const state: Selector<any, AcFunLiveInitialState> = createStructuredSelector({
 
 /* A站直播抓取 */
 function Live(props: {}): ReactElement {
-  const { acfunLiveList, liveWorkers }: AcFunLiveInitialState = useSelector(state);
+  const { acfunLiveList, liveWorkers }: AcFunLiveInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
 
   // 停止

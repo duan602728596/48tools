@@ -21,8 +21,8 @@ import { getFFmpeg } from '../../../utils/utils';
 import type { MessageEventData, WebWorkerChildItem } from '../../../types';
 import type { DownloadItem, Representation } from '../types';
 
-/* state */
-const state: Selector<any, AcFunDownloadInitialState> = createStructuredSelector({
+/* redux selector */
+const selector: Selector<any, AcFunDownloadInitialState> = createStructuredSelector({
   // 下载任务列表
   downloadList: createSelector(
     ({ acfunDownload }: { acfunDownload: AcFunDownloadInitialState }): Array<DownloadItem> => {
@@ -41,7 +41,7 @@ const state: Selector<any, AcFunDownloadInitialState> = createStructuredSelector
 
 /* A站视频下载 */
 function Download(props: {}): ReactElement {
-  const { downloadList, ffmpegDownloadWorkers }: AcFunDownloadInitialState = useSelector(state);
+  const { downloadList, ffmpegDownloadWorkers }: AcFunDownloadInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
 
   // 停止
