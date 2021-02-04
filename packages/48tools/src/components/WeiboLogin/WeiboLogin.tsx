@@ -30,7 +30,7 @@ function WeiboLogin(props: {}): ReactElement {
         onCancel={ handleCloseQrcodeClick }
       >
         <div className={ style.loginBox }>
-          <Qrcode />
+          <Qrcode onCancel={ handleCloseQrcodeClick } />
         </div>
       </Modal>
     </Fragment>
