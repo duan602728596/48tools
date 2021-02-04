@@ -3,6 +3,7 @@ import { Button, Modal } from 'antd';
 import { WeiboCircleOutlined as IconWeiboCircleOutlined } from '@ant-design/icons';
 import style from './weiboLogin.sass';
 import Qrcode from './Qrcode';
+import LoginTable from './LoginTable';
 
 /* 微博扫码登陆 */
 function WeiboLogin(props: {}): ReactElement {
@@ -23,7 +24,7 @@ function WeiboLogin(props: {}): ReactElement {
       <Button icon={ <IconWeiboCircleOutlined /> } onClick={ handleOpenQrcodeClick }>微博账号扫码登陆</Button>
       <Modal visible={ visible }
         title="微博账号扫码登陆"
-        width={ 600 }
+        width={ 700 }
         centered={ true }
         destroyOnClose={ true }
         footer={ <Button onClick={ handleCloseQrcodeClick }>关闭</Button> }
@@ -31,6 +32,7 @@ function WeiboLogin(props: {}): ReactElement {
       >
         <div className={ style.loginBox }>
           <Qrcode onCancel={ handleCloseQrcodeClick } />
+          <LoginTable />
         </div>
       </Modal>
     </Fragment>
