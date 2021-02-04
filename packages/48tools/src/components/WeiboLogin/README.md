@@ -55,3 +55,17 @@
     * alert_title: "今日签到 第400名",
     * alert_subtitle: "经验值+4",
     * alert_activity: ""
+  
+### 获取用户信息接口
+
+* url: https://weibo.com/ajax/profile/info?uid={{ id }}
+* response:
+  * ok: 1
+  * data:
+    * user:
+      * id
+      * idstr
+      * screen_name
+      * name: 昵称
+      * location
+      * description

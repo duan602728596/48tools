@@ -21,3 +21,17 @@ export interface LoginReturn {
   nick: string;
   crossDomainUrlList: Array<string>;
 }
+
+export interface UserInfo {
+  ok: number;
+  data: {
+    user: {
+      id: number;
+      idstr: string;
+      screen_name: string;
+      name: string;
+      location: string;
+      description: string;
+    };
+  };
+}
