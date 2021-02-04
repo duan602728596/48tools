@@ -2,6 +2,7 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import { Button, Modal } from 'antd';
 import { WeiboCircleOutlined as IconWeiboCircleOutlined } from '@ant-design/icons';
 import style from './weiboLogin.sass';
+import Qrcode from './Qrcode';
 
 /* 微博扫码登陆 */
 function WeiboLogin(props: {}): ReactElement {
@@ -28,7 +29,9 @@ function WeiboLogin(props: {}): ReactElement {
         footer={ <Button onClick={ handleCloseQrcodeClick }>关闭</Button> }
         onCancel={ handleCloseQrcodeClick }
       >
-        <div className={ style.loginBox }></div>
+        <div className={ style.loginBox }>
+          <Qrcode />
+        </div>
       </Modal>
     </Fragment>
   );

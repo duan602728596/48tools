@@ -14,3 +14,10 @@ export interface QrcodeCheck {
     alt: string;
   };
 }
+
+export interface LoginReturn {
+  retcode: number;
+  uid: string;
+  nick: string;
+  crossDomainUrlList: Array<string>;
+}
