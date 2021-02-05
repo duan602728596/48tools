@@ -8,6 +8,7 @@ import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 import weiboLoginReducers from '../components/WeiboLogin/reducers/weiboLogin';
+import weiboSuperReducers from '../pages/WeiboSuper/reducers/weiboSuper';
 
 /* reducers */
 export const reducersMapObject: ReducersMapObject = Object.assign({},
@@ -19,7 +20,8 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   acfunLiveReducers,
   videoEditConcatReducers,
   videoEditVideoCutReducers,
-  weiboLoginReducers
+  weiboLoginReducers,
+  weiboSuperReducers
 );
 
 export const ignoreOptions: any = {
