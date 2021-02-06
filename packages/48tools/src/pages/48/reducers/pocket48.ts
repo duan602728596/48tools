@@ -68,7 +68,10 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
     },
 
     // 录播加载
-    setRecordList(state: Pocket48InitialState, action: PayloadAction<{ next: string; data: Array<LiveInfo> }>): Pocket48InitialState {
+    setRecordList(
+      state: Pocket48InitialState,
+      action: PayloadAction<{ next: string; data: Array<LiveInfo> }>
+    ): Pocket48InitialState {
       state.recordList = action.payload.data;
       state.recordNext = action.payload.next;
 
