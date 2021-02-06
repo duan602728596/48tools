@@ -1,17 +1,20 @@
 export interface SuperItem {
-  title: string;
+  title: string;    // 超话id
   content1: string;
   content2: string;
   intro: string;
   link: string;
-  pic: string;
+  pic: string;      // 超话图片
   oid: string;
 }
 
-export interface WeiboCheckinResult {
+export interface WeiboCheckinResult extends Pick<SuperItem, 'title' | 'pic' | 'content1' | 'link'> {
   code?: number;
   result?: string;
   superId: string; // 超话id
-  title: string;   // 超话名称
-  pic: string;     // 超话图片
+}
+
+export interface Quantity {
+  checkedInLen: number;
+  total: number;
 }

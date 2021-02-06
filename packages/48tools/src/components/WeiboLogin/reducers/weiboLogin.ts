@@ -17,7 +17,14 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
   reducers: {
     // 添加一个账号
     setAddWeiboAccountList(state: WeiboLoginInitialState, action: PayloadAction<{ data: WeiboAccount }>): WeiboLoginInitialState {
-      state.accountList = state.accountList.concat([action.payload.data]);
+      const index: number = findIndex(state.accountList, { id: action.payload.data.id });
+
+      if (index >= 0) {
+        state.accountList[index] = action.payload.data;
+        state.accountList = [... state.accountList];
+      } else {
+        state.accountList = state.accountList.concat([action.payload.data]);
+      }
 
       return state;
     },

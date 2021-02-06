@@ -1,19 +1,27 @@
 import type { Store, Dispatch } from 'redux';
+import { message } from 'antd';
 import { store } from '../../store/store';
-import { requestTopicContent, requestTopicCheckin } from './services/weiboSuper';
-import { setCheckIn, setCheckinList, WeiboSuperInitialState } from './reducers/weiboSuper';
-import type { TopicResponse, CheckinResult } from './services/interface';
-import type { SuperItem, WeiboCheckinResult } from './types';
+import { requestTopicContent } from './services/weiboSuper';
+import { setCheckIn, reqTopicCheckin } from './reducers/weiboSuper';
+import type { TopicResponse } from './services/interface';
+import type { SuperItem, WeiboCheckinResult, Quantity } from './types';
+
+function sleep(time: number): Promise<void> {
+  return new Promise((resolve: Function, reject: Function) => {
+    setTimeout(resolve, time);
+  });
+}
 
 /* 签到 */
 async function checkIn(
-  state: WeiboSuperInitialState,
+  getState: Function,
   dispatch: Dispatch,
   cookie: string,
-  list: Array<SuperItem>
+  list: Array<SuperItem>,
+  quantity: Quantity
 ): Promise<void> {
   for (const item of list) {
-    if (!state.checkIn) {
+    if (!getState().weiboSuper.checkIn) {
       break;
     }
 
@@ -21,18 +29,19 @@ async function checkIn(
     const result: WeiboCheckinResult = {
       title: item.title,
       pic: item.pic,
-      superId
+      superId,
+      content1: item.content1,
+      link: item.link
     };
-    const res: CheckinResult = await requestTopicCheckin(cookie, superId);
 
-    Object.assign(result, {
-      code: Number(res.code),
-      result: res.code === 100000
-        ? `${ res.data.alert_title } ${ res.data.alert_subtitle }`
-        : (res.msg && res.msg !== '' ? res.msg : '签到失败')
-    });
-
-    dispatch(setCheckinList(result));
+    quantity.checkedInLen += 1;
+    await dispatch<any>(reqTopicCheckin({
+      cookie,
+      superId,
+      result,
+      quantity
+    }));
+    await sleep(1_500);
   }
 }
 
@@ -42,20 +51,34 @@ async function checkIn(
  */
 async function weiboCheckIn(cookie: string): Promise<void> {
   const { getState, dispatch }: Store = store;
-  const state: WeiboSuperInitialState = getState().weiboSuper;
+  const quantity: Quantity = {
+    checkedInLen: 0,
+    total: 0
+  };
   let cont: boolean = true;
   let pageIndex: number = 1;
 
   // 签到
-  while (cont && state.checkIn) {
+  while (cont) {
     const resTopic: TopicResponse = await requestTopicContent(cookie, pageIndex);
+
+    if (Number(resTopic.ok) !== 1) {
+      message.error(`获取超话列表失败，请重新登陆！(Error: ${ resTopic.ok })`);
+      cont = false;
+      break;
+    }
 
     if (resTopic?.data?.list?.length) {
       const list: Array<SuperItem> = resTopic.data.list;
 
-      await checkIn(state, dispatch, cookie, list);
+      quantity.total = resTopic.data.total_number;
+      await checkIn(getState, dispatch, cookie, list, quantity);
       pageIndex++;
     } else {
+      cont = false;
+    }
+
+    if (!getState().weiboSuper.checkIn) {
       cont = false;
     }
   }

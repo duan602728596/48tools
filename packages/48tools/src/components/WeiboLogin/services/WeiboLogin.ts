@@ -44,7 +44,7 @@ export function requestLogin(alt: string): Promise<LoginReturn> {
 export async function requestCrossDomainUrl(uri: string): Promise<string[]> {
   const res: GotResponse<string> = await got.get(uri);
 
-  return res.headers['set-cookie']!;
+  return [res.headers['set-cookie']![0]];
 }
 
 /**
