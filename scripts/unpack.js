@@ -62,7 +62,7 @@ async function unpack() {
       icon: path.join(staticsDir, 'titleBarIcon.ico')
     },
     electronDownload: {
-      version: packageJson.dependencies.electron
+      version: packageJson.dependencies.electron.replace(/^\^/, '')
     }
   };
 
