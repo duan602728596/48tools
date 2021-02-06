@@ -43,8 +43,17 @@ export function requestLogin(alt: string): Promise<LoginReturn> {
  */
 export async function requestCrossDomainUrl(uri: string): Promise<string[]> {
   const res: GotResponse<string> = await got.get(uri);
+  const setCookie: Array<string> = res.headers['set-cookie'] ?? [];
+  let subCookie: string = '';
 
-  return [res.headers['set-cookie']![0]];
+  for (const item of setCookie) {
+    if (/^sub=/i.test(item)) {
+      subCookie = item;
+      break;
+    }
+  }
+
+  return [subCookie];
 }
 
 /**
