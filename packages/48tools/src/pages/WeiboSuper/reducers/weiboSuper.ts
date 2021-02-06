@@ -19,20 +19,20 @@ export interface WeiboSuperInitialState {
 
 type CaseReducers = SliceCaseReducers<WeiboSuperInitialState>;
 
-// 签到
-export interface reqTopicCheckinReturn {
+// 微博签到
+interface ReqTopicCheckinReturn {
   result: WeiboCheckinResult;
   quantity: Quantity;
 }
 
-export interface reqTopicCheckinPayload extends reqTopicCheckinReturn {
+interface ReqTopicCheckinPayload extends ReqTopicCheckinReturn {
   cookie: string;
   superId: string;
 }
 
-export const reqTopicCheckin: AsyncThunk<reqTopicCheckinReturn, reqTopicCheckinPayload, any> = createAsyncThunk(
+export const reqTopicCheckin: AsyncThunk<ReqTopicCheckinReturn, ReqTopicCheckinPayload, {}> = createAsyncThunk(
   'weiboSuper/微博签到',
-  async function(payload: reqTopicCheckinPayload, thunkAPI: any): Promise<reqTopicCheckinReturn> {
+  async function(payload: ReqTopicCheckinPayload, thunkAPI: any): Promise<ReqTopicCheckinReturn> {
     const res: CheckinResult = await requestTopicCheckin(payload.cookie, payload.superId);
 
     Object.assign(payload.result, {
@@ -75,7 +75,7 @@ const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseRedu
     }
   },
   extraReducers: {
-    [reqTopicCheckin.fulfilled as any](state: WeiboSuperInitialState, action: PayloadAction<reqTopicCheckinReturn>): void {
+    [reqTopicCheckin.fulfilled as any](state: WeiboSuperInitialState, action: PayloadAction<ReqTopicCheckinReturn>): void {
       state.weiboCheckinList = state.weiboCheckinList.concat([action.payload.result]); // 追加新的超话
       state.quantity = action.payload.quantity; // 已签到状态
     }
