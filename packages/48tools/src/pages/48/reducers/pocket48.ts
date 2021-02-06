@@ -1,8 +1,18 @@
-import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  Slice,
+  SliceCaseReducers,
+  PayloadAction,
+  CaseReducerActions,
+  ActionCreator,
+  AsyncThunk
+} from '@reduxjs/toolkit';
 import { findIndex } from 'lodash-es';
 import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
+import { requestLiveList } from '../services/pocket48';
 import type { WebWorkerChildItem } from '../../../types';
-import type { LiveInfo } from '../services/interface';
+import type { LiveInfo, LiveData } from '../services/interface';
 
 export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;
@@ -14,6 +24,15 @@ export interface Pocket48InitialState {
 }
 
 type CaseReducers = SliceCaseReducers<Pocket48InitialState>;
+
+// 刷新直播列表
+export const reqLiveList: AsyncThunk<Array<LiveInfo>, void, {}> = createAsyncThunk(
+  'pocket48/获取直播列表',
+  async function(payload: void, thunkAPI: any): Promise<Array<LiveInfo>> {
+    const res: LiveData = await requestLiveList('0', true);
+
+    return res.content.liveList;
+  });
 
 const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReducers>({
   name: 'pocket48',
@@ -95,6 +114,11 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
       }
 
       return state;
+    }
+  },
+  extraReducers: {
+    [reqLiveList.fulfilled as any](state: Pocket48InitialState, action: PayloadAction<Array<LiveInfo>>): void {
+      state.liveList = action.payload;
     }
   }
 });

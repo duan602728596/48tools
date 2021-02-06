@@ -11,9 +11,9 @@ import { findIndex, pick } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
-import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
+import { requestLiveRoomInfo } from '../../services/pocket48';
 import {
-  setLiveList,
+  reqLiveList,
   setAddLiveChildList,
   setDeleteLiveChildList,
   setAutoGrab,
@@ -172,9 +172,7 @@ function Pocket48Live(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const res: LiveData = await requestLiveList('0', true);
-
-      dispatch(setLiveList(res.content.liveList));
+      await dispatch<any>(reqLiveList());
     } catch (err) {
       message.error('直播列表加载失败！');
       console.error(err);
