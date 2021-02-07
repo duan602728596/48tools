@@ -2,7 +2,11 @@ import { ipcRenderer, shell } from 'electron';
 import { useContext, ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
-import Icon, { ToolTwoTone as IconToolTwoTone, BugTwoTone as IconBugTwoTone } from '@ant-design/icons';
+import Icon, {
+  ToolTwoTone as IconToolTwoTone,
+  BugTwoTone as IconBugTwoTone,
+  WeiboOutlined as IconWeiboOutlined
+} from '@ant-design/icons';
 import classNames from 'classnames';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
@@ -57,6 +61,11 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     { name: 'A站直播抓取', url: '/AcFun/Live', icon: IconAcFunLogo, hBtn: true }
   ],
   [
+    {
+      name: '微博超话签到',
+      url: '/WeiboSuper',
+      icon: <IconWeiboOutlined />
+    },
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
