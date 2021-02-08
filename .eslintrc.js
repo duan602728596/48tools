@@ -251,12 +251,12 @@ module.exports = {
     'react/jsx-key': 'error',                            // 在数组或迭代器中验证JSX具有key属性
     'react/jsx-no-comment-textnodes': 'error',           // 防止将注释插入为文本节点
     'react/jsx-no-duplicate-props': 'error',             // 在JSX中防止重复的props
-    'react/jsx-no-target-blank': [ // 创建具有标记的JSX元素时，通常需要使用target='_ blank'属性在新选项卡中打开链接
+    'react/jsx-no-target-blank': [ // 创建具有标记的JSX元素时，通常需要使用target="_blank"属性在新选项卡中打开链接
       'error',
       { enforceDynamicLinks: 'never' }
     ],
-    'react/jsx-props-no-multi-spaces': 'error',           // 禁止内联JSX之间的多个空格
-    'react/jsx-tag-spacing': [                            // 验证JSX左右括号中的空格
+    'react/jsx-props-no-multi-spaces': 'error', // 禁止内联JSX之间的多个空格
+    'react/jsx-tag-spacing': [                  // 验证JSX左右括号中的空格
       'error',
       {
         closingSlash: 'never',
