@@ -1,8 +1,10 @@
 import * as process from 'process';
 import * as path from 'path';
 import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
+const analyzer: boolean = process.env.ANALYZER === 'true';
 
 function nodeExternals(node: Array<string>): { [k: string]: string } {
   const result: { [k: string]: string } = {};
@@ -91,7 +93,7 @@ export default function(info: object): { [key: string]: any } {
         }]
       }
     ],
-    plugins: [new AntdDayjsWebpackPlugin()]
+    plugins: [new AntdDayjsWebpackPlugin()].concat(analyzer ? [new BundleAnalyzerPlugin()] : [])
   };
 
   return config;

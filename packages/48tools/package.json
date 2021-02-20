@@ -9,6 +9,7 @@
     "dll": "cross-env NODE_ENV=development milktea dll",
     "start": "npm run clean && cross-env NODE_ENV=development NODE_OPTIONS=\"--max_old_space_size=4096\" milktea start",
     "build": "npm run clean && cross-env NODE_ENV=production milktea build",
+    "build:analyzer": "npm run clean && cross-env NODE_ENV=production ANALYZER=true milktea build",
     "test": "jest test",
     "clean": "rimraf ./dist"
   },
@@ -46,6 +47,7 @@
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "ts-loader": "^8.0.14",
+    "webpack-bundle-analyzer": "^4.4.0",
     "worker-loader": "^3.0.7"
   }
 }
