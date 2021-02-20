@@ -16,7 +16,7 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
   },
   reducers: {
     // 添加一个账号
-    setAddWeiboAccountList(state: WeiboLoginInitialState, action: PayloadAction<{ data: WeiboAccount }>): WeiboLoginInitialState {
+    setAddWeiboAccountList(state: WeiboLoginInitialState, action: PayloadAction<{ data: WeiboAccount }>): void {
       const index: number = findIndex(state.accountList, { id: action.payload.data.id });
 
       if (index >= 0) {
@@ -25,19 +25,15 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
       } else {
         state.accountList = state.accountList.concat([action.payload.data]);
       }
-
-      return state;
     },
 
     // 账号列表
-    setAccountList(state: WeiboLoginInitialState, action: PayloadAction<{ result: Array<WeiboAccount> }>): WeiboLoginInitialState {
+    setAccountList(state: WeiboLoginInitialState, action: PayloadAction<{ result: Array<WeiboAccount> }>): void {
       state.accountList = action.payload.result;
-
-      return state;
     },
 
     // 删除账号
-    setDeleteWeiboAccount(state: WeiboLoginInitialState, action: PayloadAction<{ query: string }>): WeiboLoginInitialState {
+    setDeleteWeiboAccount(state: WeiboLoginInitialState, action: PayloadAction<{ query: string }>): void {
       const index: number = findIndex(state.accountList, { id: action.payload.query });
 
       if (index >= 0) {
@@ -46,8 +42,6 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
         newAccountList.splice(index, 1);
         state.accountList = newAccountList;
       }
-
-      return state;
     }
   }
 });

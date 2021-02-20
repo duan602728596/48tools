@@ -18,26 +18,22 @@ const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, Ca
   },
   reducers: {
     // 添加下载
-    setAddDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): BilibiliDownloadInitialState {
+    setAddDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): void {
       state.downloadList = state.downloadList.concat([action.payload]);
-
-      return state;
     },
 
     // 删除下载
-    setDeleteDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): BilibiliDownloadInitialState {
+    setDeleteDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): void {
       const index: number = findIndex(state.downloadList, { qid: action.payload.qid });
 
       if (index >= 0) {
         state.downloadList.splice(index, 1);
         state.downloadList = [...state.downloadList];
       }
-
-      return state;
     },
 
     // 设置下载进度
-    setDownloadProgress(state: BilibiliDownloadInitialState, action: PayloadAction<MessageEventData>): BilibiliDownloadInitialState {
+    setDownloadProgress(state: BilibiliDownloadInitialState, action: PayloadAction<MessageEventData>): void {
       const { type, qid, data }: MessageEventData = action.payload;
 
       if (type === 'progress') {
@@ -47,8 +43,6 @@ const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, Ca
       }
 
       state.downloadProgress = { ...state.downloadProgress };
-
-      return state;
     }
   }
 });

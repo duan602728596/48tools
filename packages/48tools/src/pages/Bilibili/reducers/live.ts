@@ -9,10 +9,9 @@ export interface BilibiliLiveInitialState {
   liveChildList: Array<WebWorkerChildItem>;
 }
 
-type InitialState = BilibiliLiveInitialState;
-type CaseReducers = SliceCaseReducers<InitialState>;
+type CaseReducers = SliceCaseReducers<BilibiliLiveInitialState>;
 
-const { actions, reducer }: Slice = createSlice<InitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<BilibiliLiveInitialState, CaseReducers>({
   name: 'bilibiliLive',
   initialState: {
     bilibiliLiveList: [], // 数据库内获取的直播间列表
@@ -20,21 +19,17 @@ const { actions, reducer }: Slice = createSlice<InitialState, CaseReducers>({
   },
   reducers: {
     // 获取直播间列表
-    setBilibiliLiveList(state: InitialState, action: PayloadAction<{ result: Array<LiveItem> }>): InitialState {
+    setBilibiliLiveList(state: BilibiliLiveInitialState, action: PayloadAction<{ result: Array<LiveItem> }>): void {
       state.bilibiliLiveList = action.payload.result;
-
-      return state;
     },
 
     // 直播间列表内添加一个直播间
-    setBilibiliLiveListAddRoom(state: InitialState, action: PayloadAction<{ data: LiveItem }>): InitialState {
+    setBilibiliLiveListAddRoom(state: BilibiliLiveInitialState, action: PayloadAction<{ data: LiveItem }>): void {
       state.bilibiliLiveList = state.bilibiliLiveList.concat([action.payload.data]);
-
-      return state;
     },
 
     // 直播间列表内删除一个直播间
-    setBilibiliLiveListDeleteRoom(state: InitialState, action: PayloadAction<{ query: string }>): InitialState {
+    setBilibiliLiveListDeleteRoom(state: BilibiliLiveInitialState, action: PayloadAction<{ query: string }>): void {
       const index: number = findIndex(state.bilibiliLiveList, { id: action.payload.query });
 
       if (index >= 0) {
@@ -43,27 +38,21 @@ const { actions, reducer }: Slice = createSlice<InitialState, CaseReducers>({
         newBilibiliLiveList.splice(index, 1);
         state.bilibiliLiveList = newBilibiliLiveList;
       }
-
-      return state;
     },
 
     // 添加一个直播下载队列
-    setAddLiveBilibiliChildList(state: InitialState, action: PayloadAction<WebWorkerChildItem>): InitialState {
+    setAddLiveBilibiliChildList(state: BilibiliLiveInitialState, action: PayloadAction<WebWorkerChildItem>): void {
       state.liveChildList = state.liveChildList.concat([action.payload]);
-
-      return state;
     },
 
     // 删除一个直播下载队列
-    setDeleteLiveBilibiliChildList(state: InitialState, action: PayloadAction<LiveItem>): InitialState {
+    setDeleteLiveBilibiliChildList(state: BilibiliLiveInitialState, action: PayloadAction<LiveItem>): void {
       const index: number = findIndex(state.liveChildList, { id: action.payload.id });
 
       if (index >= 0) {
         state.liveChildList.splice(index, 1);
         state.liveChildList = [...state.liveChildList];
       }
-
-      return state;
     }
   }
 });

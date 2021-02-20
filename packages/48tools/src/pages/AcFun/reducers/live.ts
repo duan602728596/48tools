@@ -19,21 +19,17 @@ const { actions, reducer }: Slice = createSlice<AcFunLiveInitialState, CaseReduc
   },
   reducers: {
     // 获取直播间列表
-    setAcFunLiveList(state: AcFunLiveInitialState, action: PayloadAction<{ result: Array<LiveItem> }>): AcFunLiveInitialState {
+    setAcFunLiveList(state: AcFunLiveInitialState, action: PayloadAction<{ result: Array<LiveItem> }>): void {
       state.acfunLiveList = action.payload.result;
-
-      return state;
     },
 
     // 直播间列表内添加一个直播间
-    setAcFunLiveListAddRoom(state: AcFunLiveInitialState, action: PayloadAction<{ data: LiveItem }>): AcFunLiveInitialState {
+    setAcFunLiveListAddRoom(state: AcFunLiveInitialState, action: PayloadAction<{ data: LiveItem }>): void {
       state.acfunLiveList = state.acfunLiveList.concat([action.payload.data]);
-
-      return state;
     },
 
     // 直播间列表内删除一个直播间
-    setAcFunListDeleteRoom(state: AcFunLiveInitialState, action: PayloadAction<{ query: string }>): AcFunLiveInitialState {
+    setAcFunListDeleteRoom(state: AcFunLiveInitialState, action: PayloadAction<{ query: string }>): void {
       const index: number = findIndex(state.acfunLiveList, { id: action.payload.query });
 
       if (index >= 0) {
@@ -42,27 +38,21 @@ const { actions, reducer }: Slice = createSlice<AcFunLiveInitialState, CaseReduc
         newBilibiliLiveList.splice(index, 1);
         state.acfunLiveList = newBilibiliLiveList;
       }
-
-      return state;
     },
 
     // 添加一个直播下载队列
-    setAddLiveWorker(state: AcFunLiveInitialState, action: PayloadAction<WebWorkerChildItem>): AcFunLiveInitialState {
+    setAddLiveWorker(state: AcFunLiveInitialState, action: PayloadAction<WebWorkerChildItem>): void {
       state.liveWorkers = state.liveWorkers.concat([action.payload]);
-
-      return state;
     },
 
     // 删除一个直播下载队列
-    setDeleteLiveWorker(state: AcFunLiveInitialState, action: PayloadAction<LiveItem>): AcFunLiveInitialState {
+    setDeleteLiveWorker(state: AcFunLiveInitialState, action: PayloadAction<LiveItem>): void {
       const index: number = findIndex(state.liveWorkers, { id: action.payload.id });
 
       if (index >= 0) {
         state.liveWorkers.splice(index, 1);
         state.liveWorkers = [...state.liveWorkers];
       }
-
-      return state;
     }
   }
 });

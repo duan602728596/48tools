@@ -21,48 +21,37 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
   },
   reducers: {
     // 添加当前抓取的直播列表
-    setAddInLiveList(state: Live48InitialState, action: PayloadAction<InLiveWebWorkerItem>): Live48InitialState {
+    setAddInLiveList(state: Live48InitialState, action: PayloadAction<InLiveWebWorkerItem>): void {
       state.inLiveList = state.inLiveList.concat([action.payload]);
-
-      return state;
     },
 
     // 当前直播设置为停止
-    setStopInLiveList(state: Live48InitialState, action: PayloadAction<string>): Live48InitialState {
+    setStopInLiveList(state: Live48InitialState, action: PayloadAction<string>): void {
       const index: number = findIndex(state.inLiveList, { id: action.payload });
 
       if (index >= 0) {
         state.inLiveList[index].status = 0;
         state.inLiveList = [...state.inLiveList];
       }
-
-      return state;
     },
 
     // 删除当前抓取的直播列表
-    setDeleteInLiveList(state: Live48InitialState, action: PayloadAction<string>): Live48InitialState {
+    setDeleteInLiveList(state: Live48InitialState, action: PayloadAction<string>): void {
       const index: number = findIndex(state.inLiveList, { id: action.payload });
 
       if (index >= 0) {
         state.inLiveList.splice(index, 1);
         state.inLiveList = [...state.inLiveList];
       }
-
-      return state;
     },
 
     // 设置分页的查询条件
-    setInVideoQuery(state: Live48InitialState, action: PayloadAction<InVideoQuery>): Live48InitialState {
+    setInVideoQuery(state: Live48InitialState, action: PayloadAction<InVideoQuery>): void {
       state.inVideoQuery = Object.assign(state.inVideoQuery ?? {}, action.payload);
-
-      return state;
     },
 
     // 设置录播列表
-    setInVideoList(
-      state: Live48InitialState,
-      action: PayloadAction<{ data: Array<InVideoItem>; page: number; total: number }>
-    ): Live48InitialState {
+    setInVideoList(state: Live48InitialState, action: PayloadAction<{ data: InVideoItem[]; page: number; total: number }>): void {
       const { payload }: { payload: { data: Array<InVideoItem>; page: number; total: number } } = action;
 
       state.inVideoList = payload.data;
@@ -70,19 +59,15 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
         page: payload.page,
         total: payload.total
       }) ;
-
-      return state;
     },
 
     // 添加视频下载
-    setVideoListChildAdd(state: Live48InitialState, action: PayloadAction<InVideoWebWorkerItem>): Live48InitialState {
+    setVideoListChildAdd(state: Live48InitialState, action: PayloadAction<InVideoWebWorkerItem>): void {
       state.videoListChild = state.videoListChild.concat([action.payload]);
-
-      return state;
     },
 
     // 删除视频下载
-    setVideoListChildDelete(state: Live48InitialState, action: PayloadAction<InVideoItem>): Live48InitialState {
+    setVideoListChildDelete(state: Live48InitialState, action: PayloadAction<InVideoItem>): void {
       const index: number = findIndex(state.videoListChild, {
         id: action.payload.id,
         liveType: action.payload.liveType
@@ -92,8 +77,6 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
         state.videoListChild.splice(index, 1);
         state.videoListChild = [...state.videoListChild];
       }
-
-      return state;
     }
   }
 });

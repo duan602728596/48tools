@@ -60,7 +60,7 @@ const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseRedu
   },
   reducers: {
     // 设置签到状态
-    setCheckIn(state: WeiboSuperInitialState, action: PayloadAction<boolean>): WeiboSuperInitialState {
+    setCheckIn(state: WeiboSuperInitialState, action: PayloadAction<boolean>): void {
       state.checkIn = action.payload;
 
       if (action.payload) {
@@ -70,8 +70,6 @@ const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseRedu
           total: 0
         };
       }
-
-      return state;
     }
   },
   extraReducers: {

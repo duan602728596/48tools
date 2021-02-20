@@ -18,41 +18,33 @@ const { actions, reducer }: Slice = createSlice<AcFunDownloadInitialState, CaseR
   },
   reducers: {
     // 添加一个下载
-    setAddDownloadList(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): AcFunDownloadInitialState {
+    setAddDownloadList(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): void {
       state.downloadList = state.downloadList.concat([action.payload]);
-
-      return state;
     },
 
     // 删除一个下载
-    setDeleteDownloadList(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): AcFunDownloadInitialState {
+    setDeleteDownloadList(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): void {
       const index: number = findIndex(state.downloadList, { qid: action.payload.qid });
 
       if (index >= 0) {
         state.downloadList.splice(index, 1);
         state.downloadList = [... state.downloadList];
       }
-
-      return state;
     },
 
     // 添加一个下载线程
-    setAddDownloadWorker(state: AcFunDownloadInitialState, action: PayloadAction<WebWorkerChildItem>): AcFunDownloadInitialState {
+    setAddDownloadWorker(state: AcFunDownloadInitialState, action: PayloadAction<WebWorkerChildItem>): void {
       state.ffmpegDownloadWorkers = state.ffmpegDownloadWorkers.concat([action.payload]);
-
-      return state;
     },
 
     // 删除一个下载线程
-    setDeleteDownloadWorker(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): AcFunDownloadInitialState {
+    setDeleteDownloadWorker(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): void {
       const index: number = findIndex(state.ffmpegDownloadWorkers, { id: action.payload.qid });
 
       if (index >= 0) {
         state.ffmpegDownloadWorkers.splice(index, 1);
         state.ffmpegDownloadWorkers = [...state.ffmpegDownloadWorkers];
       }
-
-      return state;
     }
   }
 });

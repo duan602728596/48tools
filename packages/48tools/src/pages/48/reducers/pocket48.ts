@@ -46,33 +46,27 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
   },
   reducers: {
     // 直播信息
-    setLiveList(state: Pocket48InitialState, action: PayloadAction<Array<LiveInfo>>): Pocket48InitialState {
+    setLiveList(state: Pocket48InitialState, action: PayloadAction<Array<LiveInfo>>): void {
       state.liveList = action.payload;
-
-      return state;
     },
 
     // 添加直播下载
-    setAddLiveChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): Pocket48InitialState {
+    setAddLiveChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): void {
       state.liveChildList = state.liveChildList.concat([action.payload]);
-
-      return state;
     },
 
     // 删除直播下载
-    setDeleteLiveChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): Pocket48InitialState {
+    setDeleteLiveChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): void {
       const index: number = findIndex(state.liveChildList, { id: action.payload.liveId });
 
       if (index >= 0) {
         state.liveChildList.splice(index, 1);
         state.liveChildList = [...state.liveChildList];
       }
-
-      return state;
     },
 
     // 自动抓取定时器
-    setAutoGrab(state: Pocket48InitialState, action: PayloadAction<number | null>): Pocket48InitialState {
+    setAutoGrab(state: Pocket48InitialState, action: PayloadAction<number | null>): void {
       if (typeof action.payload === 'number') {
         state.autoGrabTimer = action.payload;
       } else {
@@ -82,38 +76,27 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
 
         state.autoGrabTimer = null;
       }
-
-      return state;
     },
 
     // 录播加载
-    setRecordList(
-      state: Pocket48InitialState,
-      action: PayloadAction<{ next: string; data: Array<LiveInfo> }>
-    ): Pocket48InitialState {
+    setRecordList(state: Pocket48InitialState, action: PayloadAction<{ next: string; data: Array<LiveInfo> }>): void {
       state.recordList = action.payload.data;
       state.recordNext = action.payload.next;
-
-      return state;
     },
 
     // 添加录播下载
-    setAddRecordChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): Pocket48InitialState {
+    setAddRecordChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): void {
       state.recordChildList = state.recordChildList.concat([action.payload]);
-
-      return state;
     },
 
     // 删除录播下载
-    setDeleteRecordChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): Pocket48InitialState {
+    setDeleteRecordChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): void {
       const index: number = findIndex(state.recordChildList, { id: action.payload.liveId });
 
       if (index >= 0) {
         state.recordChildList.splice(index, 1);
         state.recordChildList = [...state.recordChildList];
       }
-
-      return state;
     }
   },
   extraReducers: {

@@ -18,38 +18,33 @@ const { actions, reducer }: Slice = createSlice<VideoCutInitialState, CaseReduce
   },
   reducers: {
     // 添加一个队列
-    setCutListAdd(state: VideoCutInitialState, action: PayloadAction<CutItem>): VideoCutInitialState {
+    setCutListAdd(state: VideoCutInitialState, action: PayloadAction<CutItem>): void {
       state.cutList = state.cutList.concat([action.payload]);
-
-      return state;
     },
+
     // 删除一个队列
-    setCutListDelete(state: VideoCutInitialState, action: PayloadAction<CutItem>): VideoCutInitialState {
+    setCutListDelete(state: VideoCutInitialState, action: PayloadAction<CutItem>): void {
       const index: number = findIndex(state.cutList, { id: action.payload.id });
 
       if (index >= 0) {
         state.cutList.splice(index, 1);
         state.cutList = [...state.cutList];
       }
-
-      return state;
     },
+
     // 添加一个裁剪线程
-    setCutChildListAdd(state: VideoCutInitialState, action: PayloadAction<WebWorkerChildItem>): VideoCutInitialState {
+    setCutChildListAdd(state: VideoCutInitialState, action: PayloadAction<WebWorkerChildItem>): void {
       state.cutChildList = state.cutChildList.concat([action.payload]);
-
-      return state;
     },
+
     // 删除一个裁剪线程
-    setCutChildListDelete(state: VideoCutInitialState, action: PayloadAction<WebWorkerChildItem>): VideoCutInitialState {
+    setCutChildListDelete(state: VideoCutInitialState, action: PayloadAction<WebWorkerChildItem>): void {
       const index: number = findIndex(state.cutChildList, { id: action.payload.id });
 
       if (index >= 0) {
         state.cutChildList.splice(index, 1);
         state.cutChildList = [...state.cutChildList];
       }
-
-      return state;
     }
   }
 });

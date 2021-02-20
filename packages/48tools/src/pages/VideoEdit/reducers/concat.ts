@@ -17,36 +17,28 @@ const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers
   },
   reducers: {
     // 添加视频合并队列
-    setConcatListAdd(state: ConcatInitialState, action: PayloadAction<Array<ConcatItem>>): ConcatInitialState {
+    setConcatListAdd(state: ConcatInitialState, action: PayloadAction<Array<ConcatItem>>): void {
       state.concatList = state.concatList.concat(action.payload);
-
-      return state;
     },
 
     // 设置合并队列
-    setConcatList(state: ConcatInitialState, action: PayloadAction<Array<ConcatItem>>): ConcatInitialState {
+    setConcatList(state: ConcatInitialState, action: PayloadAction<Array<ConcatItem>>): void {
       state.concatList = action.payload;
-
-      return state;
     },
 
     // 删除
-    setConcatListDelete(state: ConcatInitialState, action: PayloadAction<ConcatItem>): ConcatInitialState {
+    setConcatListDelete(state: ConcatInitialState, action: PayloadAction<ConcatItem>): void {
       const index: number = findIndex(state.concatList, { id: action.payload.id });
 
       if (index >= 0) {
         state.concatList.splice(index, 1);
         state.concatList = [...state.concatList];
       }
-
-      return state;
     },
 
     // 设置合并线程
-    setConcatWorker(state: ConcatInitialState, action: PayloadAction<Worker | null>): ConcatInitialState {
+    setConcatWorker(state: ConcatInitialState, action: PayloadAction<Worker | null>): void {
       state.concatWorker = action.payload;
-
-      return state;
     }
   }
 });
