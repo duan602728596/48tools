@@ -6,6 +6,26 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 const isDev: boolean = process.env.NODE_ENV === 'development';
 const analyzer: boolean = process.env.ANALYZER === 'true';
 
+// html代码压缩配置
+const htmlWebpackPluginMinify: boolean | object = isDev ? false : {
+  collapseWhitespace: true,
+  keepClosingSlash: true,
+  removeComments: true,
+  removeRedundantAttributes: true,
+  removeScriptTypeAttributes: true,
+  removeStyleLinkTypeAttributes: true,
+  useShortDoctype: true,
+  minifyCSS: true,
+  minifyJS: {
+    ecma: 2020,
+    safari10: true
+  }
+};
+
+/**
+ * 模块使用node的commonjs的方式引入
+ * @param { Array<string> } node: node模块名称
+ */
 function nodeExternals(node: Array<string>): { [k: string]: string } {
   const result: { [k: string]: string } = {};
 
@@ -43,8 +63,8 @@ export default function(info: object): { [key: string]: any } {
       player: [path.join(__dirname, 'src/pages/48/Pocket48/Player/Player.tsx')]
     },
     html: [
-      { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'] },
-      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), excludeChunks: ['index'] }
+      { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'], minify: htmlWebpackPluginMinify },
+      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), excludeChunks: ['index'], minify: htmlWebpackPluginMinify }
     ],
     externals: nodeExternals([
       'child_process',
