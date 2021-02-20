@@ -61,6 +61,11 @@ async function unpack() {
       target: 'dir',
       icon: path.join(staticsDir, 'titleBarIcon.ico')
     },
+    linux: {
+      target: 'dir',
+      icon: path.join(staticsDir, 'titleBarIcon.ico'),
+      executableName: '48tools'
+    },
     electronDownload: {
       version: packageJson.dependencies.electron.replace(/^\^/, '')
     }
@@ -89,6 +94,17 @@ async function unpack() {
     }
   });
 
+  await builder.build({
+    targets: builder.Platform.LINUX.createTarget(),
+    config: {
+      ..._.cloneDeep(config),
+      directories: {
+        app: appDir,
+        output: path.join(build, 'linux')
+      }
+    }
+  });
+
   await Promise.all([
     fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'mac/mac/LICENSE')),
     fse.copy(path.join(cwd, 'README.md'), path.join(build, 'mac/mac/README.md')),
@@ -96,7 +112,10 @@ async function unpack() {
     fse.copy(path.join(build, 'win/win-unpacked/LICENSES.chromium.html'), path.join(build, 'mac/mac/LICENSES.chromium.html')),
 
     fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'win/win-unpacked/LICENSE')),
-    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'win/win-unpacked/README.md'))
+    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'win/win-unpacked/README.md')),
+
+    fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'linux/linux-unpacked/LICENSE')),
+    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'linux/linux-unpacked/README.md'))
   ]);
 }
 

@@ -27,13 +27,23 @@ async function clean() {
 
   await Promise.all(winDeleteTasks);
 
+  // 删除linux
+  const linuxFiles = await globPromise(path.join(build, 'linux/linux-unpacked/locales/*.pak'));
+  const linuxDeleteTasks = [];
+
+  linuxFiles.forEach((o) => !/zh-CN/i.test(o) && linuxDeleteTasks.push(fse.remove(o)));
+
+  await Promise.all(linuxDeleteTasks);
+
   // 写入版本号
   await fs.writeFile(path.join(build, 'mac/mac/version'), `v${ version }`);
   await fs.writeFile(path.join(build, 'win/win-unpacked/version'), `v${ version }`);
+  await fs.writeFile(path.join(build, 'linux/linux-unpacked/version'), `v${ version }`);
 
   // 重命名
-  await fs.rename(path.join(build, 'mac/mac'), path.join(build, `mac/48tools-v${ version }-mac`));
-  await fs.rename(path.join(build, 'win/win-unpacked'), path.join(build, `win/48tools-v${ version }-win`));
+  await fs.rename(path.join(build, 'mac/mac'), path.join(build, `mac/48tools-${ version }-mac`));
+  await fs.rename(path.join(build, 'win/win-unpacked'), path.join(build, `win/48tools-${ version }-winx64`));
+  await fs.rename(path.join(build, 'linux/linux-unpacked'), path.join(build, `linux/48tools-${ version }-linux64`));
 }
 
 clean();
