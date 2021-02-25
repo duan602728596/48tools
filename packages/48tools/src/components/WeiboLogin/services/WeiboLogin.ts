@@ -41,19 +41,11 @@ export function requestLogin(alt: string): Promise<LoginReturn> {
  * 获取cookie
  * @param { string } uri: CrossDomainUrl
  */
-export async function requestCrossDomainUrl(uri: string): Promise<string[]> {
+export async function requestCrossDomainUrl(uri: string): Promise<string> {
   const res: GotResponse<string> = await got.get(uri);
   const setCookie: Array<string> = res.headers['set-cookie'] ?? [];
-  let subCookie: string = '';
 
-  for (const item of setCookie) {
-    if (/^sub=/i.test(item)) {
-      subCookie = item;
-      break;
-    }
-  }
-
-  return [subCookie];
+  return setCookie.join('; ');
 }
 
 /**

@@ -20,8 +20,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   // 登陆成功
   async function loginSuccess(alt: string): Promise<void> {
     const resLogin: LoginReturn = await requestLogin(alt);
-    const resCookie: string[] = await requestCrossDomainUrl(resLogin.crossDomainUrlList[resLogin.crossDomainUrlList.length - 1]);
-    const cookie: string = resCookie.map((o: string): string => o.split(/;\s*/)[0]).join('; ');
+    const cookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[resLogin.crossDomainUrlList.length - 1]);
     const resUserInfo: UserInfo = await requestUserInfo(resLogin.uid, cookie);
 
     await dispatch(idbSaveAccount({
