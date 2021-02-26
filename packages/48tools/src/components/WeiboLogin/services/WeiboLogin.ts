@@ -1,3 +1,4 @@
+import * as querystring from 'querystring';
 import got, { Response as GotResponse } from 'got';
 import jsonp from '../../../utils/jsonp';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from './interface';
@@ -38,11 +39,43 @@ export function requestLogin(alt: string): Promise<LoginReturn> {
 }
 
 /**
+ * 获取cookie和其他相关信息
+ * @param { string } alt: 判断是否登陆后获得的alt
+ */
+export async function requestLoginV2(alt: string): Promise<[LoginReturn, string]> {
+  const query: string = querystring.stringify({
+    entry: 'weibo',
+    returntype: 'TEXT',
+    crossdomain: 1,
+    cdult: 3,
+    domain: 'weibo.com',
+    alt,
+    savestate: 30,
+    callback: 'callback'
+  });
+  const res: GotResponse<string> = await got.get(`https://login.sina.com.cn/sso/login.php?${ query }`, {
+    responseType: 'text'
+  });
+
+  const data: LoginReturn = JSON.parse(
+    res.body.replace(/^callback\(/i, '')
+      .replace(/\);$/i, ''));
+  const setCookie: Array<string> = res.headers['set-cookie'] ?? [];
+
+  return [data, setCookie.join('; ')];
+}
+
+/**
  * 获取cookie
  * @param { string } uri: CrossDomainUrl
+ * @param { string } cookie
  */
-export async function requestCrossDomainUrl(uri: string): Promise<string> {
-  const res: GotResponse<string> = await got.get(uri);
+export async function requestCrossDomainUrl(uri: string, cookie: string): Promise<string> {
+  const res: GotResponse<string> = await got.get(uri, {
+    headers: {
+      Cookie: cookie
+    }
+  });
   const setCookie: Array<string> = res.headers['set-cookie'] ?? [];
 
   return setCookie.join('; ');

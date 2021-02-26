@@ -6,7 +6,7 @@ import { Empty, Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
 import { idbSaveAccount } from './reducers/weiboLogin';
-import { requestQrcode, requestQrcodeCheck, requestLogin, requestCrossDomainUrl, requestUserInfo } from './services/WeiboLogin';
+import { requestQrcode, requestQrcodeCheck, requestLoginV2, requestCrossDomainUrl, requestUserInfo } from './services/WeiboLogin';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from './services/interface';
 
 let qrcodeLoginTimer: NodeJS.Timeout | null = null; // 轮循，判断是否登陆
@@ -19,8 +19,20 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
 
   // 登陆成功
   async function loginSuccess(alt: string): Promise<void> {
-    const resLogin: LoginReturn = await requestLogin(alt);
-    const cookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[resLogin.crossDomainUrlList.length - 1]);
+    // 缓存所有的cookie
+    const allCookies: Array<string> = [];
+    const [resLogin, loginCookie]: [LoginReturn, string] = await requestLoginV2(alt);
+
+    allCookies.push(loginCookie);
+
+    // 请求crossDomainUrl
+    for (let i: number = 0; i < 3; i++) {
+      const crossDomainCookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[i], allCookies.join('; '));
+
+      allCookies.push(crossDomainCookie);
+    }
+
+    const cookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[3], allCookies.join('; '));
     const resUserInfo: UserInfo = await requestUserInfo(resLogin.uid, cookie);
 
     await dispatch(idbSaveAccount({
