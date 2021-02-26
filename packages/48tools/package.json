@@ -10,7 +10,6 @@
     "start": "npm run clean && cross-env NODE_ENV=development NODE_OPTIONS=\"--max_old_space_size=4096\" milktea start",
     "build": "npm run clean && cross-env NODE_ENV=production milktea build",
     "build:analyzer": "npm run clean && cross-env NODE_ENV=production ANALYZER=true milktea build",
-    "test": "jest test",
     "clean": "rimraf ./dist"
   },
   "dependencies": {
