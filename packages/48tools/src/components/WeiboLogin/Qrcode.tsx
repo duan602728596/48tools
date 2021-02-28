@@ -6,7 +6,14 @@ import { Empty, Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
 import { idbSaveAccount } from './reducers/weiboLogin';
-import { requestQrcode, requestQrcodeCheck, requestLoginV2, requestCrossDomainUrl, requestUserInfo } from './services/WeiboLogin';
+import {
+  requestQrcode,
+  requestQrcodeCheck,
+  requestLoginV2,
+  requestCrossDomainUrl,
+  requestWeiboHome,
+  requestUserInfo
+} from './services/WeiboLogin';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from './services/interface';
 
 let qrcodeLoginTimer: NodeJS.Timeout | null = null; // 轮循，判断是否登陆
@@ -32,7 +39,9 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
       allCookies.push(crossDomainCookie);
     }
 
-    const cookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[3], allCookies.join('; '));
+    const domainCookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[3], allCookies.join('; '));
+    const homeCookie: string = await requestWeiboHome(domainCookie);
+    const cookie: string = `${ domainCookie }; ${ homeCookie }`;
     const resUserInfo: UserInfo = await requestUserInfo(resLogin.uid, cookie);
 
     await dispatch(idbSaveAccount({
