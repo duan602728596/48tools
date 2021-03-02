@@ -42,7 +42,7 @@ export function requestLogin(alt: string): Promise<LoginReturn> {
  * 获取cookie和其他相关信息
  * @param { string } alt: 判断是否登陆后获得的alt
  */
-export async function requestLoginV2(alt: string): Promise<[LoginReturn, string]> {
+export async function requestLoginV2(alt: string): Promise<LoginReturn> {
   const query: string = querystring.stringify({
     entry: 'weibo',
     returntype: 'TEXT',
@@ -56,29 +56,32 @@ export async function requestLoginV2(alt: string): Promise<[LoginReturn, string]
   const res: GotResponse<string> = await got.get(`https://login.sina.com.cn/sso/login.php?${ query }`, {
     responseType: 'text'
   });
-
   const data: LoginReturn = JSON.parse(
     res.body.replace(/^callback\(/i, '')
       .replace(/\);$/i, ''));
-  const setCookie: Array<string> = res.headers['set-cookie'] ?? [];
 
-  return [data, setCookie.join('; ')];
+  return data;
 }
 
 /**
  * 获取cookie
  * @param { string } uri: CrossDomainUrl
- * @param { string } cookie
  */
-export async function requestCrossDomainUrl(uri: string, cookie: string): Promise<string> {
-  const res: GotResponse<string> = await got.get(uri, {
-    headers: {
-      Cookie: cookie
-    }
-  });
+export async function requestCrossDomainUrl(uri: string): Promise<string> {
+  const res: GotResponse<string> = await got.get(uri);
   const setCookie: Array<string> = res.headers['set-cookie'] ?? [];
+  let SUB: string = '';
 
-  return setCookie.join('; ');
+  for (const item of setCookie) {
+    if (/^SUB=/i.test(item)) {
+      const cookie: string[] = item.split(/\s*;\s*/);
+
+      SUB = cookie[0];
+      break;
+    }
+  }
+
+  return SUB;
 }
 
 // 请求微博首页

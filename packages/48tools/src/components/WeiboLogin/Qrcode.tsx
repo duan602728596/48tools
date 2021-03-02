@@ -27,21 +27,8 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   // 登陆成功
   async function loginSuccess(alt: string): Promise<void> {
     // 缓存所有的cookie
-    const allCookies: Array<string> = [];
-    const [resLogin, loginCookie]: [LoginReturn, string] = await requestLoginV2(alt);
-
-    allCookies.push(loginCookie);
-
-    // 请求crossDomainUrl
-    for (let i: number = 0; i < 3; i++) {
-      const crossDomainCookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[i], allCookies.join('; '));
-
-      allCookies.push(crossDomainCookie);
-    }
-
-    const domainCookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[3], allCookies.join('; '));
-    const homeCookie: string = await requestWeiboHome(domainCookie);
-    const cookie: string = `${ domainCookie }; ${ homeCookie }`;
+    const resLogin: LoginReturn = await requestLoginV2(alt);
+    const cookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[3]);
     const resUserInfo: UserInfo = await requestUserInfo(resLogin.uid, cookie);
 
     await dispatch(idbSaveAccount({
