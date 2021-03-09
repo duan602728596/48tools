@@ -1,6 +1,7 @@
 import { ipcMain, BrowserWindow, IpcMainEvent } from 'electron';
 import openPlayerHtml from './function/openPlayerHtml';
 import ipcTheme from './function/ipcTheme';
+import weiboLogin from './function/weiboLogin';
 
 /* ipc通信 */
 function ipc(win: BrowserWindow): void {
@@ -16,6 +17,11 @@ function ipc(win: BrowserWindow): void {
 
   // 切换主题
   ipcTheme();
+
+  // 微博登陆
+  ipcMain.on('weibo-login', function(event: IpcMainEvent): void {
+    weiboLogin();
+  });
 }
 
 export default ipc;
