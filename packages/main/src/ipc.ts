@@ -1,6 +1,6 @@
 import { ipcMain, BrowserWindow, IpcMainEvent } from 'electron';
-import openPlayerHtml from './openPlayerHtml';
-import ipcTheme from './ipcTheme';
+import openPlayerHtml from './function/openPlayerHtml';
+import ipcTheme from './function/ipcTheme';
 
 /* ipc通信 */
 function ipc(win: BrowserWindow): void {
