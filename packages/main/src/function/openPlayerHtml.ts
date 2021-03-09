@@ -26,6 +26,12 @@ function openPlayerHtml(title: string, query: string): void {
     title
   });
 
+  function handleThemeEvent(value: ThemeValue): void {
+    if (win) {
+      win.webContents.send('themeSource', value);
+    }
+  }
+
   if (win) {
     win.loadFile(
       isDevelopment
@@ -33,12 +39,6 @@ function openPlayerHtml(title: string, query: string): void {
         : path.join(__dirname, '../../dist/player.html'),
       { search: query }
     );
-
-    const handleThemeEvent: (value: ThemeValue) => void = function(value: ThemeValue): void {
-      if (win) {
-        win.webContents.send('themeSource', value);
-      }
-    };
 
     win.on('closed', function(): void {
       themeEvent.off('themeSource', handleThemeEvent);
