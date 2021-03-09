@@ -84,21 +84,6 @@ export async function requestCrossDomainUrl(uri: string): Promise<string> {
   return SUB;
 }
 
-// 请求微博首页
-export async function requestWeiboHome(cookie: string): Promise<string> {
-  const res: GotResponse<string> = await got.get('https://weibo.com/', {
-    headers: {
-      Cookie: cookie,
-      Host: 'weibo.com',
-      Referer: 'https://weibo.com/'
-    }
-  });
-
-  const setCookie: Array<string> = res.headers['set-cookie'] ?? [];
-
-  return setCookie.join('; ');
-}
-
 /**
  * 获取账号信息
  * @param { string } id: 用户id

@@ -11,7 +11,6 @@ import {
   requestQrcodeCheck,
   requestLoginV2,
   requestCrossDomainUrl,
-  requestWeiboHome,
   requestUserInfo
 } from './services/WeiboLogin';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from './services/interface';
