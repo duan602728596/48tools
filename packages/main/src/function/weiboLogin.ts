@@ -15,7 +15,15 @@ function weiboLogin(): void {
       const cookies: Array<Cookie> = await ses.cookies.get({ url: weiboUrl });
 
       weiboLoginWin.webContents.send('weibo-login-cookie', cookies);
-      await ses.clearStorageData({ origin: weiboUrl });
+      await Promise.all([
+        ses.clearStorageData({ origin: weiboUrl, storages: ['cookies'] }),
+        ses.clearStorageData({ origin: 'https://passport.97973.com', storages: ['cookies'] }),
+        ses.clearStorageData({ origin: 'https://login.sina.com.cn', storages: ['cookies'] }),
+        ses.clearStorageData({ origin: 'https://passport.krcom.cn', storages: ['cookies'] }),
+        ses.clearStorageData({ origin: 'https://passport.weibo.cn', storages: ['cookies'] }),
+        ses.clearStorageData({ origin: 'https://passport.weibo.com', storages: ['cookies'] }),
+        ses.clearStorageData({ origin: 'https://weibo.cn', storages: ['cookies'] })
+      ]);
     }
   });
 
