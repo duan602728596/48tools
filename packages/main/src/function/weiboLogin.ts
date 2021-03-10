@@ -5,6 +5,10 @@ let weiboLoginWin: BrowserWindow | null = null;
 
 /* 微博登陆 */
 function weiboLogin(): void {
+  if (weiboLoginWin !== null) {
+    return;
+  }
+
   weiboLoginWin = new BrowserWindow();
   weiboLoginWin.loadURL(weiboUrl);
 
