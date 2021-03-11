@@ -41,7 +41,7 @@ async function checkIn(
       result,
       quantity
     }));
-    await sleep(1_500);
+    await sleep(1_300);
   }
 }
 
@@ -71,7 +71,7 @@ async function weiboCheckIn(cookie: string): Promise<void> {
     if (resTopic?.data?.list?.length) {
       const list: Array<SuperItem> = resTopic.data.list;
 
-      quantity.total = resTopic.data.total_number;
+      quantity.total += resTopic.data.total_number;
       await checkIn(getState, dispatch, cookie, list, quantity);
       pageIndex++;
     } else {

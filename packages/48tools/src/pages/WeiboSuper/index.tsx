@@ -126,7 +126,7 @@ function Index(props: {}): ReactElement {
           <WeiboLogin />
         </Space>
       </Header>
-      <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen } / ${ quantity.total }` } />
+      <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />
       <List size="small" dataSource={ weiboCheckinList } renderItem={ weiboCheckinListRender } />
     </Content>
   );
