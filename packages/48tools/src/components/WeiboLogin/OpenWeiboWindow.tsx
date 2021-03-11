@@ -58,8 +58,8 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
 
   return (
     <div className={ style.content }>
-      <Space>
-        <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。" />
+      <Space size={ 16 }>
+        <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议扫码登陆。" />
         <Button type="primary" onClick={ handleLoginWeiboClick }>微博登陆</Button>
       </Space>
     </div>
