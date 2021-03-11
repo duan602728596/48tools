@@ -104,7 +104,7 @@ export async function requestUserInfo(id: string, cookie: string): Promise<UserI
  * 获取uid接口
  * @param { string } cookie
  */
-export async function requestUid(cookie: string): Promise<string> {
+export async function requestUid(cookie: string): Promise<string | undefined> {
   const res: GotResponse<string> = await got.get('https://weibo.com', {
     responseType: 'text',
     headers: {
@@ -112,8 +112,19 @@ export async function requestUid(cookie: string): Promise<string> {
     }
   });
 
-  const data: string = res.body.match(/"idstr"\s*:\s*"[0-9]+"/)![0];
-  const json: { idstr: string } = JSON.parse(`{${ data }}`);
+  const newData: Array<string> | null = res.body.match(/"idstr"\s*:\s*"[0-9]+"/);
 
-  return json.idstr;
+  // 新版微博
+  if (newData) {
+    const json: { idstr: string } = JSON.parse(`{${ newData[0] }}`);
+
+    return json.idstr;
+  }
+
+  // 旧版微博
+  const oldData: Array<string> | null = res.body.match(/\$CONFIG\['uid'\]='[0-9]+'/i);
+
+  if (oldData) {
+    return oldData[0].split(/=/)[1].replace(/[';]/g, '');
+  }
 }

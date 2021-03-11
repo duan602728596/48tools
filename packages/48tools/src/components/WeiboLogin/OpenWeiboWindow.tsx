@@ -24,19 +24,22 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
 
       if (alfIndex >= 0 && ssoLoginIndex >= 0 && subIndex >= 0) {
         const cookieStr: string = cookie.map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; ');
-        const uid: string = await requestUid(cookieStr);
-        const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
+        const uid: string | undefined = await requestUid(cookieStr);
 
-        await dispatch(idbSaveAccount({
-          data: {
-            id: uid,
-            username: resUserInfo.data.user.name,
-            cookie: cookieStr,
-            lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
-          }
-        }));
-        props.onCancel();
-        message.success('登陆成功！');
+        if (uid) {
+          const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
+
+          await dispatch(idbSaveAccount({
+            data: {
+              id: uid,
+              username: resUserInfo.data.user.name,
+              cookie: cookieStr,
+              lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+            }
+          }));
+          props.onCancel();
+          message.success('登陆成功！');
+        }
       }
     }, []);
 
