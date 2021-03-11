@@ -20,7 +20,7 @@ function ipc(win: BrowserWindow): void {
 
   // 微博登陆
   ipcMain.on('weibo-login', function(event: IpcMainEvent): void {
-    weiboLogin();
+    weiboLogin(win);
   });
 }
 

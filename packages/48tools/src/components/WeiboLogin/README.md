@@ -69,3 +69,7 @@
       * name: 昵称
       * location
       * description
+  
+### 获取uid接口
+
+* url: https://weibo.com/ajax/side/cards/sideInterested?count=1

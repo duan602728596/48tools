@@ -99,3 +99,21 @@ export async function requestUserInfo(id: string, cookie: string): Promise<UserI
 
   return res.body;
 }
+
+/**
+ * 获取uid接口
+ * @param { string } cookie
+ */
+export async function requestUid(cookie: string): Promise<string> {
+  const res: GotResponse<string> = await got.get('https://weibo.com', {
+    responseType: 'text',
+    headers: {
+      Cookie: cookie
+    }
+  });
+
+  const data: string = res.body.match(/"idstr"\s*:\s*"[0-9]+"/)![0];
+  const json: { idstr: string } = JSON.parse(`{${ data }}`);
+
+  return json.idstr;
+}

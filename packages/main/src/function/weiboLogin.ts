@@ -4,7 +4,7 @@ const weiboUrl: string = 'https://weibo.com/';
 let weiboLoginWin: BrowserWindow | null = null;
 
 /* 微博登陆 */
-function weiboLogin(): void {
+function weiboLogin(win: BrowserWindow): void {
   if (weiboLoginWin !== null) {
     return;
   }
@@ -16,17 +16,13 @@ function weiboLogin(): void {
   weiboLoginWin.on('close', async function(): Promise<void> {
     if (weiboLoginWin) {
       const ses: Session = weiboLoginWin.webContents.session;
+      const winSes: Session = win.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({ url: weiboUrl });
 
-      weiboLoginWin.webContents.send('weibo-login-cookie', cookies);
+      win.webContents.send('weibo-login-cookie', cookies);
       await Promise.all([
-        ses.clearStorageData({ origin: weiboUrl, storages: ['cookies'] }),
-        ses.clearStorageData({ origin: 'https://passport.97973.com', storages: ['cookies'] }),
-        ses.clearStorageData({ origin: 'https://login.sina.com.cn', storages: ['cookies'] }),
-        ses.clearStorageData({ origin: 'https://passport.krcom.cn', storages: ['cookies'] }),
-        ses.clearStorageData({ origin: 'https://passport.weibo.cn', storages: ['cookies'] }),
-        ses.clearStorageData({ origin: 'https://passport.weibo.com', storages: ['cookies'] }),
-        ses.clearStorageData({ origin: 'https://weibo.cn', storages: ['cookies'] })
+        ses.clearStorageData({ storages: ['cookies'] }),
+        winSes.clearStorageData({ storages: ['cookies'] })
       ]);
     }
   });

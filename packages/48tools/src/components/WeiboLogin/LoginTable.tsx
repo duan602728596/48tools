@@ -63,7 +63,7 @@ function LoginTable(props: {}): ReactElement {
       bordered={ true }
       dataSource={ accountList }
       rowKey="id"
-      scroll={{ y: 180 }}
+      scroll={{ y: 360 }}
       pagination={{
         showQuickJumper: true
       }}
