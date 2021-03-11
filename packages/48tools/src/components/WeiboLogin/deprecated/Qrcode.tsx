@@ -5,20 +5,23 @@ import { useDispatch } from 'react-redux';
 import { Empty, Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
-import { idbSaveAccount } from './reducers/weiboLogin';
+import { idbSaveAccount } from '../reducers/weiboLogin';
 import {
   requestQrcode,
   requestQrcodeCheck,
   requestLoginV2,
   requestCrossDomainUrl,
   requestUserInfo
-} from './services/WeiboLogin';
-import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from './services/interface';
+} from '../services/WeiboLogin';
+import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from '../services/interface';
 
 let qrcodeLoginTimer: NodeJS.Timeout | null = null; // 轮循，判断是否登陆
 let qrid: string | null = null;
 
-/* 微博二维码 */
+/**
+ * @deprecated
+ * 微博二维码
+ */
 function Qrcode(props: { onCancel: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [imageData, setImageData]: [string | undefined, D<S<string | undefined>>] = useState(undefined); // 二维码

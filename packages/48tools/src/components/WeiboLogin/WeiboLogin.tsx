@@ -2,7 +2,7 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import { Button, Modal } from 'antd';
 import { WeiboCircleOutlined as IconWeiboCircleOutlined } from '@ant-design/icons';
 import style from './weiboLogin.sass';
-import Qrcode from './Qrcode';
+import Qrcode from './deprecated/Qrcode';
 import LoginTable from './LoginTable';
 
 /* 微博扫码登陆 */
