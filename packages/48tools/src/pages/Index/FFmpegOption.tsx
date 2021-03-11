@@ -74,7 +74,13 @@ function FFmpegOption(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button icon={ <IconThunderboltOutlined /> } onClick={ handleOpenFFmpegOptionClick }>FFmpeg配置</Button>
+      <Button type="primary"
+        danger={ true }
+        icon={ <IconThunderboltOutlined /> }
+        onClick={ handleOpenFFmpegOptionClick }
+      >
+        FFmpeg配置
+      </Button>
       <span className={ classNames(style.marginLeft, style.tips) }>
         <IconSwapLeftOutlined className={ style.tipsIcon } />
         使用前先配置FFmpeg
