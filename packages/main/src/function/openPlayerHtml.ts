@@ -21,7 +21,8 @@ function openPlayerHtml(title: string, query: string): void {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       webSecurity: false,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      contextIsolation: false
     },
     title
   });
