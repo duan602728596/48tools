@@ -100,7 +100,7 @@ function Live(props: {}): ReactElement {
   function selectPlayerUrlMiddleware(ctx: any, next: Function): void {
     const { representation, record }: { representation: Array<LiveRepresentation>; record: LiveItem } = ctx;
 
-    function SelectPlayerUrl(props: {}): ReactElement {
+    function SelectPlayerUrl(props1: {}): ReactElement {
       const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(true);
 
       // 全部关闭后清除

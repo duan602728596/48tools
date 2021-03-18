@@ -17,19 +17,19 @@ const userAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) Apple
 let child: ChildProcessWithoutNullStreams;
 
 /* 下载 */
-function download(data: WorkerEventData): void {
-  const { ffmpeg, playStreamPath, filePath, ua, protocolWhitelist }: WorkerEventData = data;
-  const args: Array<string> = ['-i', playStreamPath, '-c', 'copy', filePath];
+function download(workerData: WorkerEventData): void {
+  const { ffmpeg, playStreamPath, filePath, ua, protocolWhitelist }: WorkerEventData = workerData;
+  const ffmpegArgs: Array<string> = ['-i', playStreamPath, '-c', 'copy', filePath];
 
   if (ua) {
-    args.unshift('-user_agent', userAgent);
+    ffmpegArgs.unshift('-user_agent', userAgent);
   }
 
   if (protocolWhitelist) {
-    args.unshift('-protocol_whitelist', 'file,http,https,tcp,tls');
+    ffmpegArgs.unshift('-protocol_whitelist', 'file,http,https,tcp,tls');
   }
 
-  child = spawn(ffmpeg, args);
+  child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
     // console.log(data.toString());

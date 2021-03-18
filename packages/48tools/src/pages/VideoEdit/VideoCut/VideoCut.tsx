@@ -62,8 +62,8 @@ function Index(props: {}): ReactElement {
 
     const worker: Worker = new CutWorker();
 
-    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
-      const { type, error }: MessageEventData = event.data;
+    worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
+      const { type, error }: MessageEventData = event1.data;
 
       if (type === 'close' || type === 'error') {
         if (type === 'error') {

@@ -10,11 +10,11 @@ type WorkerEventData = {
 let child: ChildProcessWithoutNullStreams;
 
 /* 下载 */
-function download(data: WorkerEventData): void {
-  const { ffmpeg, filePath, textPath }: WorkerEventData = data;
-  const args: Array<string> = ['-f', 'concat', '-safe', '0', '-i', textPath, '-c', 'copy', filePath];
+function download(workerData: WorkerEventData): void {
+  const { ffmpeg, filePath, textPath }: WorkerEventData = workerData;
+  const ffmpegArgs: Array<string> = ['-f', 'concat', '-safe', '0', '-i', textPath, '-c', 'copy', filePath];
 
-  child = spawn(ffmpeg, args);
+  child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
     // console.log(data.toString());

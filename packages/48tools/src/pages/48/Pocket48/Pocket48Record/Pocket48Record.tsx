@@ -116,8 +116,8 @@ function Pocket48Record(props: {}): ReactElement {
 
       const worker: Worker = new FFMpegDownloadWorker();
 
-      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
-        const { type, error }: MessageEventData = event.data;
+      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
+        const { type, error }: MessageEventData = event1.data;
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {

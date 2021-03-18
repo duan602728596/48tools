@@ -117,8 +117,8 @@ function Pocket48Live(props: {}): ReactElement {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const worker: Worker = new FFMpegDownloadWorker();
 
-      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
-        const { type, error }: MessageEventData = event.data;
+      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
+        const { type, error }: MessageEventData = event1.data;
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {

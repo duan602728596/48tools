@@ -94,8 +94,8 @@ function Concat(props: {}): ReactElement {
     // 合并文件
     const worker: Worker = new ConcatVideoWorker();
 
-    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
-      const { type, error }: MessageEventData = event.data;
+    worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
+      const { type, error }: MessageEventData = event1.data;
 
       if (type === 'close' || type === 'error') {
         if (type === 'error') {

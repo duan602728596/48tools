@@ -38,6 +38,9 @@ module.exports = {
       }
     }
   },
+  globals: {
+    NodeJS: 'readonly'
+  },
   overrides: [
     {
       files: ['*.ts', '*.tsx'],

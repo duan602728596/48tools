@@ -136,7 +136,7 @@ function Download(props: {}): ReactElement {
               ) : (
                 <Select className={ style.downloadSelect }
                   placeholder="下载"
-                  onSelect={ (value: string): Promise<void> => handleDownloadAcFunVideoClick(record, value) }
+                  onSelect={ (val: string): Promise<void> => handleDownloadAcFunVideoClick(record, val) }
                 >
                   { handleDownloadQualitySelectOptionRender(record.representation) }
                 </Select>

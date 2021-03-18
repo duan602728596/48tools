@@ -52,10 +52,10 @@ function Download(props: {}): ReactElement {
 
       const worker: Worker = new DownloadBilibiliVideoWorker();
 
-      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>): void {
-        const { type }: MessageEventData = event.data;
+      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
+        const { type }: MessageEventData = event1.data;
 
-        dispatch(setDownloadProgress(event.data));
+        dispatch(setDownloadProgress(event1.data));
 
         if (type === 'success') {
           message.success('下载完成！');

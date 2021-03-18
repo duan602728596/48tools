@@ -41,13 +41,13 @@ function toNumber(t: Array<string>): [number, number, number] {
 }
 
 /* 裁剪 */
-function cut(data: WorkerEventData): void {
-  const { ffmpeg, playStreamPath, filePath, startTime, endTime }: WorkerEventData = data;
-  const args: Array<string> = [];
+function cut(workerData: WorkerEventData): void {
+  const { ffmpeg, playStreamPath, filePath, startTime, endTime }: WorkerEventData = workerData;
+  const ffmpegArgs: Array<string> = [];
 
   // 裁剪时长
   if (startTime) {
-    args.push('-ss', startTime);
+    ffmpegArgs.push('-ss', startTime);
 
     if (endTime) {
       const startTimeArr: [number, number, number] = startTime ? toNumber(startTime.split(/:/)) : [0, 0, 0];
@@ -55,18 +55,18 @@ function cut(data: WorkerEventData): void {
       const duration: [number, number, number] = computingTime(startTimeArr, endTimeArr);
       const durationStr: string = duration.map((o: number): string => `${ o }`.padStart(2, '0')).join(':');
 
-      args.push('-t', durationStr);
+      ffmpegArgs.push('-t', durationStr);
     }
   }
 
   // 判断是否为gif或者webp
   if (/\.(gif|webp)$/i.test(filePath)) {
-    args.push('-i', playStreamPath, '-loop', '0', filePath);
+    ffmpegArgs.push('-i', playStreamPath, '-loop', '0', filePath);
   } else {
-    args.push('-accurate_seek', '-i', playStreamPath, '-c', 'copy', '-avoid_negative_ts', '1', filePath);
+    ffmpegArgs.push('-accurate_seek', '-i', playStreamPath, '-c', 'copy', '-avoid_negative_ts', '1', filePath);
   }
 
-  child = spawn(ffmpeg, args);
+  child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
     // console.log(data.toString());
