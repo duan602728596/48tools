@@ -86,6 +86,11 @@ module.exports = {
         ],
         // Extension Rules
         '@typescript-eslint/no-array-constructor': 'error', // 禁止使用new Array()，但是可以使用new Array<type>()
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': [ // 禁止变量声明覆盖外层作用域的变量
+          'error',
+          { hoist: 'all' }
+        ],
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': 'error'  // 禁止定义前使用
       }
