@@ -140,6 +140,12 @@ module.exports = {
     'require-await': 'error',                // 禁止使用不带 await 表达式的 async 函数
     // Variables
     'no-delete-var': 'error',                // 禁止删除变量
+    'no-label-var': 'error',                 // 禁用与变量同名的标签
+    'no-shadow': [                           // 禁止变量声明覆盖外层作用域的变量
+      'error',
+      { hoist: 'all' }
+    ],
+    'no-undef': 'error',                     // 禁用未声明的变量
     'no-use-before-define': 'error',         // 禁止定义前使用
     // Node.js and CommonJS
     'no-new-require': 'error',               // 禁止调用 require 时使用 new 操作符
