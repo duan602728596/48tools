@@ -14,7 +14,8 @@
     "updateVersion:dev": "milktea update --__DEV__",
     "build:png": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 packages/app/titleBarIcon.png",
     "build:icon": "ffmpeg -i statics/titleBarIcon512.png -vf scale=256:256 statics/titleBarIcon.ico",
-    "build:icns": "milktea image2icns --imageEntry=\"statics/titleBarIcon512.png\" --imageOutput=\"./statics/titleBarIcon.icns\" --size=512"
+    "build:icns": "milktea image2icns --imageEntry=\"statics/titleBarIcon512.png\" --imageOutput=\"./statics/titleBarIcon.icns\" --size=512",
+    "build:linuxPng": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 statics/titleBarIcon_linux.png"
   },
   "private": true,
   "workspaces": [
