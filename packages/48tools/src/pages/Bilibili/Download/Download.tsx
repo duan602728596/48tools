@@ -11,7 +11,7 @@ import type { ColumnsType } from 'antd/es/table';
 import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
-import AddForm from './AddForm';
+import AddForm, { bilibiliVideoTypesMap } from './AddForm';
 import { setDeleteDownloadList, setDownloadProgress, BilibiliDownloadInitialState } from '../reducers/download';
 import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import type { DownloadItem } from '../types';
@@ -82,7 +82,11 @@ function Download(props: {}): ReactElement {
 
   const columns: ColumnsType<DownloadItem> = [
     { title: 'ID', dataIndex: 'id' },
-    { title: '下载类型', dataIndex: 'type' },
+    {
+      title: '下载类型',
+      dataIndex: 'type',
+      render: (value: string, record: DownloadItem, index: number): string => bilibiliVideoTypesMap[value]
+    },
     { title: '分页', dataIndex: 'page' },
     {
       title: '下载进度',
