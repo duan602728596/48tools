@@ -7,9 +7,9 @@ import { Button, Alert, Space, message } from 'antd';
 import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import style from './openWeiboWindow.sass';
-import { requestUid, requestUserInfo } from './services/WeiboLogin';
-import { idbSaveAccount } from './reducers/weiboLogin';
-import type { UserInfo } from './services/interface';
+import { requestUid, requestUserInfo } from '../services/WeiboLogin';
+import { idbSaveAccount } from '../reducers/weiboLogin';
+import type { UserInfo } from '../services/interface';
 
 /* 打开微博窗口 */
 function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
