@@ -9,6 +9,7 @@ import * as dayjs from 'dayjs';
 import style from './openWeiboWindow.sass';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { idbSaveAccount } from '../reducers/weiboLogin';
+import PuppeteerLogin from './PuppeteerLogin';
 import type { UserInfo } from '../services/interface';
 
 /* 打开微博窗口 */
@@ -39,6 +40,8 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
           }));
           props.onCancel();
           message.success('登陆成功！');
+        } else {
+          message.error('账号的uid获取失败！');
         }
       }
     }, []);
@@ -60,7 +63,8 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
     <div className={ style.content }>
       <Space size={ 16 }>
         <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议扫码登陆。" />
-        <Button type="primary" onClick={ handleLoginWeiboClick }>微博登陆</Button>
+        <Button onClick={ handleLoginWeiboClick }>微博登陆</Button>
+        <PuppeteerLogin onCancel={ props.onCancel } />
       </Space>
     </div>
   );
