@@ -10,6 +10,7 @@ import Icon, {
 import classNames from 'classnames';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
+import ExecutablePath from './ExecutablePath';
 import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
 import { ReactComponent as IconLiveSvgComponent } from './images/live.svg';
 import { ReactComponent as IconVideoSvgComponent } from './images/video.svg';
@@ -126,6 +127,7 @@ function Index(props: {}): ReactElement {
       <div>
         <Space size={ 16 }>
           <FFmpegOption />
+          <ExecutablePath />
           { theme.ChangeThemeElement }
           <Tooltip title="开发者工具">
             <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
