@@ -79,7 +79,8 @@ export default function(info: object): { [key: string]: any } {
       'electron',
       'got',
       'jsdom',
-      'node-media-server'
+      'node-media-server',
+      'puppeteer-core'
     ]),
     js: {
       ecmascript: true,

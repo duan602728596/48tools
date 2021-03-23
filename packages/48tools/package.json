@@ -30,6 +30,7 @@
     "md5": "^2.3.0",
     "node-media-server": "^2.2.4",
     "prop-types": "^15.7.2",
+    "puppeteer-core": "^8.0.0",
     "qrcode": "^1.4.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

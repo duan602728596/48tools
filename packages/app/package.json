@@ -11,6 +11,7 @@
   "dependencies": {
     "got": "^10.7.0",
     "jsdom": "^16.4.0",
-    "node-media-server": "^2.2.4"
+    "node-media-server": "^2.2.4",
+    "puppeteer-core": "^8.0.0"
   }
 }
