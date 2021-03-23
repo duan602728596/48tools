@@ -3,7 +3,7 @@ import { useEffect, useCallback, ReactElement, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
-import { Button, Alert, Space, message } from 'antd';
+import { Button, Alert, Space, message, Divider } from 'antd';
 import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import style from './openWeiboWindow.sass';
@@ -61,9 +61,10 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
 
   return (
     <div className={ style.content }>
-      <Space size={ 16 }>
-        <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议扫码登陆。" />
+      <Space size={ 8 }>
+        <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议无头浏览器登陆。" />
         <Button onClick={ handleLoginWeiboClick }>微博登陆</Button>
+        <Divider type="vertical" />
         <PuppeteerLogin onCancel={ props.onCancel } />
       </Space>
     </div>
