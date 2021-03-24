@@ -105,6 +105,21 @@ async function unpack() {
     }
   });
 
+  // mac-arm64
+  const macArm64Config = _.cloneDeep(config);
+
+  macArm64Config.mac.target = [{ target: 'dir', arch: 'arm64' }];
+  await builder.build({
+    targets: builder.Platform.MAC.createTarget(),
+    config: {
+      ...macArm64Config,
+      directories: {
+        app: appDir,
+        output: path.join(build, 'mac-arm64')
+      }
+    }
+  });
+
   // win32位编译
   const win32Config = _.cloneDeep(config);
 
@@ -131,6 +146,17 @@ async function unpack() {
 
     fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'linux/linux-unpacked/LICENSE')),
     fse.copy(path.join(cwd, 'README.md'), path.join(build, 'linux/linux-unpacked/README.md')),
+
+    fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'mac-arm64/mac-arm64/LICENSE')),
+    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'mac-arm64/mac-arm64/README.md')),
+    fse.copy(
+      path.join(build, 'win/win-unpacked/LICENSE.electron.txt'),
+      path.join(build, 'mac-arm64/mac-arm64/LICENSE.electron.txt')
+    ),
+    fse.copy(
+      path.join(build, 'win/win-unpacked/LICENSES.chromium.html'),
+      path.join(build, 'mac-arm64/mac-arm64/LICENSES.chromium.html')
+    ),
 
     fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'win32/win-ia32-unpacked/LICENSE')),
     fse.copy(path.join(cwd, 'README.md'), path.join(build, 'win32/win-ia32-unpacked/README.md'))
