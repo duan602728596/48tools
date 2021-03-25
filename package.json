@@ -51,7 +51,6 @@
     "husky": "^4.3.8",
     "lerna": "^3.22.1",
     "lint-staged": "^10.5.3",
-    "lodash": "^4.17.20",
     "rimraf": "^3.0.2",
     "tslib": "^2.1.0",
     "typescript": "^4.1.3"

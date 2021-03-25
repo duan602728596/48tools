@@ -3,33 +3,31 @@ const path = require('path');
 const rimraf = require('rimraf');
 const fse = require('fs-extra');
 const builder = require('electron-builder');
-const _ = require('lodash');
+const { cwd, appDir, staticsDir, build, output, unpacked } = require('./utils');
 const packageJson = require('../package.json');
 
 const rimrafPromise = util.promisify(rimraf);
 
-const cwd = path.join(__dirname, '../');
-const appDir = path.join(cwd, 'www');
-const staticsDir = path.join(cwd, 'statics');
-const build = path.join(cwd, 'build');
+const staticsFiles = {
+  LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
+  README: path.join(cwd, 'README.md'), // README
+  LICENSEElectron: path.join(unpacked.win, 'LICENSE.electron.txt'),   // electron许可协议
+  LICENSESChromium: path.join(unpacked.win, 'LICENSES.chromium.html') // chromium第三方许可协议
+};
+const icon = {
+  mac: path.join(staticsDir, 'titleBarIcon.icns'),
+  win: path.join(staticsDir, 'titleBarIcon.ico'),
+  linux: path.join(staticsDir, 'titleBarIcon_linux.png')
+};
+const electronDownloadVersion = packageJson.dependencies.electron.replace(/^\^/, '');
 
-/* 打包脚本 */
-async function unpack() {
-  // 删除
-  await Promise.all([
-    rimrafPromise(appDir),
-    rimrafPromise(build)
-  ]);
-
-  // 拷贝文件
-  await fse.copy(path.join(cwd, 'packages/app'), appDir);
-  await Promise.all([
-    fse.copy(path.join(cwd, 'packages/main/lib'), path.join(appDir, 'bin/lib')),
-    fse.copy(path.join(cwd, 'packages/48tools/dist'), path.join(appDir, 'dist'))
-  ]);
-
-  // 配置
-  const config = {
+/**
+ * 编译配置
+ * @param { string } outputDir: 输出文件夹
+ * @param { [string, object] | undefined } target: 重写编译目标
+ */
+function config(outputDir, target) {
+  const cfg = {
     appId: '48tools',
     productName: '48tools',
     copyright: '段昊辰',
@@ -39,7 +37,7 @@ async function unpack() {
       '!**/node_modules/*/*.md',
       '!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}',
       '!**/node_modules/*.d.ts',
-      '!**/node_modules/*.ts',
+      '!**/node_modules/*.{ts,tsx}',
       '!**/node_modules/.bin',
       '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}',
       '!.editorconfig',
@@ -48,118 +46,116 @@ async function unpack() {
       '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
       '!**/{appveyor.yml,.travis.yml,circle.yml}',
       '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}',
-      '!**/node_modules/*/{.editorconfig,.eslintignore}',
+      '!**/node_modules/*/{.editorconfig,.eslintignore,.eslintrc.js,.gitignore}',
       '!**/node_modules/*/*.{yml,yaml}',
       '!**/node_modules/*/{LICENSE,license,License}',
       '!**/node_modules/*/AUTHORS'
     ],
     mac: {
       target: 'dir',
-      icon: path.join(staticsDir, 'titleBarIcon.icns')
+      icon: icon.mac
     },
     win: {
       target: 'dir',
-      icon: path.join(staticsDir, 'titleBarIcon.ico')
+      icon: icon.win
     },
     linux: {
       target: 'dir',
-      icon: path.join(staticsDir, 'titleBarIcon_linux.png'),
+      icon: icon.linux,
       executableName: '48tools'
     },
     electronDownload: {
-      version: packageJson.dependencies.electron.replace(/^\^/, '')
+      version: electronDownloadVersion
+    },
+    directories: {
+      app: appDir,
+      output: outputDir
     }
   };
 
-  // 编译
+  // 重写编译目标
+  if (target) {
+    cfg[target[0]].target = [target[1]];
+  }
+
+  return cfg;
+}
+
+/**
+ * 拷贝文件
+ * @param { string } unpackedDir: 拷贝目录
+ * @param { boolean } isMac: 是否为mac系统
+ */
+function copy(unpackedDir, isMac) {
+  const queue = [
+    fse.copy(staticsFiles.LICENSE, path.join(unpackedDir, 'LICENSE')),
+    fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md'))
+  ];
+
+  if (isMac) {
+    queue.push(
+      fse.copy(staticsFiles.LICENSEElectron, path.join(unpackedDir, 'LICENSE.electron.txt')),
+      fse.copy(staticsFiles.LICENSESChromium, path.join(unpackedDir, 'LICENSES.chromium.html'))
+    );
+  }
+
+  return queue;
+}
+
+/* 打包脚本 */
+async function unpack() {
+  // 删除中间代码文件夹和编译后的文件夹
+  await Promise.all([
+    rimrafPromise(appDir),
+    rimrafPromise(build)
+  ]);
+
+  // 拷贝编译的临时文件到中间代码文件夹
+  const packages = path.join(cwd, 'packages');
+
+  await fse.copy(path.join(packages, 'app'), appDir);
+  await Promise.all([
+    fse.copy(path.join(packages, 'main/lib'), path.join(appDir, 'bin/lib')),
+    fse.copy(path.join(packages, '48tools/dist'), path.join(appDir, 'dist'))
+  ]);
+
+  // 编译mac
   await builder.build({
     targets: builder.Platform.MAC.createTarget(),
-    config: {
-      ..._.cloneDeep(config),
-      directories: {
-        app: appDir,
-        output: path.join(build, 'mac')
-      }
-    }
+    config: config(output.mac)
   });
 
+  // 编译mac-arm64
+  await builder.build({
+    targets: builder.Platform.MAC.createTarget(),
+    config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+  });
+
+  // 编译win64
   await builder.build({
     targets: builder.Platform.WINDOWS.createTarget(),
-    config: {
-      ..._.cloneDeep(config),
-      directories: {
-        app: appDir,
-        output: path.join(build, 'win')
-      }
-    }
+    config: config(output.win)
   });
 
+  // 编译win32
+  await builder.build({
+    targets: builder.Platform.WINDOWS.createTarget(),
+    config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
+  });
+
+  // 编译linux
   await builder.build({
     targets: builder.Platform.LINUX.createTarget(),
-    config: {
-      ..._.cloneDeep(config),
-      directories: {
-        app: appDir,
-        output: path.join(build, 'linux')
-      }
-    }
+    config: config(output.linux)
   });
 
-  // mac-arm64
-  const macArm64Config = _.cloneDeep(config);
-
-  macArm64Config.mac.target = [{ target: 'dir', arch: 'arm64' }];
-  await builder.build({
-    targets: builder.Platform.MAC.createTarget(),
-    config: {
-      ...macArm64Config,
-      directories: {
-        app: appDir,
-        output: path.join(build, 'mac-arm64')
-      }
-    }
-  });
-
-  // win32位编译
-  const win32Config = _.cloneDeep(config);
-
-  win32Config.win.target = [{ target: 'dir', arch: 'ia32' }];
-  await builder.build({
-    targets: builder.Platform.WINDOWS.createTarget(),
-    config: {
-      ...win32Config,
-      directories: {
-        app: appDir,
-        output: path.join(build, 'win32')
-      }
-    }
-  });
-
+  // 拷贝许可文件
   await Promise.all([
-    fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'mac/mac/LICENSE')),
-    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'mac/mac/README.md')),
-    fse.copy(path.join(build, 'win/win-unpacked/LICENSE.electron.txt'), path.join(build, 'mac/mac/LICENSE.electron.txt')),
-    fse.copy(path.join(build, 'win/win-unpacked/LICENSES.chromium.html'), path.join(build, 'mac/mac/LICENSES.chromium.html')),
-
-    fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'win/win-unpacked/LICENSE')),
-    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'win/win-unpacked/README.md')),
-
-    fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'linux/linux-unpacked/LICENSE')),
-    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'linux/linux-unpacked/README.md')),
-
-    fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'mac-arm64/mac-arm64/LICENSE')),
-    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'mac-arm64/mac-arm64/README.md')),
-    fse.copy(
-      path.join(build, 'win/win-unpacked/LICENSE.electron.txt'),
-      path.join(build, 'mac-arm64/mac-arm64/LICENSE.electron.txt')
-    ),
-    fse.copy(
-      path.join(build, 'win/win-unpacked/LICENSES.chromium.html'),
-      path.join(build, 'mac-arm64/mac-arm64/LICENSES.chromium.html')
-    ),
-
-    fse.copy(path.join(cwd, 'LICENSE'), path.join(build, 'win32/win-ia32-unpacked/LICENSE')),
-    fse.copy(path.join(cwd, 'README.md'), path.join(build, 'win32/win-ia32-unpacked/README.md'))
+    ...copy(unpacked.mac, true),
+    ...copy(unpacked.macArm64, true),
+    ...copy(unpacked.win),
+    ...copy(unpacked.win32),
+    ...copy(unpacked.linux)
   ]);
 }
 
