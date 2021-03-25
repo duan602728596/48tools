@@ -169,10 +169,16 @@ function Live(props: {}): ReactElement {
     let userId: number, token: string;
 
     if (cookie) {
-      const tokenRes: WebToken = await requestWebTokenGet();
+      try {
+        const tokenRes: WebToken = await requestWebTokenGet();
 
-      userId = tokenRes.userId;
-      token = tokenRes['acfun.midground.api_st'];
+        userId = tokenRes.userId;
+        token = tokenRes['acfun.midground.api_st'];
+      } catch (err) {
+        console.error(err);
+
+        return message.error('获取直播地址失败！可能是你的Cookie已过期，请重新登陆。');
+      }
     } else {
       const tokenRes: AppVisitorLogin = await requestRestAppVisitorLogin(didCookie);
 
