@@ -1,7 +1,5 @@
-import * as process from 'process';
 import { BrowserWindow, Session, Cookie } from 'electron';
 
-const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 const weiboUrl: string = 'https://weibo.com/';
 let weiboLoginWin: BrowserWindow | null = null;
 

@@ -36,8 +36,8 @@ function openPlayerHtml(title: string, query: string): void {
   if (win) {
     win.loadFile(
       isDevelopment
-        ? path.join(__dirname, '../../48tools/dist/player.html')
-        : path.join(__dirname, '../../dist/player.html'),
+        ? path.join(__dirname, '../../../48tools/dist/player.html')
+        : path.join(__dirname, '../../../dist/player.html'),
       { search: query }
     );
 
