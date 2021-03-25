@@ -57,7 +57,6 @@ async function clean() {
     fs.rename(unpacked.win, path.join(build, `win/48tools-${ version }-winx64`)),
     fs.rename(unpacked.win32, path.join(build, `win32/48tools-${ version }-winx32`)),
     fs.rename(unpacked.linux, path.join(build, `linux/48tools-${ version }-linux64`))
-
   ]);
 }
 
