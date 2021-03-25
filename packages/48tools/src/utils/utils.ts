@@ -33,7 +33,7 @@ export function source(pathname: string): string {
   if (/^https?/i.test(pathname)) {
     return pathname;
   } else {
-    return `https://source3.48.cn/${ pathname }`;
+    return `https://source3.48.cn/${ pathname.replace(/^\//, '') }`;
   }
 }
 

@@ -2,11 +2,13 @@ import * as path from 'path';
 import type { ParsedPath } from 'path';
 import { remote, SaveDialogReturnValue } from 'electron';
 import type { ReactElement, ReactNodeArray, MouseEvent } from 'react';
+import * as PropTypes from 'prop-types';
 import { Modal, message } from 'antd';
 import style from './downloadImages.sass';
-import { source } from '../../../../utils/utils';
-import { requestDownloadFileByStream } from '../../services/pocket48';
-import type { LiveInfo } from '../../services/interface';
+import ImagePreview from './ImagePreview';
+import { source } from '../../../../../utils/utils';
+import { requestDownloadFileByStream } from '../../../services/pocket48';
+import type { LiveInfo } from '../../../services/interface';
 
 interface DownloadImagesProps {
   liveInfo: LiveInfo;
@@ -47,6 +49,9 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
           <div key={ item } className={ style.listItem }>
             <div className={ style.listItemContent }>电台图片{ index + 1 }</div>
             <div className={ style.listItemActions }>
+              <ImagePreview src={ source(item) } />
+            </div>
+            <div className={ style.listItemActions }>
               <a href={ item } role="button" aria-label="下载" onClick={ handleDownloadClick }>下载</a>
             </div>
           </div>
@@ -62,6 +67,9 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
       <div className={ style.listItem }>
         <div className={ style.listItemContent }>封面图</div>
         <div className={ style.listItemActions }>
+          <ImagePreview src={ source(coverPath) } />
+        </div>
+        <div className={ style.listItemActions }>
           <a href={ coverPath } role="button" aria-label="下载" onClick={ handleDownloadClick }>下载</a>
         </div>
       </div>
@@ -69,6 +77,12 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
     </div>
   );
 }
+
+DownloadImages.propTypes = {
+  liveInfo: PropTypes.object,
+  coverPath: PropTypes.string,
+  carousels: PropTypes.array
+};
 
 /**
  * 弹出层打开图片下载

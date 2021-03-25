@@ -17,7 +17,7 @@ import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket4
 import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
-import downloadImages from '../Pocket48Live/downloadImages';
+import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 

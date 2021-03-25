@@ -22,7 +22,7 @@ import {
 } from '../../reducers/pocket48';
 import { rStr, getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../../utils/nodeMediaServer/nodeMediaServer';
-import downloadImages from './downloadImages';
+import downloadImages from './downloadImages/downloadImages';
 import autoGrab from './autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
