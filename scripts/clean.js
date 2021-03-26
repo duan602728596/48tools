@@ -54,8 +54,8 @@ async function clean() {
   await Promise.all([
     fs.rename(unpacked.mac, path.join(build, `mac/48tools-${ version }-mac`)),
     fs.rename(unpacked.macArm64, path.join(build, `mac-arm64/48tools-${ version }-mac-arm64`)),
-    fs.rename(unpacked.win, path.join(build, `win/48tools-${ version }-winx64`)),
-    fs.rename(unpacked.win32, path.join(build, `win32/48tools-${ version }-winx32`)),
+    fs.rename(unpacked.win, path.join(build, `win/48tools-${ version }-win64`)),
+    fs.rename(unpacked.win32, path.join(build, `win32/48tools-${ version }-win32`)),
     fs.rename(unpacked.linux, path.join(build, `linux/48tools-${ version }-linux64`))
   ]);
 }
