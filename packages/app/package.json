@@ -9,8 +9,8 @@
   },
   "main": "bin/lib/main.js",
   "dependencies": {
-    "got": "^10.7.0",
-    "jsdom": "^16.4.0",
+    "got": "^11.8.2",
+    "jsdom": "^16.5.1",
     "node-media-server": "^2.2.4",
     "puppeteer-core": "^8.0.0"
   }
