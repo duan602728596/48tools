@@ -10,7 +10,7 @@ import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDown
 import style from './download.sass';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
-import AddForm from './AddForm';
+import AddForm, { acfunVideoTypesMap } from './AddForm';
 import {
   setDeleteDownloadList,
   setAddDownloadWorker,
@@ -114,7 +114,11 @@ function Download(props: {}): ReactElement {
 
   const columns: ColumnsType<DownloadItem> = [
     { title: 'ID', dataIndex: 'id' },
-    { title: '下载类型', dataIndex: 'type' },
+    {
+      title: '下载类型',
+      dataIndex: 'type',
+      render: (value: string, record: DownloadItem, index: number): string => acfunVideoTypesMap[value]
+    },
     {
       title: '操作',
       key: 'handle',

@@ -1,15 +1,33 @@
-import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { Fragment, useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Button, Modal, Form, Select, Input, Alert, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import { pick } from 'lodash-es';
+import { pick, transform } from 'lodash-es';
 import style from './addForm.sass';
 import { parseAcFunUrl } from './parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
 import { rStr } from '../../../utils/utils';
 import type { Representation } from '../types';
+
+/* 视频分类 */
+const acfunVideoTypes: Array<{ label: string; value: string }> = [
+  { value: 'ac', label: '视频（ac）' },
+  { value: 'aa', label: '番剧（aa）' }
+];
+
+export const acfunVideoTypesMap: { [key: string]: string } = transform(acfunVideoTypes,
+  function(result: { [key: string]: string }, item: { label: string; value: string }, index: number): void {
+    result[item.value] = item.label;
+  }, {});
+
+/* 视频分类的select选项的渲染 */
+function typeSelectOptionsRender(): ReactNodeArray {
+  return acfunVideoTypes.map((item: { label: string; value: string }, index: number): ReactElement => {
+    return <Select.Option key={ item.value } value={ item.value }>{ item.label }</Select.Option>;
+  });
+}
 
 /* 添加A站视频下载队列 */
 function AddForm(props: {}): ReactElement {
@@ -87,10 +105,7 @@ function AddForm(props: {}): ReactElement {
           wrapperCol={{ span: 20 }}
         >
           <Form.Item name="type" label="下载类型">
-            <Select>
-              <Select.Option value="ac">视频（ac）</Select.Option>
-              <Select.Option value="aa">番剧（aa）</Select.Option>
-            </Select>
+            <Select>{ typeSelectOptionsRender() }</Select>
           </Form.Item>
           <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
             <Input />
