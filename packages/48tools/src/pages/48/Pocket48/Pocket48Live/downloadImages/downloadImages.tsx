@@ -1,9 +1,12 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
-import { remote, SaveDialogReturnValue } from 'electron';
+import * as fs from 'fs';
+import { promises as fsP } from 'fs';
+import { remote, SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
 import type { ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import { Modal, message } from 'antd';
+import { Modal, message, Button } from 'antd';
+import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/icons';
 import style from './downloadImages.sass';
 import ImagePreview from './ImagePreview';
 import { source } from '../../../../../utils/utils';
@@ -62,8 +65,44 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
     }
   }
 
+  // 下载所有图片
+  async function handleDownloadAllImagesClick(event: MouseEvent): Promise<void> {
+    try {
+      const result: OpenDialogReturnValue = await remote.dialog.showOpenDialog({
+        properties: ['openDirectory']
+      });
+
+      if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
+
+      // 保存的目录
+      const dir: string = path.join(result.filePaths[0], `[口袋48图片]${ liveInfo.userInfo.nickname }_${ liveInfo.title }`);
+      const imageFiles: Array<string> = [coverPath].concat(carousels ?? []);
+
+      // 创建目录
+      if (!fs.existsSync(dir)) {
+        await fsP.mkdir(dir);
+      }
+
+      const queue: Array<Promise<void>> = imageFiles.map(function(item: string, index: number): Promise<void> {
+        const pathResult: ParsedPath = path.parse(item);
+        const filePath: string = path.join(dir, pathResult.base);
+
+        return requestDownloadFileByStream(source(item), filePath);
+      });
+
+      await Promise.all(queue);
+      message.success('图片下载完成！');
+    } catch (err) {
+      console.error(err);
+      console.error('图片下载失败！');
+    }
+  }
+
   return (
     <div className={ style.content }>
+      <Button className={ style.downloadAllBtn } icon={ <IconCloudDownloadOutlined /> } onClick={ handleDownloadAllImagesClick }>
+        下载全部图片到文件夹
+      </Button>
       <div className={ style.listItem }>
         <div className={ style.listItemContent }>封面图</div>
         <div className={ style.listItemActions }>
