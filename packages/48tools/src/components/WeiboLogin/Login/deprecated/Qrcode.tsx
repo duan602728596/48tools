@@ -5,15 +5,15 @@ import { useDispatch } from 'react-redux';
 import { Empty, Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
-import { idbSaveAccount } from '../reducers/weiboLogin';
+import { idbSaveAccount } from '../../reducers/weiboLogin';
 import {
   requestQrcode,
   requestQrcodeCheck,
   requestLoginV2,
   requestCrossDomainUrl,
   requestUserInfo
-} from '../services/WeiboLogin';
-import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from '../services/interface';
+} from '../../services/WeiboLogin';
+import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from '../../services/interface';
 
 let qrcodeLoginTimer: NodeJS.Timeout | null = null; // 轮循，判断是否登陆
 let qrid: string | null = null;
