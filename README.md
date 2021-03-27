@@ -2,7 +2,7 @@
 
 ## 软件下载链接
 
-进入到 https://github.com/duan602728596/48tools/releases、 https://gitee.com/duanhaochen/a48tools/releases      
+进入到 https://github.com/duan602728596/48tools/releases 、 https://gitee.com/duanhaochen/a48tools/releases      
 或 https://github.com/duan602728596/document/blob/master/48/README.md 下载。
 
 ## 软件功能
