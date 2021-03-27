@@ -20,7 +20,7 @@
 * A站视频下载
 * 视频剪切
 * 视频合并
-* 微博超话签到
+* 微博超级话题签到
 * 桃叭字符串加密解密
 
 ## 许可证
@@ -33,18 +33,25 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。
 
 ## 模块
 
-* 48tools: 软件源代码
-* app：编译程序主目录
-* darkTheme：提取暗黑主题的css文件
-* main：Electron主程序运行源代码
+* 48tools: 软件源代码。
+* app：编译程序主目录。
+* darkTheme：提取暗黑主题的css文件。
+* main：Electron主程序运行源代码。
+
+## 开发
+
+1. darkTheme模块：进入`packages/darkTheme`，运行`npm run build`，编译暗黑主题的css文件。
+2. main模块：进入`packages/main`，运行`npm run start`，开发主程序源代码；或运行`npm run dev`，编译开发环境的主程序源代码。
+3. 48tools模块：进入`packages/48tools`，运行`npm run dll`，然后运行`npm run start`。
+4. 48tools模块：进入`packages/48tools`，运行`npm run runel`，启动软件。
 
 ## 编译
 
-1. main模块：进入`packages/main`，运行`npm run build`，编译主程序源代码
-2. darkTheme模块：进入`packages/darkTheme`，运行`npm run build`，编译暗黑主题的css文件
-3. 48tools模块：进入`packages/48tools`，运行`npm run build`，编译软件源代码
-4. 运行`node scripts/unpack.js`，打包软件
-5. 运行`node scripts/clean.js`，删除软件中的无用的文件
+1. main模块：进入`packages/main`，运行`npm run build`，编译主程序源代码。
+2. darkTheme模块：进入`packages/darkTheme`，运行`npm run build`，编译暗黑主题的css文件。
+3. 48tools模块：进入`packages/48tools`，运行`npm run build`，编译软件源代码。
+4. 运行`node scripts/unpack.js`，打包软件。
+5. 运行`node scripts/clean.js`，删除软件中的无用的文件。
 
 ## 源代码托管地址
 
