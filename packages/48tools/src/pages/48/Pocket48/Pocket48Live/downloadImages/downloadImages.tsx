@@ -5,7 +5,7 @@ import { promises as fsP } from 'fs';
 import { remote, SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
 import type { ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import { Modal, message, Button } from 'antd';
+import { Modal, message, Button, Image } from 'antd';
 import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/icons';
 import style from './downloadImages.sass';
 import ImagePreview from './ImagePreview';
@@ -103,16 +103,18 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
       <Button className={ style.downloadAllBtn } icon={ <IconCloudDownloadOutlined /> } onClick={ handleDownloadAllImagesClick }>
         下载全部图片到文件夹
       </Button>
-      <div className={ style.listItem }>
-        <div className={ style.listItemContent }>封面图</div>
-        <div className={ style.listItemActions }>
-          <ImagePreview src={ source(coverPath) } />
+      <Image.PreviewGroup>
+        <div className={ style.listItem }>
+          <div className={ style.listItemContent }>封面图</div>
+          <div className={ style.listItemActions }>
+            <ImagePreview src={ source(coverPath) } />
+          </div>
+          <div className={ style.listItemActions }>
+            <a href={ coverPath } role="button" aria-label="下载" onClick={ handleDownloadClick }>下载</a>
+          </div>
         </div>
-        <div className={ style.listItemActions }>
-          <a href={ coverPath } role="button" aria-label="下载" onClick={ handleDownloadClick }>下载</a>
-        </div>
-      </div>
-      { carouselsRender() }
+        { carouselsRender() }
+      </Image.PreviewGroup>
     </div>
   );
 }
