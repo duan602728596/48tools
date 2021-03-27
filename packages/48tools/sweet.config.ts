@@ -101,11 +101,11 @@ export default function(info: object): { [key: string]: any } {
         '@primary-color': '#13c2c2'
       },
       include: /node_modules[\\/](_?antd|highlight)/,
-      exclude: /dark-?Theme/i
+      exclude: /dark-?theme/i
     },
     rules: [
       {
-        test: /antd-dark\.(min\.)?css/,
+        test: /dark-theme\.(min\.)?css/,
         use: [{
           loader: 'file-loader',
           options: {

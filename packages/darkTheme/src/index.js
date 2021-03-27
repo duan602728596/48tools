@@ -39,7 +39,7 @@ async function main() {
   const hljsCss = await fsP.readFile(hljsPath, { encoding: 'utf8' });
 
   await fsP.mkdir(distDir);
-  await fsP.writeFile(path.join(distDir, 'antd-dark.css'), `${ css }\n${ hljsCss }`);
+  await fsP.writeFile(path.join(distDir, 'dark-theme.css'), `${ css }\n${ hljsCss }`);
 }
 
 main();
