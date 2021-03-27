@@ -1,7 +1,8 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
-import { remote, SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
@@ -103,7 +104,7 @@ function Pocket48Record(props: {}): ReactElement {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const time: string = getFileTime(record.ctime);
-      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ record.title }_${ time }.ts`
       });
 
@@ -153,7 +154,7 @@ function Pocket48Record(props: {}): ReactElement {
       const res: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const time: string = getFileTime(record.ctime);
       const { ext }: ParsedPath = path.parse(res.content.msgFilePath);
-      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ record.title }_${ time }${ ext }`
       });
 

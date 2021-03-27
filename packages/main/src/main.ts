@@ -1,10 +1,13 @@
 import * as process from 'process';
 import * as path from 'path';
 import { app, BrowserWindow, Menu } from 'electron';
+import { initialize } from '@electron/remote/main';
 import ipc from './ipc';
 
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 let win: BrowserWindow | null = null;
+
+initialize();
 
 /* 初始化 */
 function createWindow(): void {

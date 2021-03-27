@@ -1,5 +1,6 @@
 import { promises as fsP } from 'fs';
-import { remote, SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
@@ -93,7 +94,7 @@ function InVideo(props: {}): ReactElement {
         return message.warn('视频不存在！');
       }
 
-      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[48公演录播]${ record.liveType }_${ m3u8Url.title }_${ record.id }_${ quality }.ts`
       });
 

@@ -1,4 +1,5 @@
-import { remote, SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
@@ -56,7 +57,7 @@ function Download(props: {}): ReactElement {
   // 开始下载
   async function handleDownloadAcFunVideoClick(record: DownloadItem, value: string): Promise<void> {
     const [label, durl]: string[] = value.split(/@/);
-    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
       defaultPath: `[A站下载]${ record.type }${ record.id }_${ label }.mp4`
     });
 

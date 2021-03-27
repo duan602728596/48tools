@@ -1,7 +1,8 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
-import { remote, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
+import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ComponentClass, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
@@ -79,7 +80,7 @@ function Concat(props: {}): ReactElement {
 
     const pathResult: ParsedPath = path.parse(concatList[0].value);
     const time: string = dayjs().format('YYYY_MM_DD_HH_mm_ss');
-    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
       defaultPath: `[视频合并]${ time }${ pathResult.ext }`
     });
 
@@ -129,7 +130,7 @@ function Concat(props: {}): ReactElement {
 
   // 选择视频
   async function handleSelectVideosClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await remote.dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
       properties: ['openFile', 'multiSelections']
     });
 

@@ -76,6 +76,7 @@ export default function(info: object): { [key: string]: any } {
       'stream',
       'url',
       'util',
+      '@electron/remote',
       'electron',
       'got',
       'jsdom',

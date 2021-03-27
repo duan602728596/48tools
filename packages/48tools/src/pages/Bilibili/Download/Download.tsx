@@ -1,7 +1,8 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
 import * as url from 'url';
-import { remote, SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,7 +45,7 @@ function Download(props: {}): ReactElement {
     try {
       const urlResult: url.URL = new url.URL(item.durl);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
-      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${ parseResult.ext }`
       });
 

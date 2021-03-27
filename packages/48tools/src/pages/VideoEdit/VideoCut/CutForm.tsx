@@ -1,6 +1,7 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
-import { remote, OpenDialogReturnValue } from 'electron';
+import type { OpenDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import type { ReactElement, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -38,7 +39,7 @@ function CutForm(props: {}): ReactElement {
 
   // 选择文件
   async function handleOpenVideoFileClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await remote.dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
       properties: ['openFile']
     });
 

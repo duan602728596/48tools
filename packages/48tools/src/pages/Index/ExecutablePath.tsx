@@ -1,4 +1,5 @@
-import { shell, remote, OpenDialogReturnValue } from 'electron';
+import type { OpenDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import { Button, Modal, Form, Alert, Input, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
@@ -52,7 +53,7 @@ function ExecutablePath(props: {}): ReactElement {
 
   // 选择浏览器文件的位置
   async function handleSelectExecutablePathClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await remote.dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
       properties: ['openFile']
     });
 

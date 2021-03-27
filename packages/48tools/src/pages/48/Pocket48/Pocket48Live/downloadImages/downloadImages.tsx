@@ -2,7 +2,8 @@ import * as path from 'path';
 import type { ParsedPath } from 'path';
 import * as fs from 'fs';
 import { promises as fsP } from 'fs';
-import { remote, SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import type { ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Modal, message, Button, Image } from 'antd';
@@ -30,7 +31,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
     try {
       const href: string = event.target['getAttribute']('href');
       const pathResult: ParsedPath = path.parse(href);
-      const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[口袋48图片]${ liveInfo.userInfo.nickname }_${ liveInfo.title }_${ pathResult.base }`
       });
 
@@ -68,7 +69,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
   // 下载所有图片
   async function handleDownloadAllImagesClick(event: MouseEvent): Promise<void> {
     try {
-      const result: OpenDialogReturnValue = await remote.dialog.showOpenDialog({
+      const result: OpenDialogReturnValue = await dialog.showOpenDialog({
         properties: ['openDirectory']
       });
 

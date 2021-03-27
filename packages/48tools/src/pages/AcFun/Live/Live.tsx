@@ -1,4 +1,5 @@
-import { remote, SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, useState, useEffect, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import { render } from 'react-dom';
 import type { Dispatch } from 'redux';
@@ -113,7 +114,7 @@ function Live(props: {}): ReactElement {
       async function handleOkClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
         if (ctx.player) {
           const time: string = getFileTime();
-          const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+          const result: SaveDialogReturnValue = await dialog.showSaveDialog({
             defaultPath: `[A站直播]${ record.roomId }_${ time }.flv`
           });
 

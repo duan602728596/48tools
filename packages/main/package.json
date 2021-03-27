@@ -9,6 +9,9 @@
     "build": "npm run clean && cross-env NODE_ENV=production gulp",
     "clean": "rimraf ./lib"
   },
+  "dependencies": {
+    "@electron/remote": "^1.0.4"
+  },
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-terser": "^2.0.1",

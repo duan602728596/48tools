@@ -1,4 +1,5 @@
-import { shell, remote, OpenDialogReturnValue } from 'electron';
+import { shell, OpenDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import { Button, Modal, Form, Input, message, Alert } from 'antd';
 import type { FormInstance } from 'antd/es/form';
@@ -61,7 +62,7 @@ function FFmpegOption(props: {}): ReactElement {
 
   // 选择ffmpeg文件的位置
   async function handleSelectFFmpegClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await remote.dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
       properties: ['openFile']
     });
 

@@ -1,4 +1,5 @@
-import { remote, SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
@@ -54,7 +55,7 @@ function Index(props: {}): ReactElement {
 
   // 开始裁剪
   async function handleStartCutClick(item: CutItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
       defaultPath: `[视频裁剪]${ item.id }.${ item.name }`
     });
 

@@ -1,4 +1,5 @@
-import { remote, SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -35,7 +36,7 @@ function GetLiveUrl(props: {}): ReactElement {
 
     // 开始录制
     const time: string = getFileTime();
-    const result: SaveDialogReturnValue = await remote.dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
       defaultPath: `[48公演直播]${ value.type }_${ liveUrl.title }_${ value.live }_${ value.quality }_${ time }.flv`
     });
 

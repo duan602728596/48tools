@@ -58,3 +58,12 @@ declare module 'worker-loader!*' {
 
   export default WorkerLoader;
 }
+
+declare module '@electron/remote' {
+  import type { Remote, Dialog } from 'electron';
+
+  const remote: Remote;
+  export const dialog: Dialog;
+
+  export = remote;
+}

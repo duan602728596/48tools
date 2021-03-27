@@ -1,4 +1,5 @@
-import { remote, OpenDialogReturnValue } from 'electron';
+import type { OpenDialogReturnValue } from 'electron';
+import { dialog } from '@electron/remote';
 import { useEffect, ReactElement, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -37,7 +38,7 @@ function LiveOptions(props: {}): ReactElement {
 
   // 选择目录
   async function handleChangeDirClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await remote.dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
       properties: ['openDirectory']
     });
 

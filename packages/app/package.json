@@ -9,6 +9,7 @@
   },
   "main": "bin/lib/main.js",
   "dependencies": {
+    "@electron/remote": "^1.0.4",
     "got": "^11.8.2",
     "jsdom": "^16.5.1",
     "node-media-server": "^2.2.4",
