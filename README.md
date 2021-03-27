@@ -2,8 +2,8 @@
 
 ## 软件下载链接
 
-进入到 https://github.com/duan602728596/48tools/releases   
-或 https://github.com/duan602728596/document/blob/master/48/README.md 下载
+进入到 https://github.com/duan602728596/48tools/releases、https://gitee.com/duanhaochen/a48tools/releases      
+或 https://github.com/duan602728596/document/blob/master/48/README.md 下载。
 
 ## 软件功能
 
@@ -55,4 +55,5 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。
 
 ## 源代码托管地址
 
-[https://github.com/duan602728596/48tools](https://github.com/duan602728596/48tools)
+github：[https://github.com/duan602728596/48tools](https://github.com/duan602728596/48tools)。   
+gitee同步地址：[gitee同步地址：https://gitee.com/duanhaochen/a48tools](https://gitee.com/duanhaochen/a48tools)。
