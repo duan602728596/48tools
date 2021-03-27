@@ -1,4 +1,3 @@
-import { JSDOM, DOMWindow } from 'jsdom';
 import * as md5 from 'md5';
 import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo, requestBangumiVideoInfo } from '../services/download';
 import type { InitialState } from '../types';
@@ -21,8 +20,7 @@ interface ParseHtmlResult {
  * @param { string } html
  */
 function parseHtml(html: string): ParseHtmlResult {
-  const dom: JSDOM = new JSDOM(html);
-  const { document }: DOMWindow = dom.window;
+  const document: Document = new DOMParser().parseFromString(html, 'text/html');
   const scripts: NodeListOf<HTMLScriptElement> = document.querySelectorAll('script');
   let initialState: InitialState | undefined = undefined;
 

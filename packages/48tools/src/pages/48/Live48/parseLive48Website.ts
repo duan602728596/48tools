@@ -1,4 +1,3 @@
-import { JSDOM, DOMWindow } from 'jsdom';
 import { requestFetchHtml, requestStreamInfo } from '../services/live48';
 import type { InVideoQuery, InVideoItem } from '../types';
 import type { LiveStreamInfo } from '../services/interface';
@@ -12,8 +11,7 @@ export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ck
 export async function parseInLive(type: string): Promise<Array<{ label: string; value: string }>> {
   const indexUrl: string = `https://live.48.cn/Index/main/club/${ LIVE_TYPE.indexOf(type) + 1 }`;
   const html: string = await requestFetchHtml(indexUrl);
-  const { window }: JSDOM = new JSDOM(html);
-  const { document }: DOMWindow = window;
+  const document: Document = new DOMParser().parseFromString(html, 'text/html');
   const watchcontent: NodeListOf<HTMLDivElement> = document.querySelectorAll<HTMLDivElement>('.watchcontent');
   const result: Array<{ label: string; value: string }> = [];
 
@@ -35,8 +33,7 @@ export async function parseInLive(type: string): Promise<Array<{ label: string; 
  */
 export async function parseLiveUrl(id: string, quality: string): Promise<{ url: string; title: string } | null> {
   const html: string = await requestFetchHtml(`https://live.48.cn/Index/inlive/id/${ id }`);
-  const { window }: JSDOM = new JSDOM(html);
-  const { document }: DOMWindow = window;
+  const document: Document = new DOMParser().parseFromString(html, 'text/html');
   const urlInput: HTMLElement | null = document.getElementById(`${ quality }_url`);
 
   // 没有直播
@@ -70,8 +67,7 @@ export async function parseInVideoUrl(inVideoQuery: InVideoQuery | undefined, pa
     current: number = page ?? inVideoQuery?.page ?? 1;
   const pageUrl: string = `https://live.48.cn/Index/main/club/${ liveType + 1 }/p/${ current }.html`; // 网站地址
   const html: string = await requestFetchHtml(pageUrl);
-  const { window }: JSDOM = new JSDOM(html);
-  const { document }: DOMWindow = window;
+  const document: Document = new DOMParser().parseFromString(html, 'text/html');
 
   // 获取当前数据总数
   const totalStr: string | null = document.querySelector('.p-skip')!.innerHTML;
@@ -106,8 +102,7 @@ export async function parseVideoItem(record: InVideoItem, quality: string): Prom
   const liveType: number = LIVE_TYPE.indexOf(record.liveType);
   const pageUrl: string = `https://live.48.cn/Index/invideo/club/${ liveType + 1 }/id/${ record.id }`; // 网站地址
   const html: string = await requestFetchHtml(pageUrl);
-  const { window }: JSDOM = new JSDOM(html);
-  const { document }: DOMWindow = window;
+  const document: Document = new DOMParser().parseFromString(html, 'text/html');
   const input: HTMLElement | null = document.getElementById(`${ quality }_url`);
 
   if (input) {

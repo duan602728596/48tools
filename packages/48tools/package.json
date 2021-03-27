@@ -26,7 +26,6 @@
     "history": "^5.0.0",
     "indexeddb-tools": "^3.0.0",
     "indexeddb-tools-redux": "^3.0.0",
-    "jsdom": "^16.5.1",
     "lodash-es": "^4.17.21",
     "md5": "^2.3.0",
     "node-media-server": "^2.2.4",

@@ -32,7 +32,6 @@
     "@sweet-milktea/milktea-cli": "^2.2.0",
     "@sweet-milktea/util-tools": "^0.16.4",
     "@types/fs-extra": "^9",
-    "@types/jsdom": "^16",
     "@types/lodash-es": "^4",
     "@types/node": "^14",
     "@types/react": "^17",

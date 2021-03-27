@@ -1,4 +1,3 @@
-import { JSDOM, DOMWindow } from 'jsdom';
 import { requestAcFunHtml } from '../services/download';
 import type { KsPlayJson, PageInfo, Representation } from '../types';
 
@@ -7,8 +6,7 @@ import type { KsPlayJson, PageInfo, Representation } from '../types';
  * @param { string } html
  */
 function getWindowPageInfo(html: string): PageInfo | undefined {
-  const dom: JSDOM = new JSDOM(html);
-  const { document }: DOMWindow = dom.window;
+  const document: Document = new DOMParser().parseFromString(html, 'text/html');
   const scripts: NodeListOf<HTMLScriptElement> = document.querySelectorAll('script');
   let pageInfo: PageInfo | undefined = undefined;
 
