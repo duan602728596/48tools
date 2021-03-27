@@ -7,6 +7,7 @@ import ipc from './ipc';
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 let win: BrowserWindow | null = null;
 
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
 initialize();
 
 /* 初始化 */
