@@ -10,7 +10,8 @@
     "clean": "rimraf ./lib"
   },
   "dependencies": {
-    "@electron/remote": "^1.0.4"
+    "@electron/remote": "^1.0.4",
+    "node-media-server": "^2.2.4"
   },
   "devDependencies": {
     "gulp": "^4.0.2",

@@ -2,6 +2,7 @@ import { ipcMain, BrowserWindow, IpcMainEvent } from 'electron';
 import openPlayerHtml from './function/openPlayerHtml';
 import ipcTheme from './function/ipcTheme';
 import weiboLogin from './function/weiboLogin';
+import { nodeMediaServerInit } from './nodeMediaServer/nodeMediaServer';
 
 /* ipc通信 */
 function ipc(win: BrowserWindow): void {
@@ -22,6 +23,9 @@ function ipc(win: BrowserWindow): void {
   ipcMain.on('weibo-login', function(event: IpcMainEvent): void {
     weiboLogin(win);
   });
+
+  // 启动node-media-server
+  nodeMediaServerInit();
 }
 
 export default ipc;

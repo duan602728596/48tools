@@ -3,6 +3,7 @@ import * as path from 'path';
 import { app, BrowserWindow, Menu } from 'electron';
 import { initialize } from '@electron/remote/main';
 import ipc from './ipc';
+import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 let win: BrowserWindow | null = null;
@@ -40,7 +41,8 @@ function createWindow(): void {
 
   ipc(win);
 
-  win.on('closed', function(): void {
+  win.on('closed', async function(): Promise<void> {
+    await nodeMediaServerClose();
     win = null;
   });
 }

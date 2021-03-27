@@ -79,7 +79,6 @@ export default function(info: object): { [key: string]: any } {
       '@electron/remote',
       'electron',
       'got',
-      'node-media-server',
       'puppeteer-core'
     ]),
     js: {

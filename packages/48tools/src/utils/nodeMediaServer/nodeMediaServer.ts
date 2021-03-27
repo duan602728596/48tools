@@ -1,6 +1,6 @@
 import * as net from 'net';
 import type { Server as NetServer } from 'net';
-import * as NodeMediaServer from 'node-media-server';
+import { ipcRenderer } from 'electron';
 import { getFFmpeg } from '../utils';
 
 /* 端口号 */
@@ -71,24 +71,9 @@ export async function netMediaServerInit(): Promise<void> {
   netMediaServerPort.rtmpPort = await detectPort(netMediaServerPort.rtmpPort);
   netMediaServerPort.httpPort = await detectPort(netMediaServerPort.httpPort);
 
-  const config: object = {
-    rtmp: {
-      port: netMediaServerPort.rtmpPort,
-      chunk_size: 60000,
-      gop_cache: true,
-      ping: 30,
-      ping_timeout: 60
-    },
-    http: {
-      port: netMediaServerPort.httpPort,
-      allow_origin: '*'
-    },
-    trans: {
-      ffmpeg: getFFmpeg()
-    }
-  };
-
-  const server: NodeMediaServer = new NodeMediaServer(config);
-
-  server.run();
+  ipcRenderer.send('node-media-server', {
+    ffmpeg: getFFmpeg(),
+    rtmpPort: netMediaServerPort.rtmpPort,
+    httpPort: netMediaServerPort.httpPort
+  });
 }

@@ -105,7 +105,7 @@ function FFmpegOption(props: {}): ReactElement {
             </Button>
             <Button className={ style.marginLeft } onClick={ handleSelectFFmpegClick }>选择文件</Button>
           </div>
-          <Alert type="info" message="配置FFmpeg的地址，或自动使用环境变量的地址" />
+          <Alert type="info" message="配置FFmpeg的地址，或自动使用环境变量的地址。播放视频功能需要配置后重新启动软件。" />
         </Form>
       </Modal>
     </Fragment>

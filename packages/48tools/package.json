@@ -28,7 +28,6 @@
     "indexeddb-tools-redux": "^3.0.0",
     "lodash-es": "^4.17.21",
     "md5": "^2.3.0",
-    "node-media-server": "^2.2.4",
     "prop-types": "^15.7.2",
     "puppeteer-core": "^8.0.0",
     "qrcode": "^1.4.4",
