@@ -20,6 +20,7 @@ import { ReactComponent as IconBilibiliLogoSvgComponent } from './images/BILIBIL
 import { ReactComponent as IconAcFunLogoSvgComponent } from './images/acfunlogo.svg';
 import { ReactComponent as IconCutSvgComponent } from './images/cut.svg';
 import { ReactComponent as IconConcatSvgComponent } from './images/concat.svg';
+import { ReactComponent as IconCountSvgComponent } from './images/count.svg';
 
 interface NativeItem {
   name: string;
@@ -76,6 +77,11 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       name: '视频合并',
       url: '/VideoEdit/Concat',
       icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconConcatSvgComponent } />
+    },
+    {
+      name: '桃叭加密解密',
+      url: '/TaobaEncrypt',
+      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconCountSvgComponent } />
     }
   ]
 ];

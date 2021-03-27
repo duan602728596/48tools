@@ -54,6 +54,7 @@ async function lessRender(componentsLessFiles) {
   const lessInput = componentsLessFiles.map((o) => {
     return `@import '${ o }';`;
   }).join('\n');
+
   const output = await less.render(lessInput, {
     javascriptEnabled: true,
     modifyVars: {

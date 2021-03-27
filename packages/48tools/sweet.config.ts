@@ -76,6 +76,7 @@ export default function(info: object): { [key: string]: any } {
       'stream',
       'url',
       'util',
+      'zlib',
       '@electron/remote',
       'electron',
       'got',
@@ -99,7 +100,7 @@ export default function(info: object): { [key: string]: any } {
         // https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
         '@primary-color': '#13c2c2'
       },
-      include: /node_modules[\\/]_?antd/,
+      include: /node_modules[\\/](_?antd|highlight)/,
       exclude: /dark-?Theme/i
     },
     rules: [

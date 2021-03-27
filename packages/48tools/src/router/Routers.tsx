@@ -6,6 +6,7 @@ import Bilibili from '../pages/Bilibili/index';
 import AcFun from '../pages/AcFun/index';
 import VideoEdit from '../pages/VideoEdit/index';
 import WeiboSuper from '../pages/WeiboSuper/index';
+import TaobaEncrypt from '../pages/TaobaEncrypt/index';
 
 function Routers(props: {}): ReactElement | null {
   const routes: ReactElement | null = useRoutes([
@@ -14,7 +15,8 @@ function Routers(props: {}): ReactElement | null {
     { path: 'Bilibili/*', element: <Bilibili /> },
     { path: 'AcFun/*', element: <AcFun /> },
     { path: 'VideoEdit/*', element: <VideoEdit /> },
-    { path: 'WeiboSuper', element: <WeiboSuper /> }
+    { path: 'WeiboSuper', element: <WeiboSuper /> },
+    { path: 'TaobaEncrypt', element: <TaobaEncrypt /> }
   ]);
 
   return routes;
