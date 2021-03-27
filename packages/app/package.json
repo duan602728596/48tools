@@ -10,6 +10,7 @@
   "main": "bin/lib/main.js",
   "dependencies": {
     "@electron/remote": "^1.0.4",
+    "asar-node": "^2.1.3",
     "got": "^11.8.2",
     "node-media-server": "^2.2.4",
     "puppeteer-core": "^8.0.0"

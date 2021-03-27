@@ -1,5 +1,6 @@
 import { workerData } from 'worker_threads';
-import * as NodeMediaServer from 'node-media-server';
+import { addAsarToLookupPaths, register } from 'asar-node';
+import type * as NodeMediaServer from 'node-media-server';
 import type { NodeMediaServerArg } from './nodeMediaServer';
 
 interface WorkerData extends NodeMediaServerArg {
@@ -8,6 +9,19 @@ interface WorkerData extends NodeMediaServerArg {
 
 /* 新线程启动服务，将rtmp转换成flv */
 const { ffmpeg, rtmpPort, httpPort, isDevelopment }: WorkerData = workerData;
+
+let NodeMediaServerModule: NodeMediaServer;
+
+if (isDevelopment) {
+  NodeMediaServerModule = require('node-media-server');
+} else {
+  register();
+  addAsarToLookupPaths();
+
+  // eslint-disable-next-line import/no-unresolved
+  NodeMediaServerModule = require('../../../../app.asar/node_modules/node-media-server/node_media_server.js');
+}
+
 const config: object = {
   logType: isDevelopment ? 3 : 1,
   rtmp: {
@@ -26,6 +40,6 @@ const config: object = {
   }
 };
 
-const server: NodeMediaServer = new NodeMediaServer(config);
+const server: NodeMediaServer = new NodeMediaServerModule(config);
 
 server.run();

@@ -70,7 +70,11 @@ function config(outputDir, target) {
     directories: {
       app: appDir,
       output: outputDir
-    }
+    },
+    asarUnpack: [
+      'node_modules/asar-node',
+      'bin/lib/nodeMediaServer/server.worker.js'
+    ]
   };
 
   // 重写编译目标
