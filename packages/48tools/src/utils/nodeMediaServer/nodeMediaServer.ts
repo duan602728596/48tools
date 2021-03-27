@@ -69,7 +69,7 @@ async function detectPort(port: number, ignorePort: Array<number> = []): Promise
 /* 启动服务，将rtmp转换成flv */
 export async function netMediaServerInit(): Promise<void> {
   netMediaServerPort.rtmpPort = await detectPort(netMediaServerPort.rtmpPort);
-  netMediaServerPort.httpPort = await detectPort(netMediaServerPort.httpPort);
+  netMediaServerPort.httpPort = await detectPort(netMediaServerPort.httpPort, [netMediaServerPort.rtmpPort]);
 
   ipcRenderer.send('node-media-server', {
     ffmpeg: getFFmpeg(),
