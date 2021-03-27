@@ -2,11 +2,12 @@
 
 ## 软件下载链接
 
-进入到https://github.com/duan602728596/48tools/releases 或 https://github.com/duan602728596/document/blob/master/48/README.md 下载
+进入到 https://github.com/duan602728596/48tools/releases   
+或 https://github.com/duan602728596/document/blob/master/48/README.md 下载
 
 ## 软件功能
 
-> 使用前，需要先下载FFmpeg，并配置FFmpeg的软件位置。   
+> 使用前，需要先下载FFmpeg，并配置FFmpeg的软件位置。播放视频功能需要配置后重新启动软件。   
 > 微博超话签到，需要配置无头浏览器的地址。
 
 * 口袋48直播录源
