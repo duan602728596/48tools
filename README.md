@@ -56,4 +56,4 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。
 ## 源代码托管地址
 
 github：[https://github.com/duan602728596/48tools](https://github.com/duan602728596/48tools)。   
-gitee同步地址：[gitee同步地址：https://gitee.com/duanhaochen/a48tools](https://gitee.com/duanhaochen/a48tools)。
+gitee同步地址：[https://gitee.com/duanhaochen/a48tools](https://gitee.com/duanhaochen/a48tools)。
