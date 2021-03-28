@@ -71,6 +71,7 @@ export async function netMediaServerInit(): Promise<void> {
   netMediaServerPort.rtmpPort = await detectPort(netMediaServerPort.rtmpPort);
   netMediaServerPort.httpPort = await detectPort(netMediaServerPort.httpPort, [netMediaServerPort.rtmpPort]);
 
+  // 等待渲染线程启动后，发送消息到主线程，启动node-media-server服务
   ipcRenderer.send('node-media-server', {
     ffmpeg: getFFmpeg(),
     rtmpPort: netMediaServerPort.rtmpPort,

@@ -10,19 +10,21 @@ interface WorkerData extends NodeMediaServerArg {
 /* 新线程启动服务，将rtmp转换成flv */
 const { ffmpeg, rtmpPort, httpPort, isDevelopment }: WorkerData = workerData;
 
-let NodeMediaServerModule: NodeMediaServer;
+// 根据不同的环境加载node-media-server模块
+const NodeMediaServerModule: NodeMediaServer = (function(): NodeMediaServer {
+  if (isDevelopment) {
+    return require('node-media-server');
+  } else {
+    register();
+    addAsarToLookupPaths();
 
-if (isDevelopment) {
-  NodeMediaServerModule = require('node-media-server');
-} else {
-  register();
-  addAsarToLookupPaths();
+    // eslint-disable-next-line import/no-unresolved
+    return require('../../../../app.asar/node_modules/node-media-server/node_media_server.js');
+  }
+})();
 
-  // eslint-disable-next-line import/no-unresolved
-  NodeMediaServerModule = require('../../../../app.asar/node_modules/node-media-server/node_media_server.js');
-}
-
-const config: object = {
+// node-medie-server
+const server: NodeMediaServer = new NodeMediaServerModule({
   logType: isDevelopment ? 3 : 1,
   rtmp: {
     port: rtmpPort,
@@ -38,8 +40,6 @@ const config: object = {
   trans: {
     ffmpeg
   }
-};
-
-const server: NodeMediaServer = new NodeMediaServerModule(config);
+});
 
 server.run();
