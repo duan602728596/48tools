@@ -124,8 +124,8 @@ function TaobaEncrypt(props: {}): ReactElement {
         </div>
         <div className={ style.rightContent }>
           <pre className={ style.codePre }>
-            <code ref={ codeRef } className={ result?.['json'] ? 'json' : undefined }>
-              { result?.['result'] ?? <Empty description="请输入加密或机密的字符串" /> }
+            <code ref={ codeRef } className={ result?.json ? 'json' : undefined }>
+              { result?.result ?? <Empty description="请输入加密或机密的字符串" /> }
             </code>
           </pre>
         </div>
