@@ -11,7 +11,7 @@ interface WorkerData extends NodeMediaServerArg {
 const { ffmpeg, rtmpPort, httpPort, isDevelopment }: WorkerData = workerData;
 
 // 根据不同的环境加载node-media-server模块
-const NodeMediaServerModule: NodeMediaServer = (function(): NodeMediaServer {
+const NodeMediaServerModule: typeof NodeMediaServer = (function(): typeof NodeMediaServer {
   if (isDevelopment) {
     return require('node-media-server');
   } else {
