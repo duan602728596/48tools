@@ -1,6 +1,6 @@
 import * as process from 'process';
 import * as path from 'path';
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain } from 'electron';
 import { initialize } from '@electron/remote/main';
 import ipc from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
@@ -43,6 +43,7 @@ function createWindow(): void {
 
   win.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();
+    ipcMain.removeAllListeners();
     win = null;
   });
 }
