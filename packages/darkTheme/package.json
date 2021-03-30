@@ -1,6 +1,6 @@
 {
   "name": "@48tools/dark-theme",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "编译48tools的暗黑模式css文件",
   "license": "GPL-3.0",
   "scripts": {
