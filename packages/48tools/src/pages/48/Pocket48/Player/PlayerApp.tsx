@@ -12,6 +12,7 @@ import {
   Dispatch as D,
   SetStateAction as S,
   RefObject,
+  MutableRefObject,
   MouseEvent
 } from 'react';
 import { ConfigProvider, Avatar, Tag, Button } from 'antd';
@@ -62,7 +63,7 @@ function PlayerApp(props: {}): ReactElement {
     };
   }, []);
   const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
-  const childRef: RefObject<ChildProcessWithoutNullStreams> = useRef(null);
+  const childRef: MutableRefObject<ChildProcessWithoutNullStreams | undefined> = useRef();
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
 
   // 打开开发者工具
@@ -113,8 +114,7 @@ function PlayerApp(props: {}): ReactElement {
     child.on('close', handleChildProcessClose);
     child.on('error', handleChildProcessError);
 
-    // @ts-ignore
-    childRef['current'] = child;
+    childRef.current = child;
     loadVideo();
   }
 
@@ -151,9 +151,7 @@ function PlayerApp(props: {}): ReactElement {
     rtmpInit();
 
     return function(): void {
-      if (childRef.current) {
-        childRef.current.kill();
-      }
+      childRef.current && childRef.current.kill();
     };
   }, [info, search]);
 
