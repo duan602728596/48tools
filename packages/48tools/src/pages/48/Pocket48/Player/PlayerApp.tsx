@@ -22,8 +22,8 @@ import flvjs from 'flv.js';
 import style from './playerApp.sass';
 import ThemeProvider from '../../../../components/Theme/ThemeProvider';
 import { requestLiveRoomInfo } from '../../services/pocket48';
-import type { LiveRoomInfo } from '../../services/interface';
 import { getFFmpeg, source } from '../../../../utils/utils';
+import type { LiveRoomInfo } from '../../services/interface';
 
 interface Search {
   coverPath: string;
