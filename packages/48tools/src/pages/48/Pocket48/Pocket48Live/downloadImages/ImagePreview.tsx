@@ -1,4 +1,4 @@
-import { Fragment, useRef, ReactElement, ReactNode, RefObject, MouseEvent } from 'react';
+import { Fragment, useRef, ReactElement, RefObject, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Image } from 'antd';
 import style from './imagePreview.sass';
