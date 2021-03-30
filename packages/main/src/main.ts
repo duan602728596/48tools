@@ -1,15 +1,16 @@
 import * as process from 'process';
 import * as path from 'path';
-import { app, BrowserWindow, Menu, ipcMain } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import { initialize } from '@electron/remote/main';
-import ipc from './ipc';
+import { isDevelopment } from './utils';
+import { ipc, removeIpc } from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
-
-const isDevelopment: boolean = process.env.NODE_ENV === 'development';
-let win: BrowserWindow | null = null;
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
 initialize();
+
+/* BrowserWindow窗口对象 */
+let win: BrowserWindow | null = null;
 
 /* 初始化 */
 function createWindow(): void {
@@ -43,7 +44,7 @@ function createWindow(): void {
 
   win.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();
-    ipcMain.removeAllListeners();
+    removeIpc();
     win = null;
   });
 }

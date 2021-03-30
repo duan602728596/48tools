@@ -2,9 +2,12 @@ import * as path from 'path';
 import * as process from 'process';
 import { Worker } from 'worker_threads';
 import { ipcMain, IpcMainEvent } from 'electron';
+import { isDevelopment } from '../utils';
 
-const isDevelopment: boolean = process.env.NODE_ENV === 'development';
+/* node-media-server服务线程 */
 let nodeMediaServerWorker: Worker | null = null;
+
+export const NODE_MEDIA_SERVER_CHANNEL: string = 'node-media-server';
 
 export interface NodeMediaServerArg {
   ffmpeg: string;   // ffmpeg路径
@@ -22,7 +25,7 @@ export async function nodeMediaServerClose(): Promise<void> {
 
 /* 新线程启动node-media-server服务 */
 export function nodeMediaServerInit(): void {
-  ipcMain.on('node-media-server', async function(event: IpcMainEvent, arg: NodeMediaServerArg): Promise<void> {
+  ipcMain.on(NODE_MEDIA_SERVER_CHANNEL, async function(event: IpcMainEvent, arg: NodeMediaServerArg): Promise<void> {
     await nodeMediaServerClose(); // electron在开发者工具刷新时，已存在的node-media-server会有问题，所以需要重新创建服务
 
     // 对多线程的处理，参考https://github.com/electron/electron/issues/22446
