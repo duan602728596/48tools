@@ -10,6 +10,7 @@ import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash-es';
 import * as dayjs from 'dayjs';
+import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
 import { requestLiveRoomInfo } from '../../services/pocket48';
@@ -110,7 +111,7 @@ function Pocket48Live(props: {}): ReactElement {
     try {
       const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ record.title }_${ time }.flv`
+        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }.flv`
       });
 
       if (result.canceled || !result.filePath) return;

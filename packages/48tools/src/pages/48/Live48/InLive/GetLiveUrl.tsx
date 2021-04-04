@@ -5,6 +5,7 @@ import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
+import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
@@ -37,7 +38,7 @@ function GetLiveUrl(props: {}): ReactElement {
     // 开始录制
     const time: string = getFileTime();
     const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-      defaultPath: `[48公演直播]${ value.type }_${ liveUrl.title }_${ value.live }_${ value.quality }_${ time }.flv`
+      defaultPath: `[48公演直播]${ value.type }_${ filenamify(liveUrl.title) }_${ value.live }_${ value.quality }_${ time }.flv`
     });
 
     if (result.canceled || !result.filePath) return;

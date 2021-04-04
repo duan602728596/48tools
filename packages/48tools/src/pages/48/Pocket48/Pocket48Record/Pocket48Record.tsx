@@ -12,6 +12,7 @@ import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
+import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
 import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../../reducers/pocket48';
@@ -105,7 +106,7 @@ function Pocket48Record(props: {}): ReactElement {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ record.title }_${ time }.ts`
+        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }.ts`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -155,7 +156,7 @@ function Pocket48Record(props: {}): ReactElement {
       const time: string = getFileTime(record.ctime);
       const { ext }: ParsedPath = path.parse(res.content.msgFilePath);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ record.title }_${ time }${ ext }`
+        defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }${ ext }`
       });
 
       if (result.canceled || !result.filePath) return;
