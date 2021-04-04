@@ -15,7 +15,8 @@
     "build:png": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 packages/app/titleBarIcon.png",
     "build:icon": "ffmpeg -i statics/titleBarIcon512.png -vf scale=256:256 statics/titleBarIcon.ico",
     "build:icns": "milktea image2icns --imageEntry=\"statics/titleBarIcon512.png\" --imageOutput=\"./statics/titleBarIcon.icns\" --size=512",
-    "build:linuxPng": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 statics/titleBarIcon_linux.png"
+    "build:linuxPng": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 statics/titleBarIcon_linux.png",
+    "prepare": "husky install"
   },
   "private": true,
   "workspaces": [
@@ -47,17 +48,12 @@
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-react": "^7.23.1",
-    "husky": "^4.3.8",
+    "husky": "^6.0.0",
     "lerna": "^3.22.1",
     "lint-staged": "^10.5.3",
     "rimraf": "^3.0.2",
     "tslib": "^2.1.0",
     "typescript": "^4.2.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": "eslint"
