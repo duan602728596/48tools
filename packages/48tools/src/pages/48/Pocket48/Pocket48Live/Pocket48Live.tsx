@@ -109,9 +109,9 @@ function Pocket48Live(props: {}): ReactElement {
   // 录制
   async function handleGetVideoClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
-      const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }.flv`
+        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
+          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.flv`
       });
 
       if (result.canceled || !result.filePath) return;

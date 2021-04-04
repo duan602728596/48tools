@@ -104,9 +104,9 @@ function Pocket48Record(props: {}): ReactElement {
   async function handleDownloadM3u8Click(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }.ts`
+        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
+          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.ts`
       });
 
       if (result.canceled || !result.filePath) return;

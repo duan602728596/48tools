@@ -21,7 +21,7 @@ import {
 } from '../../reducers/live48';
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
-import { getFFmpeg } from '../../../../utils/utils';
+import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import type { MessageEventData } from '../../../../types';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
@@ -96,7 +96,8 @@ function InVideo(props: {}): ReactElement {
       }
 
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[48公演录播]${ record.liveType }_${ filenamify(m3u8Url.title) }_${ record.id }_${ quality }.ts`
+        defaultPath: `[48公演录播]${ record.liveType }_${ filenamify(m3u8Url.title) }`
+          + `@${ record.id }__${ quality }_${ getFileTime() }.ts`
       });
 
       if (result.canceled || !result.filePath) return;
