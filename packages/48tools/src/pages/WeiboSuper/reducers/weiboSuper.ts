@@ -5,7 +5,8 @@ import {
   SliceCaseReducers,
   PayloadAction,
   CaseReducerActions,
-  AsyncThunk
+  AsyncThunk,
+  ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
 import { requestTopicCheckin } from '../services/weiboSuper';
 import type { WeiboCheckinResult, Quantity } from '../types';
@@ -72,11 +73,13 @@ const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseRedu
       }
     }
   },
-  extraReducers: {
-    [reqTopicCheckin.fulfilled as any](state: WeiboSuperInitialState, action: PayloadAction<ReqTopicCheckinReturn>): void {
-      state.weiboCheckinList = state.weiboCheckinList.concat([action.payload.result]); // 追加新的超话
-      state.quantity = action.payload.quantity; // 已签到状态
-    }
+  extraReducers(builder: ActionReducerMapBuilder<WeiboSuperInitialState>): void {
+    builder.addCase(
+      reqTopicCheckin.fulfilled,
+      function(state: WeiboSuperInitialState, action: PayloadAction<ReqTopicCheckinReturn>): void {
+        state.weiboCheckinList = state.weiboCheckinList.concat([action.payload.result]); // 追加新的超话
+        state.quantity = action.payload.quantity; // 已签到状态
+      });
   }
 });
 

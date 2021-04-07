@@ -6,7 +6,8 @@ import {
   PayloadAction,
   CaseReducerActions,
   ActionCreator,
-  AsyncThunk
+  AsyncThunk,
+  ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
 import { findIndex } from 'lodash-es';
 import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
@@ -99,10 +100,12 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
       }
     }
   },
-  extraReducers: {
-    [reqLiveList.fulfilled as any](state: Pocket48InitialState, action: PayloadAction<Array<LiveInfo>>): void {
-      state.liveList = action.payload;
-    }
+  extraReducers(builder: ActionReducerMapBuilder<Pocket48InitialState>): void {
+    builder.addCase(
+      reqLiveList.fulfilled,
+      function(state: Pocket48InitialState, action: PayloadAction<Array<LiveInfo>>): void {
+        state.liveList = action.payload;
+      });
   }
 });
 
