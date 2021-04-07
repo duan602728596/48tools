@@ -15,16 +15,16 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@bbkkbkk/q": "^1.0.1",
-    "@electron/remote": "^1.0.4",
-    "@reduxjs/toolkit": "^1.5.1",
-    "antd": "^4.14.1",
+    "@electron/remote": "^1.1.0",
+    "@reduxjs/toolkit": "^1.6.0-alpha.0",
+    "antd": "^4.15.0",
     "array-move": "^3.0.1",
-    "classnames": "^2.2.6",
+    "classnames": "^2.3.1",
     "dayjs": "^1.10.4",
     "filenamify": "^4.2.0",
     "flv.js": "^1.5.0",
     "got": "^11.8.2",
-    "highlight.js": "^10.7.1",
+    "highlight.js": "^10.7.2",
     "history": "^5.0.0",
     "indexeddb-tools": "^3.0.0",
     "indexeddb-tools-redux": "^3.0.0",
@@ -43,12 +43,12 @@
     "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "@sweet-milktea/milktea": "^2.2.1",
-    "@sweet-milktea/milktea-cli": "^2.2.0",
+    "@sweet-milktea/milktea": "^2.3.0",
+    "@sweet-milktea/milktea-cli": "^2.3.1",
     "antd-dayjs-webpack-plugin": "^1.0.6",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "ts-loader": "^8.0.18",
+    "ts-loader": "^8.1.0",
     "webpack-bundle-analyzer": "^4.4.0",
     "worker-loader": "^3.0.8"
   }
