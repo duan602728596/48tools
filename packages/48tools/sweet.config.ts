@@ -63,8 +63,8 @@ export default function(info: object): { [key: string]: any } {
       player: [path.join(__dirname, 'src/pages/48/Pocket48/Player/Player.tsx')]
     },
     html: [
-      { template: path.join(__dirname, 'src/index.pug'), excludeChunks: ['player'], minify: htmlWebpackPluginMinify },
-      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), excludeChunks: ['index'], minify: htmlWebpackPluginMinify }
+      { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
+      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), minify: htmlWebpackPluginMinify }
     ],
     externals: nodeExternals([
       'child_process',

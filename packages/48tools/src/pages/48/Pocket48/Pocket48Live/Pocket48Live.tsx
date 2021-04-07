@@ -1,5 +1,5 @@
 import * as querystring from 'querystring';
-import { ipcRenderer, SaveDialogReturnValue } from 'electron';
+import { ipcRenderer, clipboard, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
@@ -10,6 +10,7 @@ import { Button, message, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash-es';
 import * as dayjs from 'dayjs';
+import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
 import { requestLiveRoomInfo } from '../../services/pocket48';
@@ -89,6 +90,14 @@ function Pocket48Live(props: {}): ReactElement {
     ));
   }
 
+  // 复制直播地址
+  async function handleCopyLiveUrlClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+
+    clipboard.writeText(resInfo.content.playStreamPath);
+    message.info('直播地址复制到剪贴板。');
+  }
+
   // 下载图片
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
@@ -108,9 +117,9 @@ function Pocket48Live(props: {}): ReactElement {
   // 录制
   async function handleGetVideoClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
-      const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ record.title }_${ time }.flv`
+        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
+          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.flv`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -199,7 +208,7 @@ function Pocket48Live(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 250,
+      width: 370,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = findIndex(liveChildList, { id: record.liveId });
 
@@ -224,6 +233,9 @@ function Pocket48Live(props: {}): ReactElement {
             </Button>
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
               下载图片
+            </Button>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleCopyLiveUrlClick(record, event) }>
+              复制直播地址
             </Button>
           </Button.Group>
         );

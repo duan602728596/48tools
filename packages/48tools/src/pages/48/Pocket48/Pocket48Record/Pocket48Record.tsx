@@ -1,7 +1,7 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
-import type { SaveDialogReturnValue } from 'electron';
+import { clipboard, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
@@ -12,6 +12,7 @@ import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
+import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
 import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../../reducers/pocket48';
@@ -92,6 +93,14 @@ function Pocket48Record(props: {}): ReactElement {
     }
   }
 
+  // 复制直播地址
+  async function handleCopyLiveUrlClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+
+    clipboard.writeText(resInfo.content.playStreamPath);
+    message.info('直播地址复制到剪贴板。');
+  }
+
   // 下载图片
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
@@ -103,9 +112,9 @@ function Pocket48Record(props: {}): ReactElement {
   async function handleDownloadM3u8Click(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const time: string = getFileTime(record.ctime);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ record.title }_${ time }.ts`
+        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
+          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.ts`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -155,7 +164,7 @@ function Pocket48Record(props: {}): ReactElement {
       const time: string = getFileTime(record.ctime);
       const { ext }: ParsedPath = path.parse(res.content.msgFilePath);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ record.title }_${ time }${ ext }`
+        defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }${ ext }`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -231,7 +240,7 @@ function Pocket48Record(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 290,
+      width: 420,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = findIndex(recordChildList, { id: record.liveId });
 
@@ -257,6 +266,9 @@ function Pocket48Record(props: {}): ReactElement {
             </Button>
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
               下载图片
+            </Button>
+            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleCopyLiveUrlClick(record, event) }>
+              复制录播地址
             </Button>
           </Button.Group>
         );

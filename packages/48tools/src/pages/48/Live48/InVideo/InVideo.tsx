@@ -8,6 +8,7 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Select, Button, Table, message, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
+import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './inVideo.sass';
 import Header from '../../../../components/Header/Header';
@@ -20,7 +21,7 @@ import {
 } from '../../reducers/live48';
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
-import { getFFmpeg } from '../../../../utils/utils';
+import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import type { MessageEventData } from '../../../../types';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
@@ -95,7 +96,8 @@ function InVideo(props: {}): ReactElement {
       }
 
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
-        defaultPath: `[48公演录播]${ record.liveType }_${ m3u8Url.title }_${ record.id }_${ quality }.ts`
+        defaultPath: `[48公演录播]${ record.liveType }_${ filenamify(m3u8Url.title) }`
+          + `@${ record.id }__${ quality }_${ getFileTime() }.ts`
       });
 
       if (result.canceled || !result.filePath) return;
