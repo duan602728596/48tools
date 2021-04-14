@@ -100,13 +100,13 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
     }
   }, [theme, themeMatches]);
 
-  if (isChildrenWindow) {
-    useEffect(function(): void {
+  useEffect(function(): void {
+    if (isChildrenWindow) {
       ipcRenderer.on('themeSource', function(event: IpcRendererEvent, value: ThemeValue): void {
         setTheme(value);
       });
-    }, []);
-  }
+    }
+  }, []);
 
   useEffect(function(): () => void {
     media.addEventListener('change', handleMatchMediaChange, false);
