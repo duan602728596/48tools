@@ -17,6 +17,8 @@
     "@bbkkbkk/q": "^1.0.2",
     "@electron/remote": "^1.1.0",
     "@reduxjs/toolkit": "^1.6.0-alpha.2",
+    "@types/fs-extra": "^9",
+    "@types/react": "^17",
     "antd": "^4.15.4",
     "array-move": "^3.0.1",
     "classnames": "^2.3.1",
