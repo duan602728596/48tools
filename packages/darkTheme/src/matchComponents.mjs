@@ -1,5 +1,5 @@
-const { promises: fsP } = require('fs');
-const path = require('path');
+import { promises as fsP } from 'fs';
+import path from 'path';
 
 /**
  * 解析、提取组件名称
@@ -23,4 +23,4 @@ async function matchComponents(cwd, filePath) {
   return components;
 }
 
-module.exports = matchComponents;
+export default matchComponents;

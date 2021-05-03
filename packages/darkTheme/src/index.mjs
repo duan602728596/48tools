@@ -1,18 +1,21 @@
-const path = require('path');
-const { promises: fsP } = require('fs');
-const { promisify } = require('util');
-const glob = require('glob');
-const _ = require('lodash');
-const matchComponents = require('./matchComponents');
-const { lessFile, lessRender } = require('./lessFile');
+import path from 'path';
+import { promises as fsP } from 'fs';
+import { promisify } from 'util';
+import glob from 'glob';
+import _ from 'lodash';
+import { moduleExists } from '@sweet-milktea/utils';
+import matchComponents from './matchComponents.mjs';
+import { lessFile, lessRender } from './lessFile.mjs';
 
-const globP = promisify(glob);
+const globPromise = promisify(glob);
+export const __dirname = path.dirname(
+  decodeURIComponent(import.meta.url.replace(/^file:\/{2}/, '')));
 
 /* 提取antd的less路径并生成css文件 */
 async function main() {
   // 获取所有的tsx文件
   const cwd48tools = path.join(__dirname, '../../48tools/src');
-  const files = await globP('**/*.tsx', {
+  const files = await globPromise('**/*.tsx', {
     cwd: cwd48tools
   });
 
@@ -35,7 +38,7 @@ async function main() {
   const distDir = path.join(__dirname, '../dist');
 
   // 代码高亮的暗黑主题样式
-  const hljsPath = path.join(require.resolve('highlight.js'), '../..', 'styles/atom-one-dark.css');
+  const hljsPath = path.join(moduleExists('highlight.js'), '../..', 'styles/atom-one-dark.css');
   const hljsCss = await fsP.readFile(hljsPath, { encoding: 'utf8' });
 
   await fsP.mkdir(distDir);

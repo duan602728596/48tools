@@ -1,5 +1,6 @@
-const path = require('path');
-const less = require('less');
+import path from 'path';
+import less from 'less';
+import { moduleExists } from '@sweet-milktea/utils';
 
 /**
  * 驼峰转连字符
@@ -33,8 +34,8 @@ function camelCaseToHyphen(str) {
  * 生成less文件
  * @param { Array<string> } allComponents: 组件名称
  */
-function lessFile(allComponents) {
-  const antd = path.join(require.resolve('antd'), '../../es');
+export function lessFile(allComponents) {
+  const antd = path.join(moduleExists('antd'), '../../es');
   const componentsLessFiles = allComponents.map((o) => {
     const name = /^[a-z]/.test(o) ? o : camelCaseToHyphen(o);
 
@@ -50,7 +51,7 @@ function lessFile(allComponents) {
  * 生成less代码
  * @param { Array<string> } componentsLessFiles: less文件的数组
  */
-async function lessRender(componentsLessFiles) {
+export async function lessRender(componentsLessFiles) {
   const lessInput = componentsLessFiles.map((o) => {
     return `@import '${ o }';`;
   }).join('\n');
@@ -64,7 +65,3 @@ async function lessRender(componentsLessFiles) {
 
   return output.css;
 }
-
-
-exports.lessFile = lessFile;
-exports.lessRender = lessRender;
