@@ -3,7 +3,7 @@
     "alwaysStrict": true,
     "moduleResolution": "node",
     "locale": "zh-CN",
-    "target": "ES2019",
+    "target": "ES2020",
     "newLine": "LF",
     "resolveJsonModule": true,
     "strictNullChecks": true,
