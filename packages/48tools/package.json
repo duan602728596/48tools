@@ -46,7 +46,7 @@
     "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "@sweet-milktea/milktea": "^3.0.0-beta.1",
+    "@sweet-milktea/milktea": "^3.0.0-beta.2",
     "@sweet-milktea/milktea-cli": "^3.0.0-beta.0",
     "antd-dayjs-webpack-plugin": "^1.0.6",
     "babel-plugin-import": "^1.13.3",
