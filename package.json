@@ -56,7 +56,7 @@
     "typescript": "^4.2.4"
   },
   "lint-staged": {
-    "**/*.{js,jsx,mjs,ts,tsx}": "eslint"
+    "**/*.{js,jsx,mjs,cjs,ts,tsx}": "eslint"
   },
   "config": {
     "commitizen": {
