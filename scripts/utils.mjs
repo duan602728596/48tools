@@ -1,7 +1,7 @@
 import path from 'path';
+import { metaHelper } from '@sweet-milktea/utils';
 
-export const __dirname = path.dirname(
-  decodeURIComponent(import.meta.url.replace(/^file:\/{2}/, '')));
+export const { __dirname } = metaHelper(import.meta.url);
 
 // 定义文件位置
 export const cwd = path.join(__dirname, '../');      // 网站目录

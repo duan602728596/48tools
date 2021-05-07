@@ -6,9 +6,9 @@ import builder from 'electron-builder';
 import { requireJson } from '@sweet-milktea/utils';
 import { __dirname, cwd, appDir, staticsDir, build, output, unpacked } from './utils.mjs';
 
-const packageJson = await requireJson(path.join(__dirname, '../package.json'));
 const rimrafPromise = util.promisify(rimraf);
 
+const packageJson = await requireJson(path.join(__dirname, '../package.json'));
 const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
   README: path.join(cwd, 'README.md'), // README

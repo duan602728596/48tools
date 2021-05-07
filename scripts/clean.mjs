@@ -3,12 +3,22 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import glob from 'glob';
 import fse from 'fs-extra';
+import zip from 'cross-zip';
 import { requireJson } from '@sweet-milktea/utils';
 import { __dirname, build, unpacked } from './utils.mjs';
 
+const globPromise = util.promisify(glob);
+const zipPromise = util.promisify(zip.zip);
+
 const lernaJson = await requireJson(path.join(__dirname, '../lerna.json'));
 const { version } = lernaJson;
-const globPromise = util.promisify(glob);
+const renameDir = {
+  mac: path.join(build, `mac/48tools-${ version }-mac`),
+  macArm64: path.join(build, `mac-arm64/48tools-${ version }-mac-arm64`),
+  win: path.join(build, `win/48tools-${ version }-win64`),
+  win32: path.join(build, `win32/48tools-${ version }-win32`),
+  linux: path.join(build, `linux/48tools-${ version }-linux64`)
+};
 
 /**
  * 删除mac的多语言文件并写入版本号
@@ -54,11 +64,20 @@ async function clean() {
 
   // 重命名
   await Promise.all([
-    fs.rename(unpacked.mac, path.join(build, `mac/48tools-${ version }-mac`)),
-    fs.rename(unpacked.macArm64, path.join(build, `mac-arm64/48tools-${ version }-mac-arm64`)),
-    fs.rename(unpacked.win, path.join(build, `win/48tools-${ version }-win64`)),
-    fs.rename(unpacked.win32, path.join(build, `win32/48tools-${ version }-win32`)),
-    fs.rename(unpacked.linux, path.join(build, `linux/48tools-${ version }-linux64`))
+    fs.rename(unpacked.mac, renameDir.mac),
+    fs.rename(unpacked.macArm64, renameDir.macArm64),
+    fs.rename(unpacked.win, renameDir.win),
+    fs.rename(unpacked.win32, renameDir.win32),
+    fs.rename(unpacked.linux, renameDir.linux)
+  ]);
+
+  // 压缩
+  await Promise.all([
+    zipPromise(renameDir.mac, `${ renameDir.mac }.zip`),
+    zipPromise(renameDir.macArm64, `${ renameDir.macArm64 }.zip`),
+    zipPromise(renameDir.win, `${ renameDir.win }.zip`),
+    zipPromise(renameDir.win32, `${ renameDir.win32 }.zip`),
+    zipPromise(renameDir.linux, `${ renameDir.linux }.zip`)
   ]);
 }
 
