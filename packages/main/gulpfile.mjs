@@ -5,10 +5,9 @@ import terser from 'gulp-terser';
 import typescript from 'gulp-typescript';
 import changed from 'gulp-changed';
 import plumber from 'gulp-plumber';
-import { requireJson } from '@sweet-milktea/utils';
+import { requireJson, metaHelper } from '@sweet-milktea/utils';
 
-const __dirname = path.dirname(
-  decodeURIComponent(import.meta.url.replace(/^file:\/{2}/, '')));
+const { __dirname } = metaHelper(import.meta.url);
 const baseTypescriptConfig = await requireJson(path.join(__dirname, '../../tsconfig.json'));
 const tsConfig = await requireJson(path.join(__dirname, './tsconfig.json'));
 
