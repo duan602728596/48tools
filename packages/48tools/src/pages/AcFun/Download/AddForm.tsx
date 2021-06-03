@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Fragment, useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -8,7 +9,6 @@ import { pick, transform } from 'lodash-es';
 import style from './addForm.sass';
 import { parseAcFunUrl } from './parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
-import { rStr } from '../../../utils/utils';
 import type { Representation } from '../types';
 
 /* 视频分类 */
@@ -53,7 +53,7 @@ function AddForm(props: {}): ReactElement {
 
       if (representation) {
         dispatch(setAddDownloadList({
-          qid: rStr(10),
+          qid: randomUUID(),
           type: formValue.type,
           id: formValue.id,
           representation: representation.map((o: Representation): Representation => pick(o, ['m3u8Slice', 'url', 'qualityLabel']))

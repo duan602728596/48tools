@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import * as querystring from 'querystring';
 import { ipcRenderer, clipboard, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
@@ -22,7 +23,7 @@ import {
   idbGetPocket48LiveOptions,
   Pocket48InitialState
 } from '../../reducers/pocket48';
-import { rStr, getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { getNetMediaServerPort, NetMediaServerPort } from '../../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from './autoGrab';
@@ -159,12 +160,11 @@ function Pocket48Live(props: {}): ReactElement {
 
   // 打开新窗口播放视频
   function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    const randomId: string = rStr(30);
     const port: NetMediaServerPort = getNetMediaServerPort();
     const query: string = querystring.stringify(Object.assign(
       {
-        id: randomId, // rtmp服务器id
-        ...port       // 端口号
+        id: randomUUID(), // rtmp服务器id
+        ...port           // 端口号
       },
       pick(record, [
         'coverPath', // 头像

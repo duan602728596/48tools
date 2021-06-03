@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S } from 'react';
@@ -10,7 +11,7 @@ import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegD
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
-import { getFFmpeg, rStr, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import type { MessageEventData } from '../../../../types';
 
 /* 抓取直播信息表单 */
@@ -43,7 +44,7 @@ function GetLiveUrl(props: {}): ReactElement {
 
     if (result.canceled || !result.filePath) return;
 
-    const id: string = rStr(30);
+    const id: string = randomUUID();
     const worker: Worker = new FFMpegDownloadWorker();
 
     worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {

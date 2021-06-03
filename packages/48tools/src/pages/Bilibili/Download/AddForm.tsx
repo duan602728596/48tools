@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Fragment, useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -6,7 +7,6 @@ import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { transform } from 'lodash-es';
 import style from './addForm.sass';
-import { rStr } from '../../../utils/utils';
 import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from './parseBilibiliUrl';
 import { setAddDownloadList } from '../reducers/download';
 
@@ -66,7 +66,7 @@ function AddForm(props: {}): ReactElement {
 
       if (result) {
         dispatch(setAddDownloadList({
-          qid: rStr(30),
+          qid: randomUUID(),
           durl: result,
           type: formValue.type,
           id: formValue.id,

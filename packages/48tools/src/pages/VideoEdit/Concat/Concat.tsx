@@ -1,6 +1,7 @@
 import * as path from 'path';
 import type { ParsedPath } from 'path';
 import { promises as fsP } from 'fs';
+import { randomUUID } from 'crypto';
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ComponentClass, MouseEvent } from 'react';
@@ -30,7 +31,7 @@ import {
   setConcatWorker,
   ConcatInitialState
 } from '../reducers/concat';
-import { getFFmpeg, rStr } from '../../../utils/utils';
+import { getFFmpeg } from '../../../utils/utils';
 import type { MessageEventData } from '../../../types';
 import type { ConcatItem } from '../types';
 
@@ -141,7 +142,7 @@ function Concat(props: {}): ReactElement {
 
       return {
         value: o,
-        id: rStr(10),
+        id: randomUUID(),
         filename: pathResult.base
       };
     });

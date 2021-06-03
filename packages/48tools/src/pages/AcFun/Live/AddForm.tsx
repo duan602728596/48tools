@@ -1,10 +1,10 @@
+import { randomUUID } from 'crypto';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Button, Form, Modal, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
-import { rStr } from '../../../utils/utils';
 import { idbSaveAcFunLiveList } from '../reducers/live';
 
 /* 添加一个A站直播间 */
@@ -26,7 +26,7 @@ function AddForm(props: {}): ReactElement {
     dispatch(idbSaveAcFunLiveList({
       data: {
         ...formValue,
-        id: rStr(30)
+        id: randomUUID()
       }
     }));
     setVisible(false);

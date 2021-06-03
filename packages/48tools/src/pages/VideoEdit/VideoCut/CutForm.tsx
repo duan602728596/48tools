@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import * as path from 'path';
 import type { ParsedPath } from 'path';
 import type { OpenDialogReturnValue } from 'electron';
@@ -8,7 +9,6 @@ import { useDispatch } from 'react-redux';
 import { Form, Button, Input, InputNumber, Card } from 'antd';
 import type { FormInstance, Rule } from 'antd/es/form';
 import style from './cutForm.sass';
-import { rStr } from '../../../utils/utils';
 import { setCutListAdd } from '../reducers/videoCut';
 import { getFullTime } from './function';
 import type { CutItem } from '../types';
@@ -52,7 +52,7 @@ function CutForm(props: {}): ReactElement {
   function handleFormSubmit(value: FormValue): void {
     const parseResult: ParsedPath = path.parse(value.file);
     const data: CutItem = {
-      id: rStr(10),
+      id: randomUUID(),
       file: value.file,
       name: parseResult.base,
       startTime: getFullTime(value.startH, value.startM, value.startS),

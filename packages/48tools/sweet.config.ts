@@ -68,6 +68,7 @@ export default function(info: object): { [key: string]: any } {
     ],
     externals: nodeExternals([
       'child_process',
+      'crypto',
       'fs',
       'net',
       'path',
