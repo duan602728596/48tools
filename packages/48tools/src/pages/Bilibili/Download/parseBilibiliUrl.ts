@@ -1,4 +1,4 @@
-import * as md5 from 'md5';
+import { createHash, Hash } from 'crypto';
 import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo, requestBangumiVideoInfo } from '../services/download';
 import type { InitialState } from '../types';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo } from '../services/interface';
@@ -13,6 +13,15 @@ const QUERY_ARRAY: [string, string] = ['qn=116&quality=80&type=', 'quality=2&typ
 interface ParseHtmlResult {
   initialState?: InitialState;
   h1Title: string;
+}
+
+/* md5加密 */
+function md5Crypto(data: string): string {
+  const md5Hash: Hash = createHash('md5');
+
+  md5Hash.update(data);
+
+  return md5Hash.digest('hex');
 }
 
 /**
@@ -63,7 +72,7 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
 
   for (const query of QUERY_ARRAY) {
     const payload: string = `appkey=${ APP_KEY }&cid=${ cid }&otype=json&page=${ page }&${ query }`;
-    const sign: string = md5(`${ payload }${ BILIBILI_KEY }`);
+    const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
     const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign);
 
     if (videoInfoRes?.durl?.length) {

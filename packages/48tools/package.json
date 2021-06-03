@@ -32,7 +32,6 @@
     "indexeddb-tools-redux": "^3.0.0",
     "js-base64": "^3.6.0",
     "lodash-es": "^4.17.21",
-    "md5": "^2.3.0",
     "prop-types": "^15.7.2",
     "puppeteer-core": "^9.1.1",
     "qrcode": "^1.4.4",
