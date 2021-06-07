@@ -1,5 +1,6 @@
 # node
 node_modules
+.yarn
 
 .sweet
 ./app

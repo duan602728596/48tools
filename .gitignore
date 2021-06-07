@@ -7,9 +7,9 @@ pnpm-lock.yaml
 # yarn
 yarn.lock
 yarn-error.log
-.yarnrc.yml
 .yarnrc
 .yarn/*
+!.yarn/releases
 .pnp.js
 
 # webstorm
