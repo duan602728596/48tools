@@ -25,6 +25,18 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
       state.inLiveList = state.inLiveList.concat([action.payload]);
     },
 
+    // 设置当前的worker，自动录制直播
+    setAddWorkerInLiveList(state: Live48InitialState, action: PayloadAction<{ id: string; worker: Worker }>): void {
+      const index: number = findIndex(state.inLiveList, { id: action.payload.id });
+
+      if (index >= 0) {
+        clearInterval(state.inLiveList[index].timer!);
+        state.inLiveList[index].timer = undefined;
+        state.inLiveList[index].worker = action.payload.worker;
+        state.inLiveList = [...state.inLiveList];
+      }
+    },
+
     // 当前直播设置为停止
     setStopInLiveList(state: Live48InitialState, action: PayloadAction<string>): void {
       const index: number = findIndex(state.inLiveList, { id: action.payload });
@@ -83,6 +95,7 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
 
 export const {
   setAddInLiveList,
+  setAddWorkerInLiveList,
   setStopInLiveList,
   setDeleteInLiveList,
   setInVideoQuery,

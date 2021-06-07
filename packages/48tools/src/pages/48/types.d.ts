@@ -1,5 +1,11 @@
 import { WebWorkerChildItem } from '../../types';
 
+export interface InLiveFormValue {
+  type?: string;
+  live?: string;
+  quality: string;
+}
+
 /* ========== live48 ========== */
 // 公演直播抓取列表
 export interface InLiveWebWorkerItem extends WebWorkerChildItem {
@@ -8,6 +14,8 @@ export interface InLiveWebWorkerItem extends WebWorkerChildItem {
   quality: string;
   playStreamPath: string;
   status?: number;
+  timer?: NodeJS.Timeout; // 定时器，监听直播是否开始
+  worker?: Worker;
 }
 
 /* ========== pocket48 ========== */
