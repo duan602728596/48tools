@@ -15,6 +15,7 @@
     "node-media-server": "^2.2.8"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "gulp": "^4.0.2",
     "gulp-changed": "^4.0.2",
     "gulp-plumber": "^1.2.1",

@@ -21,6 +21,7 @@ export function openPlayerHtml(title: string, query: string): void {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       webSecurity: false,
+      // @ts-ignore
       enableRemoteModule: true,
       contextIsolation: false
     },
