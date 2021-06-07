@@ -7,11 +7,11 @@
     "build": "rimraf ./dist && node src/index.mjs && postcss dist/dark-theme.css > dist/dark-theme.min.css"
   },
   "dependencies": {
-    "cssnano": "^5.0.2",
+    "cssnano": "^5.0.5",
     "glob": "^7.1.7",
     "less": "^4.1.1",
     "lodash": "^4.17.21",
-    "postcss": "^8.2.14",
+    "postcss": "^8.3.0",
     "postcss-cli": "^8.3.1"
   }
 }
