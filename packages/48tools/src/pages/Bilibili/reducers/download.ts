@@ -1,10 +1,25 @@
-import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
+import {
+  createSlice,
+  createEntityAdapter,
+  Slice,
+  SliceCaseReducers,
+  EntityAdapter,
+  EntityState,
+  EntitySelectors,
+  PayloadAction,
+  CaseReducerActions
+} from '@reduxjs/toolkit';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../Download/downloadBilibiliVideo.worker';
 
-export interface BilibiliDownloadInitialState {
-  downloadList: Array<DownloadItem>;
+// 下载列表
+export const bilibiliDownloadListAdapter: EntityAdapter<DownloadItem> = createEntityAdapter({
+  selectId: (item: DownloadItem): string => item.qid
+});
+export const bilibiliDownloadListSelectors: EntitySelectors<DownloadItem, EntityState<DownloadItem>>
+  = bilibiliDownloadListAdapter.getSelectors();
+
+export interface BilibiliDownloadInitialState extends EntityState<DownloadItem> {
   downloadProgress: { [key: string]: number };
 }
 
@@ -12,25 +27,12 @@ type CaseReducers = SliceCaseReducers<BilibiliDownloadInitialState>;
 
 const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, CaseReducers>({
   name: 'bilibiliDownload',
-  initialState: {
-    downloadList: [],    // 下载列表
+  initialState: bilibiliDownloadListAdapter.getInitialState({
     downloadProgress: {} // 下载进度
-  },
+  }),
   reducers: {
-    // 添加下载
-    setAddDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): void {
-      state.downloadList = state.downloadList.concat([action.payload]);
-    },
-
-    // 删除下载
-    setDeleteDownloadList(state: BilibiliDownloadInitialState, action: PayloadAction<DownloadItem>): void {
-      const index: number = findIndex(state.downloadList, { qid: action.payload.qid });
-
-      if (index >= 0) {
-        state.downloadList.splice(index, 1);
-        state.downloadList = [...state.downloadList];
-      }
-    },
+    setAddDownloadList: bilibiliDownloadListAdapter.addOne,       // 添加下载
+    setDeleteDownloadList: bilibiliDownloadListAdapter.removeOne, // 删除下载
 
     // 设置下载进度
     setDownloadProgress(state: BilibiliDownloadInitialState, action: PayloadAction<MessageEventData>): void {
@@ -47,5 +49,9 @@ const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, Ca
   }
 });
 
-export const { setAddDownloadList, setDeleteDownloadList, setDownloadProgress }: CaseReducerActions<CaseReducers> = actions;
+export const {
+  setAddDownloadList,
+  setDeleteDownloadList,
+  setDownloadProgress
+}: CaseReducerActions<CaseReducers> = actions;
 export default { bilibiliDownload: reducer };

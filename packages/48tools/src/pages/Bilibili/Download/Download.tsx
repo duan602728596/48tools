@@ -13,16 +13,25 @@ import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.w
 import type { MessageEventData } from './downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
 import AddForm, { bilibiliVideoTypesMap } from './AddForm';
-import { setDeleteDownloadList, setDownloadProgress, BilibiliDownloadInitialState } from '../reducers/download';
+import {
+  bilibiliDownloadListSelectors,
+  setDeleteDownloadList,
+  setDownloadProgress,
+  BilibiliDownloadInitialState
+} from '../reducers/download';
 import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
-const selector: Selector<any, BilibiliDownloadInitialState> = createStructuredSelector({
+type RSelector = Pick<BilibiliDownloadInitialState, 'downloadProgress'> & {
+  downloadList: Array<DownloadItem>;
+};
+
+const selector: Selector<any, RSelector> = createStructuredSelector({
   // 下载任务列表
   downloadList: createSelector(
     ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => {
-      return bilibiliDownload.downloadList;
+      return bilibiliDownloadListSelectors.selectAll(bilibiliDownload);
     },
     (data: Array<DownloadItem>): Array<DownloadItem> => data
   ),
@@ -37,7 +46,7 @@ const selector: Selector<any, BilibiliDownloadInitialState> = createStructuredSe
 
 /* 视频下载 */
 function Download(props: {}): ReactElement {
-  const { downloadList, downloadProgress }: BilibiliDownloadInitialState = useSelector(selector);
+  const { downloadList, downloadProgress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
 
   // 下载
@@ -78,7 +87,7 @@ function Download(props: {}): ReactElement {
 
   // 删除一个任务
   function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
-    dispatch(setDeleteDownloadList(item));
+    dispatch(setDeleteDownloadList(item.qid));
   }
 
   const columns: ColumnsType<DownloadItem> = [
