@@ -42,6 +42,7 @@ export const ignoreOptions: any = {
     'pocket48/setAddRecordChildList',
     'pocket48/setDeleteRecordChildList',
     'live48/setAddInLiveList',
+    'live48/setAddWorkerInLiveList',
     'live48/setStopInLiveList',
     'live48/setDeleteInLiveList',
     'live48/setVideoListChildAdd',
