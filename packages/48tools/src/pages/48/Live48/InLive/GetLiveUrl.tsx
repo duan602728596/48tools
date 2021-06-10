@@ -96,11 +96,10 @@ function GetLiveUrl(props: {}): ReactElement {
     if (result.canceled || !result.filePath) return;
 
     // 开始轮询
-    await autoInLiveTimer(id, value, result.filePath);
-
     const timer: NodeJS.Timeout = setInterval(autoInLiveTimer, 120_000, id, value, result.filePath);
 
     dispatch(setAddInLiveList({ id, timer, ...value }));
+    setTimeout(autoInLiveTimer, 0, id, value, result.filePath);
   }
 
   // 选择团体后获取公演直播信息
