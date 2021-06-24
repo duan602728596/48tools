@@ -47,7 +47,7 @@ function config(outputDir, target) {
       '!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}',
       '!**/{appveyor.yml,.travis.yml,circle.yml}',
       '!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}',
-      '!**/node_modules/*/{.editorconfig,.eslintignore,.eslintrc.js,.gitignore}',
+      '!**/node_modules/*/{.editorconfig,.eslintignore,.eslintrc.js,.eslintrc.cjs,.gitignore}',
       '!**/node_modules/*/*.{yml,yaml}',
       '!**/node_modules/*/{LICENSE,license,License}',
       '!**/node_modules/*/AUTHORS'

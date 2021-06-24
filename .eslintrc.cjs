@@ -14,6 +14,7 @@ module.exports = {
     serviceworker: true
   },
   parserOptions: {
+    ecmaVersion: 2021,
     ecmaFeatures: {
       globalReturn: true,
       jsx: true
