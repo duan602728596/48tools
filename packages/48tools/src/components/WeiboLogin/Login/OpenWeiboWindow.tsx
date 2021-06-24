@@ -33,7 +33,7 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
           await dispatch(idbSaveAccount({
             data: {
               id: uid,
-              username: resUserInfo.data.user.name,
+              username: resUserInfo.data.user.screen_name ?? uid,
               cookie: cookieStr,
               lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
             }

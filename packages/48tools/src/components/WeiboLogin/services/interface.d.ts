@@ -29,7 +29,6 @@ export interface UserInfo {
       id: number;
       idstr: string;
       screen_name: string;
-      name: string;
       location: string;
       description: string;
     };

@@ -36,7 +36,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     await dispatch(idbSaveAccount({
       data: {
         id: resLogin.uid,
-        username: resUserInfo.data.user.name,
+        username: resUserInfo.data.user.screen_name ?? resLogin.uid,
         cookie,
         lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
       }
