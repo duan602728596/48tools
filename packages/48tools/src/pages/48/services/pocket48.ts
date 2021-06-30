@@ -44,6 +44,17 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
 
 /**
  * 获取直播和录播信息数据（https://pocketapi.48.cn/live/api/v1/live/getLiveList）
+ * groupId:
+ *   明星殿堂：19
+ *   THE9：17
+ *   硬糖少女303：18
+ *   丝芭影视：20
+ *   SNH48：10
+ *   BEJ48：11
+ *   GNZ48：12
+ *   CKG48：14
+ *   IDFT：15
+ *   海外练习生：16
  * @param { string | number } next: 录播id分页
  * @param { boolean } inLive: 是否在直播中
  */
@@ -52,6 +63,7 @@ export async function requestLiveList(next: string, inLive: boolean): Promise<Li
     debug: boolean;
     next: string;
     groupId?: number;
+    userId?: number;
     record?: boolean;
   } = { debug: true, next };
 
