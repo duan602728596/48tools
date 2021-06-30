@@ -1,4 +1,5 @@
-import { WebWorkerChildItem } from '../../types';
+import type { FieldData } from 'rc-field-form/es/interface';
+import type { WebWorkerChildItem } from '../../types';
 
 export interface InLiveFormValue {
   type?: string;
@@ -42,4 +43,11 @@ export interface InVideoItem {
 
 export interface InVideoWebWorkerItem extends WebWorkerChildItem {
   liveType: string;
+}
+
+export interface RecordFieldData extends FieldData {
+  value: any;
+  touched?: boolean;
+  validating?: boolean;
+  errors?: string[];
 }

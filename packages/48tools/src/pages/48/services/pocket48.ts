@@ -57,8 +57,15 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
  *   海外练习生：16
  * @param { string | number } next: 录播id分页
  * @param { boolean } inLive: 是否在直播中
+ * @param { number | 'all' } groupId: 组
+ * @param { string | number | undefined } userId: 用户id
  */
-export async function requestLiveList(next: string, inLive: boolean): Promise<LiveData> {
+export async function requestLiveList(
+  next: string,
+  inLive: boolean,
+  groupId?: number | 'all',
+  userId?: string | number | undefined
+): Promise<LiveData> {
   const body: {
     debug: boolean;
     next: string;
@@ -70,6 +77,12 @@ export async function requestLiveList(next: string, inLive: boolean): Promise<Li
   if (inLive) {
     body.groupId = 0;
     body.record = false;
+  }
+
+  if (typeof userId === 'number') {
+    body.userId = userId;
+  } else if (typeof groupId === 'number') {
+    body.groupId = groupId;
   }
 
   const res: GotResponse<LiveData> = await got('https://pocketapi.48.cn/live/api/v1/live/getLiveList', {

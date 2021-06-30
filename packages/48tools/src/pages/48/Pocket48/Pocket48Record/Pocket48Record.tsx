@@ -7,19 +7,28 @@ import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateActio
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Button, message, Table, Tag } from 'antd';
+import { Button, message, Table, Tag, Select, Form, InputNumber, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
+import style from './pocket48Record.sass';
 import Header from '../../../../components/Header/Header';
-import { setRecordList, setAddRecordChildList, setDeleteRecordChildList, Pocket48InitialState } from '../../reducers/pocket48';
+import {
+  setRecordList,
+  setAddRecordChildList,
+  setDeleteRecordChildList,
+  Pocket48InitialState,
+  setRecordFields
+} from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
+import type { RecordFieldData } from '../../types';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
@@ -43,7 +52,7 @@ function formatTsUrl(data: string): string {
 }
 
 /* redux selector */
-type RSelector = Pick<Pocket48InitialState, 'recordList' | 'recordNext' | 'recordChildList'>;
+type RSelector = Pick<Pocket48InitialState, 'recordList' | 'recordNext' | 'recordChildList' | 'recordFields'>;
 
 const selector: Selector<any, RSelector> = createStructuredSelector({
   // 录播信息
@@ -60,15 +69,21 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   recordChildList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.recordChildList,
     (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+  ),
+  // 表单field
+  recordFields: createSelector(
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<RecordFieldData> => pocket48.recordFields,
+    (data: Array<RecordFieldData>): Array<RecordFieldData> => data
   )
 });
 
 /* 录播列表 */
 function Pocket48Record(props: {}): ReactElement {
-  const { recordList, recordNext, recordChildList }: RSelector = useSelector(selector);
+  const { recordList, recordNext, recordChildList, recordFields }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
+  const [form]: [FormInstance] = Form.useForm();
   const recordListQueryResult: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
     if (query && !/^\s*$/.test(query)) {
       const regexp: RegExp = new RegExp(query, 'i');
@@ -78,6 +93,11 @@ function Pocket48Record(props: {}): ReactElement {
       return recordList;
     }
   }, [query, recordList]);
+
+  // 表单的onFieldsChange事件
+  function handleFormFieldsChange(changedFields: RecordFieldData[], allFields: RecordFieldData[]): void {
+    dispatch(setRecordFields(allFields));
+  }
 
   // 搜索
   function onSubmit(value: FormStore): void {
@@ -182,7 +202,8 @@ function Pocket48Record(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const res: LiveData = await requestLiveList(recordNext, false);
+      const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
+      const res: LiveData = await requestLiveList(recordNext, false, groupId, userId);
       const data: Array<LiveInfo> = recordList.concat(res.content.liveList);
 
       dispatch(setRecordList({
@@ -202,7 +223,11 @@ function Pocket48Record(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const res: LiveData = await requestLiveList('0', false);
+      const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
+
+      console.log(groupId);
+
+      const res: LiveData = await requestLiveList('0', false, groupId, userId);
 
       dispatch(setRecordList({
         next: res.content.next,
@@ -280,10 +305,33 @@ function Pocket48Record(props: {}): ReactElement {
     <Fragment>
       <Header>
         <SearchForm onSubmit={ onSubmit } />
-        <Button.Group>
-          <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
-          <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
-        </Button.Group>
+        {/* 队伍和当前人的搜索 */}
+        <Form className={ style.form } form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
+          <Space size={ 0 }>
+            <Form.Item name="groupId" noStyle={ true }>
+              <Select className={ style.groupSelect }>
+                <Select.Option value="all">全部</Select.Option>
+                <Select.Option value={ 19 }>明星殿堂</Select.Option>
+                <Select.Option value={ 17 }>THE9</Select.Option>
+                <Select.Option value={ 18 }>硬糖少女303</Select.Option>
+                <Select.Option value={ 20 }>丝芭影视</Select.Option>
+                <Select.Option value={ 10 }>SNH48</Select.Option>
+                <Select.Option value={ 11 }>BEJ48</Select.Option>
+                <Select.Option value={ 12 }>GNZ48</Select.Option>
+                <Select.Option value={ 14 }>CKG48</Select.Option>
+                <Select.Option value={ 15 }>IDFT</Select.Option>
+                <Select.Option value={ 16 }>海外练习生</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="userId" noStyle={ true }>
+              <InputNumber className={ style.userIdInput } placeholder="请输入成员ID" />
+            </Form.Item>
+            <Button.Group>
+              <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
+              <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+            </Button.Group>
+          </Space>
+        </Form>
       </Header>
       <Table size="middle"
         columns={ columns }

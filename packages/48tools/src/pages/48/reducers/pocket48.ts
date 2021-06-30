@@ -12,6 +12,7 @@ import {
 import { findIndex } from 'lodash-es';
 import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
 import { requestLiveList } from '../services/pocket48';
+import type { RecordFieldData } from '../types';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveInfo, LiveData } from '../services/interface';
 
@@ -22,6 +23,7 @@ export interface Pocket48InitialState {
   recordList: Array<LiveInfo>;
   recordNext: string;
   recordChildList: Array<WebWorkerChildItem>;
+  recordFields: Array<RecordFieldData>;
 }
 
 type CaseReducers = SliceCaseReducers<Pocket48InitialState>;
@@ -43,7 +45,11 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
     autoGrabTimer: null, // 自动抓取
     recordList: [],      // 录播信息
     recordNext: '0',     // 记录录播分页位置
-    recordChildList: []  // 录播下载
+    recordChildList: [], // 录播下载
+    recordFields: [{
+      name: ['groupId'],
+      value: '全部'
+    }] // 表单保存到redux内
   },
   reducers: {
     // 直播信息
@@ -98,6 +104,11 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
         state.recordChildList.splice(index, 1);
         state.recordChildList = [...state.recordChildList];
       }
+    },
+
+    // 设置field
+    setRecordFields(state: Pocket48InitialState, action: PayloadAction<RecordFieldData[]>): void {
+      state.recordFields = action.payload;
     }
   },
   extraReducers(builder: ActionReducerMapBuilder<Pocket48InitialState>): void {
@@ -122,6 +133,7 @@ export const {
   setAutoGrab,
   setRecordList,
   setAddRecordChildList,
-  setDeleteRecordChildList
+  setDeleteRecordChildList,
+  setRecordFields
 }: CaseReducerActions<CaseReducers> = actions;
 export default { pocket48: reducer };
