@@ -107,12 +107,10 @@ export default function(info: object): { [key: string]: any } {
     rules: [
       {
         test: /dark-theme\.(min\.)?css/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: isDev ? '[name]_[hash:5].[ext]' : '[name]_[hash:15].[ext]'
-          }
-        }]
+        type: 'asset/resource',
+        generator: {
+          filename: isDev ? '[name]_[hash:5][ext]' : '[name]_[hash:15][ext]'
+        }
       }
     ],
     plugins: [new AntdDayjsWebpackPlugin()].concat(analyzer ? [new BundleAnalyzerPlugin()] : [])

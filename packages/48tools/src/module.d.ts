@@ -40,13 +40,16 @@ declare module '*.webp' {
   export default url;
 }
 
-declare module '*.svg' {
+declare module '*.component.svg' {
   import type { FunctionComponent } from 'react';
 
-  const url: string;
+  const ReactComponent: FunctionComponent;
 
-  // 如果使用@svgr/webpack加载svg，还会导出ReactComponent组件
-  export const ReactComponent: FunctionComponent;
+  export default ReactComponent;
+}
+
+declare module '*.svg' {
+  const url: string;
 
   export default url;
 }

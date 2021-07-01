@@ -3,7 +3,7 @@ import { Button, Modal } from 'antd';
 import Icon from '@ant-design/icons';
 import style from './bilibiliLogin.sass';
 import Qrcode from './Qrcode';
-import { ReactComponent as BilibiliSvgComponent } from './images/bilibili.svg';
+import BilibiliSvgComponent from './images/bilibili.component.svg';
 
 /* B站登陆 */
 function BilibiliLogin(props: {}): ReactElement {

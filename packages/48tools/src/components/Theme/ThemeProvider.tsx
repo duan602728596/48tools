@@ -123,7 +123,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
       </ThemeContext.Provider>
       {
         (theme === 'dark' || (theme === 'system' && themeMatches)) ? createPortal(
-          <link rel="stylesheet" href={ require('@48tools/dark-theme/dist/dark-theme.min.css').default } />,
+          <link rel="stylesheet" href={ require('@48tools/dark-theme/dist/dark-theme.min.css') } />,
           document.body
         ) : null
       }

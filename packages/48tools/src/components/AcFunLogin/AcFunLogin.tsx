@@ -2,7 +2,7 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import { Button, Modal } from 'antd';
 import Icon from '@ant-design/icons';
 import Qrcode from './Qrcode';
-import { ReactComponent as AcFunTvSvgComponent } from './images/CN_acfun.tv.svg';
+import AcFunTvSvgComponent from './images/CN_acfun.tv.component.svg';
 
 /* AcFun扫码登陆 */
 function AcFunLogin(props: {}): ReactElement {

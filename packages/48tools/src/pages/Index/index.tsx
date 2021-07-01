@@ -12,15 +12,15 @@ import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
 import ExecutablePath from './ExecutablePath';
 import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
-import { ReactComponent as IconLiveSvgComponent } from './images/live.svg';
-import { ReactComponent as IconVideoSvgComponent } from './images/video.svg';
-import { ReactComponent as IconMicrophoneSvgComponent } from './images/microphone.svg';
-import { ReactComponent as IconRecordSvgComponent } from './images/record.svg';
-import { ReactComponent as IconBilibiliLogoSvgComponent } from './images/BILIBILI_LOGO.svg';
-import { ReactComponent as IconAcFunLogoSvgComponent } from './images/acfunlogo.svg';
-import { ReactComponent as IconCutSvgComponent } from './images/cut.svg';
-import { ReactComponent as IconConcatSvgComponent } from './images/concat.svg';
-import { ReactComponent as IconCountSvgComponent } from './images/count.svg';
+import IconLiveSvgComponent from './images/live.component.svg';
+import IconVideoSvgComponent from './images/video.component.svg';
+import IconMicrophoneSvgComponent from './images/microphone.component.svg';
+import IconRecordSvgComponent from './images/record.component.svg';
+import IconBilibiliLogoSvgComponent from './images/bilibililogo.component.svg';
+import IconAcFunLogoSvgComponent from './images/acfunlogo.component.svg';
+import IconCutSvgComponent from './images/cut.component.svg';
+import IconConcatSvgComponent from './images/concat.component.svg';
+import IconCountSvgComponent from './images/count.component.svg';
 
 interface NativeItem {
   name: string;
@@ -147,8 +147,8 @@ function Index(props: {}): ReactElement {
       {/* 二维码 */}
       <p>欢迎打赏：</p>
       <Space size={ 8 }>
-        <Image className={ style.dashangImage } src={ require('./images/zfb.avif').default } />
-        <Image className={ style.dashangImage } src={ require('./images/wx.avif').default } />
+        <Image className={ style.dashangImage } src={ require('./images/zfb.avif') } />
+        <Image className={ style.dashangImage } src={ require('./images/wx.avif') } />
       </Space>
     </div>
   );
