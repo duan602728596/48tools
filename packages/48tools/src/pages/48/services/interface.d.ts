@@ -12,6 +12,7 @@ export interface LiveInfo {
   coverPath: string;
   ctime: string;
   liveId: string;
+  roomId: string;
   liveType: 1 | 2; // 1：直播，2：电台
   title: string;
   userInfo: UserInfo;
