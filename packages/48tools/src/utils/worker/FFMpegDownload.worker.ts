@@ -10,6 +10,7 @@ export type WorkerEventData = {
   ffmpeg: string;              // ffmpeg地址
   ua?: boolean;                // 是否添加"-user_agent"参数
   protocolWhitelist?: boolean; // 是否添加"-protocol_whitelist"参数
+  libx264?: boolean;           // 转换为libx264
 };
 
 const userAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko)'
@@ -18,8 +19,12 @@ let child: ChildProcessWithoutNullStreams;
 
 /* 下载 */
 function download(workerData: WorkerEventData): void {
-  const { ffmpeg, playStreamPath, filePath, ua, protocolWhitelist }: WorkerEventData = workerData;
-  const ffmpegArgs: Array<string> = ['-i', playStreamPath, '-c', 'copy', filePath];
+  const { ffmpeg, playStreamPath, filePath, ua, protocolWhitelist, libx264 }: WorkerEventData = workerData;
+  let ffmpegArgs: Array<string> = ['-i', playStreamPath, '-c', 'copy', filePath];
+
+  if (libx264) {
+    ffmpegArgs = ['-i', playStreamPath, '-vcodec', 'libx264', filePath];
+  }
 
   if (ua) {
     ffmpegArgs.unshift('-user_agent', userAgent);
