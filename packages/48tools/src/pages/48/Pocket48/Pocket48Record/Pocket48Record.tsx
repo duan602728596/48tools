@@ -21,8 +21,8 @@ import {
   setRecordList,
   setAddRecordChildList,
   setDeleteRecordChildList,
-  Pocket48InitialState,
-  setRecordFields
+  setRecordFields,
+  Pocket48InitialState
 } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
