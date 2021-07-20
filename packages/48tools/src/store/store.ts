@@ -2,12 +2,31 @@
 import {
   configureStore,
   combineReducers,
-  getDefaultMiddleware,
   Reducer,
   Store,
-  DeepPartial
+  DeepPartial,
+  ImmutableStateInvariantMiddlewareOptions,
+  SerializableStateInvariantMiddlewareOptions,
+  MiddlewareArray
 } from '@reduxjs/toolkit';
+import type { CurriedGetDefaultMiddleware, ThunkMiddlewareFor } from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import type { Middleware } from 'redux';
 import { reducersMapObject, ignoreOptions } from './reducers';
+
+interface ThunkOptions<E = any> {
+  extraArgument: E;
+}
+
+interface GetDefaultMiddlewareOptions {
+  thunk?: boolean | ThunkOptions;
+  immutableCheck?: boolean | ImmutableStateInvariantMiddlewareOptions;
+  serializableCheck?: boolean | SerializableStateInvariantMiddlewareOptions;
+}
+
+type MiddlewareCbReturn = MiddlewareArray<
+  Middleware<{}, any>
+  | ThunkMiddlewareFor<any, GetDefaultMiddlewareOptions>
+>;
 
 /* reducer列表 */
 const reducer: Reducer = combineReducers(reducersMapObject);
@@ -22,10 +41,12 @@ export function storeFactory(initialState: DeepPartial<any> = {}): Store {
     store = configureStore({
       reducer,
       preloadedState: initialState,
-      middleware: getDefaultMiddleware({
-        immutableCheck: ignoreOptions,
-        serializableCheck: ignoreOptions
-      })
+      middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): MiddlewareCbReturn {
+        return getDefaultMiddleware<GetDefaultMiddlewareOptions>({
+          immutableCheck: ignoreOptions,
+          serializableCheck: ignoreOptions
+        });
+      }
     });
   }
 
