@@ -18,6 +18,7 @@ import IconMicrophoneSvgComponent from './images/microphone.component.svg';
 import IconRecordSvgComponent from './images/record.component.svg';
 import IconBilibiliLogoSvgComponent from './images/bilibililogo.component.svg';
 import IconAcFunLogoSvgComponent from './images/acfunlogo.component.svg';
+import IconDouyinSvgComponent from './images/douyin.component.svg';
 import IconCutSvgComponent from './images/cut.component.svg';
 import IconConcatSvgComponent from './images/concat.component.svg';
 import IconCountSvgComponent from './images/count.component.svg';
@@ -64,10 +65,17 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   ],
   [
     {
+      name: '抖音视频下载',
+      url: '/Toutiao/Douyin',
+      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconDouyinSvgComponent } />
+    },
+    {
       name: '微博超话签到',
       url: '/WeiboSuper',
       icon: <IconWeiboOutlined />
-    },
+    }
+  ],
+  [
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
