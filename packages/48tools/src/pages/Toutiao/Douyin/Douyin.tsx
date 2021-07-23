@@ -1,5 +1,3 @@
-import * as path from 'path';
-import type { ParsedPath } from 'path';
 import * as url from 'url';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
@@ -58,8 +56,6 @@ function Douyin(props: {}): ReactElement {
   // 下载（测试ID：6902337717137329412）
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
-      const urlResult: url.URL = new url.URL(item.url);
-      const parseResult: ParsedPath = path.parse(urlResult.pathname);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[抖音]${ filenamify(item.title) }.mp4`
       });
