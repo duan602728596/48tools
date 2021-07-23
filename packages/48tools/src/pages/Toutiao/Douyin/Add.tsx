@@ -102,6 +102,7 @@ function Add(props: {}): ReactElement {
     <Fragment>
       <Input className={ style.input }
         value={ urlValue }
+        placeholder="请输入视频ID"
         onChange={ (event: ChangeEvent<HTMLInputElement>): void => setUrlValue(event.target.value) }
       />
       <Button loading={ getUrlLoading } onClick={ handleGetVideoUrlClick }>获取下载地址</Button>
