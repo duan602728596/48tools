@@ -224,9 +224,6 @@ function Pocket48Record(props: {}): ReactElement {
 
     try {
       const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
-
-      console.log(groupId);
-
       const res: LiveData = await requestLiveList('0', false, groupId, userId);
 
       dispatch(setRecordList({
