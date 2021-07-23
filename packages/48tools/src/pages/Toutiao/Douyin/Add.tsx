@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import {
   Fragment,
   useState,
@@ -8,9 +9,12 @@ import {
   ChangeEvent,
   MouseEvent
 } from 'react';
+import type { Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 import { Input, Button, Modal, message, Select } from 'antd';
 import style from './add.sass';
 import { requestDouyinVideoHtml } from '../services/douyin';
+import { setAddDownloadList } from '../reducers/douyin';
 import type { AwemeDetail, ScriptRendedData, DownloadUrlItem } from '../types';
 
 /* select渲染 */
@@ -22,16 +26,29 @@ function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): ReactNodeArra
 
 /* 获取和下载链接 */
 function Add(props: {}): ReactElement {
+  const dispatch: Dispatch = useDispatch();
   const [urlValue, setUrlValue]: [string, D<S<string>>] = useState('');
   const [getUrlLoading, setGetUrlLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 弹出层的显示隐藏
   const [downloadUrl, setDownloadUrl]: [DownloadUrlItem[], D<S<DownloadUrlItem[]>>] = useState([]); // 视频下载地址
   const [selectedUrl, setSelectedUrl]: [string, D<S<string>>] = useState(''); // 选中的下载地址
+  const [title, setTitle]: [string, D<S<string>>] = useState(''); // 视频标题
 
   // 关闭后清除状态
   function afterClose(): void {
     setDownloadUrl([]);
     setSelectedUrl('');
+    setTitle('');
+  }
+
+  // 添加新的下载地址
+  function handleAddClick(event: MouseEvent<HTMLButtonElement>): void {
+    dispatch(setAddDownloadList({
+      qid: randomUUID(),
+      url: selectedUrl,
+      title
+    }));
+    setVisible(false);
   }
 
   // 获取下载地址
@@ -59,11 +76,6 @@ function Add(props: {}): ReactElement {
         let i: number = 1;
 
         for (const item of awemeDetail.video.bitRateList) {
-          urls.push({
-            label: '下载地址-' + i++,
-            value: `https:${ item.playApi }`
-          });
-
           for (const item2 of item.playAddr) {
             urls.push({
               label: '下载地址-' + i++,
@@ -73,6 +85,7 @@ function Add(props: {}): ReactElement {
         }
 
         setDownloadUrl(urls);
+        setTitle(awemeDetail.desc);
         setVisible(true);
       } else {
         message.error('找不到视频相关信息！');
@@ -100,6 +113,7 @@ function Add(props: {}): ReactElement {
         destroyOnClose={ true }
         closable={ false }
         afterClose={ afterClose }
+        onOk={ handleAddClick }
         onCancel={ (event: MouseEvent<HTMLButtonElement>): void => setVisible(false) }
       >
         <Select className={ style.urlSelect }

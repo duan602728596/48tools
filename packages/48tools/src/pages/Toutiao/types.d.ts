@@ -1,6 +1,7 @@
 type noProtocolUrl = `//${ string }`;
 
 export interface AwemeDetail {
+  desc: string; // 标题
   download: {
     prevent: boolean;
     url: string; // 有水印
@@ -39,9 +40,9 @@ export interface DownloadUrlItem {
 
 /* 下载相关 */
 export interface DownloadItem {
-  qid: string;  // 当前的下载id，随机
-  url: string;  // 下载地址
-  path: string; // 下载位置
+  qid: string;   // 当前的下载id，随机
+  url: string;   // 下载地址
+  title: string; // 视频标题
 }
 
 // 进度条信息

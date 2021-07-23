@@ -19,13 +19,13 @@ export const douyinDownloadListAdapter: EntityAdapter<DownloadItem> = createEnti
 export const douyinDownloadListSelectors: EntitySelectors<DownloadItem, EntityState<DownloadItem>>
   = douyinDownloadListAdapter.getSelectors();
 
-export interface douyinDownloadInitialState extends EntityState<DownloadItem> {
+export interface DouyinDownloadInitialState extends EntityState<DownloadItem> {
   downloadProgress: { [key: string]: number };
 }
 
-type CaseReducers = SliceCaseReducers<douyinDownloadInitialState>;
+type CaseReducers = SliceCaseReducers<DouyinDownloadInitialState>;
 
-const { actions, reducer }: Slice = createSlice<douyinDownloadInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<DouyinDownloadInitialState, CaseReducers>({
   name: 'douyinDownload',
   initialState: douyinDownloadListAdapter.getInitialState({
     downloadProgress: {} // 下载进度
@@ -35,7 +35,7 @@ const { actions, reducer }: Slice = createSlice<douyinDownloadInitialState, Case
     setDeleteDownloadList: douyinDownloadListAdapter.removeOne, // 删除下载
 
     // 设置下载进度
-    setDownloadProgress(state: douyinDownloadInitialState, action: PayloadAction<MessageEventData>): void {
+    setDownloadProgress(state: DouyinDownloadInitialState, action: PayloadAction<MessageEventData>): void {
       const { type, qid, data }: MessageEventData = action.payload;
 
       if (type === 'progress') {
