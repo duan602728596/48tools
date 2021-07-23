@@ -89,7 +89,8 @@ function Douyin(props: {}): ReactElement {
         type: 'start',
         filePath: result.filePath,
         durl: uri,
-        qid: item.qid
+        qid: item.qid,
+        headers: {}
       });
     } catch (err) {
       console.error(err);
