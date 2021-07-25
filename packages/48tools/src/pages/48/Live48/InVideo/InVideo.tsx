@@ -5,7 +5,7 @@ import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, M
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Select, Button, Table, message, Space } from 'antd';
+import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import * as filenamify from 'filenamify';
@@ -15,9 +15,9 @@ import Header from '../../../../components/Header/Header';
 import {
   setInVideoQuery,
   setInVideoList,
-  Live48InitialState,
   setVideoListChildAdd,
-  setVideoListChildDelete
+  setVideoListChildDelete,
+  Live48InitialState
 } from '../../reducers/live48';
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
@@ -213,12 +213,11 @@ function InVideo(props: {}): ReactElement {
         });
 
         return idx >= 0 ? (
-          <Button type="primary"
-            danger={ true }
-            onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+          <Popconfirm title="确定要停止下载吗？"
+            onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
           >
-            停止下载
-          </Button>
+            <Button type="primary" danger={ true }>停止下载</Button>
+          </Popconfirm>
         ) : (
           <Button.Group>
             <Button onClick={

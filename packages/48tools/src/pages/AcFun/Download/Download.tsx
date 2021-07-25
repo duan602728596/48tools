@@ -4,7 +4,7 @@ import { Fragment, ReactElement, ReactNodeArray, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Table, Select, Button, message } from 'antd';
+import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
@@ -132,12 +132,11 @@ function Download(props: {}): ReactElement {
           <Button.Group>
             {
               inDownload ? (
-                <Button type="primary"
-                  danger={ true }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                <Popconfirm title="确定要停止下载吗？"
+                  onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
                 >
-                  停止下载
-                </Button>
+                  <Button type="primary" danger={ true }>停止下载</Button>
+                </Popconfirm>
               ) : (
                 <Select className={ style.downloadSelect }
                   placeholder="下载"

@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Button, Table, message, Modal, Select } from 'antd';
+import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import { Onion } from '@bbkkbkk/q';
@@ -231,12 +231,11 @@ function Live(props: {}): ReactElement {
           <Button.Group>
             {
               idx >= 0 ? (
-                <Button type="primary"
-                  danger={ true }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                <Popconfirm title="确定要停止录制吗？"
+                  onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
                 >
-                  停止录制
-                </Button>
+                  <Button type="primary" danger={ true }>停止录制</Button>
+                </Popconfirm>
               ) : (
                 <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleRecordClick(record, event) }>
                   开始录制

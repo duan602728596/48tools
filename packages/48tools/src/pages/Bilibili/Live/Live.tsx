@@ -4,7 +4,7 @@ import { Fragment, ReactElement, useEffect, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Button, Table, message } from 'antd';
+import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
@@ -124,12 +124,11 @@ function Live(props: {}): ReactElement {
           <Button.Group>
             {
               idx >= 0 ? (
-                <Button type="primary"
-                  danger={ true }
-                  onClick={ (event: MouseEvent<HTMLButtonElement> ): void => handleStopClick(record, event) }
+                <Popconfirm title="确定要停止录制吗？"
+                  onConfirm={ (event: MouseEvent<HTMLButtonElement> ): void => handleStopClick(record, event) }
                 >
-                  停止录制
-                </Button>
+                  <Button type="primary" danger={ true }>停止录制</Button>
+                </Popconfirm>
               ) : (
                 <Button onClick={ (event: MouseEvent<HTMLButtonElement> ): Promise<void> => handleRecordClick(record, event) }>
                   开始录制

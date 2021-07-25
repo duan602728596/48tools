@@ -2,7 +2,7 @@ import { Fragment, ReactElement, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Table, Button, Tag } from 'antd';
+import { Table, Button, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import Header from '../../../../components/Header/Header';
 import GetLiveUrl from './GetLiveUrl';
@@ -83,12 +83,12 @@ function InLive(props: {}): ReactElement {
           删除
         </Button>
       ) : (
-        <Button type="primary"
-          danger={ true }
-          onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+        <Popconfirm title="确定要停止录制吗？"
+          onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
         >
-          停止
-        </Button>
+          <Button type="primary" danger={ true }>停止</Button>
+        </Popconfirm>
+
       )
     }
   ];

@@ -7,7 +7,7 @@ import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateActio
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Button, message, Table, Tag, Select, Form, InputNumber, Space } from 'antd';
+import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
@@ -270,12 +270,11 @@ function Pocket48Record(props: {}): ReactElement {
           <Button.Group>
             {
               idx >= 0 ? (
-                <Button type="primary"
-                  danger={ true }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                <Popconfirm title="确定要停止下载吗？"
+                  onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
                 >
-                  停止下载
-                </Button>
+                  <Button type="primary" danger={ true }>停止下载</Button>
+                </Popconfirm>
               ) : (
                 <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadM3u8Click(record, event) }>
                   下载视频

@@ -7,7 +7,7 @@ import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
-import { Button, message, Table, Tag } from 'antd';
+import { Button, message, Table, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash-es';
 import * as dayjs from 'dayjs';
@@ -217,12 +217,11 @@ function Pocket48Live(props: {}): ReactElement {
           <Button.Group>
             {
               idx >= 0 ? (
-                <Button type="primary"
-                  danger={ true }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                <Popconfirm title="确定要停止录制吗？"
+                  onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
                 >
-                  停止
-                </Button>
+                  <Button type="primary" danger={ true }>停止</Button>
+                </Popconfirm>
               ) : (
                 <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, event) }>
                   录制
