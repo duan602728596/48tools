@@ -74,6 +74,7 @@ function config(outputDir, target) {
     },
     // 解压node-media-server服务线程使用的文件
     asarUnpack: [
+      'node_modules/asar-node',
       'bin/lib/nodeMediaServer/server.worker.js'
     ]
   };
