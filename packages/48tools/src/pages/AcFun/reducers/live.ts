@@ -1,5 +1,4 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
 import dbRedux, { acfunLiveObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveItem } from '../types';
@@ -30,7 +29,7 @@ const { actions, reducer }: Slice = createSlice<AcFunLiveInitialState, CaseReduc
 
     // 直播间列表内删除一个直播间
     setAcFunListDeleteRoom(state: AcFunLiveInitialState, action: PayloadAction<{ query: string }>): void {
-      const index: number = findIndex(state.acfunLiveList, { id: action.payload.query });
+      const index: number = state.acfunLiveList.findIndex((o: LiveItem): boolean => o.id === action.payload.query);
 
       if (index >= 0) {
         const newBilibiliLiveList: Array<LiveItem> = [...state.acfunLiveList];
@@ -47,7 +46,7 @@ const { actions, reducer }: Slice = createSlice<AcFunLiveInitialState, CaseReduc
 
     // 删除一个直播下载队列
     setDeleteLiveWorker(state: AcFunLiveInitialState, action: PayloadAction<LiveItem>): void {
-      const index: number = findIndex(state.liveWorkers, { id: action.payload.id });
+      const index: number = state.liveWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.id);
 
       if (index >= 0) {
         state.liveWorkers.splice(index, 1);

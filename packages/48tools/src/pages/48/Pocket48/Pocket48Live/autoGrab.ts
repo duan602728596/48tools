@@ -2,16 +2,14 @@ import * as path from 'path';
 import { promises as fsP } from 'fs';
 import type { Store } from 'redux';
 import { message } from 'antd';
-import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import { store } from '../../../../store/store';
 import { setLiveList, Pocket48InitialState, setDeleteLiveChildList, setAddLiveChildList } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
 import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
-import type { MessageEventData } from '../../../../types';
+import type { MessageEventData, WebWorkerChildItem } from '../../../../types';
 import type { LiveData, LiveInfo, UserInfo, LiveRoomInfo } from '../../services/interface';
 
 /**
@@ -32,7 +30,7 @@ async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
 
   for (const item of liveList) {
     const { userId, nickname }: UserInfo = item.userInfo;
-    const index: number = findIndex(liveChildList, { id: item.liveId });
+    const index: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === item.liveId);
 
     // 正则匹配或者id完全匹配
     if ((humanRegExp.test(nickname) || usersArr.includes[userId]) && index < 0) {

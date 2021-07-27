@@ -11,7 +11,6 @@ import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfi
 import type { ColumnsType } from 'antd/es/table';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import * as filenamify from 'filenamify';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
@@ -106,7 +105,7 @@ function Pocket48Record(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(recordChildList, { id: record.liveId });
+    const index: number = recordChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
 
     if (index >= 0) {
       recordChildList[index].worker.postMessage({ type: 'stop' });
@@ -264,7 +263,7 @@ function Pocket48Record(props: {}): ReactElement {
       key: 'action',
       width: 420,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
-        const idx: number = findIndex(recordChildList, { id: record.liveId });
+        const idx: number = recordChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
 
         return (
           <Button.Group>

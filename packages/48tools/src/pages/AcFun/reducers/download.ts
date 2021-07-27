@@ -1,5 +1,4 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
 import type { WebWorkerChildItem } from '../../../types';
 import type { DownloadItem } from '../types';
 
@@ -24,7 +23,7 @@ const { actions, reducer }: Slice = createSlice<AcFunDownloadInitialState, CaseR
 
     // 删除一个下载
     setDeleteDownloadList(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): void {
-      const index: number = findIndex(state.downloadList, { qid: action.payload.qid });
+      const index: number = state.downloadList.findIndex((o: DownloadItem): boolean => o.qid === action.payload.qid);
 
       if (index >= 0) {
         state.downloadList.splice(index, 1);
@@ -39,7 +38,7 @@ const { actions, reducer }: Slice = createSlice<AcFunDownloadInitialState, CaseR
 
     // 删除一个下载线程
     setDeleteDownloadWorker(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): void {
-      const index: number = findIndex(state.ffmpegDownloadWorkers, { id: action.payload.qid });
+      const index: number = state.ffmpegDownloadWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.qid);
 
       if (index >= 0) {
         state.ffmpegDownloadWorkers.splice(index, 1);

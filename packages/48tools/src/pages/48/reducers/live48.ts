@@ -1,5 +1,4 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
 import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 
 export interface Live48InitialState {
@@ -27,7 +26,7 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
 
     // 设置当前的worker，自动录制直播
     setAddWorkerInLiveList(state: Live48InitialState, action: PayloadAction<{ id: string; worker: Worker }>): void {
-      const index: number = findIndex(state.inLiveList, { id: action.payload.id });
+      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItem): boolean => o.id === action.payload.id);
 
       if (index >= 0) {
         clearInterval(state.inLiveList[index].timer!);
@@ -39,7 +38,7 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
 
     // 当前直播设置为停止
     setStopInLiveList(state: Live48InitialState, action: PayloadAction<string>): void {
-      const index: number = findIndex(state.inLiveList, { id: action.payload });
+      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItem): boolean => o.id === action.payload);
 
       if (index >= 0) {
         state.inLiveList[index].status = 0;
@@ -49,7 +48,7 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
 
     // 删除当前抓取的直播列表
     setDeleteInLiveList(state: Live48InitialState, action: PayloadAction<string>): void {
-      const index: number = findIndex(state.inLiveList, { id: action.payload });
+      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItem): boolean => o.id === action.payload);
 
       if (index >= 0) {
         state.inLiveList.splice(index, 1);
@@ -80,10 +79,8 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
 
     // 删除视频下载
     setVideoListChildDelete(state: Live48InitialState, action: PayloadAction<InVideoItem>): void {
-      const index: number = findIndex(state.videoListChild, {
-        id: action.payload.id,
-        liveType: action.payload.liveType
-      });
+      const index: number = state.videoListChild.findIndex(
+        (o: InVideoWebWorkerItem): boolean => o.id === action.payload.id && o.liveType === action.payload.liveType);
 
       if (index >= 0) {
         state.videoListChild.splice(index, 1);

@@ -4,7 +4,6 @@ import * as PropTypes from 'prop-types';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Button, Alert, Space, message, Divider } from 'antd';
-import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import style from './openWeiboWindow.sass';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
@@ -19,9 +18,9 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
   // 监听是否登陆
   const handleWeiboLoginCookieListener: (event: IpcRendererEvent, cookies: Array<Cookie>) => Promise<void>
     = useCallback(async function(event: IpcRendererEvent, cookies: Array<Cookie>): Promise<void> {
-      const alfIndex: number = findIndex(cookies, { name: 'ALF' }),
-        ssoLoginIndex: number = findIndex(cookies, { name: 'SSOLoginState' }),
-        subIndex: number = findIndex(cookies, { name: 'SUB' });
+      const alfIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'ALF'),
+        ssoLoginIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SSOLoginState'),
+        subIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SUB');
 
       if (alfIndex >= 0 && ssoLoginIndex >= 0 && subIndex >= 0) {
         const cookieStr: string = `SUB=${ cookies[subIndex].value }`;

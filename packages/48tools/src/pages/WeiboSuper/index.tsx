@@ -4,7 +4,6 @@ import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Select, Button, Space, List, Alert, Avatar, Tag } from 'antd';
-import { findIndex } from 'lodash-es';
 import style from './index.sass';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
@@ -57,7 +56,7 @@ function Index(props: {}): ReactElement {
 
   // 开始签到
   function handleWeiboCheckinStartClick(event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(accountList, { id: accountValue });
+    const index: number = accountList.findIndex((o: WeiboAccount): boolean => o.id === accountValue);
 
     if (index >= 0) {
       dispatch(setCheckIn(true));

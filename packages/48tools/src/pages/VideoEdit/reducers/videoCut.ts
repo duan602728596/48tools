@@ -1,5 +1,4 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
 import type { WebWorkerChildItem } from '../../../types';
 import type { CutItem } from '../types';
 
@@ -24,7 +23,7 @@ const { actions, reducer }: Slice = createSlice<VideoCutInitialState, CaseReduce
 
     // 删除一个队列
     setCutListDelete(state: VideoCutInitialState, action: PayloadAction<CutItem>): void {
-      const index: number = findIndex(state.cutList, { id: action.payload.id });
+      const index: number = state.cutList.findIndex((o: CutItem): boolean => o.id === action.payload.id);
 
       if (index >= 0) {
         state.cutList.splice(index, 1);
@@ -39,7 +38,7 @@ const { actions, reducer }: Slice = createSlice<VideoCutInitialState, CaseReduce
 
     // 删除一个裁剪线程
     setCutChildListDelete(state: VideoCutInitialState, action: PayloadAction<WebWorkerChildItem>): void {
-      const index: number = findIndex(state.cutChildList, { id: action.payload.id });
+      const index: number = state.cutChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.id);
 
       if (index >= 0) {
         state.cutChildList.splice(index, 1);

@@ -1,5 +1,4 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
 import dbRedux, { weiboLoginListObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { WeiboAccount } from '../../../types';
 
@@ -17,7 +16,7 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
   reducers: {
     // 添加一个账号
     setAddWeiboAccountList(state: WeiboLoginInitialState, action: PayloadAction<{ data: WeiboAccount }>): void {
-      const index: number = findIndex(state.accountList, { id: action.payload.data.id });
+      const index: number = state.accountList.findIndex((o: WeiboAccount): boolean => o.id === action.payload.data.id);
 
       if (index >= 0) {
         state.accountList[index] = action.payload.data;
@@ -34,7 +33,7 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
 
     // 删除账号
     setDeleteWeiboAccount(state: WeiboLoginInitialState, action: PayloadAction<{ query: string }>): void {
-      const index: number = findIndex(state.accountList, { id: action.payload.query });
+      const index: number = state.accountList.findIndex((o: WeiboAccount): boolean => o.id === action.payload.query);
 
       if (index >= 0) {
         const newAccountList: Array<WeiboAccount> = [...state.accountList];

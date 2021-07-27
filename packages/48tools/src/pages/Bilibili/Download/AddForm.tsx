@@ -5,13 +5,13 @@ import { useDispatch } from 'react-redux';
 import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import { transform } from 'lodash-es';
 import style from './addForm.sass';
 import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from './parseBilibiliUrl';
 import { setAddDownloadList } from '../reducers/download';
 
 /* 视频分类 */
-const bilibiliVideoTypes: Array<{ label: string; value: string }> = [
+type BilibiliVideoTypesItem = { label: string; value: string };
+const bilibiliVideoTypes: Array<BilibiliVideoTypesItem> = [
   { value: 'bv', label: '视频（BV）' },
   { value: 'av', label: '视频（av）' },
   { value: 'au', label: '音频（au）' },
@@ -19,9 +19,12 @@ const bilibiliVideoTypes: Array<{ label: string; value: string }> = [
   { value: 'ss', label: '番剧（ss）' }
 ];
 
-export const bilibiliVideoTypesMap: { [key: string]: string } = transform(bilibiliVideoTypes,
-  function(result: { [key: string]: string }, item: { label: string; value: string }, index: number): void {
+type BilibiliVideoTypesMap = { [key: string]: string };
+export const bilibiliVideoTypesMap: BilibiliVideoTypesMap
+  = bilibiliVideoTypes.reduce(function(result: BilibiliVideoTypesMap, item: BilibiliVideoTypesItem): BilibiliVideoTypesMap {
     result[item.value] = item.label;
+
+    return result;
   }, {});
 
 /* 视频分类的select选项的渲染 */
