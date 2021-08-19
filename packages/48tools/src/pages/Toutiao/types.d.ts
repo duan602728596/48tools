@@ -20,17 +20,21 @@ export interface AwemeDetail {
   };
 }
 
+export interface C0Obj {
+  odin: object;
+  user: object;
+}
+
+export interface CVersionObj {
+  aweme: {
+    detail: AwemeDetail;
+  };
+}
+
 export interface ScriptRendedData {
   _location: string;
-  C_0: {
-    odin: object;
-    user: object;
-  };
-  C_12: {
-    aweme: {
-      detail: AwemeDetail;
-    };
-  };
+  C_0: C0Obj;
+  [key: string]: CVersionObj;
 }
 
 export interface DownloadUrlItem {

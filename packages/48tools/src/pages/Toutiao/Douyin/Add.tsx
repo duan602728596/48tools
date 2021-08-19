@@ -15,7 +15,7 @@ import { Input, Button, Modal, message, Select } from 'antd';
 import style from './add.sass';
 import { requestDouyinVideoHtml } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
-import type { AwemeDetail, ScriptRendedData, DownloadUrlItem } from '../types';
+import type { AwemeDetail, ScriptRendedData, DownloadUrlItem, C0Obj, CVersionObj } from '../types';
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): ReactNodeArray {
@@ -65,7 +65,9 @@ function Add(props: {}): ReactElement {
       if (rendedData) {
         const data: string = decodeURIComponent(rendedData.innerText);
         const json: ScriptRendedData = JSON.parse(data);
-        const awemeDetail: AwemeDetail = json.C_12.aweme.detail;
+        const cVersion: CVersionObj = Object.values(json).find(
+          (o: C0Obj | CVersionObj): boolean => typeof o === 'object' && ('aweme' in o)) as CVersionObj;
+        const awemeDetail: AwemeDetail = cVersion.aweme.detail;
         const urls: DownloadUrlItem[] = [];
 
         urls.push(
