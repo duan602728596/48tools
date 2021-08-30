@@ -9,10 +9,10 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex, pick } from 'lodash-es';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
+import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
 import { requestLiveRoomInfo } from '../../services/pocket48';
 import {
@@ -108,7 +108,7 @@ function Pocket48Live(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(liveChildList, { id: record.liveId });
+    const index: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
 
     if (index >= 0) {
       liveChildList[index].worker.postMessage({ type: 'stop' });
@@ -211,7 +211,7 @@ function Pocket48Live(props: {}): ReactElement {
       key: 'action',
       width: 370,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
-        const idx: number = findIndex(liveChildList, { id: record.liveId });
+        const idx: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
 
         return (
           <Button.Group>

@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex } from 'lodash-es';
 import { Onion } from '@bbkkbkk/q';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
 import style from './live.sass';
@@ -51,7 +50,7 @@ function Live(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(liveWorkers, { id: record.id });
+    const index: number = liveWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) {
       liveWorkers[index].worker.postMessage({ type: 'stop' });
@@ -225,7 +224,7 @@ function Live(props: {}): ReactElement {
       key: 'handle',
       width: 175,
       render: (value: undefined, record: LiveItem, index: number): ReactElement => {
-        const idx: number = findIndex(liveWorkers, { id: record.id });
+        const idx: number = liveWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
         return (
           <Button.Group>

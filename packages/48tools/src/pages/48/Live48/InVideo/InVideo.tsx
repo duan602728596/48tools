@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex } from 'lodash-es';
 import filenamify from 'filenamify/browser';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './inVideo.sass';
@@ -79,7 +78,8 @@ function InVideo(props: {}): ReactElement {
 
   // 停止下载
   function handleStopClick(record: InVideoItem, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(videoListChild, { id: record.id, liveType: record.liveType });
+    const index: number = videoListChild.findIndex(
+      (o: InVideoWebWorkerItem): boolean => o.id === record.id && o.liveType === record.liveType);
 
     if (index >= 0) {
       videoListChild[index].worker.postMessage({ type: 'stop' });
@@ -207,10 +207,8 @@ function InVideo(props: {}): ReactElement {
       key: 'handle',
       width: 210,
       render: (value: undefined, record: InVideoItem, index: number): ReactElement => {
-        const idx: number = findIndex(videoListChild, {
-          id: record.id,
-          liveType: record.liveType
-        });
+        const idx: number = videoListChild.findIndex(
+          (o: InVideoWebWorkerItem): boolean => o.id === record.id && o.liveType === record.liveType);
 
         return idx >= 0 ? (
           <Popconfirm title="确定要停止下载吗？"

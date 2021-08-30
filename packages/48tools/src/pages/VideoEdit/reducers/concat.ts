@@ -1,5 +1,4 @@
 import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
 import type { ConcatItem } from '../types';
 
 export interface ConcatInitialState {
@@ -28,7 +27,7 @@ const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers
 
     // 删除
     setConcatListDelete(state: ConcatInitialState, action: PayloadAction<ConcatItem>): void {
-      const index: number = findIndex(state.concatList, { id: action.payload.id });
+      const index: number = state.concatList.findIndex((o: ConcatItem) => o.id === action.payload.id);
 
       if (index >= 0) {
         state.concatList.splice(index, 1);

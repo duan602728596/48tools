@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex } from 'lodash-es';
 import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
 import style from './download.sass';
 import Header from '../../../components/Header/Header';
@@ -47,7 +46,7 @@ function Download(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(ffmpegDownloadWorkers, { id: record.qid });
+    const index: number = ffmpegDownloadWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === record.qid);
 
     if (index >= 0) {
       ffmpegDownloadWorkers[index].worker.postMessage({ type: 'stop' });
@@ -125,7 +124,7 @@ function Download(props: {}): ReactElement {
       key: 'handle',
       width: 245,
       render: (value: undefined, record: DownloadItem, index: number): ReactElement => {
-        const idx: number = findIndex(ffmpegDownloadWorkers, { id: record.qid });
+        const idx: number = ffmpegDownloadWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === record.qid);
         const inDownload: boolean = idx >= 0;
 
         return (

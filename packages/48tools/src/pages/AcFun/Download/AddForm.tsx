@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import { Button, Modal, Form, Select, Input, Alert, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import { pick, transform } from 'lodash-es';
 import style from './addForm.sass';
+import { pick } from '../../../utils/lodash';
 import { parseAcFunUrl } from './parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
 import type { Representation } from '../types';
@@ -17,9 +17,12 @@ const acfunVideoTypes: Array<{ label: string; value: string }> = [
   { value: 'aa', label: '番剧（aa）' }
 ];
 
-export const acfunVideoTypesMap: { [key: string]: string } = transform(acfunVideoTypes,
-  function(result: { [key: string]: string }, item: { label: string; value: string }, index: number): void {
+type TypesResult = { [key: string]: string };
+export const acfunVideoTypesMap: TypesResult = acfunVideoTypes.reduce(
+  function(result: TypesResult, item: { label: string; value: string }, index: number): TypesResult {
     result[item.value] = item.label;
+
+    return result;
   }, {});
 
 /* 视频分类的select选项的渲染 */

@@ -9,7 +9,6 @@ import {
   AsyncThunk,
   ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
-import { findIndex } from 'lodash-es';
 import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
 import { requestLiveList } from '../services/pocket48';
 import type { RecordFieldData } from '../types';
@@ -64,7 +63,7 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
 
     // 删除直播下载
     setDeleteLiveChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): void {
-      const index: number = findIndex(state.liveChildList, { id: action.payload.liveId });
+      const index: number = state.liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.liveId);
 
       if (index >= 0) {
         state.liveChildList.splice(index, 1);
@@ -98,7 +97,7 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
 
     // 删除录播下载
     setDeleteRecordChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): void {
-      const index: number = findIndex(state.recordChildList, { id: action.payload.liveId });
+      const index: number = state.recordChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.liveId);
 
       if (index >= 0) {
         state.recordChildList.splice(index, 1);

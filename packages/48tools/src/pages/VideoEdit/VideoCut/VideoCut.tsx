@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Table, Button, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { findIndex } from 'lodash-es';
 import CutWorker from 'worker-loader!./cut.worker';
 import Header from '../../../components/Header/Header';
 import CutForm from './CutForm';
@@ -46,7 +45,7 @@ function Index(props: {}): ReactElement {
 
   // 停止裁剪
   function handleStopCutClick(record: CutItem, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = findIndex(cutChildList, { id: record.id });
+    const index: number = cutChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) {
       cutChildList[index].worker.postMessage({ type: 'stop' });
@@ -100,7 +99,7 @@ function Index(props: {}): ReactElement {
       key: 'handle',
       width: 175,
       render: (value: undefined, record: CutItem, index: number): ReactElement => {
-        const idx: number = findIndex(cutChildList, { id: record.id });
+        const idx: number = cutChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
         const hasChild: boolean = idx >= 0;
 
         return (

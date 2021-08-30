@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import { transform } from 'lodash-es';
 import style from './addForm.sass';
 import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from './parseBilibiliUrl';
 import { setAddDownloadList } from '../reducers/download';
@@ -19,9 +18,12 @@ const bilibiliVideoTypes: Array<{ label: string; value: string }> = [
   { value: 'ss', label: '番剧（ss）' }
 ];
 
-export const bilibiliVideoTypesMap: { [key: string]: string } = transform(bilibiliVideoTypes,
-  function(result: { [key: string]: string }, item: { label: string; value: string }, index: number): void {
+type TypesResult = { [key: string]: string };
+export const bilibiliVideoTypesMap: TypesResult = bilibiliVideoTypes.reduce(
+  function(result: TypesResult, item: { label: string; value: string }, index: number): TypesResult {
     result[item.value] = item.label;
+
+    return result;
   }, {});
 
 /* 视频分类的select选项的渲染 */
