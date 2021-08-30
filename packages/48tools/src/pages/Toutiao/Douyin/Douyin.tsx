@@ -1,13 +1,13 @@
 import * as url from 'url';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import * as filenamify from 'filenamify';
 import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import filenamify from 'filenamify/browser';
 import DownloadBilibiliVideoWorker from 'worker-loader!../../Bilibili/Download/downloadBilibiliVideo.worker';
 import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';

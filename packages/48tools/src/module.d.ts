@@ -70,3 +70,9 @@ declare module '@electron/remote' {
 
   export = remote;
 }
+
+declare module 'filenamify/browser' {
+  import filenamify from 'filenamify/filenamify.d.ts';
+
+  export default filenamify;
+}

@@ -11,7 +11,7 @@ import { Button, message, Table, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { findIndex, pick } from 'lodash-es';
 import * as dayjs from 'dayjs';
-import * as filenamify from 'filenamify';
+import filenamify from 'filenamify/browser';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import Header from '../../../../components/Header/Header';
 import { requestLiveRoomInfo } from '../../services/pocket48';

@@ -19,7 +19,7 @@ import {
   SortEnd,
   SortEvent
 } from 'react-sortable-hoc';
-import * as arrayMove from 'array-move';
+import { arrayMoveImmutable } from 'array-move';
 import * as dayjs from 'dayjs';
 import ConcatVideoWorker from 'worker-loader!./concatVideo.worker';
 import style from './concat.sass';
@@ -126,7 +126,7 @@ function Concat(props: {}): ReactElement {
 
   // 拖拽完毕
   function handleDragSortEnd(sort: SortEnd, event: SortEvent): void {
-    dispatch(setConcatList(arrayMove(concatList, sort.oldIndex, sort.newIndex)));
+    dispatch(setConcatList(arrayMoveImmutable(concatList, sort.oldIndex, sort.newIndex)));
   }
 
   // 选择视频

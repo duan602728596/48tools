@@ -13,7 +13,7 @@ import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { findIndex } from 'lodash-es';
 import * as dayjs from 'dayjs';
-import * as filenamify from 'filenamify';
+import filenamify from 'filenamify/browser';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './pocket48Record.sass';
 import Header from '../../../../components/Header/Header';

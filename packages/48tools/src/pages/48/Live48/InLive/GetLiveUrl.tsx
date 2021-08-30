@@ -6,7 +6,7 @@ import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
-import * as filenamify from 'filenamify';
+import filenamify from 'filenamify/browser';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
