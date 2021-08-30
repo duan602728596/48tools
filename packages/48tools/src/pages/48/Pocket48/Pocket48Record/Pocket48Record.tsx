@@ -131,17 +131,27 @@ function Pocket48Record(props: {}): ReactElement {
   async function handleDownloadM3u8Click(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+      const parseResult: ParsedPath = path.parse(resInfo.content.playStreamPath);
+      const isM3u8: boolean = parseResult.ext === '.m3u8'; // 以前的视频可能是mp4的
+
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
-          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.ts`
+          + `@${ getFileTime(record.ctime) }__${ getFileTime() }${ isM3u8 ? '.ts' : parseResult.ext }`
       });
 
       if (result.canceled || !result.filePath) return;
 
-      const m3u8File: string = `${ result.filePath }.m3u8`;
-      const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
+      let downloadFile: string;
 
-      await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data));
+      if (isM3u8) {
+        const m3u8File: string = `${ result.filePath }.m3u8`;
+        const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
+
+        await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data));
+        downloadFile = m3u8File;
+      } else {
+        downloadFile = resInfo.content.playStreamPath;
+      }
 
       const worker: Worker = new FFMpegDownloadWorker();
 
@@ -160,10 +170,10 @@ function Pocket48Record(props: {}): ReactElement {
 
       worker.postMessage({
         type: 'start',
-        playStreamPath: m3u8File,
+        playStreamPath: downloadFile,
         filePath: result.filePath,
         ffmpeg: getFFmpeg(),
-        protocolWhitelist: true
+        protocolWhitelist: isM3u8
       });
 
       dispatch(setAddRecordChildList({
