@@ -104,6 +104,17 @@ async function download(workerData: WorkerEventData): Promise<void> {
   });
 }
 
+/* 停止下载 */
+function stop(): void {
+  isStop = true;
+
+  if (child) {
+    child.kill('SIGTERM');
+  } else {
+    postMessage({ type: 'close' });
+  }
+}
+
 addEventListener('message', function(event: MessageEvent<WorkerEventData>): void {
   const { type }: WorkerEventData = event.data;
 
@@ -113,14 +124,7 @@ addEventListener('message', function(event: MessageEvent<WorkerEventData>): void
       break;
 
     case 'stop':
-      isStop = true;
-
-      if (child) {
-        child.kill('SIGTERM');
-      } else {
-        postMessage({ type: 'close' });
-      }
-
+      stop();
       break;
   }
 });
