@@ -13,6 +13,7 @@ import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
+import RecordVideoDownloadWorker from 'worker-loader!./RecordVideoDownload.worker';
 import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
 import style from './pocket48Record.sass';
 import Header from '../../../../components/Header/Header';
@@ -144,16 +145,17 @@ function Pocket48Record(props: {}): ReactElement {
       let downloadFile: string;
 
       if (isM3u8) {
-        const m3u8File: string = `${ result.filePath }.m3u8`;
+        const m3u8File: string = `${ result.filePath }.cache/_a.m3u8`;
         const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
 
-        await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data));
-        downloadFile = m3u8File;
+        await fsP.mkdir(`${ result.filePath }.cache`);   // 生成缓存文件夹
+        await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data)); // 写入m3u8文件
+        downloadFile = m3u8File;                              // m3u8文件地址
       } else {
         downloadFile = resInfo.content.playStreamPath;
       }
 
-      const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = new (isM3u8 ? RecordVideoDownloadWorker : FFMpegDownloadWorker)();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;
