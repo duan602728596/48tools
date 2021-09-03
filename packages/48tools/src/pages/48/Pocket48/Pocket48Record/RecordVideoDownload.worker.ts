@@ -88,11 +88,11 @@ async function download(workerData: WorkerEventData): Promise<void> {
   child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
-    console.log(data.toString());
+    // console.log(data.toString());
   });
 
   child.stderr.on('data', function(data: Buffer): void {
-    console.log(data.toString());
+    // console.log(data.toString());
   });
 
   child.on('close', function(...args: string[]): void {
