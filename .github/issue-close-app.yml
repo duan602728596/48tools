@@ -1,0 +1,14 @@
+comment: '此问题已关闭，因为它不符合我们的问题模板。请使用模板"错误报告"或"功能要求"来创建问题。'
+issueConfigs:
+  - content:
+    - '错误报告'
+    - '复现步骤'
+    - '预期行为'
+    - '使用环境'
+  - content:
+    - '这个功能解决了什么问题'
+    - '你期望的功能是怎样的'
+caseInsensitive: true
+label: 'closed by bot'
+exception:
+  - 'duan602728596'
