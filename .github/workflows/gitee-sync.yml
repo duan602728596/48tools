@@ -1,0 +1,18 @@
+name: gitee-sync
+
+on:
+  - push
+
+concurrency:
+  group: git-mirror
+
+jobs:
+  git-mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: wearerequired/git-mirror-action@v1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
+        with:
+          source-repo: 'git@github.com:duan602728596/48tools.git'
+          destination-repo: 'git@gitee.com:duanhaochen/a48tools.git'
