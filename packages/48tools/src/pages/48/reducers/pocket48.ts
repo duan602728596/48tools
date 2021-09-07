@@ -11,7 +11,7 @@ import {
 } from '@reduxjs/toolkit';
 import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
 import { requestLiveList } from '../services/pocket48';
-import type { RecordFieldData } from '../types';
+import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveInfo, LiveData } from '../services/interface';
 
@@ -21,7 +21,7 @@ export interface Pocket48InitialState {
   autoGrabTimer: number | null;
   recordList: Array<LiveInfo>;
   recordNext: string;
-  recordChildList: Array<WebWorkerChildItem>;
+  recordChildList: Array<RecordVideoDownloadWebWorkerItem>;
   recordFields: Array<RecordFieldData>;
 }
 
@@ -91,13 +91,13 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
     },
 
     // 添加录播下载
-    setAddRecordChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): void {
+    setAddRecordChildList(state: Pocket48InitialState, action: PayloadAction<RecordVideoDownloadWebWorkerItem>): void {
       state.recordChildList = state.recordChildList.concat([action.payload]);
     },
 
     // 删除录播下载
     setDeleteRecordChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): void {
-      const index: number = state.recordChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.liveId);
+      const index: number = state.recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === action.payload.liveId);
 
       if (index >= 0) {
         state.recordChildList.splice(index, 1);

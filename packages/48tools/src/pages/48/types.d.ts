@@ -51,3 +51,8 @@ export interface RecordFieldData extends FieldData {
   validating?: boolean;
   errors?: string[];
 }
+
+// 录播的webworker下载
+export interface RecordVideoDownloadWebWorkerItem extends WebWorkerChildItem {
+  isM3u8?: boolean; // 是否为m3u8
+}

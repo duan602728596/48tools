@@ -28,7 +28,7 @@ import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requ
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
-import type { RecordFieldData } from '../../types';
+import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
@@ -67,8 +67,8 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   ),
   // 录播下载
   recordChildList: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.recordChildList,
-    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<RecordVideoDownloadWebWorkerItem> => pocket48.recordChildList,
+    (data: Array<WebWorkerChildItem>): Array<RecordVideoDownloadWebWorkerItem> => data
   ),
   // 表单field
   recordFields: createSelector(
@@ -106,10 +106,20 @@ function Pocket48Record(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
-    const index: number = recordChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
+    const index: number = recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
 
     if (index >= 0) {
       recordChildList[index].worker.postMessage({ type: 'stop' });
+    }
+  }
+
+  // 重试（主要是下载ts碎片）
+  function handleRetryDownloadClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+    const index: number = recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
+
+    if (index >= 0) {
+      recordChildList[index].worker.postMessage({ type: 'retry' });
+      message.info('正在重新下载ts片段。');
     }
   }
 
@@ -180,7 +190,8 @@ function Pocket48Record(props: {}): ReactElement {
 
       dispatch(setAddRecordChildList({
         id: record.liveId,
-        worker
+        worker,
+        isM3u8
       }));
     } catch (err) {
       console.error(err);
@@ -273,26 +284,34 @@ function Pocket48Record(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 420,
+      width: 410,
+      className: style.textRight,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
-        const idx: number = recordChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
+        const idx: number = recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
+        const isM3u8: boolean | undefined = idx >= 0 && recordChildList[idx].isM3u8;
 
         return (
           <Button.Group>
             {
-              idx >= 0 ? (
-                <Popconfirm title="确定要停止下载吗？"
+              idx >= 0 ? [
+                <Popconfirm key="stop"
+                  title="确定要停止下载吗？"
                   onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
                 >
                   <Button type="primary" danger={ true }>停止下载</Button>
-                </Popconfirm>
-              ) : (
+                </Popconfirm>,
+                <Button key="retry"
+                  disabled={ !isM3u8 }
+                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event) }
+                >
+                  重试
+                </Button>
+              ] : (
                 <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadM3u8Click(record, event) }>
                   下载视频
                 </Button>
               )
             }
-
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrcClick(record, event) }>
               下载弹幕
             </Button>
