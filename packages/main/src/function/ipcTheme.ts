@@ -16,13 +16,15 @@ function ipcTheme(): void {
    * @param { ThemeValue } value: 主题
    * @param { boolean } themeSourceEvent: 是否触发子窗口的变化
    */
-  ipcMain.on(NATIVE_THEME_CHANGE_CHANNEL, function(event: IpcMainEvent, value: ThemeValue, themeSourceEvent: boolean): void {
-    nativeTheme.themeSource = value;
+  ipcMain.on(
+    NATIVE_THEME_CHANGE_CHANNEL,
+    function(event: IpcMainEvent, value: ThemeValue, themeSourceEvent: boolean): void {
+      nativeTheme.themeSource = value;
 
-    if (themeSourceEvent) {
-      themeEvent['emit']('themeSource', value);
-    }
-  });
+      if (themeSourceEvent) {
+        themeEvent['emit']('themeSource', value);
+      }
+    });
 }
 
 export default ipcTheme;
