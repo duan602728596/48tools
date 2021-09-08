@@ -51,12 +51,10 @@ async function rm(file: string): Promise<void> {
  * @param { string } fileUrl: 文件url地址
  * @param { string } filename: 文件本地地址
  */
-export async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<GotRequest> {
-  const req: GotRequest = got.stream(fileUrl);
+export async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
+  downloadFileReq = got.stream(fileUrl);
 
-  await pipelineP(req, fs.createWriteStream(filename));
-
-  return req;
+  await pipelineP(downloadFileReq, fs.createWriteStream(filename));
 }
 
 /**
@@ -111,7 +109,7 @@ async function downloadTsVideos(cacheDir: string, urls: Array<string>): Promise<
       }
     } else {
       downloadFilePath = ts;
-      downloadFileReq = await requestDownloadFileByStream(uri, ts);
+      await requestDownloadFileByStream(uri, ts);
     }
   }
 }
