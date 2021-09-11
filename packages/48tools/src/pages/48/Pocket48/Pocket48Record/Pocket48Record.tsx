@@ -317,32 +317,39 @@ function Pocket48Record(props: {}): ReactElement {
         return (
           <Button.Group>
             {
-              idx >= 0 ? [
-                <Popconfirm key="stop"
-                  title="确定要停止下载吗？"
+              idx >= 0 ? (
+                <Popconfirm title="确定要停止下载吗？"
                   onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
                 >
-                  <Popover content={
+                  {
                     canRetry ? (
-                      <Fragment>
-                        <p className={ style.smallText }>如果下载时发现卡住了，可以使用重试</p>
-                        <div className={ style.textRight }>
-                          <Button size="small" onClick={
-                            (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event)
-                          }>
-                            重试
-                          </Button>
-                        </div>
-                      </Fragment>
-                    ) : undefined
-                  } placement="left">
-                    <Button type="primary" danger={ true }>停止下载</Button>
-                  </Popover>
+                      <Popover content={
+                        <Fragment>
+                          <p className={ style.smallText }>
+                            正在使用备用方案下载视频。<br />
+                            如果下载时发现卡住了，可以使用重试
+                          </p>
+                          <div className={ style.textRight }>
+                            <Button size="small" onClick={
+                              (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event)
+                            }>
+                              重试
+                            </Button>
+                          </div>
+                        </Fragment>
+                      } placement="left">
+                        <Button type="primary" danger={ true }>停止下载</Button>
+                      </Popover>
+                    ) : <Button type="primary" danger={ true }>停止下载</Button>
+                  }
                 </Popconfirm>
-              ] : (
+              ) : (
                 <Popover content={
                   <Fragment>
-                    <p className={ style.smallText }>如果只有m3u8文件，使用该方式下载视频</p>
+                    <p className={ style.smallText }>
+                      如果下载下来只有m3u8文件，<br />
+                      使用该方式重新下载视频
+                    </p>
                     <div className={ style.textRight }>
                       <Button size="small" onClick={
                         (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
