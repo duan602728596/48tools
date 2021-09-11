@@ -329,9 +329,9 @@ function Pocket48Record(props: {}): ReactElement {
                       <Fragment>
                         <p className={ style.smallText }>如果下载时发现卡住了，可以使用重试</p>
                         <div className={ style.textRight }>
-                          <Button size="small"
-                            onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event) }
-                          >
+                          <Button size="small" onClick={
+                            (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event)
+                          }>
                             重试
                           </Button>
                         </div>
