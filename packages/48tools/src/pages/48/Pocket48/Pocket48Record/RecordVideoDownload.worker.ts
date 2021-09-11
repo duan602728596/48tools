@@ -109,7 +109,9 @@ async function downloadTsVideos(cacheDir: string, urls: Array<string>): Promise<
       }
     } else {
       downloadFilePath = ts;
-      await requestDownloadFileByStream(uri, ts);
+      try {
+        await requestDownloadFileByStream(uri, ts);
+      } catch { /**/ }
     }
   }
 }
