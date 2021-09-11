@@ -55,4 +55,5 @@ export interface RecordFieldData extends FieldData {
 // 录播的webworker下载
 export interface RecordVideoDownloadWebWorkerItem extends WebWorkerChildItem {
   isM3u8?: boolean; // 是否为m3u8
+  downloadType: 0 | 1;
 }

@@ -7,10 +7,12 @@ import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateActio
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
-import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfirm } from 'antd';
+import { Link } from 'react-router-dom';
+import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfirm, Popover } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
+import { CloudTwoTone as IconCloudTwoTone } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import RecordVideoDownloadWorker from 'worker-loader!./RecordVideoDownload.worker';
@@ -24,7 +26,12 @@ import {
   setRecordFields,
   Pocket48InitialState
 } from '../../reducers/pocket48';
-import { requestLiveList, requestLiveRoomInfo, requestDownloadFileByStream, requestDownloadFile } from '../../services/pocket48';
+import {
+  requestLiveList,
+  requestLiveRoomInfo,
+  requestDownloadFileByStream,
+  requestDownloadFile
+} from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
@@ -42,7 +49,7 @@ function formatTsUrl(data: string): string {
 
   for (const item of dataArr) {
     if (/^\/fragments.*\.ts$/.test(item)) {
-      newStrArr.push(`http://cychengyuan-vod.48.cn${ item }`);
+      newStrArr.push(`https://cychengyuan-vod.48.cn${ item }`);
     } else {
       newStrArr.push(item);
     }
@@ -68,7 +75,7 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   // 录播下载
   recordChildList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<RecordVideoDownloadWebWorkerItem> => pocket48.recordChildList,
-    (data: Array<WebWorkerChildItem>): Array<RecordVideoDownloadWebWorkerItem> => data
+    (data: Array<RecordVideoDownloadWebWorkerItem>): Array<RecordVideoDownloadWebWorkerItem> => data
   ),
   // 表单field
   recordFields: createSelector(
@@ -138,8 +145,17 @@ function Pocket48Record(props: {}): ReactElement {
     downloadImages(record, record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
-  // 下载视频
-  async function handleDownloadM3u8Click(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  /**
+   * 下载视频
+   * @param { LiveInfo } record
+   * @param { 0 | 1 } downloadType: 下载方式。0：正常下载，1：拼碎片
+   * @param { MouseEvent<HTMLButtonElement> } event
+   */
+  async function handleDownloadM3u8Click(
+    record: LiveInfo,
+    downloadType: 0 | 1,
+    event: MouseEvent<HTMLButtonElement>
+  ): Promise<void> {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const parseResult: ParsedPath = path.parse(resInfo.content.playStreamPath);
@@ -155,17 +171,24 @@ function Pocket48Record(props: {}): ReactElement {
       let downloadFile: string;
 
       if (isM3u8) {
-        const m3u8File: string = `${ result.filePath }.cache/_a.m3u8`;
+        let m3u8File: string;
+
+        if (downloadType === 1) {
+          m3u8File = `${ result.filePath }.cache/_a.m3u8`;
+          await fsP.mkdir(`${ result.filePath }.cache`);   // 生成缓存文件夹
+        } else {
+          m3u8File = `${ result.filePath }.m3u8`;
+        }
+
         const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
 
-        await fsP.mkdir(`${ result.filePath }.cache`);   // 生成缓存文件夹
         await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data)); // 写入m3u8文件
         downloadFile = m3u8File;                              // m3u8文件地址
       } else {
         downloadFile = resInfo.content.playStreamPath;
       }
 
-      const worker: Worker = new (isM3u8 ? RecordVideoDownloadWorker : FFMpegDownloadWorker)();
+      const worker: Worker = new (isM3u8 && downloadType === 1 ? RecordVideoDownloadWorker : FFMpegDownloadWorker)();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;
@@ -191,7 +214,8 @@ function Pocket48Record(props: {}): ReactElement {
       dispatch(setAddRecordChildList({
         id: record.liveId,
         worker,
-        isM3u8
+        isM3u8,
+        downloadType
       }));
     } catch (err) {
       console.error(err);
@@ -287,8 +311,10 @@ function Pocket48Record(props: {}): ReactElement {
       width: 410,
       className: style.textRight,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
-        const idx: number = recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
-        const isM3u8: boolean | undefined = idx >= 0 && recordChildList[idx].isM3u8;
+        const idx: number = recordChildList.findIndex(
+          (o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
+        const item: RecordVideoDownloadWebWorkerItem | undefined = idx >= 0 ? recordChildList[idx] : undefined,
+          canRetry: boolean | undefined = item && item.downloadType === 1;
 
         return (
           <Button.Group>
@@ -298,18 +324,44 @@ function Pocket48Record(props: {}): ReactElement {
                   title="确定要停止下载吗？"
                   onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
                 >
-                  <Button type="primary" danger={ true }>停止下载</Button>
-                </Popconfirm>,
-                <Button key="retry"
-                  disabled={ !isM3u8 }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event) }
-                >
-                  重试
-                </Button>
+                  <Popover content={
+                    canRetry ? (
+                      <Fragment>
+                        <p className={ style.smallText }>如果下载时发现卡住了，可以使用重试</p>
+                        <div className={ style.textRight }>
+                          <Button size="small"
+                            onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event) }
+                          >
+                            重试
+                          </Button>
+                        </div>
+                      </Fragment>
+                    ) : undefined
+                  } placement="left">
+                    <Button type="primary" danger={ true }>停止下载</Button>
+                  </Popover>
+                </Popconfirm>
               ] : (
-                <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadM3u8Click(record, event) }>
-                  下载视频
-                </Button>
+                <Popover content={
+                  <Fragment>
+                    <p className={ style.smallText }>如果只有m3u8文件，使用该方式下载视频</p>
+                    <div className={ style.textRight }>
+                      <Button size="small" onClick={
+                        (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
+                          handleDownloadM3u8Click(record, 1, event)
+                      }>
+                        使用备用方案下载视频
+                      </Button>
+                    </div>
+                  </Fragment>
+                } placement="left">
+                  <Button onClick={
+                    (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
+                      handleDownloadM3u8Click(record, 0, event)
+                  }>
+                    下载视频
+                  </Button>
+                </Popover>
               )
             }
             <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrcClick(record, event) }>
