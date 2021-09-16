@@ -30,7 +30,7 @@
 
 ## 技术栈
 
-Pug + Sass + TypeScript + React + antd + Webpack + Electron。
+Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使用corepack。
 
 ## 模块
 
