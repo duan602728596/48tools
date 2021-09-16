@@ -30,6 +30,7 @@ export const ignoreOptions: any = {
   ignoredPaths: [
     'pocket48.liveChildList',
     'pocket48.recordChildList',
+    'pocket48.m3u8DownloadWorker',
     'live48.inLiveList',
     'live48.videoListChild',
     'bilibiliLive.liveChildList',
@@ -43,6 +44,7 @@ export const ignoreOptions: any = {
     'pocket48/setDeleteLiveChildList',
     'pocket48/setAddRecordChildList',
     'pocket48/setDeleteRecordChildList',
+    'pocket48/setM3u8DownloadWorker',
     'live48/setAddInLiveList',
     'live48/setAddWorkerInLiveList',
     'live48/setStopInLiveList',

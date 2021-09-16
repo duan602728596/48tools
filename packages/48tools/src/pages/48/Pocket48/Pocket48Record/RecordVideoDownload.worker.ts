@@ -51,7 +51,7 @@ async function rm(file: string): Promise<void> {
  * @param { string } fileUrl: 文件url地址
  * @param { string } filename: 文件本地地址
  */
-export async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
+async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
   downloadFileReq = got.stream(fileUrl);
 
   await pipelineP(downloadFileReq, fs.createWriteStream(filename));
@@ -109,7 +109,9 @@ async function downloadTsVideos(cacheDir: string, urls: Array<string>): Promise<
       }
     } else {
       downloadFilePath = ts;
-      await requestDownloadFileByStream(uri, ts);
+      try {
+        await requestDownloadFileByStream(uri, ts);
+      } catch { /**/ }
     }
   }
 }
@@ -154,7 +156,9 @@ async function download(workerData: WorkerEventData): Promise<void> {
 /* 停止下载 */
 async function stop(): Promise<void> {
   isStop = true;
-  downloadFileReq && downloadFileReq.destroy();
+  try {
+    downloadFileReq && downloadFileReq.destroy();
+  } catch { /**/ }
   downloadFileReq = null;
   downloadFilePath && await rm(downloadFilePath);
   downloadFilePath = null;
@@ -173,7 +177,9 @@ async function retry(): Promise<void> {
 
   // 停止旧的ts文件下载
   isStop = true;
-  downloadFileReq && downloadFileReq.destroy();
+  try {
+    downloadFileReq && downloadFileReq.destroy();
+  } catch { /**/ }
   downloadFileReq = null;
   downloadFilePath && await rm(downloadFilePath);
   downloadFilePath = null;

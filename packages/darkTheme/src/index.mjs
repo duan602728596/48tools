@@ -3,13 +3,12 @@ import { promises as fsP } from 'fs';
 import { promisify } from 'util';
 import glob from 'glob';
 import _ from 'lodash';
-import { moduleExists } from '@sweet-milktea/utils';
+import { metaHelper, moduleExists } from '@sweet-milktea/utils';
 import matchComponents from './matchComponents.mjs';
 import { lessFile, lessRender } from './lessFile.mjs';
 
 const globPromise = promisify(glob);
-export const __dirname = path.dirname(
-  decodeURIComponent(import.meta.url.replace(/^file:\/{2}/, '')));
+const { __dirname } = metaHelper(import.meta.url);
 
 /* 提取antd的less路径并生成css文件 */
 async function main() {
