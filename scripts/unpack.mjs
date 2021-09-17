@@ -1,5 +1,5 @@
-import util from 'util';
-import path from 'path';
+import util from 'node:util';
+import path from 'node:path';
 import rimraf from 'rimraf';
 import fse from 'fs-extra';
 import builder from 'electron-builder';

@@ -1,6 +1,6 @@
-import util from 'util';
-import { promises as fs } from 'fs';
-import path from 'path';
+import util from 'node:util';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import glob from 'glob';
 import fse from 'fs-extra';
 import zip from 'cross-zip';
