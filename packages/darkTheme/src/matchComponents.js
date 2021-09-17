@@ -1,5 +1,5 @@
-import { promises as fsP } from 'fs';
-import path from 'path';
+import { promises as fsP } from 'node:fs';
+import path from 'node:path';
 
 /**
  * 解析、提取组件名称

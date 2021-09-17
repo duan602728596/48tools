@@ -1,6 +1,6 @@
-import path from 'path';
-import { promises as fsP } from 'fs';
-import { promisify } from 'util';
+import path from 'node:path';
+import { promises as fsP } from 'node:fs';
+import { promisify } from 'node:util';
 import glob from 'glob';
 import _ from 'lodash';
 import { metaHelper, moduleExists } from '@sweet-milktea/utils';

@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import less from 'less';
 import { moduleExists } from '@sweet-milktea/utils';
 
