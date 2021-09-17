@@ -15,7 +15,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.3",
     "@bbkkbkk/q": "^1.1.1",
-    "@electron/remote": "^1.2.1",
+    "@electron/remote": "^2.0.1",
     "@reduxjs/toolkit": "^1.6.1",
     "antd": "^4.16.13",
     "array-move": "^4.0.0",
@@ -48,7 +48,7 @@
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "cross-env": "^7.0.3",
-    "electron": "^14.0.0",
+    "electron": "^14.0.1",
     "ts-loader": "^9.2.5",
     "webpack-bundle-analyzer": "^4.4.2",
     "worker-loader": "^3.0.8"

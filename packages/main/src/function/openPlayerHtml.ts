@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as querystring from 'querystring';
 import { BrowserWindow } from 'electron';
+import * as remoteMain from '@electron/remote/main';
 import { isDevelopment } from '../utils';
 import { themeEvent, ThemeValue } from './ipcTheme';
 
@@ -21,12 +22,12 @@ export function openPlayerHtml(title: string, query: string): void {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       webSecurity: false,
-      // @ts-ignore
-      enableRemoteModule: true,
       contextIsolation: false
     },
     title
   });
+
+  remoteMain.enable(win.webContents);
 
   function handleThemeEvent(value: ThemeValue): void {
     if (win) {
