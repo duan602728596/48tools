@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { metaHelper, moduleExists } from '@sweet-milktea/utils';
 import matchComponents from './matchComponents.js';
 import { lessFile, lessRender } from './lessFile.js';
+import commentary from './commentary.js';
 
 const globPromise = promisify(glob);
 const { __dirname } = metaHelper(import.meta.url);
@@ -41,7 +42,7 @@ async function main() {
   const hljsCss = await fsP.readFile(hljsPath, { encoding: 'utf8' });
 
   await fsP.mkdir(distDir);
-  await fsP.writeFile(path.join(distDir, 'dark-theme.css'), `${ css }\n${ hljsCss }`);
+  await fsP.writeFile(path.join(distDir, 'dark-theme.css'), `${ commentary() }\n${ css }\n${ hljsCss }`);
 }
 
 main();
