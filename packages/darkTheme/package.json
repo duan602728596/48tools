@@ -3,8 +3,9 @@
   "version": "3.8.3",
   "description": "编译48tools的暗黑模式css文件",
   "license": "GPL-3.0",
+  "type": "module",
   "scripts": {
-    "build": "rimraf ./dist && node src/index.mjs && postcss dist/dark-theme.css > dist/dark-theme.min.css"
+    "build": "rimraf ./dist && node src/index.js && postcss dist/dark-theme.css > dist/dark-theme.min.css"
   },
   "dependencies": {
     "cssnano": "^5.0.8",
@@ -12,6 +13,7 @@
     "less": "^4.1.1",
     "lodash": "^4.17.21",
     "postcss": "^8.3.6",
-    "postcss-cli": "^8.3.1"
+    "postcss-cli": "^8.3.1",
+    "rimraf": "*"
   }
 }

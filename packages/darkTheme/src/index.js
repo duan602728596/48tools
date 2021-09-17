@@ -4,8 +4,8 @@ import { promisify } from 'util';
 import glob from 'glob';
 import _ from 'lodash';
 import { metaHelper, moduleExists } from '@sweet-milktea/utils';
-import matchComponents from './matchComponents.mjs';
-import { lessFile, lessRender } from './lessFile.mjs';
+import matchComponents from './matchComponents.js';
+import { lessFile, lessRender } from './lessFile.js';
 
 const globPromise = promisify(glob);
 const { __dirname } = metaHelper(import.meta.url);
