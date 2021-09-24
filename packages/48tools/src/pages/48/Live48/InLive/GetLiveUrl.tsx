@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';

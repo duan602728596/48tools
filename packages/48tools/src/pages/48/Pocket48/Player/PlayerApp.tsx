@@ -1,6 +1,6 @@
-import * as querystring from 'querystring';
-import type { ParsedUrlQuery } from 'querystring';
-import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import * as querystring from 'node:querystring';
+import type { ParsedUrlQuery } from 'node:querystring';
+import { spawn, ChildProcessWithoutNullStreams } from 'node:child_process';
 import { ipcRenderer } from 'electron';
 import {
   useState,

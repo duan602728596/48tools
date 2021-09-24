@@ -1,4 +1,4 @@
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 import got, { Response as GotResponse } from 'got';
 import type { LoginUrl, LoginInfo } from './interface';
 

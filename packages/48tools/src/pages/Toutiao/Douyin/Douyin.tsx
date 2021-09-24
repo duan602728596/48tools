@@ -1,4 +1,4 @@
-import * as url from 'url';
+import * as url from 'node:url';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';

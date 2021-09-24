@@ -1,4 +1,4 @@
-import * as querystring from 'querystring';
+import * as querystring from 'node:querystring';
 import got, { Response as GotResponse, CancelableRequest } from 'got';
 import type { PcDirectQr, ScanResult, AcceptResult } from './interface';
 

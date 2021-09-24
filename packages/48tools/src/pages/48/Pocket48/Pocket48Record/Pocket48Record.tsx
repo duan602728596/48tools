@@ -1,6 +1,6 @@
-import * as path from 'path';
-import type { ParsedPath } from 'path';
-import { promises as fsP } from 'fs';
+import * as path from 'node:path';
+import type { ParsedPath } from 'node:path';
+import { promises as fsP } from 'node:fs';
 import { clipboard, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, useState, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';

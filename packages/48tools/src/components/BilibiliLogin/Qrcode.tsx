@@ -1,4 +1,4 @@
-import { promisify } from 'util';
+import { promisify } from 'node:util';
 import { Fragment, useMemo, useEffect, useRef, ReactElement, RefObject, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { message, Button, Alert } from 'antd';

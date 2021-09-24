@@ -1,6 +1,6 @@
-import { randomUUID } from 'crypto';
-import * as path from 'path';
-import type { ParsedPath } from 'path';
+import { randomUUID } from 'node:crypto';
+import * as path from 'node:path';
+import type { ParsedPath } from 'node:path';
 import type { OpenDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import type { ReactElement, MouseEvent } from 'react';

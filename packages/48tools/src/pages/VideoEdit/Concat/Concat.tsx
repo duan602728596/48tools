@@ -1,7 +1,7 @@
-import * as path from 'path';
-import type { ParsedPath } from 'path';
-import { promises as fsP } from 'fs';
-import { randomUUID } from 'crypto';
+import * as path from 'node:path';
+import type { ParsedPath } from 'node:path';
+import { promises as fsP } from 'node:fs';
+import { randomUUID } from 'node:crypto';
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ComponentClass, MouseEvent } from 'react';

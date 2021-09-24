@@ -1,4 +1,4 @@
-import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import { spawn, ChildProcessWithoutNullStreams } from 'node:child_process';
 
 export type WorkerEventData = {
   type: 'start' | 'stop';      // 执行的方法

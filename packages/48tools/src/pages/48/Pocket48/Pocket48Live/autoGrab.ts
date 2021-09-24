@@ -1,5 +1,5 @@
-import * as path from 'path';
-import { promises as fsP } from 'fs';
+import * as path from 'node:path';
+import { promises as fsP } from 'node:fs';
 import type { Store } from 'redux';
 import { message } from 'antd';
 import * as dayjs from 'dayjs';

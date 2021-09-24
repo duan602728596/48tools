@@ -1,6 +1,6 @@
-import { promisify } from 'util';
-import { pipeline } from 'stream';
-import * as fs from 'fs';
+import { promisify } from 'node:util';
+import { pipeline } from 'node:stream';
+import * as fs from 'node:fs';
 import got, { Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
 import type { ProgressEventData } from '../types';

@@ -1,5 +1,5 @@
-import { randomUUID } from 'crypto';
-import * as querystring from 'querystring';
+import { randomUUID } from 'node:crypto';
+import * as querystring from 'node:querystring';
 import { ipcRenderer, clipboard, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';

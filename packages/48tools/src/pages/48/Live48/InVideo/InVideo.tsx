@@ -1,4 +1,4 @@
-import { promises as fsP } from 'fs';
+import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';

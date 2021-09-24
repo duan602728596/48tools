@@ -1,6 +1,6 @@
-import * as path from 'path';
-import type { ParsedPath } from 'path';
-import * as url from 'url';
+import * as path from 'node:path';
+import type { ParsedPath } from 'node:path';
+import * as url from 'node:url';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';

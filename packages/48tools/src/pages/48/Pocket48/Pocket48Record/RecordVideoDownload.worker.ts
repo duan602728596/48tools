@@ -1,9 +1,9 @@
-import { promisify } from 'util';
-import { pipeline } from 'stream';
-import * as fs from 'fs';
-import { promises as fsP, BigIntStats } from 'fs';
-import * as path from 'path';
-import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import { promisify } from 'node:util';
+import { pipeline } from 'node:stream';
+import * as fs from 'node:fs';
+import { promises as fsP, BigIntStats } from 'node:fs';
+import * as path from 'node:path';
+import { spawn, ChildProcessWithoutNullStreams } from 'node:child_process';
 import got from 'got';
 import type GotRequest from 'got/dist/source/core';
 

@@ -1,7 +1,7 @@
-import * as path from 'path';
-import type { ParsedPath } from 'path';
-import * as fs from 'fs';
-import { promises as fsP } from 'fs';
+import * as path from 'node:path';
+import type { ParsedPath } from 'node:path';
+import * as fs from 'node:fs';
+import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import type { ReactElement, ReactNodeArray, MouseEvent } from 'react';

@@ -1,5 +1,5 @@
-import * as net from 'net';
-import type { Server as NetServer } from 'net';
+import * as net from 'node:net';
+import type { Server as NetServer } from 'node:net';
 import { ipcRenderer } from 'electron';
 import { getFFmpeg } from '../utils';
 

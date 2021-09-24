@@ -36,6 +36,14 @@ function nodeExternals(node: Array<string>): { [k: string]: string } {
   return result;
 }
 
+/**
+ * 为node原生模块添加"node:"
+ * @param { Array<string> } node: node模块名称
+ */
+function nodeModules(node: Array<string>): Array<string> {
+  return node.concat(node.map((o: string): string => `node:${ o }`));
+}
+
 export default function(info: object): { [key: string]: any } {
   const plugins: Array<any> = [
     ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]
@@ -66,23 +74,23 @@ export default function(info: object): { [key: string]: any } {
       { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
       { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), minify: htmlWebpackPluginMinify }
     ],
-    externals: nodeExternals([
+    externals: nodeExternals(nodeModules([
       'child_process',
       'crypto',
       'fs',
       'net',
       'path',
-      'process',
       'querystring',
       'stream',
       'url',
       'util',
-      'zlib',
+      'zlib'
+    ]).concat(
       '@electron/remote',
       'electron',
       'got',
       'puppeteer-core'
-    ]),
+    )),
     js: {
       ecmascript: true,
       plugins,
