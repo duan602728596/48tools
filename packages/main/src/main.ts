@@ -1,5 +1,5 @@
-import * as process from 'process';
-import * as path from 'path';
+import * as process from 'node:process';
+import * as path from 'node:path';
 import { app, BrowserWindow, Menu } from 'electron';
 import * as remoteMain from '@electron/remote/main';
 import { isDevelopment } from './utils';

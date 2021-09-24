@@ -1,4 +1,4 @@
-import { workerData } from 'worker_threads';
+import { workerData } from 'node:worker_threads';
 import { addAsarToLookupPaths, register } from 'asar-node';
 import type * as NodeMediaServer from 'node-media-server';
 import type { NodeMediaServerArg } from './nodeMediaServer';

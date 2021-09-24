@@ -1,5 +1,5 @@
-import * as path from 'path';
-import * as querystring from 'querystring';
+import * as path from 'node:path';
+import * as querystring from 'node:querystring';
 import { BrowserWindow } from 'electron';
 import * as remoteMain from '@electron/remote/main';
 import { isDevelopment } from '../utils';

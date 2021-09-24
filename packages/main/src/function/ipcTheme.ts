@@ -1,4 +1,4 @@
-import * as EventEmitter from 'events';
+import { EventEmitter } from 'node:events';
 import { ipcMain, nativeTheme, IpcMainEvent } from 'electron';
 
 export type ThemeValue = 'light' | 'dark' | 'system';
@@ -22,7 +22,7 @@ function ipcTheme(): void {
       nativeTheme.themeSource = value;
 
       if (themeSourceEvent) {
-        themeEvent['emit']('themeSource', value);
+        themeEvent.emit('themeSource', value);
       }
     });
 }
