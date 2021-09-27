@@ -38,7 +38,10 @@ function tsProject() {
     }));
 
   return result.js
-    .pipe(terser({ ecma: 2020 }))
+    .pipe(terser({
+      ecma: 2020,
+      module: true
+    }))
     .pipe(gulp.dest('lib'));
 }
 
