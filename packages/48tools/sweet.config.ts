@@ -2,12 +2,13 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import type { Options } from 'html-minifier-terser';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
 const analyzer: boolean = process.env.ANALYZER === 'true';
 
 // html代码压缩配置
-const htmlWebpackPluginMinify: boolean | object = isDev ? false : {
+const htmlWebpackPluginMinify: boolean | Options = isDev ? false : {
   collapseWhitespace: true,
   keepClosingSlash: true,
   removeComments: true,
