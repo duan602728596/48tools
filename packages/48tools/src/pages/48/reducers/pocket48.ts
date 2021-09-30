@@ -36,7 +36,7 @@ export const reqLiveList: AsyncThunk<Array<LiveInfo>, void, {}> = createAsyncThu
     return res.content.liveList;
   });
 
-const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReducers, 'pocket48'>({
   name: 'pocket48',
   initialState: {
     liveList: [],        // 直播信息

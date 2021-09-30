@@ -25,7 +25,7 @@ export interface BilibiliDownloadInitialState extends EntityState<DownloadItem> 
 
 type CaseReducers = SliceCaseReducers<BilibiliDownloadInitialState>;
 
-const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, CaseReducers, 'bilibiliDownload'>({
   name: 'bilibiliDownload',
   initialState: bilibiliDownloadListAdapter.getInitialState({
     downloadProgress: {} // 下载进度

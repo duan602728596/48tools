@@ -8,7 +8,7 @@ export interface ConcatInitialState {
 
 type CaseReducers = SliceCaseReducers<ConcatInitialState>;
 
-const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers, 'concat'>({
   name: 'concat',
   initialState: {
     concatList: [],    // 合并列表

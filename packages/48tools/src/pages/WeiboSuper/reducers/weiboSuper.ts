@@ -49,7 +49,7 @@ export const reqTopicCheckin: AsyncThunk<ReqTopicCheckinReturn, ReqTopicCheckinP
     };
   });
 
-const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseReducers, 'weiboSuper'>({
   name: 'weiboSuper',
   initialState: {
     weiboCheckinList: [], // 超话签到结果

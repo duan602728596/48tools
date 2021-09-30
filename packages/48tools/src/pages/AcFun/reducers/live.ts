@@ -10,7 +10,7 @@ export interface AcFunLiveInitialState {
 
 type CaseReducers = SliceCaseReducers<AcFunLiveInitialState>;
 
-const { actions, reducer }: Slice = createSlice<AcFunLiveInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<AcFunLiveInitialState, CaseReducers, 'acfunLive'>({
   name: 'acfunLive',
   initialState: {
     acfunLiveList: [], // 配置的acfun直播间信息

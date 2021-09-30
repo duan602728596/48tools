@@ -9,7 +9,7 @@ export interface VideoCutInitialState {
 
 type CaseReducers = SliceCaseReducers<VideoCutInitialState>;
 
-const { actions, reducer }: Slice = createSlice<VideoCutInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<VideoCutInitialState, CaseReducers, 'videoCut'>({
   name: 'videoCut',
   initialState: {
     cutList: [],     // 视频裁剪队列

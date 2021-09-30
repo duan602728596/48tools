@@ -10,7 +10,7 @@ export interface BilibiliLiveInitialState {
 
 type CaseReducers = SliceCaseReducers<BilibiliLiveInitialState>;
 
-const { actions, reducer }: Slice = createSlice<BilibiliLiveInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<BilibiliLiveInitialState, CaseReducers, 'bilibiliLive'>({
   name: 'bilibiliLive',
   initialState: {
     bilibiliLiveList: [], // 数据库内获取的直播间列表

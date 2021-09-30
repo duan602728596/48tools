@@ -10,7 +10,7 @@ export interface Live48InitialState {
 
 type CaseReducers = SliceCaseReducers<Live48InitialState>;
 
-const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers, 'live48'>({
   name: 'live48',
   initialState: {
     inLiveList: [],          // 当前抓取的直播列表

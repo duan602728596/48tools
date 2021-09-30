@@ -9,7 +9,7 @@ export interface AcFunDownloadInitialState {
 
 type CaseReducers = SliceCaseReducers<AcFunDownloadInitialState>;
 
-const { actions, reducer }: Slice = createSlice<AcFunDownloadInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<AcFunDownloadInitialState, CaseReducers, 'acfunDownload'>({
   name: 'acfunDownload',
   initialState: {
     downloadList: [],         // acfun下载列表

@@ -25,7 +25,7 @@ export interface DouyinDownloadInitialState extends EntityState<DownloadItem> {
 
 type CaseReducers = SliceCaseReducers<DouyinDownloadInitialState>;
 
-const { actions, reducer }: Slice = createSlice<DouyinDownloadInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<DouyinDownloadInitialState, CaseReducers, 'douyinDownload'>({
   name: 'douyinDownload',
   initialState: douyinDownloadListAdapter.getInitialState({
     downloadProgress: {} // 下载进度
