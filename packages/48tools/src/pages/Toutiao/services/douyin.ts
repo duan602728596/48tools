@@ -6,7 +6,13 @@ import got, { Response as GotResponse } from 'got';
  */
 export async function requestDouyinVideoHtml(id: string): Promise<string> {
   const res: GotResponse<string> = await got.get(`https://www.douyin.com/video/${ id }`, {
-    responseType: 'text'
+    responseType: 'text',
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
+        + 'Chrome/94.0.4606.81 Safari/537.36',
+      Cookie: '__ac_referer=__ac_blank',
+      Host: 'www.douyin.com'
+    }
   });
 
   return res.body;

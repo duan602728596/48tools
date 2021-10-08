@@ -60,6 +60,14 @@ function Add(props: {}): ReactElement {
     try {
       const res: string = await requestDouyinVideoHtml(urlValue);
       const document: Document = new DOMParser().parseFromString(res, 'text/html');
+
+      if (document.getElementsByTagName('title').length === 0) {
+        message.error('触发抖音反爬机制，请重新获取下载地址！');
+        setGetUrlLoading(false);
+
+        return;
+      }
+
       const rendedData: HTMLElement | null = document.getElementById('RENDER_DATA');
 
       if (rendedData) {

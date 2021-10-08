@@ -95,7 +95,7 @@ export default function(info: object): { [key: string]: any } {
     js: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules/i
+      exclude: /node_modules|toutiaosdk-acrawler\.js/i
     },
     ts: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
@@ -115,7 +115,7 @@ export default function(info: object): { [key: string]: any } {
     },
     rules: [
       {
-        test: /dark-theme\.(min\.)?css/,
+        test: /dark-theme\.(min\.)?css|toutiaosdk-acrawler\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]' // TODO: js文件生成的hash和注入的hash不一致
