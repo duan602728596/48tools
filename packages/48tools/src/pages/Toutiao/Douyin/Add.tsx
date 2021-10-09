@@ -13,7 +13,7 @@ import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Input, Button, Modal, message, Select } from 'antd';
 import style from './add.sass';
-import { requestDouyinVideoHtml } from '../services/douyin';
+import { requestDouyinVideoHtml, DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
 import type { AwemeDetail, ScriptRendedData, DownloadUrlItem, C0Obj, CVersionObj } from '../types';
 
@@ -58,45 +58,57 @@ function Add(props: {}): ReactElement {
     setGetUrlLoading(true);
 
     try {
-      const res: string = await requestDouyinVideoHtml(urlValue);
-      const document: Document = new DOMParser().parseFromString(res, 'text/html');
+      let html: string = '';
+      const res: DouyinVideo = await requestDouyinVideoHtml(urlValue);
 
-      if (document.getElementsByTagName('title').length === 0) {
-        message.error('触发抖音反爬机制，请重新获取下载地址！');
-        setGetUrlLoading(false);
+      if (res.type === 'html') {
+        // 直接获取html
+        html = res.value;
+      } else {
+        // 计算__ac_signature并获取html
+        const acSignature: string = Reflect.get(Reflect.get(globalThis, 'byted_acrawler'), 'sign')
+          .call(undefined, '', res.value);
+        const secondCookie: string = ` __ac_nonce=${ res.value }; __ac_signature=${ acSignature }`;
+        const secondRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, secondCookie);
 
-        return;
+        html = secondRes.value;
       }
 
+      const document: Document = new DOMParser().parseFromString(html, 'text/html');
       const rendedData: HTMLElement | null = document.getElementById('RENDER_DATA');
 
       if (rendedData) {
         const data: string = decodeURIComponent(rendedData.innerText);
         const json: ScriptRendedData = JSON.parse(data);
-        const cVersion: CVersionObj = Object.values(json).find(
-          (o: C0Obj | CVersionObj): boolean => typeof o === 'object' && ('aweme' in o)) as CVersionObj;
-        const awemeDetail: AwemeDetail = cVersion.aweme.detail;
-        const urls: DownloadUrlItem[] = [];
+        const cVersion: CVersionObj | undefined = Object.values(json).find(
+          (o: C0Obj | CVersionObj): o is CVersionObj => typeof o === 'object' && ('aweme' in o));
 
-        urls.push(
-          { label: '有水印', value: awemeDetail.download.url },
-          { label: '无水印', value: `https:${ awemeDetail.video.playApi }` }
-        );
+        if (cVersion) {
+          const awemeDetail: AwemeDetail = cVersion.aweme.detail;
+          const urls: DownloadUrlItem[] = [];
 
-        let i: number = 1;
+          urls.push(
+            { label: '有水印', value: awemeDetail.download.url },
+            { label: '无水印', value: `https:${ awemeDetail.video.playApi }` }
+          );
 
-        for (const item of awemeDetail.video.bitRateList) {
-          for (const item2 of item.playAddr) {
-            urls.push({
-              label: '下载地址-' + i++,
-              value: `https:${ item2.src }`
-            });
+          let i: number = 1;
+
+          for (const item of awemeDetail.video.bitRateList) {
+            for (const item2 of item.playAddr) {
+              urls.push({
+                label: '下载地址-' + i++,
+                value: `https:${ item2.src }`
+              });
+            }
           }
-        }
 
-        setDownloadUrl(urls);
-        setTitle(awemeDetail.desc);
-        setVisible(true);
+          setDownloadUrl(urls);
+          setTitle(awemeDetail.desc);
+          setVisible(true);
+        } else {
+          message.error('找不到视频相关信息！');
+        }
       } else {
         message.error('找不到视频相关信息！');
       }

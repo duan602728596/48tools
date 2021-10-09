@@ -15,5 +15,6 @@ html
 
     include ./components/Theme/themeInit.pug
 
+    script(src=require('./pages/Toutiao/toutiaosdk-acrawler'))
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)
