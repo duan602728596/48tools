@@ -107,7 +107,7 @@ function Add(props: {}): ReactElement {
           setTitle(awemeDetail.desc);
           setVisible(true);
         } else {
-          message.error('找不到视频相关信息！');
+          message.error('视频相关信息解析失败！');
         }
       } else {
         message.error('找不到视频相关信息！');
