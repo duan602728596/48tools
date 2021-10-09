@@ -48,10 +48,3 @@ export interface DownloadItem {
   url: string;   // 下载地址
   title: string; // 视频标题
 }
-
-// 进度条信息
-export interface ProgressEventData {
-  percent: number;
-  transferred: number;
-  total: number;
-}
