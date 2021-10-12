@@ -56,14 +56,14 @@ declare module '*.svg' {
 
 declare module 'worker-loader!*' {
   class WorkerLoader extends Worker {
-    constructor(): Worker;
+    constructor();
   }
 
   export default WorkerLoader;
 }
 
 declare module 'filenamify/browser' {
-  import filenamify from 'filenamify/filenamify.d.ts';
+  import filenamify from 'filenamify/filenamify';
 
   export default filenamify;
 }
