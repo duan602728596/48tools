@@ -9,7 +9,8 @@ export interface InLiveFormValue {
 
 /* ========== live48 ========== */
 // 公演直播抓取列表
-export interface InLiveWebWorkerItem extends WebWorkerChildItem {
+export interface InLiveWebWorkerItem {
+  id: string;
   type: string;
   live: string;
   quality: string;
