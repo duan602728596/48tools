@@ -10,10 +10,10 @@
   "dependencies": {
     "cssnano": "^5.0.8",
     "glob": "^7.2.0",
-    "less": "^4.1.1",
+    "less": "^4.1.2",
     "lodash": "^4.17.21",
-    "postcss": "^8.3.7",
-    "postcss-cli": "^8.3.1",
+    "postcss": "^8.3.9",
+    "postcss-cli": "^9.0.1",
     "rimraf": "*"
   }
 }
