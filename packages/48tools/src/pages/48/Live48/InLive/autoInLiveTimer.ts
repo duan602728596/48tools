@@ -1,6 +1,6 @@
 import type { Store } from 'redux';
 import { message } from 'antd';
-import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
+import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import { store } from '../../../../store/store';
 import { setAddWorkerInLiveList, setStopInLiveList } from '../../reducers/live48';
 import { parseLiveUrl } from '../parseLive48Website';
@@ -21,7 +21,7 @@ async function autoInLiveTimer(id: string, value: InLiveFormValue, filePath: str
 
   if (!liveUrl) return;
 
-  const worker: Worker = new FFMpegDownloadWorker();
+  const worker: Worker = getFFMpegDownloadWorker();
 
   worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
     const { type, error }: MessageEventData = event.data;

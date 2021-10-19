@@ -96,11 +96,11 @@ const navLinkConfig: Array<Array<NativeItem>> = [
 
 /* 导航渲染 */
 function nativeRender(): ReactNodeArray {
-  const element: ReactNodeArray = [];
+  const element: Array<ReactElement> = [];
 
   for (let i: number = 0, j: number = navLinkConfig.length; i < j; i++) {
     const group: Array<NativeItem> = navLinkConfig[i];
-    const groupElement: ReactNodeArray = [];
+    const groupElement: Array<ReactElement> = [];
 
     for (const navItem of group) {
       groupElement.push(

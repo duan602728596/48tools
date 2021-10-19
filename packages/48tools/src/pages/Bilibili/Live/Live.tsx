@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
+import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import AddForm from './AddForm';
@@ -68,7 +68,7 @@ function Live(props: {}): ReactElement {
     try {
       const resInit: RoomInit = await requestRoomInitData(record.roomId);
       const resPlayUrl: RoomPlayUrl = await requestRoomPlayerUrl(`${ resInit.data.room_id }`);
-      const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;

@@ -4,7 +4,7 @@ import type { Store } from 'redux';
 import { message } from 'antd';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
+import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import { store } from '../../../../store/store';
 import { setLiveList, Pocket48InitialState, setDeleteLiveChildList, setAddLiveChildList } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
@@ -57,7 +57,7 @@ async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
 
       const filePath: string = path.join(dir, filename);
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
-      const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event.data;

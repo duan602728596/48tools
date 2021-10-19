@@ -21,7 +21,7 @@ import {
 } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
 import * as dayjs from 'dayjs';
-import ConcatVideoWorker from 'worker-loader!./concatVideo.worker';
+import getConcatVideoWorker from './concatVideo.worker/getConcatVideoWorker';
 import style from './concat.sass';
 import Header from '../../../components/Header/Header';
 import {
@@ -94,7 +94,7 @@ function Concat(props: {}): ReactElement {
     await fsP.writeFile(txtFile, txt);
 
     // 合并文件
-    const worker: Worker = new ConcatVideoWorker();
+    const worker: Worker = getConcatVideoWorker();
 
     worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
       const { type, error }: MessageEventData = event1.data;

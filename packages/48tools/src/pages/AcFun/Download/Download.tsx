@@ -6,8 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
 import style from './download.sass';
+import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
 import AddForm, { acfunVideoTypesMap } from './AddForm';
@@ -63,7 +63,7 @@ function Download(props: {}): ReactElement {
     if (result.canceled || !result.filePath) return;
 
     try {
-      const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event.data;

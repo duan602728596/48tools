@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import filenamify from 'filenamify/browser';
-import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
+import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import style from './getLiveUrl.sass';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import autoInLiveTimer from './autoInLiveTimer';
@@ -47,7 +47,7 @@ function GetLiveUrl(props: {}): ReactElement {
     if (result.canceled || !result.filePath) return;
 
     const id: string = randomUUID();
-    const worker: Worker = new FFMpegDownloadWorker();
+    const worker: Worker = getFFMpegDownloadWorker();
 
     worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
       const { type, error }: MessageEventData = event.data;

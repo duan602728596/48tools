@@ -11,7 +11,7 @@ import { Button, message, Table, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
-import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
+import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
 import { requestLiveRoomInfo } from '../../services/pocket48';
@@ -126,7 +126,7 @@ function Pocket48Live(props: {}): ReactElement {
       if (result.canceled || !result.filePath) return;
 
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;

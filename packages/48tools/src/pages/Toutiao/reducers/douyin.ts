@@ -10,7 +10,7 @@ import {
   CaseReducerActions
 } from '@reduxjs/toolkit';
 import type { DownloadItem } from '../types';
-import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker';
+import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 
 // 下载列表
 export const douyinDownloadListAdapter: EntityAdapter<DownloadItem> = createEntityAdapter({

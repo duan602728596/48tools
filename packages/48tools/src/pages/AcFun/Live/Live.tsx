@@ -8,8 +8,8 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
-import FFMpegDownloadWorker from 'worker-loader!../../../utils/worker/FFMpegDownload.worker';
 import style from './live.sass';
+import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
 import AddForm from './AddForm';
@@ -62,7 +62,7 @@ function Live(props: {}): ReactElement {
     const { record, player, filePath }: { record: LiveItem; player: string; filePath: string } = ctx;
 
     try {
-      const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event.data;

@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Table, Button, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import CutWorker from 'worker-loader!./cut.worker';
+import getCutWorker from './cut.worker/getCutWorker';
 import Header from '../../../components/Header/Header';
 import CutForm from './CutForm';
 import {
@@ -60,7 +60,7 @@ function Index(props: {}): ReactElement {
 
     if (result.canceled || !result.filePath) return;
 
-    const worker: Worker = new CutWorker();
+    const worker: Worker = getCutWorker();
 
     worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
       const { type, error }: MessageEventData = event1.data;

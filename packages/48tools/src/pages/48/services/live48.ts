@@ -1,4 +1,4 @@
-import Live48Worker from 'worker-loader!./live48.worker';
+import getLive48Worker from './live48.worker/getLive48Worker';
 import type { LiveStreamInfo } from './interface';
 
 /**
@@ -21,7 +21,7 @@ export async function requestFetchHtml(uri: string): Promise<string> {
  */
 export function requestStreamInfo(param: string, video_id: string, suid: string, id: string): Promise<LiveStreamInfo> {
   return new Promise((resolve: Function, reject: Function): void => {
-    const worker: Worker = new Live48Worker();
+    const worker: Worker = getLive48Worker();
 
     worker.addEventListener('message', function(event: MessageEvent<LiveStreamInfo>) {
       resolve(event.data);

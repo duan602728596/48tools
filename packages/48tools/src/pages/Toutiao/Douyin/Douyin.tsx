@@ -1,4 +1,3 @@
-import * as url from 'node:url';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
@@ -8,8 +7,8 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
-import DownloadBilibiliVideoWorker from 'worker-loader!../../Bilibili/Download/downloadBilibiliVideo.worker';
-import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker';
+import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
+import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
 import Add from './Add';
 import {
@@ -62,7 +61,7 @@ function Douyin(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const worker: Worker = new DownloadBilibiliVideoWorker();
+      const worker: Worker = getDownloadBilibiliVideoWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
         const { type }: MessageEventData = event1.data;

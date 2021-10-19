@@ -1,6 +1,6 @@
 import * as querystring from 'node:querystring';
 import got, { Response as GotResponse } from 'got';
-import LiveWorker from 'worker-loader!./live.worker';
+import getLiveWorker from './live.worker/getLiveWorker';
 import { getAcFuncCookie } from '../../../utils/utils';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from './interface';
 
@@ -10,7 +10,7 @@ import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from './interface';
  */
 export function requestAcFunLiveHtml(roomId: string): Promise<string> {
   return new Promise((resolve: Function, reject: Function): void => {
-    const worker: Worker = new LiveWorker();
+    const worker: Worker = getLiveWorker();
 
     worker.addEventListener('message', function(event: MessageEvent<string>) {
       resolve(event.data);

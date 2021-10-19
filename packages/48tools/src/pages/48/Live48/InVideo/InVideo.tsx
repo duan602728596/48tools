@@ -8,7 +8,7 @@ import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
-import FFMpegDownloadWorker from 'worker-loader!../../../../utils/worker/FFMpegDownload.worker';
+import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import style from './inVideo.sass';
 import Header from '../../../../components/Header/Header';
 import {
@@ -107,7 +107,7 @@ function InVideo(props: {}): ReactElement {
 
       await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, m3u8Url.url));
 
-      const worker: Worker = new FFMpegDownloadWorker();
+      const worker: Worker = getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;

@@ -9,8 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import DownloadBilibiliVideoWorker from 'worker-loader!./downloadBilibiliVideo.worker';
-import type { MessageEventData } from './downloadBilibiliVideo.worker';
+import getDownloadBilibiliVideoWorker from './downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
+import type { MessageEventData } from './downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
 import AddForm, { bilibiliVideoTypesMap } from './AddForm';
 import {
@@ -60,7 +60,7 @@ function Download(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const worker: Worker = new DownloadBilibiliVideoWorker();
+      const worker: Worker = getDownloadBilibiliVideoWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
         const { type }: MessageEventData = event1.data;
