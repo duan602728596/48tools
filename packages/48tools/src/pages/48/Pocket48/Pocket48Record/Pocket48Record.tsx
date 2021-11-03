@@ -226,6 +226,11 @@ function Pocket48Record(props: {}): ReactElement {
     try {
       const res: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const time: string = getFileTime(record.ctime);
+
+      if (res.content.msgFilePath === '') {
+        return message.warn('弹幕文件不存在！');
+      }
+
       const { ext }: ParsedPath = path.parse(res.content.msgFilePath);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }${ ext }`
