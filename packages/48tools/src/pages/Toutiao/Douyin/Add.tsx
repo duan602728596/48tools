@@ -3,7 +3,7 @@ import {
   Fragment,
   useState,
   ReactElement,
-  ReactNodeArray,
+  ReactNode,
   Dispatch as D,
   SetStateAction as S,
   ChangeEvent,
@@ -18,7 +18,7 @@ import { setAddDownloadList } from '../reducers/douyin';
 import type { AwemeDetail, ScriptRendedData, DownloadUrlItem, C0Obj, CVersionObj } from '../types';
 
 /* select渲染 */
-function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): ReactNodeArray {
+function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactNode> {
   return downloadUrl.map((item: DownloadUrlItem, index: number): ReactElement => {
     return <Select.Option key={ item.label + item.value } value={ item.value }>{ item.label }</Select.Option>;
   });

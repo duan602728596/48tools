@@ -1,5 +1,5 @@
 import { shell } from 'electron';
-import { useState, useEffect, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { useState, useEffect, ReactElement, ReactNode, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
@@ -70,7 +70,7 @@ function Index(props: {}): ReactElement {
   }
 
   // 渲染select
-  function accountSelectRender(): ReactNodeArray {
+  function accountSelectRender(): Array<ReactNode> {
     return accountList.map((item: WeiboAccount, index: number): ReactElement => {
       return <Select.Option key={ item.id } value={ item.id }>{ item.username }</Select.Option>;
     });
