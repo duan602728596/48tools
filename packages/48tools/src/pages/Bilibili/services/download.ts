@@ -1,9 +1,7 @@
 import { promisify } from 'node:util';
 import { pipeline } from 'node:stream';
-import * as fs from 'node:fs';
 import got, { Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
-import type { ProgressEventData } from '../types';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo } from './interface';
 
 const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
@@ -73,26 +71,4 @@ export async function requestAudioInfo(auid: string): Promise<AudioInfo> {
   });
 
   return res.body;
-}
-
-/**
- * 下载文件
- * @param { string } fileUrl: 文件url地址
- * @param { string } filename: 文件本地地址
- * @param { (e: ProgressEventData) => void } onProgress: 进度条
- */
-export async function requestDownloadFileByStream(
-  fileUrl: string,
-  filename: string,
-  onProgress: (e: ProgressEventData) => void
-): Promise<void> {
-  await pipelineP(
-    got.stream(fileUrl, {
-      headers: {
-        referer: 'https://www.bilibili.com/',
-        Cookie: getBilibiliCookie()
-      }
-    }).on('downloadProgress', onProgress),
-    fs.createWriteStream(filename)
-  );
 }
