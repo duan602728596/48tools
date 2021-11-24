@@ -2,7 +2,7 @@ import { promisify } from 'node:util';
 import { pipeline } from 'node:stream';
 import got, { Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
-import type { VideoInfo, AudioInfo, BangumiVideoInfo } from './interface';
+import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch } from './interface';
 
 const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
@@ -64,6 +64,29 @@ export async function requestBangumiVideoInfo(aid: number, cid: number, SESSDATA
 export async function requestAudioInfo(auid: string): Promise<AudioInfo> {
   const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`;
   const res: GotResponse<AudioInfo> = await got.get(apiUrl, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    }
+  });
+
+  return res.body;
+}
+
+/**
+ * 请求账户的列表
+ * @param { string } mid: 账户id
+ * @param { number } page: 分页
+ */
+export async function requestSpaceArcSearch(mid: string, page: number): Promise<SpaceArcSearch> {
+  const searchParams: URLSearchParams = new URLSearchParams({
+    mid,
+    ps: '30',
+    pn: String(page),
+    order: 'pubdate'
+  });
+  const apiUrl: string = `https://api.bilibili.com/x/space/arc/search?${ searchParams.toString() }`;
+  const res: GotResponse<SpaceArcSearch> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()

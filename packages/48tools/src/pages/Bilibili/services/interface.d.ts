@@ -29,6 +29,52 @@ export interface BangumiVideoInfo {
   } | null; // 非会员时查不到
 }
 
+// 空间信息
+export interface SpaceArcSearchVListItem {
+  comment: number;
+  typeid: number;
+  play: number;
+  pic: string;
+  subtitle: string;
+  description: string;
+  copyright: string;
+  title: string;
+  review: number;
+  author: string;
+  mid: number;
+  created: number;
+  length: string;
+  video_review: number;
+  aid: number;
+  bvid: string;
+  hide_click: boolean;
+  is_pay: number;
+  is_union_video: number;
+  is_steins_gate: number;
+  is_live_playback: number;
+}
+
+export interface SpaceArcSearch {
+  code: number;
+  message: string;
+  ttl: number;
+  data: {
+    list: {
+      tlist: Record<string, {
+        tid: number;
+        count: number;
+        name: string;
+      }>;
+      vList: Array<SpaceArcSearchVListItem>;
+    };
+    page: {
+      pn: number;
+      ps: number;
+      count: number;
+    };
+  };
+}
+
 /* ========== Live ========== */
 // 直播间信息
 export interface RoomInit {
