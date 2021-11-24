@@ -1,5 +1,5 @@
 import { ipcRenderer, shell } from 'electron';
-import { useContext, ReactElement, ReactNodeArray, MouseEvent } from 'react';
+import { useContext, ReactElement, ReactNode, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
@@ -95,7 +95,7 @@ const navLinkConfig: Array<Array<NativeItem>> = [
 ];
 
 /* 导航渲染 */
-function nativeRender(): ReactNodeArray {
+function nativeRender(): Array<ReactNode> {
   const element: Array<ReactElement> = [];
 
   for (let i: number = 0, j: number = navLinkConfig.length; i < j; i++) {

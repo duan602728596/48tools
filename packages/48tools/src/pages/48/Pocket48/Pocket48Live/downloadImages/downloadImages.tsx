@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import type { ReactElement, ReactNodeArray, MouseEvent } from 'react';
+import type { ReactElement, ReactNode, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Modal, message, Button, Image } from 'antd';
 import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/icons';
@@ -46,7 +46,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
   }
 
   // 渲染其他图片
-  function carouselsRender(): ReactNodeArray | null {
+  function carouselsRender(): Array<ReactNode> | null {
     if (carousels?.length) {
       return carousels.map((item: string, index: number): ReactElement => {
         return (

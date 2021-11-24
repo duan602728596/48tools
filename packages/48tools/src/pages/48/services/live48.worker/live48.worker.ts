@@ -47,7 +47,6 @@ async function requestStreamInfo(param: string, video_id: string, suid: string, 
     }
   });
 
-  // @ts-ignore
   postMessage(JSON.parse(res.body));
 }
 

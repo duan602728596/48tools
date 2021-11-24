@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { Fragment, useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { Fragment, useState, ReactElement, ReactNode, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
@@ -27,7 +27,7 @@ export const bilibiliVideoTypesMap: TypesResult = bilibiliVideoTypes.reduce(
   }, {});
 
 /* 视频分类的select选项的渲染 */
-function typeSelectOptionsRender(): ReactNodeArray {
+function typeSelectOptionsRender(): Array<ReactNode> {
   return bilibiliVideoTypes.map((item: { label: string; value: string }, index: number): ReactElement => {
     return <Select.Option key={ item.value } value={ item.value }>{ item.label }</Select.Option>;
   });

@@ -8,7 +8,7 @@ import {
   useMemo,
   useRef,
   ReactElement,
-  ReactNodeArray,
+  ReactNode,
   Dispatch as D,
   SetStateAction as S,
   RefObject,
@@ -130,7 +130,7 @@ function PlayerApp(props: {}): ReactElement {
   }
 
   // 渲染小偶像信息
-  function infoRender(): ReactNodeArray | null {
+  function infoRender(): Array<ReactNode> | null {
     if (info) {
       const { content }: LiveRoomInfo = info;
 

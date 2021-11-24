@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { useState, ReactElement, ReactNodeArray, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { useState, ReactElement, ReactNode, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Form, Select, message, Button, Space } from 'antd';
@@ -124,7 +124,7 @@ function GetLiveUrl(props: {}): ReactElement {
   }
 
   // 渲染公演的选择
-  function liveSelectOptionRender(): ReactNodeArray {
+  function liveSelectOptionRender(): Array<ReactNode> {
     return liveUrlInfo.map((item: { label: string; value: string }, index: number): ReactElement => {
       return <Select.Option key={ item.value } value={ item.value }>{ item.label }</Select.Option>;
     });

@@ -1,6 +1,6 @@
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, ReactElement, ReactNodeArray, MouseEvent } from 'react';
+import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector, createStructuredSelector, Selector } from 'reselect';
@@ -102,7 +102,7 @@ function Download(props: {}): ReactElement {
   }
 
   // 渲染下载
-  function handleDownloadQualitySelectOptionRender(representation: Array<Representation>): ReactNodeArray {
+  function handleDownloadQualitySelectOptionRender(representation: Array<Representation>): Array<ReactNode> {
     return representation.map((item: Representation, index: number): ReactElement => {
       return (
         <Select.Option key={ item.url } value={ `${ item.qualityLabel }@${ item.url }` }>
