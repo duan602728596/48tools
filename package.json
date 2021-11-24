@@ -22,9 +22,9 @@
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "yarn@3.0.2",
+  "packageManager": "yarn@3.1.0",
   "engines": {
-    "pm": "yarn@^3.0.2"
+    "pm": "yarn@^3.1.0"
   },
   "dependencies": {
     "cross-zip": "^4.0.0",
