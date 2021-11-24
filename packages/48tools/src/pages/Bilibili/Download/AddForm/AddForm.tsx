@@ -6,8 +6,8 @@ import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import style from './addForm.sass';
-import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from './parseBilibiliUrl';
-import { setAddDownloadList } from '../reducers/download';
+import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from '../parseBilibiliUrl';
+import { setAddDownloadList } from '../../reducers/download';
 
 /* 视频分类 */
 const bilibiliVideoTypes: Array<{ label: string; value: string }> = [

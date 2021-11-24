@@ -12,7 +12,7 @@ import type { ColumnsType } from 'antd/es/table';
 import getDownloadBilibiliVideoWorker from './downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
-import AddForm, { bilibiliVideoTypesMap } from './AddForm';
+import AddForm, { bilibiliVideoTypesMap } from './AddForm/AddForm';
 import {
   bilibiliDownloadListSelectors,
   setDeleteDownloadList,
