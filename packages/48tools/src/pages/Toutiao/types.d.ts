@@ -34,7 +34,7 @@ export interface CVersionObj {
 export interface ScriptRendedData {
   _location: string;
   C_0: C0Obj;
-  [key: string]: CVersionObj;
+  [key: `c_${ number }`]: CVersionObj;
 }
 
 export interface DownloadUrlItem {
