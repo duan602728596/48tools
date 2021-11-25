@@ -53,10 +53,8 @@ async function requestDownloadFileByStream(
 function download(qid: string, durl: string, filePath: string, headers?: Headers): void {
   requestDownloadFileByStream(durl, filePath, headers, function(e: ProgressEventData): void {
     if (e.percent >= 1) {
-      // @ts-ignore
       postMessage({ type: 'success', qid });
     } else {
-      // @ts-ignore
       postMessage({
         type: 'progress',
         data: Math.floor(e.percent * 100),

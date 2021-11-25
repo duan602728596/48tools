@@ -77,12 +77,10 @@ function cut(workerData: WorkerEventData): void {
   });
 
   child.on('close', function(...args: string[]): void {
-    // @ts-ignore
     postMessage({ type: 'close' });
   });
 
   child.on('error', function(err: Error): void {
-    // @ts-ignore
     postMessage({ type: 'error', error: err });
   });
 }

@@ -21,7 +21,7 @@ export async function requestAcFunLiveHtml(roomId: string, acfunCookie: string |
     .split(/;\s*/)[0] // _did=
     .split(/=/)[1];   // did的值
 
-  // @ts-ignore  获取cookie中的_did值
+  // 获取cookie中的_did值
   postMessage(cookie);
 }
 

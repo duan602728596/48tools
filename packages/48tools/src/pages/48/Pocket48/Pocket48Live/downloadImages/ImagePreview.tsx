@@ -14,8 +14,7 @@ function ImagePreview(props: ImagePreviewProps): ReactElement {
   // 点击预览图片
   function handlePreviewClick(event: MouseEvent<HTMLAnchorElement>): void {
     if (divRef.current) {
-      // @ts-ignore
-      divRef.current.querySelector('.ant-image-img')!.click();
+      divRef.current.querySelector<HTMLElement>('.ant-image-img')!.click();
     }
   }
 
