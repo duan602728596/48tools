@@ -49,7 +49,6 @@
     "cross-env": "^7.0.3",
     "electron": "^16.0.1",
     "ts-loader": "^9.2.6",
-    "webpack-bundle-analyzer": "^4.5.0",
-    "worker-loader": "^3.0.8"
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }

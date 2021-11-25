@@ -40,6 +40,12 @@ declare module '*.webp' {
   export default url;
 }
 
+declare module '*.avif' {
+  const url: string;
+
+  export default url;
+}
+
 declare module '*.component.svg' {
   import type { FunctionComponent } from 'react';
 
@@ -52,14 +58,6 @@ declare module '*.svg' {
   const url: string;
 
   export default url;
-}
-
-declare module 'worker-loader!*' {
-  class WorkerLoader extends Worker {
-    constructor();
-  }
-
-  export default WorkerLoader;
 }
 
 declare module 'filenamify/browser' {
