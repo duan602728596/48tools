@@ -20,7 +20,7 @@ export const douyinDownloadListSelectors: EntitySelectors<DownloadItem, EntitySt
   = douyinDownloadListAdapter.getSelectors();
 
 export interface DouyinDownloadInitialState extends EntityState<DownloadItem> {
-  downloadProgress: { [key: string]: number };
+  downloadProgress: Record<string, number>;
 }
 
 type CaseReducers = SliceCaseReducers<DouyinDownloadInitialState>;

@@ -34,12 +34,12 @@ const selector: Selector<any, AcFunLiveInitialState> = createStructuredSelector(
   // 配置的acfun直播间信息
   acfunLiveList: createSelector(
     ({ acfunLive }: { acfunLive: AcFunLiveInitialState }): Array<LiveItem> => acfunLive.acfunLiveList,
-    (data: Array<LiveItem>): Array<LiveItem> => data
+    (acfunLiveList: Array<LiveItem>): Array<LiveItem> => acfunLiveList
   ),
   // 直播下载
   liveWorkers: createSelector(
     ({ acfunLive }: { acfunLive: AcFunLiveInitialState }): Array<WebWorkerChildItem> => acfunLive.liveWorkers,
-    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+    (liveWorkers: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => liveWorkers
   )
 });
 

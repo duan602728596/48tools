@@ -39,17 +39,17 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   // 直播列表
   liveList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.liveList,
-    (data: Array<LiveInfo>): Array<LiveInfo> => data
+    (liveList: Array<LiveInfo>): Array<LiveInfo> => liveList
   ),
   // 直播下载
   liveChildList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.liveChildList,
-    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+    (liveChildList: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => liveChildList
   ),
   // 自动抓取的定时器
   autoGrabTimer: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): number | null => pocket48.autoGrabTimer,
-    (data: number | null): number | null => data
+    (autoGrabTimer: number | null): number | null => autoGrabTimer
   )
 });
 

@@ -56,17 +56,17 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   // 查询条件
   inVideoQuery: createSelector(
     ({ live48 }: { live48: Live48InitialState }): InVideoQuery | undefined => live48?.inVideoQuery,
-    (data: InVideoQuery): InVideoQuery | undefined => data
+    (inVideoQuery: InVideoQuery): InVideoQuery | undefined => inVideoQuery
   ),
   // 录播列表
   inVideoList: createSelector(
     ({ live48 }: { live48: Live48InitialState }): Array<InVideoItem> => live48.inVideoList,
-    (data: Array<InVideoItem>): Array<InVideoItem> => data
+    (inVideoList: Array<InVideoItem>): Array<InVideoItem> => inVideoList
   ),
   // 正在下载
   videoListChild: createSelector(
     ({ live48 }: { live48: Live48InitialState }): Array<InVideoWebWorkerItem> => live48.videoListChild,
-    (data: Array<InVideoWebWorkerItem>): Array<InVideoWebWorkerItem> => data
+    (videoListChild: Array<InVideoWebWorkerItem>): Array<InVideoWebWorkerItem> => videoListChild
   )
 });
 

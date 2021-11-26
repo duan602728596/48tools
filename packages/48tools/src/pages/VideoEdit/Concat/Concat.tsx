@@ -56,12 +56,12 @@ const selector: Selector<any, ConcatInitialState> = createStructuredSelector({
   // 视频合并列表
   concatList: createSelector(
     ({ concat }: { concat: ConcatInitialState }): Array<ConcatItem> => concat.concatList,
-    (data: Array<ConcatItem>): Array<ConcatItem> => data
+    (concatList: Array<ConcatItem>): Array<ConcatItem> => concatList
   ),
   // 合并线程
   concatWorker: createSelector(
     ({ concat }: { concat: ConcatInitialState }): Worker | null => concat.concatWorker,
-    (data: Worker | null): Worker | null => data
+    (concatWorker: Worker | null): Worker | null => concatWorker
   )
 });
 

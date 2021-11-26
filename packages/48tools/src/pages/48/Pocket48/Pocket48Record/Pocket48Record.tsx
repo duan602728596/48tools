@@ -63,22 +63,22 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   // 录播信息
   recordList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.recordList,
-    (data: Array<LiveInfo>): Array<LiveInfo> => data
+    (recordList: Array<LiveInfo>): Array<LiveInfo> => recordList
   ),
   // 记录录播分页位置
   recordNext: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): string => pocket48.recordNext,
-    (data: string): string => data
+    (recordNext: string): string => recordNext
   ),
   // 录播下载
   recordChildList: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<RecordVideoDownloadWebWorkerItem> => pocket48.recordChildList,
-    (data: Array<RecordVideoDownloadWebWorkerItem>): Array<RecordVideoDownloadWebWorkerItem> => data
+    (recordChildList: Array<RecordVideoDownloadWebWorkerItem>): Array<RecordVideoDownloadWebWorkerItem> => recordChildList
   ),
   // 表单field
   recordFields: createSelector(
     ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<RecordFieldData> => pocket48.recordFields,
-    (data: Array<RecordFieldData>): Array<RecordFieldData> => data
+    (recordFields: Array<RecordFieldData>): Array<RecordFieldData> => recordFields
   )
 });
 
