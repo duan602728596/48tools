@@ -86,12 +86,7 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
     order: 'pubdate'
   });
   const apiUrl: string = `https://api.bilibili.com/x/space/arc/search?${ searchParams.toString() }`;
-  const res: GotResponse<SpaceArcSearch> = await got.get(apiUrl, {
-    responseType: 'json',
-    headers: {
-      Cookie: getBilibiliCookie()
-    }
-  });
+  const res: Response = await fetch(apiUrl);
 
-  return res.body;
+  return res.json();
 }

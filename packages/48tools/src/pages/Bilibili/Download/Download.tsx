@@ -12,14 +12,15 @@ import type { ColumnsType } from 'antd/es/table';
 import getDownloadBilibiliVideoWorker from './downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
+import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import AddForm, { bilibiliVideoTypesMap } from './AddForm/AddForm';
+import AddBySearch from './AddBySearch/AddBySearch';
 import {
   bilibiliDownloadListSelectors,
   setDeleteDownloadList,
   setDownloadProgress,
   BilibiliDownloadInitialState
 } from '../reducers/download';
-import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
@@ -143,6 +144,7 @@ function Download(props: {}): ReactElement {
       <Header>
         <Button.Group>
           <BilibiliLogin />
+          <AddBySearch />
           <AddForm />
         </Button.Group>
       </Header>

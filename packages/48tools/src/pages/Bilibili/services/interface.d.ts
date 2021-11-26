@@ -66,6 +66,7 @@ export interface SpaceArcSearch {
         name: string;
       }>;
       vList: Array<SpaceArcSearchVListItem>;
+      vlist: Array<SpaceArcSearchVListItem>;
     };
     page: {
       pn: number;

@@ -85,6 +85,22 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
 }
 
 /**
+ * 解析视频列表地址
+ * @param { string } bvid
+ */
+export async function parseVideoList(bvid: string): Promise<Array<{ cid: number; part: string }> | void> {
+  const videoUrl: string = `https://www.bilibili.com/video/${ bvid }`;
+  const html: string = await requestBilibiliHtml(videoUrl);
+  const { initialState }: ParseHtmlResult = parseHtml(html);
+
+  if (!initialState) {
+    return undefined;
+  }
+
+  return initialState.videoData.pages;
+}
+
+/**
  * 解析番剧的接口
  * 参考：https://github.com/Henryhaohao/Bilibili_video_download/blob/master/bilibili_video_download_bangumi.py
  * @param { string } type: 番剧类型
