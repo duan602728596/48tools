@@ -66,12 +66,14 @@ function Download(props: {}): ReactElement {
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
         const { type }: MessageEventData = event1.data;
 
-        dispatch(setDownloadProgress(event1.data));
+        requestAnimationFrame((): void => {
+          dispatch(setDownloadProgress(event1.data));
 
-        if (type === 'success') {
-          message.success('下载完成！');
-          worker.terminate();
-        }
+          if (type === 'success') {
+            message.success('下载完成！');
+            worker.terminate();
+          }
+        });
       });
 
       worker.postMessage({
