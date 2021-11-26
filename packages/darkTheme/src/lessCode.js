@@ -32,11 +32,11 @@ function camelCaseToHyphen(str) {
 
 /**
  * 生成less文件
- * @param { Array<string> } allComponents: 组件名称
+ * @param { Array<string> } antdComponents: 组件名称
  */
-export function lessFile(allComponents) {
+function lessImportCode(antdComponents) {
   const antd = path.join(moduleExists('antd'), '../../es');
-  const componentsLessFiles = allComponents.map((o) => {
+  const componentsLessFiles = antdComponents.map((o) => {
     const name = /^[a-z]/.test(o) ? o : camelCaseToHyphen(o);
 
     return path.join(antd, name, 'style/index.less');
@@ -49,13 +49,11 @@ export function lessFile(allComponents) {
 
 /**
  * 生成less代码
- * @param { Array<string> } componentsLessFiles: less文件的数组
+ * @param { Array<string> } antdComponents: antd的组件名称
  */
-export async function lessRender(componentsLessFiles) {
-  const lessInput = componentsLessFiles.map((o) => {
-    return `@import '${ o }';`;
-  }).join('\n');
-
+async function lessCode(antdComponents) {
+  const lessImport = lessImportCode(antdComponents);
+  const lessInput = lessImport.map((o) => `@import '${ o }';`).join('\n');
   const output = await less.render(lessInput, {
     javascriptEnabled: true,
     modifyVars: {
@@ -65,3 +63,5 @@ export async function lessRender(componentsLessFiles) {
 
   return output.css;
 }
+
+export default lessCode;
