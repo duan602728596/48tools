@@ -16,7 +16,7 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   // 公演直播列表
   inLiveList: createSelector(
     ({ live48 }: { live48: Live48InitialState }): Array<InLiveWebWorkerItem> => live48.inLiveList,
-    (data: Array<InLiveWebWorkerItem>): Array<InLiveWebWorkerItem> => data
+    (inLiveList: Array<InLiveWebWorkerItem>): Array<InLiveWebWorkerItem> => inLiveList
   )
 });
 

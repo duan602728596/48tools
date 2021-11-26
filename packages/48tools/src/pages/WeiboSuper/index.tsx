@@ -23,23 +23,23 @@ const selector: Selector<any, RSelector> = createStructuredSelector({
   // 微博已登陆账号
   accountList: createSelector(
     ({ weiboLogin }: { weiboLogin: WeiboLoginInitialState }): Array<WeiboAccount> => weiboLogin.accountList,
-    (data: Array<WeiboAccount>): Array<WeiboAccount> => data
+    (accountList: Array<WeiboAccount>): Array<WeiboAccount> => accountList
   ),
   // 登陆列表
   weiboCheckinList: createSelector(
     ({ weiboSuper }: { weiboSuper: WeiboSuperInitialState }): Array<WeiboCheckinResult> => weiboSuper.weiboCheckinList,
-    (data: Array<WeiboCheckinResult>): Array<WeiboCheckinResult> => data
+    (weiboCheckinList: Array<WeiboCheckinResult>): Array<WeiboCheckinResult> => weiboCheckinList
   ),
   // 签到状态
   checkIn: createSelector(
     ({ weiboSuper }: { weiboSuper: WeiboSuperInitialState }): boolean => weiboSuper.checkIn,
-    (data: boolean): boolean => data
+    (checkIn: boolean): boolean => checkIn
   ),
   // 已签到
   quantity:
     createSelector(
       ({ weiboSuper }: { weiboSuper: WeiboSuperInitialState }): Quantity => weiboSuper.quantity,
-      (data: Quantity): Quantity => data
+      (quantity: Quantity): Quantity => quantity
     )
 });
 

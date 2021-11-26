@@ -28,17 +28,15 @@ type RSelector = Pick<DouyinDownloadInitialState, 'downloadProgress'> & {
 const selector: Selector<any, RSelector> = createStructuredSelector({
   // 下载任务列表
   downloadList: createSelector(
-    ({ douyinDownload }: { douyinDownload: DouyinDownloadInitialState }): Array<DownloadItem> => {
-      return douyinDownloadListSelectors.selectAll(douyinDownload);
-    },
-    (data: Array<DownloadItem>): Array<DownloadItem> => data
+    ({ douyinDownload }: { douyinDownload: DouyinDownloadInitialState }): Array<DownloadItem> =>
+      douyinDownloadListSelectors.selectAll(douyinDownload),
+    (downloadList: Array<DownloadItem>): Array<DownloadItem> => downloadList
   ),
   // 进度条列表
   downloadProgress: createSelector(
-    ({ douyinDownload }: { douyinDownload: DouyinDownloadInitialState }): { [key: string]: number } => {
-      return douyinDownload.downloadProgress;
-    },
-    (data: { [key: string]: number }): { [key: string]: number } => data
+    ({ douyinDownload }: { douyinDownload: DouyinDownloadInitialState }): { [key: string]: number } =>
+      douyinDownload.downloadProgress,
+    (downloadProgress: Record<string, number>): Record<string, number> => downloadProgress
   )
 });
 

@@ -24,12 +24,12 @@ const selector: Selector<any, VideoCutInitialState> = createStructuredSelector({
   // 裁剪队列
   cutList: createSelector(
     ({ videoCut }: { videoCut: VideoCutInitialState }): Array<CutItem> => videoCut.cutList,
-    (data: Array<CutItem>): Array<CutItem> => data
+    (cutList: Array<CutItem>): Array<CutItem> => cutList
   ),
   // 裁剪线程
   cutChildList: createSelector(
     ({ videoCut }: { videoCut: VideoCutInitialState }): Array<WebWorkerChildItem> => videoCut.cutChildList,
-    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+    (cutChildList: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => cutChildList
   )
 });
 

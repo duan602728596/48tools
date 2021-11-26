@@ -25,17 +25,15 @@ import type { DownloadItem, Representation } from '../types';
 const selector: Selector<any, AcFunDownloadInitialState> = createStructuredSelector({
   // 下载任务列表
   downloadList: createSelector(
-    ({ acfunDownload }: { acfunDownload: AcFunDownloadInitialState }): Array<DownloadItem> => {
-      return acfunDownload.downloadList;
-    },
-    (data: Array<DownloadItem>): Array<DownloadItem> => data
+    ({ acfunDownload }: { acfunDownload: AcFunDownloadInitialState }): Array<DownloadItem> =>
+      acfunDownload.downloadList,
+    (downloadList: Array<DownloadItem>): Array<DownloadItem> => downloadList
   ),
   // 正在下载的线程
   ffmpegDownloadWorkers: createSelector(
-    ({ acfunDownload }: { acfunDownload: AcFunDownloadInitialState }): Array<WebWorkerChildItem> => {
-      return acfunDownload.ffmpegDownloadWorkers;
-    },
-    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+    ({ acfunDownload }: { acfunDownload: AcFunDownloadInitialState }): Array<WebWorkerChildItem> =>
+      acfunDownload.ffmpegDownloadWorkers,
+    (ffmpegDownloadWorkers: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => ffmpegDownloadWorkers
   )
 });
 

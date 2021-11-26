@@ -28,17 +28,15 @@ import type { RoomInit, RoomPlayUrl } from '../services/interface';
 const selector: Selector<any, BilibiliLiveInitialState> = createStructuredSelector({
   // 直播间列表
   bilibiliLiveList: createSelector(
-    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<LiveItem> => {
-      return bilibiliLive.bilibiliLiveList;
-    },
-    (data: Array<LiveItem>): Array<LiveItem> => data
+    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<LiveItem> =>
+      bilibiliLive.bilibiliLiveList,
+    (bilibiliLiveList: Array<LiveItem>): Array<LiveItem> => bilibiliLiveList
   ),
   // 直播下载
   liveChildList: createSelector(
-    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<WebWorkerChildItem> => {
-      return bilibiliLive.liveChildList;
-    },
-    (data: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => data
+    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<WebWorkerChildItem> =>
+      bilibiliLive.liveChildList,
+    (liveChildList: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => liveChildList
   )
 });
 
