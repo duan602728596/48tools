@@ -61,7 +61,7 @@ declare module '*.svg' {
 }
 
 declare module 'filenamify/browser' {
-  import filenamify from 'filenamify/filenamify';
+  import type filenamify from 'filenamify/filenamify';
 
   export default filenamify;
 }
