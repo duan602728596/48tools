@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import * as process from 'node:process';
 import { Worker } from 'node:worker_threads';
-import { ipcMain, IpcMainEvent } from 'electron';
+import { ipcMain, type IpcMainEvent } from 'electron';
 import { isDevelopment } from '../utils';
 
 /* node-media-server服务线程 */

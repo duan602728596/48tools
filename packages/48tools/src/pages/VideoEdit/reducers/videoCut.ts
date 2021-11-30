@@ -1,4 +1,4 @@
-import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { WebWorkerChildItem } from '../../../types';
 import type { CutItem } from '../types';
 

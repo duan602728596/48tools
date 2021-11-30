@@ -1,5 +1,5 @@
 import { promisify } from 'node:util';
-import { Fragment, useMemo, useEffect, useRef, ReactElement, RefObject, MouseEvent } from 'react';
+import { Fragment, useMemo, useEffect, useRef, type ReactElement, type RefObject, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { message, Button, Alert } from 'antd';
 import { toCanvas } from 'qrcode/lib/browser';

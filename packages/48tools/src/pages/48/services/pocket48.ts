@@ -1,7 +1,7 @@
 import { promisify } from 'node:util';
 import { pipeline } from 'node:stream';
 import * as fs from 'node:fs';
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 import { createHeaders } from '../../../utils/snh48';
 import type { LiveData, LiveRoomInfo } from './interface';
 

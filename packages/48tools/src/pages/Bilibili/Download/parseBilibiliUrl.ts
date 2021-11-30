@@ -1,4 +1,4 @@
-import { createHash, Hash } from 'node:crypto';
+import { createHash, type Hash } from 'node:crypto';
 import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo, requestBangumiVideoInfo } from '../services/download';
 import type { InitialState } from '../types';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo } from '../services/interface';

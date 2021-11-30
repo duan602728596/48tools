@@ -1,12 +1,12 @@
 import {
   createSlice,
   createAsyncThunk,
-  Slice,
-  SliceCaseReducers,
-  PayloadAction,
-  CaseReducerActions,
-  AsyncThunk,
-  ActionReducerMapBuilder
+  type Slice,
+  type SliceCaseReducers,
+  type PayloadAction,
+  type CaseReducerActions,
+  type AsyncThunk,
+  type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
 import { requestTopicCheckin } from '../services/weiboSuper';
 import type { WeiboCheckinResult, Quantity } from '../types';

@@ -1,9 +1,9 @@
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
+import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
@@ -15,7 +15,7 @@ import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,
   setDownloadProgress,
-  DouyinDownloadInitialState
+  type DouyinDownloadInitialState
 } from '../reducers/douyin';
 import { requestGetVideoRedirectUrl } from '../services/douyin';
 import type { DownloadItem } from '../types';

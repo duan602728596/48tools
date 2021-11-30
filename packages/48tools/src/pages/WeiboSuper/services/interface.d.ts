@@ -1,4 +1,4 @@
-import { SuperItem } from '../types';
+import type { SuperItem } from '../types';
 
 export interface TopicResponse {
   ok: number;

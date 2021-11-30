@@ -1,6 +1,6 @@
 import { promisify } from 'node:util';
 import { pipeline } from 'node:stream';
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch } from './interface';
 

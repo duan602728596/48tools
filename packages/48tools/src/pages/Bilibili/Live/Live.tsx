@@ -1,9 +1,9 @@
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, ReactElement, useEffect, MouseEvent } from 'react';
+import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
@@ -15,7 +15,7 @@ import {
   idbDeleteBilibiliLiveList,
   setAddLiveBilibiliChildList,
   setDeleteLiveBilibiliChildList,
-  BilibiliLiveInitialState
+  type BilibiliLiveInitialState
 } from '../reducers/live';
 import dbConfig from '../../../utils/idb/dbConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';

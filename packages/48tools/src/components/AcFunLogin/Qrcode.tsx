@@ -1,5 +1,5 @@
-import { CancelableRequest, Response as GotResponse } from 'got';
-import { useState, useEffect, useMemo, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import type { CancelableRequest, Response as GotResponse } from 'got';
+import { useState, useEffect, useMemo, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Button, Empty, message } from 'antd';
 import * as dayjs from 'dayjs';

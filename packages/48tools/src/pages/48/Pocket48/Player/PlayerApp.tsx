@@ -1,19 +1,19 @@
 import * as querystring from 'node:querystring';
 import type { ParsedUrlQuery } from 'node:querystring';
-import { spawn, ChildProcessWithoutNullStreams } from 'node:child_process';
+import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { ipcRenderer } from 'electron';
 import {
   useState,
   useEffect,
   useMemo,
   useRef,
-  ReactElement,
-  ReactNode,
-  Dispatch as D,
-  SetStateAction as S,
-  RefObject,
-  MutableRefObject,
-  MouseEvent
+  type ReactElement,
+  type ReactNode,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type RefObject,
+  type MutableRefObject,
+  type MouseEvent
 } from 'react';
 import { ConfigProvider, Avatar, Tag, Button } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';

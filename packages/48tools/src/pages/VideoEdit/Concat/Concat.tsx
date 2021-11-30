@@ -4,20 +4,20 @@ import { promises as fsP } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, ReactElement, ComponentClass, MouseEvent } from 'react';
+import { Fragment, type ReactElement, type ComponentClass, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Button, List, message } from 'antd';
 import { FileFilled as IconFileFilled, MenuOutlined as IconMenuOutlined } from '@ant-design/icons';
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
-  SortableContainerProps,
-  SortableElementProps,
-  SortEnd,
-  SortEvent
+  type SortableContainerProps,
+  type SortableElementProps,
+  type SortEnd,
+  type SortEvent
 } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
 import * as dayjs from 'dayjs';
@@ -29,7 +29,7 @@ import {
   setConcatList,
   setConcatListDelete,
   setConcatWorker,
-  ConcatInitialState
+  type ConcatInitialState
 } from '../reducers/concat';
 import { getFFmpeg } from '../../../utils/utils';
 import type { MessageEventData } from '../../../types';

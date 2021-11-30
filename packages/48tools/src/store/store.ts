@@ -2,12 +2,12 @@
 import {
   configureStore,
   combineReducers,
-  Reducer,
-  Store,
-  DeepPartial,
-  ImmutableStateInvariantMiddlewareOptions,
-  SerializableStateInvariantMiddlewareOptions,
-  MiddlewareArray
+  type Reducer,
+  type Store,
+  type DeepPartial,
+  type ImmutableStateInvariantMiddlewareOptions,
+  type SerializableStateInvariantMiddlewareOptions,
+  type MiddlewareArray
 } from '@reduxjs/toolkit';
 import type { CurriedGetDefaultMiddleware, ThunkMiddlewareFor } from '@reduxjs/toolkit/src/getDefaultMiddleware';
 import type { Middleware } from 'redux';

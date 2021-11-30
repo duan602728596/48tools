@@ -1,7 +1,14 @@
 import { randomUUID } from 'node:crypto';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { useState, ReactElement, ReactNode, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import {
+  useState,
+  type ReactElement,
+  type ReactNode,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Form, Select, message, Button, Space } from 'antd';

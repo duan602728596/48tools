@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as dayjs from 'dayjs';
-import { BILIBILI_COOKIE_KEY, BilibiliCookie } from '../components/BilibiliLogin/Qrcode';
-import { ACFUN_COOKIE_KEY, AcFunCookie } from '../components/AcFunLogin/Qrcode';
+import { BILIBILI_COOKIE_KEY, type BilibiliCookie } from '../components/BilibiliLogin/Qrcode';
+import { ACFUN_COOKIE_KEY, type AcFunCookie } from '../components/AcFunLogin/Qrcode';
 
 /* 获取ffmpeg的地址 */
 export function getFFmpeg(): string {

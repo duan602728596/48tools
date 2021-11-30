@@ -1,9 +1,9 @@
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, ReactElement, ReactNode, MouseEvent } from 'react';
+import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import style from './download.sass';
@@ -15,7 +15,7 @@ import {
   setDeleteDownloadList,
   setAddDownloadWorker,
   setDeleteDownloadWorker,
-  AcFunDownloadInitialState
+  type AcFunDownloadInitialState
 } from '../reducers/download';
 import { getFFmpeg } from '../../../utils/utils';
 import type { MessageEventData, WebWorkerChildItem } from '../../../types';

@@ -1,10 +1,10 @@
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
@@ -16,7 +16,7 @@ import {
   setInVideoList,
   setVideoListChildAdd,
   setVideoListChildDelete,
-  Live48InitialState
+  type Live48InitialState
 } from '../../reducers/live48';
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';

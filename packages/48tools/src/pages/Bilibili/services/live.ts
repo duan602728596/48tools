@@ -1,4 +1,4 @@
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
 import type { RoomInit, RoomPlayUrl } from './interface';
 

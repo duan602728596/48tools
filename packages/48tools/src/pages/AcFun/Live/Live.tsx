@@ -1,10 +1,18 @@
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, useState, useEffect, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  useEffect,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import { render } from 'react-dom';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
@@ -18,7 +26,7 @@ import {
   idbDeleteAcFunLiveList,
   setAddLiveWorker,
   setDeleteLiveWorker,
-  AcFunLiveInitialState
+  type AcFunLiveInitialState
 } from '../reducers/live';
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/idb/dbConfig';

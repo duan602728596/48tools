@@ -1,5 +1,5 @@
 import IndexedDB from 'indexeddb-tools';
-import dbConfig, { ObjectStoreItem } from './dbConfig';
+import dbConfig, { type ObjectStoreItem } from './dbConfig';
 
 interface IndexArrayItem {
   name: string;

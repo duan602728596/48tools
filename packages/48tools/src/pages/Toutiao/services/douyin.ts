@@ -1,4 +1,4 @@
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 
 const userAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
   + 'Chrome/91.0.4472.164 Safari/537.36';

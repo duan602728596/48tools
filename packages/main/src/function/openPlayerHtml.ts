@@ -3,7 +3,7 @@ import * as querystring from 'node:querystring';
 import { BrowserWindow } from 'electron';
 import * as remoteMain from '@electron/remote/main';
 import { isDevelopment } from '../utils';
-import { themeEvent, ThemeValue } from './ipcTheme';
+import { themeEvent, type ThemeValue } from './ipcTheme';
 
 /* 记录id和窗口的关系 */
 export const playerWindowMaps: Map<string, BrowserWindow> = new Map();

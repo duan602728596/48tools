@@ -1,13 +1,13 @@
-import { ipcRenderer, IpcRendererEvent } from 'electron';
+import { ipcRenderer, type IpcRendererEvent } from 'electron';
 import {
   Fragment,
   useState,
   useEffect,
-  ReactElement,
-  ReactNode,
-  Dispatch as D,
-  SetStateAction as S,
-  MouseEvent
+  type ReactElement,
+  type ReactNode,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
 } from 'react';
 import { createPortal } from 'react-dom';
 import * as PropTypes from 'prop-types';

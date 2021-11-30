@@ -3,11 +3,11 @@ import {
   useState,
   useEffect,
   useRef,
-  ReactElement,
-  RefObject,
-  Dispatch as D,
-  SetStateAction as S,
-  MouseEvent
+  type ReactElement,
+  type RefObject,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
 } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Input, Form, BackTop, message, Empty } from 'antd';

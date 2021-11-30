@@ -1,13 +1,13 @@
 import {
   createSlice,
   createEntityAdapter,
-  Slice,
-  SliceCaseReducers,
-  EntityAdapter,
-  EntityState,
-  EntitySelectors,
-  PayloadAction,
-  CaseReducerActions
+  type Slice,
+  type SliceCaseReducers,
+  type EntityAdapter,
+  type EntityState,
+  type EntitySelectors,
+  type PayloadAction,
+  type CaseReducerActions
 } from '@reduxjs/toolkit';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';

@@ -1,13 +1,13 @@
 import {
   createSlice,
   createAsyncThunk,
-  Slice,
-  SliceCaseReducers,
-  PayloadAction,
-  CaseReducerActions,
-  ActionCreator,
-  AsyncThunk,
-  ActionReducerMapBuilder
+  type Slice,
+  type SliceCaseReducers,
+  type PayloadAction,
+  type CaseReducerActions,
+  type ActionCreator,
+  type AsyncThunk,
+  type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
 import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
 import { requestLiveList } from '../services/pocket48';

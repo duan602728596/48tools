@@ -1,4 +1,4 @@
-import { BrowserWindow, Session, Cookie } from 'electron';
+import { BrowserWindow, type Session, type Cookie } from 'electron';
 
 const weiboUrl: string = 'https://weibo.com/';
 let weiboLoginWin: BrowserWindow | null = null;

@@ -1,4 +1,4 @@
-import { createContext, Context, ReactElement, ReactPortal } from 'react';
+import { createContext, type Context, type ReactElement } from 'react';
 
 export interface Theme {
   ChangeThemeElement?: ReactElement;

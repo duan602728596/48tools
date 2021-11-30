@@ -1,5 +1,5 @@
 import { promisify } from 'node:util';
-import { deflate, unzip, InputType } from 'node:zlib';
+import { deflate, unzip, type InputType } from 'node:zlib';
 import { fromUint8Array, toUint8Array } from 'js-base64';
 
 type ZlibPromiseFunc = (arg1: InputType) => Promise<Buffer>;

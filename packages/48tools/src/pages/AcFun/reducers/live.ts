@@ -1,4 +1,11 @@
-import { createSlice, Slice, SliceCaseReducers, PayloadAction, CaseReducerActions, ActionCreator } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  type Slice,
+  type SliceCaseReducers,
+  type PayloadAction,
+  type CaseReducerActions,
+  type ActionCreator
+} from '@reduxjs/toolkit';
 import dbRedux, { acfunLiveObjectStoreName } from '../../../utils/idb/dbRedux';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveItem } from '../types';

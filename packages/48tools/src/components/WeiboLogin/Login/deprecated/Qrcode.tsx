@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';

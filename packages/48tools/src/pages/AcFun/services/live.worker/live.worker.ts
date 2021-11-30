@@ -1,4 +1,4 @@
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 
 type MessageEventData = {
   roomId: string;

@@ -1,5 +1,5 @@
 import * as querystring from 'node:querystring';
-import got, { Response as GotResponse, CancelableRequest } from 'got';
+import got, { type Response as GotResponse, type CancelableRequest } from 'got';
 import type { PcDirectQr, ScanResult, AcceptResult } from './interface';
 
 // 获取A站的二维码

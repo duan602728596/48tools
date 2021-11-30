@@ -1,5 +1,5 @@
 import * as querystring from 'node:querystring';
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 import jsonp from '../../../utils/jsonp';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from './interface';
 

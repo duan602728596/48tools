@@ -6,7 +6,7 @@ import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import { store } from '../../../../store/store';
-import { setLiveList, Pocket48InitialState, setDeleteLiveChildList, setAddLiveChildList } from '../../reducers/pocket48';
+import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
 import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
 import type { MessageEventData, WebWorkerChildItem } from '../../../../types';

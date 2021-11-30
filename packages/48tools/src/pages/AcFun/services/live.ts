@@ -1,5 +1,5 @@
 import * as querystring from 'node:querystring';
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 import getLiveWorker from './live.worker/getLiveWorker';
 import { getAcFuncCookie } from '../../../utils/utils';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from './interface';

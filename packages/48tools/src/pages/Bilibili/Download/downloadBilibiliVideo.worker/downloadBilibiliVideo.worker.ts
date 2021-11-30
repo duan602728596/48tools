@@ -1,7 +1,7 @@
 import { promisify } from 'node:util';
 import { pipeline } from 'node:stream';
 import * as fs from 'node:fs';
-import got, { Headers } from 'got';
+import got, { type Headers } from 'got';
 import type { ProgressEventData } from '../../types';
 
 const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);

@@ -1,7 +1,7 @@
-import { useEffect, ReactElement, MouseEvent } from 'react';
+import { useEffect, type ReactElement, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { idbCursorAccountList, idbDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';

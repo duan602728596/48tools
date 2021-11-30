@@ -1,4 +1,4 @@
-import { ReducersMapObject } from '@reduxjs/toolkit';
+import type { ReducersMapObject } from '@reduxjs/toolkit';
 import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/download';

@@ -2,18 +2,18 @@ import { randomUUID } from 'node:crypto';
 import {
   Fragment,
   useState,
-  ReactElement,
-  ReactNode,
-  Dispatch as D,
-  SetStateAction as S,
-  ChangeEvent,
-  MouseEvent
+  type ReactElement,
+  type ReactNode,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type ChangeEvent,
+  type MouseEvent
 } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Input, Button, Modal, message, Select } from 'antd';
 import style from './add.sass';
-import { requestDouyinVideoHtml, DouyinVideo } from '../services/douyin';
+import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
 import type { AwemeDetail, ScriptRendedData, DownloadUrlItem, C0Obj, CVersionObj } from '../types';
 

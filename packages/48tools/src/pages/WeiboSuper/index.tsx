@@ -1,8 +1,16 @@
 import { shell } from 'electron';
-import { useState, useEffect, ReactElement, ReactNode, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  type ReactElement,
+  type ReactNode,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, Selector } from 'reselect';
+import { createSelector, createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Space, List, Alert, Avatar, Tag } from 'antd';
 import style from './index.sass';
 import Content from '../../components/Content/Content';
@@ -11,7 +19,7 @@ import WeiboLogin from '../../components/WeiboLogin/WeiboLogin';
 import { idbCursorAccountList } from '../../components/WeiboLogin/reducers/weiboLogin';
 import dbConfig from '../../utils/idb/dbConfig';
 import weiboCheckIn from './weiboCheckIn';
-import { setCheckIn, WeiboSuperInitialState } from './reducers/weiboSuper';
+import { setCheckIn, type WeiboSuperInitialState } from './reducers/weiboSuper';
 import type { WeiboLoginInitialState } from '../../components/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../types';
 import type { WeiboCheckinResult, Quantity } from './types';

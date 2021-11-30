@@ -1,5 +1,5 @@
 import * as querystring from 'node:querystring';
-import got, { Response as GotResponse } from 'got';
+import got, { type Response as GotResponse } from 'got';
 import type { LoginUrl, LoginInfo } from './interface';
 
 // 获取登陆二维码地址

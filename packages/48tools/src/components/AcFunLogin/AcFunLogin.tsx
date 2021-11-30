@@ -1,4 +1,4 @@
-import { Fragment, useState, ReactElement, Dispatch as D, SetStateAction as S, MouseEvent } from 'react';
+import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Modal } from 'antd';
 import Icon from '@ant-design/icons';
 import Qrcode from './Qrcode';

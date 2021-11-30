@@ -1,6 +1,6 @@
 import type { OpenDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { useEffect, ReactElement, MouseEvent } from 'react';
+import { useEffect, type ReactElement, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
