@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import less from 'less';
 import { moduleExists } from '@sweet-milktea/utils';
 
@@ -36,10 +37,15 @@ function camelCaseToHyphen(str) {
  */
 function lessImportCode(antdComponents) {
   const antd = path.join(moduleExists('antd'), '../../es');
-  const componentsLessFiles = antdComponents.map((o) => {
-    const name = /^[a-z]/.test(o) ? o : camelCaseToHyphen(o);
+  const componentsLessFiles = [];
 
-    return path.join(antd, name, 'style/index.less');
+  antdComponents.forEach((o) => {
+    const name = /^[a-z]/.test(o) ? o : camelCaseToHyphen(o);
+    const file = path.join(antd, name, 'style/index.less');
+
+    if (fs.existsSync(file)) {
+      componentsLessFiles.push(file);
+    }
   });
 
   componentsLessFiles.unshift(path.join(antd, 'style/dark.less'));
