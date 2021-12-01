@@ -36,7 +36,7 @@ interface DownloadItem {
 function AddBySearch(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [form]: [FormInstance] = Form.useForm();
-  const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(true);
+  const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [pageQuery, setPageQuery]: [PageQuery, D<S<PageQuery>>] = useState({
     current: 1,
     id: undefined
