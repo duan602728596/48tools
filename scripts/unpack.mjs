@@ -4,8 +4,7 @@ import rimraf from 'rimraf';
 import fse from 'fs-extra';
 import builder from 'electron-builder';
 import { requireJson } from '@sweet-milktea/utils';
-import npmInstall from './npm-install.mjs';
-import { __dirname, cwd, appDir, staticsDir, build, output, unpacked } from './utils.mjs';
+import { __dirname, cwd, appDir, staticsDir, build, output, unpacked, command } from './utils.mjs';
 
 const rimrafPromise = util.promisify(rimraf);
 
@@ -129,7 +128,7 @@ async function unpack() {
     fse.copy(path.join(packages, 'main/lib'), path.join(appDir, 'bin/lib')),
     fse.copy(path.join(packages, '48tools/dist'), path.join(appDir, 'dist'))
   ]);
-  await npmInstall();
+  await command('npm', ['install', '--production', '--legacy-peer-deps=true'], appDir);
 
   // 编译mac
   await builder.build({

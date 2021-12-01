@@ -48,6 +48,8 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使
 
 ## 编译
 
+> 运行`node scripts/delivery.mjs`，完成整个编译过程。
+
 1. main模块：进入`packages/main`，运行`npm run build`，编译主程序源代码。
 2. darkTheme模块：进入`packages/darkTheme`，运行`npm run build`，编译暗黑主题的css文件。
 3. 48tools模块：进入`packages/48tools`，运行`npm run build`，编译软件源代码。
