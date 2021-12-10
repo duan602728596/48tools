@@ -1,7 +1,7 @@
 import { useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Empty, Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import style from './qrcode.sass';

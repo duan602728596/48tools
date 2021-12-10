@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Form, Modal, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';

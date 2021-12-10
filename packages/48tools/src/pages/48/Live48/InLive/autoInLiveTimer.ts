@@ -1,4 +1,4 @@
-import type { Store } from 'redux';
+import type { Store } from '@reduxjs/toolkit';
 import { message } from 'antd';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import { store } from '../../../../store/store';

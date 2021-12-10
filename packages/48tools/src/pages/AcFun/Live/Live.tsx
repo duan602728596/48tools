@@ -10,8 +10,8 @@ import {
   type MouseEvent
 } from 'react';
 import { render } from 'react-dom';
-import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';

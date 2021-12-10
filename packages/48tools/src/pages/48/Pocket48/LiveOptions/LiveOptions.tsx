@@ -1,8 +1,8 @@
 import type { OpenDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { useEffect, type ReactElement, type MouseEvent } from 'react';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Link } from 'react-router-dom';
 import { Form, Input, InputNumber, Button, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';

@@ -8,8 +8,8 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Space, List, Alert, Avatar, Tag } from 'antd';
 import style from './index.sass';

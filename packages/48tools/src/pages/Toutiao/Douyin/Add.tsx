@@ -9,8 +9,8 @@ import {
   type ChangeEvent,
   type MouseEvent
 } from 'react';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Input, Button, Modal, message, Select } from 'antd';
 import style from './add.sass';
 import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';

@@ -1,8 +1,8 @@
 import { ipcRenderer, type Cookie, type IpcRendererEvent } from 'electron';
 import { useEffect, useCallback, type ReactElement, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Alert, Space, message, Divider } from 'antd';
 import * as dayjs from 'dayjs';
 import style from './openWeiboWindow.sass';

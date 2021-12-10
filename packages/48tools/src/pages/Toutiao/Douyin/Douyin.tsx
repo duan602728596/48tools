@@ -1,8 +1,8 @@
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
-import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';

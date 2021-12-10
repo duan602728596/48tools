@@ -9,8 +9,8 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Input, Form, Table, Spin, message, type FormInstance } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import classNames from 'classnames';

@@ -2,11 +2,11 @@ import type { ReactElement, KeyboardEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Form, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
-import type { Store } from 'antd/es/form/interface';
+import type { Store as FormStore } from 'antd/es/form/interface';
 import style from './searchForm.sass';
 
 interface OnSubmitFunc {
-  (formValue: Store): void | Promise<void>;
+  (formValue: FormStore): void | Promise<void>;
 }
 
 /**
@@ -18,7 +18,7 @@ function SearchForm(props: { onSubmit: OnSubmitFunc }): ReactElement {
 
   // 提交
   async function handleInputPressEnter(event: KeyboardEvent<HTMLInputElement>): Promise<void> {
-    let formValue: Store;
+    let formValue: FormStore;
 
     try {
       formValue = await form.validateFields();

@@ -1,6 +1,6 @@
 import { Fragment, type ReactElement, type MouseEvent } from 'react';
-import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';

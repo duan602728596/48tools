@@ -1,4 +1,4 @@
-import type { Store, Dispatch } from 'redux';
+import type { Store, Dispatch } from '@reduxjs/toolkit';
 import { message } from 'antd';
 import { store } from '../../store/store';
 import { requestTopicContent } from './services/weiboSuper';

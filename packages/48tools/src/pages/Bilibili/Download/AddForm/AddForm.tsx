@@ -8,8 +8,8 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';

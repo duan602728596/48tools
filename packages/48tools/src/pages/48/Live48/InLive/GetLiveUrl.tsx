@@ -9,8 +9,8 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import type { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
+import type { Dispatch } from '@reduxjs/toolkit';
 import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import filenamify from 'filenamify/browser';
