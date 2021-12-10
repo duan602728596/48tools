@@ -1,7 +1,7 @@
 import { useEffect, type ReactElement, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { idbCursorAccountList, idbDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';
@@ -9,12 +9,11 @@ import dbConfig from '../../utils/idb/dbConfig';
 import type { WeiboAccount } from '../../types';
 
 /* redux selector */
-const selector: Selector<any, WeiboLoginInitialState> = createStructuredSelector({
+type RState = { weiboLogin: WeiboLoginInitialState };
+
+const selector: Selector<RState, WeiboLoginInitialState> = createStructuredSelector({
   // 微博已登陆账号
-  accountList: createSelector(
-    ({ weiboLogin }: { weiboLogin: WeiboLoginInitialState }): Array<WeiboAccount> => weiboLogin.accountList,
-    (data: Array<WeiboAccount>): Array<WeiboAccount> => data
-  )
+  accountList: ({ weiboLogin }: RState): Array<WeiboAccount> => weiboLogin.accountList
 });
 
 /* 已登陆列表 */

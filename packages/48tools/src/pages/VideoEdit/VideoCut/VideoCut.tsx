@@ -3,7 +3,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import getCutWorker from './cut.worker/getCutWorker';
@@ -20,17 +20,14 @@ import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { CutItem } from '../types';
 
 /* redux selector */
-const selector: Selector<any, VideoCutInitialState> = createStructuredSelector({
+type RState = { videoCut: VideoCutInitialState };
+
+const selector: Selector<RState, VideoCutInitialState> = createStructuredSelector({
   // 裁剪队列
-  cutList: createSelector(
-    ({ videoCut }: { videoCut: VideoCutInitialState }): Array<CutItem> => videoCut.cutList,
-    (cutList: Array<CutItem>): Array<CutItem> => cutList
-  ),
+  cutList: ({ videoCut }: RState): Array<CutItem> => videoCut.cutList,
+
   // 裁剪线程
-  cutChildList: createSelector(
-    ({ videoCut }: { videoCut: VideoCutInitialState }): Array<WebWorkerChildItem> => videoCut.cutChildList,
-    (cutChildList: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => cutChildList
-  )
+  cutChildList: ({ videoCut }: RState): Array<WebWorkerChildItem> => videoCut.cutChildList
 });
 
 /* 视频快速裁剪 */

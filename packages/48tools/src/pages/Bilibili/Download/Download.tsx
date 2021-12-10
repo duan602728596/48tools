@@ -6,7 +6,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import getDownloadBilibiliVideoWorker from './downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
@@ -27,22 +27,14 @@ import type { DownloadItem } from '../types';
 type RSelector = Pick<BilibiliDownloadInitialState, 'downloadProgress'> & {
   downloadList: Array<DownloadItem>;
 };
+type RState = { bilibiliDownload: BilibiliDownloadInitialState };
 
-const selector: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 下载任务列表
-  downloadList: createSelector(
-    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): Array<DownloadItem> => {
-      return bilibiliDownloadListSelectors.selectAll(bilibiliDownload);
-    },
-    (data: Array<DownloadItem>): Array<DownloadItem> => data
-  ),
+  downloadList: ({ bilibiliDownload }: RState): Array<DownloadItem> => bilibiliDownloadListSelectors.selectAll(bilibiliDownload),
+
   // 进度条列表
-  downloadProgress: createSelector(
-    ({ bilibiliDownload }: { bilibiliDownload: BilibiliDownloadInitialState }): { [key: string]: number } => {
-      return bilibiliDownload.downloadProgress;
-    },
-    (data: { [key: string]: number }): { [key: string]: number } => data
-  )
+  downloadProgress: ({ bilibiliDownload }: RState): { [key: string]: number } => bilibiliDownload.downloadProgress
 });
 
 /* 视频下载 */

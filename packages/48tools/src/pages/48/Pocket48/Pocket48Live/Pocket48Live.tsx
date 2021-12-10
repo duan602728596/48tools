@@ -5,7 +5,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -34,23 +34,17 @@ import type { LiveInfo, LiveRoomInfo } from '../../services/interface';
 
 /* redux selector */
 type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList' | 'autoGrabTimer'>;
+type RState = { pocket48: Pocket48InitialState };
 
-const selector: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 直播列表
-  liveList: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.liveList,
-    (liveList: Array<LiveInfo>): Array<LiveInfo> => liveList
-  ),
+  liveList: ({ pocket48 }: RState): Array<LiveInfo> => pocket48.liveList,
+
   // 直播下载
-  liveChildList: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<WebWorkerChildItem> => pocket48.liveChildList,
-    (liveChildList: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => liveChildList
-  ),
+  liveChildList: ({ pocket48 }: RState): Array<WebWorkerChildItem> => pocket48.liveChildList,
+
   // 自动抓取的定时器
-  autoGrabTimer: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): number | null => pocket48.autoGrabTimer,
-    (autoGrabTimer: number | null): number | null => autoGrabTimer
-  )
+  autoGrabTimer: ({ pocket48 }: RState): number | null => pocket48.autoGrabTimer
 });
 
 /* 直播抓取 */

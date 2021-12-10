@@ -3,7 +3,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
@@ -25,19 +25,14 @@ import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
 
 /* redux selector */
-const selector: Selector<any, BilibiliLiveInitialState> = createStructuredSelector({
+type RState = { bilibiliLive: BilibiliLiveInitialState };
+
+const selector: Selector<RState, BilibiliLiveInitialState> = createStructuredSelector({
   // 直播间列表
-  bilibiliLiveList: createSelector(
-    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<LiveItem> =>
-      bilibiliLive.bilibiliLiveList,
-    (bilibiliLiveList: Array<LiveItem>): Array<LiveItem> => bilibiliLiveList
-  ),
+  bilibiliLiveList: ({ bilibiliLive }: RState): Array<LiveItem> => bilibiliLive.bilibiliLiveList,
+
   // 直播下载
-  liveChildList: createSelector(
-    ({ bilibiliLive }: { bilibiliLive: BilibiliLiveInitialState }): Array<WebWorkerChildItem> =>
-      bilibiliLive.liveChildList,
-    (liveChildList: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => liveChildList
-  )
+  liveChildList: ({ bilibiliLive }: RState): Array<WebWorkerChildItem> => bilibiliLive.liveChildList
 });
 
 /* 直播抓取 */

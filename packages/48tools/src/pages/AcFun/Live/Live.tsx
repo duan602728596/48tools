@@ -12,7 +12,7 @@ import {
 import { render } from 'react-dom';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
@@ -38,17 +38,14 @@ import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/in
 let divElement: HTMLDivElement | null = null;
 
 /* redux selector */
-const selector: Selector<any, AcFunLiveInitialState> = createStructuredSelector({
+type RState = { acfunLive: AcFunLiveInitialState };
+
+const selector: Selector<RState, AcFunLiveInitialState> = createStructuredSelector({
   // 配置的acfun直播间信息
-  acfunLiveList: createSelector(
-    ({ acfunLive }: { acfunLive: AcFunLiveInitialState }): Array<LiveItem> => acfunLive.acfunLiveList,
-    (acfunLiveList: Array<LiveItem>): Array<LiveItem> => acfunLiveList
-  ),
+  acfunLiveList: ({ acfunLive }: RState): Array<LiveItem> => acfunLive.acfunLiveList,
+
   // 直播下载
-  liveWorkers: createSelector(
-    ({ acfunLive }: { acfunLive: AcFunLiveInitialState }): Array<WebWorkerChildItem> => acfunLive.liveWorkers,
-    (liveWorkers: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => liveWorkers
-  )
+  liveWorkers: ({ acfunLive }: RState): Array<WebWorkerChildItem> => acfunLive.liveWorkers
 });
 
 /* A站直播抓取 */

@@ -7,7 +7,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ComponentClass, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, List, message } from 'antd';
 import { FileFilled as IconFileFilled, MenuOutlined as IconMenuOutlined } from '@ant-design/icons';
 import {
@@ -52,17 +52,14 @@ const ListItem: ComponentClass<WrappedComponentProps & SortableElementProps> = S
   });
 
 /* redux selector */
-const selector: Selector<any, ConcatInitialState> = createStructuredSelector({
+type RState = { concat: ConcatInitialState };
+
+const selector: Selector<RState, ConcatInitialState> = createStructuredSelector({
   // 视频合并列表
-  concatList: createSelector(
-    ({ concat }: { concat: ConcatInitialState }): Array<ConcatItem> => concat.concatList,
-    (concatList: Array<ConcatItem>): Array<ConcatItem> => concatList
-  ),
+  concatList: ({ concat }: RState): Array<ConcatItem> => concat.concatList,
+
   // 合并线程
-  concatWorker: createSelector(
-    ({ concat }: { concat: ConcatInitialState }): Worker | null => concat.concatWorker,
-    (concatWorker: Worker | null): Worker | null => concatWorker
-  )
+  concatWorker: ({ concat }: RState): Worker | null => concat.concatWorker
 });
 
 /* 视频合并 */

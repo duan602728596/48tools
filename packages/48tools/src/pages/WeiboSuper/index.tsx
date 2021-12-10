@@ -10,7 +10,7 @@ import {
 } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Space, List, Alert, Avatar, Tag } from 'antd';
 import style from './index.sass';
 import Content from '../../components/Content/Content';
@@ -26,29 +26,23 @@ import type { WeiboCheckinResult, Quantity } from './types';
 
 /* redux selector */
 type RSelector = WeiboLoginInitialState & WeiboSuperInitialState;
+type RState = {
+  weiboLogin: WeiboLoginInitialState;
+  weiboSuper: WeiboSuperInitialState;
+};
 
-const selector: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 微博已登陆账号
-  accountList: createSelector(
-    ({ weiboLogin }: { weiboLogin: WeiboLoginInitialState }): Array<WeiboAccount> => weiboLogin.accountList,
-    (accountList: Array<WeiboAccount>): Array<WeiboAccount> => accountList
-  ),
+  accountList: ({ weiboLogin }: RState): Array<WeiboAccount> => weiboLogin.accountList,
+
   // 登陆列表
-  weiboCheckinList: createSelector(
-    ({ weiboSuper }: { weiboSuper: WeiboSuperInitialState }): Array<WeiboCheckinResult> => weiboSuper.weiboCheckinList,
-    (weiboCheckinList: Array<WeiboCheckinResult>): Array<WeiboCheckinResult> => weiboCheckinList
-  ),
+  weiboCheckinList: ({ weiboSuper }: RState): Array<WeiboCheckinResult> => weiboSuper.weiboCheckinList,
+
   // 签到状态
-  checkIn: createSelector(
-    ({ weiboSuper }: { weiboSuper: WeiboSuperInitialState }): boolean => weiboSuper.checkIn,
-    (checkIn: boolean): boolean => checkIn
-  ),
+  checkIn: ({ weiboSuper }: RState): boolean => weiboSuper.checkIn,
+
   // 已签到
-  quantity:
-    createSelector(
-      ({ weiboSuper }: { weiboSuper: WeiboSuperInitialState }): Quantity => weiboSuper.quantity,
-      (quantity: Quantity): Quantity => quantity
-    )
+  quantity: ({ weiboSuper }: RState): Quantity => weiboSuper.quantity
 });
 
 /* 微博超话签到 */

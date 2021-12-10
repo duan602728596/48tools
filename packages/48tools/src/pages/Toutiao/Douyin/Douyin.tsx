@@ -3,7 +3,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
@@ -24,20 +24,14 @@ import type { DownloadItem } from '../types';
 type RSelector = Pick<DouyinDownloadInitialState, 'downloadProgress'> & {
   downloadList: Array<DownloadItem>;
 };
+type RState = { douyinDownload: DouyinDownloadInitialState };
 
-const selector: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 下载任务列表
-  downloadList: createSelector(
-    ({ douyinDownload }: { douyinDownload: DouyinDownloadInitialState }): Array<DownloadItem> =>
-      douyinDownloadListSelectors.selectAll(douyinDownload),
-    (downloadList: Array<DownloadItem>): Array<DownloadItem> => downloadList
-  ),
+  downloadList: ({ douyinDownload }: RState): Array<DownloadItem> => douyinDownloadListSelectors.selectAll(douyinDownload),
+
   // 进度条列表
-  downloadProgress: createSelector(
-    ({ douyinDownload }: { douyinDownload: DouyinDownloadInitialState }): { [key: string]: number } =>
-      douyinDownload.downloadProgress,
-    (downloadProgress: Record<string, number>): Record<string, number> => downloadProgress
-  )
+  downloadProgress: ({ douyinDownload }: RState): { [key: string]: number } => douyinDownload.downloadProgress
 });
 
 /* 抖音视频下载 */

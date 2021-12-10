@@ -3,7 +3,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import style from './download.sass';
@@ -22,19 +22,14 @@ import type { MessageEventData, WebWorkerChildItem } from '../../../types';
 import type { DownloadItem, Representation } from '../types';
 
 /* redux selector */
-const selector: Selector<any, AcFunDownloadInitialState> = createStructuredSelector({
+type RState = { acfunDownload: AcFunDownloadInitialState };
+
+const selector: Selector<RState, AcFunDownloadInitialState> = createStructuredSelector({
   // 下载任务列表
-  downloadList: createSelector(
-    ({ acfunDownload }: { acfunDownload: AcFunDownloadInitialState }): Array<DownloadItem> =>
-      acfunDownload.downloadList,
-    (downloadList: Array<DownloadItem>): Array<DownloadItem> => downloadList
-  ),
+  downloadList: ({ acfunDownload }: RState): Array<DownloadItem> => acfunDownload.downloadList,
+
   // 正在下载的线程
-  ffmpegDownloadWorkers: createSelector(
-    ({ acfunDownload }: { acfunDownload: AcFunDownloadInitialState }): Array<WebWorkerChildItem> =>
-      acfunDownload.ffmpegDownloadWorkers,
-    (ffmpegDownloadWorkers: Array<WebWorkerChildItem>): Array<WebWorkerChildItem> => ffmpegDownloadWorkers
-  )
+  ffmpegDownloadWorkers: ({ acfunDownload }: RState): Array<WebWorkerChildItem> => acfunDownload.ffmpegDownloadWorkers
 });
 
 /* A站视频下载 */

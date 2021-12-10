@@ -14,7 +14,7 @@ import {
 } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfirm, Popover } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { FormInstance } from 'antd/es/form';
@@ -66,28 +66,20 @@ function formatTsUrl(data: string): string {
 
 /* redux selector */
 type RSelector = Pick<Pocket48InitialState, 'recordList' | 'recordNext' | 'recordChildList' | 'recordFields'>;
+type RState = { pocket48: Pocket48InitialState };
 
-const selector: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 录播信息
-  recordList: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<LiveInfo> => pocket48.recordList,
-    (recordList: Array<LiveInfo>): Array<LiveInfo> => recordList
-  ),
+  recordList: ({ pocket48 }: RState): Array<LiveInfo> => pocket48.recordList,
+
   // 记录录播分页位置
-  recordNext: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): string => pocket48.recordNext,
-    (recordNext: string): string => recordNext
-  ),
+  recordNext: ({ pocket48 }: RState): string => pocket48.recordNext,
+
   // 录播下载
-  recordChildList: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<RecordVideoDownloadWebWorkerItem> => pocket48.recordChildList,
-    (recordChildList: Array<RecordVideoDownloadWebWorkerItem>): Array<RecordVideoDownloadWebWorkerItem> => recordChildList
-  ),
+  recordChildList: ({ pocket48 }: RState): Array<RecordVideoDownloadWebWorkerItem> => pocket48.recordChildList,
+
   // 表单field
-  recordFields: createSelector(
-    ({ pocket48 }: { pocket48: Pocket48InitialState }): Array<RecordFieldData> => pocket48.recordFields,
-    (recordFields: Array<RecordFieldData>): Array<RecordFieldData> => recordFields
-  )
+  recordFields: ({ pocket48 }: RState): Array<RecordFieldData> => pocket48.recordFields
 });
 
 /* 录播列表 */

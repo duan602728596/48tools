@@ -4,7 +4,7 @@ import { dialog } from '@electron/remote';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
@@ -51,23 +51,17 @@ function formatTsUrl(data: string, m3u8Url: string): string {
 
 /* redux selector */
 type RSelector = Pick<Live48InitialState, 'inVideoQuery' | 'inVideoList' | 'videoListChild'>;
+type RState = { live48: Live48InitialState };
 
-const selector: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 查询条件
-  inVideoQuery: createSelector(
-    ({ live48 }: { live48: Live48InitialState }): InVideoQuery | undefined => live48?.inVideoQuery,
-    (inVideoQuery: InVideoQuery): InVideoQuery | undefined => inVideoQuery
-  ),
+  inVideoQuery: ({ live48 }: RState): InVideoQuery | undefined => live48?.inVideoQuery,
+
   // 录播列表
-  inVideoList: createSelector(
-    ({ live48 }: { live48: Live48InitialState }): Array<InVideoItem> => live48.inVideoList,
-    (inVideoList: Array<InVideoItem>): Array<InVideoItem> => inVideoList
-  ),
+  inVideoList: ({ live48 }: RState): Array<InVideoItem> => live48.inVideoList,
+
   // 正在下载
-  videoListChild: createSelector(
-    ({ live48 }: { live48: Live48InitialState }): Array<InVideoWebWorkerItem> => live48.videoListChild,
-    (videoListChild: Array<InVideoWebWorkerItem>): Array<InVideoWebWorkerItem> => videoListChild
-  )
+  videoListChild: ({ live48 }: RState): Array<InVideoWebWorkerItem> => live48.videoListChild
 });
 
 /* 录播下载 */

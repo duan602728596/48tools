@@ -1,7 +1,7 @@
 import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import type { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
-import { createSelector, createStructuredSelector, type Selector } from 'reselect';
+import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button, Tag, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import Header from '../../../../components/Header/Header';
@@ -11,13 +11,11 @@ import type{ InLiveWebWorkerItem } from '../../types';
 
 /* redux selector */
 type RSelector = Pick<Live48InitialState, 'inLiveList'>;
+type RState = { live48: Live48InitialState };
 
-const selector: Selector<any, RSelector> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 公演直播列表
-  inLiveList: createSelector(
-    ({ live48 }: { live48: Live48InitialState }): Array<InLiveWebWorkerItem> => live48.inLiveList,
-    (inLiveList: Array<InLiveWebWorkerItem>): Array<InLiveWebWorkerItem> => inLiveList
-  )
+  inLiveList: ({ live48 }: RState): Array<InLiveWebWorkerItem> => live48.inLiveList
 });
 
 /* 官网公演直播抓取 */
