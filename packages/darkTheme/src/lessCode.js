@@ -8,27 +8,7 @@ import { moduleExists } from '@sweet-milktea/utils';
  * @param { string } str: 字符
  */
 function camelCaseToHyphen(str) {
-  const result = [];
-  let cache = null;
-
-  for (let i = 0, j = str.length, k = j - 1; i < j; i++) {
-    // 判断是大写
-    if (/[A-Z]/.test(str[i])) {
-      if (cache !== null) {
-        result.push(cache);
-      }
-
-      cache = str[i].toLocaleLowerCase();
-    } else {
-      cache += str[i];
-    }
-
-    if (i === k) {
-      result.push(cache);
-    }
-  }
-
-  return result.join('-');
+  return str.replaceAll(/[A-Z]/g, (s) => `-${ s.toLocaleLowerCase() }`).slice(1);
 }
 
 /**
