@@ -70,9 +70,7 @@ export default function(info: object): { [key: string]: any } {
       '@reduxjs/toolkit',
       'react-redux',
       'reselect',
-      'react-router',
-      'react-router-dom',
-      'history'
+      'react-router-dom'
     ],
     entry: {
       index: [path.join(__dirname, 'src/index.tsx')],
