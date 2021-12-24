@@ -82,8 +82,8 @@ function FFmpegOption(props: {}): ReactElement {
       >
         FFmpeg配置
       </Button>
-      <span className={ classNames(style.marginLeft, style.tips) }>
-        <IconSwapLeftOutlined className={ style.tipsIcon } />
+      <span className={ classNames('inline-block', 'ml-[6px]', 'text-[12px]', style.tips) }>
+        <IconSwapLeftOutlined className="mr-[3px] text-[16px]" />
         使用前先配置FFmpeg
       </span>
       <Modal title="FFmpeg配置"
@@ -94,16 +94,16 @@ function FFmpegOption(props: {}): ReactElement {
         onOk={ handleSetFFmpegClick }
         onCancel={ handleCloseFFmpegOptionModalClick }
       >
-        <Form className={ style.form } form={ form }>
+        <Form className="height-[200px]" form={ form }>
           <Form.Item name="ffmpeg" label="可执行文件">
             <Input />
           </Form.Item>
-          <div className={ classNames(style.textRight, style.marginBottom) }>
+          <div className="mb-[32px] text-right">
             <Button icon={ <IconDownloadOutlined /> } onClick={ handleOpenIssuesClick }>FFmpeg下载</Button>
-            <Button className={ style.marginLeft } type="primary" danger={ true } onClick={ handleResetFFmpegOptionClick }>
+            <Button className="ml-[6px]" type="primary" danger={ true } onClick={ handleResetFFmpegOptionClick }>
               清除配置
             </Button>
-            <Button className={ style.marginLeft } onClick={ handleSelectFFmpegClick }>选择文件</Button>
+            <Button className="ml-[6px]" onClick={ handleSelectFFmpegClick }>选择文件</Button>
           </div>
           <Alert type="info" message="配置FFmpeg的地址，或自动使用环境变量的地址。播放视频功能需要配置后重新启动软件。" />
         </Form>
