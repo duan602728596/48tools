@@ -46,6 +46,9 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "cross-env": "^7.0.3",
     "electron": "^16.0.1",
+    "postcss": "^8.4.5",
+    "postcss-loader": "^6.2.1",
+    "tailwindcss": "^3.0.7",
     "ts-loader": "^9.2.6",
     "webpack-bundle-analyzer": "^4.5.0"
   }

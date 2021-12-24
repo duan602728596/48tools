@@ -30,8 +30,10 @@ interface NativeItem {
   hBtn?: boolean;
 }
 
-const IconBilibiliLogo: ReactElement = <Icon className={ style.iconBilibili } component={ IconBilibiliLogoSvgComponent } />,
-  IconAcFunLogo: ReactElement = <Icon className={ style.iconAcFun } component={ IconAcFunLogoSvgComponent } />;
+const IconBilibiliLogo: ReactElement
+    = <Icon className={ classNames('relative', style.iconBilibili) } component={ IconBilibiliLogoSvgComponent } />,
+  IconAcFunLogo: ReactElement
+    = <Icon className={ classNames('relative', style.iconAcFun) } component={ IconAcFunLogoSvgComponent } />;
 
 /* 导航配置 */
 const navLinkConfig: Array<Array<NativeItem>> = [
@@ -104,8 +106,8 @@ function nativeRender(): Array<ReactNode> {
 
     for (const navItem of group) {
       groupElement.push(
-        <Link key={ navItem.name } className={ style.navItemLink } to={ navItem.url }>
-          <Button className={ navItem.hBtn ? style.hBtn : undefined } icon={ navItem.icon }>{ navItem.name }</Button>
+        <Link key={ navItem.name } className="inline-block" to={ navItem.url }>
+          <Button className={ navItem.hBtn ? 'overflow-hidden' : undefined } icon={ navItem.icon }>{ navItem.name }</Button>
         </Link>
       );
     }
@@ -136,7 +138,7 @@ function Index(props: {}): ReactElement {
   }
 
   return (
-    <div className={ style.main }>
+    <div className="p-[16px]">
       { nativeRender() }
       <div>
         <Space size={ 16 }>
@@ -155,8 +157,8 @@ function Index(props: {}): ReactElement {
       {/* 二维码 */}
       <p>欢迎打赏：</p>
       <Space size={ 8 }>
-        <Image className={ style.dashangImage } src={ require('./images/zfb.avif') } />
-        <Image className={ style.dashangImage } src={ require('./images/wx.avif') } />
+        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ require('./images/zfb.avif') } />
+        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ require('./images/wx.avif') } />
       </Space>
     </div>
   );

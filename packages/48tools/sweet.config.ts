@@ -1,5 +1,6 @@
 import * as process from 'node:process';
 import * as path from 'node:path';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
@@ -116,7 +117,7 @@ export default function(info: object): { [key: string]: any } {
         '@primary-color': '#13c2c2'
       },
       include: /node_modules[\\/](_?antd|highlight)/,
-      exclude: /dark-?theme/i
+      exclude: /dark-?theme|tailwindcss/i
     },
     rules: [
       {
@@ -125,6 +126,10 @@ export default function(info: object): { [key: string]: any } {
         generator: {
           filename: '[name][ext]' // TODO: js文件生成的hash和注入的hash不一致
         }
+      },
+      {
+        test: /\.tailwindcss\.css$/i,
+        use: [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       }
     ],
     plugins: [new AntdDayjsWebpackPlugin()].concat(analyzer ? [new BundleAnalyzerPlugin()] : [])

@@ -10,6 +10,7 @@ import Routers from './router/Routers';
 import ThemeProvider from './components/Theme/ThemeProvider';
 import { netMediaServerInit } from './utils/nodeMediaServer/nodeMediaServer';
 import dbInit from './utils/idb/dbInit';
+import './main.tailwindcss.css';
 
 dayjs.locale('zh-cn');
 
