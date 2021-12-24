@@ -18,6 +18,7 @@ import {
 import { ConfigProvider, Avatar, Tag, Button } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
+import classNames from 'classnames';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
 import ThemeProvider from '../../../../components/Theme/ThemeProvider';
@@ -136,7 +137,7 @@ function PlayerApp(props: {}): ReactElement {
 
       return [
         <Avatar key="avatar" src={ source(content.user.userAvatar) } />,
-        <span key="username" className={ style.user }>{ content.user.userName }</span>
+        <span key="username" className="ml-[6px] text-[12px]">{ content.user.userName }</span>
       ];
     } else {
       return null;
@@ -158,20 +159,20 @@ function PlayerApp(props: {}): ReactElement {
   return (
     <ThemeProvider isChildrenWindow={ true }>
       <ConfigProvider locale={ zhCN }>
-        <div className={ style.content }>
-          <header className={ style.header }>
-            <h1 className={ style.title }>{ search.title }</h1>
+        <div className="p-[16px]">
+          <header className="mb-[8px]">
+            <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">{ search.title }</h1>
             { search.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
-            <div className={ style.flex }>
-              <div className={ style.userBox }>{ infoRender() }</div>
-              <div className={ style.tools }>
+            <div className="flex">
+              <div className="grow">{ infoRender() }</div>
+              <div className="shrink-0">
                 <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
               </div>
             </div>
           </header>
           <div>
             <video ref={ videoRef }
-              className={ style.video }
+              className={ classNames('block w-full min-h-[500px]', style.video) }
               controls={ true }
               poster={ source(search.coverPath) }
             />

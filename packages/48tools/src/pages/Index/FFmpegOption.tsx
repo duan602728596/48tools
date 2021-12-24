@@ -82,7 +82,7 @@ function FFmpegOption(props: {}): ReactElement {
       >
         FFmpeg配置
       </Button>
-      <span className={ classNames('inline-block', 'ml-[6px]', 'text-[12px]', style.tips) }>
+      <span className={ classNames('inline-block ml-[6px] text-[12px]', style.tips) }>
         <IconSwapLeftOutlined className="mr-[3px] text-[16px]" />
         使用前先配置FFmpeg
       </span>

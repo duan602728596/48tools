@@ -88,7 +88,7 @@ function ExecutablePath(props: {}): ReactElement {
           <Alert type="info" message={
             <Fragment>
               <h4>
-                <IconQuestionCircleTwoTone className={ classNames('mr-[6px]', 'text-[22px]', style.iconQuestion) } />
+                <IconQuestionCircleTwoTone className={ classNames('mr-[6px] text-[22px]', style.iconQuestion) } />
                 无头浏览器配置的是什么？
               </h4>
               <p>
@@ -104,7 +104,7 @@ function ExecutablePath(props: {}): ReactElement {
                 <i className={ style.iText }>"Google Chrome.app/Contents/MacOS/Google Chrome"</i>文件。
               </p>
               <h4>
-                <IconQuestionCircleTwoTone className={ classNames('mr-[6px]', 'text-[22px]', style.iconQuestion) } />
+                <IconQuestionCircleTwoTone className={ classNames('mr-[6px] text-[22px]', style.iconQuestion) } />
                 为什么要配置无头浏览器的可执行文件地址？
               </h4>
               <p>
