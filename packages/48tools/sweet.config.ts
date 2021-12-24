@@ -97,12 +97,12 @@ export default function(info: object): { [key: string]: any } {
       'got',
       'puppeteer-core'
     )),
-    js: {
+    javascript: {
       ecmascript: true,
       plugins,
       exclude: /node_modules|toutiaosdk-acrawler\.js/i
     },
-    ts: {
+    typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
       plugins,
       exclude: /node_modules/
