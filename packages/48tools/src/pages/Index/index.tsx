@@ -41,22 +41,22 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋48直播抓取',
       url: '/48/Pocket48Live',
-      icon: <Icon className={ classNames(style.icon, style.iconV5) } component={ IconLiveSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV5) } component={ IconLiveSvgComponent } />
     },
     {
       name: '口袋48录播下载',
       url: '/48/Pocket48Record',
-      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconVideoSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconVideoSvgComponent } />
     },
     {
       name: '官方公演直播抓取',
       url: '/48/InLive',
-      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconMicrophoneSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconMicrophoneSvgComponent } />
     },
     {
       name: '官方公演录播下载',
       url: '/48/InVideo',
-      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconRecordSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconRecordSvgComponent } />
     }
   ],
   [
@@ -69,7 +69,7 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '抖音视频下载',
       url: '/Toutiao/Douyin',
-      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconDouyinSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />
     },
     {
       name: '微博超话签到',
@@ -81,17 +81,17 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
-      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconCutSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconCutSvgComponent } />
     },
     {
       name: '视频合并',
       url: '/VideoEdit/Concat',
-      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconConcatSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconConcatSvgComponent } />
     },
     {
       name: '桃叭加密解密',
       url: '/TaobaEncrypt',
-      icon: <Icon className={ classNames(style.icon, style.iconV4) } component={ IconCountSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconCountSvgComponent } />
     }
   ]
 ];

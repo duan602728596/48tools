@@ -54,7 +54,7 @@ function LiveOptions(props: {}): ReactElement {
   }, []);
 
   return (
-    <Form className={ style.form }
+    <Form className="w-[600px]"
       form={ form }
       initialValues={{ time: 1 }}
       labelCol={{ span: 5 }}
@@ -75,11 +75,11 @@ function LiveOptions(props: {}): ReactElement {
           <Input.TextArea rows={ 7 } />
         </Form.Item>
         <p className={ style.tips }>
-          使用"<b className={ style.b }>,</b>"分隔姓名或ID
+          使用"<b className="mx-[6px] my-0">,</b>"分隔姓名或ID
         </p>
       </Form.Item>
       <Form.Item label="自动保存的目录" required={ true }>
-        <div className={ style.dirInput }>
+        <div className="inline-block mr-[6px] w-[380px]">
           <Form.Item name="dir" rules={ [{ required: true, message: '请选择自动保存的目录', whitespace: true }] } noStyle={ true }>
             <Input />
           </Form.Item>

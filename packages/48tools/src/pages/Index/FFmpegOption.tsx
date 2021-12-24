@@ -94,7 +94,7 @@ function FFmpegOption(props: {}): ReactElement {
         onOk={ handleSetFFmpegClick }
         onCancel={ handleCloseFFmpegOptionModalClick }
       >
-        <Form className="height-[200px]" form={ form }>
+        <Form className="h-[200px]" form={ form }>
           <Form.Item name="ffmpeg" label="可执行文件">
             <Input />
           </Form.Item>

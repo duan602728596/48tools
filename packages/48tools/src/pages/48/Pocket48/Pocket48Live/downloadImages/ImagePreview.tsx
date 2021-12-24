@@ -1,7 +1,6 @@
 import { Fragment, useRef, type ReactElement, type RefObject, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Image } from 'antd';
-import style from './imagePreview.sass';
 
 interface ImagePreviewProps {
   src?: string;
@@ -21,7 +20,7 @@ function ImagePreview(props: ImagePreviewProps): ReactElement {
   return (
     <Fragment>
       <a role="button" aria-label="点击预览图片" onClick={ handlePreviewClick }>预览</a>
-      <div ref={ divRef } className={ style.image }>
+      <div ref={ divRef } className="hidden">
         <Image src={ props.src } />
       </div>
     </Fragment>

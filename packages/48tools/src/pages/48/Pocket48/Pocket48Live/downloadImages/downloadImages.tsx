@@ -100,8 +100,8 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
   }
 
   return (
-    <div className={ style.content }>
-      <Button className={ style.downloadAllBtn } icon={ <IconCloudDownloadOutlined /> } onClick={ handleDownloadAllImagesClick }>
+    <div className="p-[8px] h-[200px] overflow-auto">
+      <Button className="mb-[8px]" icon={ <IconCloudDownloadOutlined /> } onClick={ handleDownloadAllImagesClick }>
         下载全部图片到文件夹
       </Button>
       <Image.PreviewGroup>
