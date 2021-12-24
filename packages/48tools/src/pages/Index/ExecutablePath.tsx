@@ -75,15 +75,15 @@ function ExecutablePath(props: {}): ReactElement {
         onOk={ handleSetExecutablePathClick }
         onCancel={ handleCloseExecutablePathModalClick }
       >
-        <Form className={ style.form } form={ form }>
+        <Form className="height-[430px]" form={ form }>
           <Form.Item name="executablePath" label="浏览器可执行文件">
             <Input />
           </Form.Item>
-          <div className={ classNames(style.textRight, style.marginBottom) }>
-            <Button className={ style.marginLeft } type="primary" danger={ true } onClick={ handleResetExecutablePathClick }>
+          <div className="mb-[32px] text-right">
+            <Button className="ml-[6px]" type="primary" danger={ true } onClick={ handleResetExecutablePathClick }>
               清除配置
             </Button>
-            <Button className={ style.marginLeft } onClick={ handleSelectExecutablePathClick }>选择文件</Button>
+            <Button className="ml-[6px]" onClick={ handleSelectExecutablePathClick }>选择文件</Button>
           </div>
           <Alert type="info" message={
             <Fragment>
