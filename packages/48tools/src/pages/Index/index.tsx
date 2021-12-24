@@ -1,5 +1,5 @@
 import { ipcRenderer, shell } from 'electron';
-import { useContext, ReactElement, ReactNode, MouseEvent } from 'react';
+import { useContext, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
