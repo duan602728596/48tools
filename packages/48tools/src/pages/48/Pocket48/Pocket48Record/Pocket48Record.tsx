@@ -21,7 +21,6 @@ import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
-import style from './pocket48Record.sass';
 import getRecordVideoDownloadWorker from './RecordVideoDownload.worker/getRecordVideoDownloadWorker';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
@@ -312,7 +311,7 @@ function Pocket48Record(props: {}): ReactElement {
       title: '操作',
       key: 'action',
       width: 410,
-      className: style.textRight,
+      className: 'text-right',
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = recordChildList.findIndex(
           (o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
@@ -330,11 +329,11 @@ function Pocket48Record(props: {}): ReactElement {
                     canRetry ? (
                       <Popover content={
                         <Fragment>
-                          <p className={ style.smallText }>
+                          <p className="text-[12px]">
                             正在使用备用方案下载视频。<br />
                             如果下载时发现卡住了，可以使用重试
                           </p>
-                          <div className={ style.textRight }>
+                          <div className="text-right">
                             <Button size="small" onClick={
                               (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event)
                             }>
@@ -351,11 +350,11 @@ function Pocket48Record(props: {}): ReactElement {
               ) : (
                 <Popover content={
                   <Fragment>
-                    <p className={ style.smallText }>
+                    <p className="text-[12px]">
                       如果下载下来只有m3u8文件，<br />
                       使用该方式重新下载视频
                     </p>
-                    <div className={ style.textRight }>
+                    <div className="text-right">
                       <Button size="small" onClick={
                         (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
                           handleDownloadM3u8Click(record, 1, event)
@@ -394,10 +393,10 @@ function Pocket48Record(props: {}): ReactElement {
       <Header>
         <SearchForm onSubmit={ onSubmit } />
         {/* 队伍和当前人的搜索 */}
-        <Form className={ style.form } form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
+        <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
           <Space size={ 0 }>
             <Form.Item name="groupId" noStyle={ true }>
-              <Select className={ style.groupSelect }>
+              <Select className="w-[130px]">
                 <Select.Option value="all">全部</Select.Option>
                 <Select.Option value={ 19 }>明星殿堂</Select.Option>
                 <Select.Option value={ 17 }>THE9</Select.Option>
@@ -412,7 +411,7 @@ function Pocket48Record(props: {}): ReactElement {
               </Select>
             </Form.Item>
             <Form.Item name="userId" noStyle={ true }>
-              <InputNumber className={ style.userIdInput } placeholder="请输入成员ID" />
+              <InputNumber className="w-[130px]" placeholder="请输入成员ID" />
             </Form.Item>
             <Button.Group>
               <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>

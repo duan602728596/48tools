@@ -3,7 +3,6 @@ import * as PropTypes from 'prop-types';
 import { Form, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import style from './searchForm.sass';
 
 interface OnSubmitFunc {
   (formValue: FormStore): void | Promise<void>;
@@ -31,7 +30,7 @@ function SearchForm(props: { onSubmit: OnSubmitFunc }): ReactElement {
 
   return (
     <Form form={ form } component={ false }>
-      <div className={ style.searchInput }>
+      <div className="inline-block mr-[16px] w-[170px]">
         <Form.Item name="q" noStyle={ true }>
           <Input allowClear={ true }
             placeholder="输入小偶像名称搜索"
