@@ -137,7 +137,7 @@ function AddBySearch(props: {}): ReactElement {
     return bvVideoList.map((o: DownloadItem, index: number): ReactElement => {
       return (
         <Button key={ o.cid }
-          className={ style.downloadBtn }
+          className={ classNames('block text-left', style.downloadBtn) }
           block={ true }
           onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleAddDownloadQueueClick(o, event) }
         >
@@ -185,16 +185,16 @@ function AddBySearch(props: {}): ReactElement {
         footer={ <Button onClick={ handleCancelClick }>关闭</Button> }
         onCancel={ handleCancelClick }
       >
-        <div className={ style.content }>
-          <Form className={ style.form } form={ form } layout="inline" onFinish={ handleSearchSubmit }>
+        <div className="flex flex-col h-[400px]">
+          <Form className="shrink-0 mb-[8px]" form={ form } layout="inline" onFinish={ handleSearchSubmit }>
             <Form.Item name="spaceId">
-              <Input className={ style.spaceIdInput } placeholder="账号ID" />
+              <Input className="w-[300px]" placeholder="账号ID" />
             </Form.Item>
             <Button htmlType="submit">搜索</Button>
           </Form>
-          <div className={ style.resultContent }>
-            <div className={ style.resultContentItem }>
-              <Table className={ style.table }
+          <div className="flex grow">
+            <div className="w-6/12">
+              <Table className="w-full"
                 size="small"
                 columns={ columns }
                 dataSource={ dataSource }
@@ -211,10 +211,10 @@ function AddBySearch(props: {}): ReactElement {
                 }}
               />
             </div>
-            <div className={ classNames(style.resultContentItem, style.downloadContent) }>
+            <div className="w-6/12 h-[370px] pl-[12px] overflow-auto">
               {
                 secondLoading ? (
-                  <div className={ style.center }>
+                  <div className="text-center">
                     <Spin size="large" tip="解析中..." />
                   </div>
                 ) : videoListDownloadRender()

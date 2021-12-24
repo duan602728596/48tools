@@ -148,7 +148,7 @@ function Live(props: {}): ReactElement {
           onOk={ handleOkClick }
           onCancel={ handleCloseClick }
         >
-          <div className={ style.selectBox }>
+          <div className="h-[60px]">
             <Select className={ style.selectInput } onSelect={ (value: string): string => (ctx.player = value) }>
               {
                 representation.map((o: LiveRepresentation): ReactElement => (

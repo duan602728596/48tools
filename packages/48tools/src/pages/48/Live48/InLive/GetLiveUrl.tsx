@@ -161,7 +161,7 @@ function GetLiveUrl(props: {}): ReactElement {
           </Select>
         </Form.Item>
       </Space>
-      <Button.Group className={ style.marginLeft16 }>
+      <Button.Group className="ml-[16px]">
         <Button type="primary" htmlType="submit">开始直播录制</Button>
         <Button onClick={ handleAutoInLiveClick }>自动录制</Button>
       </Button.Group>

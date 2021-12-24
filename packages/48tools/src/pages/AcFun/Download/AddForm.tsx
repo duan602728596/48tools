@@ -13,7 +13,6 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Select, Input, Alert, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import style from './addForm.sass';
 import { pick } from '../../../utils/lodash';
 import { parseAcFunUrl } from './parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
@@ -109,7 +108,7 @@ function AddForm(props: {}): ReactElement {
         onOk={ handleAddDownloadQueueClick }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form className={ style.formContent }
+        <Form className="h-[155px]"
           form={ form }
           initialValues={{ type: 'ac' }}
           labelCol={{ span: 4 }}

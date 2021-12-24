@@ -58,7 +58,7 @@ function AddForm(props: {}): ReactElement {
         onOk={ handleAddRoomIdClick }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form className={ style.formContent } form={ form } labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+        <Form className="h-[120px]" form={ form } labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
           <Form.Item name="description"
             label="直播间说明"
             rules={ [{ required: true, message: '请填写直播间说明', whitespace: true }] }

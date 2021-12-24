@@ -13,7 +13,6 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import style from './addForm.sass';
 import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from '../parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
 
@@ -122,7 +121,7 @@ function AddForm(props: {}): ReactElement {
         onOk={ handleAddDownloadQueueClick }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form className={ style.formContent }
+        <Form className="h-[155px]"
           form={ form }
           initialValues={{ type: 'bv' }}
           labelCol={{ span: 4 }}
