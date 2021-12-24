@@ -1,5 +1,5 @@
 import { ipcRenderer, shell } from 'electron';
-import { useContext, ReactElement, ReactNode, MouseEvent } from 'react';
+import { useContext, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
@@ -9,8 +9,8 @@ import Icon, {
 } from '@ant-design/icons';
 import classNames from 'classnames';
 import style from './index.sass';
-import FFmpegOption from './FFmpegOption';
-import ExecutablePath from './ExecutablePath';
+import FFmpegOption from './FFmpegOption/FFmpegOption';
+import ExecutablePath from './ExecutablePath/ExecutablePath';
 import ThemeContext, { type Theme } from '../../components/Theme/ThemeContext';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
