@@ -14,7 +14,6 @@ import * as PropTypes from 'prop-types';
 import { Button, Tooltip, Modal, Radio } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
-import style from './themeProvider.sass';
 import ThemeContext from './ThemeContext';
 
 export const LOCALSTORAGE_THEME_NAME: string = 'THEME_VALUE';
@@ -80,7 +79,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
         footer={ <Button onClick={ handleThemeModalCloseClick }>关闭</Button> }
         onCancel={ handleThemeModalCloseClick }
       >
-        <div className={ style.changeThemeBox }>
+        <div className="h-[35px] text-center">
           <Radio.Group optionType="button"
             buttonStyle="solid"
             options={ themeOptions }

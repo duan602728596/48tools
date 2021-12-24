@@ -94,13 +94,13 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   return (
     <Fragment>
       <Alert className={ style.alert } type="info" message="下载付费直播或者大会员专属视频时需要登陆。" />
-      <div className={ style.qrcodeBox }>
+      <div className="mt-0 mb-[24px] mx-auto w-[196px] h-[196px]">
         <canvas ref={ canvasRef } width={ 196 } height={ 196 } />
       </div>
-      <div className={ style.tools }>
+      <div className="text-center">
         <Button type="text" danger={ true } onClick={ handleClearBilibiliCookieClick }>清除Cookie</Button>
-        <Button className={ style.resetBtn } type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
-        <p className={ style.time }>上次登陆时间：{ bilibiliCookie?.time ?? '无' }</p>
+        <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
+        <p className="mt-[8px]">上次登陆时间：{ bilibiliCookie?.time ?? '无' }</p>
       </div>
     </Fragment>
   );

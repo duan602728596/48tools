@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo, type ReactElement, type Dispatch as D, ty
 import * as PropTypes from 'prop-types';
 import { Button, Empty, message } from 'antd';
 import * as dayjs from 'dayjs';
-import style from './qrcode.sass';
 import { requestPcDirectQr, requestPcDirectScanResult, requestPcDirectAcceptResult } from './services/acfunLogin';
 import type { PcDirectQr, ScanResult, AcceptResult } from './services/interface';
 
@@ -104,14 +103,14 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }, []);
 
   return (
-    <div className={ style.qrcodeContent }>
-      <div className={ style.qrcodeBox }>
-        { imageData ? <img src={ imageData } /> : <Empty description={ false } /> }
+    <div className="h-[300px]">
+      <div className="mt-0 mb-[24px] mx-auto w-[196px] h-[196px]">
+        { imageData ? <img className="block w-full h-full" src={ imageData } /> : <Empty description={ false } /> }
       </div>
-      <div className={ style.tools }>
+      <div className="text-center">
         <Button type="text" danger={ true } onClick={ handleClearAcFunCookieClick }>清除Cookie</Button>
-        <Button className={ style.resetBtn } type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
-        <p className={ style.time }>上次登陆时间：{ acFunCookie?.time ?? '无' }</p>
+        <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
+        <p className="mt-[8px]">上次登陆时间：{ acFunCookie?.time ?? '无' }</p>
       </div>
     </div>
   );

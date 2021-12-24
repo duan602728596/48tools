@@ -2,7 +2,6 @@ import type { ReactElement, ReactNode } from 'react';
 import * as PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
-import style from './header.sass';
 
 interface HeaderProps {
   to?: string;
@@ -18,8 +17,8 @@ function Header(props: HeaderProps): ReactElement {
   const { to = '/', children }: HeaderProps = props;
 
   return (
-    <header className={ style.header }>
-      <div className={ style.headerLeft }>
+    <header className="flex mb-[8px]">
+      <div className="grow">
         <Link to={ to }>
           <Button type="primary" danger={ true }>返回</Button>
         </Link>

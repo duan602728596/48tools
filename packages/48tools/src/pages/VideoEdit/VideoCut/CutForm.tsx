@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Form, Button, Input, InputNumber, Card } from 'antd';
 import type { FormInstance, Rule } from 'antd/es/form';
+import classNames from 'classnames';
 import style from './cutForm.sass';
 import { setCutListAdd } from '../reducers/videoCut';
 import { getFullTime } from './function';
@@ -64,10 +65,10 @@ function CutForm(props: {}): ReactElement {
   }
 
   return (
-    <Card className={ style.card }>
+    <Card className={ classNames('min-w-[880px]', style.card) }>
       <Form form={ form } onFinish={ handleFormSubmit }>
         <Form.Item label="选择需要裁剪的视频">
-          <div className={ style.fileInput }>
+          <div className="inline-block w-[592px] mr-[6px]">
             <Form.Item name="file" rules={ [{ required: true, whitespace: true, message: '请选择视频文件' }] } noStyle={ true }>
               <Input readOnly={ true } />
             </Form.Item>
@@ -87,7 +88,7 @@ function CutForm(props: {}): ReactElement {
           <Form.Item name="startS" rules={ timeRules } noStyle={ true }>
             <InputNumber placeholder="秒" />
           </Form.Item>
-          <label className={ style.labelMarginLeft }>结束时间：</label>
+          <label className="ml-[12px]">结束时间：</label>
           <Form.Item name="endH" rules={ timeRules } noStyle={ true }>
             <InputNumber placeholder="时" />
           </Form.Item>

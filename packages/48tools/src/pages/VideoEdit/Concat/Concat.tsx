@@ -21,6 +21,7 @@ import {
 } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
 import * as dayjs from 'dayjs';
+import classNames from 'classnames';
 import getConcatVideoWorker from './concatVideo.worker/getConcatVideoWorker';
 import style from './concat.sass';
 import Header from '../../../components/Header/Header';
@@ -39,7 +40,7 @@ import type { ConcatItem } from '../types';
 type WrappedComponentProps = { children: ReactElement };
 
 const DragHandleComponent: ComponentClass = SortableHandle(
-  (): ReactElement => <IconMenuOutlined className={ style.moveIcon } />);
+  (): ReactElement => <IconMenuOutlined className={ classNames('mr-[12px]', style.moveIcon) } />);
 
 const ListContainer: ComponentClass<WrappedComponentProps & SortableContainerProps> = SortableContainer(
   function(props: WrappedComponentProps & SortableContainerProps): ReactElement {
@@ -194,7 +195,7 @@ function Concat(props: {}): ReactElement {
           }
         </Button.Group>
       </Header>
-      <div className={ style.container } id="container">
+      <div className="relative" id="container">
         <ListContainer useDragHandle={ true }
           helperContainer={ helperContainer }
           onSortEnd={ handleDragSortEnd }

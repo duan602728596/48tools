@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Alert, Space, message, Divider } from 'antd';
 import * as dayjs from 'dayjs';
-import style from './openWeiboWindow.sass';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { idbSaveAccount } from '../reducers/weiboLogin';
 import PuppeteerLogin from './PuppeteerLogin';
@@ -59,7 +58,7 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
   }, []);
 
   return (
-    <div className={ style.content }>
+    <div className="mb-[16px]">
       <Space size={ 8 }>
         <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议无头浏览器登陆。" />
         <Button onClick={ handleLoginWeiboClick }>微博登陆</Button>

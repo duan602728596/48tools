@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Empty, Button, message } from 'antd';
 import * as dayjs from 'dayjs';
-import style from './qrcode.sass';
 import { idbSaveAccount } from '../../reducers/weiboLogin';
 import {
   requestQrcode,
@@ -91,11 +90,11 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }, []);
 
   return (
-    <div className={ style.content }>
-      <div className={ style.qrcodeBox }>
-        { imageData ? <img src={ imageData } /> : <Empty description={ false } /> }
+    <div className="mb-[8px] text-center">
+      <div className="inline-block w-[160px] h-[160px]">
+        { imageData ? <img className="block w-full h-full" src={ imageData } /> : <Empty description={ false } /> }
       </div>
-      <Button className={ style.resetBtn } onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
+      <Button className="ml-[16px] align-[75px]" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
     </div>
   );
 }

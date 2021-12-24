@@ -15,7 +15,6 @@ import type { FormInstance } from 'antd/es/form';
 import hljs from 'highlight.js/lib/core';
 import jsonLanguages from 'highlight.js/lib/languages/json';
 import 'highlight.js/styles/atom-one-light.css';
-import style from './index.sass';
 import { encrypt, decrypt } from './encrypt';
 
 hljs.registerLanguage('json', jsonLanguages);
@@ -104,10 +103,10 @@ function TaobaEncrypt(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <div key="main" className={ style.main }>
-        <div className={ style.leftContent }>
-          <div className={ style.marginBottom }>
-            <Link className={ style.marginRight } to="/">
+      <div key="main" className="flex p-[16px]">
+        <div className="shrink-0 mr-[16px] w-[360px]">
+          <div className="mb-[16px]">
+            <Link className="mr-[16px]" to="/">
               <Button type="primary" danger={ true }>返回</Button>
             </Link>
             <Button.Group>
@@ -122,8 +121,8 @@ function TaobaEncrypt(props: {}): ReactElement {
             </Form.Item>
           </Form>
         </div>
-        <div className={ style.rightContent }>
-          <pre className={ style.codePre }>
+        <div className="grow">
+          <pre className="h-full text-[12px] whitespace-pre-wrap break-all">
             <code ref={ codeRef } className={ result?.['json'] ? 'json' : undefined }>
               { result?.['result'] ?? <Empty description="请输入加密或机密的字符串" /> }
             </code>

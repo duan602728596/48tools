@@ -91,7 +91,7 @@ function Index(props: {}): ReactElement {
               { item.title }
             </a>
           }
-          description={ <div className={ style.description }>{ item.content1 }</div> }
+          description={ <div className="pr-[16px] text-[12px]">{ item.content1 }</div> }
         />
         <Tag color={ item.code === 100000 ? '#87d068' : '#f50' }>{ item.result }</Tag>
       </List.Item>

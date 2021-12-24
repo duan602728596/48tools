@@ -1,7 +1,6 @@
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Modal } from 'antd';
 import Icon from '@ant-design/icons';
-import style from './bilibiliLogin.sass';
 import Qrcode from './Qrcode';
 import BilibiliSvgComponent from './images/bilibili.component.svg';
 
@@ -21,7 +20,7 @@ function BilibiliLogin(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button icon={ <Icon className={ style.bilibiliIcon } component={ BilibiliSvgComponent } /> }
+      <Button icon={ <Icon className="text-[18px] align-[-3px]" component={ BilibiliSvgComponent } /> }
         onClick={ handleOpenQrcodeClick }
       >
         B站账号扫码登陆
@@ -34,7 +33,7 @@ function BilibiliLogin(props: {}): ReactElement {
         footer={ <Button onClick={ handleCloseQrcodeClick }>关闭</Button> }
         onCancel={ handleCloseQrcodeClick }
       >
-        <div className={ style.loginBox }>
+        <div className="h-[350px]">
           <Qrcode onCancel={ handleCloseQrcodeClick } />
         </div>
       </Modal>

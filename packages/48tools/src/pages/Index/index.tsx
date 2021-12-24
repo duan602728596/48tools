@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption';
 import ExecutablePath from './ExecutablePath';
-import ThemeContext, { Theme } from '../../components/Theme/ThemeContext';
+import ThemeContext, { type Theme } from '../../components/Theme/ThemeContext';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
 import IconMicrophoneSvgComponent from './images/microphone.component.svg';
