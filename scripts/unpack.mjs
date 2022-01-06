@@ -123,12 +123,13 @@ async function unpack() {
   // 拷贝编译的临时文件到中间代码文件夹
   const packages = path.join(cwd, 'packages');
 
+  await command('node', ['./scripts/taskfile.mjs'], cwd);
   await fse.copy(path.join(packages, 'app'), appDir);
   await Promise.all([
     fse.copy(path.join(packages, 'main/lib'), path.join(appDir, 'bin/lib')),
     fse.copy(path.join(packages, '48tools/dist'), path.join(appDir, 'dist'))
   ]);
-  await command('npm', ['install', '--production', '--legacy-peer-deps=true'], appDir);
+  // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], appDir);
 
   // 编译mac
   await builder.build({
