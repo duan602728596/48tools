@@ -11,24 +11,11 @@ import { cwd } from './utils.mjs';
 const require = createRequire(import.meta.url);
 const rimrafPromise = util.promisify(rimraf);
 
-const otherFile = {
-  '@electron/remote': [{
-    type: 'build',
-    input: 'main/index.js',
-    output: 'main/index.js'
-  }],
-  'node-media-server': [{
-    type: 'write',
-    output: 'src/node_media_server.js',
-    content: "module.exports = require('../index.js');"
-  }]
-};
-
 /* 文件路径 */
 const appDir = path.join(cwd, 'packages/app'),        // app文件夹位置
   appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node_modules
-
 const packageJson = await requireJson(path.join(appDir, 'package.json'));
+const { dependenciesOtherFiles } = await requireJson(path.join(appDir, 'dependenciesOtherFiles.json'));
 
 /**
  * ncc文件编译
@@ -85,8 +72,8 @@ async function createFilesByDependenciesName(dependenciesName) {
   });
 
   // 处理其他文件
-  if (dependenciesName in otherFile) {
-    const tasks = otherFile[dependenciesName];
+  if (dependenciesName in dependenciesOtherFiles) {
+    const tasks = dependenciesOtherFiles[dependenciesName];
 
     for (const task of tasks) {
       if (task.type === 'build') {
@@ -103,10 +90,9 @@ async function createFilesByDependenciesName(dependenciesName) {
 
 async function taskFile() {
   await rimrafPromise(appNodeModules);
-  const { dependencies } = packageJson;
 
   // 创建目录和文件
-  for (const depName of Object.keys(dependencies)) {
+  for (const depName of Object.keys(packageJson.dependencies)) {
     console.log(`正在编译模块：${ depName }...`);
     await createFilesByDependenciesName(depName);
   }

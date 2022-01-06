@@ -1,0 +1,14 @@
+{
+  "dependenciesOtherFiles": {
+    "@electron/remote": [{
+      "type": "build",
+      "input": "main/index.js",
+      "output": "main/index.js"
+    }],
+    "node-media-server": [{
+      "type": "write",
+      "output": "src/node_media_server.js",
+      "content": "module.exports = require('../index.js');"
+    }]
+  }
+}
