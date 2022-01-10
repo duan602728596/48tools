@@ -50,6 +50,9 @@ function createWindow(): void {
   });
 }
 
+// https://github.com/microsoft/vscode/issues/116715#issuecomment-917783861
+app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer');
+
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', function(): void {
