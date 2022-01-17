@@ -11,13 +11,13 @@ import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
 import AddForm from './AddForm';
 import {
-  idbCursorBilibiliLiveList,
-  idbDeleteBilibiliLiveList,
+  IDBCursorBilibiliLiveList,
+  IDBDeleteBilibiliLiveList,
   setAddLiveBilibiliChildList,
   setDeleteLiveBilibiliChildList,
   type BilibiliLiveInitialState
 } from '../reducers/live';
-import dbConfig from '../../../utils/idb/dbConfig';
+import dbConfig from '../../../utils/IDB/IDBConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import type { WebWorkerChildItem, MessageEventData } from '../../../types';
@@ -97,7 +97,7 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
-    dispatch(idbDeleteBilibiliLiveList({
+    dispatch(IDBDeleteBilibiliLiveList({
       query: record.id
     }));
   }
@@ -141,7 +141,7 @@ function Live(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(idbCursorBilibiliLiveList({
+    dispatch(IDBCursorBilibiliLiveList({
       query: { indexName: dbConfig.objectStore[0].data[1] }
     }));
   }, []);

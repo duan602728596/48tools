@@ -16,6 +16,8 @@
     "@ant-design/icons": "^4.7.0",
     "@bbkkbkk/q": "^1.1.1",
     "@electron/remote": "^2.0.1",
+    "@indexeddb-tools/indexeddb": "^1.0.0",
+    "@indexeddb-tools/indexeddb-redux": "^1.0.0",
     "@reduxjs/toolkit": "^1.7.0",
     "antd": "^4.17.1",
     "array-move": "^4.0.0",

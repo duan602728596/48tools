@@ -6,7 +6,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Alert, Space, message, Divider } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
-import { idbSaveAccount } from '../reducers/weiboLogin';
+import { IDBSaveAccount } from '../reducers/weiboLogin';
 import PuppeteerLogin from './PuppeteerLogin';
 import type { UserInfo } from '../services/interface';
 
@@ -28,7 +28,7 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
         if (uid) {
           const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
 
-          await dispatch(idbSaveAccount({
+          await dispatch(IDBSaveAccount({
             data: {
               id: uid,
               username: resUserInfo.data.user.screen_name ?? uid,

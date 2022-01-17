@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Form, Input, InputNumber, Button, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import style from './liveOptions.sass';
-import { idbGetPocket48LiveOptions, idbSavePocket48LiveOptions } from '../../reducers/pocket48';
+import { IDBGetPocket48LiveOptions, IDBSavePocket48LiveOptions } from '../../reducers/pocket48';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 
 export const OPTIONS_NAME: string = 'pocket48LiveAutoGrabOptions';
@@ -19,7 +19,7 @@ function LiveOptions(props: {}): ReactElement {
 
   // 获取数据
   function getData(): void {
-    dispatch(idbGetPocket48LiveOptions({
+    dispatch(IDBGetPocket48LiveOptions({
       query: OPTIONS_NAME
     })).then((res: { query: string; result?: { name: string; value: Pocket48LiveAutoGrabOptions } }): void => {
       if (res.result) {
@@ -30,7 +30,7 @@ function LiveOptions(props: {}): ReactElement {
 
   // 保存配置
   async function handleSaveSubmit(value: Pocket48LiveAutoGrabOptions): Promise<void> {
-    await dispatch(idbSavePocket48LiveOptions({
+    await dispatch(IDBSavePocket48LiveOptions({
       data: { name: OPTIONS_NAME, value }
     }));
     message.success('保存成功！');

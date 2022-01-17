@@ -16,8 +16,8 @@ import style from './index.sass';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
 import WeiboLogin from '../../components/WeiboLogin/WeiboLogin';
-import { idbCursorAccountList } from '../../components/WeiboLogin/reducers/weiboLogin';
-import dbConfig from '../../utils/idb/dbConfig';
+import { IDBCursorAccountList } from '../../components/WeiboLogin/reducers/weiboLogin';
+import dbConfig from '../../utils/IDB/IDBConfig';
 import weiboCheckIn from './weiboCheckIn';
 import { setCheckIn, type WeiboSuperInitialState } from './reducers/weiboSuper';
 import type { WeiboLoginInitialState } from '../../components/WeiboLogin/reducers/weiboLogin';
@@ -99,7 +99,7 @@ function Index(props: {}): ReactElement {
   }
 
   useEffect(function(): void {
-    dispatch(idbCursorAccountList({
+    dispatch(IDBCursorAccountList({
       query: {
         indexName: dbConfig.objectStore[3].data[0]
       }

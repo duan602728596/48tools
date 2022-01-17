@@ -1,12 +1,6 @@
-import {
-  createSlice,
-  type Slice,
-  type SliceCaseReducers,
-  type PayloadAction,
-  type CaseReducerActions,
-  type ActionCreator
-} from '@reduxjs/toolkit';
-import dbRedux, { acfunLiveObjectStoreName } from '../../../utils/idb/dbRedux';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
+import IDBRedux, { acfunLiveObjectStoreName } from '../../../utils/IDB/IDBRedux';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveItem } from '../types';
 
@@ -72,19 +66,19 @@ export const {
 }: CaseReducerActions<CaseReducers> = actions;
 
 // 保存数据
-export const idbSaveAcFunLiveList: ActionCreator<any> = dbRedux.putAction({
+export const IDBSaveAcFunLiveList: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: acfunLiveObjectStoreName,
   successAction: setAcFunLiveListAddRoom
 });
 
 // 请求所有列表
-export const idbCursorAcFunLiveList: ActionCreator<any> = dbRedux.cursorAction({
+export const IDBCursorAcFunLiveList: CursorDispatchFunc = IDBRedux.cursorAction({
   objectStoreName: acfunLiveObjectStoreName,
   successAction: setAcFunLiveList
 });
 
 // 删除
-export const idbDeleteAcFunLiveList: ActionCreator<any> = dbRedux.deleteAction({
+export const IDBDeleteAcFunLiveList: QueryDispatchFunc = IDBRedux.deleteAction({
   objectStoreName: acfunLiveObjectStoreName,
   successAction: setAcFunListDeleteRoom
 });

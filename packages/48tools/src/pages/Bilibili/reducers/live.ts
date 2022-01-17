@@ -1,12 +1,6 @@
-import {
-  createSlice,
-  type Slice,
-  type SliceCaseReducers,
-  type PayloadAction,
-  type CaseReducerActions,
-  type ActionCreator
-} from '@reduxjs/toolkit';
-import dbRedux, { bilibiliLiveObjectStoreName } from '../../../utils/idb/dbRedux';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
+import IDBRedux, { bilibiliLiveObjectStoreName } from '../../../utils/IDB/IDBRedux';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveItem } from '../types';
 
@@ -72,19 +66,19 @@ export const {
 }: CaseReducerActions<CaseReducers> = actions;
 
 // 保存数据
-export const idbSaveBilibiliLiveList: ActionCreator<any> = dbRedux.putAction({
+export const IDBSaveBilibiliLiveList: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: bilibiliLiveObjectStoreName,
   successAction: setBilibiliLiveListAddRoom
 });
 
 // 请求所有列表
-export const idbCursorBilibiliLiveList: ActionCreator<any> = dbRedux.cursorAction({
+export const IDBCursorBilibiliLiveList: CursorDispatchFunc = IDBRedux.cursorAction({
   objectStoreName: bilibiliLiveObjectStoreName,
   successAction: setBilibiliLiveList
 });
 
 // 删除
-export const idbDeleteBilibiliLiveList: ActionCreator<any> = dbRedux.deleteAction({
+export const IDBDeleteBilibiliLiveList: QueryDispatchFunc = IDBRedux.deleteAction({
   objectStoreName: bilibiliLiveObjectStoreName,
   successAction: setBilibiliLiveListDeleteRoom
 });

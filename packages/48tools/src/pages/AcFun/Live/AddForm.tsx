@@ -5,7 +5,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Form, Modal, Input } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store } from 'antd/es/form/interface';
-import { idbSaveAcFunLiveList } from '../reducers/live';
+import { IDBSaveAcFunLiveList } from '../reducers/live';
 
 /* 添加一个A站直播间 */
 function AddForm(props: {}): ReactElement {
@@ -23,7 +23,7 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    dispatch(idbSaveAcFunLiveList({
+    dispatch(IDBSaveAcFunLiveList({
       data: {
         ...formValue,
         id: randomUUID()

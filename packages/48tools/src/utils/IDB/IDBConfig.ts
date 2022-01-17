@@ -5,13 +5,13 @@ export interface ObjectStoreItem {
   data: Array<string>;
 }
 
-export interface DbConfig {
+export interface IDBConfig {
   name: string;
   version: number;
   objectStore: Array<ObjectStoreItem>;
 }
 
-const dbConfig: DbConfig = {
+const dbConfig: IDBConfig = {
   name: '48tools',
   version: 4,
   objectStore: [

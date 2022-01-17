@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Empty, Button, message } from 'antd';
 import * as dayjs from 'dayjs';
-import { idbSaveAccount } from '../../reducers/weiboLogin';
+import { IDBSaveAccount } from '../../reducers/weiboLogin';
 import {
   requestQrcode,
   requestQrcodeCheck,
@@ -32,7 +32,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     const cookie: string = await requestCrossDomainUrl(resLogin.crossDomainUrlList[3]);
     const resUserInfo: UserInfo = await requestUserInfo(resLogin.uid, cookie);
 
-    await dispatch(idbSaveAccount({
+    await dispatch(IDBSaveAccount({
       data: {
         id: resLogin.uid,
         username: resUserInfo.data.user.screen_name ?? resLogin.uid,

@@ -22,14 +22,14 @@ import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
 import AddForm from './AddForm';
 import {
-  idbCursorAcFunLiveList,
-  idbDeleteAcFunLiveList,
+  IDBCursorAcFunLiveList,
+  IDBDeleteAcFunLiveList,
   setAddLiveWorker,
   setDeleteLiveWorker,
   type AcFunLiveInitialState
 } from '../reducers/live';
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
-import dbConfig from '../../../utils/idb/dbConfig';
+import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
 import type { WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { LiveRepresentation, LiveVideoPlayRes, LiveItem } from '../types';
@@ -216,7 +216,7 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
-    dispatch(idbDeleteAcFunLiveList({
+    dispatch(IDBDeleteAcFunLiveList({
       query: record.id
     }));
   }
@@ -260,7 +260,7 @@ function Live(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(idbCursorAcFunLiveList({
+    dispatch(IDBCursorAcFunLiveList({
       query: { indexName: dbConfig.objectStore[1].data[1] }
     }));
   }, []);

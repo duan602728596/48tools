@@ -7,7 +7,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
-import { idbSaveAccount } from '../reducers/weiboLogin';
+import { IDBSaveAccount } from '../reducers/weiboLogin';
 import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;
@@ -78,7 +78,7 @@ function PuppeteerLogin(props: { onCancel: Function }): ReactElement {
         if (uid) {
           const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
 
-          await dispatch(idbSaveAccount({
+          await dispatch(IDBSaveAccount({
             data: {
               id: uid,
               username: resUserInfo.data.user.screen_name ?? uid,

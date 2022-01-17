@@ -5,11 +5,11 @@ import {
   type SliceCaseReducers,
   type PayloadAction,
   type CaseReducerActions,
-  type ActionCreator,
   type AsyncThunk,
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
-import dbRedux, { optionsObjectStoreName } from '../../../utils/idb/dbRedux';
+import type { QueryDispatchFunc, DataDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
+import IDBRedux, { optionsObjectStoreName } from '../../../utils/IDB/IDBRedux';
 import { requestLiveList } from '../services/pocket48';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
 import type { WebWorkerChildItem } from '../../../types';
@@ -120,10 +120,14 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
 });
 
 // 获取配置项目
-export const idbGetPocket48LiveOptions: ActionCreator<any> = dbRedux.getAction({ objectStoreName: optionsObjectStoreName });
+export const IDBGetPocket48LiveOptions: QueryDispatchFunc = IDBRedux.getAction({
+  objectStoreName: optionsObjectStoreName
+});
 
 // 保存
-export const idbSavePocket48LiveOptions: ActionCreator<any> = dbRedux.putAction({ objectStoreName: optionsObjectStoreName });
+export const IDBSavePocket48LiveOptions: DataDispatchFunc = IDBRedux.putAction({
+  objectStoreName: optionsObjectStoreName
+});
 
 export const {
   setLiveList,

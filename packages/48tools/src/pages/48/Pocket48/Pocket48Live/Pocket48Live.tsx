@@ -20,7 +20,7 @@ import {
   setAddLiveChildList,
   setDeleteLiveChildList,
   setAutoGrab,
-  idbGetPocket48LiveOptions,
+  IDBGetPocket48LiveOptions,
   type Pocket48InitialState
 } from '../../reducers/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
@@ -63,7 +63,7 @@ function Pocket48Live(props: {}): ReactElement {
   async function handleStartAutoGrabClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
     // 获取配置
     const result: { query: string; result?: { name: string; value: Pocket48LiveAutoGrabOptions } }
-      = await dispatch(idbGetPocket48LiveOptions({ query: OPTIONS_NAME }));
+      = await dispatch(IDBGetPocket48LiveOptions({ query: OPTIONS_NAME }));
 
     if (!result.result) {
       return message.warn('请先配置自动抓取相关配置。');

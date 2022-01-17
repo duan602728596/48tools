@@ -4,8 +4,8 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { idbCursorAccountList, idbDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';
-import dbConfig from '../../utils/idb/dbConfig';
+import { IDBCursorAccountList, IDBDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';
+import dbConfig from '../../utils/IDB/IDBConfig';
 import type { WeiboAccount } from '../../types';
 
 /* redux selector */
@@ -23,7 +23,7 @@ function LoginTable(props: {}): ReactElement {
 
   // 删除账号
   function handleDeleteWeiboAccountClick(record: WeiboAccount, event: MouseEvent<HTMLButtonElement>): void {
-    dispatch(idbDeleteAccount({
+    dispatch(IDBDeleteAccount({
       query: record.id
     }));
   }
@@ -49,7 +49,7 @@ function LoginTable(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(idbCursorAccountList({
+    dispatch(IDBCursorAccountList({
       query: {
         indexName: dbConfig.objectStore[3].data[0]
       }
