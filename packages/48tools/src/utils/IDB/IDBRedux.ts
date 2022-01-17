@@ -1,5 +1,4 @@
 import { IDBReduxInstance, type IndexedDBRedux } from '@indexeddb-tools/indexeddb-redux';
-
 import dbConfig from './IDBConfig';
 
 /* indexeddb redux */
