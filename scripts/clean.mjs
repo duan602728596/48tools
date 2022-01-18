@@ -4,13 +4,12 @@ import path from 'node:path';
 import glob from 'glob';
 import fse from 'fs-extra';
 import zip from 'cross-zip';
-import { requireJson } from '@sweet-milktea/utils';
-import { __dirname, build, unpacked } from './utils.mjs';
+import { build, unpacked } from './utils.mjs';
+import lernaJson from '../lerna.json';
 
 const globPromise = util.promisify(glob);
 const zipPromise = util.promisify(zip.zip);
 
-const lernaJson = await requireJson(path.join(__dirname, '../lerna.json'));
 const { version } = lernaJson;
 const renameDir = {
   mac: path.join(build, `mac/48tools-${ version }-mac`),

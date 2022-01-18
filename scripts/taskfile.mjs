@@ -1,4 +1,5 @@
 import util from 'node:util';
+import process from 'node:process';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { promises as fsP } from 'node:fs';
@@ -7,15 +8,18 @@ import fse from 'fs-extra';
 import rimraf from 'rimraf';
 import { requireJson } from '@sweet-milktea/utils';
 import { cwd } from './utils.mjs';
+import packageJson from '../packages/app/package.json';
+import dependenciesOtherFilesJson from '../packages/app/dependenciesOtherFiles.json';
 
 const require = createRequire(import.meta.url);
 const rimrafPromise = util.promisify(rimraf);
 
+const argv = process.argv.slice(2);
+
 /* 文件路径 */
 const appDir = path.join(cwd, 'packages/app'),        // app文件夹位置
   appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node_modules
-const packageJson = await requireJson(path.join(appDir, 'package.json'));
-const { dependenciesOtherFiles } = await requireJson(path.join(appDir, 'dependenciesOtherFiles.json'));
+const { dependenciesOtherFiles } = dependenciesOtherFilesJson;
 
 /**
  * ncc文件编译
@@ -98,4 +102,8 @@ async function taskFile() {
   }
 }
 
-taskFile();
+export default taskFile;
+
+if (argv[0] === 'build') {
+  taskFile();
+}

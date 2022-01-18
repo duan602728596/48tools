@@ -3,12 +3,12 @@ import path from 'node:path';
 import rimraf from 'rimraf';
 import fse from 'fs-extra';
 import builder from 'electron-builder';
-import { requireJson } from '@sweet-milktea/utils';
-import { __dirname, cwd, appDir, staticsDir, build, output, unpacked, command } from './utils.mjs';
+import { cwd, appDir, staticsDir, build, output, unpacked } from './utils.mjs';
+import taskfile from './taskfile.mjs';
+import packageJson from '../package.json';
 
 const rimrafPromise = util.promisify(rimraf);
 
-const packageJson = await requireJson(path.join(__dirname, '../package.json'));
 const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
   README: path.join(cwd, 'README.md'), // README
@@ -124,7 +124,7 @@ async function unpack() {
   // 拷贝编译的临时文件到中间代码文件夹
   const packages = path.join(cwd, 'packages');
 
-  await command('node', ['./scripts/taskfile.mjs'], cwd);
+  await taskfile();
   await fse.copy(path.join(packages, 'app'), appDir, {
     filter(src, dest) {
       return !src.includes('dependenciesOtherFiles');
