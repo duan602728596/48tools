@@ -23,24 +23,24 @@
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "yarn@3.1.0",
+  "packageManager": "yarn@3.1.1",
   "engines": {
-    "pm": "yarn@^3.1.0"
+    "pm": "yarn@^3.1.1"
   },
   "dependencies": {
     "@vercel/ncc": "^0.33.1",
     "cross-zip": "^4.0.0",
-    "electron": "^16.0.1",
-    "electron-builder": "^22.14.7",
+    "electron": "^16.0.7",
+    "electron-builder": "^22.14.13",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "lerna": "^4.0.0",
     "rimraf": "^3.0.2",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.5"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.16.3",
+    "@babel/eslint-parser": "^7.16.5",
     "@sweet-milktea/milktea-cli": "^3.1.1",
     "@sweet-milktea/util-tools": "^3.1.6",
     "@types/fs-extra": "^9",
@@ -48,18 +48,18 @@
     "@types/react": "^17",
     "@types/react-dom": "^17",
     "@types/react-redux": "^7",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "commitizen": "^4.2.4",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.3.0",
+    "eslint": "^8.7.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.5.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-react": "^7.28.0",
     "husky": "^7.0.4",
-    "lint-staged": "^12.1.2"
+    "lint-staged": "^12.3.1"
   },
   "lint-staged": {
     "**/*.{js,jsx,mjs,cjs,ts,tsx}": "eslint"
