@@ -6,6 +6,7 @@ import { toCanvas } from 'qrcode/lib/browser';
 import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
 import { requestLoginUrl, requestLoginInfo } from './services/bilibiliLogin';
+import { warningNativeMessage } from '../../utils/nativeMessage';
 import type { LoginUrl, LoginInfo } from './services/interface';
 
 const toCanvasPromise: (e: HTMLCanvasElement, u: string) => Promise<void> = promisify(toCanvas);
@@ -35,7 +36,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   // 清除cookie
   function handleClearBilibiliCookieClick(event: MouseEvent<HTMLButtonElement>): void {
     localStorage.removeItem(BILIBILI_COOKIE_KEY);
-    message.warn('B站Cookie已清除，请重新登陆。');
+    warningNativeMessage('B站Cookie已清除，请重新登陆。');
   }
 
   // 轮询，判断接口返回的值

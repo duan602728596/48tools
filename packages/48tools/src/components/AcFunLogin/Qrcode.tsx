@@ -1,9 +1,18 @@
 import type { CancelableRequest, Response as GotResponse } from 'got';
-import { useState, useEffect, useMemo, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  useMemo,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import * as PropTypes from 'prop-types';
 import { Button, Empty, message } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestPcDirectQr, requestPcDirectScanResult, requestPcDirectAcceptResult } from './services/acfunLogin';
+import { warningNativeMessage } from '../../utils/nativeMessage';
 import type { PcDirectQr, ScanResult, AcceptResult } from './services/interface';
 
 export const ACFUN_COOKIE_KEY: string = 'ACFUN_COOKIE';
@@ -45,7 +54,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   // 清除cookie
   function handleClearAcFunCookieClick(event: MouseEvent<HTMLButtonElement>): void {
     localStorage.removeItem(ACFUN_COOKIE_KEY);
-    message.warn('A站Cookie已清除，请重新登陆。');
+    warningNativeMessage('A站Cookie已清除，请重新登陆。');
   }
 
   // 生成二维码

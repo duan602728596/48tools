@@ -8,6 +8,7 @@ import { Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
+import { errorNativeMessage } from '../../../utils/nativeMessage';
 import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;
@@ -33,7 +34,9 @@ function PuppeteerLogin(props: { onCancel: Function }): ReactElement {
     const executablePath: string | null = localStorage.getItem('PUPPETEER_EXECUTABLE_PATH');
 
     if (!(executablePath && !/^\s*$/.test(executablePath))) {
-      return message.warning('请先配置无头浏览器！');
+      errorNativeMessage('请先配置无头浏览器！');
+
+      return;
     }
 
     try {

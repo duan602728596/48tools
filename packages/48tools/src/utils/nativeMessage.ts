@@ -3,10 +3,11 @@ import type { MessageBoxReturnValue, MessageBoxOptions } from 'electron';
 
 /**
  * 显示native的message提示
- * @param { MessageBoxOptions | string } options: 配置
+ * @param { MessageBoxOptions | string } optionsOrMessageText: 配置
  */
-export function nativeMessage(options: MessageBoxOptions | string): Promise<MessageBoxReturnValue> {
-  const messageOptions: MessageBoxOptions = typeof options === 'string' ? { message: options } : options;
+export function nativeMessage(optionsOrMessageText: MessageBoxOptions | string): Promise<MessageBoxReturnValue> {
+  const messageOptions: MessageBoxOptions = typeof optionsOrMessageText === 'string'
+    ? { message: optionsOrMessageText } : optionsOrMessageText;
 
   if (typeof messageOptions.type !== 'string') {
     messageOptions.type = 'info';
@@ -26,12 +27,5 @@ export function warningNativeMessage(messageText: string): Promise<MessageBoxRet
   return nativeMessage({
     message: messageText,
     type: 'warning'
-  });
-}
-
-export function infoNativeMessage(messageText: string): Promise<MessageBoxReturnValue> {
-  return nativeMessage({
-    message: messageText,
-    type: 'info'
   });
 }
