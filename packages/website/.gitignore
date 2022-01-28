@@ -1,0 +1,4 @@
+!dist
+dist/**/*.*
+!dist/vercel.json
+dist/.vercel
