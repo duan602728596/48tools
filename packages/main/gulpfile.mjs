@@ -8,8 +8,8 @@ import plumber from 'gulp-plumber';
 import { requireJson, metaHelper } from '@sweet-milktea/utils';
 
 const { __dirname } = metaHelper(import.meta.url);
-const baseTypescriptConfig = await requireJson(path.join(__dirname, '../../tsconfig.json'));
-const tsConfig = await requireJson(path.join(__dirname, './tsconfig.json'));
+const baseTypescriptConfig = await requireJson(path.join(__dirname, '../../tsconfig.api.json'));
+const tsConfig = await requireJson(path.join(__dirname, './tsconfig.api.json'));
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isWatch = process.env.WATCH;
