@@ -1,6 +1,6 @@
 import got, { type Response as GotResponse } from 'got';
 import { createHeaders } from '../utils.js';
-import type { LiveData, LiveRoomInfo } from './interface';
+import type { LiveData, LiveRoomInfo, RoomInfo } from './interface';
 
 /**
  * @param { string | number } next: 录播id分页
@@ -53,6 +53,16 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
     headers: createHeaders(),
     responseType: 'json',
     json: { liveId: id }
+  });
+
+  return res.body;
+}
+
+// 查询roomId
+export async function requestRoomId(): Promise<RoomInfo> {
+  const uri: string = 'https://raw.githubusercontent.com/duan602728596/qqtools/main/packages/NIMTest/node/roomId.json';
+  const res: GotResponse<RoomInfo> = await got.get(uri, {
+    responseType: 'json'
   });
 
   return res.body;

@@ -1,6 +1,17 @@
-import { requestLiveList, requestLiveRoomInfo } from '../services/pocket48.js';
-import type { LiveInfo, LiveData, LiveRoomInfoContent, LiveRoomInfo } from '../services/interface';
-import type { RecordValueLiveInfo, RecordValue, RootValue, RecordContext } from './types';
+import { requestLiveList, requestLiveRoomInfo, requestRoomId } from '../services/pocket48.js';
+import type {
+  LiveInfo,
+  LiveData,
+  LiveRoomInfoContent,
+  LiveRoomInfo,
+  RoomInfo
+} from '../services/interface';
+import type {
+  RecordValueLiveInfo,
+  RecordValue,
+  RootValue,
+  RecordContext
+} from './types';
 
 /* 获取录播信息 */
 async function record(ctx: RecordContext): Promise<RecordValue> {
@@ -21,10 +32,18 @@ async function record(ctx: RecordContext): Promise<RecordValue> {
   };
 }
 
+/* 获取roomInfo */
+async function roomInfo(): Promise<RoomInfo> {
+  const roomInfoRes: RoomInfo = await requestRoomId();
+
+  return roomInfoRes;
+}
+
 /* graphql入口文件 */
 function rootValue(): RootValue {
   return {
-    record
+    record,
+    roomInfo
   };
 }
 

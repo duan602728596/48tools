@@ -1,4 +1,4 @@
-import type { LiveInfo, LiveRoomInfoContent } from '../services/interface';
+import type { LiveInfo, LiveRoomInfoContent, RoomInfo } from '../services/interface';
 
 /* record */
 export interface RecordValueLiveInfo extends LiveInfo {
@@ -17,4 +17,5 @@ export interface RecordContext {
 
 export interface RootValue {
   record(context: RecordContext): Promise<RecordValue>;
+  roomInfo(): Promise<RoomInfo>;
 }

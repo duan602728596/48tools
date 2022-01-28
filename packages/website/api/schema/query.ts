@@ -1,38 +1,13 @@
+import recordSchema from './record.js';
+import roomInfoSchema from './roomInfo.js';
+
 export default /* GraphQL */ `
-    # 房间信息
-    type LiveRoomInfo {
-        playStreamPath: String
-        systemMsg: String
-        msgFilePath: String
-    }
+    ${ recordSchema }
 
-    # 用户信息
-    type UserInfo {
-        avatar: String
-        nickname: String
-        teamLogo: String
-        userId: String
-    }
-
-    # 列表
-    type LiveInfo {
-        coverPath: String
-        ctime: String
-        liveId: String
-        roomId: String
-        liveType: Int
-        title: String
-        userInfo: UserInfo
-        liveRoomInfo: LiveRoomInfo
-    }
-
-    # 录播
-    type Record {
-        next: String
-        liveList: [LiveInfo]
-    }
+    ${ roomInfoSchema }
 
     type Query {
         record(next: String, userId: Int!): Record
+        roomInfo: RoomInfo
     }
 `;

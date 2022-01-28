@@ -54,3 +54,16 @@ export interface LiveRoomInfo {
   status: number;
   success: boolean;
 }
+
+// roomId.json
+export interface RoomId {
+  id: number;
+  ownerName: string;
+  roomId: string;
+  account: string;
+}
+
+export interface RoomInfo {
+  roomId: Array<RoomId>;
+  buildTime: string;
+}
