@@ -1,7 +1,9 @@
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd-mobile';
 import zhCN from 'antd-mobile/es/locales/zh-CN';
+import { storeFactory } from './store/store';
 import Routers from './router/Routers';
 import Main from './components/Main/Main';
 import './main.tailwindcss.css';
@@ -9,13 +11,15 @@ import './global.sass';
 
 /* app */
 render(
-  <ConfigProvider locale={ zhCN }>
-    <Main>
-      <BrowserRouter>
-        <Routers />
-      </BrowserRouter>
-    </Main>
-  </ConfigProvider>,
+  <Provider store={ storeFactory() }>
+    <ConfigProvider locale={ zhCN }>
+      <Main>
+        <BrowserRouter>
+          <Routers />
+        </BrowserRouter>
+      </Main>
+    </ConfigProvider>
+  </Provider>,
   document.getElementById('app')
 );
 

@@ -37,7 +37,8 @@ export async function requestLiveList(
     method: 'POST',
     headers: createHeaders(),
     responseType: 'json',
-    json: body
+    json: body,
+    timeout: { request: 60_000 }
   });
 
   return res.body;
@@ -52,7 +53,8 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
     method: 'POST',
     headers: createHeaders(),
     responseType: 'json',
-    json: { liveId: id }
+    json: { liveId: id },
+    timeout: { request: 60_000 }
   });
 
   return res.body;
@@ -62,7 +64,8 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
 export async function requestRoomId(): Promise<RoomInfo> {
   const uri: string = 'https://raw.githubusercontent.com/duan602728596/qqtools/main/packages/NIMTest/node/roomId.json';
   const res: GotResponse<RoomInfo> = await got.get(uri, {
-    responseType: 'json'
+    responseType: 'json',
+    timeout: { request: 60_000 }
   });
 
   return res.body;
