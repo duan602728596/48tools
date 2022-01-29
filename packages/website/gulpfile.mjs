@@ -47,7 +47,7 @@ function apiTsProject() {
 function packageJsonProject() {
   return gulp.src('package.json')
     .pipe(replace(/(.*\n?)*/, function(ms) {
-      return JSON.stringify(_.omit(JSON.parse(ms), ['devDependencies']));
+      return JSON.stringify(_.omit(JSON.parse(ms), ['devDependencies', 'optionalDependencies']));
     }))
     .pipe(gulp.dest('dist'));
 }
