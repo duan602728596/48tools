@@ -164,7 +164,7 @@ function Download(props: {}): ReactElement {
       <div className={ classNames('grow overflow-auto py-[16px]', mainStyle.touchOverflow) }>
         { liveList.length > 0 && <List>{ listRender() }</List> }
       </div>
-      <div className="shrink-0 h-[50px] bg-blue-200">
+      <div className="shrink-0 h-[50px] bg-blue-100">
         {
           loading ? (
             <div className="leading-[50px] text-center">
@@ -172,7 +172,7 @@ function Download(props: {}): ReactElement {
               数据加载中
             </div>
           ) : (
-            <Button className="h-[50px] bg-blue-200" block={ true } onClick={ handleLoadMoreDataClick }>
+            <Button className="h-[50px] bg-blue-100" block={ true } onClick={ handleLoadMoreDataClick }>
               加载更多
             </Button>
           )
