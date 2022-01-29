@@ -12,6 +12,8 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Form, Input, Button, DotLoading, Toast, List, Checkbox } from 'antd-mobile';
 import type { FormInstance } from 'antd-mobile/es/components/form';
 import * as dayjs from 'dayjs';
+import classNames from 'classnames';
+import mainStyle from '../../components/Main/main.module.sass';
 import { useReqRoomIdListQuery } from '../RoomInfo/reducers/roomInfo.query';
 import { setRoomId, setLiveList, type RecordInitialState } from './reducers/record';
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../utils/GraphQLRequest';
@@ -73,6 +75,13 @@ function Download(props: {}): ReactElement {
           next: res.data.record.next,
           liveList: list.concat(res.data.record.liveList)
         }));
+
+        if (res.data.record.liveList.length === 0) {
+          Toast.show({
+            position: 'top',
+            content: '没有数据'
+          });
+        }
       } else {
         Toast.show({
           icon: 'fail',
@@ -89,7 +98,14 @@ function Download(props: {}): ReactElement {
 
   // 加载更多
   function handleLoadMoreDataClick(event: MouseEvent<HTMLButtonElement>): void {
-    getData(next!, roomId?.id!, liveList);
+    if (next && roomId) {
+      getData(next, roomId.id, liveList);
+    } else {
+      Toast.show({
+        position: 'top',
+        content: '没有数据'
+      });
+    }
   }
 
   // 搜索
@@ -137,7 +153,7 @@ function Download(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Form form={ form }>
+      <Form className="shrink-0" form={ form }>
         <Form.Item className="h-[75px]" name="query" rules={ [{ required: true, message: '必须输入ID' }] }>
           <Input placeholder="请输入要下载录播的小偶像的ID" />
         </Form.Item>
@@ -145,26 +161,22 @@ function Download(props: {}): ReactElement {
           <Button color="primary" block={ true } onClick={ handleSearchClick }>搜索</Button>
         </div>
       </Form>
-      <div className="mb-[32px]">
+      <div className={ classNames('grow overflow-auto py-[16px]', mainStyle.touchOverflow) }>
         { liveList.length > 0 && <List>{ listRender() }</List> }
-        <div className="h-[40px] bg-white">
-          {
-            loading ? (
-              <div className="leading-[40px] text-center">
-                <DotLoading color="primary" />
-                数据加载中
-              </div>
-            ) : (liveList.length > 0 && (
-              <Button className="h-[40px]"
-                color="warning"
-                block={ true }
-                onClick={ handleLoadMoreDataClick }
-              >
-                加载更多
-              </Button>
-            ))
-          }
-        </div>
+      </div>
+      <div className="shrink-0 h-[50px] bg-blue-200">
+        {
+          loading ? (
+            <div className="leading-[50px] text-center">
+              <DotLoading color="primary" />
+              数据加载中
+            </div>
+          ) : (
+            <Button className="h-[50px] bg-blue-200" block={ true } onClick={ handleLoadMoreDataClick }>
+              加载更多
+            </Button>
+          )
+        }
       </div>
     </Fragment>
   );

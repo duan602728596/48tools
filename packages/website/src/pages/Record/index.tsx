@@ -10,8 +10,10 @@ function Index(props: {}): ReactElement {
       <Helmet>
         <title>录播地址导出 - 48tools</title>
       </Helmet>
-      <div className="h-full">
-        <Header title="录播地址导出" />
+      <div className="flex flex-col h-full">
+        <div className="shrink-0">
+          <Header title="录播地址导出" />
+        </div>
         <Download />
       </div>
     </Fragment>
