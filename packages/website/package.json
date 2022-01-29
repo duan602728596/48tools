@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start:api": "npm run clean && cross-env NODE_ENV=development gulp",
-    "start:vercel": "vercel dev --listen 5005",
+    "start:vercel": "vercel dev --listen 5054",
     "clean": "rimraf dist/api dist/package.json"
   },
   "dependencies": {
