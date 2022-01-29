@@ -10,6 +10,8 @@ import {
 import { Form, Input, Button, DotLoading, List, Empty } from 'antd-mobile';
 import type { FormInstance } from 'antd-mobile/es/components/form';
 import { ExclamationShieldFill as IconExclamationShieldFill } from 'antd-mobile-icons';
+import classNames from 'classnames';
+import style from './search.module.sass';
 import { useReqRoomIdListQuery } from './reducers/roomInfo.query';
 import type { QuerySubState } from '../../store/queryTypes';
 import type { RoomId } from '../../../api/services/interface';
@@ -71,7 +73,7 @@ function Search(props: {}): ReactElement {
           <Button color="primary" block={ true } onClick={ handleSearchSubmit }>搜索</Button>
         </div>
       </Form>
-      <div className="grow overflow-auto py-[16px]">
+      <div className={ classNames('grow overflow-auto py-[16px]', style.touchOverflow) }>
         {
           isLoading ? (
             <div className="text-center">

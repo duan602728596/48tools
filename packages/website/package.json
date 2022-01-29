@@ -18,6 +18,7 @@
     "@reduxjs/toolkit": "^1.7.1",
     "antd-mobile": "^5.0.0-rc.23",
     "antd-mobile-icons": "^0.2.2",
+    "classnames": "^2.3.1",
     "prop-types": "^15.8.1",
     "react": "rc",
     "react-dom": "rc",
