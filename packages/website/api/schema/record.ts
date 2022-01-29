@@ -1,13 +1,13 @@
 export default /* GraphQL */ `
     # 房间信息
-    type LiveRoomInfo {
+    type RecordLiveRoomInfo {
         playStreamPath: String
         systemMsg: String
         msgFilePath: String
     }
 
     # 用户信息
-    type UserInfo {
+    type RecordUserInfo {
         avatar: String
         nickname: String
         teamLogo: String
@@ -15,20 +15,20 @@ export default /* GraphQL */ `
     }
 
     # 列表
-    type LiveInfo {
+    type RecordLiveInfo {
         coverPath: String
         ctime: String
         liveId: String
         roomId: String
         liveType: Int
         title: String
-        userInfo: UserInfo
-        liveRoomInfo: LiveRoomInfo
+        userInfo: RecordUserInfo
+        liveRoomInfo: RecordLiveRoomInfo
     }
 
     # 录播
     type Record {
         next: String
-        liveList: [LiveInfo]
+        liveList: [RecordLiveInfo]
     }
 `;

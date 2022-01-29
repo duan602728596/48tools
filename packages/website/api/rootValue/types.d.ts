@@ -15,6 +15,7 @@ export interface RecordContext {
   userId?: number;
 }
 
+/* root */
 export interface RootValue {
   record(context: RecordContext): Promise<RecordValue>;
   roomInfo(): Promise<RoomInfo>;

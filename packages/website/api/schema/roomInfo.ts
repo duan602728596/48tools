@@ -1,5 +1,5 @@
 export default /* GraphQL */ `
-    type RoomId {
+    type RoomInfoRoomId {
         id: Float
         ownerName: String
         roomId: String
@@ -7,7 +7,7 @@ export default /* GraphQL */ `
     }
 
     type RoomInfo {
-        roomId: [RoomId]
+        roomId: [RoomInfoRoomId]
         buildTime: String
     }
 `;

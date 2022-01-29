@@ -1,4 +1,3 @@
-/* ========== pocket48 ========== */
 // 当前的用户信息
 export interface UserInfo {
   avatar: string;
