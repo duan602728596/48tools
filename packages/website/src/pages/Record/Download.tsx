@@ -9,7 +9,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Form, Input, Button, DotLoading, Toast, List, Checkbox } from 'antd-mobile';
+import { Form, Input, Button, DotLoading, Toast, List, Checkbox, Tag } from 'antd-mobile';
 import type { FormInstance } from 'antd-mobile/es/components/form';
 import * as dayjs from 'dayjs';
 import classNames from 'classnames';
@@ -58,10 +58,11 @@ function Download(props: {}): ReactElement {
         {
             record(userId: ${ loadUserId }, next: "${ loadNext }") {
                 next
-                    liveList {
+                liveList {
                     title
                     liveId
                     ctime
+                    liveType
                     userInfo {
                         nickname
                     }
@@ -143,6 +144,11 @@ function Download(props: {}): ReactElement {
           <div className="flex">
             <div className="grow">
               <Checkbox>{ item.title }</Checkbox>
+              {
+                item.liveType === 2
+                  ? <Tag className="ml-[16px]" color="warning">电台</Tag>
+                  : <Tag className="ml-[16px]" color="purple">视频</Tag>
+              }
             </div>
             <time>{ time }</time>
           </div>
