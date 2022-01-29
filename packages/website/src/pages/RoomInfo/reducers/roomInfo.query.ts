@@ -4,6 +4,10 @@ import type { QueryApi, QueryEndpointBuilder, EndpointsReturn } from '../../../s
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../../utils/GraphQLRequest';
 import type { RoomInfo, RoomId } from '../../../../api/services/interface';
 
+interface RoomInfoResponseData {
+  roomInfo: RoomInfo;
+}
+
 const TAG_TYPES: Record<string, string> = {
   ROOM_INFO_LIST: 'roomInfoQueryApi/roomInfoList'
 };
@@ -16,8 +20,7 @@ const api: QueryApi = createApi({
     return {
       reqRoomIdList: builder.query({
         async queryFn(): Promise<{ data: Array<RoomId> }> {
-          type ResData = { roomInfo: RoomInfo };
-          const res: GraphQLResponse<ResData> = await GraphQLRequest<ResData>(/* GraphQL */ `
+          const res: GraphQLResponse<RoomInfoResponseData> = await GraphQLRequest<RoomInfoResponseData>(/* GraphQL */ `
             {
                 roomInfo {
                     roomId {
@@ -30,7 +33,7 @@ const api: QueryApi = createApi({
             }
           `);
 
-          if (isGraphQLData<ResData>(res)) {
+          if (isGraphQLData<RoomInfoResponseData>(res)) {
             return { data: res.data.roomInfo.roomId };
           } else {
             return { data: [] };

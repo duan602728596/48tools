@@ -11,7 +11,7 @@ import { Form, Input, Button, DotLoading, List, Empty } from 'antd-mobile';
 import type { FormInstance } from 'antd-mobile/es/components/form';
 import { ExclamationShieldFill as IconExclamationShieldFill } from 'antd-mobile-icons';
 import classNames from 'classnames';
-import style from './search.module.sass';
+import mainStyle from '../../components/Main/main.module.sass';
 import { useReqRoomIdListQuery } from './reducers/roomInfo.query';
 import type { QuerySubState } from '../../store/queryTypes';
 import type { RoomId } from '../../../api/services/interface';
@@ -57,7 +57,7 @@ function Search(props: {}): ReactElement {
   }, [roomIdList, query]);
 
   // 搜索
-  function handleSearchSubmit(event: MouseEvent<HTMLButtonElement>): void {
+  function handleSearchClick(event: MouseEvent<HTMLButtonElement>): void {
     const formValue: FormQuery = form.getFieldsValue();
 
     setQuery(formValue);
@@ -70,10 +70,10 @@ function Search(props: {}): ReactElement {
           <Input placeholder="请输入要搜索的姓名或者ID" />
         </Form.Item>
         <div className="mx-[20px] mb-[20px]">
-          <Button color="primary" block={ true } onClick={ handleSearchSubmit }>搜索</Button>
+          <Button color="primary" block={ true } onClick={ handleSearchClick }>搜索</Button>
         </div>
       </Form>
-      <div className={ classNames('grow overflow-auto py-[16px]', style.touchOverflow) }>
+      <div className={ classNames('grow overflow-auto py-[16px]', mainStyle.touchOverflow) }>
         {
           isLoading ? (
             <div className="text-center">

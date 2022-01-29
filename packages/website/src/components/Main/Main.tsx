@@ -1,9 +1,15 @@
 import type { ReactElement, ReactNode } from 'react';
 import * as PropTypes from 'prop-types';
+import classNames from 'classnames';
+import style from './main.module.sass';
 
 /* 网站750宽度限制 */
 function Main(props: { children: ReactNode }): ReactElement {
-  return <div className="mx-auto my-0 w-[750px] max-w-full h-full bg-white">{ props.children }</div>;
+  return (
+    <div className={ classNames('mx-auto my-0 w-[750px] max-w-full h-full bg-white', style.touchOverflow) }>
+      { props.children }
+    </div>
+  );
 }
 
 Main.propTypes = {
