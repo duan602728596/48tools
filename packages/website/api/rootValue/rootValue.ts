@@ -28,7 +28,12 @@ async function record(ctx: RecordContext): Promise<RecordValue> {
           return liveRoomInfoRes.content;
         }
       };
-    })
+    }),
+    liveRoomInfo: Promise.all((ctx.liveId ?? []).map(async (liveId: string): Promise<LiveRoomInfoContent> => {
+      const liveRoomInfoRes: LiveRoomInfo = await requestLiveRoomInfo(liveId);
+
+      return liveRoomInfoRes.content;
+    }))
   };
 }
 

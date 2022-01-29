@@ -4,6 +4,8 @@ export default /* GraphQL */ `
         playStreamPath: String
         systemMsg: String
         msgFilePath: String
+        title: String
+        liveId: String
     }
 
     # 用户信息
@@ -30,5 +32,6 @@ export default /* GraphQL */ `
     type Record {
         next: String
         liveList: [RecordLiveInfo]
+        liveRoomInfo: [RecordLiveRoomInfo]
     }
 `;

@@ -7,7 +7,7 @@ export default /* GraphQL */ `
     ${ roomInfoSchema }
 
     type Query {
-        record(next: String, userId: Int!): Record
+        record(userId: Int!, next: String, liveId: [String]): Record
         roomInfo: RoomInfo
     }
 `;

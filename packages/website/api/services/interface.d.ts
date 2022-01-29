@@ -45,6 +45,8 @@ export interface LiveRoomInfoContent {
     userId: string;
     userName: string;
   };
+  title: string;
+  ctime: string;
 }
 
 export interface LiveRoomInfo {

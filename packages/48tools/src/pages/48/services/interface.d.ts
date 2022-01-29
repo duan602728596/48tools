@@ -47,6 +47,8 @@ export interface LiveRoomInfo {
       userId: string;
       userName: string;
     };
+    title: string;
+    ctime: string;
   };
   message: string;
   status: number;
