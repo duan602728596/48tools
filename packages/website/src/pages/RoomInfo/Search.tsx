@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';
 import { useReqRoomIdListQuery } from './reducers/roomInfo.query';
 import type { QuerySubState } from '../../store/queryTypes';
-import type { RoomId } from '../../../api/services/interface';
+import type { RoomId } from '../../../src-api/services/interface';
 
 interface FormQuery {
   query: string | undefined;

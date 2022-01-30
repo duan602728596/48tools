@@ -9,16 +9,23 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Form, Input, Button, DotLoading, Toast, List, Checkbox, Tag } from 'antd-mobile';
+import { Form, Input, Button, DotLoading, Toast, List, Checkbox, Tag, NoticeBar } from 'antd-mobile';
 import type { FormInstance } from 'antd-mobile/es/components/form';
 import * as dayjs from 'dayjs';
 import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';
 import { useReqRoomIdListQuery } from '../RoomInfo/reducers/roomInfo.query';
-import { setRoomId, setLiveList, type RecordInitialState } from './reducers/record';
+import {
+  setRoomId,
+  setLiveList,
+  setLiveInfoItemCheckedChange,
+  setLiveListCheckedClean,
+  type RecordInitialState
+} from './reducers/record';
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../utils/GraphQLRequest';
 import type { QuerySubState } from '../../store/queryTypes';
-import type { RoomId, LiveInfo } from '../../../api/services/interface';
+import type { RoomId, LiveInfo } from '../../../src-api/services/interface';
+import type { RecordLiveInfo } from './types';
 
 interface RecordResponseData {
   record: {
@@ -31,14 +38,9 @@ interface RecordResponseData {
 type RState = { record: RecordInitialState };
 
 const selector: Selector<RState, RecordInitialState> = createStructuredSelector({
-  // 搜索的next
-  next: ({ record }: RState): string | undefined => record.next,
-
-  // 搜索结果
-  liveList: ({ record }: RState): Array<LiveInfo> => record.liveList,
-
-  // 录播下载
-  roomId: ({ record }: RState): RoomId | undefined => record.roomId
+  next: ({ record }: RState): string | undefined => record.next,            // 搜索的next
+  liveList: ({ record }: RState): Array<RecordLiveInfo> => record.liveList, // 搜索结果
+  roomId: ({ record }: RState): RoomId | undefined => record.roomId         // 录播下载
 });
 
 /* 视频下载 */
@@ -50,7 +52,7 @@ function Download(props: {}): ReactElement {
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
 
   // 加载数据
-  async function getData(loadNext: string, loadUserId: number, list: Array<LiveInfo>): Promise<void> {
+  async function getData(loadNext: string, loadUserId: number, list: Array<RecordLiveInfo>): Promise<void> {
     setLoading(true);
 
     try {
@@ -109,6 +111,11 @@ function Download(props: {}): ReactElement {
     }
   }
 
+  // 清空选中
+  function handleClearCheckClick(event: MouseEvent<HTMLButtonElement>): void {
+    dispatch(setLiveListCheckedClean(undefined));
+  }
+
   // 搜索
   function handleSearchClick(event: MouseEvent<HTMLButtonElement>): void {
     const formValue: { query: string | undefined } = form.getFieldsValue();
@@ -134,23 +141,35 @@ function Download(props: {}): ReactElement {
     }
   }
 
+  // checkbox选中
+  function handleCheckboxChange(liveId: string, value: boolean): void {
+    dispatch(setLiveInfoItemCheckedChange({ liveId, value }));
+  }
+
   // 渲染List
   function listRender(): Array<ReactElement> {
-    return liveList.map((item: LiveInfo): ReactElement => {
+    return liveList.map((item: RecordLiveInfo, index: number): ReactElement => {
       const time: string = dayjs(Number(item.ctime)).format('YYYY-MM-DD HH:mm:ss');
 
       return (
         <List.Item key={ item.liveId } description={ item.userInfo.nickname }>
           <div className="flex">
             <div className="grow">
-              <Checkbox>{ item.title }</Checkbox>
+              <Checkbox checked={ item.checked }
+                onChange={ (value: boolean): void => handleCheckboxChange(item.liveId, value) }
+              >
+                { index + 1 }、
+                <span className="ml-[6px]">{ item.title }</span>
+              </Checkbox>
+            </div>
+            <div className="shrink-0 w-[70px]">
               {
                 item.liveType === 2
                   ? <Tag className="ml-[16px]" color="warning">电台</Tag>
                   : <Tag className="ml-[16px]" color="purple">视频</Tag>
               }
             </div>
-            <time>{ time }</time>
+            <time className="shrink-0 w-[165px]">{ time }</time>
           </div>
         </List.Item>
       );
@@ -159,6 +178,9 @@ function Download(props: {}): ReactElement {
 
   return (
     <Fragment>
+      <div className="shrink-0">
+        <NoticeBar content="最多支持20个地址的导出。导出时间较慢，请耐心等待。" color="alert" />
+      </div>
       <Form className="shrink-0" form={ form }>
         <Form.Item className="h-[75px]" name="query" rules={ [{ required: true, message: '必须输入ID' }] }>
           <Input placeholder="请输入要下载录播的小偶像的ID" />
@@ -175,12 +197,25 @@ function Download(props: {}): ReactElement {
           loading ? (
             <div className="leading-[50px] text-center">
               <DotLoading color="primary" />
-              数据加载中
             </div>
           ) : (
-            <Button className="h-[50px] bg-blue-100" block={ true } onClick={ handleLoadMoreDataClick }>
-              加载更多
-            </Button>
+            <div className="flex">
+              <div className="w-1/4">
+                <Button className="h-[50px] bg-blue-100" block={ true } onClick={ handleClearCheckClick }>
+                  清空选中
+                </Button>
+              </div>
+              <div className="w-2/4">
+                <Button className="h-[50px] bg-blue-200" block={ true } onClick={ handleLoadMoreDataClick }>
+                  加载更多
+                </Button>
+              </div>
+              <div className="w-1/4">
+                <Button className="h-[50px] bg-blue-100" block={ true }>
+                  导出地址
+                </Button>
+              </div>
+            </div>
           )
         }
       </div>

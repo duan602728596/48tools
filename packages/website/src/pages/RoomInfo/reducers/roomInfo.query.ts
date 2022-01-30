@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import type { Middleware } from '@reduxjs/toolkit';
 import type { QueryApi, QueryEndpointBuilder, EndpointsReturn } from '../../../store/queryTypes';
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../../utils/GraphQLRequest';
-import type { RoomInfo, RoomId } from '../../../../api/services/interface';
+import type { RoomInfo, RoomId } from '../../../../src-api/services/interface';
 
 interface RoomInfoResponseData {
   roomInfo: RoomInfo;
