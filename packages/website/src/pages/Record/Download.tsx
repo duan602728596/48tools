@@ -143,7 +143,9 @@ function Download(props: {}): ReactElement {
 
       if (isGraphQLData<RecordLiveRoomInfo>(res)) {
         const downloadTime: Dayjs = dayjs();
-        const downloadRoomId: string = `# ${ roomId?.ownerName } ${ roomId?.id } ${ roomId?.roomId }
+        const downloadRoomId: string = `# ${ roomId?.ownerName }
+# ${ roomId?.id }
+# ${ roomId?.roomId }
 # ${ downloadTime.format('YYYY-MM-DD HH:mm:ss') }\n\n`;
 
         const text: string = res.data.record.liveRoomInfo.map((item: LiveRoomInfoContent): string => {
