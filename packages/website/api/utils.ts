@@ -31,3 +31,12 @@ export function createHeaders(): { [key: string]: string } {
     Host: 'pocketapi.48.cn'
   };
 }
+
+/* sleep */
+export function sleep(time: number): Promise<void> {
+  return new Promise((resolve: Function, reject: Function): void => {
+    setTimeout((): void => {
+      resolve();
+    }, time * 1_000);
+  });
+}

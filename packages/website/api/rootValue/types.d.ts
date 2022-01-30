@@ -8,7 +8,7 @@ export interface RecordValueLiveInfo extends LiveInfo {
 export interface RecordValue {
   next: string;
   liveList: Array<RecordValueLiveInfo>;
-  liveRoomInfo: Promise<Array<LiveRoomInfoContent>>;
+  liveRoomInfo(): Promise<Array<LiveRoomInfoContent>>;
 }
 
 export interface RecordContext {
