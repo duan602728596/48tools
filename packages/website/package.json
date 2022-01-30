@@ -5,9 +5,9 @@
   "scripts": {
     "start:api": "npm run clean && cross-env NODE_ENV=development gulp",
     "start:vercel": "vercel dev --listen 5054",
-    "start:website": "milktea-esm vite-start",
+    "start:website": "cross-env NODE_ENV=development milktea-esm vite-start",
     "build:api": "npm run clean && cross-env NODE_ENV=production gulp",
-    "build:website": "milktea-esm vite-build",
+    "build:website": "cross-env NODE_ENV=production milktea-esm vite-build",
     "build": "npm run clean && npm run build:api && npm run build:website",
     "clean": "rimraf dist/api dist/package.json dist/**/*.{html,css,js,svg,ico,jpg,png,webp,avif}"
   },
@@ -45,7 +45,6 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.18",
-    "vite-plugin-babel": "^1.0.0",
-    "vite-plugin-html": "^3.0.3"
+    "vite-plugin-babel": "^1.0.0"
   }
 }
