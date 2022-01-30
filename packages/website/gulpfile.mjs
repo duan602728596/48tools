@@ -17,7 +17,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 /* 编译api */
 function devApiTsProject() {
-  const result = gulp.src('api/**/*.ts')
+  const result = gulp.src('src-api/**/*.ts')
     .pipe(changed('dist/api'))
     .pipe(plumber())
     .pipe(typescript({
@@ -29,7 +29,7 @@ function devApiTsProject() {
 }
 
 function apiTsProject() {
-  const result = gulp.src('api/**/*.ts')
+  const result = gulp.src('src-api/**/*.ts')
     .pipe(typescript({
       ...baseTypescriptConfig.compilerOptions,
       ...tsConfig.compilerOptions
