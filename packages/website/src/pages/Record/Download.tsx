@@ -115,10 +115,10 @@ function Download(props: {}): ReactElement {
 
     if (checkedLiveList.length === 0) return;
 
-    if (checkedLiveList.length > 20) {
+    if (checkedLiveList.length > 10) {
       Toast.show({
         position: 'top',
-        content: '最多支持20个地址的导出'
+        content: '最多支持10个地址的导出'
       });
 
       return;
@@ -251,7 +251,7 @@ ${ time }\n`;
   return (
     <Fragment>
       <div className="shrink-0">
-        <NoticeBar content="最多支持20个地址的导出。导出时间较慢，请耐心等待。" color="alert" />
+        <NoticeBar content="由于Vercel的限制，最多支持10个地址的导出。导出时间较慢，请耐心等待。" color="alert" />
       </div>
       <Form className="shrink-0" form={ form }>
         <Form.Item className="h-[75px]" name="query" rules={ [{ required: true, message: '必须输入ID' }] }>

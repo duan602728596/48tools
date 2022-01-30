@@ -1,5 +1,4 @@
 import { requestLiveList, requestLiveRoomInfo, requestRoomId } from '../services/pocket48.js';
-import { sleep } from '../utils.js';
 import type {
   LiveInfo,
   LiveData,
@@ -24,24 +23,18 @@ async function record(ctx: RecordContext): Promise<RecordValue> {
       return {
         ...item,
         async liveRoomInfo(): Promise<LiveRoomInfoContent> {
-          await sleep(3);
           const liveRoomInfoRes: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
 
           return liveRoomInfoRes.content;
         }
       };
     }),
-    async liveRoomInfo(): Promise<Array<LiveRoomInfoContent>> {
-      const result: Array<LiveRoomInfoContent> = [];
-
-      for (const liveId of (ctx.liveId ?? [])) {
-        await sleep(3);
+    liveRoomInfo(): Promise<Array<LiveRoomInfoContent>> {
+      return Promise.all((ctx.liveId ?? []).map(async (liveId: string): Promise<LiveRoomInfoContent> => {
         const liveRoomInfoRes: LiveRoomInfo = await requestLiveRoomInfo(liveId);
 
-        result.push(liveRoomInfoRes.content);
-      }
-
-      return result;
+        return liveRoomInfoRes.content;
+      }));
     }
   };
 }

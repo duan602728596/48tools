@@ -45,6 +45,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.18",
-    "vite-plugin-babel": "^1.0.0"
+    "vite-plugin-babel": "^1.0.0",
+    "vite-plugin-html": "^3.0.3"
   }
 }
