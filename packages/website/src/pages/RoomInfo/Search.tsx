@@ -44,8 +44,8 @@ function Search(props: {}): ReactElement {
         element.push(
           <List.Item key={ `${ item.id }` } description={ item.account }>
             <div className="grid grid-cols-3 gap-3">
-              <div>{ item.ownerName }</div>
-              <div>ID：{ item.id }</div>
+              <div className="mr-[8px]">{ item.ownerName }</div>
+              <div className="mr-[8px]">ID：{ item.id }</div>
               <div>房间ID：{ item.roomId }</div>
             </div>
           </List.Item>
