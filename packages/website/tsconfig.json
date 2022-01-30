@@ -4,13 +4,10 @@
     "module": "ESNext",
     "jsx": "react-jsx",
     "importHelpers": true,
-    "skipLibCheck": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "exclude": [
-    "node_modules",
-    "api"
-  ],
-  "include": [
-    "./src"
+    "node_modules"
   ]
 }

@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from 'react';
-import * as PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import style from './main.module.sass';
 

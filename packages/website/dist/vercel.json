@@ -5,7 +5,7 @@
       "destination": "/api"
     },
     {
-      "source": "/(Index|RoomInfo|Record)",
+      "source": "/(.*)",
       "destination": "/"
     }
   ]

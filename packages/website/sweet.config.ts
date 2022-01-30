@@ -1,9 +1,10 @@
 import * as process from 'node:process';
 import babel from 'vite-plugin-babel';
-import type { Plugin } from 'vite';
+import type { InlineConfig, Plugin } from 'vite';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
 const plugins: Array<Plugin> = [];
+const vite: InlineConfig = {};
 
 if (!isDev) {
   plugins.push(
@@ -15,9 +16,12 @@ if (!isDev) {
       }
     })
   );
+
+  vite.build = { sourcemap: true };
 }
 
 export default {
   frame: 'react',
-  plugins
+  plugins,
+  vite
 };

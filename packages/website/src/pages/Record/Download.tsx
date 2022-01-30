@@ -11,7 +11,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Form, Input, Button, DotLoading, Toast, List, Checkbox, Tag, NoticeBar } from 'antd-mobile';
 import type { FormInstance } from 'antd-mobile/es/components/form';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';

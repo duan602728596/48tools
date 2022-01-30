@@ -1,5 +1,5 @@
 import { useCallback, type ReactElement } from 'react';
-import * as PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { useNavigate, type NavigateFunction } from 'react-router-dom';
 import { NavBar } from 'antd-mobile';
 

@@ -3,12 +3,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd-mobile';
 import zhCN from 'antd-mobile/es/locales/zh-CN';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { storeFactory } from './store/store';
 import Routers from './router/Routers';
 import './main.tailwindcss.css';
-import './global.sass';
+import Main from './components/Main/Main';
 
 dayjs.locale('zh-cn');
 
@@ -17,7 +17,9 @@ render(
   <Provider store={ storeFactory() }>
     <ConfigProvider locale={ zhCN }>
       <BrowserRouter>
-        <Routers />
+        <Main>
+          <Routers />
+        </Main>
       </BrowserRouter>
     </ConfigProvider>
   </Provider>,
