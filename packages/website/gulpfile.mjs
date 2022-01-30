@@ -46,8 +46,13 @@ function apiTsProject() {
 /* 拷贝package.json */
 function packageJsonProject() {
   return gulp.src('package.json')
-    .pipe(replace(/(.*\n?)*/, function(ms) {
-      return JSON.stringify(_.omit(JSON.parse(ms), ['devDependencies', 'optionalDependencies']));
+    .pipe(replace(/(.*\n?)*/, function(match) {
+      let json = JSON.parse(match);
+
+      json.scripts = _.pick(json.scripts, 'start:vercel');
+      json = _.omit(json, ['devDependencies', 'optionalDependencies']);
+
+      return JSON.stringify(json);
     }))
     .pipe(gulp.dest('dist'));
 }
@@ -59,4 +64,4 @@ function watch() {
 
 export default isDevelopment
   ? gulp.series(gulp.parallel(devApiTsProject, packageJsonProject), watch)
-  : apiTsProject;
+  : gulp.parallel(apiTsProject, packageJsonProject);

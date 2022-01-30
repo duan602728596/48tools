@@ -7,7 +7,6 @@ import * as dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { storeFactory } from './store/store';
 import Routers from './router/Routers';
-import Main from './components/Main/Main';
 import './main.tailwindcss.css';
 import './global.sass';
 
@@ -17,11 +16,9 @@ dayjs.locale('zh-cn');
 render(
   <Provider store={ storeFactory() }>
     <ConfigProvider locale={ zhCN }>
-      <Main>
-        <BrowserRouter>
-          <Routers />
-        </BrowserRouter>
-      </Main>
+      <BrowserRouter>
+        <Routers />
+      </BrowserRouter>
     </ConfigProvider>
   </Provider>,
   document.getElementById('app')

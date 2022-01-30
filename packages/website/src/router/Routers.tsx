@@ -6,7 +6,8 @@ import Record from '../pages/Record/index';
 
 function Routers(props: {}): ReactElement | null {
   const routes: ReactElement | null = useRoutes([
-    { path: '/*', element: <Index /> },
+    { path: '/', element: <Index /> },
+    { path: 'Index', element: <Index /> },
     { path: 'RoomInfo', element: <RoomInfo /> },
     { path: 'Record', element: <Record /> }
   ]);

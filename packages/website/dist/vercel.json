@@ -3,6 +3,10 @@
     {
       "source": "/api/(.*)",
       "destination": "/api"
+    },
+    {
+      "source": "/(Index|RoomInfo|Record)",
+      "destination": "/"
     }
   ]
 }
