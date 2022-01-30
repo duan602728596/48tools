@@ -223,17 +223,19 @@ ${ time }\n`;
   // 渲染List
   function listRender(): Array<ReactElement> {
     return liveList.map((item: RecordLiveInfo, index: number): ReactElement => {
-      const time: string = dayjs(Number(item.ctime)).format('YYYY-MM-DD HH:mm:ss');
+      const time: string[] = dayjs(Number(item.ctime)).format('YYYY-MM-DD@HH:mm:ss').split('@');
 
       return (
         <List.Item key={ item.liveId } description={ item.userInfo.nickname }>
-          <div className="flex">
+          <div className="flex mb-[8px]">
             <div className="grow">
               <Checkbox checked={ item.checked }
                 onChange={ (value: boolean): void => handleCheckboxChange(item.liveId, value) }
               >
-                { index + 1 }、
-                <span className="ml-[6px]">{ item.title }</span>
+                <span className="text-[16px]">
+                  { index + 1 }、
+                  <span className="ml-[6px]">{ item.title }</span>
+                </span>
               </Checkbox>
             </div>
             <div className="shrink-0 w-[70px]">
@@ -243,7 +245,9 @@ ${ time }\n`;
                   : <Tag className="ml-[16px]" color="purple">视频</Tag>
               }
             </div>
-            <time className="shrink-0 w-[165px]">{ time }</time>
+            <time className="shrink-0 w-[90px] text-[14px]">
+              { time[0] }<br />{ time[1] }
+            </time>
           </div>
         </List.Item>
       );
