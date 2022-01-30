@@ -53,7 +53,7 @@ function packageJsonProject() {
 }
 
 function watch() {
-  gulp.watch('api/**/*.ts', devApiTsProject);
+  gulp.watch('src-api/**/*.ts', devApiTsProject);
   gulp.watch('package.json', packageJsonProject);
 }
 

@@ -12,6 +12,7 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Form, Input, Button, DotLoading, Toast, List, Checkbox, Tag, NoticeBar } from 'antd-mobile';
 import type { FormInstance } from 'antd-mobile/es/components/form';
 import * as dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';
 import { useReqRoomIdListQuery } from '../RoomInfo/reducers/roomInfo.query';
@@ -20,11 +21,13 @@ import {
   setLiveList,
   setLiveInfoItemCheckedChange,
   setLiveListCheckedClean,
+  setInDownloading,
   type RecordInitialState
 } from './reducers/record';
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../utils/GraphQLRequest';
+import download from '../../utils/download';
 import type { QuerySubState } from '../../store/queryTypes';
-import type { RoomId, LiveInfo } from '../../../src-api/services/interface';
+import type { RoomId, LiveInfo, LiveRoomInfoContent } from '../../../src-api/services/interface';
 import type { RecordLiveInfo } from './types';
 
 interface RecordResponseData {
@@ -34,18 +37,25 @@ interface RecordResponseData {
   };
 }
 
+interface RecordLiveRoomInfo {
+  record: {
+    liveRoomInfo: Array<LiveRoomInfoContent>;
+  };
+}
+
 /* redux selector */
 type RState = { record: RecordInitialState };
 
 const selector: Selector<RState, RecordInitialState> = createStructuredSelector({
   next: ({ record }: RState): string | undefined => record.next,            // 搜索的next
   liveList: ({ record }: RState): Array<RecordLiveInfo> => record.liveList, // 搜索结果
-  roomId: ({ record }: RState): RoomId | undefined => record.roomId         // 录播下载
+  roomId: ({ record }: RState): RoomId | undefined => record.roomId,        // 录播下载
+  inDownloading: ({ record }: RState): boolean => record.inDownloading      // 设置下载的状态
 });
 
 /* 视频下载 */
 function Download(props: {}): ReactElement {
-  const { next, liveList, roomId }: RecordInitialState = useSelector(selector);
+  const { next, liveList, roomId, inDownloading }: RecordInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [form]: [FormInstance] = Form.useForm();
   const { data: roomIdList = [] }: QuerySubState<Array<RoomId>> = useReqRoomIdListQuery();
@@ -97,6 +107,68 @@ function Download(props: {}): ReactElement {
     }
 
     setLoading(false);
+  }
+
+  // 导出地址
+  async function handleExportAddressClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    const checkedLiveList: Array<RecordLiveInfo> = liveList.filter((o: RecordLiveInfo) => o.checked);
+
+    if (checkedLiveList.length === 0) return;
+
+    if (checkedLiveList.length > 20) {
+      Toast.show({
+        position: 'top',
+        content: '最多支持20个地址的导出'
+      });
+
+      return;
+    }
+
+    dispatch(setInDownloading(true));
+
+    try {
+      const $liveId: string = checkedLiveList.map((o: RecordLiveInfo): string => `"${ o.liveId }"`).join(',');
+      const res: GraphQLResponse<RecordLiveRoomInfo> = await GraphQLRequest<RecordLiveRoomInfo>(/* GraphQL */ `
+        {
+            record(userId: ${ roomId?.id ?? 0 }, liveId: [${ $liveId }]) {
+                liveRoomInfo {
+                    liveId
+                    playStreamPath
+                    title
+                    ctime
+                }
+            }
+        }
+      `);
+
+      if (isGraphQLData<RecordLiveRoomInfo>(res)) {
+        const downloadTime: Dayjs = dayjs();
+        const downloadRoomId: string = `# ${ roomId?.ownerName } ${ roomId?.id } ${ roomId?.roomId }
+# ${ downloadTime.format('YYYY-MM-DD HH:mm:ss') }\n\n`;
+
+        const text: string = res.data.record.liveRoomInfo.map((item: LiveRoomInfoContent): string => {
+          const time: string = dayjs(Number(item.ctime)).format('YYYY-MM-DD HH:mm:ss');
+
+          return `${ item.title }
+${ item.liveId }
+${ item.playStreamPath }
+${ time }\n`;
+        }).join('\n');
+        const blob: Blob = new Blob([`${ downloadRoomId }${ text }`], { type: 'type/text' });
+
+        download(blob, `${ roomId?.ownerName }-${ downloadTime.format('YYYY-MM-DD_HH-mm-ss') }.txt`);
+      } else {
+        Toast.show({
+          icon: 'fail',
+          position: 'top',
+          content: '数据加载失败'
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    dispatch(setInDownloading(false));
   }
 
   // 加载更多
@@ -194,9 +266,10 @@ function Download(props: {}): ReactElement {
       </div>
       <div className="shrink-0 h-[50px] bg-blue-100">
         {
-          loading ? (
+          (loading || inDownloading) ? (
             <div className="leading-[50px] text-center">
               <DotLoading color="primary" />
+              { inDownloading ? '下载中' : '数据加载中' }
             </div>
           ) : (
             <div className="flex">
@@ -211,7 +284,7 @@ function Download(props: {}): ReactElement {
                 </Button>
               </div>
               <div className="w-1/4">
-                <Button className="h-[50px] bg-blue-100" block={ true }>
+                <Button className="h-[50px] bg-blue-100" block={ true } onClick={ handleExportAddressClick }>
                   导出地址
                 </Button>
               </div>

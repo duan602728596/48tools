@@ -6,6 +6,7 @@ export default /* GraphQL */ `
         msgFilePath: String
         title: String
         liveId: String
+        ctime: String
     }
 
     # 用户信息

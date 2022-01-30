@@ -24,7 +24,7 @@ async function record(ctx: RecordContext): Promise<RecordValue> {
       return {
         ...item,
         async liveRoomInfo(): Promise<LiveRoomInfoContent> {
-          await sleep(5);
+          await sleep(3);
           const liveRoomInfoRes: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
 
           return liveRoomInfoRes.content;
@@ -35,7 +35,7 @@ async function record(ctx: RecordContext): Promise<RecordValue> {
       const result: Array<LiveRoomInfoContent> = [];
 
       for (const liveId of (ctx.liveId ?? [])) {
-        await sleep(5);
+        await sleep(3);
         const liveRoomInfoRes: LiveRoomInfo = await requestLiveRoomInfo(liveId);
 
         result.push(liveRoomInfoRes.content);

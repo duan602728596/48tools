@@ -6,6 +6,7 @@ export interface RecordInitialState {
   next: string | undefined;
   liveList: Array<RecordLiveInfo>;
   roomId: RoomId | undefined;
+  inDownloading: boolean;
 }
 
 type CaseReducers = SliceCaseReducers<RecordInitialState>;
@@ -13,9 +14,10 @@ type CaseReducers = SliceCaseReducers<RecordInitialState>;
 const { actions, reducer }: Slice = createSlice<RecordInitialState, CaseReducers, 'record'>({
   name: 'record',
   initialState: {
-    next: undefined,  // 搜索的next
-    liveList: [],     // 搜索结果
-    roomId: undefined // 搜索的id
+    next: undefined,     // 搜索的next
+    liveList: [],        // 搜索结果
+    roomId: undefined,   // 搜索的id
+    inDownloading: false // 下载中
   },
   reducers: {
     setRoomId(state: RecordInitialState, action: PayloadAction<RoomId>): void {
@@ -45,6 +47,11 @@ const { actions, reducer }: Slice = createSlice<RecordInitialState, CaseReducers
 
         return item;
       });
+    },
+
+    // 设置下载的状态
+    setInDownloading(state: RecordInitialState, action: PayloadAction<boolean>): void {
+      state.inDownloading = action.payload;
     }
   }
 });
@@ -53,6 +60,7 @@ export const {
   setRoomId,
   setLiveList,
   setLiveInfoItemCheckedChange,
-  setLiveListCheckedClean
+  setLiveListCheckedClean,
+  setInDownloading
 }: CaseReducerActions<CaseReducers> = actions;
 export default { record: reducer };
