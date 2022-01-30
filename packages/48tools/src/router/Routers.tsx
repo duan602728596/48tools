@@ -11,7 +11,7 @@ import TaobaEncrypt from '../pages/TaobaEncrypt/index';
 
 function Routers(props: {}): ReactElement | null {
   const routes: ReactElement | null = useRoutes([
-    { path: '/*', element: <Index /> },
+    { path: '/', element: <Index /> },
     { path: '48/*', element: <Pocket48 /> },
     { path: 'Bilibili/*', element: <Bilibili /> },
     { path: 'AcFun/*', element: <AcFun /> },
