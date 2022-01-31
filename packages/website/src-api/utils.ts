@@ -31,3 +31,5 @@ export function createHeaders(): { [key: string]: string } {
     Host: 'pocketapi.48.cn'
   };
 }
+
+export const exportMaxLength: number = 7; // 最多导出

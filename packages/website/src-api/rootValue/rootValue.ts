@@ -1,4 +1,5 @@
 import { requestLiveList, requestLiveRoomInfo, requestRoomId } from '../services/pocket48.js';
+import { exportMaxLength } from '../utils.js';
 import type {
   LiveInfo,
   LiveData,
@@ -30,7 +31,9 @@ async function record(ctx: RecordContext): Promise<RecordValue> {
       };
     }),
     liveRoomInfo(): Promise<Array<LiveRoomInfoContent>> {
-      return Promise.all((ctx.liveId ?? []).map(async (liveId: string): Promise<LiveRoomInfoContent> => {
+      const arr: Array<string> = (ctx.liveId ?? []).slice(0, exportMaxLength);
+
+      return Promise.all(arr.map(async (liveId: string): Promise<LiveRoomInfoContent> => {
         const liveRoomInfoRes: LiveRoomInfo = await requestLiveRoomInfo(liveId);
 
         return liveRoomInfoRes.content;

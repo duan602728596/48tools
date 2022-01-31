@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Form, Input, Button, DotLoading, Toast, List, Checkbox, Tag, NoticeBar } from 'antd-mobile';
-import type { FormInstance } from 'antd-mobile/es/components/form';
+import type { FormInstance } from 'rc-field-form';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import classNames from 'classnames';
@@ -26,6 +26,7 @@ import {
 } from './reducers/record';
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../utils/GraphQLRequest';
 import download from '../../utils/download';
+import { exportMaxLength } from '../../../src-api/utils';
 import type { QuerySubState } from '../../store/queryTypes';
 import type { RoomId, LiveInfo, LiveRoomInfoContent } from '../../../src-api/services/interface';
 import type { RecordLiveInfo } from './types';
@@ -115,10 +116,10 @@ function Download(props: {}): ReactElement {
 
     if (checkedLiveList.length === 0) return;
 
-    if (checkedLiveList.length > 10) {
+    if (checkedLiveList.length > exportMaxLength) {
       Toast.show({
         position: 'top',
-        content: '最多支持10个地址的导出'
+        content: `最多支持${ exportMaxLength }个地址的导出`
       });
 
       return;
@@ -257,7 +258,7 @@ ${ time }\n`;
   return (
     <Fragment>
       <div className="shrink-0">
-        <NoticeBar content="由于Vercel的限制，最多支持10个地址的导出。导出时间较慢，请耐心等待。" color="alert" />
+        <NoticeBar content={ `由于Vercel的限制，最多支持${ exportMaxLength }个地址的导出。导出时间较慢，请耐心等待。` } color="alert" />
       </div>
       <Form className="shrink-0" form={ form }>
         <Form.Item className="h-[75px]" name="query" rules={ [{ required: true, message: '必须输入ID' }] }>
