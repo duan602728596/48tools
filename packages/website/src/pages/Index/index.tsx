@@ -21,7 +21,7 @@ function Index(props: {}): ReactElement {
       <Helmet>
         <title>48tools</title>
       </Helmet>
-      <div className="pb-[20px]">
+      <div className="h-full">
         <picture className="block w-full">
           <source srcSet={ bg1Avif } type="image/avif" />
           <source srcSet={ bg1Webp } type="image/avif" />
