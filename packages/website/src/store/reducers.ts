@@ -9,6 +9,6 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
 );
 
 /* apiMiddlewares */
-export const middlewares: Array<Middleware> = [
+export const apiMiddlewares: Array<Middleware> = [
   roomInfoQueryApiMiddleware
 ];

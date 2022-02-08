@@ -11,7 +11,7 @@ import {
   type Middleware
 } from '@reduxjs/toolkit';
 import type { CurriedGetDefaultMiddleware, ThunkMiddlewareFor } from '@reduxjs/toolkit/src/getDefaultMiddleware';
-import { reducersMapObject, middlewares } from './reducers';
+import { reducersMapObject, apiMiddlewares } from './reducers';
 
 interface ThunkOptions<E = any> {
   extraArgument: E;
@@ -39,7 +39,7 @@ function createStore(initialState: DeepPartial<any> = {}): void {
     reducer,
     preloadedState: initialState,
     middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): MiddlewareCbReturn {
-      return getDefaultMiddleware<GetDefaultMiddlewareOptions>().concat(middlewares);
+      return getDefaultMiddleware<GetDefaultMiddlewareOptions>().concat(apiMiddlewares);
     }
   });
 }
