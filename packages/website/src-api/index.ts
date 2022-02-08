@@ -1,3 +1,4 @@
+import process from 'process';
 import type { IncomingMessage, ServerResponse } from 'http';
 import express, { type Express } from 'express';
 import { graphqlHTTP, type OptionsData, type GraphQLParams } from 'express-graphql';
@@ -16,7 +17,7 @@ app.use('/api/graphql',
     return {
       schema: buildSchema(querySchema),
       rootValue: await rootValue(),
-      graphiql: true
+      graphiql: process.env.VERCEL_ENVIRONMENT !== '1'
     };
   })
 );
