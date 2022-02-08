@@ -1,4 +1,4 @@
-import type { Api } from '@reduxjs/toolkit/query/react';
+import type { Api, BaseQueryFn, EndpointDefinitions } from '@reduxjs/toolkit/query/react';
 import type { EndpointBuilder, QueryDefinition } from '@reduxjs/toolkit/src/query/endpointDefinitions';
 
 // @redux/toolkit/query 返回的结果
@@ -18,6 +18,6 @@ export interface QuerySubState<T> {
   status: string;
 }
 
-export type QueryApi = Api<any, any, string, string>;
-export type QueryEndpointBuilder = EndpointBuilder<any, string, string>;
-export type EndpointsReturn = Record<string, QueryDefinition<any, any, any, any>>;
+export type QueryApi = Api<BaseQueryFn, EndpointDefinitions, string, string>;
+export type QueryEndpointsBuilder = EndpointBuilder<BaseQueryFn, string, string>;
+export type QueryEndpointsFuncReturn = Record<string, QueryDefinition<unknown, BaseQueryFn, string, unknown>>;

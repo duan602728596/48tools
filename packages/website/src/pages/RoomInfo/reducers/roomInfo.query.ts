@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import type { Middleware } from '@reduxjs/toolkit';
-import type { QueryApi, QueryEndpointBuilder, EndpointsReturn } from '../../../store/queryTypes';
+import type { QueryApi, QueryEndpointsBuilder, QueryEndpointsFuncReturn } from '../../../store/queryTypes';
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../../utils/GraphQLRequest';
 import type { RoomInfo, RoomId } from '../../../../src-api/services/interface';
 
@@ -16,7 +16,7 @@ const api: QueryApi = createApi({
   reducerPath: 'roomInfoQueryApi',
   keepUnusedDataFor: 600_000,
   tagTypes: Object.values(TAG_TYPES),
-  endpoints(builder: QueryEndpointBuilder): EndpointsReturn {
+  endpoints(builder: QueryEndpointsBuilder): QueryEndpointsFuncReturn {
     return {
       reqRoomIdList: builder.query({
         async queryFn(): Promise<{ data: Array<RoomId> }> {
