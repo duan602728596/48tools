@@ -19,5 +19,5 @@ export interface QuerySubState<T> {
 }
 
 export type QueryApi = Api<BaseQueryFn, EndpointDefinitions, string, string>;
-export type QueryEndpointsBuilder = EndpointBuilder<BaseQueryFn, string, string>;
-export type QueryEndpointsFuncReturn = Record<string, QueryDefinition<unknown, BaseQueryFn, string, unknown>>;
+export type QueryEndpointBuilder = EndpointBuilder<BaseQueryFn, string, string>;
+export type QueryEndpointFuncReturn = Record<string, QueryDefinition<unknown, BaseQueryFn, string, unknown>>;
