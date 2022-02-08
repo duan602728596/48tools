@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import * as querystring from 'node:querystring';
 import { BrowserWindow } from 'electron';
 import * as remoteMain from '@electron/remote/main';
-import { isDevelopment } from '../utils';
+import { isDevelopment, wwwPath } from '../utils';
 import { themeEvent, type ThemeValue } from './ipcTheme';
 
 /* 记录id和窗口的关系 */
@@ -38,8 +38,8 @@ export function openPlayerHtml(title: string, query: string): void {
   if (win) {
     win.loadFile(
       isDevelopment
-        ? path.join(__dirname, '../../../48tools/dist/player.html')
-        : path.join(__dirname, '../../../dist/player.html'),
+        ? path.join(wwwPath, '48tools/dist/player.html')
+        : path.join(wwwPath, 'dist/player.html'),
       { search: query }
     );
 

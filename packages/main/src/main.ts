@@ -2,7 +2,7 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import { app, BrowserWindow, Menu } from 'electron';
 import * as remoteMain from '@electron/remote/main';
-import { isDevelopment } from './utils';
+import { isDevelopment, wwwPath } from './utils';
 import { ipc, removeIpc } from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 
@@ -23,7 +23,7 @@ function createWindow(): void {
       webSecurity: false,
       contextIsolation: false
     },
-    icon: isDevelopment ? undefined : path.join(__dirname, '../../titleBarIcon.png')
+    icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png')
   });
 
   remoteMain.enable(win.webContents);
@@ -34,8 +34,8 @@ function createWindow(): void {
 
   win.loadFile(
     isDevelopment
-      ? path.join(__dirname, '../../48tools/dist/index.html')
-      : path.join(__dirname, '../../dist/index.html')
+      ? path.join(wwwPath, '48tools/dist/index.html')
+      : path.join(wwwPath, 'dist/index.html')
   );
 
   // 去掉顶层菜单
