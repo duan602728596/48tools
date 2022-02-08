@@ -1,5 +1,5 @@
-import type { Api, BaseQueryFn, EndpointDefinitions } from '@reduxjs/toolkit/query/react';
-import type { EndpointBuilder, QueryDefinition } from '@reduxjs/toolkit/src/query/endpointDefinitions';
+import type { Api, BaseQueryFn, EndpointDefinitions, QueryDefinition } from '@reduxjs/toolkit/query';
+import type { EndpointBuilder } from '@reduxjs/toolkit/src/query/endpointDefinitions';
 
 // @redux/toolkit/query 返回的结果
 export interface QuerySubState<T> {
