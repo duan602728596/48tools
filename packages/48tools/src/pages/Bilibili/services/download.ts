@@ -1,10 +1,6 @@
-import { promisify } from 'node:util';
-import { pipeline } from 'node:stream';
 import got, { type Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch } from './interface';
-
-const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
 // B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
 // 请求bilibili的html
