@@ -21,6 +21,7 @@ import {
   setDownloadProgress,
   type BilibiliDownloadInitialState
 } from '../reducers/download';
+import { requestDownloadFileByStream } from '../../48/services/pocket48';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
@@ -41,6 +42,28 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
 function Download(props: {}): ReactElement {
   const { downloadList, downloadProgress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+
+  // 下载封面
+  async function handleDownloadPicClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    if (item.pic === undefined || item.pic === '') {
+      return;
+    }
+
+    try {
+      const urlResult: url.URL = new url.URL(item.durl);
+      const parseResult: ParsedPath = path.parse(urlResult.pathname);
+      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+        defaultPath: `[B站封面下载]${ item.type }${ item.id }${ parseResult.ext }`
+      });
+
+      if (result.canceled || !result.filePath) return;
+
+      await requestDownloadFileByStream(item.pic, result.filePath);
+      message.success('图片下载完成！');
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   // 下载
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -109,7 +132,7 @@ function Download(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 155,
+      width: 220,
       render: (value: undefined, record: DownloadItem, index: number): ReactElement => {
         const inDownload: boolean = record.qid in downloadProgress;
 
@@ -119,6 +142,11 @@ function Download(props: {}): ReactElement {
               onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadClick(record, event) }
             >
               下载
+            </Button>
+            <Button disabled={ record.pic === undefined || record.pic === '' }
+              onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadPicClick(record, event) }
+            >
+              封面
             </Button>
             <Button type="primary"
               danger={ true }
