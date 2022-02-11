@@ -13,7 +13,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
-import { parseVideoUrl, parseAudioUrl, parseBangumiVideo } from '../parseBilibiliUrl';
+import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo } from '../parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
 
 /* 视频分类 */
@@ -60,7 +60,7 @@ function AddForm(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      let result: string | void;
+      let result: string | { flvUrl: string; pic: string } | void;
 
       if (formValue.type === 'au') {
         // 下载音频
@@ -69,14 +69,15 @@ function AddForm(props: {}): ReactElement {
         // 下载番剧
         result = await parseBangumiVideo(formValue.type, formValue.id);
       } else {
-        // 下载av、bv视频
-        result = await parseVideoUrl(formValue.type, formValue.id, formValue.page);
+        // 下载av、bv视频，会返回视频封面
+        result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page);
       }
 
       if (result) {
         dispatch(setAddDownloadList({
           qid: randomUUID(),
-          durl: result,
+          durl: typeof result === 'object' ? result.flvUrl : result,
+          pic: typeof result === 'object' ? result.pic : undefined,
           type: formValue.type,
           id: formValue.id,
           page: formValue.page ?? 1

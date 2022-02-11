@@ -1,6 +1,6 @@
 import got, { type Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
-import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch } from './interface';
+import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData } from './interface';
 
 // B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
 // 请求bilibili的html
@@ -85,4 +85,21 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
   const res: Response = await fetch(apiUrl);
 
   return res.json();
+}
+
+/**
+ * 根据https://api.bilibili.com/x/web-interface/view?bvid=1V341177FV接口查询视频信息
+ * @param { string } id: av或bv的id
+ * @param { 'av' | 'bv' } type
+ */
+export async function requestWebInterfaceView(id: string, type: string): Promise<WebInterfaceViewData> {
+  const apiUrl: string = `https://api.bilibili.com/x/web-interface/view?${ type === 'av' ? 'a' : 'bv' }id=${ id }`;
+  const res: GotResponse<WebInterfaceViewData> = await got.get(apiUrl, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    }
+  });
+
+  return res.body;
 }

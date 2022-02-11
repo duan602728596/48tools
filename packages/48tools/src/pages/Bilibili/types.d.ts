@@ -5,6 +5,7 @@ export interface DownloadItem {
   id: string;               // 视频：av、bv的id，音频：au的id
   page: number;             // 分页
   durl: string;             // 下载地址
+  pic?: string;             // 封面图
 }
 
 // b站页面上的视频信息

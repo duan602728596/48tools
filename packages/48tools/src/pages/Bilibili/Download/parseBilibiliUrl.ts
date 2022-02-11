@@ -1,7 +1,19 @@
 import { createHash, type Hash } from 'node:crypto';
-import { requestBilibiliHtml, requestVideoInfo, requestAudioInfo, requestBangumiVideoInfo } from '../services/download';
+import {
+  requestBilibiliHtml,
+  requestVideoInfo,
+  requestAudioInfo,
+  requestBangumiVideoInfo,
+  requestWebInterfaceView
+} from '../services/download';
 import type { InitialState } from '../types';
-import type { VideoInfo, AudioInfo, BangumiVideoInfo } from '../services/interface';
+import type {
+  VideoInfo,
+  AudioInfo,
+  BangumiVideoInfo,
+  WebInterfaceViewData,
+  WebInterfaceViewDataPageItem
+} from '../services/interface';
 
 // b站请求接口需要的key
 const APP_KEY: string = 'iVGUTjsxvpLeuDCf';
@@ -53,6 +65,7 @@ function parseHtml(html: string): ParseHtmlResult {
 }
 
 /**
+ * @deprecated: 使用parseVideoUrlV2方法，通过接口请求信息
  * 解析视频url
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
@@ -82,6 +95,40 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
   }
 
   return flvUrl;
+}
+
+/**
+ * 解析视频url
+ * @param { string } type: 视频类型
+ * @param { string } id: 视频id
+ * @param { number } page: 分页
+ */
+export async function parseVideoUrlV2(type: string, id: string, page: number = 1): Promise<{ flvUrl: string; pic: string } | undefined> {
+  const res: WebInterfaceViewData = await requestWebInterfaceView(id, type);
+  let result: { flvUrl: string; pic: string } | undefined = undefined;
+  let flvUrl: string | undefined = undefined; // 视频地址
+
+  if (res?.data?.pages) {
+    const { cid }: WebInterfaceViewDataPageItem = res.data.pages[page - 1]; // cid
+
+    for (const query of QUERY_ARRAY) {
+      const payload: string = `appkey=${ APP_KEY }&cid=${ cid }&otype=json&page=${ page }&${ query }`;
+      const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
+      const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign);
+
+      if (videoInfoRes?.durl?.length) {
+        result = {
+          flvUrl: videoInfoRes.durl[0].url,
+          pic: res.data.pic
+        };
+
+        flvUrl = videoInfoRes.durl[0].url;
+        break;
+      }
+    }
+  }
+
+  return result;
 }
 
 /**

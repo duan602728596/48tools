@@ -76,6 +76,27 @@ export interface SpaceArcSearch {
   };
 }
 
+// 通过接口获取视频信息
+export interface WebInterfaceViewDataPageItem {
+  cid: number;
+  page: number;
+  part: string;
+}
+
+export interface WebInterfaceViewData {
+  code: number;
+  message: string;
+  ttl: number;
+  data: {
+    bvid: `BV${ string }`;
+    aid: number;
+    cid: number;
+    pic: string;
+    title: string;
+    pages: Array<WebInterfaceViewDataPageItem>;
+  };
+}
+
 /* ========== Live ========== */
 // 直播间信息
 export interface RoomInit {

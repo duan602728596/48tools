@@ -16,7 +16,7 @@ import type { ColumnsType } from 'antd/es/table';
 import classNames from 'classnames';
 import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
-import { parseVideoList, parseVideoUrl } from '../parseBilibiliUrl';
+import { parseVideoList, parseVideoUrlV2 } from '../parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
 import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
 
@@ -51,7 +51,7 @@ function AddBySearch(props: {}): ReactElement {
   async function handleAddDownloadQueueClick(o: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const bvId: string = o.bvid.replace(/^bv/i, '');
-      const result: string | void = await parseVideoUrl('bv', bvId, o.index);
+      const result: string | void = await parseVideoUrlV2('bv', bvId, o.index);
 
       if (result) {
         dispatch(setAddDownloadList({
