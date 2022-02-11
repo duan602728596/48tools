@@ -50,7 +50,7 @@ function Download(props: {}): ReactElement {
     }
 
     try {
-      const urlResult: url.URL = new url.URL(item.durl);
+      const urlResult: url.URL = new url.URL(item.pic);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[B站封面下载]${ item.type }${ item.id }${ parseResult.ext }`
