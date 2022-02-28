@@ -5,7 +5,7 @@ import fse from 'fs-extra';
 import builder from 'electron-builder';
 import { cwd, appDir, staticsDir, build, output, unpacked } from './utils.mjs';
 import taskfile from './taskfile.mjs';
-import packageJson from '../package.json';
+import packageJson from '../package.json' assert { type: 'json' };
 
 const rimrafPromise = util.promisify(rimraf);
 

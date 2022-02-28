@@ -8,8 +8,8 @@ import fse from 'fs-extra';
 import rimraf from 'rimraf';
 import { requireJson } from '@sweet-milktea/utils';
 import { cwd } from './utils.mjs';
-import packageJson from '../packages/app/package.json';
-import dependenciesOtherFilesJson from '../packages/app/dependenciesOtherFiles.json';
+import packageJson from '../packages/app/package.json' assert { type: 'json' };
+import dependenciesOtherFilesJson from '../packages/app/dependenciesOtherFiles.json' assert { type: 'json' };
 
 const require = createRequire(import.meta.url);
 const rimrafPromise = util.promisify(rimraf);
