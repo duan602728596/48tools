@@ -1,12 +1,12 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 
 export type WorkerEventData = {
-  type: 'start' | 'stop';      // 执行的方法
-  playStreamPath: string;      // 媒体地址
-  filePath: string;            // 文件保存地址
-  startTime?: string;          // 开始时间
-  endTime?: string;            // 结束时间
-  ffmpeg: string;              // ffmpeg地址
+  type: 'start' | 'stop'; // 执行的方法
+  playStreamPath: string; // 媒体地址
+  filePath: string;       // 文件保存地址
+  startTime?: string;     // 开始时间
+  endTime?: string;       // 结束时间
+  ffmpeg: string;         // ffmpeg地址
 };
 
 export type MessageEventData = {
