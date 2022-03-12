@@ -7,11 +7,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Link } from 'react-router-dom';
-import { Button, message, Table, Tag, Popconfirm } from 'antd';
+import { Button, message, Table, Tag, Popconfirm, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
+import { Onion } from '@bbkkbkk/q';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
 import { requestLiveRoomInfo } from '../../services/pocket48';
@@ -61,8 +63,11 @@ function Pocket48Live(props: {}): ReactElement {
 
   // 开始自动抓取
   async function handleStartAutoGrabClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+    type LiveOptionsResult = { name: string; value: Pocket48LiveAutoGrabOptions };
+    type OnionContext = { result: LiveOptionsResult; transcoding?: boolean };
+
     // 获取配置
-    const result: { query: string; result?: { name: string; value: Pocket48LiveAutoGrabOptions } }
+    const result: { query: string; result?: LiveOptionsResult }
       = await dispatch(IDBGetPocket48LiveOptions({ query: OPTIONS_NAME }));
 
     if (!result.result) {
@@ -78,11 +83,43 @@ function Pocket48Live(props: {}): ReactElement {
       return message.warn('请先配置自动抓取监听的成员直播。');
     }
 
-    message.info('开始自动抓取。');
-    autoGrab(result.result.value.dir, usersArr);
-    dispatch(setAutoGrab(
-      setInterval(autoGrab, result.result.value.time * 60_000, result.result.value.dir, usersArr)
-    ));
+    const onion: Onion = new Onion();
+
+    // 判断是否需要转码
+    onion.use(function(ctx: OnionContext, next: Function): void {
+      Modal.confirm({
+        content: '确认在录制时转码吗？',
+        closable: false,
+        keyboard: false,
+        mask: false,
+        maskClosable: false,
+        centered: true,
+        okText: '转码',
+        cancelText: '不转码',
+        onOk(): void {
+          ctx.transcoding = true;
+          next();
+        },
+        onCancel(): void {
+          ctx.transcoding = false;
+          next();
+        }
+      });
+    });
+
+    // 自动抓取
+    onion.use(function(ctx: OnionContext, next: Function): void {
+      const { result: r, transcoding = false }: OnionContext = ctx;
+
+      message.info('开始自动抓取。');
+      autoGrab(r.value.dir, usersArr, transcoding);
+      dispatch(setAutoGrab(
+        setInterval(autoGrab, r.value.time * 60_000, r.value.dir, usersArr, transcoding)
+      ));
+      next();
+    });
+
+    onion.run({ result: result.result });
   }
 
   // 复制直播地址
@@ -110,7 +147,7 @@ function Pocket48Live(props: {}): ReactElement {
   }
 
   // 录制
-  async function handleGetVideoClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleGetVideoClick(record: LiveInfo, transcoding: boolean, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
@@ -120,7 +157,7 @@ function Pocket48Live(props: {}): ReactElement {
       if (result.canceled || !result.filePath) return;
 
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const worker: Worker = getFFMpegDownloadWorker();
+      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;
@@ -203,35 +240,48 @@ function Pocket48Live(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 370,
+      width: 245,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
+        const inRecording: boolean = idx >= 0;
 
         return (
-          <Button.Group>
-            {
-              idx >= 0 ? (
-                <Popconfirm title="确定要停止录制吗？"
-                  onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+          <Fragment>
+            <div className="mb-[6px]">
+              <Button.Group>
+                {
+                  inRecording ? (
+                    <Popconfirm title="确定要停止录制吗？"
+                      onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                    >
+                      <Button type="primary" danger={ true }>停止</Button>
+                    </Popconfirm>
+                  ) : (
+                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
+                      handleGetVideoClick(record, false, event) }>
+                      录制
+                    </Button>
+                  )
+                }
+                <Button disabled={ inRecording }
+                  onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, true, event) }
                 >
-                  <Button type="primary" danger={ true }>停止</Button>
-                </Popconfirm>
-              ) : (
-                <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, event) }>
-                  录制
+                  录制并转码
                 </Button>
-              )
-            }
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleOpenPlayerClick(record, event) }>
-              播放
-            </Button>
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
-              下载图片
-            </Button>
-            <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleCopyLiveUrlClick(record, event) }>
-              复制直播地址
-            </Button>
-          </Button.Group>
+              </Button.Group>
+            </div>
+            <Button.Group size="small">
+              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleOpenPlayerClick(record, event) }>
+                播放
+              </Button>
+              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
+                下载图片
+              </Button>
+              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleCopyLiveUrlClick(record, event) }>
+                复制直播地址
+              </Button>
+            </Button.Group>
+          </Fragment>
         );
       }
     }

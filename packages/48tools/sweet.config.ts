@@ -96,6 +96,7 @@ export default function(info: object): { [key: string]: any } {
     ]).concat(
       '@electron/remote',
       'electron',
+      'fluent-ffmpeg',
       'got',
       'puppeteer-core'
     )),

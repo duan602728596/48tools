@@ -5,6 +5,7 @@ import { message } from 'antd';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
@@ -16,8 +17,9 @@ import type { LiveData, LiveInfo, UserInfo, LiveRoomInfo } from '../../services/
  * 自动抓取
  * @param { string } dir: 保存录像的目录
  * @param { Array<string> } usersArr: 监听的小偶像
+ * @param { boolean } transcoding: 自动转码
  */
-async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
+async function autoGrab(dir: string, usersArr: string[], transcoding: boolean): Promise<void> {
   const { dispatch, getState }: Store = store;
   const res: LiveData = await requestLiveList('0', true);
   const liveList: Array<LiveInfo> = res.content.liveList; // 自动刷新获取直播列表
@@ -57,7 +59,7 @@ async function autoGrab(dir: string, usersArr: string[]): Promise<void> {
 
       const filePath: string = path.join(dir, filename);
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
-      const worker: Worker = getFFMpegDownloadWorker();
+      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event.data;
