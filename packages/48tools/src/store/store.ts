@@ -7,10 +7,9 @@ import {
   type DeepPartial,
   type ImmutableStateInvariantMiddlewareOptions,
   type SerializableStateInvariantMiddlewareOptions,
-  type MiddlewareArray,
   type Middleware
 } from '@reduxjs/toolkit';
-import type { CurriedGetDefaultMiddleware, ThunkMiddlewareFor } from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import type { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
 import { reducersMapObject, ignoreOptions } from './reducers';
 
 interface ThunkOptions<E = any> {
@@ -23,10 +22,7 @@ interface GetDefaultMiddlewareOptions {
   serializableCheck?: boolean | SerializableStateInvariantMiddlewareOptions;
 }
 
-type MiddlewareCbReturn = MiddlewareArray<
-  Middleware<{}, any>
-  | ThunkMiddlewareFor<any, GetDefaultMiddlewareOptions>
->;
+type Middlewares = ReadonlyArray<Middleware<{}, any>>;
 
 /* reducer列表 */
 const reducer: Reducer = combineReducers(reducersMapObject);
@@ -38,7 +34,7 @@ function createStore(initialState: DeepPartial<any> = {}): void {
   store = configureStore({
     reducer,
     preloadedState: initialState,
-    middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): MiddlewareCbReturn {
+    middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): Middlewares {
       return getDefaultMiddleware<GetDefaultMiddlewareOptions>({
         immutableCheck: ignoreOptions,
         serializableCheck: ignoreOptions
