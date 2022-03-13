@@ -19,9 +19,9 @@ function download(workerData: WorkerEventData): void {
   }
 
   command = FluentFFmpeg(playStreamPath)
-    .videoCodec('libx264')
+    .videoCodec('copy')
     .audioCodec('copy')
-    .fps(27)
+    .fps(30)
     .output(filePath)
     .on('end', function(): void {
       postMessage({ type: 'close' });

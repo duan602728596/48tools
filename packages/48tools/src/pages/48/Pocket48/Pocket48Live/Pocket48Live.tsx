@@ -176,8 +176,7 @@ function Pocket48Live(props: {}): ReactElement {
         type: 'start',
         playStreamPath: resInfo.content.playStreamPath,
         filePath: result.filePath,
-        ffmpeg: getFFmpeg(),
-        libx264: true
+        ffmpeg: getFFmpeg()
       });
 
       dispatch(setAddLiveChildList({
