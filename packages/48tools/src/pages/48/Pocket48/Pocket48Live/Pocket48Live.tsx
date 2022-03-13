@@ -151,7 +151,7 @@ function Pocket48Live(props: {}): ReactElement {
     try {
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
-          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.flv`
+          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.${ transcoding ? 'ts' : 'flv' }`
       });
 
       if (result.canceled || !result.filePath) return;
