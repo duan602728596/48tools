@@ -22,10 +22,7 @@ function download(workerData: WorkerEventData): void {
   }
 
   command = FluentFFmpeg(playStreamPath)
-    .inputOptions([
-      '-flags low_delay',
-      '-framedrop'
-    ])
+    .inputOptions(['-re'])
     .videoCodec('copy')
     .audioCodec('copy')
     .fps(30)
