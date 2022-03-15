@@ -10,7 +10,10 @@ export type WorkerEventData = {
 
 let command: FfmpegCommand;
 
-/* 转码并下载 */
+/**
+ * 转码并下载
+ * https://stackoverflow.com/questions/16658873/how-to-minimize-the-delay-in-a-live-streaming-with-ffmpeg
+ */
 function download(workerData: WorkerEventData): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
 
@@ -19,6 +22,10 @@ function download(workerData: WorkerEventData): void {
   }
 
   command = FluentFFmpeg(playStreamPath)
+    .inputOptions([
+      '-flags low_delay',
+      '-framedrop'
+    ])
     .videoCodec('copy')
     .audioCodec('copy')
     .fps(30)

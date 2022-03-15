@@ -88,14 +88,14 @@ function Pocket48Live(props: {}): ReactElement {
     // 判断是否需要转码
     onion.use(function(ctx: OnionContext, next: Function): void {
       Modal.confirm({
-        content: '确认在录制时转码吗？',
+        content: '选择要录制的视频方法。',
         closable: false,
         keyboard: false,
         mask: false,
         maskClosable: false,
         centered: true,
-        okText: '转码',
-        cancelText: '不转码',
+        okText: '录制',
+        cancelText: '录制（修复连麦用）',
         onOk(): void {
           ctx.transcoding = true;
           next();
@@ -265,7 +265,7 @@ function Pocket48Live(props: {}): ReactElement {
                 <Button disabled={ inRecording }
                   onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, true, event) }
                 >
-                  录制并转码
+                  录制（修复连麦用）
                 </Button>
               </Button.Group>
             </div>
