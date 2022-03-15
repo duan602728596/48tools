@@ -31,11 +31,7 @@ function download(workerData: WorkerEventData): void {
       postMessage({ type: 'close' });
     })
     .on('error', function(err: Error, stdout: string, stderr: string): void {
-      if (err.message.includes('ffmpeg exited')) {
-        postMessage({ type: 'close' });
-      } else {
-        postMessage({ type: 'error', error: err });
-      }
+      postMessage({ type: 'error', error: err });
     });
 
   command.run();
