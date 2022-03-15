@@ -22,7 +22,7 @@ function download(workerData: WorkerEventData): void {
   }
 
   command = FluentFFmpeg(playStreamPath)
-    .inputOptions(['-re'])
+    .inputOptions(['-re', '-accurate_seek'])
     .videoCodec('copy')
     .audioCodec('copy')
     .fps(30)
