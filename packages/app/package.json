@@ -1,6 +1,6 @@
 {
   "name": "@48tools/app",
-  "version": "3.9.0",
+  "version": "3.9.1",
   "description": "工具合集，提供各种常用功能，包括口袋48直播、公演直播、A站、B站、视频裁剪等。",
   "license": "GPL-3.0",
   "author": {
