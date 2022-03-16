@@ -94,8 +94,8 @@ function Pocket48Live(props: {}): ReactElement {
         mask: false,
         maskClosable: false,
         centered: true,
-        okText: '录制',
-        cancelText: '录制（修复连麦用）',
+        okText: '录制（修复连麦用）',
+        cancelText: '录制',
         onOk(): void {
           ctx.transcoding = true;
           next();
@@ -146,7 +146,12 @@ function Pocket48Live(props: {}): ReactElement {
     }
   }
 
-  // 录制
+  /**
+   * 录制
+   * @param { LiveInfo } record: 直播信息
+   * @param { boolean } transcoding: 为true时，每次都会重新编码，而不是采用视频开始时的编码，可以修复连麦问题
+   * @param { MouseEvent<HTMLButtonElement> } event
+   */
   async function handleGetVideoClick(record: LiveInfo, transcoding: boolean, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
