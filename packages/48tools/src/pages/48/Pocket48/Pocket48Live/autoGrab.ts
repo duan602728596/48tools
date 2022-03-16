@@ -40,7 +40,8 @@ async function autoGrab(dir: string, usersArr: string[], transcoding: boolean): 
         cTime: string = cTimeDay.format(fileTimeFormat), // 直播开始时间
         rTimeDay: Dayjs = dayjs(),
         rTime: string = rTimeDay.format(fileTimeFormat), // 文件创建时间
-        filename: string = `[口袋48直播]${ item.userInfo.nickname }_${ cTime }_${ item.liveId }_${ rTime }.flv`; // 文件名
+        filename: string = `[口袋48直播]${ item.userInfo.nickname }_${ cTime }_${ item.liveId }_${ rTime }`
+          + `.${ transcoding ? 'ts' : 'flv' }`; // 文件名
 
       try {
         // 追加log
