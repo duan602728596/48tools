@@ -1,4 +1,6 @@
 import { randomUUID } from 'node:crypto';
+import { setTimeout } from 'node:timers/promises';
+import { ipcRenderer } from 'electron';
 import {
   Fragment,
   useState,
@@ -12,10 +14,19 @@ import {
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Input, Button, Modal, message, Select } from 'antd';
+import { Onion } from '@bbkkbkk/q';
 import style from './add.sass';
 import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
-import type { AwemeDetail, ScriptRendedData, DownloadUrlItem, C0Obj, CVersionObj } from '../types';
+import type {
+  AwemeDetail,
+  ScriptRendedData,
+  DownloadUrlItem,
+  C0Obj,
+  CVersionObj,
+  GetVideoUrlOnionContext,
+  VerifyData
+} from '../types';
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactNode> {
@@ -52,72 +63,135 @@ function Add(props: {}): ReactElement {
   }
 
   // 获取下载地址
-  async function handleGetVideoUrlClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  function handleGetVideoUrlClick(event: MouseEvent<HTMLButtonElement>): void {
     if (/^\s*$/.test(urlValue)) return;
 
     setGetUrlLoading(true);
 
     try {
-      let html: string = '';
-      const res: DouyinVideo = await requestDouyinVideoHtml(urlValue);
+      const onion: Onion = new Onion();
 
-      if (res.type === 'html') {
-        // 直接获取html
-        html = res.value;
-      } else {
-        // 计算__ac_signature并获取html
-        const acSignature: string = Reflect.get(Reflect.get(globalThis, 'byted_acrawler'), 'sign')
-          .call(undefined, '', res.value);
-        const secondCookie: string = ` __ac_nonce=${ res.value }; __ac_signature=${ acSignature }`;
+      // 请求html
+      onion.use(async function(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
+        let html: string = '';
+        const res: DouyinVideo = await requestDouyinVideoHtml(urlValue); // 获取__ac_nonce
+
+        if (res.type === 'html') {
+          // 直接获取html
+          html = res.value;
+        } else {
+          // 计算__ac_signature并获取html
+          const acSignature: string = Reflect.get(Reflect.get(globalThis, 'byted_acrawler'), 'sign')
+            .call(undefined, '', res.value);
+          const secondCookie: string = `__ac_nonce=${ res.value }; __ac_signature=${ acSignature };`;
+          const secondRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, secondCookie);
+
+          ctx.cookie = secondCookie;
+          html = secondRes.value;
+        }
+
+        ctx.html = html;
+        next();
+      });
+
+      // 分析验证码消息
+      onion.use(async function(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
+        if (ctx.html && ctx.html.includes('验证码中间页')) {
+          const verifyDataArr: string[] = ctx.html.split(/\n/);
+          const verifyData: string | undefined = verifyDataArr.find(
+            (o: string): boolean => /const\s+verify_data\s+=\s+/i.test(o));
+
+          if (verifyData) {
+            const verifyDataJson: VerifyData = JSON.parse(
+              verifyData.replace(/const\s+verify_data\s+=\s+/i, ''));
+
+            ctx.fp = verifyDataJson.fp;
+            ipcRenderer.send('toutiao-fp', verifyDataJson.fp); // 将fp发送到主线程
+            await setTimeout(2_000);
+            globalThis.TTGCaptcha.init({
+              commonOptions: {
+                aid: 6383,
+                iid: '0',
+                did: '0'
+              },
+              captchaOptions: {
+                hideCloseBtn: true,
+                showMode: 'mask',
+                successCb(): void {
+                  next();
+                }
+              }
+            });
+            globalThis.TTGCaptcha.render({ verify_data: verifyDataJson });
+          } else {
+            next();
+          }
+        } else {
+          next();
+        }
+      });
+
+      // 再次请求html
+      onion.use(async function(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
+        const secondCookie: string = `${ ctx.cookie! } s_v_web_id=${ ctx.fp! };`;
         const secondRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, secondCookie);
 
-        html = secondRes.value;
-      }
+        ctx.html = secondRes.value;
+        next();
+      });
 
-      const document: Document = new DOMParser().parseFromString(html, 'text/html');
-      const rendedData: HTMLElement | null = document.getElementById('RENDER_DATA');
+      // 解析dom
+      onion.use(function(ctx: GetVideoUrlOnionContext, next: Function): void {
+        const document: Document = new DOMParser().parseFromString(ctx.html!, 'text/html');
+        const rendedData: HTMLElement | null = document.getElementById('RENDER_DATA');
 
-      if (rendedData) {
-        const data: string = decodeURIComponent(rendedData.innerText);
-        const json: ScriptRendedData = JSON.parse(data);
-        const cVersion: CVersionObj | undefined = Object.values(json).find(
-          (o: C0Obj | CVersionObj): o is CVersionObj => typeof o === 'object' && ('aweme' in o));
+        if (rendedData) {
+          const data: string = decodeURIComponent(rendedData.innerText);
+          const json: ScriptRendedData = JSON.parse(data);
+          const cVersion: CVersionObj | undefined = Object.values(json).find(
+            (o: C0Obj | CVersionObj): o is CVersionObj => typeof o === 'object' && ('aweme' in o));
 
-        if (cVersion) {
-          const awemeDetail: AwemeDetail = cVersion.aweme.detail;
-          const urls: DownloadUrlItem[] = [];
+          if (cVersion) {
+            const awemeDetail: AwemeDetail = cVersion.aweme.detail;
+            const urls: DownloadUrlItem[] = [];
 
-          urls.push(
-            { label: '有水印', value: awemeDetail.download.url },
-            { label: '无水印', value: `https:${ awemeDetail.video.playApi }` }
-          );
+            urls.push({ label: '无水印', value: `https:${ awemeDetail.video.playApi }` });
 
-          let i: number = 1;
+            let i: number = 1;
 
-          for (const item of awemeDetail.video.bitRateList) {
-            for (const item2 of item.playAddr) {
-              urls.push({
-                label: '下载地址-' + i++,
-                value: `https:${ item2.src }`
-              });
+            for (const item of awemeDetail.video.bitRateList) {
+              for (const item2 of item.playAddr) {
+                urls.push({
+                  label: '下载地址-' + i++,
+                  value: `https:${ item2.src }`
+                });
+              }
             }
-          }
 
-          setDownloadUrl(urls);
-          setTitle(awemeDetail.desc);
-          setVisible(true);
+            setDownloadUrl(urls);
+            setTitle(awemeDetail.desc);
+            setVisible(true);
+          } else {
+            message.error('视频相关信息解析失败！');
+          }
         } else {
-          message.error('视频相关信息解析失败！');
+          message.error('找不到视频相关信息！');
         }
-      } else {
-        message.error('找不到视频相关信息！');
-      }
+
+        next();
+      });
+
+      onion.use(function(ctx: GetVideoUrlOnionContext, next: Function): void {
+        setGetUrlLoading(false);
+        next();
+      });
+
+      onion.run();
     } catch (err) {
       console.error(err);
       message.error('视频地址解析失败！');
+      setGetUrlLoading(false);
     }
-
-    setGetUrlLoading(false);
   }
 
   return (

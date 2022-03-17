@@ -7,6 +7,7 @@ const userAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Apple
 export interface DouyinVideo {
   type: 'html' | 'cookie';
   value: string;
+  body: string;
 }
 
 /**
@@ -31,14 +32,16 @@ export async function requestDouyinVideoHtml(id: string, cookie: string = ''): P
     if (val) {
       return {
         type: 'cookie',
-        value: val.split(/s*;s*/)[0].split(/=/)[1]
+        value: val.split(/s*;s*/)[0].split(/=/)[1],
+        body: res.body
       };
     }
   }
 
   return {
     type: 'html',
-    value: res.body
+    value: res.body,
+    body: res.body
   };
 }
 

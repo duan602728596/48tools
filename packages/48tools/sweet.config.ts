@@ -90,6 +90,7 @@ export default function(info: object): { [key: string]: any } {
       'path',
       'querystring',
       'stream',
+      'timers/promises',
       'url',
       'util',
       'zlib'
@@ -103,7 +104,7 @@ export default function(info: object): { [key: string]: any } {
     javascript: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules|toutiaosdk-acrawler\.js/i
+      exclude: /node_modules|toutiaosdk-(acrawler|captcha)\.js/i
     },
     typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
@@ -123,7 +124,7 @@ export default function(info: object): { [key: string]: any } {
     },
     rules: [
       {
-        test: /dark-theme\.(min\.)?css|toutiaosdk-acrawler\.js/,
+        test: /dark-theme\.(min\.)?css|toutiaosdk-(acrawler|captcha)\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]' // TODO: js文件生成的hash和注入的hash不一致

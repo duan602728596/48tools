@@ -3,8 +3,8 @@ type noProtocolUrl = `//${ string }`;
 export interface AwemeDetail {
   desc: string; // 标题
   download: {
-    prevent: boolean;
-    url: string; // 有水印
+    prevent?: boolean;
+    url?: string; // 有水印
   };
   video: {
     bitRateList: Array<{
@@ -47,4 +47,24 @@ export interface DownloadItem {
   qid: string;   // 当前的下载id，随机
   url: string;   // 下载地址
   title: string; // 视频标题
+}
+
+/* 解析头条验证码 */
+export interface GetVideoUrlOnionContext {
+  html?: string;
+  fp?: `verify_${ string }`;
+  cookie?: string;
+}
+
+export interface VerifyData {
+  code: string;
+  detail: string;
+  fp: `verify_${ string }`;
+  from: string;
+  region: string;
+  server_sdk_env: string;
+  subtype: 'slide';
+  type: 'verify';
+  verify_event: string;
+  version: string;
 }

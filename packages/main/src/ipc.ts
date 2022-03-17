@@ -3,6 +3,7 @@ import { openPlayerHtml, playerWindowMaps } from './function/openPlayerHtml';
 import ipcTheme, { NATIVE_THEME_CHANGE_CHANNEL } from './function/ipcTheme';
 import weiboLogin from './function/weiboLogin';
 import { nodeMediaServerInit, NODE_MEDIA_SERVER_CHANNEL } from './nodeMediaServer/nodeMediaServer';
+import { TOUTIAO_REQUEST, handleToutiaoFpListener } from './toutiaoRequest';
 
 // 通信类型
 enum IpcListenerType {
@@ -19,7 +20,8 @@ const removeListenerChannel: Array<string> = [
   IpcListenerType.PLAYER_DEVELOPER_TOOLS_CHANNEL,
   IpcListenerType.WEIBO_LOGIN_CHANNEL,
   NATIVE_THEME_CHANGE_CHANNEL,
-  NODE_MEDIA_SERVER_CHANNEL
+  NODE_MEDIA_SERVER_CHANNEL,
+  TOUTIAO_REQUEST
 ];
 
 export function removeIpc(): void {
@@ -59,4 +61,7 @@ export function ipc(win: BrowserWindow): void {
 
   // 启动node-media-server
   nodeMediaServerInit();
+
+  // 头条的处理
+  ipcMain.on(TOUTIAO_REQUEST, handleToutiaoFpListener);
 }

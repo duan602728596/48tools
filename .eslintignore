@@ -9,3 +9,4 @@ lib
 dist
 www
 packages/48tools/src/pages/Toutiao/toutiaosdk-acrawler.js
+packages/48tools/src/pages/Toutiao/toutiaosdk-captcha.js

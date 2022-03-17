@@ -16,5 +16,6 @@ html
     include ./components/Theme/themeInit.pug
 
     script(src=require('./pages/Toutiao/toutiaosdk-acrawler'))
+    script(src=require('./pages/Toutiao/toutiaosdk-captcha'))
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)
