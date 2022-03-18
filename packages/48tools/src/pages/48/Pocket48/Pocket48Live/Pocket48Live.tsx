@@ -233,12 +233,20 @@ function Pocket48Live(props: {}): ReactElement {
     {
       title: '类型',
       dataIndex: 'liveType',
-      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => value === 2
-        ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>
+      width: 115,
+      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => {
+        return (
+          <Fragment>
+            { value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
+            { record.inMicrophoneConnection && <Tag className="m-0" color="cyan">连麦</Tag> }
+          </Fragment>
+        );
+      }
     },
     {
       title: '时间',
       dataIndex: 'ctime',
+      width: 170,
       render: (value: string, record: LiveInfo, index: number): string => dayjs(Number(value)).format('YYYY-MM-DD HH:mm:ss')
     },
     {

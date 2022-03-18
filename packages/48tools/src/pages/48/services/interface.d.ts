@@ -16,6 +16,7 @@ export interface LiveInfo {
   liveType: 1 | 2; // 1：直播，2：电台
   title: string;
   userInfo: UserInfo;
+  inMicrophoneConnection: boolean;
 }
 
 // 返回的直播数据
