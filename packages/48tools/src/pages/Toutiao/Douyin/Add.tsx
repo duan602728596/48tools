@@ -15,6 +15,8 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Input, Button, Modal, message, Select } from 'antd';
 import { Onion } from '@bbkkbkk/q';
+import * as dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import style from './add.sass';
 import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
@@ -27,6 +29,15 @@ import type {
   GetVideoUrlOnionContext,
   VerifyData
 } from '../types';
+
+// 缓存cookie的时间和值
+const douyinCookieCache: {
+  value: string | undefined;
+  time: Dayjs | undefined;
+} = {
+  value: undefined,
+  time: undefined
+};
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactNode> {
@@ -74,20 +85,27 @@ function Add(props: {}): ReactElement {
       // 请求html
       onion.use(async function(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
         let html: string = '';
-        const res: DouyinVideo = await requestDouyinVideoHtml(urlValue); // 获取__ac_nonce
+        let douyinFirstResCookie: string | undefined = undefined;
 
-        if (res.type === 'html') {
+        // 取缓存的cookie
+        if (douyinCookieCache.time && dayjs().diff(douyinCookieCache.time, 'second') < 300) { // 5分钟缓存
+          douyinFirstResCookie = douyinCookieCache.value;
+        }
+
+        const douyinFirstRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, douyinFirstResCookie); // 获取__ac_nonce
+
+        if (douyinFirstRes.type === 'html') {
           // 直接获取html
-          html = res.value;
+          html = douyinFirstRes.value;
         } else {
           // 计算__ac_signature并获取html
           const acSignature: string = Reflect.get(Reflect.get(globalThis, 'byted_acrawler'), 'sign')
-            .call(undefined, '', res.value);
-          const secondCookie: string = `__ac_nonce=${ res.value }; __ac_signature=${ acSignature };`;
-          const secondRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, secondCookie);
+            .call(undefined, '', douyinFirstRes.value);
+          const douyinAcCookie: string = `__ac_nonce=${ douyinFirstRes.value }; __ac_signature=${ acSignature };`;
+          const douyinSecondRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, douyinAcCookie);
 
-          ctx.cookie = secondCookie;
-          html = secondRes.value;
+          ctx.cookie = douyinAcCookie;
+          html = douyinSecondRes.value;
         }
 
         ctx.html = html;
@@ -117,26 +135,23 @@ function Add(props: {}): ReactElement {
               captchaOptions: {
                 hideCloseBtn: true,
                 showMode: 'mask',
-                successCb(): void {
+                async successCb(): Promise<void> {
+                  const douyinCompleteCookie: string = `${ ctx.cookie! } s_v_web_id=${ ctx.fp! };`; // 需要的完整的cookie
+                  const douyinHtmlRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, douyinCompleteCookie);
+
+                  douyinCookieCache.time = dayjs();
+                  douyinCookieCache.value = douyinCompleteCookie;
+                  ctx.html = douyinHtmlRes.value;
                   next();
                 }
               }
             });
             globalThis.TTGCaptcha.render({ verify_data: verifyDataJson });
-          } else {
-            next();
+
+            return;
           }
-        } else {
-          next();
         }
-      });
 
-      // 再次请求html
-      onion.use(async function(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
-        const secondCookie: string = `${ ctx.cookie! } s_v_web_id=${ ctx.fp! };`;
-        const secondRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, secondCookie);
-
-        ctx.html = secondRes.value;
         next();
       });
 
