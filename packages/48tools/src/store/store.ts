@@ -22,8 +22,6 @@ interface GetDefaultMiddlewareOptions {
   serializableCheck?: boolean | SerializableStateInvariantMiddlewareOptions;
 }
 
-type Middlewares = ReadonlyArray<Middleware<{}, any>>;
-
 /* reducer列表 */
 const reducer: Reducer = combineReducers(reducersMapObject);
 
@@ -34,7 +32,7 @@ function createStore(initialState: DeepPartial<any> = {}): void {
   store = configureStore({
     reducer,
     preloadedState: initialState,
-    middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): Middlewares {
+    middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): ReadonlyArray<Middleware> {
       return getDefaultMiddleware<GetDefaultMiddlewareOptions>({
         immutableCheck: ignoreOptions,
         serializableCheck: ignoreOptions
