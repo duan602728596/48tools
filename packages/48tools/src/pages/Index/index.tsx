@@ -22,6 +22,8 @@ import IconDouyinSvgComponent from './images/douyin.component.svg';
 import IconCutSvgComponent from './images/cut.component.svg';
 import IconConcatSvgComponent from './images/concat.component.svg';
 import IconCountSvgComponent from './images/count.component.svg';
+import imageUrlZfbAvif from './images/zfb.avif';
+import imageUrlWxAvif from './images/wx.avif';
 
 interface NativeItem {
   name: string;
@@ -157,8 +159,8 @@ function Index(props: {}): ReactElement {
       {/* 二维码 */}
       <p>欢迎打赏：</p>
       <Space size={ 8 }>
-        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ require('./images/zfb.avif') } />
-        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ require('./images/wx.avif') } />
+        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
+        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
       </Space>
     </div>
   );

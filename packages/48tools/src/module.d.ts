@@ -1,3 +1,9 @@
+declare module '*dark-theme.min.css' {
+  const url: string;
+
+  export default url;
+}
+
 declare module '*.css' {
   const style: { [key: string]: string };
 

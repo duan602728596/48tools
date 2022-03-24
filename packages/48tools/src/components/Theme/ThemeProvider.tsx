@@ -14,6 +14,7 @@ import * as PropTypes from 'prop-types';
 import { Button, Tooltip, Modal, Radio } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
+import dartThemeCssUrl from '@48tools/dark-theme/dist/dark-theme.min.css';
 import ThemeContext from './ThemeContext';
 
 export const LOCALSTORAGE_THEME_NAME: string = 'THEME_VALUE';
@@ -122,7 +123,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
       </ThemeContext.Provider>
       {
         (theme === 'dark' || (theme === 'system' && themeMatches)) ? createPortal(
-          <link rel="stylesheet" href={ require('@48tools/dark-theme/dist/dark-theme.min.css') } />,
+          <link rel="stylesheet" href={ dartThemeCssUrl } />,
           document.body
         ) : null
       }
