@@ -1,4 +1,3 @@
-import * as querystring from 'node:querystring';
 import got, { type Response as GotResponse } from 'got';
 import jsonp from '../../../utils/jsonp';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from './interface';
@@ -43,16 +42,16 @@ export function requestLogin(alt: string): Promise<LoginReturn> {
  * @param { string } alt: 判断是否登陆后获得的alt
  */
 export async function requestLoginV2(alt: string): Promise<LoginReturn> {
-  const query: string = querystring.stringify({
+  const query: string = new URLSearchParams({
     entry: 'weibo',
     returntype: 'TEXT',
-    crossdomain: 1,
-    cdult: 3,
+    crossdomain: '1',
+    cdult: '3',
     domain: 'weibo.com',
     alt,
-    savestate: 30,
+    savestate: '30',
     callback: 'callback'
-  });
+  }).toString();
   const res: GotResponse<string> = await got.get(`https://login.sina.com.cn/sso/login.php?${ query }`, {
     responseType: 'text'
   });

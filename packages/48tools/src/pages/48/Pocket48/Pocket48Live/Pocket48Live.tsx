@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import * as querystring from 'node:querystring';
 import { ipcRenderer, clipboard, type SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
@@ -197,7 +196,7 @@ function Pocket48Live(props: {}): ReactElement {
   // 打开新窗口播放视频
   function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
     const port: NetMediaServerPort = getNetMediaServerPort();
-    const query: string = querystring.stringify(Object.assign(
+    const searchParams: URLSearchParams = new URLSearchParams(Object.assign(
       {
         id: randomUUID(), // rtmp服务器id
         ...port           // 端口号
@@ -210,7 +209,7 @@ function Pocket48Live(props: {}): ReactElement {
       ])
     ));
 
-    ipcRenderer.send('player.html', record.title, query);
+    ipcRenderer.send('player.html', record.title, searchParams.toString());
   }
 
   // 点击刷新直播列表

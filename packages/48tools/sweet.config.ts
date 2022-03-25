@@ -88,7 +88,6 @@ export default function(info: object): { [key: string]: any } {
       'fs',
       'net',
       'path',
-      'querystring',
       'stream',
       'timers/promises',
       'url',

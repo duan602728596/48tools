@@ -1,4 +1,3 @@
-import * as querystring from 'node:querystring';
 import got, { type Response as GotResponse } from 'got';
 import getLiveWorker from './live.worker/getLiveWorker';
 import { getAcFuncCookie } from '../../../utils/utils';
@@ -70,14 +69,14 @@ export async function requestPlayUrl(
   isVisitor: boolean,
   authorId: string
 ): Promise<LiveWebStartPlay> {
-  const query: string = querystring.stringify({
+  const query: string = new URLSearchParams({
     subBiz: 'mainApp',
     kpn: 'ACFUN_APP',
     kpf: 'PC_WEB',
-    userId,
+    userId: String(userId),
     did: didCookie,
     [isVisitor ? 'acfun.api.visitor_st' : 'acfun.midground.api_st']: st
-  });
+  }).toString();
   const res: GotResponse<string> = await got(`https://api.kuaishouzt.com/rest/zt/live/web/startPlay?${ query }`, {
     method: 'POST',
     responseType: 'text',
@@ -86,10 +85,10 @@ export async function requestPlayUrl(
       Cookie: getAcFuncCookie(),
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     },
-    body: querystring.stringify({
+    body: new URLSearchParams({
       authorId,
       pullStreamType: 'FLV'
-    })
+    }).toString()
   });
 
   return JSON.parse(res.body);

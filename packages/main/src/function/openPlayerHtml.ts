@@ -13,8 +13,8 @@ export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
  * @param { string } query: 字符串查询参数
  */
 export function openPlayerHtml(title: string, query: string): void {
-  const searchResult: URLSearchParams = new URLSearchParams(query);
-  const id: string | null = searchResult.get('id');
+  const searchParams: URLSearchParams = new URLSearchParams(query);
+  const id: string | null = searchParams.get('id');
   let win: BrowserWindow | null = new BrowserWindow({
     width: 300,
     height: 680,

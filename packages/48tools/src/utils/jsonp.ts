@@ -1,4 +1,3 @@
-import * as querystring from 'node:querystring';
 import { rStr } from './utils';
 
 /**
@@ -9,11 +8,11 @@ import { rStr } from './utils';
 function jsonp<T = any>(uri: string, options?: { [key: string]: any }): Promise<T> {
   return new Promise((resolve: Function, reject: Function): void => {
     const callbackName: string = `__$jsonpCallback_${ rStr(10) }__`;
-    const qs: string = querystring.stringify(
+    const qs: string = new URLSearchParams(
       Object.assign({
         callback: callbackName
       }, options)
-    );
+    ).toString();
     let script: HTMLScriptElement | null = document.createElement('script');
 
     globalThis[callbackName] = (data: T): void => {

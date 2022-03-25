@@ -1,4 +1,3 @@
-import * as querystring from 'node:querystring';
 import got, { type Response as GotResponse, type CancelableRequest } from 'got';
 import type { PcDirectQr, ScanResult, AcceptResult } from './interface';
 
@@ -19,11 +18,11 @@ export async function requestPcDirectQr(): Promise<PcDirectQr> {
  * @param { string } qrLoginSignature
  */
 export function requestPcDirectScanResult(qrLoginToken: string, qrLoginSignature: string): CancelableRequest<GotResponse<ScanResult>> {
-  const query: string = querystring.stringify({
+  const query: string = new URLSearchParams({
     qrLoginToken,
     qrLoginSignature,
-    _: new Date().getTime()
-  });
+    _: String(new Date().getTime())
+  }).toString();
 
   return got.get(`https://scan.acfun.cn/rest/pc-direct/qr/scanResult?${ query }`, {
     responseType: 'json'
@@ -36,11 +35,11 @@ export function requestPcDirectScanResult(qrLoginToken: string, qrLoginSignature
  * @param { string } qrLoginSignature: 是否扫码时返回的qrLoginSignature
  */
 export function requestPcDirectAcceptResult(qrLoginToken: string, qrLoginSignature: string): CancelableRequest<GotResponse<AcceptResult>> {
-  const query: string = querystring.stringify({
+  const query: string = new URLSearchParams({
     qrLoginToken,
     qrLoginSignature,
-    _: new Date().getTime()
-  });
+    _: String(new Date().getTime())
+  }).toString();
 
   return got.get(`https://scan.acfun.cn/rest/pc-direct/qr/acceptResult?${ query }`, {
     responseType: 'json'

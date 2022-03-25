@@ -1,4 +1,3 @@
-import * as querystring from 'node:querystring';
 import got, { type Response as GotResponse } from 'got';
 
 type MessageEventData = {
@@ -37,7 +36,7 @@ async function requestStreamInfo(param: string, video_id: string, suid: string, 
   const res: GotResponse<string> = await got('https://live.48.cn/Index/get_streaminfo', {
     method: 'POST',
     responseType: 'text',
-    body: querystring.stringify({ param, video_id, suid, id }),
+    body: new URLSearchParams({ param, video_id, suid, id }).toString(),
     headers: {
       Host: 'live.48.cn',
       Referer: `https://live.48.cn/Index/inlive/id/${ id }`,

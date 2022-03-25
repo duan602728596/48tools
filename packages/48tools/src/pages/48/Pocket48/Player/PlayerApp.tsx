@@ -1,5 +1,3 @@
-import * as querystring from 'node:querystring';
-import type { ParsedUrlQuery } from 'node:querystring';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { ipcRenderer } from 'electron';
 import {
@@ -51,16 +49,16 @@ function handleChildProcessError(err: Error): void {
 /* PlayerApp */
 function PlayerApp(props: {}): ReactElement {
   const search: Search = useMemo(function(): Search {
-    const s: ParsedUrlQuery = querystring.parse(window.location.search.replace(/^\?/, ''));
+    const searchParams: URLSearchParams = new URLSearchParams(window.location.search);
 
     return {
-      coverPath: s.coverPath as string,
-      title: s.title as string,
-      liveId: s.liveId as string,
-      id: s.id as string,
-      liveType: Number(s.liveType),
-      rtmpPort: Number(s.rtmpPort),
-      httpPort: Number(s.httpPort)
+      coverPath: searchParams.get('coverPath')!,
+      title: searchParams.get('title')!,
+      liveId: searchParams.get('liveId')!,
+      id: searchParams.get('id')!,
+      liveType: Number(searchParams.get('liveType')!),
+      rtmpPort: Number(searchParams.get('rtmpPort')!),
+      httpPort: Number(searchParams.get('httpPort')!)
     };
   }, []);
   const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
