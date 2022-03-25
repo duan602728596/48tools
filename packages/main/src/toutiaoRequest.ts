@@ -1,4 +1,3 @@
-import { URL } from 'node:url';
 import {
   session,
   type OnBeforeRequestListenerDetails,
