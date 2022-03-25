@@ -15,11 +15,10 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Input, Button, Modal, message, Select } from 'antd';
 import { Onion } from '@bbkkbkk/q';
-import * as dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
 import style from './add.sass';
 import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
+import douyinCookieCache from './DouyinCookieCache';
 import type {
   AwemeDetail,
   ScriptRendedData,
@@ -29,15 +28,6 @@ import type {
   GetVideoUrlOnionContext,
   VerifyData
 } from '../types';
-
-// 缓存cookie的时间和值
-const douyinCookieCache: {
-  value: string | undefined;
-  time: Dayjs | undefined;
-} = {
-  value: undefined,
-  time: undefined
-};
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactNode> {
@@ -87,10 +77,7 @@ function Add(props: {}): ReactElement {
         let html: string = '';
         let douyinFirstResCookie: string | undefined = undefined;
 
-        // 取缓存的cookie
-        if (douyinCookieCache.time && dayjs().diff(douyinCookieCache.time, 'second') < 300) { // 5分钟缓存
-          douyinFirstResCookie = douyinCookieCache.value;
-        }
+        douyinCookieCache.getCookie((c: string): unknown => douyinFirstResCookie = c); // 取缓存的cookie
 
         const douyinFirstRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, douyinFirstResCookie); // 获取__ac_nonce
 
@@ -139,8 +126,7 @@ function Add(props: {}): ReactElement {
                   const douyinCompleteCookie: string = `${ ctx.cookie! } s_v_web_id=${ ctx.fp! };`; // 需要的完整的cookie
                   const douyinHtmlRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, douyinCompleteCookie);
 
-                  douyinCookieCache.time = dayjs();
-                  douyinCookieCache.value = douyinCompleteCookie;
+                  douyinCookieCache.setCookie(douyinCompleteCookie);
                   ctx.html = douyinHtmlRes.value;
                   next();
                 }
@@ -216,7 +202,15 @@ function Add(props: {}): ReactElement {
         placeholder="请输入视频ID"
         onChange={ (event: ChangeEvent<HTMLInputElement>): void => setUrlValue(event.target.value) }
       />
-      <Button loading={ getUrlLoading } onClick={ handleGetVideoUrlClick }>获取下载地址</Button>
+      <Button.Group>
+        <Button loading={ getUrlLoading } onClick={ handleGetVideoUrlClick }>获取下载地址</Button>
+        <Button type="primary"
+          danger={ true }
+          onClick={ (event: MouseEvent<HTMLButtonElement>): void => douyinCookieCache.clearCookie() }
+        >
+          清除抖音Cookie的缓存
+        </Button>
+      </Button.Group>
       {/* 下载地址 */}
       <Modal title="选择下载地址"
         visible={ visible }
