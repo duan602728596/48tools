@@ -36,12 +36,11 @@ export function openPlayerHtml(title: string, query: string): void {
   }
 
   if (win) {
-    win.loadFile(
-      isDevelopment
-        ? path.join(wwwPath, '48tools/dist/player.html')
-        : path.join(wwwPath, 'dist/player.html'),
-      { search: query }
-    );
+    if (isDevelopment) {
+      win.loadURL(`http://127.0.0.1:5050/player.html?${ query }`);
+    } else {
+      win.loadFile(path.join(wwwPath, 'dist/player.html'), { search: query });
+    }
 
     win.on('closed', function(): void {
       themeEvent.off('themeSource', handleThemeEvent);
