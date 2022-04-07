@@ -124,7 +124,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
       {
         (theme === 'dark' || (theme === 'system' && themeMatches)) ? createPortal(
           <link rel="stylesheet" href={ dartThemeCssUrl } />,
-          document.body
+          document.head
         ) : null
       }
     </Fragment>
