@@ -33,11 +33,11 @@ function createWindow(): void {
     win.webContents.openDevTools();
   }
 
-  if (isDevelopment) {
-    win.loadURL('http://127.0.0.1:5050/');
-  } else {
-    win.loadFile(path.join(wwwPath, 'dist/index.html'));
-  }
+  win.loadFile(
+    isDevelopment
+      ? path.join(wwwPath, '48tools/dist/index.html')
+      : path.join(wwwPath, 'dist/index.html')
+  );
 
   // 去掉顶层菜单
   Menu.setApplicationMenu(null);

@@ -27,18 +27,12 @@ export interface AcFunCookie {
 
 function clearData(): void {
   if (scanResultRequest) {
-    if (process.env.NODE_ENV !== 'development') {
-      scanResultRequest.cancel();
-    }
-
+    scanResultRequest.cancel();
     scanResultRequest = null;
   }
 
   if (acceptResultRequest) {
-    if (process.env.NODE_ENV !== 'development') {
-      acceptResultRequest.cancel();
-    }
-
+    acceptResultRequest.cancel();
     acceptResultRequest = null;
   }
 
