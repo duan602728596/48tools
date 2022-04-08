@@ -59,43 +59,45 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
 
   // 生成二维码
   async function createQrcode(): Promise<void> {
-    clearData();
-    resetCreateQrcodeTimer = setTimeout(createQrcode, 90_000); // 刷新二维码
+    try {
+      clearData();
+      resetCreateQrcodeTimer = setTimeout(createQrcode, 90_000); // 刷新二维码
 
-    // 获取二维码图片
-    const resQr: PcDirectQr = await requestPcDirectQr();
+      // 获取二维码图片
+      const resQr: PcDirectQr = await requestPcDirectQr();
 
-    setImageData(`data:image/png;base64,${ resQr.imageData }`);
+      setImageData(`data:image/png;base64,${ resQr.imageData }`);
 
-    // 等待二维码扫描确认
-    scanResultRequest = requestPcDirectScanResult(resQr.qrLoginToken, resQr.qrLoginSignature);
+      // 等待二维码扫描确认（阻塞）
+      scanResultRequest = requestPcDirectScanResult(resQr.qrLoginToken, resQr.qrLoginSignature);
 
-    const resScanResult: ScanResult = (await scanResultRequest).body;
+      const resScanResult: ScanResult = (await scanResultRequest).body;
 
-    scanResultRequest = null;
+      scanResultRequest = null;
 
-    if (resScanResult.result !== 0) {
-      return message.error('登陆失败！请刷新后重新登陆！');
-    }
+      if (resScanResult.result !== 0) {
+        return message.error('登陆失败！请刷新后重新登陆！');
+      }
 
-    // 扫描登陆成功
-    acceptResultRequest = requestPcDirectAcceptResult(resQr.qrLoginToken, resScanResult.qrLoginSignature);
+      // 扫描登陆成功
+      acceptResultRequest = requestPcDirectAcceptResult(resQr.qrLoginToken, resScanResult.qrLoginSignature);
 
-    const resAcceptResult: GotResponse<AcceptResult> = await acceptResultRequest;
+      const resAcceptResult: GotResponse<AcceptResult> = await acceptResultRequest;
 
-    acceptResultRequest = null;
+      acceptResultRequest = null;
 
-    if (resAcceptResult.body.result === 0) {
-      const time: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
-      const cookie: string = resAcceptResult.headers['set-cookie']!
-        .map((o: string): string => o.split(/;\s*/)[0]).join('; ');
+      if (resAcceptResult.body.result === 0) {
+        const time: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
+        const cookie: string = resAcceptResult.headers['set-cookie']!
+          .map((o: string): string => o.split(/;\s*/)[0]).join('; ');
 
-      localStorage.setItem(ACFUN_COOKIE_KEY, JSON.stringify({ time, cookie }));
-      message.success('登陆成功！');
-      props.onCancel();
-    } else {
-      message.error('登陆失败！请刷新后重新登陆！');
-    }
+        localStorage.setItem(ACFUN_COOKIE_KEY, JSON.stringify({ time, cookie }));
+        message.success('登陆成功！');
+        props.onCancel();
+      } else {
+        message.error('登陆失败！请刷新后重新登陆！');
+      }
+    } catch { /* noop */ }
   }
 
   // 重新生成二维码
