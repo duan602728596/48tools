@@ -12,22 +12,22 @@
     "clean": "rimraf dist/api dist/package.json dist/**/*.{html,css,js,map,svg,ico,jpg,png,webp,avif}"
   },
   "dependencies": {
-    "express": "^4.17.3",
+    "express": "^4.18.1",
     "express-graphql": "^0.12.0",
-    "got": "^12.0.3",
-    "graphql": "^16.3.0"
+    "got": "^12.0.4",
+    "graphql": "^16.4.0"
   },
   "optionalDependencies": {
-    "@reduxjs/toolkit": "^1.7.1",
-    "antd-mobile": "^5.0.0-rc.23",
+    "@reduxjs/toolkit": "^1.8.1",
+    "antd-mobile": "^5.11.1",
     "antd-mobile-icons": "^0.2.2",
     "classnames": "^2.3.1",
     "prop-types": "^15.8.1",
-    "react": "rc",
-    "react-dom": "rc",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
-    "react-redux": "^8.0.0-beta.2",
-    "react-router-dom": "^6.2.1",
+    "react-redux": "^8.0.1",
+    "react-router-dom": "^6.3.0",
     "reselect": "^4.1.5"
   },
   "devDependencies": {
@@ -43,8 +43,8 @@
     "gulp-replace": "^1.1.3",
     "gulp-terser": "^2.1.0",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "postcss": "^8.4.12",
-    "tailwindcss": "^3.0.23",
+    "postcss": "^8.4.13",
+    "tailwindcss": "^3.0.24",
     "vite-plugin-babel": "^1.0.0",
     "vite-plugin-html": "^3.2.0"
   }

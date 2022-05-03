@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "cssnano": "^5.1.7",
-    "glob": "^7.2.0",
+    "glob": "^8.0.1",
     "less": "^4.1.2",
-    "postcss": "^8.4.12",
+    "postcss": "^8.4.13",
     "postcss-cli": "^9.1.0",
     "rimraf": "*",
     "typescript": "*"
