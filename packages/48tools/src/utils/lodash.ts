@@ -14,7 +14,7 @@ export function omit<T = Obj>(obj: Obj, delKeys: string[]): T {
     }
 
     return result;
-  }, {} as T);
+  }, {} as any);
 }
 
 /**
@@ -29,5 +29,5 @@ export function pick<T = Obj>(obj: Obj, useKeys: string[]): T {
     }
 
     return result;
-  }, {} as T);
+  }, {} as any);
 }
