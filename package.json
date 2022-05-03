@@ -61,6 +61,10 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1"
   },
+  "resolutions": {
+    "@types/react": "^18",
+    "@types/react-dom": "^18"
+  },
   "lint-staged": {
     "**/*.{js,jsx,mjs,cjs,ts,tsx}": "eslint"
   },
