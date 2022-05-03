@@ -67,7 +67,7 @@ export default function(info: object): { [key: string]: any } {
       'js-base64',
       'qrcode/lib/browser',
       'react',
-      'react-dom',
+      'react-dom/client',
       'prop-types',
       '@reduxjs/toolkit',
       'react-redux',

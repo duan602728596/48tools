@@ -1,4 +1,4 @@
-import { render } from 'react-dom';
+import { createRoot, type Root } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
@@ -15,7 +15,9 @@ import './main.tailwindcss.css';
 dayjs.locale('zh-cn');
 
 /* app */
-render(
+const root: Root = createRoot(document.getElementById('app')!);
+
+root.render(
   <Provider store={ storeFactory() }>
     <ConfigProvider locale={ zhCN }>
       <ThemeProvider>
@@ -24,8 +26,7 @@ render(
         </HashRouter>
       </ThemeProvider>
     </ConfigProvider>
-  </Provider>,
-  document.getElementById('app')
+  </Provider>
 );
 
 netMediaServerInit();
