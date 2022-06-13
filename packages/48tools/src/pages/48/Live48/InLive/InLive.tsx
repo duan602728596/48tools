@@ -7,7 +7,7 @@ import type { ColumnsType } from 'antd/es/table';
 import Header from '../../../../components/Header/Header';
 import GetLiveUrl from './GetLiveUrl';
 import { setDeleteInLiveList, setStopInLiveList, type Live48InitialState } from '../../reducers/live48';
-import type{ InLiveWebWorkerItem } from '../../types';
+import type { InLiveWebWorkerItem } from '../../types';
 
 /* redux selector */
 type RSelector = Pick<Live48InitialState, 'inLiveList'>;
