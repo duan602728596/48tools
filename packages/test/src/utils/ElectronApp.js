@@ -1,15 +1,13 @@
 import path from 'node:path';
-import { _electron as electron, type ElectronApplication, type Page } from 'playwright';
+import { _electron as electron } from 'playwright';
 import { metaHelper } from '@sweet-milktea/utils';
 
-const { __dirname }: { __dirname: string } = metaHelper(import.meta.url);
+const { __dirname } = metaHelper(import.meta.url);
 
 /* 获取electron相关的对象 */
 class ElectronApp {
-  electronApp: ElectronApplication;
-  win: Page;
-
-  async init(): Promise<void> {
+  // 初始化
+  async init() {
     this.electronApp = await electron.launch({
       args: [path.join(__dirname, '../../../main/lib/main.js')],
       env: {
@@ -19,7 +17,8 @@ class ElectronApp {
     this.win = await this.electronApp.firstWindow();
   }
 
-  async close(): Promise<void> {
+  // 关闭
+  async close() {
     await this.electronApp.close();
   }
 }
