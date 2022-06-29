@@ -1,0 +1,13 @@
+{
+  "name": "@48tools/test",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.23.0",
+    "@sweet-milktea/utils": "^3.0.2",
+    "playwright": "^1.23.0"
+  }
+}
