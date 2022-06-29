@@ -8,10 +8,10 @@
     "build": "rimraf ./dist && node src/index.js && postcss dist/dark-theme.css > dist/dark-theme.min.css"
   },
   "dependencies": {
-    "cssnano": "^5.1.7",
-    "glob": "^8.0.1",
-    "less": "^4.1.2",
-    "postcss": "^8.4.13",
+    "cssnano": "^5.1.12",
+    "glob": "^8.0.3",
+    "less": "^4.1.3",
+    "postcss": "^8.4.14",
     "postcss-cli": "^9.1.0",
     "rimraf": "*",
     "typescript": "*"
