@@ -1,5 +1,6 @@
 import * as puppeteer from 'puppeteer-core';
-import type { Browser, Page, Protocol } from 'puppeteer-core';
+import type { Browser, Page } from 'puppeteer-core';
+import type { Protocol } from 'devtools-protocol';
 import type { ReactElement, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
