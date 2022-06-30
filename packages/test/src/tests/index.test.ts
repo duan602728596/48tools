@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/test';
 import type { ElementHandle } from 'playwright';
 import type { ElementHandleForTag } from 'playwright-core/types/structs';
-import ElectronApp from './utils/ElectronApp.js';
+import ElectronApp from '../utils/ElectronApp.js';
 
 /* 客户端主界面入口测试 */
-test.describe('Index Page', function(): void {
+export const title: string = 'Index Page';
+
+export function callback(): void {
   let app: ElectronApp;
 
   test.beforeAll(async function(): Promise<void> {
@@ -32,4 +34,4 @@ test.describe('Index Page', function(): void {
 
     expect(images.length).toEqual(2);
   });
-});
+}

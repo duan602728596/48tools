@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
-import ElectronApp from './utils/ElectronApp.js';
+import ElectronApp from '../utils/ElectronApp.js';
 
 /* 口袋48录播下载测试 */
-test.describe('48/Pocket48Record Page', function(): void {
+export const title: string = '48/Pocket48Record Page';
+
+export function callback(): void {
   let app: ElectronApp;
 
   test.beforeAll(async function(): Promise<void> {
@@ -32,4 +34,4 @@ test.describe('48/Pocket48Record Page', function(): void {
 
     expect(images.length).toEqual(10);
   });
-});
+}

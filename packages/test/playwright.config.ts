@@ -12,7 +12,10 @@ const config: PlaywrightTestConfig = {
   testDir: path.join(__dirname, 'src'),
   outputDir: path.join(__dirname, 'dist'),
   workers: os.cpus().length,
-  timeout: 300_000
+  timeout: 300_000,
+  testIgnore: [
+    '**/src/tests/*.test.ts'
+  ]
 };
 
 export default config;
