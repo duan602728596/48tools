@@ -11,7 +11,8 @@ const config: PlaywrightTestConfig = {
   },
   testDir: path.join(__dirname, 'src'),
   outputDir: path.join(__dirname, 'dist'),
-  workers: os.cpus().length
+  workers: os.cpus().length,
+  timeout: 300_000
 };
 
 export default config;

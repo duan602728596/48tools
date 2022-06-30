@@ -17,10 +17,12 @@ test.describe('Index Page', function(): void {
   });
 
   test('Should render navs and images', async function(): Promise<void> {
-    // 测试导航的正常显示
-    await app.win.waitForSelector('nav', { state: 'attached' });
-    await app.win.waitForSelector('.ant-image', { state: 'attached' });
+    await Promise.all([
+      app.win.waitForSelector('nav', { state: 'attached' }),
+      app.win.waitForSelector('.ant-image', { state: 'attached' })
+    ]);
 
+    // 测试导航的正常显示
     const navs: Array<ElementHandleForTag<'nav'>> = await app.win.$$('nav');
 
     expect(navs.length).toEqual(4);
