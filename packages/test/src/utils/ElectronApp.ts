@@ -1,4 +1,5 @@
 import * as path from 'node:path';
+import electronPath from 'electron/index.js';
 import { _electron as electron, type ElectronApplication, type Page } from 'playwright';
 import { metaHelper } from '@sweet-milktea/utils';
 
@@ -17,7 +18,8 @@ class ElectronApp {
         NODE_ENV: 'development',
         TEST: 'true'
       },
-      colorScheme: 'light'
+      colorScheme: 'light',
+      executablePath: electronPath
     });
     this.win = await this.electronApp.firstWindow();
   }
