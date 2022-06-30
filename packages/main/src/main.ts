@@ -2,7 +2,7 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import { app, BrowserWindow, Menu } from 'electron';
 import * as remoteMain from '@electron/remote/main';
-import { isDevelopment, wwwPath } from './utils';
+import { isDevelopment, isTest, wwwPath } from './utils';
 import { ipc, removeIpc } from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import toutiaoRequest from './toutiaoRequest';
@@ -29,7 +29,7 @@ function createWindow(): void {
 
   remoteMain.enable(win.webContents);
 
-  if (isDevelopment) {
+  if (isDevelopment && !isTest) {
     win.webContents.openDevTools();
   }
 

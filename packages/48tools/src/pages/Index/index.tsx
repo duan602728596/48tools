@@ -30,6 +30,7 @@ interface NativeItem {
   url: string;
   icon: ReactElement;
   hBtn?: boolean;
+  testId?: string;
 }
 
 const IconBilibiliLogo: ReactElement
@@ -48,7 +49,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋48录播下载',
       url: '/48/Pocket48Record',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconVideoSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconVideoSvgComponent } />,
+      testId: 'pocket48-record-link'
     },
     {
       name: '官方公演直播抓取',
@@ -108,7 +110,7 @@ function nativeRender(): Array<ReactNode> {
 
     for (const navItem of group) {
       groupElement.push(
-        <Link key={ navItem.name } className="inline-block" to={ navItem.url }>
+        <Link key={ navItem.name } className="inline-block" to={ navItem.url } data-test-id={ navItem.testId }>
           <Button className={ navItem.hBtn ? 'overflow-hidden' : undefined } icon={ navItem.icon }>{ navItem.name }</Button>
         </Link>
       );

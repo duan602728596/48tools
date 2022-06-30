@@ -3,12 +3,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "mocha ./src/*.test.js --timeout 180000"
+    "test": "playwright test"
   },
   "dependencies": {
+    "@playwright/test": "^1.23.0",
     "@sweet-milktea/utils": "^3.0.2",
-    "chai": "^4.3.6",
-    "mocha": "^10.0.0",
     "playwright": "^1.23.0"
   }
 }
