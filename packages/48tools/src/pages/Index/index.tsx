@@ -60,7 +60,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '官方公演录播下载',
       url: '/48/InVideo',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconRecordSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconRecordSvgComponent } />,
+      testId: '48-in-video-link'
     }
   ],
   [

@@ -18,7 +18,7 @@ export function callback(): void {
   });
 
   test('Should get record data', async function(): Promise<void> {
-    const navBtn: Locator = await app.win.locator('[data-test-id=pocket48-record-link]');
+    const navBtn: Locator = await app.win.locator('[data-test-id="pocket48-record-link"]');
 
     await navBtn.click();
 
