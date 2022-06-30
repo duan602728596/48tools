@@ -30,7 +30,8 @@
 
 ## 技术栈
 
-Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使用corepack。
+Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使用corepack。   
+使用playwright + @playwright/test进行e2e测试。
 
 ## 模块
 
@@ -38,6 +39,7 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使
 * app：编译程序主目录。
 * darkTheme：提取暗黑主题的css文件。
 * main：Electron主程序运行源代码。
+* test：e2e测试
 
 ## 开发
 
@@ -55,6 +57,10 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使
 3. 48tools模块：进入`packages/48tools`，运行`npm run build`，编译软件源代码。
 4. 运行`node scripts/unpack.mjs`，打包软件。
 5. 运行`node scripts/clean.mjs`，删除软件中的无用的文件。
+
+## 测试
+
+进入`packages/test`，运行`npm run test`，运行e2e测试。
 
 ## 源代码托管地址
 
