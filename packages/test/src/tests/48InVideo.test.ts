@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
 import ElectronApp from '../utils/ElectronApp.js';
+import testIdClick from '../actions/testIdClick.js';
 
 /* 48官方公演录播下载测试 */
 export const title: string = '48/InVideo Page';
@@ -27,9 +28,7 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const navBtn: Locator = await app.win.locator('[data-test-id="48-in-video-link"]');
-
-    await navBtn.click();
+    await testIdClick(app, '48-in-video-link');
 
     // 选择团队
     const changeTeamSelect: Locator = await app.win.locator('.ant-select');
