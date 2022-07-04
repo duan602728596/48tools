@@ -236,7 +236,7 @@ function InVideo(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Space size={ 8 }>
+        <Space size={ 8 } data-test-id="bilibili-download-live-type">
           <Select className={ style.typeSelect } value={ inVideoQuery?.liveType } onSelect={ handleLiveTypeSelect }>
             <Select.Option value="snh48">SNH48</Select.Option>
             <Select.Option value="bej48">BEJ48</Select.Option>

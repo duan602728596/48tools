@@ -48,7 +48,7 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    await testIdClick(app, 'bilibili-download');
+    await testIdClick(app, 'bilibili-download-link');
 
     // 【4月/主题曲/官方歌词】剃须。然后捡到女高中生 OP&ED【中文字幕】https://www.bilibili.com/video/BV1Hp4y1t7Nd
     await query('视频（BV）', '1Hp4y1t7Nd');

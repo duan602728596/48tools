@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
 import ElectronApp from '../utils/ElectronApp.js';
 import testIdClick from '../actions/testIdClick.js';
+import selectItemClick from '../actions/selectItemClick.js';
 
 /* 48官方公演录播下载测试 */
 export const title: string = '48/InVideo Page';
@@ -21,9 +22,9 @@ export function callback(): void {
 
   /**
    * 选择team并加载对应的视频
-   * @param { number } index
+   * @param { `${ string }48` } liveType
    */
-  async function getTeamsVideoData(index: number): Promise<void> {
+  async function getTeamsVideoData(liveType: `${ string }48`): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -31,14 +32,7 @@ export function callback(): void {
     await testIdClick(app, '48-in-video-link');
 
     // 选择团队
-    const changeTeamSelect: Locator = await app.win.locator('.ant-select');
-
-    await changeTeamSelect.click();
-
-    const selectItem: Locator = await app.win.locator('.ant-select-item');
-
-    await selectItem.nth(index).click();
-    await app.win.waitForTimeout(1_500);
+    await selectItemClick(app, 'bilibili-download-live-type', liveType);
 
     // 加载数据
     const loadDataBtn: Locator = await app.win.locator('.ant-space-item button');
@@ -52,18 +46,18 @@ export function callback(): void {
   }
 
   test('Should get SNH48 public performance video data', async function(): Promise<void> {
-    await getTeamsVideoData(0);
+    await getTeamsVideoData('SNH48');
   });
 
   test('Should get BEJ48 public performance video data', async function(): Promise<void> {
-    await getTeamsVideoData(1);
+    await getTeamsVideoData('BEJ48');
   });
 
   test('Should get GNZ48 public performance video data', async function(): Promise<void> {
-    await getTeamsVideoData(2);
+    await getTeamsVideoData('GNZ48');
   });
 
   test('Should get CKG48 public performance video data', async function(): Promise<void> {
-    await getTeamsVideoData(3);
+    await getTeamsVideoData('CKG48');
   });
 }
