@@ -9,12 +9,12 @@ export const title: string = 'Index Page';
 export function callback(): void {
   let app: ElectronApp;
 
-  test.beforeAll(async function(): Promise<void> {
+  test.beforeEach(async function(): Promise<void> {
     app = new ElectronApp();
     await app.init();
   });
 
-  test.afterAll(async function(): Promise<void> {
+  test.afterEach(async function(): Promise<void> {
     await app.close();
   });
 
