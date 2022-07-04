@@ -43,7 +43,7 @@ export function callback(): void {
   }
 
   // BV查询
-  test('Should get bilibili video query by BV type', async function(): Promise<void> {
+  test('Should get bilibili video', async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
