@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import type { ElementHandle } from 'playwright';
+import type { Locator, ElementHandle } from 'playwright';
 import ElectronApp from '../utils/ElectronApp.js';
 import testIdClick from '../actions/testIdClick.js';
 import selectItemClick from '../actions/selectItemClick.js';
@@ -72,5 +72,67 @@ export function callback(): void {
     const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
     expect(willBeDownload.length).toEqual(5);
+  });
+
+  // 根据ID搜索视频
+  async function queryBySpaceId(userId: number, clear?: boolean): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    await testIdClick(app, 'bilibili-download-add-by-search-btn');
+
+    if (clear) {
+      await app.win.click('#spaceId');
+
+      // 10次键盘删除
+      for (let i: number = 0; i < 10; i++) {
+        await app.win.keyboard.down('Backspace');
+      }
+    } else {
+      await app.win.waitForSelector('#spaceId');
+    }
+
+    await app.win.type('#spaceId', userId.toString());
+    await app.win.click('.ant-modal-body .ant-form .ant-btn');
+    await app.win.waitForTimeout(1_500); // 等待查询结果
+
+    // 点击搜索视频详细数据
+    const seeVideo: Locator = app.win.locator('.ant-modal-body .ant-table-cell .ant-btn');
+
+    await seeVideo.nth(0).click();
+    await app.win.waitForTimeout(1_500); // 等待查询结果
+
+    // 添加到下载列表
+    const addToDownload: Locator = app.win.locator('.ant-modal-body .ant-form + div .overflow-auto .ant-btn');
+
+    await addToDownload.nth(0).click();
+    await app.win.click('.ant-modal-footer button.ant-btn');
+    await app.win.waitForTimeout(1_500);
+  }
+
+  // 根据ID搜索
+  test('Should get bilibili video by id', async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    await testIdClick(app, 'bilibili-download-link');
+
+    // 犬山玉姬Official https://space.bilibili.com/12362451/
+    await queryBySpaceId(12362451);
+
+    // 時雨羽衣Official https://space.bilibili.com/2601367/
+    await queryBySpaceId(2601367, true);
+
+    // 音乐世界CytusII https://space.bilibili.com/270735958/
+    await queryBySpaceId(270735958, true);
+
+    // 结果
+    await app.win.waitForSelector('.ant-table-row');
+
+    const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
+
+    expect(willBeDownload.length).toEqual(3);
   });
 }

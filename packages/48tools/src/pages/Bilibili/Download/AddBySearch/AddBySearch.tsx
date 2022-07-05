@@ -176,7 +176,11 @@ function AddBySearch(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => setVisible(true) }>个人主页批量下载</Button>
+      <Button data-test-id="bilibili-download-add-by-search-btn"
+        onClick={ (event: MouseEvent<HTMLButtonElement>): void => setVisible(true) }
+      >
+        个人主页批量下载
+      </Button>
       <Modal title="个人主页批量下载"
         visible={ visible }
         width={ 800 }

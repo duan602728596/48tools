@@ -15,7 +15,7 @@ async function selectItemClick(app: ElectronApp, selectId: string, title: string
   const selectItem: Locator = await app.win.locator(`.ant-select-item[title="${ title }"]`);
 
   await selectItem.click();
-  await app.win.waitForTimeout(1_500);
+  await app.win.waitForTimeout(1_000);
 }
 
 export default selectItemClick;
