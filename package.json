@@ -28,7 +28,7 @@
     "@vercel/ncc": "^0.34.0",
     "cross-zip": "^4.0.0",
     "electron": "^19.0.6",
-    "electron-builder": "^23.2.0",
+    "electron-builder": "^23.3.0",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "lerna": "^5.1.6",
