@@ -24,9 +24,6 @@
     "packages/*"
   ],
   "packageManager": "yarn@3.2.1",
-  "engines": {
-    "pm": "yarn@^3.2.1"
-  },
   "dependencies": {
     "@vercel/ncc": "^0.34.0",
     "cross-zip": "^4.0.0",
