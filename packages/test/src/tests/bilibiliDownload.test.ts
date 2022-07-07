@@ -21,7 +21,7 @@ export function callback(): void {
   });
 
   // 执行一次查询
-  async function query(selectItemTitle: string, id: string, page?: string): Promise<void> {
+  async function query(selectItemTitle: string, id: string, page?: string, proxy?: boolean): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -30,13 +30,20 @@ export function callback(): void {
     await Promise.all([
       app.win.waitForSelector('#type'),
       app.win.waitForSelector('#id'),
-      app.win.waitForSelector('#page')
+      app.win.waitForSelector('#page'),
+      app.win.waitForSelector('#proxy')
     ]);
 
     // 选择视频类型并输入查询
     await selectItemClick(app, 'bilibili-download-form-type', selectItemTitle);
     await app.win.type('#id', id);
     page && await app.win.type('#page', page);
+
+    // 港澳台
+    if (proxy) {
+      await app.win.click('#proxy');
+      await app.win.waitForTimeout(1_000);
+    }
 
     await app.win.click('.ant-modal-footer button.ant-btn-primary');
     await app.win.waitForTimeout(2_000);
@@ -72,6 +79,34 @@ export function callback(): void {
     const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
     expect(willBeDownload.length).toEqual(5);
+  });
+
+  test('Should get bilibili video with proxy', async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    await testIdClick(app, 'bilibili-download-link');
+
+    // SHADOWS HOUSE-影宅-（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ep398517
+    await query('番剧（ep）', '398517', undefined, true);
+
+    // 刮掉鬍子的我與撿到的女高中生（僅限港澳台地區）https://www.bilibili.com/bangumi/play/ep398301
+    await query('番剧（ep）', '398301', undefined, true);
+
+    // 繼母的拖油瓶是我的前女友（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss42121
+    await query('番剧（ss）', '42121', undefined, true);
+
+    // 青梅竹馬絕對不會輸的戀愛喜劇（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss38396
+    await query('番剧（ss）', '38396', undefined, true);
+
+    // 等待查询结果
+    await app.win.waitForTimeout(2_000);
+    await app.win.waitForSelector('.ant-table-row');
+
+    const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
+
+    expect(willBeDownload.length).toEqual(4);
   });
 
   // 根据ID搜索视频
