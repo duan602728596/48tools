@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Form, Input, Select, InputNumber, message } from 'antd';
+import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo } from '../parseBilibiliUrl';
@@ -64,13 +64,13 @@ function AddForm(props: {}): ReactElement {
 
       if (formValue.type === 'au') {
         // 下载音频
-        result = await parseAudioUrl(formValue.id);
+        result = await parseAudioUrl(formValue.id, !!formValue.proxy);
       } else if (formValue.type === 'ss' || formValue.type === 'ep') {
         // 下载番剧
-        result = await parseBangumiVideo(formValue.type, formValue.id);
+        result = await parseBangumiVideo(formValue.type, formValue.id, !!formValue.proxy);
       } else {
         // 下载av、bv视频，会返回视频封面
-        result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page);
+        result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page, !!formValue.proxy);
       }
 
       if (result) {
@@ -122,7 +122,7 @@ function AddForm(props: {}): ReactElement {
         onOk={ handleAddDownloadQueueClick }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form className="h-[155px]"
+        <Form className="h-[210px]"
           form={ form }
           initialValues={{ type: 'bv' }}
           labelCol={{ span: 4 }}
@@ -136,6 +136,9 @@ function AddForm(props: {}): ReactElement {
           </Form.Item>
           <Form.Item name="page" label="Page">
             <InputNumber />
+          </Form.Item>
+          <Form.Item name="proxy" label="Proxy" valuePropName="checked">
+            <Checkbox>用于港澳台番剧地址的获取</Checkbox>
           </Form.Item>
         </Form>
       </Modal>

@@ -98,6 +98,7 @@ export default function(info: object): { [key: string]: any } {
       'electron',
       'fluent-ffmpeg',
       'got',
+      'hpagent',
       'puppeteer-core'
     )),
     javascript: {

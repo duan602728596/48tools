@@ -51,7 +51,7 @@ function AddBySearch(props: {}): ReactElement {
   async function handleAddDownloadQueueClick(o: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
       const bvId: string = o.bvid.replace(/^bv/i, '');
-      const result: { flvUrl: string; pic: string } | void = await parseVideoUrlV2('bv', bvId, o.index);
+      const result: { flvUrl: string; pic: string } | void = await parseVideoUrlV2('bv', bvId, o.index, false);
 
       if (result) {
         dispatch(setAddDownloadList({

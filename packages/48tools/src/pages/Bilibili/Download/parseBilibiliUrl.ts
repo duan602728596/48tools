@@ -70,10 +70,11 @@ function parseHtml(html: string): ParseHtmlResult {
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
  * @param { number } page: 分页
+ * @param { boolean } proxy: 是否使用代理
  */
-export async function parseVideoUrl(type: string, id: string, page: number = 1): Promise<string | void> {
+export async function parseVideoUrl(type: string, id: string, page: number = 1, proxy: boolean): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/video/${ type === 'av' ? 'av' : 'BV' }${ id }?p=${ page }`;
-  const html: string = await requestBilibiliHtml(videoUrl);
+  const html: string = await requestBilibiliHtml(videoUrl, proxy);
   const { initialState }: ParseHtmlResult = parseHtml(html);
 
   if (!initialState) {
@@ -86,7 +87,7 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
   for (const query of QUERY_ARRAY) {
     const payload: string = `appkey=${ APP_KEY }&cid=${ cid }&otype=json&page=${ page }&${ query }`;
     const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
-    const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign);
+    const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
 
     if (videoInfoRes?.durl?.length) {
       flvUrl = videoInfoRes.durl[0].url;
@@ -102,9 +103,15 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1):
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
  * @param { number } page: 分页
+ * @param { boolean } proxy: 是否使用代理
  */
-export async function parseVideoUrlV2(type: string, id: string, page: number = 1): Promise<{ flvUrl: string; pic: string } | undefined> {
-  const res: WebInterfaceViewData = await requestWebInterfaceView(id, type);
+export async function parseVideoUrlV2(
+  type: string,
+  id: string,
+  page: number = 1,
+  proxy: boolean
+): Promise<{ flvUrl: string; pic: string } | undefined> {
+  const res: WebInterfaceViewData = await requestWebInterfaceView(id, type, proxy);
   let result: { flvUrl: string; pic: string } | undefined = undefined;
   let flvUrl: string | undefined = undefined; // 视频地址
 
@@ -114,7 +121,7 @@ export async function parseVideoUrlV2(type: string, id: string, page: number = 1
     for (const query of QUERY_ARRAY) {
       const payload: string = `appkey=${ APP_KEY }&cid=${ cid }&otype=json&page=${ page }&${ query }`;
       const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
-      const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign);
+      const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
 
       if (videoInfoRes?.durl?.length) {
         result = {
@@ -137,7 +144,7 @@ export async function parseVideoUrlV2(type: string, id: string, page: number = 1
  */
 export async function parseVideoList(bvid: string): Promise<Array<{ cid: number; part: string }> | void> {
   const videoUrl: string = `https://www.bilibili.com/video/${ bvid }`;
-  const html: string = await requestBilibiliHtml(videoUrl);
+  const html: string = await requestBilibiliHtml(videoUrl, false);
   const { initialState }: ParseHtmlResult = parseHtml(html);
 
   if (!initialState) {
@@ -152,10 +159,11 @@ export async function parseVideoList(bvid: string): Promise<Array<{ cid: number;
  * 参考：https://github.com/Henryhaohao/Bilibili_video_download/blob/master/bilibili_video_download_bangumi.py
  * @param { string } type: 番剧类型
  * @param { string } id: 番剧id
+ * @param { boolean } proxy: 是否使用代理
  */
-export async function parseBangumiVideo(type: string, id: string): Promise<string | void> {
+export async function parseBangumiVideo(type: string, id: string, proxy: boolean): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/bangumi/play/${ type }${ id }`;
-  const html: string = await requestBilibiliHtml(videoUrl);
+  const html: string = await requestBilibiliHtml(videoUrl, proxy);
   const { initialState }: ParseHtmlResult = parseHtml(html);
 
   if (!initialState) {
@@ -163,7 +171,7 @@ export async function parseBangumiVideo(type: string, id: string): Promise<strin
   }
 
   const { aid, cid }: { aid: number; cid: number } = initialState.epInfo;
-  const res: BangumiVideoInfo = await requestBangumiVideoInfo(aid, cid);
+  const res: BangumiVideoInfo = await requestBangumiVideoInfo(aid, cid, proxy);
 
   if (res.data) {
     return res.data.durl[0].url;
@@ -175,9 +183,10 @@ export async function parseBangumiVideo(type: string, id: string): Promise<strin
 /**
  * 解析音频地址
  * @param { string } id: 音频id
+ * @param { boolean } proxy: 是否使用代理
  */
-export async function parseAudioUrl(id: string): Promise<string | void> {
-  const res: AudioInfo = await requestAudioInfo(id);
+export async function parseAudioUrl(id: string, proxy: boolean): Promise<string | void> {
+  const res: AudioInfo = await requestAudioInfo(id, proxy);
 
   return res.data.cdns?.[0];
 }
