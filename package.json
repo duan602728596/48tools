@@ -13,11 +13,13 @@
     "update-version": "milktea-esm update",
     "update-version:dev": "milktea-esm update --__DEV__",
     "build": "node scripts/delivery.mjs",
+    "build:cn": "cross-env ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ node scripts/delivery.mjs",
     "build:png": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 packages/app/titleBarIcon.png",
     "build:icon": "ffmpeg -i statics/titleBarIcon512.png -vf scale=256:256 statics/titleBarIcon.ico",
     "build:icns": "milktea-esm image2icns --imageEntry=\"statics/titleBarIcon512.png\" --imageOutput=\"./statics/titleBarIcon.icns\" --size=512",
     "build:linuxPng": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 statics/titleBarIcon_linux.png",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "install:cn": "cross-env ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 yarn install"
   },
   "private": true,
   "workspaces": [
