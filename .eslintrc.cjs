@@ -35,7 +35,7 @@ module.exports = {
         project: 'tsconfig.json'
       },
       node: {
-        extensions: ['.js', '.jsx', '.cjs', '.mjs', '.ts', '.tsx', '.mts', '.cts']
+        extensions: ['.js', '.jsx', '.mjs', '.cjs', '.ts', '.tsx', '.mts', '.cts']
       }
     }
   },
