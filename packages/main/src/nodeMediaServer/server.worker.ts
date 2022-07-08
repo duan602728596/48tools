@@ -1,5 +1,5 @@
 import { workerData } from 'node:worker_threads';
-import { addAsarToLookupPaths, register } from 'asar-node';
+import 'asar-node';
 import type * as NodeMediaServer from 'node-media-server';
 import type { NodeMediaServerArg } from './nodeMediaServer';
 
@@ -15,9 +15,6 @@ const NodeMediaServerModule: typeof NodeMediaServer = (function(): typeof NodeMe
   if (isDevelopment) {
     return require('node-media-server');
   } else {
-    register();
-    addAsarToLookupPaths();
-
     // eslint-disable-next-line import/no-unresolved
     return require('../../../../app.asar/node_modules/node-media-server/src/node_media_server.js');
   }
