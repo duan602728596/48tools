@@ -14,8 +14,9 @@ function camelCaseToHyphen(str) {
 /**
  * 生成less文件
  * @param { Array<string> } antdComponents: 组件名称
+ * @param { boolean } isDark: 是否是暗色主题
  */
-function lessImportCode(antdComponents) {
+function lessImportCode(antdComponents, isDark) {
   const antd = path.join(moduleExists('antd'), '../../es');
   const componentsLessFiles = [];
 
@@ -28,7 +29,7 @@ function lessImportCode(antdComponents) {
     }
   });
 
-  componentsLessFiles.unshift(path.join(antd, 'style/dark.less'));
+  componentsLessFiles.unshift(path.join(antd, isDark ? 'style/dark.less' : 'style/default.less'));
 
   return componentsLessFiles;
 }
@@ -36,9 +37,10 @@ function lessImportCode(antdComponents) {
 /**
  * 生成less代码
  * @param { Array<string> } antdComponents: antd的组件名称
+ * @param { boolean } isDark: 是否是暗色主题
  */
-async function lessCode(antdComponents) {
-  const lessImport = lessImportCode(antdComponents);
+async function lessCode(antdComponents, isDark) {
+  const lessImport = lessImportCode(antdComponents, isDark);
   const lessInput = lessImport.map((o) => `@import '${ o }';`).join('\n');
   const output = await less.render(lessInput, {
     javascriptEnabled: true,

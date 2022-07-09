@@ -48,11 +48,11 @@ function nodeModules(node: Array<string>): Array<string> {
 }
 
 export default function(info: object): { [key: string]: any } {
-  const plugins: Array<any> = [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]
-  ];
+  const plugins: Array<any> = [];
 
-  if (!isDev) {
+  if (isDev) {
+    plugins.unshift(['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]);
+  } else {
     plugins.unshift(['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }]);
   }
 
@@ -120,11 +120,11 @@ export default function(info: object): { [key: string]: any } {
         '@primary-color': '#13c2c2'
       },
       include: /node_modules[\\/](_?antd|highlight)/,
-      exclude: /dark-?theme|tailwindcss/i
+      exclude: /(light|dark)-?theme|tailwindcss/i
     },
     rules: [
       {
-        test: /dark-theme\.(min\.)?css|toutiaosdk-(acrawler|captcha)\.js/,
+        test: /(light|dark)-theme\.(min\.)?css|toutiaosdk-(acrawler|captcha)\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]' // TODO: js文件生成的hash和注入的hash不一致

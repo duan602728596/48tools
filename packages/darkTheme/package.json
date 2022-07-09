@@ -5,7 +5,9 @@
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
-    "build": "rimraf ./dist && node src/index.js && postcss dist/dark-theme.css > dist/dark-theme.min.css"
+    "build": "rimraf ./dist && node src/index.js && npm run nano:dark && npm run nano:light",
+    "nano:dark": "postcss dist/dark-theme.css > dist/dark-theme.min.css",
+    "nano:light": "postcss dist/light-theme.css > dist/light-theme.min.css"
   },
   "dependencies": {
     "cssnano": "^5.1.12",

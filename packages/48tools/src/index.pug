@@ -8,6 +8,8 @@ html
     meta(name='renderer' content='webkit')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     title= `48tools - ${ packageJson.version }`
+    if htmlWebpackPlugin.options.mode !== 'development'
+      include ./components/Theme/stylesheet.pug
 
   body
     div.app#app
