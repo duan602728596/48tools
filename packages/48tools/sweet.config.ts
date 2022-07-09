@@ -114,7 +114,7 @@ export default function(info: object): { [key: string]: any } {
     sass: {
       include: /src/
     },
-    css: {
+    less: {
       modifyVars: {
         // https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
         '@primary-color': '#13c2c2'
