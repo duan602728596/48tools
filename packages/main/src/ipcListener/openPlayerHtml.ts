@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import { BrowserWindow, ipcMain, type IpcMainEvent } from 'electron';
 import * as remoteMain from '@electron/remote/main';
-import { isDevelopment, wwwPath } from '../utils';
+import { isDevelopment, wwwPath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import store from '../store';
 
@@ -18,8 +18,6 @@ export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
 function open(title: string, query: string): void {
   const searchParams: URLSearchParams = new URLSearchParams(query);
   const id: string | null = searchParams.get('id');
-
-  searchParams.set('theme', store.get('theme') ?? 'system');
 
   let win: BrowserWindow | null = new BrowserWindow({
     width: 300,
@@ -45,6 +43,11 @@ function open(title: string, query: string): void {
       win.webContents.send('themeSource', value);
     }
   }
+
+  // initialState
+  searchParams.set('initialState', ils({
+    theme: store.get('theme') ?? 'system'
+  }));
 
   if (win) {
     win.loadFile(

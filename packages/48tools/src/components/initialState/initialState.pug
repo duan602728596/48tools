@@ -1,11 +1,8 @@
 // 从主线程获取的初始化的值
 script.
   (function initialState() {
-    const paramsResult = Array.from(new URLSearchParams(window.location.search).entries());
+    const searchParams = new URLSearchParams(window.location.search);
+    const initialState = searchParams.get('initialState');
 
-    globalThis.__INITIAL_STATE__ = paramsResult.reduce(function(result, [key, value]) {
-      result[key] = value;
-
-      return result;
-    }, {});
+    globalThis.__INITIAL_STATE__ = JSON.parse(decodeURIComponent(initialState));
   })();

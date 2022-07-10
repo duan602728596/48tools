@@ -2,7 +2,7 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
 import * as remoteMain from '@electron/remote/main';
-import { isDevelopment, isTest, wwwPath } from './utils';
+import { isDevelopment, isTest, wwwPath, initialState as ils } from './utils';
 import { ipc, removeIpc } from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
@@ -50,7 +50,9 @@ function createWindow(): void {
       : path.join(wwwPath, 'dist/index.html'),
     {
       query: {
-        theme: themeSource ?? 'system'
+        initialState: ils({
+          theme: themeSource ?? 'system'
+        })
       }
     }
   );
