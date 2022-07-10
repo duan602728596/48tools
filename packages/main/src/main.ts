@@ -5,7 +5,7 @@ import * as remoteMain from '@electron/remote/main';
 import { isDevelopment, isTest, wwwPath } from './utils';
 import { ipc, removeIpc } from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
-import toutiaoRequest from './toutiaoRequest';
+import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
 remoteMain.initialize();
@@ -50,7 +50,7 @@ function createWindow(): void {
     win = null;
   });
 
-  toutiaoRequest();
+  toutiaoRequestInit();
 }
 
 // https://github.com/microsoft/vscode/issues/116715#issuecomment-917783861

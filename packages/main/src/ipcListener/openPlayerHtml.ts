@@ -1,8 +1,10 @@
 import * as path from 'node:path';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, ipcMain, type IpcMainEvent } from 'electron';
 import * as remoteMain from '@electron/remote/main';
 import { isDevelopment, wwwPath } from '../utils';
-import { themeEvent, type ThemeValue } from './ipcTheme';
+import { themeEvent, type ThemeValue } from './themeChange';
+
+export const type: string = 'player.html';
 
 /* 记录id和窗口的关系 */
 export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
@@ -12,7 +14,7 @@ export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
  * @param { string } title: 窗口标题
  * @param { string } query: 字符串查询参数
  */
-export function openPlayerHtml(title: string, query: string): void {
+function open(title: string, query: string): void {
   const searchParams: URLSearchParams = new URLSearchParams(query);
   const id: string | null = searchParams.get('id');
   let win: BrowserWindow | null = new BrowserWindow({
@@ -54,3 +56,11 @@ export function openPlayerHtml(title: string, query: string): void {
 
   id && playerWindowMaps.set(id, win);
 }
+
+function openPlayerHtml(): void {
+  ipcMain.on(type, function(event: IpcMainEvent, title: string, query: string): void {
+    open(title, query);
+  });
+}
+
+export default openPlayerHtml;

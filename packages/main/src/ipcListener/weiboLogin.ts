@@ -1,10 +1,12 @@
-import { BrowserWindow, type Session, type Cookie } from 'electron';
+import { BrowserWindow, ipcMain, type Session, type Cookie, type IpcMainEvent } from 'electron';
+
+export const type: string = 'weibo-login';
 
 const weiboUrl: string = 'https://weibo.com/';
 let weiboLoginWin: BrowserWindow | null = null;
 
 /* 微博登陆 */
-function weiboLogin(win: BrowserWindow): void {
+function login(win: BrowserWindow): void {
   if (weiboLoginWin !== null) {
     return;
   }
@@ -37,6 +39,12 @@ function weiboLogin(win: BrowserWindow): void {
 
   weiboLoginWin.on('closed', function(): void {
     weiboLoginWin = null;
+  });
+}
+
+function weiboLogin(win: BrowserWindow): void {
+  ipcMain.on(type, function(event: IpcMainEvent): void {
+    login(win);
   });
 }
 

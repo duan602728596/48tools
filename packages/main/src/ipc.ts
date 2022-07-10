@@ -1,27 +1,21 @@
-import { ipcMain, type BrowserWindow, type IpcMainEvent } from 'electron';
-import { openPlayerHtml, playerWindowMaps } from './function/openPlayerHtml';
-import ipcTheme, { NATIVE_THEME_CHANGE_CHANNEL } from './function/ipcTheme';
-import weiboLogin from './function/weiboLogin';
-import { nodeMediaServerInit, NODE_MEDIA_SERVER_CHANNEL } from './nodeMediaServer/nodeMediaServer';
-import { TOUTIAO_REQUEST, handleToutiaoFpListener } from './toutiaoRequest';
-
-// 通信类型
-enum IpcListenerType {
-  DEVELOP_TOOLS_CHANNEL = 'developer-tools',
-  PLAYER_HTML_CHANNEL = 'player.html',
-  PLAYER_DEVELOPER_TOOLS_CHANNEL = 'player-developer-tools',
-  WEIBO_LOGIN_CHANNEL = 'weibo-login'
-}
+import { ipcMain, type BrowserWindow } from 'electron';
+import openDevTools, { type as openDevToolsType } from './ipcListener/openDevTools';
+import openPlayerHtml, { type as openPlayerHtmlType } from './ipcListener/openPlayerHtml';
+import openPlayerDevTools, { type as openPlayerDevToolsType } from './ipcListener/openPlayerDevTools';
+import themeChange, { type as themeChangeType } from './ipcListener/themeChange';
+import weiboLogin, { type as weiboLoginType } from './ipcListener/weiboLogin';
+import nodeMediaServer, { type as nodeMediaServerType } from './nodeMediaServer/nodeMediaServer';
+import toutiaoRequest, { type as toutiaoRequestType } from './toutiaoRequest/toutiaoRequest';
 
 // 移除所有监听的通信
 const removeListenerChannel: Array<string> = [
-  IpcListenerType.DEVELOP_TOOLS_CHANNEL,
-  IpcListenerType.PLAYER_HTML_CHANNEL,
-  IpcListenerType.PLAYER_DEVELOPER_TOOLS_CHANNEL,
-  IpcListenerType.WEIBO_LOGIN_CHANNEL,
-  NATIVE_THEME_CHANGE_CHANNEL,
-  NODE_MEDIA_SERVER_CHANNEL,
-  TOUTIAO_REQUEST
+  openDevToolsType,
+  openPlayerHtmlType,
+  openPlayerDevToolsType,
+  themeChangeType,
+  weiboLoginType,
+  nodeMediaServerType,
+  toutiaoRequestType
 ];
 
 export function removeIpc(): void {
@@ -32,36 +26,11 @@ export function removeIpc(): void {
 
 /* ipc通信 */
 export function ipc(win: BrowserWindow): void {
-  // 打开开发者工具
-  ipcMain.on(IpcListenerType.DEVELOP_TOOLS_CHANNEL, function(event: IpcMainEvent): void {
-    win.webContents.openDevTools();
-  });
-
-  // 获取其他路由的文件的绝对路径
-  ipcMain.on(IpcListenerType.PLAYER_HTML_CHANNEL, function(event: IpcMainEvent, title: string, query: string): void {
-    openPlayerHtml(title, query);
-  });
-
-  /**
-   * 根据当前窗口的唯一id打开子窗口的开发者工具
-   * @param { IpcMainEvent } event
-   * @param { string } pid: 当前窗口的唯一id
-   */
-  ipcMain.on(IpcListenerType.PLAYER_DEVELOPER_TOOLS_CHANNEL, function(event: IpcMainEvent, pid: string): void {
-    playerWindowMaps.get(pid)?.webContents.openDevTools();
-  });
-
-  // 切换主题
-  ipcTheme();
-
-  // 微博登陆
-  ipcMain.on(IpcListenerType.WEIBO_LOGIN_CHANNEL, function(event: IpcMainEvent): void {
-    weiboLogin(win);
-  });
-
-  // 启动node-media-server
-  nodeMediaServerInit();
-
-  // 头条的处理
-  ipcMain.on(TOUTIAO_REQUEST, handleToutiaoFpListener);
+  openDevTools(win);    // 打开开发者工具
+  openPlayerHtml();     // 打开播放器
+  openPlayerDevTools(); // 打开播放器开发者工具
+  themeChange();        // 主题更换
+  weiboLogin(win);      // 微博登录
+  nodeMediaServer();    // 启动node-media-server
+  toutiaoRequest();     // 头条请求拦截
 }
