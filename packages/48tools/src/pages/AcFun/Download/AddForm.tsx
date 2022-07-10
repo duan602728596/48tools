@@ -97,7 +97,7 @@ function AddForm(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button type="primary" onClick={ handleOpenAddModalClick }>添加下载队列</Button>
+      <Button type="primary" data-test-id="acfun-download-add-btn" onClick={ handleOpenAddModalClick }>添加下载队列</Button>
       <Modal visible={ visible }
         title="添加下载任务"
         width={ 480 }
@@ -114,7 +114,7 @@ function AddForm(props: {}): ReactElement {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 20 }}
         >
-          <Form.Item name="type" label="下载类型">
+          <Form.Item name="type" label="下载类型" data-test-id="acfun-download-form-type">
             <Select>{ typeSelectOptionsRender() }</Select>
           </Form.Item>
           <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
