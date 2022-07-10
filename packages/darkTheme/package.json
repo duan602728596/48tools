@@ -10,6 +10,7 @@
     "nano:light": "postcss dist/light-theme.css > dist/light-theme.min.css"
   },
   "dependencies": {
+    "@sweet-milktea/utils": "^3.0.2",
     "cssnano": "^5.1.12",
     "glob": "^8.0.3",
     "less": "^4.1.3",

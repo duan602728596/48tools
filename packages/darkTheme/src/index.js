@@ -5,6 +5,7 @@ import glob from 'glob';
 import { metaHelper, moduleExists } from '@sweet-milktea/utils';
 import parser from './parser.js';
 import lessCode from './lessCode.js';
+import remove from './remove.js';
 
 const globPromise = promisify(glob);
 const { __dirname } = metaHelper(import.meta.url);
@@ -30,7 +31,7 @@ async function createLessFile(distDir, antdComponents, isDark) {
 
   await fsP.writeFile(
     path.join(distDir, isDark ? 'dark-theme.css' : 'light-theme.css'),
-    `/*! @48tools ${ isDark ? '暗黑模式' : '浅色模式' }css文件 !*/\n${ css }\n${ hljsCss }`
+    `/*! @48tools ${ isDark ? '暗黑模式' : '浅色模式' }css文件 !*/\n${ await remove(css) }\n${ hljsCss }`
   );
 }
 
@@ -46,7 +47,7 @@ async function main() {
   // 生成less文件
   const distDir = path.join(__dirname, '../dist');
 
-  createLessFile(distDir, antdComponents, true);
+  await createLessFile(distDir, antdComponents, true);
 }
 
 main();
