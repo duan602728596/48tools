@@ -16,7 +16,6 @@ import type { RadioChangeEvent } from 'antd/es/radio';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
 import ThemeContext from './ThemeContext';
 
-export const LOCALSTORAGE_THEME_NAME: string = 'THEME_VALUE';
 const themeOptions: Array<{ label: string; value: string }> = [
   { label: '自动', value: 'system' },
   { label: '浅色主题', value: 'light' },
@@ -37,10 +36,10 @@ interface ThemeProviderProps {
  */
 function ThemeProvider(props: ThemeProviderProps): ReactElement {
   const { children, isChildrenWindow }: ThemeProviderProps = props;
-  const media: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');    // 暗黑模式媒体查询
+  const media: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)'); // 暗黑模式媒体查询
   const [themeMatches, setThemeMatches]: [boolean, D<S<boolean>>] = useState(media.matches); // 是否为暗黑模式
   const [theme, setTheme]: [ThemeValue, D<S<ThemeValue>>]
-    = useState((localStorage.getItem(LOCALSTORAGE_THEME_NAME) ?? 'system') as ThemeValue);  // 当前使用的主题
+    = useState((globalThis?.__INITIAL_STATE__?.theme ?? 'system') as ThemeValue); // 当前使用的主题
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 配置当前主题
 
   // media变化
@@ -64,7 +63,6 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
 
     ipcRenderer.send('nativeTheme:change', value, true);
     setTheme(value);
-    localStorage.setItem(LOCALSTORAGE_THEME_NAME, value);
   }
 
   const ChangeThemeElement: ReactElement = (

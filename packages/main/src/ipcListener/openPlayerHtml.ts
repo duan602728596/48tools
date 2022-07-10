@@ -3,6 +3,7 @@ import { BrowserWindow, ipcMain, type IpcMainEvent } from 'electron';
 import * as remoteMain from '@electron/remote/main';
 import { isDevelopment, wwwPath } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
+import store from '../store';
 
 export const type: string = 'player.html';
 
@@ -17,6 +18,9 @@ export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
 function open(title: string, query: string): void {
   const searchParams: URLSearchParams = new URLSearchParams(query);
   const id: string | null = searchParams.get('id');
+
+  searchParams.set('theme', store.get('theme') ?? 'system');
+
   let win: BrowserWindow | null = new BrowserWindow({
     width: 300,
     height: 680,
@@ -42,7 +46,9 @@ function open(title: string, query: string): void {
       isDevelopment
         ? path.join(wwwPath, '48tools/dist/player.html')
         : path.join(wwwPath, 'dist/player.html'),
-      { search: query }
+      {
+        search: searchParams.toString()
+      }
     );
 
     win.on('closed', function(): void {

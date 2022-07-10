@@ -1,11 +1,13 @@
 import * as process from 'node:process';
 import * as path from 'node:path';
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
 import * as remoteMain from '@electron/remote/main';
 import { isDevelopment, isTest, wwwPath } from './utils';
 import { ipc, removeIpc } from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
+import store from './store';
+import type { ThemeValue } from './ipcListener/themeChange';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
 remoteMain.initialize();
@@ -15,6 +17,13 @@ let win: BrowserWindow | null = null;
 
 /* 初始化 */
 function createWindow(): void {
+  // 初始化设置当前的主题
+  const themeSource: ThemeValue | undefined = store.get('theme');
+
+  if (themeSource) {
+    nativeTheme.themeSource = themeSource;
+  }
+
   win = new BrowserWindow({
     width: 1000,
     height: 800,
@@ -36,7 +45,12 @@ function createWindow(): void {
   win.loadFile(
     isDevelopment
       ? path.join(wwwPath, '48tools/dist/index.html')
-      : path.join(wwwPath, 'dist/index.html')
+      : path.join(wwwPath, 'dist/index.html'),
+    {
+      query: {
+        theme: themeSource ?? 'system'
+      }
+    }
   );
 
   // 去掉顶层菜单

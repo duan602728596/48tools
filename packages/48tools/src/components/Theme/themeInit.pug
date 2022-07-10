@@ -7,19 +7,18 @@ style.
   }
 
 script.
-  function themeInit() {
+  (function themeInit() {
     const { ipcRenderer } = globalThis.require('electron');
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const darkMatches = media.matches; // 判断当前是否为暗黑模式
-    const theme = localStorage.getItem('THEME_VALUE') ?? 'system'; // 判断当前的主题
-
-    if (theme !== 'system') {
-      ipcRenderer.send('nativeTheme:change', theme);
-    }
+    const theme = globalThis?.__INITIAL_STATE__?.theme ?? 'system'; // 判断当前的主题
 
     if ((theme === 'system' && darkMatches) || (theme === 'dark')) {
       document.body.setAttribute('theme', 'dark');
     }
-  }
 
-  themeInit();
+    // 删除旧的配置
+    if (!localStorage.getItem('THEME_VALUE')) {
+      localStorage.removeItem('THEME_VALUE');
+    }
+  })();

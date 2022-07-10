@@ -1,5 +1,6 @@
 import { EventEmitter } from 'node:events';
 import { ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
+import store from '../store';
 
 export type ThemeValue = 'light' | 'dark' | 'system';
 
@@ -15,6 +16,7 @@ function themeChange(): void {
    * @param { boolean } themeSourceEvent: 是否触发子窗口的变化
    */
   ipcMain.on(type, function(event: IpcMainEvent, value: ThemeValue, themeSourceEvent: boolean): void {
+    store.set('theme', value);
     nativeTheme.themeSource = value;
 
     if (themeSourceEvent) {
