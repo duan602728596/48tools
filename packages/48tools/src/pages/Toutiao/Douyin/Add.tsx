@@ -195,6 +195,12 @@ function Add(props: {}): ReactElement {
     }
   }
 
+  // 清除抖音的cookie
+  function handleClearDouyinCookie(event: MouseEvent<HTMLButtonElement>): void {
+    douyinCookieCache.clearCookie();
+    message.success('Cookie已清除！');
+  }
+
   return (
     <Fragment>
       <Input className={ style.input }
@@ -204,12 +210,7 @@ function Add(props: {}): ReactElement {
       />
       <Button.Group>
         <Button loading={ getUrlLoading } onClick={ handleGetVideoUrlClick }>获取下载地址</Button>
-        <Button type="primary"
-          danger={ true }
-          onClick={ (event: MouseEvent<HTMLButtonElement>): void => douyinCookieCache.clearCookie() }
-        >
-          清除抖音Cookie的缓存
-        </Button>
+        <Button type="primary" danger={ true } onClick={ handleClearDouyinCookie }>清除抖音Cookie的缓存</Button>
       </Button.Group>
       {/* 下载地址 */}
       <Modal title="选择下载地址"
