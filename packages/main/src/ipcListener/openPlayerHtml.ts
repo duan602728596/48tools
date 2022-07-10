@@ -30,7 +30,12 @@ function open(title: string, query: string): void {
       webSecurity: false,
       contextIsolation: false
     },
-    title
+    title,
+    show: false
+  });
+
+  win.on('ready-to-show', function(): void {
+    win!.show();
   });
 
   remoteMain.enable(win.webContents);

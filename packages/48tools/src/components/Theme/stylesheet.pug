@@ -1,7 +1,15 @@
 // 样式表的加载
-link(rel='stylesheet'
-  href=require('@48tools/dark-theme/dist/light-theme.min.css')
-  media='(prefers-color-scheme: light), (prefers-color-scheme: no-preference)')
-link(rel='stylesheet'
-  href=require('@48tools/dark-theme/dist/dark-theme.min.css')
-  media='(prefers-color-scheme: dark)')
+style.
+  @media (prefers-color-scheme: dark) {
+    body.theme {
+      background-color: #000;
+    }
+  }
+
+if htmlWebpackPlugin.options.mode !== 'development'
+  link(rel='stylesheet'
+    href=require('@48tools/dark-theme/dist/light-theme.min.css')
+    media='(prefers-color-scheme: light), (prefers-color-scheme: no-preference)')
+  link(rel='stylesheet'
+    href=require('@48tools/dark-theme/dist/dark-theme.min.css')
+    media='(prefers-color-scheme: dark)')

@@ -8,16 +8,13 @@ html
     meta(name='renderer' content='webkit')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     title= `48tools - ${ packageJson.version }`
-    if htmlWebpackPlugin.options.mode !== 'development'
-      include ./components/Theme/stylesheet.pug
+    include ./components/Theme/stylesheet.pug
 
-  body
+  body.theme
     div.app#app
       include ./components/loading/loading.pug
 
     include ./components/initialState/initialState.pug
-    include ./components/Theme/themeInit.pug
-
     script(src=require('./pages/Toutiao/toutiaosdk-acrawler'))
     script(src=require('./pages/Toutiao/toutiaosdk-captcha'))
     if htmlWebpackPlugin.options.mode === 'development'

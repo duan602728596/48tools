@@ -33,7 +33,9 @@ function createWindow(): void {
       webSecurity: false,
       contextIsolation: false
     },
-    icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png')
+    icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png'),
+    show: true,
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
 
   remoteMain.enable(win.webContents);
