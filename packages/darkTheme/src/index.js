@@ -2,7 +2,7 @@ import path from 'node:path';
 import fs, { promises as fsP } from 'node:fs';
 import { promisify } from 'node:util';
 import glob from 'glob';
-import { metaHelper, moduleExists } from '@sweet-milktea/utils';
+import { metaHelper } from '@sweet-milktea/utils';
 import parser from './parser.js';
 import lessCode from './lessCode.js';
 import remove from './remove.js';
@@ -18,12 +18,6 @@ const { __dirname } = metaHelper(import.meta.url);
  */
 async function createLessFile(distDir, antdComponents, isDark) {
   const css = await lessCode(antdComponents, isDark);
-  const hljsPath = path.join(
-    moduleExists('highlight.js'),
-    '../..',
-    isDark ? 'styles/atom-one-dark.css' : 'styles/atom-one-light.css'
-  );
-  const hljsCss = await fsP.readFile(hljsPath, { encoding: 'utf8' });
 
   if (!fs.existsSync(distDir)) {
     await fsP.mkdir(distDir);
@@ -31,7 +25,7 @@ async function createLessFile(distDir, antdComponents, isDark) {
 
   await fsP.writeFile(
     path.join(distDir, isDark ? 'dark-theme.css' : 'light-theme.css'),
-    `/*! @48tools ${ isDark ? '暗黑模式' : '浅色模式' }css文件 !*/\n${ await remove(css) }\n${ hljsCss }`
+    `/*! @48tools ${ isDark ? '暗黑模式' : '浅色模式' }css文件 !*/\n${ await remove(css) }\n`
   );
 }
 

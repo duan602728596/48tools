@@ -8,6 +8,12 @@ html
     meta(name='renderer' content='webkit')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     title= `48tools - ${ packageJson.version }`
+    link(rel='stylesheet'
+      href=require('highlight.js/styles/atom-one-light.css')
+      media='(prefers-color-scheme: light), (prefers-color-scheme: no-preference)')
+    link(rel='stylesheet'
+      href=require('highlight.js/styles/atom-one-dark.css')
+      media='(prefers-color-scheme: dark)')
 
   body.theme
     include ./components/Theme/stylesheet.pug
