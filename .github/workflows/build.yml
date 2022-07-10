@@ -1,0 +1,45 @@
+name: Build apps CI
+
+on:
+  push:
+    branches:
+      - 'build/v**'
+
+jobs:
+  build:
+    runs-on: macos-12
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: |
+          VERSION=${{ github.ref }}
+          VERSION=${VERSION#refs/heads/build/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - run: npm run install:cn
+
+      - run: npm run build:cn
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: v${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          draft: true
+          prerelease: true
+          files: |
+            build/linux/48tools-${{ env.VERSION }}-linux64.zip
+            build/mac/48tools-${{ env.VERSION }}-mac.zip
+            build/mac-arm64/48tools-${{ env.VERSION }}-mac-arm64.zip
+            build/win/48tools-${{ env.VERSION }}-win64.zip
+            build/win32/48tools-${{ env.VERSION }}-win32.zip
