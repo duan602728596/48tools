@@ -16,6 +16,11 @@ import type { RadioChangeEvent } from 'antd/es/radio';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
 import ThemeContext from './ThemeContext';
 
+// TODO: 删除旧的配置，以后会删除这段代码
+if (!localStorage.getItem('THEME_VALUE')) {
+  localStorage.removeItem('THEME_VALUE');
+}
+
 const themeOptions: Array<{ label: string; value: string }> = [
   { label: '自动', value: 'system' },
   { label: '浅色主题', value: 'light' },
