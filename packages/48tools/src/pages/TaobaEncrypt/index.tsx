@@ -14,11 +14,8 @@ import { Button, Input, Form, BackTop, message, Empty } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import hljs from 'highlight.js/lib/core';
 import jsonLanguages from 'highlight.js/lib/languages/json';
+import 'highlight.js/styles/atom-one-light.css';
 import { encrypt, decrypt } from './encrypt';
-
-if (process.env.NODE_ENV === 'development') {
-  require('highlight.js/styles/atom-one-light.css');
-}
 
 hljs.registerLanguage('json', jsonLanguages);
 

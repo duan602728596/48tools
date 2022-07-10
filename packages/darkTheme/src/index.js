@@ -46,10 +46,7 @@ async function main() {
   // 生成less文件
   const distDir = path.join(__dirname, '../dist');
 
-  await Promise.all([
-    createLessFile(distDir, antdComponents, false),
-    createLessFile(distDir, antdComponents, true)
-  ]);
+  createLessFile(distDir, antdComponents, true);
 }
 
 main();

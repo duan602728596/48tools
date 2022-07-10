@@ -48,11 +48,9 @@ function nodeModules(node: Array<string>): Array<string> {
 }
 
 export default function(info: object): { [key: string]: any } {
-  const plugins: Array<any> = [];
+  const plugins: Array<any> = [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]];
 
-  if (isDev) {
-    plugins.unshift(['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]);
-  } else {
+  if (!isDev) {
     plugins.unshift(['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }]);
   }
 

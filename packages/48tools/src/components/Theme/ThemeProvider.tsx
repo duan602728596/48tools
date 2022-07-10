@@ -116,19 +116,9 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   }, [media]);
 
   return (
-    <Fragment>
-      <ThemeContext.Provider value={{ ChangeThemeElement }}>
-        { children }
-      </ThemeContext.Provider>
-      {
-        (process.env.NODE_ENV === 'development' && (theme === 'dark' || (theme === 'system' && themeMatches)))
-          ? createPortal(
-            <link rel="stylesheet"
-              href={ require('@48tools/dark-theme/dist/dark-theme.min.css') }
-            />,
-            document.head) : null
-      }
-    </Fragment>
+    <ThemeContext.Provider value={{ ChangeThemeElement }}>
+      { children }
+    </ThemeContext.Provider>
   );
 }
 

@@ -6,10 +6,4 @@ style.
     }
   }
 
-if htmlWebpackPlugin.options.mode !== 'development'
-  link(rel='stylesheet'
-    href=require('@48tools/dark-theme/dist/light-theme.min.css')
-    media='(prefers-color-scheme: light), (prefers-color-scheme: no-preference)')
-  link(rel='stylesheet'
-    href=require('@48tools/dark-theme/dist/dark-theme.min.css')
-    media='(prefers-color-scheme: dark)')
+link(rel='stylesheet' href=require('@48tools/dark-theme/dist/dark-theme.min.css') media='(prefers-color-scheme: dark)')
