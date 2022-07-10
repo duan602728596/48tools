@@ -16,10 +16,7 @@ import type { RadioChangeEvent } from 'antd/es/radio';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
 import ThemeContext from './ThemeContext';
 
-// TODO: 删除旧的配置，以后会删除这段代码
-if (!localStorage.getItem('THEME_VALUE')) {
-  localStorage.removeItem('THEME_VALUE');
-}
+localStorage.setItem('THEME_VALUE', globalThis?.__INITIAL_STATE__?.theme ?? 'system');
 
 const themeOptions: Array<{ label: string; value: string }> = [
   { label: '自动', value: 'system' },
@@ -44,7 +41,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   const media: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)'); // 暗黑模式媒体查询
   const [themeMatches, setThemeMatches]: [boolean, D<S<boolean>>] = useState(media.matches); // 是否为暗黑模式
   const [theme, setTheme]: [ThemeValue, D<S<ThemeValue>>]
-    = useState((globalThis?.__INITIAL_STATE__?.theme ?? 'system') as ThemeValue); // 当前使用的主题
+    = useState(localStorage.getItem('THEME_VALUE') as ThemeValue); // 当前使用的主题
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 配置当前主题
 
   // media变化
