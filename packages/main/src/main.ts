@@ -2,7 +2,7 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
 import * as remoteMain from '@electron/remote/main';
-import { isDevelopment, isTest, wwwPath, initialState as ils } from './utils';
+import { isDevelopment, isTest, wwwPath, initialState as ils, packageJson } from './utils';
 import { ipc, removeIpc } from './ipc';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
@@ -33,6 +33,7 @@ function createWindow(): void {
       webSecurity: false,
       contextIsolation: false
     },
+    title: `48tools - ${ packageJson.version }`,
     icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png'),
     show: true,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
