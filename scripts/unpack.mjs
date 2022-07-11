@@ -3,7 +3,7 @@ import path from 'node:path';
 import rimraf from 'rimraf';
 import fse from 'fs-extra';
 import builder from 'electron-builder';
-import { cwd, appDir, staticsDir, build, output, unpacked } from './utils.mjs';
+import { cwd, appDir, staticsDir, build, output, unpacked, isMacOS } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -137,13 +137,13 @@ async function unpack() {
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], appDir);
 
   // 编译mac
-  await builder.build({
+  isMacOS && await builder.build({
     targets: builder.Platform.MAC.createTarget(),
     config: config(output.mac)
   });
 
   // 编译mac-arm64
-  await builder.build({
+  isMacOS && await builder.build({
     targets: builder.Platform.MAC.createTarget(),
     config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
   });
@@ -168,8 +168,8 @@ async function unpack() {
 
   // 拷贝许可文件
   await Promise.all([
-    ...copy(unpacked.mac, true),
-    ...copy(unpacked.macArm64, true),
+    ...isMacOS ? copy(unpacked.mac, true) : [],
+    ...isMacOS ? copy(unpacked.macArm64, true) : [],
     ...copy(unpacked.win),
     ...copy(unpacked.win32),
     ...copy(unpacked.linux)
