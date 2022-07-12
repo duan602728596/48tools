@@ -9,7 +9,7 @@ function postcssRemoveRulesPlugin() {
     for (let i = nodes.length - 1; i >= 0; i--) {
       const item = nodes[i];
 
-      if (!/#|rgba?|transparent/i.test(item.value) ) {
+      if (!/#|rgba?|hsla?|hsv|transparent/i.test(item.value) ) {
         item.remove();
       }
     }
