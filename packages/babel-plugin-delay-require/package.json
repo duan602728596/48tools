@@ -1,0 +1,13 @@
+{
+  "name": "@48tools/babel-plugin-delay-require",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "devDependencies": {
+    "@babel/core": "^7.18.6",
+    "@types/babel__core": "^7",
+    "@types/babel__generator": "^7",
+    "@types/babel__template": "^7",
+    "@types/babel__traverse": "^7"
+  }
+}
