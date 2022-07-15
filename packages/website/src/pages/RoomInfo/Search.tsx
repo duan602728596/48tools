@@ -71,6 +71,7 @@ function Search(props: {}): ReactElement {
 
   return (
     <Fragment>
+      {/* @ts-ignore */}
       <Form className="shrink-0" form={ form }>
         <Form.Item name="query">
           <Input placeholder="请输入要搜索的姓名或者ID" />
