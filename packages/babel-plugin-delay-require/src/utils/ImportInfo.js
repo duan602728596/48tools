@@ -26,4 +26,4 @@ class ImportInfo {
   }
 }
 
-exports.ImportInfo = ImportInfo;
+module.exports = ImportInfo;

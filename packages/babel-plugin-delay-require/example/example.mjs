@@ -15,17 +15,25 @@ function test1() {
   function test11() {
     fsP.readFile('2.txt');
   }
+
+  function test12() {
+    fsP.readFile('3.txt');
+
+    function test121() {
+      fsP.writeFile('4.txt', '');
+    }
+  }
 }
 
-// async function test2() {
-//   await setTimeout(500);
-//
-//   const dir = path.join(__dirname, '2.js');
-// }
-//
-// function test3() {
-//   if (fs.existsSync('a.js')) {}
-// }
+async function test2() {
+  await setTimeout(500);
+
+  const dir = path.join(__dirname, '2.js');
+}
+
+function test3() {
+  if (fs.existsSync('a.js')) {}
+}
 `;
 
 const result = await transformAsync(code, {
