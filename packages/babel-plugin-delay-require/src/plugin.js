@@ -45,7 +45,7 @@ function plugin(t, moduleName) {
 
           if (index >= 0) {
             const inject = importInfoArray.map(
-              (o) => t.VariableDeclaration('let', [t.VariableDeclarator(t.identifier(o.formatVariableName))]));
+              (o) => t.variableDeclaration('let', [t.variableDeclarator(t.identifier(o.formatVariableName))]));
 
             body.splice(index + 1, 0, ...inject);
           }
