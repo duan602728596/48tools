@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@playwright/test": "^1.23.0",
-    "@sweet-milktea/utils": "^3.0.2",
+    "@sweet-milktea/utils": "^4.0.0",
     "playwright": "^1.23.0"
   }
 }

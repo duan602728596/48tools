@@ -31,9 +31,9 @@
     "reselect": "^4.1.6"
   },
   "devDependencies": {
-    "@sweet-milktea/milktea-cli": "^3.1.1",
-    "@sweet-milktea/milktea-vite": "^3.1.8",
-    "@sweet-milktea/server": "^3.1.11",
+    "@sweet-milktea/milktea-cli": "^4.0.0",
+    "@sweet-milktea/milktea-vite": "^4.0.0",
+    "@sweet-milktea/server": "^4.0.0",
     "@types/express": "^4",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "cross-env": "^7.0.3",

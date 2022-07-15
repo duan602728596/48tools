@@ -260,6 +260,7 @@ ${ time }\n`;
       <div className="shrink-0">
         <NoticeBar content={ `由于Vercel的限制，最多支持${ exportMaxLength }个地址的导出。导出时间较慢，请耐心等待。` } color="alert" />
       </div>
+      {/* @ts-ignore */}
       <Form className="shrink-0" form={ form }>
         <Form.Item className="h-[75px]" name="query" rules={ [{ required: true, message: '必须输入ID' }] }>
           <Input placeholder="请输入要下载录播的小偶像的ID" />
