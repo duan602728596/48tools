@@ -74,6 +74,12 @@ function plugin(t, moduleNames, variableName) {
   const prefixVariableName = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
   const prefixVariableNameRegexp = new RegExp(`^${ prefixVariableName }`);
   const importInfoArray = [];
+  const filterGlobalTypes = [
+    'VariableDeclarator',
+    'ImportDefaultSpecifier',
+    'ImportSpecifier',
+    'ImportNamespaceSpecifier'
+  ];
 
   // 获取模块加载的信息
   const ProgramEnterImportDeclarationVisitor = {
@@ -155,12 +161,7 @@ function plugin(t, moduleNames, variableName) {
         if (!prefixVariableNameRegexp.test(path.node.name)) return;
 
         // 过滤全局变量
-        if ([
-          'VariableDeclarator',
-          'ImportDefaultSpecifier',
-          'ImportSpecifier',
-          'ImportNamespaceSpecifier'
-        ].includes(path.parent.type)) return;
+        if (filterGlobalTypes.includes(path.parent.type)) return;
 
         const members = path.node.name.split('.');
 
@@ -181,12 +182,7 @@ function plugin(t, moduleNames, variableName) {
         const [scopePath, scopeBody] = findScope(path);
 
         // 过滤全局变量
-        if ([
-          'VariableDeclarator',
-          'ImportDefaultSpecifier',
-          'ImportSpecifier',
-          'ImportNamespaceSpecifier'
-        ].includes(path.parent.type)) return;
+        if (filterGlobalTypes.includes(path.parent.type)) return;
 
         let body = scopeBody;
 
