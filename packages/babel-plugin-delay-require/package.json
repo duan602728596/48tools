@@ -4,6 +4,9 @@
   "description": "将node模块延迟加载",
   "type": "commonjs",
   "main": "src/index.js",
+  "scripts": {
+    "debug": "node --inspect example/example.mjs"
+  },
   "devDependencies": {
     "@babel/core": "^7.18.6",
     "@types/babel__core": "^7",

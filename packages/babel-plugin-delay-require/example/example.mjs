@@ -1,3 +1,4 @@
+import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { transformAsync } from '@babel/core';
 import babelPluginDelayRequire from '../src/index.js';
 
@@ -101,4 +102,6 @@ const result = await transformAsync(code, {
 });
 
 console.log(result.code, '\n');
-// console.log(JSON.stringify(result.ast, null, 2));
+console.log(result.ast);
+
+await setTimeoutPromise(60_00_000);
