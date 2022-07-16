@@ -101,7 +101,6 @@ export default function(info: object): { [key: string]: any } {
       { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
       { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), minify: htmlWebpackPluginMinify }
     ],
-    devtool: 'source-map',
     externals: nodeExternals(externalsName),
     javascript: {
       ecmascript: true,
