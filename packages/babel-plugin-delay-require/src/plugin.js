@@ -23,7 +23,7 @@ function variableRename(path, importInfo) {
 }
 
 /**
- * 创建ast: variableName ??= globalThis.require(moduleName)
+ * 创建Node: variableName ??= globalThis.require(moduleName)
  * @param { import('@babel/types') } t
  * @param { ImportInfo } importInfo
  */
@@ -50,7 +50,7 @@ function findScope(t, path) {
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    if (Array.isArray(scopeBody) || t.isFile(scopePath.parentPath.node)) {
+    if (Array.isArray(scopeBody) || t.isFile(scopePath.parentPath.node) || !scopePath.parentPath) {
       break;
     }
 
@@ -59,6 +59,33 @@ function findScope(t, path) {
   }
 
   return [scopePath, scopeBody];
+}
+
+/**
+ * 查找父级作用域
+ */
+/**
+ * 查找作用域
+ * @param { import('@babel/types') } t
+ * @param { import('@babel/core').NodePath } path
+ */
+function findParentScope(t, path) {
+  const parentScopePath = path?.parentPath;
+  const parentScopeBody = parentScopePath?.node?.body?.body ?? parentScopePath?.node?.body;
+
+  return [parentScopePath, parentScopeBody];
+}
+
+/**
+ * 判断body中是否存在对应的表达式
+ * @param { import('@babel/types') } t
+ * @param { import('@babel/core').Node } body
+ * @param { string } name
+ */
+function hasExpressionStatement(t, body, name) {
+  return body.some((o) => t.isExpressionStatement(o)
+    && t.isAssignmentExpression(o.expression, { operator: '??=' })
+    && t.isIdentifier(o.expression.left, { name }));
 }
 
 /**
@@ -118,6 +145,36 @@ function plugin(t, moduleNames, variableName) {
     }
   };
 
+  const ProgramLevelVisitor = {
+    ExpressionStatement(path) {
+      // 查找父级作用域是否绑定过，绑定则删除
+      if (
+        t.isAssignmentExpression(path.node.expression, { operator: '??=' })
+        && prefixVariableNameRegexp.test(path.node.expression.left.name)
+      ) {
+        const [scopePath] = findScope(t, path); // 当前作用域的path和body
+        let isFatherFindVariable = false;
+        let [parentScopePath, parentScopeBody] = findParentScope(t, scopePath);
+
+        while (!isFatherFindVariable) {
+          if (Array.isArray(parentScopeBody)) {
+            isFatherFindVariable = hasExpressionStatement(t, parentScopeBody, path.node.expression.left.name);
+          }
+
+          if (isFatherFindVariable) break;
+
+          [parentScopePath, parentScopeBody] = findParentScope(t, parentScopePath);
+
+          if (!parentScopePath) break;
+        }
+
+        if (isFatherFindVariable) {
+          path.remove();
+        }
+      }
+    }
+  };
+
   return {
     Program: {
       enter(path) {
@@ -140,6 +197,10 @@ function plugin(t, moduleNames, variableName) {
 
         // 修改绑定和引用
         importInfoArray.forEach((importInfo) => variableRename(path, importInfo));
+      },
+
+      exit(path) {
+        path.traverse(ProgramLevelVisitor);
       }
     },
 
@@ -175,7 +236,7 @@ function plugin(t, moduleNames, variableName) {
 
         if (!importInfo) return;
 
-        const [scopePath, scopeBody] = findScope(t, path);
+        const [scopePath, scopeBody] = findScope(t, path); // 当前作用域的path和body
 
         // 过滤全局变量
         if (filterGlobalTypes.includes(path.parentPath.node.type)) return;
@@ -192,11 +253,7 @@ function plugin(t, moduleNames, variableName) {
         }
 
         // 查找当前作用域是否绑定过
-        const findVariable = body.some((o) => t.isExpressionStatement(o)
-          && t.isAssignmentExpression(o.expression, { operator: '??=' })
-          && t.isIdentifier(o.expression.left, { name: importInfo.formatVariableName }));
-
-        if (findVariable) return;
+        if (hasExpressionStatement(t, body, importInfo.formatVariableName)) return;
 
         // 插入表达式
         const scopePathIsProgram = t.isProgram(scopePath);
