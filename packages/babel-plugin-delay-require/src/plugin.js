@@ -32,7 +32,7 @@ function createGlobalRequireExpressionStatement(t, importInfo) {
     t.assignmentExpression('??=',
       t.identifier(importInfo.formatVariableName),
       t.callExpression(
-        t.memberExpression(t.identifier('global'), t.identifier('require')),
+        t.memberExpression(t.identifier('globalThis'), t.identifier('require')),
         [t.stringLiteral(importInfo.moduleName)]
       )
     )
