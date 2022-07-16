@@ -124,10 +124,7 @@ function plugin(t, moduleName, variableName) {
     ImportDeclaration: {
       exit(path) {
         // 删除被引用的模块
-        if (
-          t.isImportDeclaration(path.node)
-          && importInfoArray.find((o) => t.isStringLiteral(path.node.source, { value: o.moduleName }))
-        ) {
+        if (importInfoArray.find((o) => t.isStringLiteral(path.node.source, { value: o.moduleName }))) {
           path.remove();
         }
       }
