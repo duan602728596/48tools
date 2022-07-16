@@ -4,17 +4,20 @@ class ImportInfo {
   }
 
   /**
+   * @param { string } prefixVariableName
    * @param { string } moduleName: 模块名
    * @param { string | undefined } variableName: 变量名
    * @param { boolean } exportDefault: 是否导出了default
    * @param { Array<[string, string | undefined]> } specifier
    */
   constructor({
+    prefixVariableName,
     moduleName,
     variableName,
     exportDefault,
     specifier
   }) {
+    this.prefixVariableName = prefixVariableName;
     this.moduleName = moduleName;
     this.variableName = variableName;
     this.exportDefault = exportDefault;
@@ -22,7 +25,7 @@ class ImportInfo {
   }
 
   get formatVariableName() {
-    return `__ELECTRON__DELAY_REQUIRE__${ this.variableName ?? ImportInfo.moduleNameToVariableName(this.moduleName) }`;
+    return `${ this.prefixVariableName }${ this.variableName ?? ImportInfo.moduleNameToVariableName(this.moduleName) }`;
   }
 }
 

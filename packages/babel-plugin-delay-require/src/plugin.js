@@ -24,7 +24,7 @@ function variableRename(path, importInfo) {
 /**
  * 绑定变量
  * @param { Record<string, import('@babel/core').Binding> } bindings: 绑定作用域
- * @param { Map } bindingMembersMap
+ * @param { WeakMap } bindingMembersMap
  * @param { Array<string> } scopePathRequireMembers: 变量
  */
 function setElectronRequireMembers(bindings, bindingMembersMap, scopePathRequireMembers) {
@@ -37,12 +37,32 @@ function setElectronRequireMembers(bindings, bindingMembersMap, scopePathRequire
 }
 
 /**
+ * 创建ast: variableName ??= global.require(moduleName)
+ * @param { import('@babel/types') } t
+ * @param { ImportInfo } importInfo
+ */
+function createGlobalRequireExpressionStatement(t, importInfo) {
+  return t.expressionStatement(
+    t.assignmentExpression('??=',
+      t.identifier(importInfo.formatVariableName),
+      t.callExpression(
+        t.memberExpression(t.identifier('global'), t.identifier('require')),
+        [t.stringLiteral(importInfo.moduleName)]
+      )
+    )
+  );
+}
+
+/**
  * @param { import('@babel/types') } t
  * @param { Array<string> } moduleName
+ * @param { string } variableName
  */
-function plugin(t, moduleName) {
+function plugin(t, moduleName, variableName) {
+  const prefixVariableName = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
+  const prefixVariableNameRegexp = new RegExp(`^${ prefixVariableName }`);
   const importInfoArray = [];
-  const bindingMembersMap = new Map();
+  const bindingMembersMap = new WeakMap();
 
   // 获取模块加载的信息
   const ImportDeclarationVisitor = {
@@ -66,6 +86,7 @@ function plugin(t, moduleName) {
   const ProgramVisitor = {
     ImportDeclaration(path) {
       const importInfo = new ImportInfo({
+        prefixVariableName,
         moduleName: path.node.source.value,
         specifier: []
       });
@@ -114,7 +135,7 @@ function plugin(t, moduleName) {
 
     Identifier: {
       enter(path) {
-        if (!/^__ELECTRON__DELAY_REQUIRE__/.test(path.node.name)) return;
+        if (!prefixVariableNameRegexp.test(path.node.name)) return;
 
         // 过滤全局变量
         if ([
@@ -132,7 +153,7 @@ function plugin(t, moduleName) {
       },
 
       exit(path) {
-        if (!/^__ELECTRON__DELAY_REQUIRE__/.test(path.node.name)) return;
+        if (!prefixVariableNameRegexp.test(path.node.name)) return;
 
         // 检查作用域
         const { name } = path.node;
@@ -162,33 +183,17 @@ function plugin(t, moduleName) {
         ].includes(path.parent.type)) return;
 
         // 查找当前作用域是否绑定过
-        const findVariable = scopeBody.find((o) => {
-          if (
-            t.isExpressionStatement(o)
-            && t.isAssignmentExpression(o.expression, { operator: '??=' })
-            && t.isIdentifier(o.expression.left, { name: importInfo.formatVariableName })
-          ) return true;
-        });
+        const findVariable = scopeBody.find((o) => t.isExpressionStatement(o)
+          && t.isAssignmentExpression(o.expression, { operator: '??=' })
+          && t.isIdentifier(o.expression.left, { name: importInfo.formatVariableName }));
 
         if (findVariable) return;
 
         // 插入表达式
-        const index = scopeBody.findLastIndex((o) => {
-          if (
-            t.isExpressionStatement(o)
-            && t.isAssignmentExpression(o.expression, { operator: '??=' })
-            && /^__ELECTRON__DELAY_REQUIRE__/.test(o.expression.left.name)
-          ) return true;
-        });
-
-        const node = t.expressionStatement(
-          t.assignmentExpression('??=',
-            t.identifier(importInfo.formatVariableName),
-            t.callExpression(
-              t.memberExpression(t.identifier('global'), t.identifier('require')),
-              [t.stringLiteral(importInfo.moduleName)]
-            ))
-        );
+        const index = scopeBody.findLastIndex((o) => t.isExpressionStatement(o)
+          && t.isAssignmentExpression(o.expression, { operator: '??=' })
+          && prefixVariableNameRegexp.test(o.expression.left.name));
+        const node = createGlobalRequireExpressionStatement(t, importInfo);
 
         if (index >= 0) {
           scopeBody.splice(index + 1, 0, node);

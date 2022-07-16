@@ -7,9 +7,10 @@ const plugin = require('./plugin.js');
  */
 function babelPluginDelayRequire({ types: t }, options) {
   const moduleName = options?.moduleName ?? [];
+  const variableName = options?.variableName;
 
   return {
-    visitor: plugin(t, moduleName)
+    visitor: plugin(t, moduleName, variableName)
   };
 }
 
