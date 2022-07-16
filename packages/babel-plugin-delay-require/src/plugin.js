@@ -1,6 +1,10 @@
 const ImportInfo = require('./utils/ImportInfo.js');
 
-/* 修改绑定和引用 */
+/**
+ * 修改绑定和引用
+ * @param { import('@babel/core').NodePath<import('@babel/types').ImportDeclaration> } path: import节点路径
+ * @param { ImportInfo } importInfo: 导入信息
+ */
 function variableRename(path, importInfo) {
   if (importInfo.specifier.length === 0) {
     if (importInfo.exportDefault) {
@@ -17,13 +21,18 @@ function variableRename(path, importInfo) {
   }
 }
 
-/* 绑定变量 */
+/**
+ * 绑定变量
+ * @param { Record<string, import('@babel/core').Binding> } bindings: 绑定作用域
+ * @param { Map } bindingMembersMap
+ * @param { Array<string> } scopePathRequireMembers: 变量
+ */
 function setElectronRequireMembers(bindings, bindingMembersMap, scopePathRequireMembers) {
   (Object.values(bindings ?? {})).forEach((binding) => {
     const electronRequireMembers = bindingMembersMap.get(binding.path.node) ?? [];
 
     electronRequireMembers.push(...scopePathRequireMembers);
-    bindingMembersMap.set(binding.path.node, electronRequireMembers);
+    bindingMembersMap.set(binding.path.node, Array.from(new Set(electronRequireMembers)));
   });
 }
 
@@ -107,9 +116,27 @@ function plugin(t, moduleName) {
       enter(path) {
         if (!/^__ELECTRON__DELAY_REQUIRE__/.test(path.node.name)) return;
 
-        // 检查作用域
+        // 过滤全局变量
+        if ([
+          'VariableDeclarator',
+          'ImportDefaultSpecifier',
+          'ImportSpecifier',
+          'ImportNamespaceSpecifier'
+        ].includes(path.parent.type)) return;
+
         const members = path.node.name.split('.');
-        const importInfo = importInfoArray.find((o) => members[0] === o.formatVariableName);
+
+        if (members.length > 1) {
+          path.replaceWithMultiple(t.memberExpression(t.Identifier(members[0]), t.Identifier(members[1])));
+        }
+      },
+
+      exit(path) {
+        if (!/^__ELECTRON__DELAY_REQUIRE__/.test(path.node.name)) return;
+
+        // 检查作用域
+        const { name } = path.node;
+        const importInfo = importInfoArray.find((o) => name === o.formatVariableName);
 
         if (!importInfo) return;
 
@@ -124,7 +151,7 @@ function plugin(t, moduleName) {
         }
 
         // 如果有变量，不需要添加
-        if (bindingMembersMap.get(path.scope.block)?.includes?.(members[0])) return;
+        if (bindingMembersMap.get(path.scope.block)?.includes?.(name)) return;
 
         // 过滤全局变量
         if ([
@@ -170,7 +197,7 @@ function plugin(t, moduleName) {
         }
 
         // 绑定当前的members
-        setElectronRequireMembers(path.scope.bindings, bindingMembersMap, [members[0]]);
+        setElectronRequireMembers(path.scope.bindings, bindingMembersMap, [name]);
       }
     }
   };

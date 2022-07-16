@@ -44,3 +44,4 @@ const result = await transformAsync(code, {
 });
 
 console.log(result.code);
+console.log(JSON.stringify(result.ast, null, 2));
