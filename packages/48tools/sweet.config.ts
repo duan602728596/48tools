@@ -56,8 +56,7 @@ const externalsName: Array<string> = nodeModules([
   'stream',
   'timers/promises',
   'url',
-  'util',
-  'zlib'
+  'util'
 ]).concat([
   '@electron/remote',
   'electron',
@@ -85,7 +84,6 @@ export default function(info: object): { [key: string]: any } {
       'array-move',
       'classnames',
       'filenamify/browser',
-      'js-base64',
       'qrcode/lib/browser',
       'react',
       'react-dom/client',
@@ -123,12 +121,12 @@ export default function(info: object): { [key: string]: any } {
         // https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
         '@primary-color': '#13c2c2'
       },
-      include: /node_modules[\\/](_?antd|highlight)/,
-      exclude: /(light|dark)-?theme|highlight\.js[\\/]styles[\\/].+\.css|tailwindcss/i
+      include: /node_modules[\\/]_?antd/,
+      exclude: /(light|dark)-?theme|tailwindcss/i
     },
     rules: [
       {
-        test: /(light|dark)-theme\.(min\.)?css|highlight\.js[\\/]styles[\\/].+\.css|toutiaosdk-(acrawler|captcha)\.js/,
+        test: /(light|dark)-theme\.(min\.)?css|htoutiaosdk-(acrawler|captcha)\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]' // TODO: js文件生成的hash和注入的hash不一致
