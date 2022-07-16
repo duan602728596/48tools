@@ -1,6 +1,7 @@
 {
   "name": "@48tools/babel-plugin-delay-require",
   "version": "0.0.0",
+  "description": "将node模块延迟加载",
   "type": "commonjs",
   "main": "src/index.js",
   "devDependencies": {
