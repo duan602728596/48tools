@@ -7,14 +7,15 @@ const ImportInfo = require('./utils/ImportInfo.js');
  */
 function variableRename(path, importInfo) {
   if (importInfo.specifier.length === 0) {
-    if (importInfo.exportDefault) {
-      path.scope.rename(importInfo.variableName, `${ importInfo.formatVariableName }.default`);
-    } else {
-      path.scope.rename(importInfo.variableName, importInfo.formatVariableName);
-    }
+    const exportDefault = importInfo.exportDefault ? '.default' : '';
+
+    importInfo.variableName.forEach((variableName) => {
+      path.scope.rename(variableName, `${ importInfo.formatVariableName }${ exportDefault }`);
+    });
   } else {
-    importInfo.variableName
-    && path.scope.rename(importInfo.variableName, `${ importInfo.formatVariableName }.default`);
+    importInfo.variableName.forEach((variableName) => {
+      path.scope.rename(variableName, `${ importInfo.formatVariableName }.default`);
+    });
     importInfo.specifier.forEach(([a, b]) => {
       path.scope.rename(b ?? a, `${ importInfo.formatVariableName }.${ a }`);
     });
@@ -54,25 +55,35 @@ function createGlobalRequireExpressionStatement(t, importInfo) {
 }
 
 /**
+ * 查找作用域
+ * @param { import('@babel/core').NodePath } path
+ */
+function findScope(path) {
+  const scopePath = path.scope.path;
+  const scopeBody = scopePath.node.body.body ?? scopePath.node.body;
+
+  return [scopePath, scopeBody];
+}
+
+/**
  * @param { import('@babel/types') } t
- * @param { Array<string> } moduleName
+ * @param { Array<string> } moduleNames
  * @param { string } variableName
  */
-function plugin(t, moduleName, variableName) {
+function plugin(t, moduleNames, variableName) {
   const prefixVariableName = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
   const prefixVariableNameRegexp = new RegExp(`^${ prefixVariableName }`);
   const importInfoArray = [];
-  const bindingMembersMap = new WeakMap();
 
   // 获取模块加载的信息
-  const ImportDeclarationVisitor = {
+  const ProgramEnterImportDeclarationVisitor = {
     ImportDefaultSpecifier(path) {
-      this.importInfo.variableName = path.node.local.name;
+      this.importInfo.variableName.push(path.node.local.name);
       this.importInfo.exportDefault = true;
     },
 
     ImportNamespaceSpecifier(path) {
-      this.importInfo.variableName = path.node.local.name;
+      this.importInfo.variableName.push(path.node.local.name);
       this.importInfo.exportDefault = false;
     },
 
@@ -83,16 +94,25 @@ function plugin(t, moduleName, variableName) {
       ]);
     }
   };
-  const ProgramVisitor = {
-    ImportDeclaration(path) {
-      const importInfo = new ImportInfo({
-        prefixVariableName,
-        moduleName: path.node.source.value,
-        specifier: []
-      });
 
-      path.traverse(ImportDeclarationVisitor, { importInfo });
-      importInfoArray.push(importInfo);
+  const ProgramEnterVisitor = {
+    ImportDeclaration(path) {
+      const sourceValue = path.node.source.value;
+
+      if (moduleNames.includes(sourceValue)) {
+        let importInfo = importInfoArray.find((o) => o.moduleName === sourceValue);
+
+        if (!importInfo) {
+          importInfo = new ImportInfo({
+            prefixVariableName,
+            moduleName: sourceValue
+          });
+          importInfoArray.push(importInfo);
+        }
+
+        path.traverse(ProgramEnterImportDeclarationVisitor, { importInfo });
+
+      }
     }
   };
 
@@ -102,7 +122,7 @@ function plugin(t, moduleName, variableName) {
         const body = path.node.body;
 
         // 获取模块加载的信息
-        path.traverse(ProgramVisitor);
+        path.traverse(ProgramEnterVisitor);
 
         // 插入模块
         if (importInfoArray.length > 0) {
@@ -145,7 +165,7 @@ function plugin(t, moduleName, variableName) {
         const members = path.node.name.split('.');
 
         if (members.length > 1) {
-          path.replaceWithMultiple(t.memberExpression(t.Identifier(members[0]), t.Identifier(members[1])));
+          path.replaceWith(t.memberExpression(t.Identifier(members[0]), t.Identifier(members[1])));
         }
       },
 
@@ -158,18 +178,7 @@ function plugin(t, moduleName, variableName) {
 
         if (!importInfo) return;
 
-        const scopePath = path.scope.path;
-        const scopeBody = scopePath.type === 'Program' ? scopePath.node.body : scopePath.node.body.body;
-
-        // 为子作用域添加标记
-        const scopePathRequireMembers = bindingMembersMap.get(scopePath.node);
-
-        if (scopePathRequireMembers?.length) {
-          setElectronRequireMembers(scopePath.scope.bindings, bindingMembersMap, scopePathRequireMembers);
-        }
-
-        // 如果有变量，不需要添加
-        if (bindingMembersMap.get(path.scope.block)?.includes?.(name)) return;
+        const [scopePath, scopeBody] = findScope(path);
 
         // 过滤全局变量
         if ([
@@ -179,27 +188,35 @@ function plugin(t, moduleName, variableName) {
           'ImportNamespaceSpecifier'
         ].includes(path.parent.type)) return;
 
+        let body = scopeBody;
+
+        // class时添加作用域的方式有变化
+        if (t.isClassDeclaration(scopePath.node)) {
+          if (!t.isStaticBlock(scopeBody[0])) {
+            scopeBody.unshift(t.staticBlock([]));
+          }
+
+          body = scopeBody[0].body;
+        }
+
         // 查找当前作用域是否绑定过
-        const findVariable = scopeBody.find((o) => t.isExpressionStatement(o)
+        const findVariable = body.some((o) => t.isExpressionStatement(o)
           && t.isAssignmentExpression(o.expression, { operator: '??=' })
           && t.isIdentifier(o.expression.left, { name: importInfo.formatVariableName }));
 
         if (findVariable) return;
 
         // 插入表达式
-        const index = scopeBody.findLastIndex((o) => t.isExpressionStatement(o)
+        const index = body.findLastIndex((o) => t.isExpressionStatement(o)
           && t.isAssignmentExpression(o.expression, { operator: '??=' })
           && prefixVariableNameRegexp.test(o.expression.left.name));
         const node = createGlobalRequireExpressionStatement(t, importInfo);
 
         if (index >= 0) {
-          scopeBody.splice(index + 1, 0, node);
+          body.splice(index + 1, 0, node);
         } else {
-          scopeBody.unshift(node);
+          body.unshift(node);
         }
-
-        // 绑定当前的members
-        setElectronRequireMembers(path.scope.bindings, bindingMembersMap, [name]);
       }
     }
   };

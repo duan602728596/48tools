@@ -9,7 +9,6 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import { createPortal } from 'react-dom';
 import * as PropTypes from 'prop-types';
 import { Button, Tooltip, Modal, Radio } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';

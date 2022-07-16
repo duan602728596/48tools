@@ -3,14 +3,14 @@ const plugin = require('./plugin.js');
 /**
  * @param { import('@babel/types') } t
  * @param { object } options
- * @param { Array<string> } options.moduleName
+ * @param { Array<string> } options.moduleNames
  */
 function babelPluginDelayRequire({ types: t }, options) {
-  const moduleName = options?.moduleName ?? [];
+  const moduleNames = options?.moduleNames ?? [];
   const variableName = options?.variableName;
 
   return {
-    visitor: plugin(t, moduleName, variableName)
+    visitor: plugin(t, moduleNames, variableName)
   };
 }
 

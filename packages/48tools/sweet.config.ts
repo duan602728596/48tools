@@ -29,8 +29,8 @@ const htmlWebpackPluginMinify: boolean | HtmlMinifierOptions = isDev ? false : {
  * 模块使用node的commonjs的方式引入
  * @param { Array<string> } node: node模块名称
  */
-function nodeExternals(node: Array<string>): { [k: string]: string } {
-  const result: { [k: string]: string } = {};
+function nodeExternals(node: Array<string>): Record<string, `globalThis.require('${ string }')`> {
+  const result: Record<string, `globalThis.require('${ string }')`> = {};
 
   for (const name of node) {
     result[name] = `globalThis.require('${ name }')`;
@@ -47,8 +47,31 @@ function nodeModules(node: Array<string>): Array<string> {
   return node.concat(node.map((o: string): string => `node:${ o }`));
 }
 
+const externalsName: Array<string> = nodeModules([
+  'child_process',
+  'crypto',
+  'fs',
+  'net',
+  'path',
+  'stream',
+  'timers/promises',
+  'url',
+  'util',
+  'zlib'
+]).concat([
+  '@electron/remote',
+  'electron',
+  'fluent-ffmpeg',
+  'got',
+  'hpagent',
+  'puppeteer-core'
+]);
+
 export default function(info: object): { [key: string]: any } {
-  const plugins: Array<any> = [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]];
+  const plugins: Array<any> = [
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
+    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName }]
+  ];
 
   if (!isDev) {
     plugins.unshift(['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }]);
@@ -80,25 +103,8 @@ export default function(info: object): { [key: string]: any } {
       { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
       { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), minify: htmlWebpackPluginMinify }
     ],
-    externals: nodeExternals(nodeModules([
-      'child_process',
-      'crypto',
-      'fs',
-      'net',
-      'path',
-      'stream',
-      'timers/promises',
-      'url',
-      'util',
-      'zlib'
-    ]).concat(
-      '@electron/remote',
-      'electron',
-      'fluent-ffmpeg',
-      'got',
-      'hpagent',
-      'puppeteer-core'
-    )),
+    devtool: 'source-map',
+    externals: nodeExternals(externalsName),
     javascript: {
       ecmascript: true,
       plugins,
