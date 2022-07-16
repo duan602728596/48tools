@@ -23,7 +23,7 @@ function variableRename(path, importInfo) {
 }
 
 /**
- * 创建ast: variableName ??= global.require(moduleName)
+ * 创建ast: variableName ??= globalThis.require(moduleName)
  * @param { import('@babel/types') } t
  * @param { ImportInfo } importInfo
  */
