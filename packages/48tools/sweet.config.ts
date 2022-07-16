@@ -121,12 +121,12 @@ export default function(info: object): { [key: string]: any } {
         // https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
         '@primary-color': '#13c2c2'
       },
-      include: /node_modules[\\/]_?antd/,
+      include: /node_modules[\\/](_?antd|highlight)/,
       exclude: /(light|dark)-?theme|tailwindcss/i
     },
     rules: [
       {
-        test: /(light|dark)-theme\.(min\.)?css|htoutiaosdk-(acrawler|captcha)\.js/,
+        test: /(light|dark)-theme\.(min\.)?css|toutiaosdk-(acrawler|captcha)\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]' // TODO: js文件生成的hash和注入的hash不一致
