@@ -63,9 +63,6 @@ function findScope(t, path) {
 
 /**
  * 查找父级作用域
- */
-/**
- * 查找作用域
  * @param { import('@babel/types') } t
  * @param { import('@babel/core').NodePath } path
  */
