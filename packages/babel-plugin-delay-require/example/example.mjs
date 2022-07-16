@@ -12,9 +12,13 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import c1 from 'c';
 import c2 from 'c';
+import d from 'd';
+
+console.log(d);
 
 function test1() {
-  fsP.writeFile('1.txt', '');
+  const txt = urls.map((o) => \`file '\${path.basename(o)}'\`);
+  fsP.writeFile('1.txt', txt);
 
   function test11() {
     fsP.readFile('2.txt');
@@ -91,7 +95,7 @@ class Test6 {
 
 const result = await transformAsync(code, {
   plugins: [[babelPluginDelayRequire, {
-    moduleNames: ['fs', 'node:fs', 'path', 'node:path', 'electron', 'fluent-ffmpeg', 'react', 'c']
+    moduleNames: ['fs', 'node:fs', 'path', 'node:path', 'electron', 'fluent-ffmpeg', 'react', 'c', 'd']
   }]],
   ast: true
 });

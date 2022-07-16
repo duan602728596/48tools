@@ -23,21 +23,6 @@ function variableRename(path, importInfo) {
 }
 
 /**
- * 绑定变量
- * @param { Record<string, import('@babel/core').Binding> } bindings: 绑定作用域
- * @param { WeakMap } bindingMembersMap
- * @param { Array<string> } scopePathRequireMembers: 变量
- */
-function setElectronRequireMembers(bindings, bindingMembersMap, scopePathRequireMembers) {
-  (Object.values(bindings ?? {})).forEach((binding) => {
-    const electronRequireMembers = bindingMembersMap.get(binding.path.node) ?? [];
-
-    electronRequireMembers.push(...scopePathRequireMembers);
-    bindingMembersMap.set(binding.path.node, Array.from(new Set(electronRequireMembers)));
-  });
-}
-
-/**
  * 创建ast: variableName ??= global.require(moduleName)
  * @param { import('@babel/types') } t
  * @param { ImportInfo } importInfo
@@ -56,11 +41,22 @@ function createGlobalRequireExpressionStatement(t, importInfo) {
 
 /**
  * 查找作用域
+ * @param { import('@babel/types') } t
  * @param { import('@babel/core').NodePath } path
  */
-function findScope(path) {
-  const scopePath = path.scope.path;
-  const scopeBody = scopePath.node.body.body ?? scopePath.node.body;
+function findScope(t, path) {
+  let scopePath = path.scope.path;
+  let scopeBody = scopePath.node.body.body ?? scopePath.node.body;
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    if (Array.isArray(scopeBody) || t.isFile(scopePath.parentPath.node)) {
+      break;
+    }
+
+    scopePath = scopePath.parentPath;
+    scopeBody = scopePath.node?.body?.body ?? scopePath.node?.body;
+  }
 
   return [scopePath, scopeBody];
 }
@@ -161,7 +157,7 @@ function plugin(t, moduleNames, variableName) {
         if (!prefixVariableNameRegexp.test(path.node.name)) return;
 
         // 过滤全局变量
-        if (filterGlobalTypes.includes(path.parent.type)) return;
+        if (filterGlobalTypes.includes(path.parentPath.node.type)) return;
 
         const members = path.node.name.split('.');
 
@@ -179,10 +175,10 @@ function plugin(t, moduleNames, variableName) {
 
         if (!importInfo) return;
 
-        const [scopePath, scopeBody] = findScope(path);
+        const [scopePath, scopeBody] = findScope(t, path);
 
         // 过滤全局变量
-        if (filterGlobalTypes.includes(path.parent.type)) return;
+        if (filterGlobalTypes.includes(path.parentPath.node.type)) return;
 
         let body = scopeBody;
 
@@ -203,9 +199,14 @@ function plugin(t, moduleNames, variableName) {
         if (findVariable) return;
 
         // 插入表达式
-        const index = body.findLastIndex((o) => t.isExpressionStatement(o)
+        const scopePathIsProgram = t.isProgram(scopePath);
+        const index = body.findLastIndex((o) => (t.isExpressionStatement(o)
           && t.isAssignmentExpression(o.expression, { operator: '??=' })
-          && prefixVariableNameRegexp.test(o.expression.left.name));
+          && prefixVariableNameRegexp.test(o.expression.left.name))
+          || (scopePathIsProgram
+          && t.isVariableDeclaration(o, { kind: 'let' })
+          && prefixVariableNameRegexp.test(o.declarations[0].id.name))
+        );
         const node = createGlobalRequireExpressionStatement(t, importInfo);
 
         if (index >= 0) {

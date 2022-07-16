@@ -1,7 +1,7 @@
 import { promisify } from 'node:util';
 import { pipeline } from 'node:stream';
 import * as fs from 'node:fs';
-import { promises as fsP, BigIntStats } from 'node:fs';
+import { promises as fsP, type BigIntStats } from 'node:fs';
 import * as path from 'node:path';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import got from 'got';
