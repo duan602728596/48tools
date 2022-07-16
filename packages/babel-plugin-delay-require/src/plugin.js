@@ -96,7 +96,6 @@ function hasExpressionStatement(t, body, name) {
 function plugin(t, moduleNames, variableName) {
   const prefixVariableName = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
   const prefixVariableNameRegexp = new RegExp(`^${ prefixVariableName }`);
-  const importInfoArray = [];
   const filterGlobalTypes = [
     'VariableDeclarator',
     'ImportDefaultSpecifier',
@@ -129,14 +128,14 @@ function plugin(t, moduleNames, variableName) {
       const sourceValue = path.node.source.value;
 
       if (moduleNames.includes(sourceValue)) {
-        let importInfo = importInfoArray.find((o) => o.moduleName === sourceValue);
+        let importInfo = this.importInfoArray.find((o) => o.moduleName === sourceValue);
 
         if (!importInfo) {
           importInfo = new ImportInfo({
             prefixVariableName,
             moduleName: sourceValue
           });
-          importInfoArray.push(importInfo);
+          this.importInfoArray.push(importInfo);
         }
 
         path.traverse(ProgramEnterImportDeclarationVisitor, { importInfo });
@@ -181,14 +180,16 @@ function plugin(t, moduleNames, variableName) {
         const body = path.node.body;
 
         // 获取模块加载的信息
-        path.traverse(ProgramEnterVisitor);
+        path.traverse(ProgramEnterVisitor, {
+          importInfoArray: this.importInfoArray
+        });
 
         // 插入模块
-        if (importInfoArray.length > 0) {
+        if (this.importInfoArray.length > 0) {
           const index = body.findLastIndex((o) => t.isImportDeclaration(o));
 
           if (index >= 0) {
-            const inject = importInfoArray.map((o) => t.variableDeclaration(
+            const inject = this.importInfoArray.map((o) => t.variableDeclaration(
               'let', [t.variableDeclarator(t.identifier(o.formatVariableName))]));
 
             body.splice(index + 1, 0, ...inject);
@@ -196,7 +197,7 @@ function plugin(t, moduleNames, variableName) {
         }
 
         // 修改绑定和引用
-        importInfoArray.forEach((importInfo) => variableRename(path, importInfo));
+        this.importInfoArray.forEach((importInfo) => variableRename(path, importInfo));
       },
 
       exit(path) {
@@ -207,7 +208,7 @@ function plugin(t, moduleNames, variableName) {
     ImportDeclaration: {
       exit(path) {
         // 删除被引用的模块
-        if (importInfoArray.find((o) => t.isStringLiteral(path.node.source, { value: o.moduleName }))) {
+        if (this.importInfoArray.find((o) => t.isStringLiteral(path.node.source, { value: o.moduleName }))) {
           path.remove();
         }
       }
@@ -232,7 +233,7 @@ function plugin(t, moduleNames, variableName) {
 
         // 检查作用域
         const { name } = path.node;
-        const importInfo = importInfoArray.find((o) => name === o.formatVariableName);
+        const importInfo = this.importInfoArray.find((o) => name === o.formatVariableName);
 
         if (!importInfo) return;
 

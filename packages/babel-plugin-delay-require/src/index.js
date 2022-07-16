@@ -11,7 +11,11 @@ function babelPluginDelayRequire({ types: t }, options) {
   const variableName = options?.variableName;
 
   return {
-    visitor: plugin(t, moduleNames, variableName)
+    pre(state) {
+      this.importInfoArray = [];
+    },
+    visitor: plugin(t, moduleNames, variableName),
+    post(state) { /* noop */ }
   };
 }
 
