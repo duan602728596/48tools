@@ -159,10 +159,6 @@ function plugin(t, moduleNames, variableName) {
             isFatherFindVariable = hasExpressionStatement(t, parentScopeBody, path.node.expression.left.name, path.node);
           }
 
-          if (isFatherFindVariable) {
-            console.log(path, parentScopePath);
-          }
-
           if (isFatherFindVariable) break;
 
           [parentScopePath, parentScopeBody] = findParentScope(t, parentScopePath);
