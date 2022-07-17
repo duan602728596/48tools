@@ -46,7 +46,7 @@ function createGlobalRequireExpressionStatement(t, importInfo) {
  */
 function findScope(t, path) {
   let scopePath = path.scope.path;
-  let scopeBody = scopePath.node.body.body ?? scopePath.node.body;
+  let scopeBody = scopePath.node?.body?.body ?? scopePath.node?.body;
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
@@ -78,9 +78,11 @@ function findParentScope(t, path) {
  * @param { import('@babel/types') } t
  * @param { import('@babel/core').Node } body
  * @param { string } name
+ * @param { import('@babel/core').Node } node
  */
-function hasExpressionStatement(t, body, name) {
+function hasExpressionStatement(t, body, name, node) {
   return body.some((o) => t.isExpressionStatement(o)
+    && o !== node
     && t.isAssignmentExpression(o.expression, { operator: '??=' })
     && t.isIdentifier(o.expression.left, { name }));
 }
@@ -154,7 +156,11 @@ function plugin(t, moduleNames, variableName) {
 
         while (!isFatherFindVariable) {
           if (Array.isArray(parentScopeBody)) {
-            isFatherFindVariable = hasExpressionStatement(t, parentScopeBody, path.node.expression.left.name);
+            isFatherFindVariable = hasExpressionStatement(t, parentScopeBody, path.node.expression.left.name, path.node);
+          }
+
+          if (isFatherFindVariable) {
+            console.log(path, parentScopePath);
           }
 
           if (isFatherFindVariable) break;

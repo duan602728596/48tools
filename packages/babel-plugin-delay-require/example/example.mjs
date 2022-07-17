@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import c1 from 'c';
 import c2 from 'c';
 import d from 'd';
+import * as oicq from 'oicq';
 
 console.log(d);
 
@@ -92,11 +93,40 @@ class Test6 {
   };
   a = path.join('6.js');
 }
+
+
+export function miraiMessageTooicqMessage(miraiMessage) {
+  const oicqMessage = [];
+
+  for (const item of miraiMessage) {
+    switch (item.type) {
+      case 'Plain':
+        oicqMessage.push(oicq.segment.text(item.text));
+        break;
+
+      case 'Image':
+        oicqMessage.push(oicq.segment.image((item.url ?? item.path)));
+        break;
+
+      case 'At':
+        oicqMessage.push(oicq.segment.at(item.target));
+        break;
+
+      case 'AtAll':
+        oicqMessage.push({
+          type: 'at',
+          data: { qq: 'all' }
+        });
+        break;
+    }
+  }
+
+  return oicqMessage;
 `;
 
 const result = await transformAsync(code, {
   plugins: [[babelPluginDelayRequire, {
-    moduleNames: ['fs', 'node:fs', 'path', 'node:path', 'electron', 'fluent-ffmpeg', 'react', 'c', 'd']
+    moduleNames: ['fs', 'node:fs', 'path', 'node:path', 'electron', 'fluent-ffmpeg', 'react', 'c', 'd', 'oicq']
   }]],
   ast: true
 });
