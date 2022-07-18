@@ -76,7 +76,7 @@ function findParentScope(t, path) {
 /**
  * 判断body中是否存在对应的表达式
  * @param { import('@babel/types') } t
- * @param { import('@babel/core').Node } body
+ * @param { Array<import('@babel/core').Node> } body
  * @param { string } name
  * @param { import('@babel/core').Node } node
  */
