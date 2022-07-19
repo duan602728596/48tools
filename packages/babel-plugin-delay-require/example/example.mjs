@@ -122,6 +122,7 @@ export function miraiMessageTooicqMessage(miraiMessage) {
   }
 
   return oicqMessage;
+}
 `;
 
 const result = await transformAsync(code, {
