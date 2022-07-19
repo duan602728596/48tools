@@ -1,6 +1,6 @@
 import * as path from 'node:path';
-import electronPath from 'electron/index.js';
 import { _electron as electron, type ElectronApplication, type Page } from 'playwright';
+import electronPath from 'electron/index.js';
 import { metaHelper } from '@sweet-milktea/utils';
 
 const { __dirname }: { __dirname: string } = metaHelper(import.meta.url);
