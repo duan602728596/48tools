@@ -1,6 +1,13 @@
-import * as puppeteer from 'puppeteer-core';
-import type { Browser, Page } from 'puppeteer-core';
-import type { Protocol } from 'devtools-protocol';
+import {
+  chromium,
+  firefox,
+  webkit,
+  type BrowserType,
+  type Browser,
+  type BrowserContext,
+  type Page,
+  type Cookie
+} from 'playwright-core';
 import type { ReactElement, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -14,6 +21,17 @@ import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;
 
+/* 根据路径获取不同的启动器 */
+function getBrowser(executablePath: string): BrowserType {
+  if (/Safari/i.test(executablePath)) {
+    return webkit;
+  } else if (/(Firefox|火狐)/i.test(executablePath)) {
+    return firefox;
+  } else {
+    return chromium;
+  }
+}
+
 /* 判断是否登陆成功（有cookie） */
 function waitFunc(): boolean {
   const documentCookie: string = document.cookie;
@@ -25,7 +43,7 @@ function waitFunc(): boolean {
 }
 
 /* 无头浏览器登陆 */
-function PuppeteerLogin(props: { onCancel: Function }): ReactElement {
+function UserBrowserLogin(props: { onCancel: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
 
   // 打开无头浏览器
@@ -41,17 +59,15 @@ function PuppeteerLogin(props: { onCancel: Function }): ReactElement {
     }
 
     try {
-      browser = await puppeteer.launch({
+      browser = await getBrowser(executablePath).launch({
         headless: false,
         executablePath,
-        defaultViewport: {
-          width: 800,
-          height: 600
-        }
+        timeout: 0
       });
+      const context: BrowserContext = await browser.newContext();
 
       // 先去微博登陆页
-      const page: Page = await browser.newPage();
+      const page: Page = await context.newPage();
 
       page.on('close', function(): void {
         browser?.close();
@@ -68,12 +84,12 @@ function PuppeteerLogin(props: { onCancel: Function }): ReactElement {
       await page.waitForTimeout(1300);
 
       // 获取cookies
-      const cookies: Array<Protocol.Network.Cookie> = await page.cookies('https://weibo.com');
+      const cookies: Array<Cookie> = await context.cookies('https://weibo.com');
 
       await page.close();
 
-      const subCookie: Protocol.Network.Cookie | undefined
-        = cookies.find((o: Protocol.Network.Cookie): boolean => o.name === 'SUB');
+      const subCookie: Cookie | undefined
+        = cookies.find((o: Cookie): boolean => o.name === 'SUB');
 
       if (subCookie) {
         const cookieStr: string = `SUB=${ subCookie.value }`;
@@ -108,8 +124,8 @@ function PuppeteerLogin(props: { onCancel: Function }): ReactElement {
   return <Button type="primary" onClick={ handleLoginClick }>无头浏览器登陆</Button>;
 }
 
-PuppeteerLogin.propTypes = {
+UserBrowserLogin.propTypes = {
   onCancel: PropTypes.func // 关闭弹出层的回调函数
 };
 
-export default PuppeteerLogin;
+export default UserBrowserLogin;

@@ -63,7 +63,7 @@ const externalsName: Array<string> = nodeModules([
   'fluent-ffmpeg',
   'got',
   'hpagent',
-  'puppeteer-core'
+  'playwright-core'
 ]);
 
 export default function(info: object): { [key: string]: any } {

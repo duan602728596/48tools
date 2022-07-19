@@ -16,6 +16,6 @@
     "got": "^11.8.3",
     "hpagent": "^1.0.0",
     "node-media-server": "^2.3.12",
-    "puppeteer-core": "^15.2.0"
+    "playwright-core": "^1.23.4"
   }
 }

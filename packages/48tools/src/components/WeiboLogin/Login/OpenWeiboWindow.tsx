@@ -7,7 +7,7 @@ import { Button, Alert, Space, message, Divider } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
-import PuppeteerLogin from './PuppeteerLogin';
+import UserBrowserLogin from './UserBrowserLogin';
 import type { UserInfo } from '../services/interface';
 
 /* 打开微博窗口 */
@@ -63,7 +63,7 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
         <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议无头浏览器登陆。" />
         <Button onClick={ handleLoginWeiboClick }>微博登陆</Button>
         <Divider type="vertical" />
-        <PuppeteerLogin onCancel={ props.onCancel } />
+        <UserBrowserLogin onCancel={ props.onCancel } />
       </Space>
     </div>
   );
