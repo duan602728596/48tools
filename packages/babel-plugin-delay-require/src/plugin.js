@@ -6,16 +6,13 @@ const ImportInfo = require('./utils/ImportInfo.js');
  * @param { ImportInfo } importInfo: 导入信息
  */
 function variableRename(path, importInfo) {
-  if (importInfo.specifier.length === 0) {
-    const exportDefault = importInfo.exportDefault ? '.default' : '';
+  const exportDefault = importInfo.exportDefault ? '.default' : '';
 
-    importInfo.variableName.forEach((variableName) => {
-      path.scope.rename(variableName, `${ importInfo.formatVariableName }${ exportDefault }`);
-    });
-  } else {
-    importInfo.variableName.forEach((variableName) => {
-      path.scope.rename(variableName, `${ importInfo.formatVariableName }.default`);
-    });
+  importInfo.variableName.forEach((variableName) => {
+    path.scope.rename(variableName, `${ importInfo.formatVariableName }${ exportDefault }`);
+  });
+
+  if (importInfo.specifier.length) {
     importInfo.specifier.forEach(([a, b]) => {
       path.scope.rename(b ?? a, `${ importInfo.formatVariableName }.${ a }`);
     });
