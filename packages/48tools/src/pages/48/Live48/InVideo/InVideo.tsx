@@ -29,7 +29,7 @@ import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../type
  * @param { string } data: m3u8文件内容
  * @param { string } m3u8Url: m3u8文件的路径
  */
-function formatTsUrl(data: string, m3u8Url: string): string {
+function formatTsUrl(data: string, m3u8Url: string): [string, Array<string>] {
   const dataArr: string[] = data.split('\n');
   const newStrArr: string[] = [];
 
@@ -46,7 +46,10 @@ function formatTsUrl(data: string, m3u8Url: string): string {
     }
   }
 
-  return newStrArr.join('\n');
+  return [
+    newStrArr.join('\n'),
+    newStrArr.filter((item: string): boolean => !(/^#/.test(item) || item === ''))
+  ];
 }
 
 /* redux selector */
@@ -98,8 +101,9 @@ function InVideo(props: {}): ReactElement {
 
       const m3u8File: string = `${ result.filePath }.m3u8`;
       const m3u8Data: string = await requestDownloadFile(m3u8Url.url);
+      const [m3u8UrlF, m3u8urlFArr]: [string, Array<string>] = formatTsUrl(m3u8Data, m3u8Url.url);
 
-      await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, m3u8Url.url));
+      await fsP.writeFile(m3u8File, m3u8UrlF);
 
       const worker: Worker = getFFMpegDownloadWorker();
 
