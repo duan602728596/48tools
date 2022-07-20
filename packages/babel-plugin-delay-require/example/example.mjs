@@ -135,4 +135,4 @@ const result = await transformAsync(code, {
 console.log(result.code, '\n');
 console.log(result.ast);
 
-await setTimeoutPromise(60_00_000);
+await setTimeoutPromise(60_000_000);
