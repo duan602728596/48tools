@@ -5,7 +5,8 @@
   "type": "commonjs",
   "main": "src/index.js",
   "scripts": {
-    "debug": "node --inspect example/example.mjs"
+    "test": "node test/test.mjs",
+    "debug": "node --inspect test/test.mjs debug"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
