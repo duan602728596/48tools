@@ -1,10 +1,7 @@
-import { promisify } from 'node:util';
-import { pipeline } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import got, { type Headers } from 'got';
 import type { ProgressEventData } from '../../types';
-
-const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
 type WorkerEventData = {
   type: 'start';
@@ -33,7 +30,7 @@ async function requestDownloadFileByStream(
   headers: Headers | undefined,
   onProgress: (e: ProgressEventData) => void
 ): Promise<void> {
-  await pipelineP(
+  await pipeline(
     got.stream(fileUrl, {
       headers: headers ?? {
         referer: 'https://www.bilibili.com/'

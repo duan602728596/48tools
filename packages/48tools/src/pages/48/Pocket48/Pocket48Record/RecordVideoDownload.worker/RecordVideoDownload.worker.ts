@@ -1,13 +1,10 @@
-import { promisify } from 'node:util';
-import { pipeline } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import { promises as fsP, type BigIntStats } from 'node:fs';
 import * as path from 'node:path';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import got from 'got';
 import type GotRequest from 'got/dist/source/core';
-
-const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
 /**
  * 口袋48录播下载线程
@@ -54,7 +51,7 @@ async function rm(file: string): Promise<void> {
 async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
   downloadFileReq = got.stream(fileUrl);
 
-  await pipelineP(downloadFileReq, fs.createWriteStream(filename));
+  await pipeline(downloadFileReq, fs.createWriteStream(filename));
 }
 
 /**

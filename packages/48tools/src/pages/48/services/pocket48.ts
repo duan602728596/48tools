@@ -1,11 +1,8 @@
-import { promisify } from 'node:util';
-import { pipeline } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import got, { type Response as GotResponse } from 'got';
 import { createHeaders } from '../../../utils/snh48';
 import type { LiveData, LiveRoomInfo } from './interface';
-
-const pipelineP: (stream1: NodeJS.ReadableStream, stream2: NodeJS.WritableStream) => Promise<void> = promisify(pipeline);
 
 /**
  * 获取单个直播间的信息
@@ -81,7 +78,7 @@ export async function requestLiveList(
  * @param { string } filename: 文件本地地址
  */
 export async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
-  await pipelineP(got.stream(fileUrl), fs.createWriteStream(filename));
+  await pipeline(got.stream(fileUrl), fs.createWriteStream(filename));
 }
 
 /**
