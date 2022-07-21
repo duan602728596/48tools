@@ -1,6 +1,8 @@
 import { ipcRenderer } from 'electron';
 import { getFFmpeg, detectPort } from '../utils';
 
+let start: boolean = false;
+
 /* 端口号 */
 export interface NetMediaServerPort {
   rtmpPort: number;
@@ -18,6 +20,8 @@ export function getNetMediaServerPort(): NetMediaServerPort {
 
 /* 启动服务，将rtmp转换成flv */
 export async function netMediaServerInit(): Promise<void> {
+  if (start) return;
+
   netMediaServerPort.rtmpPort = await detectPort(netMediaServerPort.rtmpPort);
   netMediaServerPort.httpPort = await detectPort(netMediaServerPort.httpPort, [netMediaServerPort.rtmpPort]);
 
@@ -27,4 +31,5 @@ export async function netMediaServerInit(): Promise<void> {
     rtmpPort: netMediaServerPort.rtmpPort,
     httpPort: netMediaServerPort.httpPort
   });
+  start = true;
 }

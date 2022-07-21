@@ -1,7 +1,15 @@
 import { randomUUID } from 'node:crypto';
 import { ipcRenderer, clipboard, type SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  useEffect,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -25,7 +33,11 @@ import {
   type Pocket48InitialState
 } from '../../reducers/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
-import { getNetMediaServerPort, type NetMediaServerPort } from '../../../../utils/nodeMediaServer/nodeMediaServer';
+import {
+  netMediaServerInit,
+  getNetMediaServerPort,
+  type NetMediaServerPort
+} from '../../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from './autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
@@ -297,6 +309,10 @@ function Pocket48Live(props: {}): ReactElement {
       }
     }
   ];
+
+  useEffect(function(): void {
+    netMediaServerInit();
+  }, []);
 
   return (
     <Fragment>

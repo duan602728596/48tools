@@ -1,7 +1,15 @@
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue } from 'electron';
 import { dialog } from '@electron/remote';
-import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  useEffect,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -21,7 +29,7 @@ import {
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
-import { getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
+import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
 import type { MessageEventData } from '../../../../types';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
@@ -242,6 +250,10 @@ function InVideo(props: {}): ReactElement {
       }
     }
   ];
+
+  useEffect(function(): void {
+    proxyServerInit();
+  }, []);
 
   return (
     <Fragment>

@@ -8,8 +8,6 @@ import 'dayjs/locale/zh-cn';
 import { storeFactory } from './store/store';
 import Routers from './router/Routers';
 import ThemeProvider from './components/Theme/ThemeProvider';
-import { netMediaServerInit } from './utils/nodeMediaServer/nodeMediaServer';
-import { proxyServerInit } from './utils/proxyServer/proxyServer';
 import IDBInit from './utils/IDB/IDBInit';
 import './main.tailwindcss.css';
 
@@ -31,5 +29,3 @@ root.render(
 );
 
 IDBInit();
-netMediaServerInit();
-proxyServerInit();
