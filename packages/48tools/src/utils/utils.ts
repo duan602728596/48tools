@@ -1,4 +1,6 @@
 import * as fs from 'node:fs';
+import * as net from 'node:net';
+import type { Server as NetServer } from 'node:net';
 import * as dayjs from 'dayjs';
 import { BILIBILI_COOKIE_KEY, type BilibiliCookie } from '../components/BilibiliLogin/Qrcode';
 import { ACFUN_COOKIE_KEY, type AcFunCookie } from '../components/AcFunLogin/Qrcode';
@@ -76,4 +78,24 @@ export function getFileTime(value?: number | string): string {
   } else {
     return dayjs().format(fileTimeFormat);
   }
+}
+
+/**
+ * 检查端口占用情况
+ * @param { number } port: 检查的端口
+ */
+export function portIsOccupied(port: number): Promise<boolean> {
+  return new Promise(function(resolve: Function, reject: Function): void {
+    const server: NetServer = net.createServer().listen(port);
+
+    server.on('listening', (): void => {
+      server.close();
+      resolve(true);
+    });
+
+    server.on('error', (err: Error): void => {
+      server.close();
+      resolve(false);
+    });
+  });
 }

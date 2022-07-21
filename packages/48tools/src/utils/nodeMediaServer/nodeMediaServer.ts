@@ -1,7 +1,5 @@
-import * as net from 'node:net';
-import type { Server as NetServer } from 'node:net';
 import { ipcRenderer } from 'electron';
-import { getFFmpeg } from '../utils';
+import { getFFmpeg, portIsOccupied } from '../utils';
 
 /* 端口号 */
 export interface NetMediaServerPort {
@@ -16,26 +14,6 @@ const netMediaServerPort: NetMediaServerPort = {
 
 export function getNetMediaServerPort(): NetMediaServerPort {
   return netMediaServerPort;
-}
-
-/**
- * 检查端口占用情况
- * @param { number } port: 检查的端口
- */
-function portIsOccupied(port: number): Promise<boolean> {
-  return new Promise(function(resolve: Function, reject: Function): void {
-    const server: NetServer = net.createServer().listen(port);
-
-    server.on('listening', (): void => {
-      server.close();
-      resolve(true);
-    });
-
-    server.on('error', (err: Error): void => {
-      server.close();
-      resolve(false);
-    });
-  });
 }
 
 /**
