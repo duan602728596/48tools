@@ -27,8 +27,9 @@ function test() {
 }`;
   const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?\?=/g).length, 1);
-  deepStrictEqual(/let __ELECTRON__DELAY_REQUIRE__a \?\?=(.|\n)+test\s*\(\)/.test(result.code), true);
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+  deepStrictEqual(/let __ELECTRON__DELAY_REQUIRE__a;(.|\n)+test\s*\(\)/.test(result.code), true);
+  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+test1\s*\(\)/.test(result.code), true);
 });
 
 // if作用域
@@ -36,12 +37,12 @@ test('if scope', async function() {
   const code = `import * as b from 'b';
 
 function test() {
-  if (b.c()) {}
+  if (b()) {}
 }`;
   const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?\?=/g).length, 1);
-  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?\?=(.|\n)+if/.test(result.code), true);
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+if/.test(result.code), true);
 });
 
 // 顺序的不同
@@ -55,8 +56,8 @@ function test() {
 }`;
   const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?\?=/g).length, 1);
-  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?\?=(.|\n)+if/.test(result.code), true);
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
+  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+if/.test(result.code), true);
 });
 
 // class作用域
@@ -69,8 +70,8 @@ class Test {
 }`;
   const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?\?=/g).length, 1);
-  deepStrictEqual(/static\s*\{(.|\n)+__ELECTRON__DELAY_REQUIRE__a \?\?=(.|\n)+}/.test(result.code), true);
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+  deepStrictEqual(/static\s*\{(.|\n)+__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+}/.test(result.code), true);
 });
 
 // switch作用域
@@ -88,8 +89,8 @@ function test() {
 }`;
   const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?\?=/g).length, 1);
-  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?\?=(.|\n)+switch/.test(result.code), true);
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+switch/.test(result.code), true);
 });
 
 // 箭头函数
@@ -101,10 +102,45 @@ function test(m) {
 }`;
   const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?\?=/g).length, 1);
-  deepStrictEqual(/test\s*\(m\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?\?=(.|\n)+const v/.test(result.code), true);
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
+  deepStrictEqual(/test\s*\(m\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+const v/.test(result.code), true);
 });
 
 if (args[0] === 'debug') {
   await setTimeoutPromise(60_000_000);
 }
+
+// 多个同名的包
+test('multiple same name packages(1)', async function() {
+  const code = `import * as b from 'b';
+import { e, f, g } from 'b';
+
+console.log(b);
+console.log(e());
+console.log(f());
+console.log(g());`;
+  const result = await transform(code);
+
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b\)/.test(result.code), true);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+});
+
+test('multiple same name packages(2)', async function() {
+  const code = `import b from 'b';
+import { e, f, g } from 'b';
+
+console.log(b);
+console.log(e());
+console.log(f());
+console.log(g());`;
+  const result = await transform(code);
+
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b\.default\)/.test(result.code), true);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
+  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+});
