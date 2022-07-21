@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { getFFmpeg, portIsOccupied } from '../utils';
+import { getFFmpeg, detectPort } from '../utils';
 
 /* 端口号 */
 export interface NetMediaServerPort {
@@ -14,34 +14,6 @@ const netMediaServerPort: NetMediaServerPort = {
 
 export function getNetMediaServerPort(): NetMediaServerPort {
   return netMediaServerPort;
-}
-
-/**
- * 判断端口是否被占用，并返回新的端口
- * @param { number } port: 检查的端口
- * @param { Array<number> } ignorePort: 忽略的端口
- */
-async function detectPort(port: number, ignorePort: Array<number> = []): Promise<number> {
-  let maxPort: number = port + 10; // 最大端口
-  let newNumber: number = port,    // 使用的端口
-    pt: number = port;
-
-  if (maxPort > 65535) {
-    maxPort = 65535;
-  }
-
-  while (pt <= maxPort) {
-    const portCanUse: boolean = await portIsOccupied(pt);
-
-    if (portCanUse && !ignorePort.includes(pt)) {
-      newNumber = pt;
-      break;
-    } else {
-      pt++;
-    }
-  }
-
-  return newNumber;
 }
 
 /* 启动服务，将rtmp转换成flv */

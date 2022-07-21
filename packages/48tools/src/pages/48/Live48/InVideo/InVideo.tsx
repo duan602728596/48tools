@@ -21,6 +21,7 @@ import {
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
 import type { MessageEventData } from '../../../../types';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
@@ -30,6 +31,7 @@ import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../type
  * @param { string } m3u8Url: m3u8文件的路径
  */
 function formatTsUrl(data: string, m3u8Url: string): [string, Array<string>] {
+  const port: number = getProxyServerPort().port;
   const dataArr: string[] = data.split('\n');
   const newStrArr: string[] = [];
 
@@ -40,9 +42,13 @@ function formatTsUrl(data: string, m3u8Url: string): [string, Array<string>] {
     if (/^#/.test(item) || item === '') {
       newStrArr.push(item);
     } else if (/^\//.test(item)) {
-      newStrArr.push(`https://ts.48.cn${ item }`);
+      const tsUrl: string = `https://ts.48.cn${ item }`;
+
+      newStrArr.push(`http://localhost:${ port }/proxy/ts48?url=${ encodeURIComponent(tsUrl) }`);
     } else {
-      newStrArr.push(`${ m3u8Pathname }/${ item }`);
+      const tsUrl: string = `${ m3u8Pathname }/${ item }`;
+
+      newStrArr.push(`http://localhost:${ port }/proxy/ts48?url=${ encodeURIComponent(tsUrl) }`);
     }
   }
 
@@ -101,7 +107,7 @@ function InVideo(props: {}): ReactElement {
 
       const m3u8File: string = `${ result.filePath }.m3u8`;
       const m3u8Data: string = await requestDownloadFile(m3u8Url.url);
-      const [m3u8UrlF, m3u8urlFArr]: [string, Array<string>] = formatTsUrl(m3u8Data, m3u8Url.url);
+      const [m3u8UrlF]: [string, Array<string>] = formatTsUrl(m3u8Data, m3u8Url.url);
 
       await fsP.writeFile(m3u8File, m3u8UrlF);
 

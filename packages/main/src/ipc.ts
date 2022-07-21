@@ -5,6 +5,7 @@ import openPlayerDevTools, { type as openPlayerDevToolsType } from './ipcListene
 import themeChange, { type as themeChangeType } from './ipcListener/themeChange';
 import weiboLogin, { type as weiboLoginType } from './ipcListener/weiboLogin';
 import nodeMediaServer, { type as nodeMediaServerType } from './nodeMediaServer/nodeMediaServer';
+import proxyServer, { type as proxyServerType } from './proxyServer/proxyServer';
 import toutiaoRequest, { type as toutiaoRequestType } from './toutiaoRequest/toutiaoRequest';
 
 // 移除所有监听的通信
@@ -15,6 +16,7 @@ const removeListenerChannel: Array<string> = [
   themeChangeType,
   weiboLoginType,
   nodeMediaServerType,
+  proxyServerType,
   toutiaoRequestType
 ];
 
@@ -32,5 +34,6 @@ export function ipc(win: BrowserWindow): void {
   themeChange();        // 主题更换
   weiboLogin(win);      // 微博登录
   nodeMediaServer();    // 启动node-media-server
+  proxyServer();        // 启动代理服务
   toutiaoRequest();     // 头条请求拦截
 }
