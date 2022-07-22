@@ -6,10 +6,10 @@ import { workerData } from 'node:worker_threads';
 const baseUrl: string = `http://localhost:${ workerData.port }`;
 
 /* 开启代理服务，加载ts文件 */
-const server: Server = http.createServer(function(req: IncomingMessage, res: ServerResponse): void {
-  if (!req.url) return;
+const server: Server = http.createServer(function(httpRequest: IncomingMessage, httpResponse: ServerResponse): void {
+  if (!httpRequest.url) return;
 
-  const urlParse: URL = new URL(req.url, baseUrl);
+  const urlParse: URL = new URL(httpRequest.url, baseUrl);
 
   if (urlParse.pathname !== '/proxy/ts48' ) return;
 
@@ -27,8 +27,8 @@ const server: Server = http.createServer(function(req: IncomingMessage, res: Ser
         + ' Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.62'
     }
   }, function(response: IncomingMessage): void {
-    res.setHeader('Content-type', 'video/mp2ts');
-    response.pipe(res);
+    httpResponse.setHeader('Content-type', 'video/mp2ts');
+    response.pipe(httpResponse);
   });
 });
 
