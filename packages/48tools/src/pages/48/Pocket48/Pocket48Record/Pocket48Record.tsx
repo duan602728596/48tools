@@ -6,11 +6,12 @@ import { dialog } from '@electron/remote';
 import {
   Fragment,
   useState,
+  useEffect,
   useMemo,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent, useEffect
+  type MouseEvent
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
