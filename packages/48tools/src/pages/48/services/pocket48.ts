@@ -1,6 +1,6 @@
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
-import got, { type Response as GotResponse } from 'got';
+import got, { type Response as GotResponse, type Headers as GotHeaders } from 'got';
 import { createHeaders } from '../../../utils/snh48';
 import type { LiveData, LiveRoomInfo } from './interface';
 
@@ -84,11 +84,13 @@ export async function requestDownloadFileByStream(fileUrl: string, filename: str
 /**
  * 下载文件
  * @param { string } fileUrl: 文件url地址
+ * @param { GotHeaders } headers: headers
  */
-export async function requestDownloadFile(fileUrl: string): Promise<string> {
+export async function requestDownloadFile(fileUrl: string, headers?: GotHeaders): Promise<string> {
   const res: GotResponse<string> = await got(fileUrl, {
     method: 'GET',
-    responseType: 'text'
+    responseType: 'text',
+    headers
   });
 
   return res.body;

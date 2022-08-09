@@ -49,7 +49,12 @@ async function rm(file: string): Promise<void> {
  * @param { string } filename: 文件本地地址
  */
 async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
-  downloadFileReq = got.stream(fileUrl);
+  downloadFileReq = got.stream(fileUrl, {
+    headers: {
+      'Host': 'cychengyuan-vod.48.cn',
+      'User-Agent': 'SNH48 ENGINE'
+    }
+  });
 
   await pipeline(downloadFileReq, fs.createWriteStream(filename));
 }

@@ -10,7 +10,7 @@ import {
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent
+  type MouseEvent, useEffect
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -40,6 +40,7 @@ import {
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
+import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { MessageEventData } from '../../../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
@@ -49,12 +50,15 @@ import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface'
  * @param { string } data: m3u8文件内容
  */
 function formatTsUrl(data: string): string {
+  const port: number = getProxyServerPort().port;
   const dataArr: string[] = data.split('\n');
   const newStrArr: string[] = [];
 
   for (const item of dataArr) {
     if (/^\/fragments.*\.ts$/.test(item)) {
-      newStrArr.push(`https://cychengyuan-vod.48.cn${ item }`);
+      const tsUrl: string = `https://cychengyuan-vod.48.cn${ item }`;
+
+      newStrArr.push(`http://localhost:${ port }/proxy/cychengyuan-vod48?url=${ encodeURIComponent(tsUrl) }`);
     } else {
       newStrArr.push(item);
     }
@@ -177,7 +181,10 @@ function Pocket48Record(props: {}): ReactElement {
           m3u8File = `${ result.filePath }.m3u8`;
         }
 
-        const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath);
+        const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath, {
+          'Host': 'cychengyuan-vod.48.cn',
+          'User-Agent': 'SNH48 ENGINE'
+        });
 
         await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data)); // 写入m3u8文件
         downloadFile = m3u8File;                              // m3u8文件地址
@@ -387,6 +394,10 @@ function Pocket48Record(props: {}): ReactElement {
       }
     }
   ];
+
+  useEffect(function(): void {
+    proxyServerInit();
+  }, []);
 
   return (
     <Fragment>
