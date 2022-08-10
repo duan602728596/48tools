@@ -12,7 +12,7 @@ import * as PropTypes from 'prop-types';
 import { Button, Empty, message } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestPcDirectQr, requestPcDirectScanResult, requestPcDirectAcceptResult } from './services/acfunLogin';
-import { warningNativeMessage } from '../../utils/nativeMessage';
+import { warningNativeMessage } from '../../utils/remote/nativeMessage';
 import type { PcDirectQr, ScanResult, AcceptResult } from './services/interface';
 
 export const ACFUN_COOKIE_KEY: string = 'ACFUN_COOKIE';

@@ -4,6 +4,7 @@ import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
 import * as remoteMain from '@electron/remote/main';
 import { isDevelopment, isTest, wwwPath, initialState as ils, packageJson } from './utils';
 import { ipc, removeIpc } from './ipc';
+import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
 import store from './store';
@@ -62,6 +63,7 @@ function createWindow(): void {
   Menu.setApplicationMenu(null);
 
   ipc(win);
+  ipcRemoteHandle(win);
 
   win.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();

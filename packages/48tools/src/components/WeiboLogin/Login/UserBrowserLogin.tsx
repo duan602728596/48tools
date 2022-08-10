@@ -16,7 +16,7 @@ import { Button, message } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
-import { errorNativeMessage } from '../../../utils/nativeMessage';
+import { errorNativeMessage } from '../../../utils/remote/nativeMessage';
 import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;

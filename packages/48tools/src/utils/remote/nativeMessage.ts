@@ -1,11 +1,10 @@
-import { dialog, getCurrentWindow } from '@electron/remote';
-import type { MessageBoxReturnValue, MessageBoxOptions } from 'electron';
+import { ipcRenderer, type MessageBoxOptions } from 'electron';
 
 /**
  * 显示native的message提示
  * @param { MessageBoxOptions | string } optionsOrMessageText: 配置
  */
-export function nativeMessage(optionsOrMessageText: MessageBoxOptions | string): Promise<MessageBoxReturnValue> {
+export function nativeMessage(optionsOrMessageText: MessageBoxOptions | string): Promise<void> {
   const messageOptions: MessageBoxOptions = typeof optionsOrMessageText === 'string'
     ? { message: optionsOrMessageText } : optionsOrMessageText;
 
@@ -13,17 +12,17 @@ export function nativeMessage(optionsOrMessageText: MessageBoxOptions | string):
     messageOptions.type = 'info';
   }
 
-  return dialog.showMessageBox(getCurrentWindow(), messageOptions);
+  return ipcRenderer.invoke('native-message', messageOptions);
 }
 
-export function errorNativeMessage(messageText: string): Promise<MessageBoxReturnValue> {
+export function errorNativeMessage(messageText: string): Promise<void> {
   return nativeMessage({
     message: messageText,
     type: 'error'
   });
 }
 
-export function warningNativeMessage(messageText: string): Promise<MessageBoxReturnValue> {
+export function warningNativeMessage(messageText: string): Promise<void> {
   return nativeMessage({
     message: messageText,
     type: 'warning'
