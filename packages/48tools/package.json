@@ -40,7 +40,7 @@
     "babel-plugin-import": "^1.13.5",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "cross-env": "^7.0.3",
-    "electron": "^19.0.6",
+    "electron": "^20.0.1",
     "postcss": "^8.4.14",
     "postcss-loader": "^7.0.0",
     "tailwindcss": "^3.1.4",
