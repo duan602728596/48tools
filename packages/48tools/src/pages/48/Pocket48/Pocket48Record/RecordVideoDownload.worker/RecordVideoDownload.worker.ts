@@ -44,6 +44,16 @@ async function rm(file: string): Promise<void> {
 }
 
 /**
+ * 解析参数
+ * @param { string } uri
+ */
+function getUrlQuery(uri: string): string {
+  const urlParse: URL = new URL(uri);
+
+  return decodeURIComponent(urlParse.searchParams.get('url')!);
+}
+
+/**
  * 下载文件
  * @param { string } fileUrl: 文件url地址
  * @param { string } filename: 文件本地地址
@@ -81,7 +91,7 @@ async function createTxtFile(concatTxt: string, urls: Array<string>): Promise<vo
 
   if (s) return;
 
-  const txt: string[] = urls.map((o: string): string => `file '${ path.basename(o) }'`);
+  const txt: string[] = urls.map((o: string): string => `file '${ path.basename(getUrlQuery(o)) }'`);
 
   await fsP.writeFile(concatTxt, txt.join('\n'), { encoding: 'utf8' });
 }
@@ -99,7 +109,7 @@ async function downloadTsVideos(cacheDir: string, urls: Array<string>): Promise<
       break;
     }
 
-    const ts: string = path.join(cacheDir, path.basename(uri));
+    const ts: string = path.join(cacheDir, path.basename(getUrlQuery(uri)));
 
     // 检查文件是否存在
     const s: BigIntStats | null = await stat(ts);
