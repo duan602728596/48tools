@@ -9,7 +9,6 @@
   },
   "main": "bin/lib/main.js",
   "dependencies": {
-    "@electron/remote": "^2.0.8",
     "asar-node": "^3.1.0",
     "electron-store": "^8.0.2",
     "fluent-ffmpeg": "^2.1.2",

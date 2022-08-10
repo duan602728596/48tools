@@ -1,11 +1,11 @@
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
@@ -52,7 +52,7 @@ function Live(props: {}): ReactElement {
   // 开始录制
   async function handleRecordClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const time: string = getFileTime();
-    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
     });
 

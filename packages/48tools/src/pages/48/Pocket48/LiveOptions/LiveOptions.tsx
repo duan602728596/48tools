@@ -1,5 +1,4 @@
 import type { OpenDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -7,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Form, Input, InputNumber, Button, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import style from './liveOptions.sass';
+import { showOpenDialog } from '../../../../utils/remote/dialog';
 import { IDBGetPocket48LiveOptions, IDBSavePocket48LiveOptions } from '../../reducers/pocket48';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 
@@ -38,7 +38,7 @@ function LiveOptions(props: {}): ReactElement {
 
   // 选择目录
   async function handleChangeDirClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openDirectory']
     });
 

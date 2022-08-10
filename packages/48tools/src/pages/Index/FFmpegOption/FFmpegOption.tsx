@@ -1,5 +1,4 @@
 import { shell, type OpenDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Modal, Form, Input, message, Alert } from 'antd';
 import type { FormInstance } from 'antd/es/form';
@@ -11,6 +10,7 @@ import {
 } from '@ant-design/icons';
 import classNames from 'classnames';
 import style from './FFmpegOption.sass';
+import { showOpenDialog } from '../../../utils/remote/dialog';
 
 /* 配置ffmpeg地址 */
 function FFmpegOption(props: {}): ReactElement {
@@ -62,7 +62,7 @@ function FFmpegOption(props: {}): ReactElement {
 
   // 选择ffmpeg文件的位置
   async function handleSelectFFmpegClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openFile']
     });
 

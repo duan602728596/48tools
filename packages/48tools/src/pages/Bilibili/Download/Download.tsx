@@ -2,13 +2,13 @@ import * as path from 'node:path';
 import type { ParsedPath } from 'node:path';
 import * as url from 'node:url';
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from './downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
@@ -52,7 +52,7 @@ function Download(props: {}): ReactElement {
     try {
       const urlResult: url.URL = new url.URL(item.pic);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[B站封面下载]${ item.type }${ item.id }${ parseResult.ext }`
       });
 
@@ -70,7 +70,7 @@ function Download(props: {}): ReactElement {
     try {
       const urlResult: url.URL = new url.URL(item.durl);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${ parseResult.ext }`
       });
 

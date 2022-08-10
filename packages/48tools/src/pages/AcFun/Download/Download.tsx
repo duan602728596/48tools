@@ -1,5 +1,4 @@
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -7,6 +6,7 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import style from './download.sass';
+import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
@@ -49,7 +49,7 @@ function Download(props: {}): ReactElement {
   // 开始下载
   async function handleDownloadAcFunVideoClick(record: DownloadItem, value: string): Promise<void> {
     const [label, durl]: string[] = value.split(/@/);
-    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `[A站下载]${ record.type }${ record.id }_${ label }.mp4`
     });
 

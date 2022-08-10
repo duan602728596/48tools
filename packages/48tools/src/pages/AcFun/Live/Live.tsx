@@ -1,5 +1,4 @@
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import {
   Fragment,
   useState,
@@ -17,6 +16,7 @@ import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
 import style from './live.sass';
+import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
@@ -118,7 +118,7 @@ function Live(props: {}): ReactElement {
       async function handleOkClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
         if (ctx.player) {
           const time: string = getFileTime();
-          const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+          const result: SaveDialogReturnValue = await showSaveDialog({
             defaultPath: `[A站直播]${ record.roomId }_${ time }.flv`
           });
 

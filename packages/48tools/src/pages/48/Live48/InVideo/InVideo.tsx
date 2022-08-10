@@ -1,6 +1,5 @@
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import {
   Fragment,
   useState,
@@ -16,8 +15,9 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import style from './inVideo.sass';
+import { showSaveDialog } from '../../../../utils/remote/dialog';
+import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
 import {
   setInVideoQuery,
@@ -106,7 +106,7 @@ function InVideo(props: {}): ReactElement {
         return message.warn('视频不存在！');
       }
 
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[48公演录播]${ record.liveType }_${ filenamify(m3u8Url.title) }`
           + `@${ record.id }__${ quality }_${ getFileTime() }.ts`
       });

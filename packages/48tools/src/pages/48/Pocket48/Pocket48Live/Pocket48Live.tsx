@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
 import { ipcRenderer, clipboard, type SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import {
   Fragment,
   useState,
@@ -19,6 +18,7 @@ import type { ColumnsType } from 'antd/es/table';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
+import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
@@ -165,7 +165,7 @@ function Pocket48Live(props: {}): ReactElement {
    */
   async function handleGetVideoClick(record: LiveInfo, transcoding: boolean, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
           + `@${ getFileTime(record.ctime) }__${ getFileTime() }.${ transcoding ? 'ts' : 'flv' }`
       });

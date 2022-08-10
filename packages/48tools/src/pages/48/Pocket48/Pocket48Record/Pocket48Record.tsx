@@ -2,7 +2,6 @@ import * as path from 'node:path';
 import type { ParsedPath } from 'node:path';
 import { promises as fsP } from 'node:fs';
 import { clipboard, type SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import {
   Fragment,
   useState,
@@ -22,6 +21,7 @@ import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
+import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getRecordVideoDownloadWorker from './RecordVideoDownload.worker/getRecordVideoDownloadWorker';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
@@ -163,7 +163,7 @@ function Pocket48Record(props: {}): ReactElement {
       const parseResult: ParsedPath = path.parse(resInfo.content.playStreamPath);
       const isM3u8: boolean = parseResult.ext === '.m3u8'; // 以前的视频可能是mp4的
 
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
           + `@${ getFileTime(record.ctime) }__${ getFileTime() }${ isM3u8 ? '.ts' : parseResult.ext }`
       });
@@ -239,7 +239,7 @@ function Pocket48Record(props: {}): ReactElement {
       }
 
       const { ext }: ParsedPath = path.parse(res.content.msgFilePath);
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }${ ext }`
       });
 

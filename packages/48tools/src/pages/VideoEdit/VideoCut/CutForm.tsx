@@ -2,7 +2,6 @@ import { randomUUID } from 'node:crypto';
 import * as path from 'node:path';
 import type { ParsedPath } from 'node:path';
 import type { OpenDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import type { ReactElement, MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -10,6 +9,7 @@ import { Form, Button, Input, InputNumber, Card } from 'antd';
 import type { FormInstance, Rule } from 'antd/es/form';
 import classNames from 'classnames';
 import style from './cutForm.sass';
+import { showOpenDialog } from '../../../utils/remote/dialog';
 import { setCutListAdd } from '../reducers/videoCut';
 import { getFullTime } from './function';
 import type { CutItem } from '../types';
@@ -40,7 +40,7 @@ function CutForm(props: {}): ReactElement {
 
   // 选择文件
   async function handleOpenVideoFileClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openFile']
     });
 

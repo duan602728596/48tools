@@ -1,7 +1,6 @@
 import * as process from 'node:process';
 import * as path from 'node:path';
 import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
-import * as remoteMain from '@electron/remote/main';
 import { isDevelopment, isTest, wwwPath, initialState as ils, packageJson } from './utils';
 import { ipc, removeIpc } from './ipc';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle';
@@ -11,7 +10,6 @@ import store from './store';
 import type { ThemeValue } from './ipcListener/themeChange';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
-remoteMain.initialize();
 
 /* BrowserWindow窗口对象 */
 let win: BrowserWindow | null = null;
@@ -39,8 +37,6 @@ function createWindow(): void {
     show: true,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
-
-  remoteMain.enable(win.webContents);
 
   if (isDevelopment && !isTest) {
     win.webContents.openDevTools();

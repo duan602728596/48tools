@@ -3,12 +3,12 @@ import type { ParsedPath } from 'node:path';
 import * as fs from 'node:fs';
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import type { ReactElement, ReactNode, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Modal, message, Button, Image } from 'antd';
 import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/icons';
 import style from './downloadImages.sass';
+import { showOpenDialog, showSaveDialog } from '../../../../../utils/remote/dialog';
 import ImagePreview from './ImagePreview';
 import { source } from '../../../../../utils/utils';
 import { requestDownloadFileByStream } from '../../../services/pocket48';
@@ -31,7 +31,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
     try {
       const href: string = event.target['getAttribute']('href');
       const pathResult: ParsedPath = path.parse(href);
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[口袋48图片]${ liveInfo.userInfo.nickname }_${ liveInfo.title }_${ pathResult.base }`
       });
 
@@ -69,7 +69,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
   // 下载所有图片
   async function handleDownloadAllImagesClick(event: MouseEvent): Promise<void> {
     try {
-      const result: OpenDialogReturnValue = await dialog.showOpenDialog({
+      const result: OpenDialogReturnValue = await showOpenDialog({
         properties: ['openDirectory']
       });
 

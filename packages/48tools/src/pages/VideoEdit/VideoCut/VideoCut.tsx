@@ -1,11 +1,11 @@
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { showSaveDialog } from '../../../utils/remote/dialog';
 import getCutWorker from './cut.worker/getCutWorker';
 import Header from '../../../components/Header/Header';
 import CutForm from './CutForm';
@@ -51,7 +51,7 @@ function Index(props: {}): ReactElement {
 
   // 开始裁剪
   async function handleStartCutClick(item: CutItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `[视频裁剪]${ item.id }.${ item.name }`
     });
 

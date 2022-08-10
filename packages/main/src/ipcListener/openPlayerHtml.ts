@@ -1,6 +1,5 @@
 import * as path from 'node:path';
 import { BrowserWindow, ipcMain, type IpcMainEvent } from 'electron';
-import * as remoteMain from '@electron/remote/main';
 import { isDevelopment, wwwPath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import store from '../store';
@@ -35,8 +34,6 @@ function open(title: string, query: string): void {
   win.on('ready-to-show', function(): void {
     win!.show();
   });
-
-  remoteMain.enable(win.webContents);
 
   function handleThemeEvent(value: ThemeValue): void {
     if (win) {

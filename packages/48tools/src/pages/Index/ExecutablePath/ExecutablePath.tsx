@@ -1,5 +1,4 @@
 import type { OpenDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Modal, Form, Alert, Input, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
@@ -7,6 +6,7 @@ import type { Store } from 'antd/es/form/interface';
 import { ChromeFilled as IconChromeFilled, QuestionCircleTwoTone as IconQuestionCircleTwoTone } from '@ant-design/icons';
 import classNames from 'classnames';
 import style from './executablePath.sass';
+import { showOpenDialog } from '../../../utils/remote/dialog';
 
 /* 配置无头浏览器地址 */
 function ExecutablePath(props: {}): ReactElement {
@@ -53,7 +53,7 @@ function ExecutablePath(props: {}): ReactElement {
 
   // 选择浏览器文件的位置
   async function handleSelectExecutablePathClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
-    const result: OpenDialogReturnValue = await dialog.showOpenDialog({
+    const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openFile']
     });
 

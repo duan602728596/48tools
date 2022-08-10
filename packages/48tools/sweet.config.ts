@@ -58,7 +58,6 @@ const externalsName: Array<string> = nodeModules([
   'url',
   'util'
 ]).concat([
-  '@electron/remote',
   'electron',
   'fluent-ffmpeg',
   'got',

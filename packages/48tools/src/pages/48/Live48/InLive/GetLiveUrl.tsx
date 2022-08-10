@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import {
   useState,
   type ReactElement,
@@ -14,8 +13,9 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Form, Select, message, Button, Space } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import filenamify from 'filenamify/browser';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import style from './getLiveUrl.sass';
+import { showSaveDialog } from '../../../../utils/remote/dialog';
+import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import autoInLiveTimer from './autoInLiveTimer';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
@@ -47,7 +47,7 @@ function GetLiveUrl(props: {}): ReactElement {
 
     // 开始录制
     const time: string = getFileTime();
-    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `[48公演直播]${ value.type }_${ filenamify(liveUrl.title) }_${ value.live }_${ value.quality }_${ time }.flv`
     });
 
@@ -96,7 +96,7 @@ function GetLiveUrl(props: {}): ReactElement {
     // 开始监听
     const id: string = randomUUID();
     const time: string = getFileTime();
-    const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+    const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `[48公演直播]${ value.type }_${ id }_${ value.live }_${ value.quality }_${ time }.flv`
     });
 

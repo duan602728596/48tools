@@ -1,5 +1,4 @@
 import type { SaveDialogReturnValue } from 'electron';
-import { dialog } from '@electron/remote';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -7,6 +6,7 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
+import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
@@ -47,7 +47,7 @@ function Douyin(props: {}): ReactElement {
   // 下载（测试ID：6902337717137329412）
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     try {
-      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+      const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[抖音]${ filenamify(item.title) }.mp4`
       });
 
