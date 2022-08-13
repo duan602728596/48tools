@@ -1,21 +1,33 @@
-/* 删除没有颜色的值的css属性 */
-function postcssRemoveNoColorRulesPlugin() {
-  function removeRules(nodes) {
-    for (let i = nodes.length - 1; i >= 0; i--) {
-      const item = nodes[i];
+/**
+ * 删除没有颜色的值的css属性
+ * @param { Array<import('postcss').ChildNode> } nodes
+ */
+function removeNoColorRules(nodes) {
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const item = nodes[i];
 
-      if (!/#|rgba?|hsla?|hsv|transparent/i.test(item.value) ) {
-        item.remove();
-      }
+    if (!/#|rgba?|hsla?|hsv|transparent/i.test(item.value) ) {
+      item.remove();
     }
-
-    return nodes;
   }
 
+  return nodes;
+}
+
+/**
+ * postcss插件：删除没有颜色的值的css属性
+ * @type { import('postcss').PluginCreator }
+ * @return { import('postcss').Plugin }
+ */
+function postcssRemoveNoColorRulesPlugin() {
   return {
     postcssPlugin: 'postcss-remove-no-color-rules',
+
+    /**
+     * @param { import('postcss').Rule } rule
+     */
     Rule(rule) {
-      removeRules(rule.nodes);
+      removeNoColorRules(rule.nodes);
 
       if (rule.nodes.length === 0) {
         rule.remove();
