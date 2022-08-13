@@ -13,7 +13,7 @@ function postcssRemoveNoColorRulesPlugin() {
   }
 
   return {
-    postcssPlugin: 'postcss-remove-rules',
+    postcssPlugin: 'postcss-remove-no-color-rules',
     Rule(rule) {
       removeRules(rule.nodes);
 
