@@ -2,13 +2,28 @@ import path from 'node:path';
 import fs, { promises as fsP } from 'node:fs';
 import { promisify } from 'node:util';
 import glob from 'glob';
+import postcss from 'postcss';
 import { metaHelper } from '@sweet-milktea/utils';
-import parser from './parser.js';
+import typescriptParser from './typescriptParser.js';
 import lessCode from './lessCode.js';
-import remove from './remove.js';
+import postcssRemoveNoColorRulesPlugin from './postcssPlugins/removeNoColorRulesPlugin.js';
+import postcssRemoveExcessSelectorPlugin from './postcssPlugins/removeExcessSelectorPlugin.js';
 
 const globPromise = promisify(glob);
 const { __dirname } = metaHelper(import.meta.url);
+
+/**
+ * 使用postcss移除多余的css属性，只保留颜色
+ * @param { string } css
+ */
+async function removeExcessCss(css) {
+  const result = await postcss([
+    postcssRemoveNoColorRulesPlugin,
+    postcssRemoveExcessSelectorPlugin
+  ]).process(css, { from: undefined });
+
+  return result.css;
+}
 
 /**
  * 生成less文件
@@ -25,7 +40,7 @@ async function createLessFile(distDir, antdComponents, isDark) {
 
   await fsP.writeFile(
     path.join(distDir, isDark ? 'dark-theme.css' : 'light-theme.css'),
-    `/*! @48tools ${ isDark ? '暗黑模式' : '浅色模式' }css文件 !*/\n${ await remove(css) }\n`
+    `/*! @48tools ${ isDark ? '暗黑模式' : '浅色模式' }css文件 !*/\n${ await removeExcessCss(css) }\n`
   );
 }
 
@@ -36,7 +51,7 @@ async function main() {
   const files = await globPromise('**/*.tsx', { cwd: cwd48tools });
 
   // 查找antd组件
-  const antdComponents = await parser(cwd48tools, files);
+  const antdComponents = await typescriptParser(cwd48tools, files);
 
   // 生成less文件
   const distDir = path.join(__dirname, '../dist');

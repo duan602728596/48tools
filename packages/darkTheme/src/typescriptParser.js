@@ -26,7 +26,7 @@ function resolveNodeObject(statements) {
  * @param { string } cwd: 目录
  * @param { Array<string> } files: 文件名
  */
-async function parser(cwd, files) {
+async function typescriptParser(cwd, files) {
   // 提取组件名称
   let components = ['Pagination', 'Empty'];
 
@@ -41,4 +41,4 @@ async function parser(cwd, files) {
   return Array.from(new Set(components));
 }
 
-export default parser;
+export default typescriptParser;
