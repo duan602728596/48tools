@@ -1,6 +1,6 @@
 import * as https from 'node:https';
 import * as http from 'node:http';
-import type { IncomingMessage, ServerResponse, OutgoingHttpHeaders } from 'node:http';
+import type { ClientRequest, IncomingMessage, ServerResponse, OutgoingHttpHeaders } from 'node:http';
 import { workerData } from 'node:worker_threads';
 
 const baseUrl: string = `http://localhost:${ workerData.port }`;
@@ -18,9 +18,18 @@ function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: 
   const deTsUrl: string = decodeURIComponent(tsUrl);
   const deTsUrlParse: URL = new URL(deTsUrl);
 
-  (deTsUrlParse.protocol === 'https:' ? https : http).get(deTsUrl, { headers }, function(response: IncomingMessage): void {
-    httpResponse.setHeader('Content-type', 'video/mp2ts');
-    response.pipe(httpResponse);
+  const req: ClientRequest = (deTsUrlParse.protocol === 'https:' ? https : http)
+    .get(deTsUrl, { headers }, function(response: IncomingMessage): void {
+      httpResponse.setHeader('Content-type', 'video/mp2ts');
+      response.pipe(httpResponse);
+
+      response.on('error', function(error: Error): void {
+        console.error(error);
+      });
+    });
+
+  req.on('error', function(error: Error): void {
+    console.error(error);
   });
 }
 
