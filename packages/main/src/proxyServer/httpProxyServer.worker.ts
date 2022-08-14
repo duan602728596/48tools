@@ -20,15 +20,21 @@ function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: 
 
   const req: ClientRequest = (deTsUrlParse.protocol === 'https:' ? https : http)
     .get(deTsUrl, { headers }, function(response: IncomingMessage): void {
-      httpResponse.setHeader('Content-type', 'video/mp2ts');
-      response.pipe(httpResponse);
+      const buffer: Array<Buffer> = [];
 
-      response.on('error', function(error: Error): void {
-        console.error(error);
+      response.on('data', (chunk: Buffer): unknown => buffer.push(chunk));
+
+      response.on('end', (): void => {
+        httpResponse.setHeader('Content-type', 'video/mp2ts');
+        httpResponse.end(Buffer.concat(buffer));
       });
+
+      response.on('error', (error: Error): unknown => console.error(error));
     });
 
   req.on('error', function(error: Error): void {
+    httpResponse.statusCode = 400;
+    httpResponse.end(null);
     console.error(error);
   });
 }
