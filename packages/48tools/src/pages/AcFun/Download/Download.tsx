@@ -3,7 +3,7 @@ import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 're
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Table, Select, Button, message, Popconfirm } from 'antd';
+import { Table, Select, Button, message, Popconfirm, Progress } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import style from './download.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
@@ -15,11 +15,13 @@ import {
   setDeleteDownloadList,
   setAddDownloadWorker,
   setDeleteDownloadWorker,
+  setDownloadProgress,
   type AcFunDownloadInitialState
 } from '../reducers/download';
 import { getFFmpeg } from '../../../utils/utils';
-import type { MessageEventData, WebWorkerChildItem } from '../../../types';
+import type { WebWorkerChildItem } from '../../../types';
 import type { DownloadItem, Representation } from '../types';
+import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
 
 /* redux selector */
 type RState = { acfunDownload: AcFunDownloadInitialState };
@@ -29,12 +31,15 @@ const selector: Selector<RState, AcFunDownloadInitialState> = createStructuredSe
   downloadList: ({ acfunDownload }: RState): Array<DownloadItem> => acfunDownload.downloadList,
 
   // 正在下载的线程
-  ffmpegDownloadWorkers: ({ acfunDownload }: RState): Array<WebWorkerChildItem> => acfunDownload.ffmpegDownloadWorkers
+  ffmpegDownloadWorkers: ({ acfunDownload }: RState): Array<WebWorkerChildItem> => acfunDownload.ffmpegDownloadWorkers,
+
+  // 进度条列表
+  progress: ({ acfunDownload }: RState): Record<string, number> => acfunDownload.progress
 });
 
 /* A站视频下载 */
 function Download(props: {}): ReactElement {
-  const { downloadList, ffmpegDownloadWorkers }: AcFunDownloadInitialState = useSelector(selector);
+  const { downloadList, ffmpegDownloadWorkers, progress }: AcFunDownloadInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
 
   // 停止
@@ -55,38 +60,43 @@ function Download(props: {}): ReactElement {
 
     if (result.canceled || !result.filePath) return;
 
-    try {
-      const worker: Worker = getFFMpegDownloadWorker();
+    let requestIdleID: number | null = null;
+    const worker: Worker = getFFMpegDownloadWorker();
 
-      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
-        const { type, error }: MessageEventData = event.data;
+    worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
+      const { type }: MessageEventData = event.data;
 
-        if (type === 'close' || type === 'error') {
-          if (type === 'error') {
-            message.error(`[${ record.type }${ record.id }]下载失败！`);
-          }
+      if (type === 'progress') {
+        requestIdleID !== null && cancelIdleCallback(requestIdleID);
+        requestIdleID = requestIdleCallback((): void => {
+          dispatch(setDownloadProgress(event.data));
+        });
+      }
 
-          worker.terminate();
-          dispatch(setDeleteDownloadWorker(record));
+      if (type === 'close' || type === 'error') {
+        requestIdleID !== null && cancelIdleCallback(requestIdleID);
+
+        if (type === 'error') {
+          message.error(`[${ record.type }${ record.id }]下载失败！`);
         }
-      }, false);
 
-      worker.postMessage({
-        type: 'start',
-        playStreamPath: durl,
-        filePath: result.filePath,
-        id: record.qid,
-        ffmpeg: getFFmpeg()
-      });
+        worker.terminate();
+        dispatch(setDeleteDownloadWorker(record));
+      }
+    }, false);
 
-      dispatch(setAddDownloadWorker({
-        id: record.qid,
-        worker
-      }));
-    } catch (err) {
-      console.error(err);
-      message.error('视频下载失败！');
-    }
+    worker.postMessage({
+      type: 'start',
+      playStreamPath: durl,
+      filePath: result.filePath,
+      ffmpeg: getFFmpeg(),
+      qid: record.qid
+    });
+
+    dispatch(setAddDownloadWorker({
+      id: record.qid,
+      worker
+    }));
   }
 
   // 删除一个下载队列
@@ -111,6 +121,19 @@ function Download(props: {}): ReactElement {
       title: '下载类型',
       dataIndex: 'type',
       render: (value: string, record: DownloadItem, index: number): string => acfunVideoTypesMap[value]
+    },
+    {
+      title: '下载进度',
+      dataIndex: 'qid',
+      render: (value: string, record: DownloadItem, index: number): ReactNode => {
+        const inDownload: boolean = Object.hasOwn(progress, value);
+
+        if (inDownload) {
+          return <Progress type="circle" width={ 30 } percent={ progress[value] } />;
+        } else {
+          return '等待下载';
+        }
+      }
     },
     {
       title: '操作',
