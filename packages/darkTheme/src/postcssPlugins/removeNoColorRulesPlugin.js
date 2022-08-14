@@ -6,7 +6,7 @@ function removeNoColorRules(nodes) {
   for (let i = nodes.length - 1; i >= 0; i--) {
     const item = nodes[i];
 
-    if (!/#|rgba?|hsla?|hsv|transparent/i.test(item.value) ) {
+    if (!/#[\dA-Fa-f]{3,6}|rgba?|hsla?|hsv|transparent/i.test(item.value)) {
       item.remove();
     }
   }
