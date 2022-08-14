@@ -29,13 +29,17 @@ function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: 
         httpResponse.end(Buffer.concat(buffer));
       });
 
-      response.on('error', (error: Error): unknown => console.error(error));
+      response.on('error', (error: Error): void => {
+        httpResponse.statusCode = response.statusCode ?? 400;
+        httpResponse.end(null);
+        console.error(`[Http response error] ${ deTsUrl }\n`, error, '\n');
+      });
     });
 
   req.on('error', function(error: Error): void {
     httpResponse.statusCode = 400;
     httpResponse.end(null);
-    console.error(error);
+    console.error(`[Http request error] ${ deTsUrl }\n`, error, '\n');
   });
 }
 
