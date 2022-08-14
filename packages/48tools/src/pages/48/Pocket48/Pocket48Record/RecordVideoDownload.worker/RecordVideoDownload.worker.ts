@@ -14,6 +14,7 @@ export type WorkerEventData = {
   type: 'start' | 'stop' | 'retry'; // 执行的方法
   playStreamPath: string;           // 文件夹内的m3u8文件地址
   filePath: string;                 // 文件夹地址
+  qid?: string;
 };
 
 const ZERO_BIGINT: bigint = BigInt(0);
@@ -100,8 +101,12 @@ async function createTxtFile(concatTxt: string, urls: Array<string>): Promise<vo
  * 下载视频
  * @param { string } cacheDir: 文件夹
  * @param { Array<string> } urls: ts合集
+ * @param { string } qid: 唯一ID
  */
-async function downloadTsVideos(cacheDir: string, urls: Array<string>): Promise<void> {
+async function downloadTsVideos(cacheDir: string, urls: Array<string>, qid?: string): Promise<void> {
+  const allFiles: number = urls.length + 1;
+  let index: number = 0;
+
   for (const uri of urls) {
     downloadFileReq = downloadFilePath = null;
 
@@ -125,6 +130,16 @@ async function downloadTsVideos(cacheDir: string, urls: Array<string>): Promise<
         await requestDownloadFileByStream(uri, ts);
       } catch { /**/ }
     }
+
+    index++;
+
+    if (qid) {
+      postMessage({
+        type: 'progress',
+        data: Math.floor(index / allFiles * 100),
+        qid
+      });
+    }
   }
 }
 
@@ -132,13 +147,13 @@ async function downloadTsVideos(cacheDir: string, urls: Array<string>): Promise<
 async function download(workerData: WorkerEventData): Promise<void> {
   isStop = false;
 
-  const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
+  const { ffmpeg, playStreamPath, filePath, qid }: WorkerEventData = workerData;
   const cacheDir: string = `${ filePath }.cache`;
   const concatTxt: string = path.join(cacheDir, '_a.txt');
   const urls: Array<string> = await parseM3u8File(cacheDir, playStreamPath);
 
   await createTxtFile(concatTxt, urls);
-  await downloadTsVideos(cacheDir, urls);
+  await downloadTsVideos(cacheDir, urls, qid);
 
   if (isStop) return;
 
