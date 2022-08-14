@@ -123,18 +123,22 @@ function InVideo(props: {}): ReactElement {
 
       await fsP.writeFile(m3u8File, m3u8UrlF);
 
+      let requestIdleID: number | null = null;
       const worker: Worker = getFFMpegDownloadWorker();
 
       worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
         const { type }: MessageEventData = workerEvent.data;
 
         if (type === 'progress') {
-          requestIdleCallback((): void => {
+          requestIdleID !== null && cancelIdleCallback(requestIdleID);
+          requestIdleID = requestIdleCallback((): void => {
             dispatch(setDownloadProgress(workerEvent.data));
           });
         }
 
         if (type === 'close' || type === 'error') {
+          requestIdleID !== null && cancelIdleCallback(requestIdleID);
+
           if (type === 'error') {
             message.error(`视频：${ record.title } 下载失败！`);
           }

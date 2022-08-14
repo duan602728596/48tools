@@ -197,18 +197,22 @@ function Pocket48Record(props: {}): ReactElement {
         downloadFile = resInfo.content.playStreamPath;
       }
 
+      let requestIdleID: number | null = null;
       const worker: Worker = (isM3u8 && downloadType === 1 ? getRecordVideoDownloadWorker : getFFMpegDownloadWorker)();
 
       worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
         const { type }: MessageEventData = workerEvent.data;
 
         if (type === 'progress') {
-          requestIdleCallback((): void => {
+          requestIdleID !== null && cancelIdleCallback(requestIdleID);
+          requestIdleID = requestIdleCallback((): void => {
             dispatch(setDownloadProgress(workerEvent.data));
           });
         }
 
         if (type === 'close' || type === 'error') {
+          requestIdleID !== null && cancelIdleCallback(requestIdleID);
+
           if (type === 'error') {
             message.error(`视频：${ record.title } 下载失败！`);
           }
@@ -354,55 +358,37 @@ function Pocket48Record(props: {}): ReactElement {
             <div className="mb-[6px]">
               {
                 idx >= 0 ? (
-                  <Popconfirm title="确定要停止下载吗？"
-                    onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
-                  >
+                  <Button.Group>
+                    <Popconfirm title="确定要停止下载吗？"
+                      onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                    >
+                      <Button type="primary" danger={ true }>停止下载</Button>
+                    </Popconfirm>
                     {
-                      canRetry ? (
-                        <Popover content={
-                          <Fragment>
-                            <p className="text-[12px]">
-                              正在使用备用方案下载视频。<br />
-                              如果下载时发现卡住了，可以使用重试
-                            </p>
-                            <div className="text-right">
-                              <Button size="small" onClick={
-                                (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event)
-                              }>
-                                重试
-                              </Button>
-                            </div>
-                          </Fragment>
-                        } placement="left">
-                          <Button type="primary" danger={ true }>停止下载</Button>
-                        </Popover>
-                      ) : <Button type="primary" danger={ true }>停止下载</Button>
-                    }
-                  </Popconfirm>
-                ) : (
-                  <Popover content={
-                    <Fragment>
-                      <p className="text-[12px]">
-                        如果下载下来只有m3u8文件，<br />
-                        使用该方式重新下载视频
-                      </p>
-                      <div className="text-right">
-                        <Button size="small" onClick={
-                          (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
-                            handleDownloadM3u8Click(record, 1, event)
+                      canRetry && (
+                        <Button onClick={
+                          (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event)
                         }>
-                          使用备用方案下载视频
+                          重试
                         </Button>
-                      </div>
-                    </Fragment>
-                  } placement="left">
+                      )
+                    }
+                  </Button.Group>
+                ) : (
+                  <Button.Group>
                     <Button onClick={
                       (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
                         handleDownloadM3u8Click(record, 0, event)
                     }>
                       下载视频
                     </Button>
-                  </Popover>
+                    <Button onClick={
+                      (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
+                        handleDownloadM3u8Click(record, 1, event)
+                    }>
+                      备用方案下载
+                    </Button>
+                  </Button.Group>
                 )
               }
             </div>
