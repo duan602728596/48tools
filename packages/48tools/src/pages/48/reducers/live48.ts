@@ -1,11 +1,13 @@
 import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
+import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
 
 export interface Live48InitialState {
   inLiveList: Array<InLiveWebWorkerItem>;
   inVideoQuery?: InVideoQuery;
   inVideoList: Array<InVideoItem>;
   videoListChild: Array<InVideoWebWorkerItem>;
+  progress: Record<string, number>;
 }
 
 type CaseReducers = SliceCaseReducers<Live48InitialState>;
@@ -16,7 +18,8 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
     inLiveList: [],          // 当前抓取的直播列表
     inVideoQuery: undefined, // 录播分页的查询条件
     inVideoList: [],         // 当前的查找到的数据
-    videoListChild: []       // 当前下载
+    videoListChild: [],      // 当前下载
+    progress: {} // 下载进度
   },
   reducers: {
     // 添加当前抓取的直播列表
@@ -84,8 +87,22 @@ const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers
 
       if (index >= 0) {
         state.videoListChild.splice(index, 1);
+        delete state.progress[action.payload.id];
+
         state.videoListChild = [...state.videoListChild];
+        state.progress = { ...state.progress };
       }
+    },
+
+    // 设置下载进度
+    setDownloadProgress(state: Live48InitialState, action: PayloadAction<MessageEventData>): void {
+      if (action.payload.type === 'progress') {
+        state.progress[action.payload.qid] = action.payload.data;
+      } else if (action.payload.type === 'close' && action.payload.qid) {
+        delete state.progress[action.payload.qid]; // 下载完成
+      }
+
+      state.progress = { ...state.progress };
     }
   }
 });
@@ -98,6 +115,7 @@ export const {
   setInVideoQuery,
   setInVideoList,
   setVideoListChildAdd,
-  setVideoListChildDelete
+  setVideoListChildDelete,
+  setDownloadProgress
 }: CaseReducerActions<CaseReducers> = actions;
 export default { live48: reducer };

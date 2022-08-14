@@ -7,12 +7,12 @@ import {
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent
+  type MouseEvent, ReactNode
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
+import { Select, Button, Table, message, Space, Popconfirm, Progress } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import filenamify from 'filenamify/browser';
 import style from './inVideo.sass';
@@ -24,13 +24,14 @@ import {
   setInVideoList,
   setVideoListChildAdd,
   setVideoListChildDelete,
+  setDownloadProgress,
   type Live48InitialState
 } from '../../reducers/live48';
 import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
-import type { MessageEventData } from '../../../../types';
+import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
 /**
@@ -67,7 +68,7 @@ function formatTsUrl(data: string, m3u8Url: string): [string, Array<string>] {
 }
 
 /* redux selector */
-type RSelector = Pick<Live48InitialState, 'inVideoQuery' | 'inVideoList' | 'videoListChild'>;
+type RSelector = Pick<Live48InitialState, 'inVideoQuery' | 'inVideoList' | 'videoListChild' | 'progress'>;
 type RState = { live48: Live48InitialState };
 
 const selector: Selector<RState, RSelector> = createStructuredSelector({
@@ -78,12 +79,15 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   inVideoList: ({ live48 }: RState): Array<InVideoItem> => live48.inVideoList,
 
   // 正在下载
-  videoListChild: ({ live48 }: RState): Array<InVideoWebWorkerItem> => live48.videoListChild
+  videoListChild: ({ live48 }: RState): Array<InVideoWebWorkerItem> => live48.videoListChild,
+
+  // 进度条列表
+  progress: ({ live48 }: RState): Record<string, number> => live48.progress
 });
 
 /* 录播下载 */
 function InVideo(props: {}): ReactElement {
-  const { inVideoQuery, inVideoList, videoListChild }: RSelector = useSelector(selector);
+  const { inVideoQuery, inVideoList, videoListChild, progress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
 
@@ -121,8 +125,14 @@ function InVideo(props: {}): ReactElement {
 
       const worker: Worker = getFFMpegDownloadWorker();
 
-      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
-        const { type, error }: MessageEventData = event1.data;
+      worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
+        const { type }: MessageEventData = workerEvent.data;
+
+        if (type === 'progress') {
+          requestIdleCallback((): void => {
+            dispatch(setDownloadProgress(workerEvent.data));
+          });
+        }
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
@@ -139,7 +149,8 @@ function InVideo(props: {}): ReactElement {
         playStreamPath: m3u8File,
         filePath: result.filePath,
         ffmpeg: getFFmpeg(),
-        protocolWhitelist: true
+        protocolWhitelist: true,
+        qid: record.id
       });
 
       dispatch(setVideoListChildAdd({
@@ -213,6 +224,19 @@ function InVideo(props: {}): ReactElement {
       title: '说明',
       dataIndex: 'description',
       render: (value: string, record: InVideoItem, index: number): ReactElement => <span dangerouslySetInnerHTML={{ __html: value }} />
+    },
+    {
+      title: '下载进度',
+      dataIndex: 'id',
+      render: (value: string, record: InVideoItem, index: number): ReactNode => {
+        const inDownload: boolean = Object.hasOwn(progress, value);
+
+        if (inDownload) {
+          return <Progress type="circle" width={ 30 } percent={ progress[value] } />;
+        } else {
+          return '未下载';
+        }
+      }
     },
     {
       title: '操作',

@@ -14,6 +14,7 @@ import { requestLiveList } from '../services/pocket48';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
 import type { WebWorkerChildItem } from '../../../types';
 import type { LiveInfo, LiveData } from '../services/interface';
+import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
 
 export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;
@@ -23,6 +24,7 @@ export interface Pocket48InitialState {
   recordNext: string;
   recordChildList: Array<RecordVideoDownloadWebWorkerItem>;
   recordFields: Array<RecordFieldData>;
+  progress: Record<string, number>;
 }
 
 type CaseReducers = SliceCaseReducers<Pocket48InitialState>;
@@ -48,7 +50,8 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
     recordFields: [{
       name: ['groupId'],
       value: '全部'
-    }] // 表单保存到redux内
+    }], // 表单保存到redux内
+    progress: {} // 下载进度
   },
   reducers: {
     // 直播信息
@@ -97,17 +100,32 @@ const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReduce
 
     // 删除录播下载
     setDeleteRecordChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): void {
-      const index: number = state.recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === action.payload.liveId);
+      const index: number = state.recordChildList.findIndex(
+        (o: RecordVideoDownloadWebWorkerItem): boolean => o.id === action.payload.liveId);
 
       if (index >= 0) {
         state.recordChildList.splice(index, 1);
+        delete state.progress[action.payload.liveId];
+
         state.recordChildList = [...state.recordChildList];
+        state.progress = { ...state.progress };
       }
     },
 
     // 设置field
     setRecordFields(state: Pocket48InitialState, action: PayloadAction<RecordFieldData[]>): void {
       state.recordFields = action.payload;
+    },
+
+    // 设置下载进度
+    setDownloadProgress(state: Pocket48InitialState, action: PayloadAction<MessageEventData>): void {
+      if (action.payload.type === 'progress') {
+        state.progress[action.payload.qid] = action.payload.data;
+      } else if (action.payload.type === 'close' && action.payload.qid) {
+        delete state.progress[action.payload.qid];
+      }
+
+      state.progress = { ...state.progress };
     }
   },
   extraReducers(builder: ActionReducerMapBuilder<Pocket48InitialState>): void {
@@ -137,6 +155,7 @@ export const {
   setRecordList,
   setAddRecordChildList,
   setDeleteRecordChildList,
-  setRecordFields
+  setRecordFields,
+  setDownloadProgress
 }: CaseReducerActions<CaseReducers> = actions;
 export default { pocket48: reducer };

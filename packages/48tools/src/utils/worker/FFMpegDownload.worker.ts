@@ -14,6 +14,24 @@ export type WorkerEventData = {
   qid?: string;
 };
 
+export interface ErrorMessageEventData {
+  type: 'error';
+  error: Error;
+}
+
+export interface CloseMessageEventData {
+  type: 'close';
+  qid?: string;
+}
+
+export interface ProgressMessageEventData {
+  type: 'progress';
+  qid: string;
+  data: number;
+}
+
+export type MessageEventData = ErrorMessageEventData | CloseMessageEventData | ProgressMessageEventData;
+
 const userAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko)'
   + ' Chrome/77.0.3865.90 Safari/537.36';
 let child: ChildProcessWithoutNullStreams;
@@ -93,7 +111,7 @@ function download(workerData: WorkerEventData): void {
   });
 
   child.on('close', function(...args: string[]): void {
-    postMessage({ type: 'close' });
+    postMessage({ type: 'close', qid });
   });
 
   child.on('error', function(err: Error): void {
