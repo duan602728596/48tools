@@ -3,7 +3,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "rootDir": "./src",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules"
