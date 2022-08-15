@@ -4,10 +4,10 @@
   "description": "Electron主程序运行源代码",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "npm run clean && cross-env NODE_ENV=development WATCH=1 gulp",
-    "dev": "npm run clean && cross-env NODE_ENV=development gulp",
-    "build": "npm run clean && cross-env NODE_ENV=production gulp",
-    "clean": "rimraf ./lib"
+    "start": "npm run clean && tsc --outDir lib --watch",
+    "dev": "npm run clean && tsc --outDir lib",
+    "build": "npm run clean && tsc --outDir .lib.mid && gulp",
+    "clean": "rimraf ./lib && rimraf ./.lib.mid"
   },
   "dependencies": {
     "asar-node": "^3.1.0",
@@ -15,11 +15,8 @@
     "node-media-server": "^2.3.12"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
     "gulp": "^4.0.2",
-    "gulp-changed": "^4.0.3",
-    "gulp-plumber": "^1.2.1",
     "gulp-terser": "^2.1.0",
-    "gulp-typescript": "^6.0.0-alpha.1"
+    "typescript": "*"
   }
 }
