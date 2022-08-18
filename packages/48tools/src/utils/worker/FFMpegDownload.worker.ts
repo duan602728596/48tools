@@ -11,7 +11,8 @@ export type WorkerEventData = {
   ua?: boolean;                // 是否添加"-user_agent"参数
   protocolWhitelist?: boolean; // 是否添加"-protocol_whitelist"参数
   libx264?: boolean;           // 转换为libx264
-  qid?: string;
+  qid?: string;                // id
+  ffmpegHeaders?: string;      // ffmpeg的headers
 };
 
 export interface ErrorMessageEventData {
@@ -84,11 +85,24 @@ function ffmpegProgressParse(qid: string, str: string): void {
 
 /* 下载 */
 function download(workerData: WorkerEventData): void {
-  const { ffmpeg, playStreamPath, filePath, ua, protocolWhitelist, libx264, qid }: WorkerEventData = workerData;
+  const {
+    ffmpeg,
+    playStreamPath,
+    filePath,
+    ua,
+    protocolWhitelist,
+    libx264,
+    qid,
+    ffmpegHeaders
+  }: WorkerEventData = workerData;
   let ffmpegArgs: Array<string> = ['-i', playStreamPath, '-c', 'copy', filePath];
 
   if (libx264) {
     ffmpegArgs = ['-i', playStreamPath, '-vcodec', 'libx264', filePath];
+  }
+
+  if (ffmpegHeaders) {
+    ffmpegArgs.unshift('-headers', ffmpegHeaders);
   }
 
   if (ua) {

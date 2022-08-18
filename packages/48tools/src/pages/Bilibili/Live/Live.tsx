@@ -80,9 +80,11 @@ function Live(props: {}): ReactElement {
         type: 'start',
         playStreamPath: resPlayUrl.data.durl[0].url,
         filePath: result.filePath,
-        id: record.id,
         ffmpeg: getFFmpeg(),
-        ua: true
+        ua: true,
+        ffmpegHeaders: `Referer: https://live.bilibili.com/${ record.roomId }\r
+Host: live.bilibili.com\r
+Origin: https://live.bilibili.com\r`
       });
 
       dispatch(setAddLiveBilibiliChildList({
