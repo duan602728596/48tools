@@ -7,7 +7,7 @@ import fse from 'fs-extra';
 import zip from 'cross-zip';
 import { metaHelper } from '@sweet-milktea/utils';
 
-export const { __dirname } = metaHelper(import.meta.url);
+const { __dirname } = metaHelper(import.meta.url);
 
 const ffmpegDownloadUrl = 'https://evermeet.cx/ffmpeg/';
 const ffmpegDir = path.join(__dirname, 'ffmpeg');
