@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
-import ElectronApp from '../utils/ElectronApp.js';
-import testIdClick from '../actions/testIdClick.js';
+import ElectronApp from '../../utils/ElectronApp.js';
+import testIdClick from '../../actions/testIdClick.js';
 
 /* 口袋48录播下载测试 */
 export const title: string = '48/Pocket48Record Page';

@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
-import ElectronApp from '../utils/ElectronApp.js';
-import testIdClick from '../actions/testIdClick.js';
-import selectItemClick from '../actions/selectItemClick.js';
+import ElectronApp from '../../utils/ElectronApp.js';
+import testIdClick from '../../actions/testIdClick.js';
+import selectItemClick from '../../actions/selectItemClick.js';
 
 /* 48官方公演录播下载测试 */
 export const title: string = '48/InVideo Page';

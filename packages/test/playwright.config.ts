@@ -14,7 +14,7 @@ const config: PlaywrightTestConfig = {
   workers: os.cpus().length,
   timeout: 300_000,
   testIgnore: [
-    '**/src/tests/*.test.ts'
+    '**/src/tests'
   ]
 };
 

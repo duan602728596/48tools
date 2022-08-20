@@ -24,3 +24,4 @@ lib
 www
 build
 dist
+packages/test/ffmpeg

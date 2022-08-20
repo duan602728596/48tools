@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
-import ElectronApp from '../utils/ElectronApp.js';
-import testIdClick from '../actions/testIdClick.js';
-import selectItemClick from '../actions/selectItemClick.js';
+import ElectronApp from '../../utils/ElectronApp.js';
+import testIdClick from '../../actions/testIdClick.js';
+import selectItemClick from '../../actions/selectItemClick.js';
 
 /* acfun视频下载 */
 export const title: string = 'AcFun/Download Page';

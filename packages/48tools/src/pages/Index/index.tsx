@@ -71,7 +71,13 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       hBtn: true,
       testId: 'bilibili-download-link'
     },
-    { name: 'B站直播抓取', url: '/Bilibili/Live', icon: IconBilibiliLogo, hBtn: true },
+    {
+      name: 'B站直播抓取',
+      url: '/Bilibili/Live',
+      icon: IconBilibiliLogo,
+      hBtn: true,
+      testId: 'bilibili-live-link'
+    },
     {
       name: 'A站视频下载',
       url: '/AcFun/Download',

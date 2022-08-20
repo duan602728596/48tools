@@ -10,8 +10,8 @@ import { metaHelper } from '@sweet-milktea/utils';
 export const { __dirname } = metaHelper(import.meta.url);
 
 const ffmpegDownloadUrl = 'https://evermeet.cx/ffmpeg/';
-const ffmpegDist = path.join(__dirname, 'dist');
-const ffmpegZipFile = path.join(ffmpegDist, 'ffmpeg.zip');
+const ffmpegDir = path.join(__dirname, 'ffmpeg');
+const ffmpegZipFile = path.join(ffmpegDir, 'ffmpeg.zip');
 
 /* 解析并获取ffmpeg的下载地址 */
 async function getFFMpegHtml() {
@@ -43,7 +43,7 @@ function getDownloadUrl(html) {
 /* 下载 */
 async function downloadFFMpegZip(href) {
   console.log(`获取到下载地址：${ href }`);
-  await fse.ensureDir(ffmpegDist);
+  await fse.ensureDir(ffmpegDir);
 
   const readStream = got.stream.get(href, { throwHttpErrors: false });
   let old = null;
@@ -68,4 +68,4 @@ const evermeetHtml = await getFFMpegHtml();
 const downloadUrl = getDownloadUrl(evermeetHtml);
 
 await downloadFFMpegZip(downloadUrl);
-await zip.unzip(ffmpegZipFile, path.join(ffmpegDist, 'ffmpeg'));
+await zip.unzip(ffmpegZipFile, path.join(ffmpegDir, 'bin'));
