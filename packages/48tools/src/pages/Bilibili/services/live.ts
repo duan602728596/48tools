@@ -1,5 +1,6 @@
 import got, { type Response as GotResponse } from 'got';
 import { getBilibiliCookie } from '../../../utils/utils';
+import { gotAgentChineseMainland } from './proxy';
 import type { RoomInit, RoomPlayUrl } from './interface';
 
 /**
@@ -12,7 +13,8 @@ export async function requestRoomInitData(roomId: string): Promise<RoomInit> {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
-    }
+    },
+    agent: gotAgentChineseMainland
   });
 
   return res.body;
@@ -28,7 +30,8 @@ export async function requestRoomPlayerUrl(roomId: string): Promise<RoomPlayUrl>
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
-    }
+    },
+    agent: gotAgentChineseMainland
   });
 
   return res.body;

@@ -1,33 +1,7 @@
-import got, { type Response as GotResponse, type Agents as GotAgents } from 'got';
-import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
-import { getBilibiliCookie, isTest } from '../../../utils/utils';
+import got, { type Response as GotResponse } from 'got';
+import { getBilibiliCookie } from '../../../utils/utils';
+import { gotAgent, gotAgentChineseMainland } from './proxy';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData } from './interface';
-
-const proxyAgentOptions: HttpProxyAgentOptions | HttpsProxyAgentOptions = {
-  keepAlive: true,
-  keepAliveMsecs: 1000,
-  maxSockets: 256,
-  maxFreeSockets: 256,
-  scheduling: 'lifo',
-  proxy: atob('aHR0cDovL2Nocm9tZXR3LnVmdW5yLm1lOjc3Nzc=')
-};
-const gotAgent: GotAgents = {
-  http: new HttpProxyAgent(proxyAgentOptions),
-  https: new HttpsProxyAgent(proxyAgentOptions)
-};
-
-const proxyAgentOptionsChineseMainland: HttpProxyAgentOptions | HttpsProxyAgentOptions = {
-  keepAlive: true,
-  keepAliveMsecs: 1000,
-  maxSockets: 256,
-  maxFreeSockets: 256,
-  scheduling: 'lifo',
-  proxy: atob('aHR0cDovL2Nocm9tZS51ZnVuci5tZTo3Nzc3')
-};
-const gotAgentChineseMainland: GotAgents | undefined = isTest ? {
-  http: new HttpProxyAgent(proxyAgentOptionsChineseMainland),
-  https: new HttpsProxyAgent(proxyAgentOptionsChineseMainland)
-} : undefined;
 
 // B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
 // 请求bilibili的html
