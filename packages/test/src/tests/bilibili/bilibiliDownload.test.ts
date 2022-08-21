@@ -128,7 +128,7 @@ export function callback(): void {
   });
 
   // 根据ID搜索视频
-  async function queryBySpaceId(userId: number, clear?: boolean): Promise<void> {
+  async function queryBySpaceId(userId: number, length: number, clear?: boolean): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -164,6 +164,11 @@ export function callback(): void {
     const addToDownload: Locator = app.win.locator('.ant-modal-body .ant-form + div .overflow-auto .ant-btn');
 
     await addToDownload.nth(0).click();
+    await app.win.waitForFunction(
+      (l: number): boolean =>
+        document.querySelector('.ant-table-wrapper')!.querySelectorAll('.ant-table-row').length === l,
+      length);
+
     await app.win.click('.ant-modal-footer button.ant-btn');
     await app.win.waitForTimeout(2_000);
   }
@@ -177,15 +182,15 @@ export function callback(): void {
     await testIdClick(app, 'bilibili-download-link');
 
     // 犬山玉姬Official https://space.bilibili.com/12362451/
-    await queryBySpaceId(12362451);
+    await queryBySpaceId(12362451, 1);
     console.log('[43] Add 12362451');
 
     // 時雨羽衣Official https://space.bilibili.com/2601367/
-    await queryBySpaceId(2601367, true);
+    await queryBySpaceId(2601367, 2, true);
     console.log('[43] Add 2601367');
 
     // 音乐世界CytusII https://space.bilibili.com/270735958/
-    await queryBySpaceId(270735958, true);
+    await queryBySpaceId(270735958, 3, true);
     console.log('[43] Add 270735958');
 
     // 结果
