@@ -9,30 +9,26 @@ import { metaHelper } from '@sweet-milktea/utils';
 
 const { __dirname } = metaHelper(import.meta.url);
 
-const ffmpegDownloadUrl = 'https://evermeet.cx/ffmpeg/';
 const ffmpegDir = path.join(__dirname, 'ffmpeg');
 const ffmpegZipFile = path.join(ffmpegDir, 'ffmpeg.zip');
 
-/* 解析并获取ffmpeg的下载地址 */
-async function getFFMpegHtml() {
-  const res = await got.get(ffmpegDownloadUrl, {
-    responseType: 'text',
-    timeout: {
-      lookup: 120_000,
-      connect: 120_000,
-      secureConnect: 120_000,
-      socket: 120_000,
-      send: 120_000,
-      response: 180_000
-    }
-  });
+const gotReqOptions = {
+  responseType: 'text',
+  timeout: {
+    lookup: 120_000,
+    connect: 120_000,
+    secureConnect: 120_000,
+    socket: 120_000,
+    send: 120_000,
+    response: 180_000
+  }
+};
 
-  return res.body;
-}
-
-/* 获取下载地址 */
-function getDownloadUrl(html) {
-  const { document: jsdomDocument } = new JSDOM(html).window;
+/* 获取mac版本的url */
+async function getMacFFmpegUrl() {
+  const ffmpegDownloadUrl = 'https://evermeet.cx/ffmpeg/';
+  const res = await got.get(ffmpegDownloadUrl, gotReqOptions);
+  const { document: jsdomDocument } = new JSDOM(res.body).window;
   const href = jsdomDocument.querySelectorAll('.btn-download-wrapper')[1]
     .querySelectorAll('a')[2]
     .getAttribute('href');
@@ -64,8 +60,7 @@ async function downloadFFMpegZip(href) {
   console.log('下载完毕，正在解压......');
 }
 
-const evermeetHtml = await getFFMpegHtml();
-const downloadUrl = getDownloadUrl(evermeetHtml);
+const downloadUrl = await getMacFFmpegUrl();
 
 await downloadFFMpegZip(downloadUrl);
 await zip.unzip(ffmpegZipFile, path.join(ffmpegDir, 'bin'));
