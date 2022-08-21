@@ -47,6 +47,8 @@ export function callback(): void {
 
     await app.win.click('.ant-modal-footer button.ant-btn-primary');
     await app.win.waitForTimeout(2_000);
+    await app.win.waitForSelector('.ant-modal-footer button.ant-btn-primary:not(.ant-btn-loading)');
+    await app.win.waitForTimeout(2_000);
   }
 
   // BV查询
