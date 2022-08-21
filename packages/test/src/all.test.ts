@@ -8,11 +8,11 @@ import * as acfunDownload from './tests/acfun/acfunDownload.test.js';
 import * as acfunLive from './tests/acfun/acfunLive.test.js';
 
 test.describe.serial('48tools e2e test', function(): void {
-  // test.describe(indexTest.title, indexTest.callback);
-  // test.describe(pocket48RecordTest.title, pocket48RecordTest.callback);
-  // test.describe(fortyEightInVideo.title, fortyEightInVideo.callback);
+  test.describe(indexTest.title, indexTest.callback);
+  test.describe(pocket48RecordTest.title, pocket48RecordTest.callback);
+  test.describe(fortyEightInVideo.title, fortyEightInVideo.callback);
   test.describe(bilibiliDownload.title, bilibiliDownload.callback);
-  // test.describe(bilibiliLive.title, bilibiliLive.callback);
-  // test.describe(acfunDownload.title, acfunDownload.callback);
-  // test.describe(acfunLive.title, acfunLive.callback);
+  test.describe(bilibiliLive.title, bilibiliLive.callback);
+  test.describe(acfunDownload.title, acfunDownload.callback);
+  test.describe(acfunLive.title, acfunLive.callback);
 });
