@@ -18,7 +18,7 @@ export function callback(): void {
     await app.close();
   });
 
-  test('Should get record data', async function(): Promise<void> {
+  test('[25]Should get record data', async function(): Promise<void> {
     await testIdClick(app, 'pocket48-record-link');
 
     // 测试能够正常加载数据

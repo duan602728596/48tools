@@ -50,7 +50,7 @@ export function callback(): void {
   }
 
   // BV查询
-  test('Should get bilibili video', async function(): Promise<void> {
+  test('[41]Should get bilibili video', async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -81,7 +81,7 @@ export function callback(): void {
     expect(willBeDownload.length).toEqual(5);
   });
 
-  test('Should get bilibili video with proxy', async function(): Promise<void> {
+  test('[42]Should get bilibili video with proxy', async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -147,7 +147,7 @@ export function callback(): void {
   }
 
   // 根据ID搜索
-  test('Should get bilibili video by id', async function(): Promise<void> {
+  test('[43]Should get bilibili video by id', async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

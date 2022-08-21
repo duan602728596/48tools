@@ -18,7 +18,7 @@ export function callback(): void {
     await app.close();
   });
 
-  test('Should render navs and images', async function(): Promise<void> {
+  test('[11]Should render navs and images', async function(): Promise<void> {
     await Promise.all([
       app.win.waitForSelector('nav', { state: 'attached' }),
       app.win.waitForSelector('.ant-image', { state: 'attached' })

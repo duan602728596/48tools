@@ -39,7 +39,7 @@ export function callback(): void {
     await app.win.waitForTimeout(2_000);
   }
 
-  test('Should get acfun video', async function(): Promise<void> {
+  test('[31]Should get acfun video', async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

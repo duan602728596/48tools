@@ -45,19 +45,19 @@ export function callback(): void {
     expect(images.length).toEqual(15);
   }
 
-  test('Should get SNH48 public performance video data', async function(): Promise<void> {
+  test('[21]Should get SNH48 public performance video data', async function(): Promise<void> {
     await getTeamsVideoData('SNH48');
   });
 
-  test('Should get BEJ48 public performance video data', async function(): Promise<void> {
+  test('[22]Should get BEJ48 public performance video data', async function(): Promise<void> {
     await getTeamsVideoData('BEJ48');
   });
 
-  test('Should get GNZ48 public performance video data', async function(): Promise<void> {
+  test('[23]Should get GNZ48 public performance video data', async function(): Promise<void> {
     await getTeamsVideoData('GNZ48');
   });
 
-  test('Should get CKG48 public performance video data', async function(): Promise<void> {
+  test('[24]Should get CKG48 public performance video data', async function(): Promise<void> {
     await getTeamsVideoData('CKG48');
   });
 }

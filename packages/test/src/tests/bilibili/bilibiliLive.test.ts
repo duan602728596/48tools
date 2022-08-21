@@ -27,7 +27,7 @@ export function callback(): void {
     app = null;
   });
 
-  test('Should get bilibili live video', async function(): Promise<void> {
+  test('[44]Should get bilibili live video', async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
