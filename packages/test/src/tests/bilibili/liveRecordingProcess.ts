@@ -22,9 +22,10 @@ export async function liveRecordingTypeRoomIdAndStart(app: ElectronApp, roomId: 
 
 /* 十秒后停止录制并删除添加的roomId */
 export async function stopAndDeleteRoomId(app: ElectronApp): Promise<void> {
+  await setTimeoutPromise(10_000);
+
   const actionBtns: Locator = await app.win.locator('.ant-table-cell button');
 
-  await setTimeoutPromise(10_000);
   await actionBtns.nth(0).click();
   await app.win.locator('.ant-popover-buttons button.ant-btn-primary').click();
 
