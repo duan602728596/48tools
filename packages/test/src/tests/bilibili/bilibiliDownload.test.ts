@@ -139,7 +139,7 @@ export function callback(): void {
       await app.win.click('#spaceId');
 
       // 10次键盘删除
-      for (let i: number = 0; i < 10; i++) {
+      for (let i: number = 0; i < 20; i++) {
         await app.win.keyboard.down('Backspace');
       }
     } else {
@@ -165,7 +165,7 @@ export function callback(): void {
 
     await addToDownload.nth(0).click();
     await app.win.click('.ant-modal-footer button.ant-btn');
-    await app.win.waitForTimeout(1_500);
+    await app.win.waitForTimeout(2_000);
   }
 
   // 根据ID搜索
@@ -178,12 +178,15 @@ export function callback(): void {
 
     // 犬山玉姬Official https://space.bilibili.com/12362451/
     await queryBySpaceId(12362451);
+    console.log('[43] Add 12362451');
 
     // 時雨羽衣Official https://space.bilibili.com/2601367/
     await queryBySpaceId(2601367, true);
+    console.log('[43] Add 2601367');
 
     // 音乐世界CytusII https://space.bilibili.com/270735958/
     await queryBySpaceId(270735958, true);
+    console.log('[43] Add 270735958');
 
     // 结果
     await app.win.waitForSelector('.ant-table-row');
