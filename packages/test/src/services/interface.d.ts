@@ -1,5 +1,5 @@
 /* 获取B站直播的列表 */
-export interface RoomList {
+export interface BilibiliLiveRoomList {
   module_info: object;
   list: Array<{
     roomid: number;
@@ -9,9 +9,9 @@ export interface RoomList {
   }>;
 }
 
-export interface LiveListResponse {
+export interface BilibiliLiveListResponse {
   code: number;
   data: {
-    room_list: Array<RoomList>;
+    room_list: Array<BilibiliLiveRoomList>;
   };
 }

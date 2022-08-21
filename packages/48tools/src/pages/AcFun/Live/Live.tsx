@@ -148,7 +148,7 @@ function Live(props: {}): ReactElement {
           onOk={ handleOkClick }
           onCancel={ handleCloseClick }
         >
-          <div className="h-[60px]">
+          <div className="h-[60px]" data-test-id="acfun-live-type">
             <Select className={ style.selectInput } onSelect={ (value: string): string => (ctx.player = value) }>
               {
                 representation.map((o: LiveRepresentation): ReactElement => (

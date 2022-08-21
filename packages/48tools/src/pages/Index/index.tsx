@@ -85,7 +85,13 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       hBtn: true,
       testId: 'acfun-download-link'
     },
-    { name: 'A站直播抓取', url: '/AcFun/Live', icon: IconAcFunLogo, hBtn: true }
+    {
+      name: 'A站直播抓取',
+      url: '/AcFun/Live',
+      icon: IconAcFunLogo,
+      hBtn: true,
+      testId: 'acfun-live-link'
+    }
   ],
   [
     {
