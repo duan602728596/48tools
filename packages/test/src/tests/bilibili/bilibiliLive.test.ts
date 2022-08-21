@@ -4,10 +4,9 @@ import { test, expect } from '@playwright/test';
 import type { JSHandle, Locator, ElementHandle } from 'playwright';
 import fse from 'fs-extra';
 import { isFileExists } from '@sweet-milktea/utils';
-import type Electron from 'electron';
-import type { IpcMainInvokeEvent, SaveDialogOptions, SaveDialogReturnValue } from 'electron';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
+import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
 import * as config from '../../utils/config.js';
 import { getLiveList } from '../../services/services.js';
 import type { LiveListResponse } from '../../services/interface.js';
@@ -36,23 +35,12 @@ export function callback(): void {
     const downloadVideoPath: string = path.join(config.bilibiliDir, 'bilibili-live.flv');
 
     await fse.ensureDir(config.bilibiliDir);
-    await app.electronApp.evaluate(({ ipcMain }: typeof Electron, _downloadVideoPath: string): void => {
-      ipcMain.removeHandler('show-save-dialog');
-      ipcMain.handle(
-        'show-save-dialog',
-        function(event: IpcMainInvokeEvent, options: SaveDialogOptions): Promise<SaveDialogReturnValue> {
-          return Promise.resolve({
-            canceled: false,
-            filePath: _downloadVideoPath
-          });
-        });
-    }, downloadVideoPath);
+    await mockShowSaveDialog(app, downloadVideoPath);
 
     // 设置ffmpeg的位置
     const [liveList]: [LiveListResponse, JSHandle<void>, void] = await Promise.all([
       getLiveList(),
-      app.win.evaluateHandle(
-        (ffmpegPath: string): void => localStorage.setItem('FFMPEG_PATH', ffmpegPath), config.ffmpegPath),
+      setFFmpegPath(app),
       (async (): Promise<void> => {
         await testIdClick(app, 'bilibili-live-link');
         await testIdClick(app, 'bilibili-add-live-id-btn');
