@@ -1,6 +1,5 @@
 import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
 import type { Agents as GotAgents } from 'got';
-import { isTest } from '../../../utils/utils';
 
 const proxyAgentOptions: HttpProxyAgentOptions | HttpsProxyAgentOptions = {
   keepAlive: true,
@@ -25,7 +24,11 @@ const proxyAgentOptionsChineseMainland: HttpProxyAgentOptions | HttpsProxyAgentO
   proxy: atob('aHR0cDovL2Nocm9tZS51ZnVuci5tZTo3Nzc3')
 };
 
-export const gotAgentChineseMainland: GotAgents | undefined = isTest ? {
-  http: new HttpProxyAgent(proxyAgentOptionsChineseMainland),
-  https: new HttpsProxyAgent(proxyAgentOptionsChineseMainland)
-} : undefined;
+export let gotAgentChineseMainland: GotAgents | undefined = undefined;
+
+if (process.env.TEST) {
+  gotAgentChineseMainland = {
+    http: new HttpProxyAgent(proxyAgentOptionsChineseMainland),
+    https: new HttpsProxyAgent(proxyAgentOptionsChineseMainland)
+  };
+}
