@@ -46,8 +46,15 @@ export function callback(): void {
     }
 
     await app.win.click('.ant-modal-footer button.ant-btn-primary');
-    await app.win.waitForTimeout(2_000);
-    await app.win.waitForSelector('.ant-modal-footer button.ant-btn-primary:not(.ant-btn-loading)');
+    await app.win.waitForFunction((): boolean => {
+      const wrap: HTMLElement | null = document.querySelector('.ant-modal-wrap');
+
+      if (!wrap) {
+        return true;
+      }
+
+      return wrap.style.display === 'none';
+    });
     await app.win.waitForTimeout(2_000);
   }
 

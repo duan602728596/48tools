@@ -36,6 +36,15 @@ export function callback(): void {
     await selectItemClick(app, 'acfun-download-form-type', selectItemTitle);
     await app.win.type('#id', id);
     await app.win.click('.ant-modal-footer button.ant-btn-primary');
+    await app.win.waitForFunction((): boolean => {
+      const wrap: HTMLElement | null = document.querySelector('.ant-modal-wrap');
+
+      if (!wrap) {
+        return true;
+      }
+
+      return wrap.style.display === 'none';
+    });
     await app.win.waitForTimeout(2_000);
   }
 
