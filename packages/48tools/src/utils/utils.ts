@@ -127,3 +127,5 @@ export async function detectPort(port: number, ignorePort: Array<number> = []): 
 
   return newNumber;
 }
+
+export const isTest: boolean = !!process.env.TEST;

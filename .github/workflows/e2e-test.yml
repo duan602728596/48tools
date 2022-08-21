@@ -29,7 +29,7 @@ jobs:
       - run: npm run dev
         working-directory: packages/main
 
-      - run: npm run build
+      - run: npm run build:test
         working-directory: packages/48tools
 
       - run: npm run download
