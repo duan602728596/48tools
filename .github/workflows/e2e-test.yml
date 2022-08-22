@@ -1,0 +1,54 @@
+name: e2e test CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: macos-12
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm run install:cn
+
+      - run: npm run build
+        working-directory: packages/darkTheme
+
+      - run: npm run dev
+        working-directory: packages/main
+
+      - run: npm run build:test
+        working-directory: packages/48tools
+
+      - run: npm run download
+        working-directory: packages/test
+
+      - run: npm run test
+        working-directory: packages/test
+
+      - run: npm run zip
+        working-directory: packages/test
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: test-result
+          tag_name: test-result
+          draft: false
+          prerelease: false
+          files: |
+            dist/media.zip
+          working-directory: packages/test
