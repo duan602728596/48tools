@@ -3,7 +3,7 @@ import type { ElementHandle } from 'playwright';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
-import Names from '../../utils/Names';
+import Names from '../../utils/Names.js';
 
 const testNames: Names = new Names('acfun-download', ['default']);
 
