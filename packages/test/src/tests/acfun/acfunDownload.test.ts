@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
-import type { Locator, ElementHandle } from 'playwright';
+import type { ElementHandle } from 'playwright';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
+import Names from '../../utils/Names';
+
+const testNames: Names = new Names('acfun-download', ['default']);
 
 /* acfun视频下载 */
 export const title: string = 'AcFun/Download Page';
@@ -11,7 +14,7 @@ export function callback(): void {
   let app: ElectronApp | null = null;
 
   test.beforeEach(async function(): Promise<void> {
-    app = new ElectronApp();
+    app = new ElectronApp({ mediaName: testNames.name });
     await app.init();
   });
 

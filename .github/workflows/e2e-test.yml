@@ -51,7 +51,6 @@ jobs:
           name: test-result
           tag_name: test-result
           draft: false
-          prerelease: false
+          prerelease: true
           files: |
-            dist/media.zip
-          working-directory: packages/test
+            packages/test/dist/media.zip
