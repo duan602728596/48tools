@@ -10,6 +10,9 @@ export const ffmpegPath: string = path.join(__dirname, `../../ffmpeg/bin/ffmpeg$
 // 临时文件
 export const testDir: string = path.join(__dirname, '../../dist');
 
+// 视频地址
+export const mediaDir: string = path.join(testDir, 'media');
+
 // bilibili文件夹
 export const bilibiliDir: string = path.join(testDir, 'bilibili');
 
