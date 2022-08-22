@@ -22,7 +22,7 @@ export function callback(): void {
   let app: ElectronApp | null = null;
 
   test.beforeEach(async function(): Promise<void> {
-    app = new ElectronApp();
+    app = new ElectronApp({ mediaName: testNames.name });
     await app.init();
   });
 
