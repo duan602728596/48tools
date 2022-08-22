@@ -56,7 +56,7 @@ class ElectronApp {
   async close(): Promise<void> {
     if (typeof this.timer !== 'undefined') {
       clearTimeout(this.timer);
-      await setTimeoutPromise(1_500);
+      await setTimeoutPromise(3_500);
     }
 
     await this.electronApp.close();
