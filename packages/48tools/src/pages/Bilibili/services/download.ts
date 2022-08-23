@@ -1,7 +1,21 @@
-import got, { type Response as GotResponse } from 'got';
+import got, { type Response as GotResponse, Agents as GotAgents } from 'got';
+import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
 import { getBilibiliCookie } from '../../../utils/utils';
-import { gotAgent, gotAgentChineseMainland } from './proxy';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData } from './interface';
+
+const proxyAgentOptions: HttpProxyAgentOptions | HttpsProxyAgentOptions = {
+  keepAlive: true,
+  keepAliveMsecs: 1000,
+  maxSockets: 256,
+  maxFreeSockets: 256,
+  scheduling: 'lifo',
+  proxy: atob('aHR0cDovL2Nocm9tZXR3LnVmdW5yLm1lOjc3Nzc=')
+};
+
+const gotAgent: GotAgents = {
+  http: new HttpProxyAgent(proxyAgentOptions),
+  https: new HttpsProxyAgent(proxyAgentOptions)
+};
 
 // B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
 // 请求bilibili的html
@@ -14,7 +28,7 @@ export async function requestBilibiliHtml(url: string, proxy: boolean): Promise<
         + 'Chrome/84.0.4147.38 Safari/537.36 Edg/84.0.522.15',
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : gotAgentChineseMainland
+    agent: proxy ? gotAgent : undefined
   });
 
   return res.body;
@@ -33,7 +47,7 @@ export async function requestVideoInfo(payload: string, sign: string, proxy: boo
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : gotAgentChineseMainland
+    agent: proxy ? gotAgent : undefined
   });
 
   return res.body;
@@ -52,7 +66,7 @@ export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: b
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : gotAgentChineseMainland
+    agent: proxy ? gotAgent : undefined
   });
 
   return res.body;
@@ -70,7 +84,7 @@ export async function requestAudioInfo(auid: string, proxy: boolean): Promise<Au
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : gotAgentChineseMainland
+    agent: proxy ? gotAgent : undefined
   });
 
   return res.body;
@@ -107,7 +121,7 @@ export async function requestWebInterfaceView(id: string, type: string, proxy: b
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : gotAgentChineseMainland
+    agent: proxy ? gotAgent : undefined
   });
 
   return res.body;

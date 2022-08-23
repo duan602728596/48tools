@@ -1,6 +1,5 @@
 import * as process from 'node:process';
 import * as path from 'node:path';
-import * as webpack from 'webpack';
 // @ts-ignore
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
@@ -8,7 +7,6 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
-const isTest: boolean = process.env.TEST === 'true';
 const analyzer: boolean = process.env.ANALYZER === 'true';
 
 // html代码压缩配置
@@ -139,9 +137,6 @@ export default function(info: object): { [key: string]: any } {
     ],
     plugins: [
       new AntdDayjsWebpackPlugin(),
-      isTest && new webpack.DefinePlugin({
-        'process.env.TEST': JSON.stringify(true)
-      }),
       analyzer && new BundleAnalyzerPlugin()
     ].filter(Boolean)
   };
