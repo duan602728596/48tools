@@ -3,9 +3,6 @@ import type { Locator, ElementHandle } from 'playwright';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
-import Names from '../../utils/Names.js';
-
-const testNames: Names = new Names('bilibili-download', ['default', 'proxy', 'byid']);
 
 /* B站视频下载测试 */
 export const title: string = 'Bilibili/Download Page';
@@ -14,7 +11,7 @@ export function callback(): void {
   let app: ElectronApp | null = null;
 
   test.beforeEach(async function(): Promise<void> {
-    app = new ElectronApp({ mediaName: testNames.name });
+    app = new ElectronApp();
     await app.init();
   });
 

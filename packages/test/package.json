@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "rimraf ./dist && playwright test",
-    "download": "rimraf ./ffmpeg && node ffmpegDownload.mjs",
-    "zip": "node zip.mjs"
+    "download": "rimraf ./ffmpeg && node ffmpegDownload.mjs"
   },
   "dependencies": {
     "@playwright/test": "^1.23.4",

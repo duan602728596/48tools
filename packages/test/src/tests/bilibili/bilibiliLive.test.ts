@@ -9,10 +9,7 @@ import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js'
 import * as config from '../../utils/config.js';
 import { getLiveList } from '../../services/services.js';
 import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from './liveRecordingProcess.js';
-import Names from '../../utils/Names.js';
 import type { BilibiliLiveListResponse } from '../../services/interface.js';
-
-const testNames: Names = new Names('bilibili-live', ['default']);
 
 /* B站直播测试 */
 export const title: string = 'Bilibili/Live Page';
@@ -21,7 +18,7 @@ export function callback(): void {
   let app: ElectronApp | null = null;
 
   test.beforeEach(async function(): Promise<void> {
-    app = new ElectronApp({ mediaName: testNames.name });
+    app = new ElectronApp();
     await app.init();
   });
 
