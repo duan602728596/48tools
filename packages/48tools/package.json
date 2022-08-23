@@ -8,9 +8,7 @@
     "runel": "cross-env NODE_ENV=development electron ./",
     "dll": "cross-env NODE_ENV=development milktea-esm dll",
     "start": "npm run clean && cross-env NODE_ENV=development NODE_OPTIONS=\"--max_old_space_size=4096\" milktea-esm start",
-    "start:test": "npm run clean && cross-env NODE_ENV=development TEST=true NODE_OPTIONS=\"--max_old_space_size=4096\" milktea-esm start",
     "build": "npm run clean && cross-env NODE_ENV=production milktea-esm build",
-    "build:test": "npm run clean && cross-env NODE_ENV=production TEST=true milktea-esm build",
     "build:analyzer": "npm run clean && cross-env NODE_ENV=production ANALYZER=true milktea-esm build",
     "clean": "rimraf ./dist"
   },
