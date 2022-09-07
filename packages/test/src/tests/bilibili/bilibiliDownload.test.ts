@@ -1,8 +1,14 @@
+import path from 'node:path';
+import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
+import fse from 'fs-extra';
+import { isFileExists } from '@sweet-milktea/utils';
+import * as config from '../../utils/config.js';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
+import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
 
 /* B站视频下载测试 */
 export const title: string = 'Bilibili/Download Page';
@@ -199,5 +205,39 @@ export function callback(): void {
     const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
     expect(willBeDownload.length).toEqual(3);
+  });
+
+  // 视频的下载
+  test('[45]Should download bilibili video', async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    const downloadVideoPath: string = path.join(config.bilibiliDir, '1CS4y1W7ef.flv');
+
+    await fse.ensureDir(config.bilibiliDir);
+    await mockShowSaveDialog(app, downloadVideoPath);
+
+    await Promise.all([
+      setFFmpegPath(app),
+      (async (): Promise<void> => {
+        await testIdClick(app, 'bilibili-download-link');
+        await query('视频（BV）', '1CS4y1W7ef'); // https://www.bilibili.com/video/BV1CS4y1W7ef/
+      })()
+    ]);
+
+    // 下载
+    const actionBtns: Locator = await app.win.locator('.ant-table-cell button');
+
+    await actionBtns.nth(0).click();
+    await setTimeoutPromise(5_000);
+    await app.win.waitForFunction((): boolean => {
+      const button: HTMLButtonElement | null = document.querySelector('.ant-table-cell button');
+
+      if (!button) return false;
+
+      return !button.disabled;
+    });
+    expect(await isFileExists(downloadVideoPath)).toEqual(true);
   });
 }
