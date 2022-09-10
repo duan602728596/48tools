@@ -1,8 +1,14 @@
+import path from 'node:path';
+import { setTimeout as setTimeoutPromise } from 'timers/promises';
 import { test, expect } from '@playwright/test';
-import type { ElementHandle } from 'playwright';
+import type { ElementHandle, Locator } from 'playwright';
+import fse from 'fs-extra';
+import { isFileExists } from '@sweet-milktea/utils';
+import * as config from '../../utils/config.js';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
+import { mockShowSaveDialog, setFFmpegPath } from '../../actions/utilActions.js';
 
 /* acfun视频下载 */
 export const title: string = 'AcFun/Download Page';
@@ -80,5 +86,36 @@ export function callback(): void {
     const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
     expect(willBeDownload.length).toEqual(6);
+  });
+
+  test('[33]Should download acfun video', async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    const downloadVideoPath: string = path.join(config.acfunDir, '36727175.mp4');
+
+    await fse.ensureDir(config.acfunDir);
+    await mockShowSaveDialog(app, downloadVideoPath);
+
+    await Promise.all([
+      setFFmpegPath(app),
+      (async (): Promise<void> => {
+        await testIdClick(app, 'acfun-download-link');
+        await query('视频（ac）', '36727175');
+      })()
+    ]);
+
+    // 下载
+    await selectItemClick(app, await app.win.locator('.ant-table-cell .ant-select'), '360P');
+    await setTimeoutPromise(5_000);
+    await app.win.waitForFunction((): boolean => {
+      const button: HTMLButtonElement | null = document.querySelector('.ant-table-cell button');
+
+      if (!button) return false;
+
+      return !button.disabled;
+    });
+    expect(await isFileExists(downloadVideoPath)).toEqual(true);
   });
 }
