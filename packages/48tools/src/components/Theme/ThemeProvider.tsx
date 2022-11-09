@@ -67,7 +67,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   }
 
   const ChangeThemeElement: ReactElement = (
-    <Fragment>
+    <div>
       <Tooltip title="切换主题">
         <Button type="text" icon={ <IconSkinTwoTone /> } onClick={ handleThemeModalOpenClick } />
       </Tooltip>
@@ -87,7 +87,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
           />
         </div>
       </Modal>
-    </Fragment>
+    </div>
   );
 
   useEffect(function(): void {
