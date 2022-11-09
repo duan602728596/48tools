@@ -251,7 +251,9 @@ function Pocket48Record(props: {}): ReactElement {
       const time: string = getFileTime(record.ctime);
 
       if (res.content.msgFilePath === '') {
-        return message.warn('弹幕文件不存在！');
+        message.warning('弹幕文件不存在！');
+
+        return;
       }
 
       const { ext }: ParsedPath = path.parse(res.content.msgFilePath);

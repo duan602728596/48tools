@@ -16,7 +16,7 @@ import {
 import { ConfigProvider, Avatar, Tag, Button } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
-import classNames from 'classnames';
+import * as classNames from 'classnames';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
 import ThemeProvider from '../../../../components/Theme/ThemeProvider';

@@ -82,7 +82,9 @@ function Pocket48Live(props: {}): ReactElement {
       = await dispatch(IDBGetPocket48LiveOptions({ query: OPTIONS_NAME }));
 
     if (!result.result) {
-      return message.warn('请先配置自动抓取相关配置。');
+      message.warning('请先配置自动抓取相关配置。');
+
+      return;
     }
 
     // 格式化配置数据
@@ -91,7 +93,9 @@ function Pocket48Live(props: {}): ReactElement {
       .filter((o: string): boolean => o !== '');
 
     if (usersArr.length === 0) {
-      return message.warn('请先配置自动抓取监听的成员直播。');
+      message.info('请先配置自动抓取监听的成员直播。');
+
+      return;
     }
 
     const onion: Onion = new Onion();

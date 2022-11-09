@@ -7,7 +7,7 @@ import Icon, {
   BugTwoTone as IconBugTwoTone,
   WeiboOutlined as IconWeiboOutlined
 } from '@ant-design/icons';
-import classNames from 'classnames';
+import * as classNames from 'classnames';
 import style from './index.sass';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';

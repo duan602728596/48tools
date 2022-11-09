@@ -1,7 +1,7 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { weiboLoginListObjectStoreName } from '../../../utils/IDB/IDBRedux';
-import type { WeiboAccount } from '../../../types';
+import type { WeiboAccount, IDBActionFunc } from '../../../types';
 
 export interface WeiboLoginInitialState {
   accountList: Array<WeiboAccount>;
@@ -46,24 +46,24 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
   }
 });
 
-export const { setAddWeiboAccountList, setAccountList, setDeleteWeiboAccount }: CaseReducerActions<CaseReducers> = actions;
+export const { setAddWeiboAccountList, setAccountList, setDeleteWeiboAccount }: Record<string, Function> = actions;
 
 // 保存微博账号
 export const IDBSaveAccount: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: weiboLoginListObjectStoreName,
-  successAction: setAddWeiboAccountList
+  successAction: setAddWeiboAccountList as IDBActionFunc
 });
 
 // 获取微博账号列表
 export const IDBCursorAccountList: CursorDispatchFunc = IDBRedux.cursorAction({
   objectStoreName: weiboLoginListObjectStoreName,
-  successAction: setAccountList
+  successAction: setAccountList as IDBActionFunc
 });
 
 // 删除微博登陆账号
 export const IDBDeleteAccount: QueryDispatchFunc = IDBRedux.deleteAction({
   objectStoreName: weiboLoginListObjectStoreName,
-  successAction: setDeleteWeiboAccount
+  successAction: setDeleteWeiboAccount as IDBActionFunc
 });
 
 export default { weiboLogin: reducer };

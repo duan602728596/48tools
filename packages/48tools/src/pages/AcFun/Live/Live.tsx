@@ -128,7 +128,7 @@ function Live(props: {}): ReactElement {
           next();
           setVisible(false);
         } else {
-          message.warn('请先选择一个直播源。');
+          message.warning('请先选择一个直播源。');
         }
       }
 
@@ -181,8 +181,9 @@ function Live(props: {}): ReactElement {
         token = tokenRes['acfun.midground.api_st'];
       } catch (err) {
         console.error(err);
+        message.error('获取直播地址失败！可能是你的Cookie已过期，请重新登陆。');
 
-        return message.error('获取直播地址失败！可能是你的Cookie已过期，请重新登陆。');
+        return;
       }
     } else {
       const tokenRes: AppVisitorLogin = await requestRestAppVisitorLogin(didCookie);
@@ -194,7 +195,9 @@ function Live(props: {}): ReactElement {
     const playerRes: LiveWebStartPlay = await requestPlayUrl(didCookie, token, userId, !cookie, record.roomId);
 
     if (playerRes.result !== 1) {
-      return message.warn(playerRes.error_msg ?? '当前直播未开始！');
+      message.warning(playerRes.error_msg ?? '当前直播未开始！');
+
+      return;
     }
 
     const videoPlayRes: LiveVideoPlayRes = JSON.parse(playerRes.data.videoPlayRes);

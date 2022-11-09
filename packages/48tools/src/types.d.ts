@@ -17,3 +17,7 @@ export interface WeiboAccount {
   cookie: string;
   lastLoginTime: string; // 最后登陆时间
 }
+
+export interface IDBActionFunc {
+  (ActionResult: any): any;
+}

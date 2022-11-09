@@ -20,7 +20,7 @@ import {
 } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
 import * as dayjs from 'dayjs';
-import classNames from 'classnames';
+import * as classNames from 'classnames';
 import style from './concat.sass';
 import { showOpenDialog, showSaveDialog } from '../../../utils/remote/dialog';
 import getConcatVideoWorker from './concatVideo.worker/getConcatVideoWorker';

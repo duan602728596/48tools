@@ -5,9 +5,10 @@ import {
   useState,
   useEffect,
   type ReactElement,
+  type ReactNode,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent, ReactNode
+  type MouseEvent
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -107,7 +108,9 @@ function InVideo(props: {}): ReactElement {
       const m3u8Url: { url: string; title: string } | null = await parseVideoItem(record, quality);
 
       if (!m3u8Url) {
-        return message.warn('视频不存在！');
+        message.warning('视频不存在！');
+
+        return;
       }
 
       const result: SaveDialogReturnValue = await showSaveDialog({

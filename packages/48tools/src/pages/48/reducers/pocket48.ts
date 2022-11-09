@@ -4,7 +4,6 @@ import {
   type Slice,
   type SliceCaseReducers,
   type PayloadAction,
-  type CaseReducerActions,
   type AsyncThunk,
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
@@ -157,5 +156,5 @@ export const {
   setDeleteRecordChildList,
   setRecordFields,
   setDownloadProgress
-}: CaseReducerActions<CaseReducers> = actions;
+}: Record<string, Function> = actions;
 export default { pocket48: reducer };

@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { ConcatItem } from '../types';
 
 export interface ConcatInitialState {
@@ -47,5 +47,5 @@ export const {
   setConcatList,
   setConcatListDelete,
   setConcatWorker
-}: CaseReducerActions<CaseReducers> = actions;
+}: Record<string, Function> = actions;
 export default { concat: reducer };

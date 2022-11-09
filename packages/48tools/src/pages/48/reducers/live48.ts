@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
 
@@ -117,5 +117,5 @@ export const {
   setVideoListChildAdd,
   setVideoListChildDelete,
   setDownloadProgress
-}: CaseReducerActions<CaseReducers> = actions;
+}: Record<string, Function> = actions;
 export default { live48: reducer };

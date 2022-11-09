@@ -4,7 +4,6 @@ import {
   type Slice,
   type SliceCaseReducers,
   type PayloadAction,
-  type CaseReducerActions,
   type AsyncThunk,
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
@@ -83,5 +82,5 @@ const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseRedu
   }
 });
 
-export const { setCheckIn }: CaseReducerActions<CaseReducers> = actions;
+export const { setCheckIn }: Record<string, Function> = actions;
 export default { weiboSuper: reducer };

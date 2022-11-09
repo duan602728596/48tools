@@ -6,8 +6,7 @@ import {
   type EntityAdapter,
   type EntityState,
   type EntitySelectors,
-  type PayloadAction,
-  type CaseReducerActions
+  type PayloadAction
 } from '@reduxjs/toolkit';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
@@ -53,5 +52,5 @@ export const {
   setAddDownloadList,
   setDeleteDownloadList,
   setDownloadProgress
-}: CaseReducerActions<CaseReducers> = actions;
+}: Record<string, Function> = actions;
 export default { douyinDownload: reducer };

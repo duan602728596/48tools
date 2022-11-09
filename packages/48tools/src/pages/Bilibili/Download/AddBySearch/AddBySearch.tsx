@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Input, Form, Table, Spin, message, type FormInstance } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import classNames from 'classnames';
+import * as classNames from 'classnames';
 import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
 import { parseVideoList, parseVideoUrlV2 } from '../parseBilibiliUrl';
@@ -64,7 +64,7 @@ function AddBySearch(props: {}): ReactElement {
         }));
         message.success('添加到下载队列！');
       } else {
-        message.warn('没有获取到媒体地址！');
+        message.warning('没有获取到媒体地址！');
       }
     } catch (err) {
       console.error(err);

@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { WebWorkerChildItem } from '../../../types';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
@@ -72,5 +72,5 @@ export const {
   setAddDownloadWorker,
   setDeleteDownloadWorker,
   setDownloadProgress
-}: CaseReducerActions<CaseReducers> = actions;
+}: Record<string, Function> = actions;
 export default { acfunDownload: reducer };

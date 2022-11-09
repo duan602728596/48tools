@@ -8,7 +8,7 @@ import {
   DownloadOutlined as IconDownloadOutlined,
   SwapLeftOutlined as IconSwapLeftOutlined
 } from '@ant-design/icons';
-import classNames from 'classnames';
+import * as classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 

@@ -76,7 +76,9 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
       scanResultRequest = null;
 
       if (resScanResult.result !== 0) {
-        return message.error('登陆失败！请刷新后重新登陆！');
+        message.error('登陆失败！请刷新后重新登陆！');
+
+        return;
       }
 
       // 扫描登陆成功

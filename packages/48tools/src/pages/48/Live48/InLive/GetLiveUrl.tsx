@@ -36,13 +36,17 @@ function GetLiveUrl(props: {}): ReactElement {
   // 开始直播录制
   async function handleStartInLiveSubmit(value: InLiveFormValue): Promise<void> {
     if (!value.type || !value.live) {
-      return message.warn('请选择直播！');
+      message.warning('请选择直播！');
+
+      return;
     }
 
     const liveUrl: { url: string; title: string } | null = await parseLiveUrl(value.live, value.quality);
 
     if (!liveUrl) {
-      return message.warn('当前直播未开始！');
+      message.warning('当前直播未开始！');
+
+      return;
     }
 
     // 开始录制
@@ -90,7 +94,9 @@ function GetLiveUrl(props: {}): ReactElement {
     }
 
     if (!value.type || !value.live) {
-      return message.warn('请选择直播！');
+      message.warning('请选择直播！');
+
+      return;
     }
 
     // 开始监听
@@ -120,7 +126,7 @@ function GetLiveUrl(props: {}): ReactElement {
       form.resetFields(['live']);
 
       if (liveInfo.length === 0) {
-        message.warn('当前没有公演！');
+        message.warning('当前没有公演！');
       }
     } catch (err) {
       console.error(err);

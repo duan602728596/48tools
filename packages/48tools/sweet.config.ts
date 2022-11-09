@@ -2,7 +2,6 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 // @ts-ignore
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import AntdDayjsWebpackPlugin from 'antd-dayjs-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
 
@@ -67,13 +66,9 @@ const externalsName: Array<string> = nodeModules([
 
 export default function(info: object): { [key: string]: any } {
   const plugins: Array<any> = [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
-    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName }]
-  ];
-
-  if (!isDev) {
-    plugins.unshift(['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }]);
-  }
+    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName }],
+    !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }]
+  ].filter(Boolean);
 
   const config: { [key: string]: any } = {
     frame: 'react',
@@ -136,7 +131,6 @@ export default function(info: object): { [key: string]: any } {
       }
     ],
     plugins: [
-      new AntdDayjsWebpackPlugin(),
       analyzer && new BundleAnalyzerPlugin()
     ].filter(Boolean)
   };

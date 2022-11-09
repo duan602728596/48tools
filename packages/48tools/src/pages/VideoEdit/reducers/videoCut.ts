@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { WebWorkerChildItem } from '../../../types';
 import type { CutItem } from '../types';
 
@@ -53,5 +53,5 @@ export const {
   setCutListDelete,
   setCutChildListAdd,
   setCutChildListDelete
-}: CaseReducerActions<CaseReducers> = actions;
+}: Record<string, Function> = actions;
 export default { videoCut: reducer };

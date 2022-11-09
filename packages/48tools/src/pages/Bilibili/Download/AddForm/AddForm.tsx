@@ -84,7 +84,7 @@ function AddForm(props: {}): ReactElement {
         }));
         setVisible(false);
       } else {
-        message.warn('没有获取到媒体地址！');
+        message.warning('没有获取到媒体地址！');
       }
     } catch (err) {
       message.error('地址解析失败！');
