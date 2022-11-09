@@ -7,15 +7,15 @@
     "download": "rimraf ./ffmpeg && node ffmpegDownload.mjs"
   },
   "dependencies": {
-    "@playwright/test": "^1.23.4",
+    "@playwright/test": "^1.27.1",
     "@sweet-milktea/utils": "^4.0.0",
     "fs-extra": "^10.1.0",
-    "got": "^12.3.1",
-    "playwright": "^1.23.4"
+    "got": "^12.5.2",
+    "playwright": "^1.27.1"
   },
   "devDependencies": {
     "cross-zip": "^4.0.0",
-    "jsdom": "^19.0.0",
+    "jsdom": "^20.0.2",
     "rimraf": "*"
   }
 }

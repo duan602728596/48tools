@@ -10,9 +10,9 @@
     "clean": "rimraf ./lib && rimraf ./.lib.mid"
   },
   "dependencies": {
-    "asar-node": "^3.1.0",
-    "electron-store": "^8.0.2",
-    "node-media-server": "^2.3.12"
+    "asar-node": "^3.1.1",
+    "electron-store": "^8.1.0",
+    "node-media-server": "^2.4.9"
   },
   "devDependencies": {
     "gulp": "^4.0.2",

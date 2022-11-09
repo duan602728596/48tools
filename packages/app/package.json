@@ -9,12 +9,12 @@
   },
   "main": "bin/lib/main.js",
   "dependencies": {
-    "asar-node": "^3.1.0",
-    "electron-store": "^8.0.2",
+    "asar-node": "^3.1.1",
+    "electron-store": "^8.1.0",
     "fluent-ffmpeg": "^2.1.2",
-    "got": "^11.8.3",
-    "hpagent": "^1.0.0",
-    "node-media-server": "^2.3.12",
-    "playwright-core": "^1.23.4"
+    "got": "^11.8.5",
+    "hpagent": "^1.2.0",
+    "node-media-server": "^2.4.9",
+    "playwright-core": "^1.27.1"
   }
 }
