@@ -71,7 +71,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
       <Tooltip title="切换主题">
         <Button type="text" icon={ <IconSkinTwoTone /> } onClick={ handleThemeModalOpenClick } />
       </Tooltip>
-      <Modal visible={ visible }
+      <Modal open={ visible }
         title="切换主题"
         width={ 380 }
         centered={ true }

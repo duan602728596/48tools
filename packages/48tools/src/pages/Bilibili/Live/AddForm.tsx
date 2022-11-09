@@ -52,7 +52,7 @@ function AddForm(props: {}): ReactElement {
     <Fragment>
       <Button type="primary" data-test-id="bilibili-add-live-id-btn" onClick={ handleOpenAddModalClick }>添加直播间信息</Button>
       <Modal title="添加B站直播间信息"
-        visible={ visible }
+        open={ visible }
         width={ 500 }
         afterClose={ handleAddModalClose }
         onOk={ handleAddRoomIdClick }

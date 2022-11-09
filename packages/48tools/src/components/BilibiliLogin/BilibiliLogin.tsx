@@ -25,7 +25,7 @@ function BilibiliLogin(props: {}): ReactElement {
       >
         B站账号扫码登陆
       </Button>
-      <Modal visible={ visible }
+      <Modal open={ visible }
         title="B站账号扫码登陆"
         width={ 600 }
         centered={ true }

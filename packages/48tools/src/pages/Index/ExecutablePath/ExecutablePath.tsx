@@ -68,7 +68,7 @@ function ExecutablePath(props: {}): ReactElement {
     <Fragment>
       <Button icon={ <IconChromeFilled /> } onClick={ handleOpenExecutablePathClick }>无头浏览器配置</Button>
       <Modal title="无头浏览器配置"
-        visible={ visible }
+        open={ visible }
         width={ 600 }
         centered={ true }
         afterClose={ handleResetExecutablePathClick }

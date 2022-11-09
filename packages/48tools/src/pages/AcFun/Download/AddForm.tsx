@@ -98,7 +98,7 @@ function AddForm(props: {}): ReactElement {
   return (
     <Fragment>
       <Button type="primary" data-test-id="acfun-download-add-btn" onClick={ handleOpenAddModalClick }>添加下载队列</Button>
-      <Modal visible={ visible }
+      <Modal open={ visible }
         title="添加下载任务"
         width={ 480 }
         centered={ true }

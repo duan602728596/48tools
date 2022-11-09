@@ -214,7 +214,7 @@ function Add(props: {}): ReactElement {
       </Button.Group>
       {/* 下载地址 */}
       <Modal title="选择下载地址"
-        visible={ visible }
+        open={ visible }
         width={ 400 }
         centered={ true }
         destroyOnClose={ true }

@@ -23,7 +23,7 @@ function AcFunLogin(props: {}): ReactElement {
       <Button icon={ <Icon component={ AcFunTvSvgComponent } /> } onClick={ handleOpenQrcodeClick }>
         A站账号扫码登陆
       </Button>
-      <Modal visible={ visible }
+      <Modal open={ visible }
         title="A站账号扫码登陆"
         width={ 600 }
         centered={ true }

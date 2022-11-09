@@ -52,7 +52,7 @@ function AddForm(props: {}): ReactElement {
       <Button type="primary" data-test-id="acfun-add-live-id-btn" onClick={ handleOpenAddModalClick }>添加直播间信息</Button>
       <Modal bodyStyle={{ height: '150px' }}
         title="添加B站直播间信息"
-        visible={ visible }
+        open={ visible }
         width={ 500 }
         afterClose={ handleAddModalClose }
         onOk={ handleAddRoomIdClick }

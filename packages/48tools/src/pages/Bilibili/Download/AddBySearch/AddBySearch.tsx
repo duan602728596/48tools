@@ -182,7 +182,7 @@ function AddBySearch(props: {}): ReactElement {
         个人主页批量下载
       </Button>
       <Modal title="个人主页批量下载"
-        visible={ visible }
+        open={ visible }
         width={ 800 }
         centered={ true }
         destroyOnClose={ true }

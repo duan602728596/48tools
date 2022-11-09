@@ -139,7 +139,7 @@ function Live(props: {}): ReactElement {
 
       return (
         <Modal title="选择直播源"
-          visible={ visible }
+          open={ visible }
           width={ 400 }
           centered={ true }
           okText="开始录制"

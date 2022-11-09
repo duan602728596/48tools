@@ -87,7 +87,7 @@ function FFmpegOption(props: {}): ReactElement {
         使用前先配置FFmpeg
       </span>
       <Modal title="FFmpeg配置"
-        visible={ visible }
+        open={ visible }
         width={ 600 }
         centered={ true }
         afterClose={ handleResetFFmpegOptionClick }
