@@ -2,7 +2,7 @@ import {
   session,
   ipcMain,
   type OnBeforeRequestListenerDetails,
-  type Response,
+  type CallbackResponse,
   type IpcMainEvent
 } from 'electron';
 
@@ -13,7 +13,7 @@ let fpCache: string;
 export function toutiaoRequestInit(): void {
   session.defaultSession.webRequest.onBeforeRequest({
     urls: ['*://verify.snssdk.com/*']
-  }, function(details: OnBeforeRequestListenerDetails, callback: (res: Response) => void): void {
+  }, function(details: OnBeforeRequestListenerDetails, callback: (res: CallbackResponse) => void): void {
     if (details.url.includes('captcha/get') || details.url.includes('captcha/verify')) {
       const urlResult: URL = new URL(details.url);
       const searchFpValue: string | null = urlResult.searchParams.get('fp');
