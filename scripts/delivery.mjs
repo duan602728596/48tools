@@ -5,7 +5,6 @@ import { cwd, command, isWindows } from './utils.mjs';
 async function delivery() {
   const npm = isWindows ? 'npm.cmd' : 'npm';
 
-  await command(npm, ['run', 'build'], path.join(cwd, 'packages/darkTheme'));
   await command(npm, ['run', 'build'], path.join(cwd, 'packages/main'));
   await command(npm, ['run', 'build'], path.join(cwd, 'packages/48tools'));
   await command('node', ['--experimental-json-modules', './scripts/unpack.mjs'], cwd);
