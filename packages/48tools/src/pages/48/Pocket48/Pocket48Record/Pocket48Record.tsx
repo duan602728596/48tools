@@ -16,7 +16,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfirm, Progress } from 'antd';
+import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfirm, Progress, Input } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
@@ -423,24 +423,28 @@ function Pocket48Record(props: {}): ReactElement {
         {/* 队伍和当前人的搜索 */}
         <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
           <Space size={ 0 }>
-            <Form.Item name="groupId" noStyle={ true }>
-              <Select className="w-[130px]">
-                <Select.Option value="all">全部</Select.Option>
-                <Select.Option value={ 19 }>明星殿堂</Select.Option>
-                <Select.Option value={ 17 }>THE9</Select.Option>
-                <Select.Option value={ 18 }>硬糖少女303</Select.Option>
-                <Select.Option value={ 20 }>丝芭影视</Select.Option>
-                <Select.Option value={ 10 }>SNH48</Select.Option>
-                <Select.Option value={ 11 }>BEJ48</Select.Option>
-                <Select.Option value={ 12 }>GNZ48</Select.Option>
-                <Select.Option value={ 14 }>CKG48</Select.Option>
-                <Select.Option value={ 15 }>IDFT</Select.Option>
-                <Select.Option value={ 16 }>海外练习生</Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name="userId" noStyle={ true }>
-              <InputNumber className="w-[130px]" placeholder="请输入成员ID" />
-            </Form.Item>
+            <div className="inline-block mr-[8px] align-super">
+              <Input.Group compact={ true }>
+                <Form.Item name="groupId" noStyle={ true }>
+                  <Select className="w-[130px]">
+                    <Select.Option value="all">全部</Select.Option>
+                    <Select.Option value={ 19 }>明星殿堂</Select.Option>
+                    <Select.Option value={ 17 }>THE9</Select.Option>
+                    <Select.Option value={ 18 }>硬糖少女303</Select.Option>
+                    <Select.Option value={ 20 }>丝芭影视</Select.Option>
+                    <Select.Option value={ 10 }>SNH48</Select.Option>
+                    <Select.Option value={ 11 }>BEJ48</Select.Option>
+                    <Select.Option value={ 12 }>GNZ48</Select.Option>
+                    <Select.Option value={ 14 }>CKG48</Select.Option>
+                    <Select.Option value={ 15 }>IDFT</Select.Option>
+                    <Select.Option value={ 16 }>海外练习生</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item name="userId" noStyle={ true }>
+                  <InputNumber className="w-[130px]" placeholder="请输入成员ID" />
+                </Form.Item>
+              </Input.Group>
+            </div>
             <Button.Group>
               <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
               <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
