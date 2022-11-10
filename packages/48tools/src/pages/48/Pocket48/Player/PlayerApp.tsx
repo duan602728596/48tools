@@ -135,7 +135,7 @@ function PlayerApp(props: {}): ReactElement {
 
       return [
         <Avatar key="avatar" src={ source(content.user.userAvatar) } />,
-        <span key="username" className="ml-[6px] text-[12px]">{ content.user.userName }</span>
+        <span key="username" className={ classNames('ml-[6px] text-[12px]', style.text) }>{ content.user.userName }</span>
       ];
     } else {
       return null;
@@ -159,7 +159,7 @@ function PlayerApp(props: {}): ReactElement {
       <AntdConfig>
         <div className="p-[16px]">
           <header className="mb-[8px]">
-            <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">{ search.title }</h1>
+            <h1 className={ classNames('inline-block mb-[8px] mr-[6px] text-[16px]', style.text) }>{ search.title }</h1>
             { search.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
             <div className="flex">
               <div className="grow">{ infoRender() }</div>

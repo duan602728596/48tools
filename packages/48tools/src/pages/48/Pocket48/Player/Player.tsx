@@ -1,4 +1,5 @@
 import { createRoot, type Root } from 'react-dom/client';
+import 'antd/dist/reset.css';
 import PlayerApp from './PlayerApp';
 import '../../../../main.tailwindcss.css';
 
