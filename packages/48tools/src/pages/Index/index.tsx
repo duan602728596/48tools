@@ -134,7 +134,8 @@ function nativeRender(): Array<ReactNode> {
           linkProps={{ to: navItem.url }}
           buttonProps={{
             className: navItem.hBtn ? 'overflow-hidden' : undefined,
-            icon: navItem.icon
+            icon: navItem.icon,
+            'data-test-id': navItem.testId
           }}
         >
           { navItem.name }

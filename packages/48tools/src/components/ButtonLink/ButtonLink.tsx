@@ -6,7 +6,7 @@ import { pick } from '../../utils/lodash';
 
 export interface ButtonLinkProps {
   linkProps: LinkProps;
-  buttonProps?: ButtonProps;
+  buttonProps?: ButtonProps & Record<string, unknown>;
   children?: ReactNode;
 }
 
