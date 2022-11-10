@@ -3,10 +3,10 @@ import { useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Link } from 'react-router-dom';
-import { Form, Input, InputNumber, Button, message } from 'antd';
-import type { FormInstance } from 'antd/es/form';
+import { Form, Input, InputNumber, Button, message, type FormInstance } from 'antd';
 import style from './liveOptions.sass';
 import { showOpenDialog } from '../../../../utils/remote/dialog';
+import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
 import { IDBGetPocket48LiveOptions, IDBSavePocket48LiveOptions } from '../../reducers/pocket48';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 
@@ -87,9 +87,7 @@ function LiveOptions(props: {}): ReactElement {
         <Button onClick={ handleChangeDirClick }>选择目录</Button>
       </Form.Item>
       <Button.Group>
-        <Link to="/48/Pocket48Live">
-          <Button type="primary" danger={ true }>返回</Button>
-        </Link>
+        <ButtonLink linkProps={{ to: '/48/Pocket48Live' }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>
         <Button type="primary" htmlType="submit">保存</Button>
       </Button.Group>
     </Form>

@@ -1,7 +1,6 @@
 import type { ReactElement, ReactNode } from 'react';
 import * as PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Button } from 'antd';
+import ButtonLink from '../ButtonLink/ButtonLink';
 
 interface HeaderProps {
   to?: string;
@@ -19,9 +18,7 @@ function Header(props: HeaderProps): ReactElement {
   return (
     <header className="flex mb-[8px]">
       <div className="grow">
-        <Link to={ to }>
-          <Button type="primary" danger={ true }>返回</Button>
-        </Link>
+        <ButtonLink linkProps={{ to }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>
       </div>
       <div>{ children }</div>
     </header>

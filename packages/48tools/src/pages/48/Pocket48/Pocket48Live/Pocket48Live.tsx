@@ -23,6 +23,7 @@ import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadW
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
+import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
 import { requestLiveRoomInfo } from '../../services/pocket48';
 import {
   reqLiveList,
@@ -328,9 +329,7 @@ function Pocket48Live(props: {}): ReactElement {
               ? <Button type="primary" danger={ true } onClick={ handleStopAutoGrabClick }>停止自动抓取</Button>
               : <Button onClick={ handleStartAutoGrabClick }>开始自动抓取</Button>
           }
-          <Link to="/48/LiveOptions">
-            <Button>自动抓取配置</Button>
-          </Link>
+          <ButtonLink linkProps={{ to: '/48/LiveOptions' }}>自动抓取配置</ButtonLink>
         </Button.Group>
       </Header>
       <Table size="middle"
