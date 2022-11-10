@@ -18,5 +18,8 @@
     "postcss-cli": "^10.0.0",
     "rimraf": "*",
     "typescript": "*"
+  },
+  "peerDependencies": {
+    "antd": "^4.17.0"
   }
 }
