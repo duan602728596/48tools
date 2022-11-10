@@ -18,13 +18,13 @@ const root: Root = createRoot(document.getElementById('app')!);
 
 root.render(
   <Provider store={ storeFactory() }>
-    <AntdConfig>
-      <ThemeProvider>
+    <ThemeProvider>
+      <AntdConfig>
         <HashRouter>
           <Routers />
         </HashRouter>
-      </ThemeProvider>
-    </AntdConfig>
+      </AntdConfig>
+    </ThemeProvider>
   </Provider>
 );
 

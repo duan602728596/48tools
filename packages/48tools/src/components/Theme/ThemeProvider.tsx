@@ -1,7 +1,7 @@
 import { ipcRenderer, type IpcRendererEvent } from 'electron';
 import {
-  Fragment,
   useState,
+  useMemo,
   useEffect,
   type ReactElement,
   type ReactNode,
@@ -42,6 +42,11 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   const [theme, setTheme]: [ThemeValue, D<S<ThemeValue>>]
     = useState(localStorage.getItem('THEME_VALUE') as ThemeValue); // 当前使用的主题
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 配置当前主题
+
+  // 当前是暗黑模式
+  const isDark: boolean = useMemo(function(): boolean {
+    return theme === 'dark' || (theme === 'system' && themeMatches);
+  }, [theme, themeMatches]);
 
   // media变化
   function handleMatchMediaChange(event: MediaQueryListEvent): void {
@@ -91,12 +96,12 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   );
 
   useEffect(function(): void {
-    if ((theme === 'dark' || (theme === 'system' && themeMatches))) {
+    if (isDark) {
       document.body.setAttribute('theme', 'dark');
     } else {
       document.body.removeAttribute('theme');
     }
-  }, [theme, themeMatches]);
+  }, [isDark]);
 
   useEffect(function(): void {
     if (isChildrenWindow) {
@@ -115,7 +120,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   }, [media]);
 
   return (
-    <ThemeContext.Provider value={{ ChangeThemeElement }}>
+    <ThemeContext.Provider value={{ ChangeThemeElement, isDark }}>
       { children }
     </ThemeContext.Provider>
   );

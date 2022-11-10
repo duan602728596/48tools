@@ -13,12 +13,12 @@ import {
   type MutableRefObject,
   type MouseEvent
 } from 'react';
-import { ConfigProvider, Avatar, Tag, Button } from 'antd';
-import zhCN from 'antd/es/locale-provider/zh_CN';
+import { Avatar, Tag, Button } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import flvjs from 'flv.js';
 import style from './playerApp.sass';
+import AntdConfig from '../../../../components/AntdConfig/AntdConfig';
 import ThemeProvider from '../../../../components/Theme/ThemeProvider';
 import { requestLiveRoomInfo } from '../../services/pocket48';
 import { getFFmpeg, source } from '../../../../utils/utils';
@@ -156,7 +156,7 @@ function PlayerApp(props: {}): ReactElement {
 
   return (
     <ThemeProvider isChildrenWindow={ true }>
-      <ConfigProvider locale={ zhCN }>
+      <AntdConfig>
         <div className="p-[16px]">
           <header className="mb-[8px]">
             <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">{ search.title }</h1>
@@ -176,7 +176,7 @@ function PlayerApp(props: {}): ReactElement {
             />
           </div>
         </div>
-      </ConfigProvider>
+      </AntdConfig>
     </ThemeProvider>
   );
 }
