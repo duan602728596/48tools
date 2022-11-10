@@ -9,6 +9,7 @@ import Icon, {
 } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './index.sass';
+import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';
 import ThemeContext, { type Theme } from '../../components/Theme/ThemeContext';
@@ -129,9 +130,15 @@ function nativeRender(): Array<ReactNode> {
 
     for (const navItem of group) {
       groupElement.push(
-        <Link key={ navItem.name } className="inline-block" to={ navItem.url } data-test-id={ navItem.testId }>
-          <Button className={ navItem.hBtn ? 'overflow-hidden' : undefined } icon={ navItem.icon }>{ navItem.name }</Button>
-        </Link>
+        <ButtonLink key={ navItem.name }
+          linkProps={{ to: navItem.url }}
+          buttonProps={{
+            className: navItem.hBtn ? 'overflow-hidden' : undefined,
+            icon: navItem.icon
+          }}
+        >
+          { navItem.name }
+        </ButtonLink>
       );
     }
 
