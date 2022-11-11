@@ -8,7 +8,7 @@ import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyin';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
-import weiboLoginReducers from '../components/WeiboLogin/reducers/weiboLogin';
+import weiboLoginReducers from '../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import weiboSuperReducers from '../pages/WeiboSuper/reducers/weiboSuper';
 
 /* reducers */

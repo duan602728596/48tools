@@ -15,12 +15,12 @@ import { Select, Button, Space, List, Alert, Avatar, Tag } from 'antd';
 import style from './index.sass';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
-import WeiboLogin from '../../components/WeiboLogin/WeiboLogin';
-import { IDBCursorAccountList } from '../../components/WeiboLogin/reducers/weiboLogin';
+import WeiboLogin from '../../functionalComponents/WeiboLogin/WeiboLogin';
+import { IDBCursorAccountList } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import dbConfig from '../../utils/IDB/IDBConfig';
 import weiboCheckIn from './weiboCheckIn';
 import { setCheckIn, type WeiboSuperInitialState } from './reducers/weiboSuper';
-import type { WeiboLoginInitialState } from '../../components/WeiboLogin/reducers/weiboLogin';
+import type { WeiboLoginInitialState } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../types';
 import type { WeiboCheckinResult, Quantity } from './types';
 

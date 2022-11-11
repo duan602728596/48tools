@@ -8,7 +8,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
-import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
+import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AddForm from './AddForm';
 import {
   IDBCursorBilibiliLiveList,

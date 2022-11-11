@@ -9,7 +9,7 @@ import style from './download.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
-import AcFunLogin from '../../../components/AcFunLogin/AcFunLogin';
+import AcFunLogin from '../../../functionalComponents/AcFunLogin/AcFunLogin';
 import AddForm, { acfunVideoTypesMap } from './AddForm';
 import {
   setDeleteDownloadList,

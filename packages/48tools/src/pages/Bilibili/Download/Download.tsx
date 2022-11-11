@@ -12,7 +12,7 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from './downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
-import BilibiliLogin from '../../../components/BilibiliLogin/BilibiliLogin';
+import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AddForm, { bilibiliVideoTypesMap } from './AddForm/AddForm';
 import AddBySearch from './AddBySearch/AddBySearch';
 import {
