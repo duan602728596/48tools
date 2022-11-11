@@ -21,7 +21,7 @@ const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseRedu
 
       if (index >= 0) {
         state.accountList[index] = action.payload.data;
-        state.accountList = [... state.accountList];
+        state.accountList = [...state.accountList];
       } else {
         state.accountList = state.accountList.concat([action.payload.data]);
       }
