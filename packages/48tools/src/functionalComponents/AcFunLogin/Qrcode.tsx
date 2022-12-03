@@ -1,5 +1,6 @@
 import type { CancelableRequest, Response as GotResponse } from 'got';
 import {
+  Fragment,
   useState,
   useEffect,
   useMemo,
@@ -13,6 +14,7 @@ import { Button, Empty, message } from 'antd';
 import * as dayjs from 'dayjs';
 import { requestPcDirectQr, requestPcDirectScanResult, requestPcDirectAcceptResult } from './services/acfunLogin';
 import { warningNativeMessage } from '../../utils/remote/nativeMessage';
+import type { UseMessageReturnType } from '../../types';
 import type { PcDirectQr, ScanResult, AcceptResult } from './services/interface';
 
 export const ACFUN_COOKIE_KEY: string = 'ACFUN_COOKIE';
@@ -44,6 +46,7 @@ function clearData(): void {
 
 /* 生成A站二维码 */
 function Qrcode(props: { onCancel: Function }): ReactElement {
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [imageData, setImageData]: [string | undefined, D<S<string | undefined>>] = useState(undefined); // 二维码
   const acFunCookie: AcFunCookie | null = useMemo(function(): AcFunCookie | null {
     const info: string | null = localStorage.getItem(ACFUN_COOKIE_KEY);
@@ -76,7 +79,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
       scanResultRequest = null;
 
       if (resScanResult.result !== 0) {
-        message.error('登陆失败！请刷新后重新登陆！');
+        messageApi.error('登陆失败！请刷新后重新登陆！');
 
         return;
       }
@@ -94,10 +97,10 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
           .map((o: string): string => o.split(/;\s*/)[0]).join('; ');
 
         localStorage.setItem(ACFUN_COOKIE_KEY, JSON.stringify({ time, cookie }));
-        message.success('登陆成功！');
+        messageApi.success('登陆成功！');
         props.onCancel();
       } else {
-        message.error('登陆失败！请刷新后重新登陆！');
+        messageApi.error('登陆失败！请刷新后重新登陆！');
       }
     } catch { /* noop */ }
   }
@@ -116,16 +119,19 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }, []);
 
   return (
-    <div className="h-[300px]">
-      <div className="mt-0 mb-[24px] mx-auto w-[196px] h-[196px]">
-        { imageData ? <img className="block w-full h-full" src={ imageData } /> : <Empty description={ false } /> }
+    <Fragment>
+      <div className="h-[300px]">
+        <div className="mt-0 mb-[24px] mx-auto w-[196px] h-[196px]">
+          { imageData ? <img className="block w-full h-full" src={ imageData } /> : <Empty description={ false } /> }
+        </div>
+        <div className="text-center">
+          <Button type="text" danger={ true } onClick={ handleClearAcFunCookieClick }>清除Cookie</Button>
+          <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
+          <p className="mt-[8px]">上次登陆时间：{ acFunCookie?.time ?? '无' }</p>
+        </div>
       </div>
-      <div className="text-center">
-        <Button type="text" danger={ true } onClick={ handleClearAcFunCookieClick }>清除Cookie</Button>
-        <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
-        <p className="mt-[8px]">上次登陆时间：{ acFunCookie?.time ?? '无' }</p>
-      </div>
-    </div>
+      { messageContextHolder }
+    </Fragment>
   );
 }
 

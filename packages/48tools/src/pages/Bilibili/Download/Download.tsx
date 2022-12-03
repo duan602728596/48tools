@@ -22,6 +22,7 @@ import {
   type BilibiliDownloadInitialState
 } from '../reducers/download';
 import { requestDownloadFileByStream } from '../../48/services/pocket48';
+import type { UseMessageReturnType } from '../../../types';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
@@ -42,6 +43,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
 function Download(props: {}): ReactElement {
   const { downloadList, downloadProgress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 下载封面
   async function handleDownloadPicClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -59,7 +61,7 @@ function Download(props: {}): ReactElement {
       if (result.canceled || !result.filePath) return;
 
       await requestDownloadFileByStream(item.pic, result.filePath);
-      message.success('图片下载完成！');
+      messageApi.success('图片下载完成！');
     } catch (err) {
       console.error(err);
     }
@@ -85,7 +87,7 @@ function Download(props: {}): ReactElement {
           dispatch(setDownloadProgress(event1.data));
 
           if (type === 'success') {
-            message.success('下载完成！');
+            messageApi.success('下载完成！');
             worker.terminate();
           }
         });
@@ -99,7 +101,7 @@ function Download(props: {}): ReactElement {
       });
     } catch (err) {
       console.error(err);
-      message.error('视频下载失败！');
+      messageApi.error('视频下载失败！');
     }
   }
 
@@ -179,6 +181,7 @@ function Download(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      { messageContextHolder }
     </Fragment>
   );
 }

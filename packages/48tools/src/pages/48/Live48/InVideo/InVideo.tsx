@@ -32,6 +32,7 @@ import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
+import type { UseMessageReturnType } from '../../../../types';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
@@ -90,6 +91,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
 function InVideo(props: {}): ReactElement {
   const { inVideoQuery, inVideoList, videoListChild, progress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
 
   // 停止下载
@@ -108,7 +110,7 @@ function InVideo(props: {}): ReactElement {
       const m3u8Url: { url: string; title: string } | null = await parseVideoItem(record, quality);
 
       if (!m3u8Url) {
-        message.warning('视频不存在！');
+        messageApi.warning('视频不存在！');
 
         return;
       }
@@ -143,7 +145,7 @@ function InVideo(props: {}): ReactElement {
           requestIdleID !== null && cancelIdleCallback(requestIdleID);
 
           if (type === 'error') {
-            message.error(`视频：${ record.title } 下载失败！`);
+            messageApi.error(`视频：${ record.title } 下载失败！`);
           }
 
           worker.terminate();
@@ -167,7 +169,7 @@ function InVideo(props: {}): ReactElement {
       }));
     } catch (err) {
       console.error(err);
-      message.error('下载失败！');
+      messageApi.error('下载失败！');
     }
   }
 
@@ -195,7 +197,7 @@ function InVideo(props: {}): ReactElement {
       }));
     } catch (err) {
       console.error(err);
-      message.error('录播加载失败！');
+      messageApi.error('录播加载失败！');
     }
 
     setLoading(false);
@@ -218,7 +220,7 @@ function InVideo(props: {}): ReactElement {
       }));
     } catch (err) {
       console.error(err);
-      message.error('录播加载失败！');
+      messageApi.error('录播加载失败！');
     }
 
     setLoading(false);
@@ -314,6 +316,7 @@ function InVideo(props: {}): ReactElement {
           onChange: handlePageChange
         }}
       />
+      { messageContextHolder }
     </Fragment>
   );
 }

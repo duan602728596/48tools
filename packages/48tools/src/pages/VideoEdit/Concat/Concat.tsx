@@ -33,7 +33,7 @@ import {
   type ConcatInitialState
 } from '../reducers/concat';
 import { getFFmpeg } from '../../../utils/utils';
-import type { MessageEventData } from '../../../types';
+import type { UseMessageReturnType, MessageEventData } from '../../../types';
 import type { ConcatItem } from '../types';
 
 /* 拖拽组件 */
@@ -67,6 +67,7 @@ const selector: Selector<RState, ConcatInitialState> = createStructuredSelector(
 function Concat(props: {}): ReactElement {
   const { concatList, concatWorker }: ConcatInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止合并
   function handleStopConcatVideoClick(event: MouseEvent<HTMLButtonElement>): void {
@@ -99,7 +100,7 @@ function Concat(props: {}): ReactElement {
 
       if (type === 'close' || type === 'error') {
         if (type === 'error') {
-          message.error('视频合并失败！');
+          messageApi.error('视频合并失败！');
         }
 
         worker.terminate();
@@ -203,6 +204,7 @@ function Concat(props: {}): ReactElement {
           <List dataSource={ concatList } renderItem={ renderItem } bordered={ true } />
         </ListContainer>
       </div>
+      { messageContextHolder }
     </Fragment>
   );
 }

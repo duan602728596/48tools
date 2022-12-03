@@ -10,10 +10,10 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message } from 'antd';
-import type { FormInstance } from 'antd/es/form';
+import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, type FormInstance } from 'antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo } from '../parseBilibiliUrl';
+import type { UseMessageReturnType } from '../../../../types';
 import { setAddDownloadList } from '../../reducers/download';
 
 /* 视频分类 */
@@ -45,6 +45,7 @@ function AddForm(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [form]: [FormInstance] = Form.useForm();
 
   // 确定添加视频
@@ -84,10 +85,10 @@ function AddForm(props: {}): ReactElement {
         }));
         setVisible(false);
       } else {
-        message.warning('没有获取到媒体地址！');
+        messageApi.warning('没有获取到媒体地址！');
       }
     } catch (err) {
-      message.error('地址解析失败！');
+      messageApi.error('地址解析失败！');
       console.error(err);
     }
 
@@ -142,6 +143,7 @@ function AddForm(props: {}): ReactElement {
           </Form.Item>
         </Form>
       </Modal>
+      { messageContextHolder }
     </Fragment>
   );
 }

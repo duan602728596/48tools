@@ -1,7 +1,6 @@
 import type { ReactElement, KeyboardEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import { Form, Input } from 'antd';
-import type { FormInstance } from 'antd/es/form';
+import { Form, Input, type FormInstance } from 'antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 
 interface OnSubmitFunc {

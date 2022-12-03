@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import { promises as fsP } from 'node:fs';
 import type { Store } from '@reduxjs/toolkit';
-import { message } from 'antd';
+import type { MessageInstance } from 'antd/es/message/interface';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
@@ -15,11 +15,12 @@ import type { LiveData, LiveInfo, UserInfo, LiveRoomInfo } from '../../services/
 
 /**
  * 自动抓取
+ * @param { MessageInstance } messageApi
  * @param { string } dir: 保存录像的目录
  * @param { Array<string> } usersArr: 监听的小偶像
  * @param { boolean } transcoding: 自动转码
  */
-async function autoGrab(dir: string, usersArr: string[], transcoding: boolean): Promise<void> {
+async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: string[], transcoding: boolean): Promise<void> {
   const { dispatch, getState }: Store = store;
   const res: LiveData = await requestLiveList('0', true);
   const liveList: Array<LiveInfo> = res.content.liveList; // 自动刷新获取直播列表
@@ -67,7 +68,7 @@ async function autoGrab(dir: string, usersArr: string[], transcoding: boolean): 
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
-            message.error(`视频：${ item.title } 下载失败！`);
+            messageApi.error(`视频：${ item.title } 下载失败！`);
           }
 
           worker.terminate();

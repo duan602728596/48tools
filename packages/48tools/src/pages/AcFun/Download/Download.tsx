@@ -19,7 +19,7 @@ import {
   type AcFunDownloadInitialState
 } from '../reducers/download';
 import { getFFmpeg } from '../../../utils/utils';
-import type { WebWorkerChildItem } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem } from '../../../types';
 import type { DownloadItem, Representation } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
 
@@ -41,6 +41,7 @@ const selector: Selector<RState, AcFunDownloadInitialState> = createStructuredSe
 function Download(props: {}): ReactElement {
   const { downloadList, ffmpegDownloadWorkers, progress }: AcFunDownloadInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止
   function handleStopClick(record: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
@@ -77,7 +78,7 @@ function Download(props: {}): ReactElement {
         requestIdleID !== null && cancelIdleCallback(requestIdleID);
 
         if (type === 'error') {
-          message.error(`[${ record.type }${ record.id }]下载失败！`);
+          messageApi.error(`[${ record.type }${ record.id }]下载失败！`);
         }
 
         worker.terminate();
@@ -191,6 +192,7 @@ function Download(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      { messageContextHolder }
     </Fragment>
   );
 }

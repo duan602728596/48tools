@@ -8,7 +8,7 @@ import {
   type Page,
   type Cookie
 } from 'playwright-core';
-import type { ReactElement, MouseEvent } from 'react';
+import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -17,6 +17,7 @@ import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import { errorNativeMessage } from '../../../utils/remote/nativeMessage';
+import type { UseMessageReturnType } from '../../../types';
 import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;
@@ -45,6 +46,7 @@ function waitFunc(): boolean {
 /* 无头浏览器登陆 */
 function UserBrowserLogin(props: { onCancel: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 打开无头浏览器
   async function handleLoginClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
@@ -91,29 +93,33 @@ function UserBrowserLogin(props: { onCancel: Function }): ReactElement {
       const subCookie: Cookie | undefined
         = cookies.find((o: Cookie): boolean => o.name === 'SUB');
 
-      if (subCookie) {
-        const cookieStr: string = `SUB=${ subCookie.value }`;
-        const uid: string | undefined = await requestUid(cookieStr);
+      if (!subCookie) {
+        messageApi.error('没有获取到Cookie！');
 
-        if (uid) {
-          const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
-
-          await dispatch(IDBSaveAccount({
-            data: {
-              id: uid,
-              username: resUserInfo.data.user.screen_name ?? uid,
-              cookie: cookieStr,
-              lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
-            }
-          }));
-          props.onCancel();
-          message.success('登陆成功！');
-        } else {
-          message.error('账号的uid获取失败！');
-        }
-      } else {
-        message.error('没有获取到Cookie！');
+        return;
       }
+
+      const cookieStr: string = `SUB=${ subCookie.value }`;
+      const uid: string | undefined = await requestUid(cookieStr);
+
+      if (!uid) {
+        messageApi.error('账号的uid获取失败！');
+
+        return;
+      }
+
+      const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
+
+      await dispatch(IDBSaveAccount({
+        data: {
+          id: uid,
+          username: resUserInfo.data.user.screen_name ?? uid,
+          cookie: cookieStr,
+          lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+        }
+      }));
+      props.onCancel();
+      messageApi.success('登陆成功！');
     } catch (err) {
       console.error(err);
       browser?.close();
@@ -121,7 +127,12 @@ function UserBrowserLogin(props: { onCancel: Function }): ReactElement {
     }
   }
 
-  return <Button type="primary" onClick={ handleLoginClick }>无头浏览器登陆</Button>;
+  return (
+    <Fragment>
+      <Button type="primary" onClick={ handleLoginClick }>无头浏览器登陆</Button>
+      { messageContextHolder }
+    </Fragment>
+  );
 }
 
 UserBrowserLogin.propTypes = {

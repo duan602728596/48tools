@@ -10,12 +10,12 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Form, Select, Input, Alert, message } from 'antd';
-import type { FormInstance } from 'antd/es/form';
+import { Button, Modal, Form, Select, Input, Alert, message, type FormInstance } from 'antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
 import { parseAcFunUrl } from './parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
+import type { UseMessageReturnType } from '../../../types';
 import type { Representation } from '../types';
 
 /* 视频分类 */
@@ -42,6 +42,7 @@ function typeSelectOptionsRender(): Array<ReactNode> {
 /* 添加A站视频下载队列 */
 function AddForm(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
@@ -70,10 +71,10 @@ function AddForm(props: {}): ReactElement {
         }));
         setVisible(false);
       } else {
-        message.warning('没有获取到媒体地址！');
+        messageApi.warning('没有获取到媒体地址！');
       }
     } catch (err) {
-      message.error('地址解析失败！');
+      messageApi.error('地址解析失败！');
       console.error(err);
     }
 
@@ -123,6 +124,7 @@ function AddForm(props: {}): ReactElement {
           <Alert type="info" message="ID为ac后面的字符，包括页码等。" />
         </Form>
       </Modal>
+      { messageContextHolder }
     </Fragment>
   );
 }

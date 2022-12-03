@@ -16,7 +16,7 @@ import {
   type VideoCutInitialState
 } from '../reducers/videoCut';
 import { getFFmpeg } from '../../../utils/utils';
-import type { WebWorkerChildItem, MessageEventData } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { CutItem } from '../types';
 
 /* redux selector */
@@ -34,6 +34,7 @@ const selector: Selector<RState, VideoCutInitialState> = createStructuredSelecto
 function Index(props: {}): ReactElement {
   const { cutList, cutChildList }: VideoCutInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 删除队列
   function handleDeleteClick(item: CutItem, event: MouseEvent<HTMLButtonElement>): void {
@@ -64,7 +65,7 @@ function Index(props: {}): ReactElement {
 
       if (type === 'close' || type === 'error') {
         if (type === 'error') {
-          message.error(`视频：${ item.name } 裁剪失败！`);
+          messageApi.error(`视频：${ item.name } 裁剪失败！`);
         }
 
         worker.terminate();
@@ -141,6 +142,7 @@ function Index(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      { messageContextHolder }
     </Fragment>
   );
 }

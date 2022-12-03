@@ -1,16 +1,17 @@
 import type { OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
-import { Button, Modal, Form, Alert, Input, message } from 'antd';
-import type { FormInstance } from 'antd/es/form';
+import { Button, Modal, Form, Alert, Input, message, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
 import { ChromeFilled as IconChromeFilled, QuestionCircleTwoTone as IconQuestionCircleTwoTone } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './executablePath.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
+import type { UseMessageReturnType } from '../../../types';
 
 /* 配置无头浏览器地址 */
 function ExecutablePath(props: {}): ReactElement {
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 弹出层
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [form]: [FormInstance] = Form.useForm();
 
   // 取消
@@ -42,7 +43,7 @@ function ExecutablePath(props: {}): ReactElement {
       localStorage.removeItem('PUPPETEER_EXECUTABLE_PATH');
     }
 
-    message.success('配置成功！');
+    messageApi.success('配置成功！');
     handleCloseExecutablePathModalClick(event);
   }
 
@@ -115,6 +116,7 @@ function ExecutablePath(props: {}): ReactElement {
           } />
         </Form>
       </Modal>
+      { messageContextHolder }
     </Fragment>
   );
 }

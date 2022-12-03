@@ -7,6 +7,7 @@ import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
 import { requestLoginUrl, requestLoginInfo } from './services/bilibiliLogin';
 import { warningNativeMessage } from '../../utils/remote/nativeMessage';
+import type { UseMessageReturnType } from '../../types';
 import type { LoginUrl, LoginInfo } from './services/interface';
 
 const toCanvasPromise: (e: HTMLCanvasElement, u: string) => Promise<void> = promisify(toCanvas);
@@ -26,6 +27,7 @@ export interface BilibiliCookie {
  * @param { Function } props.onCancel: 关闭弹出层的方法
  */
 function Qrcode(props: { onCancel: Function }): ReactElement {
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const canvasRef: RefObject<HTMLCanvasElement> = useRef(null);
   const bilibiliCookie: BilibiliCookie | null = useMemo(function(): BilibiliCookie | null {
     const info: string | null = localStorage.getItem(BILIBILI_COOKIE_KEY);
@@ -48,7 +50,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
       const cookie: string = cookieArr.map((o: string): string => o.split(/;\s*/)[0]).join('; ');
 
       localStorage.setItem(BILIBILI_COOKIE_KEY, JSON.stringify({ time, cookie }));
-      message.success('登陆成功！');
+      messageApi.success('登陆成功！');
       props.onCancel();
     } else {
       loginInfoTimer = setTimeout(getLoginInfo, 1_000);
@@ -103,6 +105,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
         <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
         <p className="mt-[8px]">上次登陆时间：{ bilibiliCookie?.time ?? '无' }</p>
       </div>
+      { messageContextHolder }
     </Fragment>
   );
 }

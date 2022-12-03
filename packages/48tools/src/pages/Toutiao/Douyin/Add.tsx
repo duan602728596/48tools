@@ -19,6 +19,7 @@ import style from './add.sass';
 import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
 import douyinCookieCache from './DouyinCookieCache';
+import type { UseMessageReturnType } from '../../../types';
 import type {
   AwemeDetail,
   ScriptRendedData,
@@ -39,6 +40,7 @@ function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactNo
 /* 获取和下载链接 */
 function Add(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [urlValue, setUrlValue]: [string, D<S<string>>] = useState('');
   const [getUrlLoading, setGetUrlLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 弹出层的显示隐藏
@@ -173,10 +175,10 @@ function Add(props: {}): ReactElement {
             setTitle(awemeDetail.desc);
             setVisible(true);
           } else {
-            message.error('视频相关信息解析失败！');
+            messageApi.error('视频相关信息解析失败！');
           }
         } else {
-          message.error('找不到视频相关信息！');
+          messageApi.error('找不到视频相关信息！');
         }
 
         next();
@@ -190,7 +192,7 @@ function Add(props: {}): ReactElement {
       onion.run();
     } catch (err) {
       console.error(err);
-      message.error('视频地址解析失败！');
+      messageApi.error('视频地址解析失败！');
       setGetUrlLoading(false);
     }
   }
@@ -198,7 +200,7 @@ function Add(props: {}): ReactElement {
   // 清除抖音的cookie
   function handleClearDouyinCookie(event: MouseEvent<HTMLButtonElement>): void {
     douyinCookieCache.clearCookie();
-    message.success('Cookie已清除！');
+    messageApi.success('Cookie已清除！');
   }
 
   return (
@@ -230,6 +232,7 @@ function Add(props: {}): ReactElement {
           { selectOptionsRender(downloadUrl) }
         </Select>
       </Modal>
+      { messageContextHolder }
     </Fragment>
   );
 }

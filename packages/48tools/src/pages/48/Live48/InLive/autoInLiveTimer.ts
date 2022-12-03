@@ -1,5 +1,5 @@
 import type { Store } from '@reduxjs/toolkit';
-import { message } from 'antd';
+import type { MessageInstance } from 'antd/es/message/interface';
 import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
 import { store } from '../../../../store/store';
 import { setAddWorkerInLiveList, setStopInLiveList } from '../../reducers/live48';
@@ -10,11 +10,12 @@ import type { MessageEventData } from '../../../../types';
 
 /**
  * 监听直播是否开始，并自动录制
+ * @param { MessageInstance } messageApi
  * @param { string } id: 当前item的id
  * @param { InLiveFormValue } value: 表单内获取的直播配置
  * @param { string } filePath: 保存地址
  */
-async function autoInLiveTimer(id: string, value: InLiveFormValue, filePath: string): Promise<void> {
+async function autoInLiveTimer(messageApi: MessageInstance, id: string, value: InLiveFormValue, filePath: string): Promise<void> {
   const { dispatch }: Store = store;
 
   const liveUrl: { url: string; title: string } | null = await parseLiveUrl(value.live!, value.quality!);
@@ -28,7 +29,7 @@ async function autoInLiveTimer(id: string, value: InLiveFormValue, filePath: str
 
     if (type === 'close' || type === 'error') {
       if (type === 'error') {
-        message.error(`${ value.type }直播下载失败！`);
+        messageApi.error(`${ value.type }直播下载失败！`);
       }
 
       worker.terminate();

@@ -1,5 +1,6 @@
 import { shell } from 'electron';
 import {
+  Fragment,
   useState,
   useEffect,
   type ReactElement,
@@ -11,7 +12,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Select, Button, Space, List, Alert, Avatar, Tag } from 'antd';
+import { Select, Button, Space, List, Alert, Avatar, Tag, message } from 'antd';
 import style from './index.sass';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
@@ -20,6 +21,7 @@ import { IDBCursorAccountList } from '../../functionalComponents/WeiboLogin/redu
 import dbConfig from '../../utils/IDB/IDBConfig';
 import weiboCheckIn from './weiboCheckIn';
 import { setCheckIn, type WeiboSuperInitialState } from './reducers/weiboSuper';
+import type { UseMessageReturnType } from '../../types';
 import type { WeiboLoginInitialState } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../types';
 import type { WeiboCheckinResult, Quantity } from './types';
@@ -49,6 +51,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
 function Index(props: {}): ReactElement {
   const { accountList, weiboCheckinList, checkIn, quantity }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [accountValue, setAccountValue]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
 
   // 打开超话
@@ -62,7 +65,7 @@ function Index(props: {}): ReactElement {
 
     if (index >= 0) {
       dispatch(setCheckIn(true));
-      weiboCheckIn(accountList[index].cookie);
+      weiboCheckIn(messageApi, accountList[index].cookie);
     }
   }
 
@@ -107,29 +110,32 @@ function Index(props: {}): ReactElement {
   }, []);
 
   return (
-    <Content>
-      <Header>
-        <Space>
-          <Select className={ style.accountSelect }
-            value={ accountValue }
-            disabled={ checkIn }
-            onSelect={ (value: string): void => setAccountValue(value) }
-          >
-            { accountSelectRender() }
-          </Select>
-          {
-            checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (
-              <Button type="primary" disabled={ accountValue === undefined } onClick={ handleWeiboCheckinStartClick }>
-                超话签到
-              </Button>
-            )
-          }
-          <WeiboLogin />
-        </Space>
-      </Header>
-      <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />
-      <List size="small" dataSource={ weiboCheckinList } renderItem={ weiboCheckinListRender } />
-    </Content>
+    <Fragment>
+      <Content>
+        <Header>
+          <Space>
+            <Select className={ style.accountSelect }
+              value={ accountValue }
+              disabled={ checkIn }
+              onSelect={ (value: string): void => setAccountValue(value) }
+            >
+              { accountSelectRender() }
+            </Select>
+            {
+              checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (
+                <Button type="primary" disabled={ accountValue === undefined } onClick={ handleWeiboCheckinStartClick }>
+                  超话签到
+                </Button>
+              )
+            }
+            <WeiboLogin />
+          </Space>
+        </Header>
+        <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />
+        <List size="small" dataSource={ weiboCheckinList } renderItem={ weiboCheckinListRender } />
+      </Content>
+      { messageContextHolder }
+    </Fragment>
   );
 }
 

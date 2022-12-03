@@ -18,6 +18,7 @@ import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
 import { parseVideoList, parseVideoUrlV2 } from '../parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
+import type { UseMessageReturnType } from '../../../../types';
 import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
 
 interface PageQuery {
@@ -35,6 +36,7 @@ interface DownloadItem {
 /* 根据账号ID搜索 */
 function AddBySearch(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [form]: [FormInstance] = Form.useForm();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [pageQuery, setPageQuery]: [PageQuery, D<S<PageQuery>>] = useState({
@@ -62,9 +64,9 @@ function AddBySearch(props: {}): ReactElement {
           id: bvId,
           page: o.index
         }));
-        message.success('添加到下载队列！');
+        messageApi.success('添加到下载队列！');
       } else {
-        message.warning('没有获取到媒体地址！');
+        messageApi.warning('没有获取到媒体地址！');
       }
     } catch (err) {
       console.error(err);
@@ -228,6 +230,7 @@ function AddBySearch(props: {}): ReactElement {
           </div>
         </div>
       </Modal>
+      { messageContextHolder }
     </Fragment>
   );
 }

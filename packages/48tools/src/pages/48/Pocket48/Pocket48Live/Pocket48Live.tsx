@@ -12,7 +12,6 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Link } from 'react-router-dom';
 import { Button, message, Table, Tag, Popconfirm, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import * as dayjs from 'dayjs';
@@ -42,7 +41,7 @@ import {
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from './autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
-import type { WebWorkerChildItem, MessageEventData } from '../../../../types';
+import type { UseModalReturnType, UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../../types';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 import type { LiveInfo, LiveRoomInfo } from '../../services/interface';
 
@@ -65,12 +64,14 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
 function Pocket48Live(props: {}): ReactElement {
   const { liveList, liveChildList, autoGrabTimer }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
   // 停止自动抓取
   function handleStopAutoGrabClick(event: MouseEvent<HTMLButtonElement>): void {
     dispatch(setAutoGrab(null));
-    message.info('停止自动抓取。');
+    messageApi.info('停止自动抓取。');
   }
 
   // 开始自动抓取
@@ -83,7 +84,7 @@ function Pocket48Live(props: {}): ReactElement {
       = await dispatch(IDBGetPocket48LiveOptions({ query: OPTIONS_NAME }));
 
     if (!result.result) {
-      message.warning('请先配置自动抓取相关配置。');
+      messageApi.warning('请先配置自动抓取相关配置。');
 
       return;
     }
@@ -94,7 +95,7 @@ function Pocket48Live(props: {}): ReactElement {
       .filter((o: string): boolean => o !== '');
 
     if (usersArr.length === 0) {
-      message.info('请先配置自动抓取监听的成员直播。');
+      messageApi.info('请先配置自动抓取监听的成员直播。');
 
       return;
     }
@@ -103,7 +104,7 @@ function Pocket48Live(props: {}): ReactElement {
 
     // 判断是否需要转码
     onion.use(function(ctx: OnionContext, next: Function): void {
-      Modal.confirm({
+      modalApi.confirm({
         content: '选择要录制的视频方法。',
         closable: false,
         keyboard: false,
@@ -127,8 +128,8 @@ function Pocket48Live(props: {}): ReactElement {
     onion.use(function(ctx: OnionContext, next: Function): void {
       const { result: r, transcoding = false }: OnionContext = ctx;
 
-      message.info('开始自动抓取。');
-      autoGrab(r.value.dir, usersArr, transcoding);
+      messageApi.info('开始自动抓取。');
+      autoGrab(messageApi, r.value.dir, usersArr, transcoding);
       dispatch(setAutoGrab(
         setInterval(autoGrab, r.value.time * 60_000, r.value.dir, usersArr, transcoding)
       ));
@@ -143,14 +144,14 @@ function Pocket48Live(props: {}): ReactElement {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
     clipboard.writeText(resInfo.content.playStreamPath);
-    message.info('直播地址复制到剪贴板。');
+    messageApi.info('直播地址复制到剪贴板。');
   }
 
   // 下载图片
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
-    downloadImages(record, record.coverPath, resInfo.content?.carousels?.carousels);
+    downloadImages(modalApi, record, record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
   // 停止
@@ -185,7 +186,7 @@ function Pocket48Live(props: {}): ReactElement {
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
-            message.error(`视频：${ record.title } 下载失败！`);
+            messageApi.error(`视频：${ record.title } 下载失败！`);
           }
 
           worker.terminate();
@@ -206,7 +207,7 @@ function Pocket48Live(props: {}): ReactElement {
       }));
     } catch (err) {
       console.error(err);
-      message.error('直播录制失败！');
+      messageApi.error('直播录制失败！');
     }
   }
 
@@ -236,7 +237,7 @@ function Pocket48Live(props: {}): ReactElement {
     try {
       await dispatch<any>(reqLiveList());
     } catch (err) {
-      message.error('直播列表加载失败！');
+      messageApi.error('直播列表加载失败！');
       console.error(err);
     }
 
@@ -342,6 +343,8 @@ function Pocket48Live(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      { modalContextHolder }
+      { messageContextHolder }
     </Fragment>
   );
 }

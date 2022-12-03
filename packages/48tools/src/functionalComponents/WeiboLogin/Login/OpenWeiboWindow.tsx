@@ -1,5 +1,5 @@
 import { ipcRenderer, type Cookie, type IpcRendererEvent } from 'electron';
-import { useEffect, useCallback, type ReactElement, type MouseEvent } from 'react';
+import { Fragment, useEffect, useCallback, type ReactElement, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -8,11 +8,13 @@ import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import UserBrowserLogin from './UserBrowserLogin';
+import type { UseMessageReturnType } from '../../../types';
 import type { UserInfo } from '../services/interface';
 
 /* 打开微博窗口 */
 function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 监听是否登陆
   const handleWeiboLoginCookieListener: (event: IpcRendererEvent, cookies: Array<Cookie>) => Promise<void>
@@ -37,9 +39,9 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
             }
           }));
           props.onCancel();
-          message.success('登陆成功！');
+          messageApi.success('登陆成功！');
         } else {
-          message.error('账号的uid获取失败！');
+          messageApi.error('账号的uid获取失败！');
         }
       }
     }, []);
@@ -58,14 +60,17 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
   }, []);
 
   return (
-    <div className="mb-[16px]">
-      <Space size={ 8 }>
-        <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议无头浏览器登陆。" />
-        <Button onClick={ handleLoginWeiboClick }>微博登陆</Button>
-        <Divider type="vertical" />
-        <UserBrowserLogin onCancel={ props.onCancel } />
-      </Space>
-    </div>
+    <Fragment>
+      <div className="mb-[16px]">
+        <Space size={ 8 }>
+          <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。建议无头浏览器登陆。" />
+          <Button onClick={ handleLoginWeiboClick }>微博登陆</Button>
+          <Divider type="vertical" />
+          <UserBrowserLogin onCancel={ props.onCancel } />
+        </Space>
+      </div>
+      { messageContextHolder }
+    </Fragment>
   );
 }
 

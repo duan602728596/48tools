@@ -20,7 +20,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import type { WebWorkerChildItem, MessageEventData } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
 
@@ -39,6 +39,7 @@ const selector: Selector<RState, BilibiliLiveInitialState> = createStructuredSel
 function Live(props: {}): ReactElement {
   const { bilibiliLiveList, liveChildList }: BilibiliLiveInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止
   function handleStopClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
@@ -68,7 +69,7 @@ function Live(props: {}): ReactElement {
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
-            message.error(`${ record.description }[${ record.roomId }]录制失败！`);
+            messageApi.error(`${ record.description }[${ record.roomId }]录制失败！`);
           }
 
           worker.terminate();
@@ -93,7 +94,7 @@ Origin: https://live.bilibili.com\r`
       }));
     } catch (err) {
       console.error(err);
-      message.error('录制失败！');
+      messageApi.error('录制失败！');
     }
   }
 
@@ -165,6 +166,7 @@ Origin: https://live.bilibili.com\r`
           showQuickJumper: true
         }}
       />
+      { messageContextHolder }
     </Fragment>
   );
 }

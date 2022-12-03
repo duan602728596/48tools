@@ -1,4 +1,12 @@
-import { useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  useEffect,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -12,6 +20,7 @@ import {
   requestCrossDomainUrl,
   requestUserInfo
 } from '../../services/WeiboLogin';
+import type { UseMessageReturnType } from '../../../../types';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from '../../services/interface';
 
 let qrcodeLoginTimer: NodeJS.Timeout | null = null; // 轮循，判断是否登陆
@@ -23,6 +32,7 @@ let qrid: string | null = null;
  */
 function Qrcode(props: { onCancel: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [imageData, setImageData]: [string | undefined, D<S<string | undefined>>] = useState(undefined); // 二维码
 
   // 登陆成功
@@ -41,7 +51,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
       }
     }));
     props.onCancel();
-    message.success('登陆成功！');
+    messageApi.success('登陆成功！');
   }
 
   // 判断是否登陆
@@ -90,12 +100,15 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }, []);
 
   return (
-    <div className="mb-[8px] text-center">
-      <div className="inline-block w-[160px] h-[160px]">
-        { imageData ? <img className="block w-full h-full" src={ imageData } /> : <Empty description={ false } /> }
+    <Fragment>
+      <div className="mb-[8px] text-center">
+        <div className="inline-block w-[160px] h-[160px]">
+          { imageData ? <img className="block w-full h-full" src={ imageData } /> : <Empty description={ false } /> }
+        </div>
+        <Button className="ml-[16px] align-[75px]" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
       </div>
-      <Button className="ml-[16px] align-[75px]" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
-    </div>
+      { messageContextHolder }
+    </Fragment>
   );
 }
 

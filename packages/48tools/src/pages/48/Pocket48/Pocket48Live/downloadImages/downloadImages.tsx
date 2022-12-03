@@ -3,15 +3,17 @@ import type { ParsedPath } from 'node:path';
 import * as fs from 'node:fs';
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
-import type { ReactElement, ReactNode, MouseEvent } from 'react';
+import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import { Modal, message, Button, Image } from 'antd';
+import { message, Button, Image } from 'antd';
+import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/icons';
 import style from './downloadImages.sass';
 import { showOpenDialog, showSaveDialog } from '../../../../../utils/remote/dialog';
 import ImagePreview from './ImagePreview';
 import { source } from '../../../../../utils/utils';
 import { requestDownloadFileByStream } from '../../../services/pocket48';
+import type { UseMessageReturnType } from '../../../../../types';
 import type { LiveInfo } from '../../../services/interface';
 
 interface DownloadImagesProps {
@@ -23,6 +25,7 @@ interface DownloadImagesProps {
 /* 图片下载 */
 function DownloadImages(props: DownloadImagesProps): ReactElement {
   const { liveInfo, coverPath, carousels }: DownloadImagesProps = props;
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 下载图片
   async function handleDownloadClick(event: MouseEvent<HTMLAnchorElement>): Promise<void> {
@@ -38,7 +41,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
       if (result.canceled || !result.filePath) return;
 
       await requestDownloadFileByStream(source(href), result.filePath);
-      message.success('图片下载完成！');
+      messageApi.success('图片下载完成！');
     } catch (err) {
       console.error(err);
       console.error('图片下载失败！');
@@ -92,7 +95,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
       });
 
       await Promise.all(queue);
-      message.success('图片下载完成！');
+      messageApi.success('图片下载完成！');
     } catch (err) {
       console.error(err);
       console.error('图片下载失败！');
@@ -100,23 +103,26 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
   }
 
   return (
-    <div className="p-[8px] h-[200px] overflow-auto">
-      <Button className="mb-[8px]" icon={ <IconCloudDownloadOutlined /> } onClick={ handleDownloadAllImagesClick }>
-        下载全部图片到文件夹
-      </Button>
-      <Image.PreviewGroup>
-        <div className={ style.listItem }>
-          <div className={ style.listItemContent }>封面图</div>
-          <div className={ style.listItemActions }>
-            <ImagePreview src={ source(coverPath) } />
+    <Fragment>
+      <div className="p-[8px] h-[200px] overflow-auto">
+        <Button className="mb-[8px]" icon={ <IconCloudDownloadOutlined /> } onClick={ handleDownloadAllImagesClick }>
+          下载全部图片到文件夹
+        </Button>
+        <Image.PreviewGroup>
+          <div className={ style.listItem }>
+            <div className={ style.listItemContent }>封面图</div>
+            <div className={ style.listItemActions }>
+              <ImagePreview src={ source(coverPath) } />
+            </div>
+            <div className={ style.listItemActions }>
+              <a href={ coverPath } role="button" aria-label="下载" onClick={ handleDownloadClick }>下载</a>
+            </div>
           </div>
-          <div className={ style.listItemActions }>
-            <a href={ coverPath } role="button" aria-label="下载" onClick={ handleDownloadClick }>下载</a>
-          </div>
-        </div>
-        { carouselsRender() }
-      </Image.PreviewGroup>
-    </div>
+          { carouselsRender() }
+        </Image.PreviewGroup>
+      </div>
+      { messageContextHolder }
+    </Fragment>
   );
 }
 
@@ -128,12 +134,18 @@ DownloadImages.propTypes = {
 
 /**
  * 弹出层打开图片下载
+ * @param { Omit<ModalStaticFunctions, 'warn'> } modalApi
  * @param { LiveInfo } liveInfo: 直播信息
  * @param { string } coverPath: 封面
  * @param { Array<string> } carousels?: 电台轮播图
  */
-function downloadImages(liveInfo: LiveInfo, coverPath: string, carousels?: Array<string>): void {
-  Modal.info({
+function downloadImages(
+  modalApi: Omit<ModalStaticFunctions, 'warn'>,
+  liveInfo: LiveInfo,
+  coverPath: string,
+  carousels?: Array<string>
+): void {
+  modalApi.info({
     title: '图片下载',
     width: 420,
     centered: true,

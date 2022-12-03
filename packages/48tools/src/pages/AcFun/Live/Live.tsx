@@ -31,7 +31,7 @@ import {
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
-import type { WebWorkerChildItem, MessageEventData } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../types';
 import type { LiveRepresentation, LiveVideoPlayRes, LiveItem } from '../types';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';
 
@@ -52,6 +52,7 @@ const selector: Selector<RState, AcFunLiveInitialState> = createStructuredSelect
 function Live(props: {}): ReactElement {
   const { acfunLiveList, liveWorkers }: AcFunLiveInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止
   function handleStopClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
@@ -74,7 +75,7 @@ function Live(props: {}): ReactElement {
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
-            message.error(`${ record.description }[${ record.roomId }]录制失败！`);
+            messageApi.error(`${ record.description }[${ record.roomId }]录制失败！`);
           }
 
           worker.terminate();
@@ -97,7 +98,7 @@ function Live(props: {}): ReactElement {
       }));
     } catch (err) {
       console.error(err);
-      message.error('录制失败！');
+      messageApi.error('录制失败！');
     }
   }
 
@@ -128,7 +129,7 @@ function Live(props: {}): ReactElement {
           next();
           setVisible(false);
         } else {
-          message.warning('请先选择一个直播源。');
+          messageApi.warning('请先选择一个直播源。');
         }
       }
 
@@ -181,7 +182,7 @@ function Live(props: {}): ReactElement {
         token = tokenRes['acfun.midground.api_st'];
       } catch (err) {
         console.error(err);
-        message.error('获取直播地址失败！可能是你的Cookie已过期，请重新登陆。');
+        messageApi.error('获取直播地址失败！可能是你的Cookie已过期，请重新登陆。');
 
         return;
       }
@@ -195,7 +196,7 @@ function Live(props: {}): ReactElement {
     const playerRes: LiveWebStartPlay = await requestPlayUrl(didCookie, token, userId, !cookie, record.roomId);
 
     if (playerRes.result !== 1) {
-      message.warning(playerRes.error_msg ?? '当前直播未开始！');
+      messageApi.warning(playerRes.error_msg ?? '当前直播未开始！');
 
       return;
     }
@@ -285,6 +286,7 @@ function Live(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      { messageContextHolder }
     </Fragment>
   );
 }

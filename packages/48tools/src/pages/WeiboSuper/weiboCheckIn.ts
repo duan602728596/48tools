@@ -1,5 +1,5 @@
 import type { Store, Dispatch } from '@reduxjs/toolkit';
-import { message } from 'antd';
+import type { MessageInstance } from 'antd/es/message/interface';
 import { store } from '../../store/store';
 import { requestTopicContent } from './services/weiboSuper';
 import { setCheckIn, reqTopicCheckin } from './reducers/weiboSuper';
@@ -47,9 +47,10 @@ async function checkIn(
 
 /**
  * 微博签到
+ * @param { MessageInstance } messageApi
  * @param { string } cookie: 账号cookie
  */
-async function weiboCheckIn(cookie: string): Promise<void> {
+async function weiboCheckIn(messageApi: MessageInstance, cookie: string): Promise<void> {
   const { getState, dispatch }: Store = store;
   const quantity: Quantity = {
     checkedInLen: 0,
@@ -63,7 +64,7 @@ async function weiboCheckIn(cookie: string): Promise<void> {
     const resTopic: TopicResponse = await requestTopicContent(cookie, pageIndex);
 
     if (Number(resTopic.ok) !== 1) {
-      message.error(`获取超话列表失败，请重新登陆！(Error: ${ resTopic.ok })`);
+      messageApi.error(`获取超话列表失败，请重新登陆！(Error: ${ resTopic.ok })`);
       cont = false;
       break;
     }

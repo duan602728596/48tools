@@ -16,9 +16,22 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Table, Tag, Select, Form, InputNumber, Space, Popconfirm, Progress, Input } from 'antd';
+import {
+  Button,
+  message,
+  Table,
+  Tag,
+  Select,
+  Form,
+  InputNumber,
+  Space,
+  Popconfirm,
+  Progress,
+  Input,
+  Modal,
+  type FormInstance
+} from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { FormInstance } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
@@ -47,6 +60,7 @@ import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServ
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
+import type { UseModalReturnType, UseMessageReturnType } from '../../../../types';
 
 /**
  * 格式化m3u8文件内视频的地址
@@ -95,6 +109,8 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
 function Pocket48Record(props: {}): ReactElement {
   const { recordList, recordNext, recordChildList, recordFields, progress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
   const [form]: [FormInstance] = Form.useForm();
@@ -133,7 +149,7 @@ function Pocket48Record(props: {}): ReactElement {
 
     if (index >= 0) {
       recordChildList[index].worker.postMessage({ type: 'retry' });
-      message.info('正在重新下载ts片段。');
+      messageApi.info('正在重新下载ts片段。');
     }
   }
 
@@ -142,14 +158,14 @@ function Pocket48Record(props: {}): ReactElement {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
     clipboard.writeText(resInfo.content.playStreamPath);
-    message.info('直播地址复制到剪贴板。');
+    messageApi.info('直播地址复制到剪贴板。');
   }
 
   // 下载图片
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
-    downloadImages(record, record.coverPath, resInfo.content?.carousels?.carousels);
+    downloadImages(modalApi, record, record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
   /**
@@ -215,7 +231,7 @@ function Pocket48Record(props: {}): ReactElement {
           requestIdleID !== null && cancelIdleCallback(requestIdleID);
 
           if (type === 'error') {
-            message.error(`视频：${ record.title } 下载失败！`);
+            messageApi.error(`视频：${ record.title } 下载失败！`);
           }
 
           worker.terminate();
@@ -240,7 +256,7 @@ function Pocket48Record(props: {}): ReactElement {
       }));
     } catch (err) {
       console.error(err);
-      message.error('录播下载失败！');
+      messageApi.error('录播下载失败！');
     }
   }
 
@@ -251,7 +267,7 @@ function Pocket48Record(props: {}): ReactElement {
       const time: string = getFileTime(record.ctime);
 
       if (res.content.msgFilePath === '') {
-        message.warning('弹幕文件不存在！');
+        messageApi.warning('弹幕文件不存在！');
 
         return;
       }
@@ -264,9 +280,9 @@ function Pocket48Record(props: {}): ReactElement {
       if (result.canceled || !result.filePath) return;
 
       await requestDownloadFileByStream(res.content.msgFilePath, result.filePath);
-      message.success('弹幕文件下载成功！');
+      messageApi.success('弹幕文件下载成功！');
     } catch (err) {
-      message.error('弹幕文件下载失败！');
+      messageApi.error('弹幕文件下载失败！');
       console.error(err);
     }
   }
@@ -285,7 +301,7 @@ function Pocket48Record(props: {}): ReactElement {
         data
       }));
     } catch (err) {
-      message.error('录播列表加载失败！');
+      messageApi.error('录播列表加载失败！');
       console.error(err);
     }
 
@@ -305,7 +321,7 @@ function Pocket48Record(props: {}): ReactElement {
         data: res.content.liveList
       }));
     } catch (err) {
-      message.error('录播列表加载失败！');
+      messageApi.error('录播列表加载失败！');
       console.error(err);
     }
 
@@ -463,6 +479,8 @@ function Pocket48Record(props: {}): ReactElement {
           showTotal: showTotalRender
         }}
       />
+      { modalContextHolder }
+      { messageContextHolder }
     </Fragment>
   );
 }

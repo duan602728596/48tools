@@ -1,7 +1,6 @@
 import { shell, type OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
-import { Button, Modal, Form, Input, message, Alert } from 'antd';
-import type { FormInstance } from 'antd/es/form';
+import { Button, Modal, Form, Input, message, Alert, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
 import {
   ThunderboltOutlined as IconThunderboltOutlined,
@@ -11,10 +10,12 @@ import {
 import * as classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
+import type { UseMessageReturnType } from '../../../types';
 
 /* 配置ffmpeg地址 */
 function FFmpegOption(props: {}): ReactElement {
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 弹出层
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [form]: [FormInstance] = Form.useForm();
 
   // 下载ffmpeg
@@ -51,7 +52,7 @@ function FFmpegOption(props: {}): ReactElement {
       localStorage.removeItem('FFMPEG_PATH');
     }
 
-    message.success('配置成功！');
+    messageApi.success('配置成功！');
     handleCloseFFmpegOptionModalClick(event);
   }
 
@@ -108,6 +109,7 @@ function FFmpegOption(props: {}): ReactElement {
           <Alert type="info" message="配置FFmpeg的地址，或自动使用环境变量的地址。播放视频功能需要配置后重新启动软件。" />
         </Form>
       </Modal>
+      { messageContextHolder }
     </Fragment>
   );
 }

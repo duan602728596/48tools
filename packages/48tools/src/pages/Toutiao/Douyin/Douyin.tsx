@@ -18,6 +18,7 @@ import {
   type DouyinDownloadInitialState
 } from '../reducers/douyin';
 import { requestGetVideoRedirectUrl } from '../services/douyin';
+import type { UseMessageReturnType } from '../../../types';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
@@ -38,6 +39,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
 function Douyin(props: {}): ReactElement {
   const { downloadList, downloadProgress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 删除一个任务
   function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
@@ -61,7 +63,7 @@ function Douyin(props: {}): ReactElement {
         dispatch(setDownloadProgress(event1.data));
 
         if (type === 'success') {
-          message.success('下载完成！');
+          messageApi.success('下载完成！');
           worker.terminate();
         }
       });
@@ -85,7 +87,7 @@ function Douyin(props: {}): ReactElement {
       });
     } catch (err) {
       console.error(err);
-      message.error('视频下载失败！');
+      messageApi.error('视频下载失败！');
     }
   }
 
@@ -145,6 +147,7 @@ function Douyin(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      { messageContextHolder }
     </Fragment>
   );
 }
