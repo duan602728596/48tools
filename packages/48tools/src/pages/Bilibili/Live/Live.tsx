@@ -20,7 +20,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
 

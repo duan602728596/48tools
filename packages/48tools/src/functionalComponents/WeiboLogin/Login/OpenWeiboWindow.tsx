@@ -8,7 +8,7 @@ import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import UserBrowserLogin from './UserBrowserLogin';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 import type { UserInfo } from '../services/interface';
 
 /* 打开微博窗口 */

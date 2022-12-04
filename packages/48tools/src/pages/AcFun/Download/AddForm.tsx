@@ -15,7 +15,7 @@ import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
 import { parseAcFunUrl } from './parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 import type { Representation } from '../types';
 
 /* 视频分类 */

@@ -17,7 +17,7 @@ import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import { errorNativeMessage } from '../../../utils/remote/nativeMessage';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;

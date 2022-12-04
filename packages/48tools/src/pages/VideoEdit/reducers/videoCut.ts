@@ -1,5 +1,5 @@
 import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
-import type { WebWorkerChildItem } from '../../../types';
+import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { CutItem } from '../types';
 
 export interface VideoCutInitialState {

@@ -20,7 +20,7 @@ import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import autoInLiveTimer from './autoInLiveTimer';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
-import type { UseMessageReturnType, MessageEventData } from '../../../../types';
+import type { UseMessageReturnType, MessageEventData } from '../../../../commonTypes';
 import type { InLiveFormValue } from '../../types';
 
 /* 抓取直播信息表单 */

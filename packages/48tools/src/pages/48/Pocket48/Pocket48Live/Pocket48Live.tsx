@@ -41,7 +41,7 @@ import {
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from './autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
-import type { UseModalReturnType, UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../../types';
+import type { UseModalReturnType, UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 import type { LiveInfo, LiveRoomInfo } from '../../services/interface';
 

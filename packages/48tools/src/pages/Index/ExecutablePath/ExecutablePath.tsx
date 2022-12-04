@@ -6,7 +6,7 @@ import { ChromeFilled as IconChromeFilled, QuestionCircleTwoTone as IconQuestion
 import * as classNames from 'classnames';
 import style from './executablePath.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 
 /* 配置无头浏览器地址 */
 function ExecutablePath(props: {}): ReactElement {

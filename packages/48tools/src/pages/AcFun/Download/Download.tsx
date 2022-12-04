@@ -19,7 +19,7 @@ import {
   type AcFunDownloadInitialState
 } from '../reducers/download';
 import { getFFmpeg } from '../../../utils/utils';
-import type { UseMessageReturnType, WebWorkerChildItem } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem, Representation } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
 

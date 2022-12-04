@@ -10,7 +10,7 @@ import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
 import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
 import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
-import type { MessageEventData, WebWorkerChildItem } from '../../../../types';
+import type { MessageEventData, WebWorkerChildItem } from '../../../../commonTypes';
 import type { LiveData, LiveInfo, UserInfo, LiveRoomInfo } from '../../services/interface';
 
 /**

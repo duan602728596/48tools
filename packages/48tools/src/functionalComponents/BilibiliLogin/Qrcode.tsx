@@ -7,7 +7,7 @@ import * as dayjs from 'dayjs';
 import style from './qrcode.sass';
 import { requestLoginUrl, requestLoginInfo } from './services/bilibiliLogin';
 import { warningNativeMessage } from '../../utils/remote/nativeMessage';
-import type { UseMessageReturnType } from '../../types';
+import type { UseMessageReturnType } from '../../commonTypes';
 import type { LoginUrl, LoginInfo } from './services/interface';
 
 const toCanvasPromise: (e: HTMLCanvasElement, u: string) => Promise<void> = promisify(toCanvas);

@@ -6,7 +6,7 @@ import { Table, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { IDBCursorAccountList, IDBDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';
 import dbConfig from '../../utils/IDB/IDBConfig';
-import type { WeiboAccount } from '../../types';
+import type { WeiboAccount } from '../../commonTypes';
 
 /* redux selector */
 type RState = { weiboLogin: WeiboLoginInitialState };

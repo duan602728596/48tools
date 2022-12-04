@@ -16,7 +16,7 @@ import {
   type VideoCutInitialState
 } from '../reducers/videoCut';
 import { getFFmpeg } from '../../../utils/utils';
-import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { CutItem } from '../types';
 
 /* redux selector */

@@ -32,7 +32,7 @@ import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
-import type { UseMessageReturnType } from '../../../../types';
+import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 

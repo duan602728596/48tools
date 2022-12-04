@@ -60,7 +60,7 @@ import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServ
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
-import type { UseModalReturnType, UseMessageReturnType } from '../../../../types';
+import type { UseModalReturnType, UseMessageReturnType } from '../../../../commonTypes';
 
 /**
  * 格式化m3u8文件内视频的地址

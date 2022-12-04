@@ -22,7 +22,7 @@ import {
   type BilibiliDownloadInitialState
 } from '../reducers/download';
 import { requestDownloadFileByStream } from '../../48/services/pocket48';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 import type { DownloadItem } from '../types';
 
 /* redux selector */

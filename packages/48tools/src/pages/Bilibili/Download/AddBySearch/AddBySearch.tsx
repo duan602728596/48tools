@@ -18,7 +18,7 @@ import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
 import { parseVideoList, parseVideoUrlV2 } from '../parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
-import type { UseMessageReturnType } from '../../../../types';
+import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
 
 interface PageQuery {

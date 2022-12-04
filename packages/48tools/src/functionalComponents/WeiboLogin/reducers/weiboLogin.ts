@@ -1,7 +1,7 @@
 import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { weiboLoginListObjectStoreName } from '../../../utils/IDB/IDBRedux';
-import type { WeiboAccount, IDBActionFunc } from '../../../types';
+import type { WeiboAccount, IDBActionFunc } from '../../../commonTypes';
 
 export interface WeiboLoginInitialState {
   accountList: Array<WeiboAccount>;

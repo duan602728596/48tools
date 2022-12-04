@@ -13,7 +13,7 @@ import { showOpenDialog, showSaveDialog } from '../../../../../utils/remote/dial
 import ImagePreview from './ImagePreview';
 import { source } from '../../../../../utils/utils';
 import { requestDownloadFileByStream } from '../../../services/pocket48';
-import type { UseMessageReturnType } from '../../../../../types';
+import type { UseMessageReturnType } from '../../../../../commonTypes';
 import type { LiveInfo } from '../../../services/interface';
 
 interface DownloadImagesProps {

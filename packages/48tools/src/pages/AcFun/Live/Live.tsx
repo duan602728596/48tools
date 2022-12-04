@@ -31,7 +31,7 @@ import {
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
-import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../types';
+import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveRepresentation, LiveVideoPlayRes, LiveItem } from '../types';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';
 

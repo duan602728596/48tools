@@ -1,7 +1,7 @@
 import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { bilibiliLiveObjectStoreName } from '../../../utils/IDB/IDBRedux';
-import type { WebWorkerChildItem, IDBActionFunc } from '../../../types';
+import type { WebWorkerChildItem, IDBActionFunc } from '../../../commonTypes';
 import type { LiveItem } from '../types';
 
 export interface BilibiliLiveInitialState {

@@ -6,7 +6,7 @@ import { setAddWorkerInLiveList, setStopInLiveList } from '../../reducers/live48
 import { parseLiveUrl } from '../parseLive48Website';
 import { getFFmpeg } from '../../../../utils/utils';
 import type { InLiveFormValue } from '../../types';
-import type { MessageEventData } from '../../../../types';
+import type { MessageEventData } from '../../../../commonTypes';
 
 /**
  * 监听直播是否开始，并自动录制

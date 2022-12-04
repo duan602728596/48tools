@@ -7,7 +7,7 @@ import style from './liveOptions.sass';
 import { showOpenDialog } from '../../../../utils/remote/dialog';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
 import { IDBGetPocket48LiveOptions, IDBSavePocket48LiveOptions } from '../../reducers/pocket48';
-import type { UseMessageReturnType } from '../../../../types';
+import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 
 export const OPTIONS_NAME: string = 'pocket48LiveAutoGrabOptions';

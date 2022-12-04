@@ -1,5 +1,5 @@
 import type { FieldData } from 'rc-field-form/es/interface';
-import type { WebWorkerChildItem } from '../../types';
+import type { WebWorkerChildItem } from '../../commonTypes';
 
 export interface InLiveFormValue {
   type?: string;

@@ -10,7 +10,7 @@ import {
 import * as classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 
 /* 配置ffmpeg地址 */
 function FFmpegOption(props: {}): ReactElement {

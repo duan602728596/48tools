@@ -19,7 +19,7 @@ import style from './add.sass';
 import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
 import douyinCookieCache from './DouyinCookieCache';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 import type {
   AwemeDetail,
   ScriptRendedData,

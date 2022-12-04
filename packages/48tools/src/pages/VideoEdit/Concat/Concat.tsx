@@ -33,7 +33,7 @@ import {
   type ConcatInitialState
 } from '../reducers/concat';
 import { getFFmpeg } from '../../../utils/utils';
-import type { UseMessageReturnType, MessageEventData } from '../../../types';
+import type { UseMessageReturnType, MessageEventData } from '../../../commonTypes';
 import type { ConcatItem } from '../types';
 
 /* 拖拽组件 */

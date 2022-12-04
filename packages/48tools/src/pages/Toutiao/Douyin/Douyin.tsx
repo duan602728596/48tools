@@ -18,7 +18,7 @@ import {
   type DouyinDownloadInitialState
 } from '../reducers/douyin';
 import { requestGetVideoRedirectUrl } from '../services/douyin';
-import type { UseMessageReturnType } from '../../../types';
+import type { UseMessageReturnType } from '../../../commonTypes';
 import type { DownloadItem } from '../types';
 
 /* redux selector */

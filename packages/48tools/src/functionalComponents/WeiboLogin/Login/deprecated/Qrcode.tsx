@@ -20,7 +20,7 @@ import {
   requestCrossDomainUrl,
   requestUserInfo
 } from '../../services/WeiboLogin';
-import type { UseMessageReturnType } from '../../../../types';
+import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from '../../services/interface';
 
 let qrcodeLoginTimer: NodeJS.Timeout | null = null; // 轮循，判断是否登陆

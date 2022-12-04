@@ -21,9 +21,9 @@ import { IDBCursorAccountList } from '../../functionalComponents/WeiboLogin/redu
 import dbConfig from '../../utils/IDB/IDBConfig';
 import weiboCheckIn from './weiboCheckIn';
 import { setCheckIn, type WeiboSuperInitialState } from './reducers/weiboSuper';
-import type { UseMessageReturnType } from '../../types';
+import type { UseMessageReturnType } from '../../commonTypes';
 import type { WeiboLoginInitialState } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
-import type { WeiboAccount } from '../../types';
+import type { WeiboAccount } from '../../commonTypes';
 import type { WeiboCheckinResult, Quantity } from './types';
 
 /* redux selector */
