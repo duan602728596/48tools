@@ -63,6 +63,7 @@ function PlayerApp(props: {}): ReactElement {
   }, []);
   const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
   const childRef: MutableRefObject<ChildProcessWithoutNullStreams | undefined> = useRef();
+  const flvPlayerRef: MutableRefObject<flvjs.Player | undefined> = useRef();
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
 
   // 打开开发者工具
@@ -73,14 +74,14 @@ function PlayerApp(props: {}): ReactElement {
   // 加载视频
   function loadVideo(): void {
     if (videoRef.current && info) {
-      const flvPlayer: flvjs.Player = flvjs.createPlayer({
+      flvPlayerRef.current = flvjs.createPlayer({
         type: 'flv',
         isLive: true,
         url: `http://localhost:${ search.httpPort }/live/${ search.id }.flv`
       });
 
-      flvPlayer.attachMediaElement(videoRef.current);
-      flvPlayer.load();
+      flvPlayerRef.current.attachMediaElement(videoRef.current);
+      flvPlayerRef.current.load();
     }
   }
 
@@ -151,6 +152,7 @@ function PlayerApp(props: {}): ReactElement {
 
     return function(): void {
       childRef.current && childRef.current.kill();
+      flvPlayerRef.current && flvPlayerRef.current.destroy();
     };
   }, [info, search]);
 
