@@ -17,7 +17,7 @@ import { Avatar, Tag, Button } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import flvjs from 'flv.js';
-import style from './playerApp.sass';
+import style from './liveVideo.sass';
 import AntdConfig from '../../../../components/AntdConfig/AntdConfig';
 import ThemeProvider from '../../../../components/Theme/ThemeProvider';
 import { requestLiveRoomInfo } from '../../services/pocket48';
@@ -46,8 +46,8 @@ function handleChildProcessError(err: Error): void {
   console.error(err);
 }
 
-/* PlayerApp */
-function PlayerApp(props: {}): ReactElement {
+/* LiveVideo */
+function LiveVideo(props: {}): ReactElement {
   const search: Search = useMemo(function(): Search {
     const searchParams: URLSearchParams = new URLSearchParams(window.location.search);
 
@@ -183,4 +183,4 @@ function PlayerApp(props: {}): ReactElement {
   );
 }
 
-export default PlayerApp;
+export default LiveVideo;
