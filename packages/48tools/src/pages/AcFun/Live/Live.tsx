@@ -55,7 +55,7 @@ function Live(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止
-  function handleStopClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopClick(record: LiveItem, event?: MouseEvent): void {
     const index: number = liveWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) {
@@ -116,7 +116,7 @@ function Live(props: {}): ReactElement {
       }
 
       // 确认
-      async function handleOkClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+      async function handleOkClick(event: MouseEvent): Promise<void> {
         if (ctx.player) {
           const time: string = getFileTime();
           const result: SaveDialogReturnValue = await showSaveDialog({
@@ -134,7 +134,7 @@ function Live(props: {}): ReactElement {
       }
 
       // 关闭弹出层
-      function handleCloseClick(event: MouseEvent<HTMLButtonElement>): void {
+      function handleCloseClick(event: MouseEvent): void {
         setVisible(false);
       }
 
@@ -209,7 +209,7 @@ function Live(props: {}): ReactElement {
   }
 
   // 开始录制
-  async function handleRecordClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
     const onion: Onion = new Onion();
 
     onion.use(getLivePlayerUrlMiddleware);
@@ -219,7 +219,7 @@ function Live(props: {}): ReactElement {
   }
 
   // 删除
-  function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
     dispatch(IDBDeleteAcFunLiveList({
       query: record.id
     }));
@@ -240,12 +240,12 @@ function Live(props: {}): ReactElement {
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
-                  onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                  onConfirm={ (event?: MouseEvent): void => handleStopClick(record, event) }
                 >
                   <Button type="primary" danger={ true }>停止录制</Button>
                 </Popconfirm>
               ) : (
-                <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleRecordClick(record, event) }>
+                <Button onClick={ (event: MouseEvent): Promise<void> => handleRecordClick(record, event) }>
                   开始录制
                 </Button>
               )
@@ -253,7 +253,7 @@ function Live(props: {}): ReactElement {
             <Button type="primary"
               danger={ true }
               disabled={ idx >= 0 }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteRoomIdClick(record, event) }
+              onClick={ (event: MouseEvent): void => handleDeleteRoomIdClick(record, event) }
             >
               删除
             </Button>

@@ -49,7 +49,7 @@ function UserBrowserLogin(props: { onCancel: Function }): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 打开无头浏览器
-  async function handleLoginClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleLoginClick(event: MouseEvent): Promise<void> {
     if (browser !== null) return;
 
     const executablePath: string | null = localStorage.getItem('PUPPETEER_EXECUTABLE_PATH');

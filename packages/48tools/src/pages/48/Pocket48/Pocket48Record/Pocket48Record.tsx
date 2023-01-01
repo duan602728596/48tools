@@ -135,7 +135,7 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 停止
-  function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopClick(record: LiveInfo, event?: MouseEvent): void {
     const index: number = recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
 
     if (index >= 0) {
@@ -144,7 +144,7 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 重试（主要是下载ts碎片）
-  function handleRetryDownloadClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+  function handleRetryDownloadClick(record: LiveInfo, event: MouseEvent): void {
     const index: number = recordChildList.findIndex((o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
 
     if (index >= 0) {
@@ -154,7 +154,7 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 复制直播地址
-  async function handleCopyLiveUrlClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleCopyLiveUrlClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
     clipboard.writeText(resInfo.content.playStreamPath);
@@ -162,7 +162,7 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 下载图片
-  async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
     downloadImages(modalApi, record, record.coverPath, resInfo.content?.carousels?.carousels);
@@ -174,11 +174,7 @@ function Pocket48Record(props: {}): ReactElement {
    * @param { 0 | 1 } downloadType: 下载方式。0：正常下载，1：拼碎片
    * @param { MouseEvent<HTMLButtonElement> } event
    */
-  async function handleDownloadM3u8Click(
-    record: LiveInfo,
-    downloadType: 0 | 1,
-    event: MouseEvent<HTMLButtonElement>
-  ): Promise<void> {
+  async function handleDownloadM3u8Click(record: LiveInfo, downloadType: 0 | 1, event: MouseEvent): Promise<void> {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const parseResult: ParsedPath = path.parse(resInfo.content.playStreamPath);
@@ -261,7 +257,7 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 下载弹幕
-  async function handleDownloadLrcClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadLrcClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     try {
       const res: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const time: string = getFileTime(record.ctime);
@@ -288,7 +284,7 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 加载列表
-  async function handleLoadRecordListClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleLoadRecordListClick(event: MouseEvent): Promise<void> {
     setLoading(true);
 
     try {
@@ -309,7 +305,7 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 刷新列表
-  async function handleRefreshLiveListClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleRefreshLiveListClick(event: MouseEvent): Promise<void> {
     setLoading(true);
 
     try {
@@ -379,14 +375,14 @@ function Pocket48Record(props: {}): ReactElement {
                 idx >= 0 ? (
                   <Button.Group>
                     <Popconfirm title="确定要停止下载吗？"
-                      onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                      onConfirm={ (event?: MouseEvent): void => handleStopClick(record, event) }
                     >
                       <Button type="primary" danger={ true }>停止下载</Button>
                     </Popconfirm>
                     {
                       canRetry && (
                         <Button onClick={
-                          (event: MouseEvent<HTMLButtonElement>): void => handleRetryDownloadClick(record, event)
+                          (event: MouseEvent): void => handleRetryDownloadClick(record, event)
                         }>
                           重试
                         </Button>
@@ -396,15 +392,12 @@ function Pocket48Record(props: {}): ReactElement {
                 ) : (
                   <Button.Group>
                     <Button onClick={
-                      (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
+                      (event: MouseEvent): Promise<void> =>
                         handleDownloadM3u8Click(record, 0, event)
                     }>
                       下载视频
                     </Button>
-                    <Button onClick={
-                      (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
-                        handleDownloadM3u8Click(record, 1, event)
-                    }>
+                    <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadM3u8Click(record, 1, event) }>
                       备用方案下载
                     </Button>
                   </Button.Group>
@@ -412,13 +405,13 @@ function Pocket48Record(props: {}): ReactElement {
               }
             </div>
             <Button.Group size="small">
-              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadLrcClick(record, event) }>
+              <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadLrcClick(record, event) }>
                 下载弹幕
               </Button>
-              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
+              <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadImagesClick(record, event) }>
                 下载图片
               </Button>
-              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleCopyLiveUrlClick(record, event) }>
+              <Button onClick={ (event: MouseEvent): Promise<void> => handleCopyLiveUrlClick(record, event) }>
                 复制录播地址
               </Button>
             </Button.Group>

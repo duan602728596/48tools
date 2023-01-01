@@ -47,7 +47,7 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
     }, []);
 
   // 登陆
-  function handleLoginWeiboClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleLoginWeiboClick(event: MouseEvent): void {
     ipcRenderer.send('weibo-login');
   }
 

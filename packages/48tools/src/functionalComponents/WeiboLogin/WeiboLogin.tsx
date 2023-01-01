@@ -9,12 +9,12 @@ function WeiboLogin(props: {}): ReactElement {
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
 
   // 打开扫码弹出层
-  function handleOpenQrcodeClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenQrcodeClick(event: MouseEvent): void {
     setVisible(true);
   }
 
   // 关闭扫码弹出层
-  function handleCloseQrcodeClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleCloseQrcodeClick(event: MouseEvent): void {
     setVisible(false);
   }
 

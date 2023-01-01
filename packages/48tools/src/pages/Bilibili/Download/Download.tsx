@@ -46,7 +46,7 @@ function Download(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 下载封面
-  async function handleDownloadPicClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadPicClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     if (item.pic === undefined || item.pic === '') {
       return;
     }
@@ -68,7 +68,7 @@ function Download(props: {}): ReactElement {
   }
 
   // 下载
-  async function handleDownloadClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       const urlResult: url.URL = new url.URL(item.durl);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
@@ -106,7 +106,7 @@ function Download(props: {}): ReactElement {
   }
 
   // 删除一个任务
-  function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent): void {
     dispatch(setDeleteDownloadList(item.qid));
   }
 
@@ -141,19 +141,19 @@ function Download(props: {}): ReactElement {
         return (
           <Button.Group>
             <Button disabled={ inDownload }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadClick(record, event) }
+              onClick={ (event: MouseEvent): Promise<void> => handleDownloadClick(record, event) }
             >
               下载
             </Button>
             <Button disabled={ record.pic === undefined || record.pic === '' }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadPicClick(record, event) }
+              onClick={ (event: MouseEvent): Promise<void> => handleDownloadPicClick(record, event) }
             >
               封面
             </Button>
             <Button type="primary"
               danger={ true }
               disabled={ inDownload }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteTaskClick(record, event) }
+              onClick={ (event: MouseEvent): void => handleDeleteTaskClick(record, event) }
             >
               删除
             </Button>

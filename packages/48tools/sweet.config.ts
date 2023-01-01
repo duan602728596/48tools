@@ -110,7 +110,7 @@ export default function(info: object): { [key: string]: any } {
       include: /src/
     },
     less: {
-      include: /node_modules[\\/]highlight/,
+      include: /node_modules[\\/](_?antd|highlight)/,
       exclude: /tailwindcss/i
     },
     rules: [

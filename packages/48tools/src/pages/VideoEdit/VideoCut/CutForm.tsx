@@ -39,7 +39,7 @@ function CutForm(props: {}): ReactElement {
   const { setFieldsValue, resetFields }: FormInstance = form;
 
   // 选择文件
-  async function handleOpenVideoFileClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleOpenVideoFileClick(event: MouseEvent): Promise<void> {
     const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openFile']
     });
@@ -102,7 +102,7 @@ function CutForm(props: {}): ReactElement {
           </Form.Item>
         </Form.Item>
         <Button.Group>
-          <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => resetFields() }>重置</Button>
+          <Button onClick={ (event: MouseEvent): void => resetFields() }>重置</Button>
           <Button type="primary" htmlType="submit">添加到裁剪队列</Button>
         </Button.Group>
       </Form>

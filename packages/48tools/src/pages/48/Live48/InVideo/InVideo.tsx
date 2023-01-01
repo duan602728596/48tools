@@ -95,7 +95,7 @@ function InVideo(props: {}): ReactElement {
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
 
   // 停止下载
-  function handleStopClick(record: InVideoItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopClick(record: InVideoItem, event?: MouseEvent): void {
     const index: number = videoListChild.findIndex(
       (o: InVideoWebWorkerItem): boolean => o.id === record.id && o.liveType === record.liveType);
 
@@ -105,7 +105,7 @@ function InVideo(props: {}): ReactElement {
   }
 
   // 开始下载
-  async function handleDownloadClick(record: InVideoItem, quality: string, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadClick(record: InVideoItem, quality: string, event: MouseEvent): Promise<void> {
     try {
       const m3u8Url: { url: string; title: string } | null = await parseVideoItem(record, quality);
 
@@ -204,7 +204,7 @@ function InVideo(props: {}): ReactElement {
   }
 
   // 解析并加载列表
-  async function handleGetVideoListClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleGetVideoListClick(event: MouseEvent): Promise<void> {
     setLoading(true);
 
     try {
@@ -257,24 +257,24 @@ function InVideo(props: {}): ReactElement {
 
         return idx >= 0 ? (
           <Popconfirm title="确定要停止下载吗？"
-            onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+            onConfirm={ (event?: MouseEvent): void => handleStopClick(record, event) }
           >
             <Button type="primary" danger={ true }>停止下载</Button>
           </Popconfirm>
         ) : (
           <Button.Group>
             <Button onClick={
-              (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadClick(record, 'chao', event) }
+              (event: MouseEvent): Promise<void> => handleDownloadClick(record, 'chao', event) }
             >
               超清
             </Button>
             <Button onClick={
-              (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadClick(record, 'gao', event) }
+              (event: MouseEvent): Promise<void> => handleDownloadClick(record, 'gao', event) }
             >
               高清
             </Button>
             <Button onClick={
-              (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadClick(record, 'liuchang', event) }
+              (event: MouseEvent): Promise<void> => handleDownloadClick(record, 'liuchang', event) }
             >
               流畅
             </Button>

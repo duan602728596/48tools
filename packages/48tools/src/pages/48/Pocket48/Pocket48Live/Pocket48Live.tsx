@@ -69,13 +69,13 @@ function Pocket48Live(props: {}): ReactElement {
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
 
   // 停止自动抓取
-  function handleStopAutoGrabClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopAutoGrabClick(event: MouseEvent): void {
     dispatch(setAutoGrab(null));
     messageApi.info('停止自动抓取。');
   }
 
   // 开始自动抓取
-  async function handleStartAutoGrabClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleStartAutoGrabClick(event: MouseEvent): Promise<void> {
     type LiveOptionsResult = { name: string; value: Pocket48LiveAutoGrabOptions };
     type OnionContext = { result: LiveOptionsResult; transcoding?: boolean };
 
@@ -140,7 +140,7 @@ function Pocket48Live(props: {}): ReactElement {
   }
 
   // 复制直播地址
-  async function handleCopyLiveUrlClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleCopyLiveUrlClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
     clipboard.writeText(resInfo.content.playStreamPath);
@@ -148,14 +148,14 @@ function Pocket48Live(props: {}): ReactElement {
   }
 
   // 下载图片
-  async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
 
     downloadImages(modalApi, record, record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
   // 停止
-  function handleStopClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopClick(record: LiveInfo, event?: MouseEvent): void {
     const index: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
 
     if (index >= 0) {
@@ -169,7 +169,7 @@ function Pocket48Live(props: {}): ReactElement {
    * @param { boolean } transcoding: 为true时，每次都会重新编码，而不是采用视频开始时的编码，可以修复连麦问题
    * @param { MouseEvent<HTMLButtonElement> } event
    */
-  async function handleGetVideoClick(record: LiveInfo, transcoding: boolean, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleGetVideoClick(record: LiveInfo, transcoding: boolean, event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
@@ -212,7 +212,7 @@ function Pocket48Live(props: {}): ReactElement {
   }
 
   // 打开新窗口播放视频
-  function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent): void {
     const port: NetMediaServerPort = getNetMediaServerPort();
     const searchParams: URLSearchParams = new URLSearchParams(Object.assign(
       {
@@ -231,7 +231,7 @@ function Pocket48Live(props: {}): ReactElement {
   }
 
   // 点击刷新直播列表
-  async function handleRefreshLiveListClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleRefreshLiveListClick(event: MouseEvent): Promise<void> {
     setLoading(true);
 
     try {
@@ -281,32 +281,32 @@ function Pocket48Live(props: {}): ReactElement {
                 {
                   inRecording ? (
                     <Popconfirm title="确定要停止录制吗？"
-                      onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                      onConfirm={ (event?: MouseEvent): void => handleStopClick(record, event) }
                     >
                       <Button type="primary" danger={ true }>停止</Button>
                     </Popconfirm>
                   ) : (
-                    <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> =>
+                    <Button onClick={ (event: MouseEvent): Promise<void> =>
                       handleGetVideoClick(record, false, event) }>
                       录制
                     </Button>
                   )
                 }
                 <Button disabled={ inRecording }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetVideoClick(record, true, event) }
+                  onClick={ (event: MouseEvent): Promise<void> => handleGetVideoClick(record, true, event) }
                 >
                   录制（修复连麦用）
                 </Button>
               </Button.Group>
             </div>
             <Button.Group size="small">
-              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleOpenPlayerClick(record, event) }>
+              <Button onClick={ (event: MouseEvent): void => handleOpenPlayerClick(record, event) }>
                 播放
               </Button>
-              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadImagesClick(record, event) }>
+              <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadImagesClick(record, event) }>
                 下载图片
               </Button>
-              <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleCopyLiveUrlClick(record, event) }>
+              <Button onClick={ (event: MouseEvent): Promise<void> => handleCopyLiveUrlClick(record, event) }>
                 复制直播地址
               </Button>
             </Button.Group>

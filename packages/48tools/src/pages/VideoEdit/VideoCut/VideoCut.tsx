@@ -37,12 +37,12 @@ function Index(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 删除队列
-  function handleDeleteClick(item: CutItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteClick(item: CutItem, event: MouseEvent): void {
     dispatch(setCutListDelete(item));
   }
 
   // 停止裁剪
-  function handleStopCutClick(record: CutItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopCutClick(record: CutItem, event: MouseEvent): void {
     const index: number = cutChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) {
@@ -51,7 +51,7 @@ function Index(props: {}): ReactElement {
   }
 
   // 开始裁剪
-  async function handleStartCutClick(item: CutItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleStartCutClick(item: CutItem, event: MouseEvent): Promise<void> {
     const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `[视频裁剪]${ item.id }.${ item.name }`
     });
@@ -106,12 +106,12 @@ function Index(props: {}): ReactElement {
               hasChild ? (
                 <Button type="primary"
                   danger={ true }
-                  onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleStopCutClick(record, event) }
+                  onClick={ (event: MouseEvent): void => handleStopCutClick(record, event) }
                 >
                   停止裁剪
                 </Button>
               ) : (
-                <Button onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleStartCutClick(record, event) }>
+                <Button onClick={ (event: MouseEvent): Promise<void> => handleStartCutClick(record, event) }>
                   开始裁剪
                 </Button>
               )
@@ -119,7 +119,7 @@ function Index(props: {}): ReactElement {
             <Button type="primary"
               danger={ true }
               disabled={ hasChild }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteClick(record, event) }
+              onClick={ (event: MouseEvent): void => handleDeleteClick(record, event) }
             >
               删除
             </Button>

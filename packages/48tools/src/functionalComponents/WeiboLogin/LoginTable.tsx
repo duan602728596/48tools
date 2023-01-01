@@ -22,7 +22,7 @@ function LoginTable(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
 
   // 删除账号
-  function handleDeleteWeiboAccountClick(record: WeiboAccount, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteWeiboAccountClick(record: WeiboAccount, event: MouseEvent): void {
     dispatch(IDBDeleteAccount({
       query: record.id
     }));
@@ -40,7 +40,7 @@ function LoginTable(props: {}): ReactElement {
         <Button type="primary"
           size="small"
           danger={ true }
-          onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteWeiboAccountClick(record, event) }
+          onClick={ (event: MouseEvent): void => handleDeleteWeiboAccountClick(record, event) }
         >
           删除
         </Button>

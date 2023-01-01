@@ -60,7 +60,7 @@ function Index(props: {}): ReactElement {
   }
 
   // 开始签到
-  function handleWeiboCheckinStartClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleWeiboCheckinStartClick(event: MouseEvent): void {
     const index: number = accountList.findIndex((o: WeiboAccount): boolean => o.id === accountValue);
 
     if (index >= 0) {
@@ -70,7 +70,7 @@ function Index(props: {}): ReactElement {
   }
 
   // 停止签到
-  function handleWeiboCheckinStopClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleWeiboCheckinStopClick(event: MouseEvent): void {
     dispatch(setCheckIn(false));
   }
 

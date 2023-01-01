@@ -56,7 +56,7 @@ function Add(props: {}): ReactElement {
   }
 
   // 添加新的下载地址
-  function handleAddClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleAddClick(event: MouseEvent): void {
     dispatch(setAddDownloadList({
       qid: randomUUID(),
       url: selectedUrl,
@@ -66,7 +66,7 @@ function Add(props: {}): ReactElement {
   }
 
   // 获取下载地址
-  function handleGetVideoUrlClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleGetVideoUrlClick(event: MouseEvent): void {
     if (/^\s*$/.test(urlValue)) return;
 
     setGetUrlLoading(true);
@@ -198,7 +198,7 @@ function Add(props: {}): ReactElement {
   }
 
   // 清除抖音的cookie
-  function handleClearDouyinCookie(event: MouseEvent<HTMLButtonElement>): void {
+  function handleClearDouyinCookie(event: MouseEvent): void {
     douyinCookieCache.clearCookie();
     messageApi.success('Cookie已清除！');
   }
@@ -223,7 +223,7 @@ function Add(props: {}): ReactElement {
         closable={ false }
         afterClose={ afterClose }
         onOk={ handleAddClick }
-        onCancel={ (event: MouseEvent<HTMLButtonElement>): void => setVisible(false) }
+        onCancel={ (event: MouseEvent): void => setVisible(false) }
       >
         <Select className={ style.urlSelect }
           value={ selectedUrl }

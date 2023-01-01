@@ -158,12 +158,12 @@ function Index(props: {}): ReactElement {
   const theme: Theme = useContext(ThemeContext);
 
   // 打开issues
-  function handleOpenIssuesClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenIssuesClick(event: MouseEvent): void {
     shell.openExternal('https://github.com/duan602728596/48tools/issues');
   }
 
   // 打开开发者工具
-  function handleOpenDeveloperToolsClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenDeveloperToolsClick(event: MouseEvent): void {
     ipcRenderer.send('developer-tools');
   }
 

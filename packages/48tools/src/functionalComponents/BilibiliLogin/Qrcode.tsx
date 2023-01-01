@@ -36,7 +36,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }, []);
 
   // 清除cookie
-  function handleClearBilibiliCookieClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleClearBilibiliCookieClick(event: MouseEvent): void {
     localStorage.removeItem(BILIBILI_COOKIE_KEY);
     warningNativeMessage('B站Cookie已清除，请重新登陆。');
   }
@@ -76,7 +76,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }
 
   // 重新生成二维码
-  function handleResetCreateQrcodeClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleResetCreateQrcodeClick(event: MouseEvent): void {
     createQrcode();
   }
 

@@ -42,12 +42,12 @@ function Douyin(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 删除一个任务
-  function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent): void {
     dispatch(setDeleteDownloadList(item.qid));
   }
 
   // 下载（测试ID：6902337717137329412）
-  async function handleDownloadClick(item: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: `[抖音]${ filenamify(item.title) }.mp4`
@@ -116,14 +116,14 @@ function Douyin(props: {}): ReactElement {
         return (
           <Button.Group>
             <Button disabled={ inDownload }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleDownloadClick(record, event) }
+              onClick={ (event: MouseEvent): Promise<void> => handleDownloadClick(record, event) }
             >
               下载
             </Button>
             <Button type="primary"
               danger={ true }
               disabled={ inDownload }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteTaskClick(record, event) }
+              onClick={ (event: MouseEvent): void => handleDeleteTaskClick(record, event) }
             >
               删除
             </Button>

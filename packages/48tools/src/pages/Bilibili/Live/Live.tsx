@@ -42,7 +42,7 @@ function Live(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止
-  function handleStopClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopClick(record: LiveItem, event?: MouseEvent): void {
     const index: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) {
@@ -51,7 +51,7 @@ function Live(props: {}): ReactElement {
   }
 
   // 开始录制
-  async function handleRecordClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
     const time: string = getFileTime();
     const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
@@ -99,7 +99,7 @@ Origin: https://live.bilibili.com\r`
   }
 
   // 删除
-  function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
     dispatch(IDBDeleteBilibiliLiveList({
       query: record.id
     }));
@@ -120,12 +120,12 @@ Origin: https://live.bilibili.com\r`
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
-                  onConfirm={ (event: MouseEvent<HTMLButtonElement> ): void => handleStopClick(record, event) }
+                  onConfirm={ (event?: MouseEvent ): void => handleStopClick(record, event) }
                 >
                   <Button type="primary" danger={ true }>停止录制</Button>
                 </Popconfirm>
               ) : (
-                <Button onClick={ (event: MouseEvent<HTMLButtonElement> ): Promise<void> => handleRecordClick(record, event) }>
+                <Button onClick={ (event: MouseEvent ): Promise<void> => handleRecordClick(record, event) }>
                   开始录制
                 </Button>
               )
@@ -133,7 +133,7 @@ Origin: https://live.bilibili.com\r`
             <Button type="primary"
               danger={ true }
               disabled={ idx >= 0 }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteRoomIdClick(record, event) }
+              onClick={ (event: MouseEvent): void => handleDeleteRoomIdClick(record, event) }
             >
               删除
             </Button>

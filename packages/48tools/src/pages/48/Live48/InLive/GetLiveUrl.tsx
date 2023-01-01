@@ -85,7 +85,7 @@ function GetLiveUrl(props: {}): ReactElement {
   }
 
   // 自动录制
-  async function handleAutoInLiveClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleAutoInLiveClick(event: MouseEvent): Promise<void> {
     let value: InLiveFormValue;
 
     try {

@@ -13,7 +13,7 @@ function AddForm(props: {}): ReactElement {
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
 
   // 添加一个直播间
-  async function handleAddRoomIdClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleAddRoomIdClick(event: MouseEvent): Promise<void> {
     let formValue: Store;
 
     try {
@@ -37,12 +37,12 @@ function AddForm(props: {}): ReactElement {
   }
 
   // 打开弹出层
-  function handleOpenAddModalClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenAddModalClick(event: MouseEvent): void {
     setVisible(true);
   }
 
   // 关闭弹出层
-  function handleCloseAddModalClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleCloseAddModalClick(event: MouseEvent): void {
     setVisible(false);
   }
 

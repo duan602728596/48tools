@@ -55,7 +55,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }, []);
 
   // 清除cookie
-  function handleClearAcFunCookieClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleClearAcFunCookieClick(event: MouseEvent): void {
     localStorage.removeItem(ACFUN_COOKIE_KEY);
     warningNativeMessage('A站Cookie已清除，请重新登陆。');
   }
@@ -106,7 +106,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }
 
   // 重新生成二维码
-  function handleResetCreateQrcodeClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleResetCreateQrcodeClick(event: MouseEvent): void {
     createQrcode();
   }
 

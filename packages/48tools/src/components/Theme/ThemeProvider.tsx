@@ -54,12 +54,12 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   }
 
   // 打开配置
-  function handleThemeModalOpenClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleThemeModalOpenClick(event: MouseEvent): void {
     setVisible(true);
   }
 
   // 关闭配置
-  function handleThemeModalCloseClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleThemeModalCloseClick(event: MouseEvent): void {
     setVisible(false);
   }
 

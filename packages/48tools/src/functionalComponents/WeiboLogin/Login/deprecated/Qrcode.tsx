@@ -83,7 +83,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }
 
   // 重新生成二维码
-  function handleResetCreateQrcodeClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleResetCreateQrcodeClick(event: MouseEvent): void {
     createQrcode();
   }
 

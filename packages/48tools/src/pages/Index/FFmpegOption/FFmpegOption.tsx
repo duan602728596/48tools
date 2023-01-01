@@ -19,12 +19,12 @@ function FFmpegOption(props: {}): ReactElement {
   const [form]: [FormInstance] = Form.useForm();
 
   // 下载ffmpeg
-  function handleOpenIssuesClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenIssuesClick(event: MouseEvent): void {
     shell.openExternal('https://ffmpeg.org/download.html');
   }
 
   // 打开配置弹出层
-  function handleOpenFFmpegOptionClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenFFmpegOptionClick(event: MouseEvent): void {
     form.setFieldsValue({
       ffmpeg: localStorage.getItem('FFMPEG_PATH')
     });
@@ -32,12 +32,12 @@ function FFmpegOption(props: {}): ReactElement {
   }
 
   // 取消
-  function handleCloseFFmpegOptionModalClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleCloseFFmpegOptionModalClick(event: MouseEvent): void {
     setVisible(false);
   }
 
   // 确认
-  async function handleSetFFmpegClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleSetFFmpegClick(event: MouseEvent): Promise<void> {
     let formValue: Store;
 
     try {
@@ -62,7 +62,7 @@ function FFmpegOption(props: {}): ReactElement {
   }
 
   // 选择ffmpeg文件的位置
-  async function handleSelectFFmpegClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleSelectFFmpegClick(event: MouseEvent): Promise<void> {
     const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openFile']
     });

@@ -44,7 +44,7 @@ function Download(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止
-  function handleStopClick(record: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopClick(record: DownloadItem, event?: MouseEvent): void {
     const index: number = ffmpegDownloadWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === record.qid);
 
     if (index >= 0) {
@@ -101,7 +101,7 @@ function Download(props: {}): ReactElement {
   }
 
   // 删除一个下载队列
-  function handleDeleteDownloadItemClick(record: DownloadItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteDownloadItemClick(record: DownloadItem, event: MouseEvent): void {
     dispatch(setDeleteDownloadList(record));
   }
 
@@ -149,7 +149,7 @@ function Download(props: {}): ReactElement {
             {
               inDownload ? (
                 <Popconfirm title="确定要停止下载吗？"
-                  onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+                  onConfirm={ (event?: MouseEvent): void => handleStopClick(record, event) }
                 >
                   <Button type="primary" danger={ true }>停止下载</Button>
                 </Popconfirm>
@@ -165,7 +165,7 @@ function Download(props: {}): ReactElement {
             <Button type="primary"
               danger={ true }
               disabled={ inDownload }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteDownloadItemClick(record, event) }
+              onClick={ (event: MouseEvent): void => handleDeleteDownloadItemClick(record, event) }
             >
               删除
             </Button>

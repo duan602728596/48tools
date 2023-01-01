@@ -70,12 +70,12 @@ function Concat(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止合并
-  function handleStopConcatVideoClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopConcatVideoClick(event: MouseEvent): void {
     concatWorker?.postMessage({ type: 'stop' });
   }
 
   // 视频合并
-  async function handleConcatVideoClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleConcatVideoClick(event: MouseEvent): Promise<void> {
     if (!concatList?.length) return;
 
     const pathResult: ParsedPath = path.parse(concatList[0].value);
@@ -129,7 +129,7 @@ function Concat(props: {}): ReactElement {
   }
 
   // 选择视频
-  async function handleSelectVideosClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleSelectVideosClick(event: MouseEvent): Promise<void> {
     const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openFile', 'multiSelections']
     });
@@ -150,12 +150,12 @@ function Concat(props: {}): ReactElement {
   }
 
   // 删除
-  function handleDeleteItemClick(item: ConcatItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteItemClick(item: ConcatItem, event: MouseEvent): void {
     dispatch(setConcatListDelete(item));
   }
 
   // 清空视频
-  function handleClearAllListClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleClearAllListClick(event: MouseEvent): void {
     dispatch(setConcatList([]));
   }
 
@@ -170,7 +170,7 @@ function Concat(props: {}): ReactElement {
               size="small"
               type="primary"
               danger={ true }
-              onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteItemClick(item, event) }
+              onClick={ (event: MouseEvent): void => handleDeleteItemClick(item, event) }
             >
               删除
             </Button>

@@ -15,12 +15,12 @@ function ExecutablePath(props: {}): ReactElement {
   const [form]: [FormInstance] = Form.useForm();
 
   // 取消
-  function handleCloseExecutablePathModalClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleCloseExecutablePathModalClick(event: MouseEvent): void {
     setVisible(false);
   }
 
   // 打开配置弹出层
-  function handleOpenExecutablePathClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleOpenExecutablePathClick(event: MouseEvent): void {
     form.setFieldsValue({
       executablePath: localStorage.getItem('PUPPETEER_EXECUTABLE_PATH')
     });
@@ -28,7 +28,7 @@ function ExecutablePath(props: {}): ReactElement {
   }
 
   // 确认
-  async function handleSetExecutablePathClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleSetExecutablePathClick(event: MouseEvent): Promise<void> {
     let formValue: Store;
 
     try {
@@ -53,7 +53,7 @@ function ExecutablePath(props: {}): ReactElement {
   }
 
   // 选择浏览器文件的位置
-  async function handleSelectExecutablePathClick(event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleSelectExecutablePathClick(event: MouseEvent): Promise<void> {
     const result: OpenDialogReturnValue = await showOpenDialog({
       properties: ['openFile']
     });

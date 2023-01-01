@@ -18,7 +18,7 @@
     "@indexeddb-tools/indexeddb": "^1.0.0",
     "@indexeddb-tools/indexeddb-redux": "^1.0.0",
     "@reduxjs/toolkit": "^1.9.0",
-    "antd": "^5.0.0",
+    "antd": "^5.1.2",
     "array-move": "^4.0.0",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.6",

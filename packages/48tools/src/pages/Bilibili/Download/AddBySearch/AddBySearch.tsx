@@ -50,7 +50,7 @@ function AddBySearch(props: {}): ReactElement {
   const [secondLoading, setSecondLoading]: [boolean, D<S<boolean>>] = useState(false);        // 单个视频搜索的part
 
   // 添加到下载列表
-  async function handleAddDownloadQueueClick(o: DownloadItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleAddDownloadQueueClick(o: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       const bvId: string = o.bvid.replace(/^bv/i, '');
       const result: { flvUrl: string; pic: string } | void = await parseVideoUrlV2('bv', bvId, o.index, false);
@@ -92,7 +92,7 @@ function AddBySearch(props: {}): ReactElement {
   }
 
   // 解析地址
-  async function handleGetUrlListClick(record: SpaceArcSearchVListItem, event: MouseEvent<HTMLButtonElement>): Promise<void> {
+  async function handleGetUrlListClick(record: SpaceArcSearchVListItem, event: MouseEvent): Promise<void> {
     setSecondLoading(true);
 
     try {
@@ -131,7 +131,7 @@ function AddBySearch(props: {}): ReactElement {
   }
 
   // 关闭
-  function handleCancelClick(event: MouseEvent<HTMLButtonElement>): void {
+  function handleCancelClick(event: MouseEvent): void {
     setVisible(false);
   }
 
@@ -142,7 +142,7 @@ function AddBySearch(props: {}): ReactElement {
         <Button key={ o.cid }
           className={ classNames('block text-left', style.downloadBtn) }
           block={ true }
-          onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleAddDownloadQueueClick(o, event) }
+          onClick={ (event: MouseEvent): Promise<void> => handleAddDownloadQueueClick(o, event) }
         >
           { index + 1 }、
           { o.part }
@@ -163,7 +163,7 @@ function AddBySearch(props: {}): ReactElement {
       render: (value: undefined, record: SpaceArcSearchVListItem, index: number): ReactElement => {
         return (
           <Button size="small"
-            onClick={ (event: MouseEvent<HTMLButtonElement>): Promise<void> => handleGetUrlListClick(record, event) }
+            onClick={ (event: MouseEvent): Promise<void> => handleGetUrlListClick(record, event) }
           >
             查看视频
           </Button>
@@ -179,7 +179,7 @@ function AddBySearch(props: {}): ReactElement {
   return (
     <Fragment>
       <Button data-test-id="bilibili-download-add-by-search-btn"
-        onClick={ (event: MouseEvent<HTMLButtonElement>): void => setVisible(true) }
+        onClick={ (event: MouseEvent): void => setVisible(true) }
       >
         个人主页批量下载
       </Button>

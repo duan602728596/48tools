@@ -24,12 +24,12 @@ function InLive(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
 
   // 删除
-  function handleDeleteClick(item: InLiveWebWorkerItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleDeleteClick(item: InLiveWebWorkerItem, event: MouseEvent): void {
     dispatch(setDeleteInLiveList(item.id));
   }
 
   // 停止
-  function handleStopClick(item: InLiveWebWorkerItem, event: MouseEvent<HTMLButtonElement>): void {
+  function handleStopClick(item: InLiveWebWorkerItem, event?: MouseEvent): void {
     item.timer && clearInterval(item.timer);
 
     if (item.worker) {
@@ -76,13 +76,13 @@ function InLive(props: {}): ReactElement {
       render: (value: undefined, record: InLiveWebWorkerItem, index: number): ReactElement => record.status === 0 ? (
         <Button type="primary"
           danger={ true }
-          onClick={ (event: MouseEvent<HTMLButtonElement>): void => handleDeleteClick(record, event) }
+          onClick={ (event: MouseEvent): void => handleDeleteClick(record, event) }
         >
           删除
         </Button>
       ) : (
         <Popconfirm title="确定要停止录制吗？"
-          onConfirm={ (event: MouseEvent<HTMLButtonElement>): void => handleStopClick(record, event) }
+          onConfirm={ (event?: MouseEvent): void => handleStopClick(record, event) }
         >
           <Button type="primary" danger={ true }>停止</Button>
         </Popconfirm>
