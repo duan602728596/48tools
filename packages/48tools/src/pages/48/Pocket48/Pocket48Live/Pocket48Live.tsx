@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { ipcRenderer, clipboard, type SaveDialogReturnValue } from 'electron';
 import {
   Fragment,
@@ -216,8 +215,8 @@ function Pocket48Live(props: {}): ReactElement {
     const port: NetMediaServerPort = getNetMediaServerPort();
     const searchParams: URLSearchParams = new URLSearchParams(Object.assign(
       {
-        id: randomUUID(), // rtmp服务器id
-        ...port           // 端口号
+        id: record.liveId, // rtmp服务器id
+        ...port            // 端口号
       },
       pick(record, [
         'coverPath', // 头像

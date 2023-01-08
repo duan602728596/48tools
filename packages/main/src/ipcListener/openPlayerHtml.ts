@@ -18,6 +18,14 @@ function open(title: string, query: string): void {
   const searchParams: URLSearchParams = new URLSearchParams(query);
   const id: string | null = searchParams.get('id');
 
+  if (!id) return;
+
+  if (playerWindowMaps.has(id)) {
+    playerWindowMaps.get(id)!.show();
+
+    return;
+  }
+
   let win: BrowserWindow | null = new BrowserWindow({
     width: 300,
     height: 680,
@@ -58,14 +66,14 @@ function open(title: string, query: string): void {
 
     win.on('closed', function(): void {
       themeEvent.off('themeSource', handleThemeEvent);
-      id && playerWindowMaps.delete(id);
+      playerWindowMaps.delete(id);
       win = null;
     });
 
     themeEvent.on('themeSource', handleThemeEvent);
   }
 
-  id && playerWindowMaps.set(id, win);
+  playerWindowMaps.set(id, win);
 }
 
 function openPlayerHtml(): void {
