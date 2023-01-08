@@ -89,11 +89,11 @@ export default function(info: object): { [key: string]: any } {
     ],
     entry: {
       index: [path.join(__dirname, 'src/index.tsx')],
-      player: [path.join(__dirname, 'src/pages/48/Pocket48/Player/Player.tsx')]
+      player: [path.join(__dirname, 'src/Player.tsx')]
     },
     html: [
       { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
-      { template: path.join(__dirname, 'src/pages/48/Pocket48/Player/player.pug'), minify: htmlWebpackPluginMinify }
+      { template: path.join(__dirname, 'src/player.pug'), minify: htmlWebpackPluginMinify }
     ],
     externals: nodeExternals(externalsName),
     javascript: {

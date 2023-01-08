@@ -1,4 +1,4 @@
-- var imports = require('../../../../imports');
+- var imports = require('./imports');
 
 doctype html
 html
@@ -8,10 +8,10 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1')
 
   body.theme
-    include ../../../../components/Theme/stylesheet.pug
+    include components/Theme/stylesheet
     div.app#app
-      include ../../../../components/loading/loading.pug
+      include components/loading/loading
 
-    include ../../../../components/initialState/initialState.pug
+    include components/initialState/initialState
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)
