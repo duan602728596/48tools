@@ -1,7 +1,7 @@
 import util from 'node:util';
 import path from 'node:path';
 import rimraf from 'rimraf';
-import fse from 'fs-extra';
+import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
 import { cwd, appDir, staticsDir, build, output, unpacked, isMacOS } from './utils.mjs';
 import taskfile from './taskfile.mjs';

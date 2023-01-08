@@ -2,7 +2,7 @@ import util from 'node:util';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import glob from 'glob';
-import fse from 'fs-extra';
+import fse from 'fs-extra/esm';
 import zip from 'cross-zip';
 import { build, unpacked, isMacOS } from './utils.mjs';
 import lernaJson from '../lerna.json' assert { type: 'json' };
