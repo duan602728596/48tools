@@ -10,3 +10,4 @@ dist
 www
 packages/48tools/src/pages/Toutiao/toutiaosdk-acrawler.js
 packages/48tools/src/pages/Toutiao/toutiaosdk-captcha.js
+packages/48tools/src/pages/48/Pocket48/Player/Danmu/NIM_Web_SDK_v8.0.0.js
