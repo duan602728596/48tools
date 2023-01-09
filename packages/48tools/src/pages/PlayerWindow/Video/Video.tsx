@@ -1,9 +1,9 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import flvjs from 'flv.js';
-import { getFFmpeg, source } from '../../../../../utils/utils';
-import type { Search } from '../LiveVideo';
-import type { LiveRoomInfo } from '../../../services/interface';
+import { getFFmpeg, source } from '../../../utils/utils';
+import type { Search } from '../PlayerWindow';
+import type { LiveRoomInfo } from '../../48/services/interface';
 
 function handleChildProcessStdoutOrStderr(data: Buffer): void {
   // console.log(data.toString());

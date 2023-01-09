@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
 import LiveInfo from './LiveInfo/LiveInfo';
 import Video from './Video/Video';
-import { requestLiveRoomInfo } from '../../services/pocket48';
-import type { LiveRoomInfo } from '../../services/interface';
+import { requestLiveRoomInfo } from '../48/services/pocket48';
+import type { LiveRoomInfo } from '../48/services/interface';
 
 export interface Search {
   coverPath: string;
@@ -14,8 +14,8 @@ export interface Search {
   httpPort: number;
 }
 
-/* LiveVideo */
-function LiveVideo(props: {}): ReactElement {
+/* 直播窗口 */
+function PlayerWindow(props: {}): ReactElement {
   const search: Search = useMemo(function(): Search {
     const searchParams: URLSearchParams = new URLSearchParams(window.location.search);
 
@@ -55,4 +55,4 @@ function LiveVideo(props: {}): ReactElement {
   );
 }
 
-export default LiveVideo;
+export default PlayerWindow;

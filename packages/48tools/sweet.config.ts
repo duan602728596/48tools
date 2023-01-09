@@ -89,13 +89,16 @@ export default function(info: object): { [key: string]: any } {
     ],
     entry: {
       index: [path.join(__dirname, 'src/index.tsx')],
-      player: [path.join(__dirname, 'src/Player.tsx')]
+      player: [path.join(__dirname, 'src/player.tsx')]
     },
     html: [
       { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
       { template: path.join(__dirname, 'src/player.pug'), minify: htmlWebpackPluginMinify }
     ],
-    externals: nodeExternals(externalsName),
+    externals: {
+      SDK: 'window.SDK',
+      ...nodeExternals(externalsName)
+    },
     javascript: {
       ecmascript: true,
       plugins,

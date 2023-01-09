@@ -4,9 +4,9 @@ import { Avatar, Button, Tag } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './liveInfo.sass';
-import { source } from '../../../../../utils/utils';
-import type { Search } from '../LiveVideo';
-import type { LiveRoomInfo } from '../../../services/interface';
+import { source } from '../../../utils/utils';
+import type { Search } from '../PlayerWindow';
+import type { LiveRoomInfo } from '../../48/services/interface';
 
 interface LiveInfoProps {
   search: Search;
