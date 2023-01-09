@@ -40,6 +40,7 @@ function PlayerWindow(props: {}): ReactElement {
     try {
       const res: LiveRoomInfo = await requestLiveRoomInfo(search.liveId);
 
+      console.log(res.content);
       setInfo(res);
     } catch (err) {
       console.error(err);
