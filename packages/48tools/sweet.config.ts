@@ -66,8 +66,8 @@ const externalsName: Array<string> = nodeModules([
 
 export default function(info: object): { [key: string]: any } {
   const plugins: Array<any> = [
-    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName }],
-    !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }]
+    !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }],
+    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName }]
   ].filter(Boolean);
 
   const config: { [key: string]: any } = {
