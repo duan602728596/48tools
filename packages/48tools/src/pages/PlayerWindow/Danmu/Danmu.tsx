@@ -101,7 +101,7 @@ function Danmu(props: DanmuProps): ReactElement {
 
   return (
     <Fragment>
-      <div className="mb-[6px]">
+      <div className="shrink-0 mb-[6px]">
         <Switch className="mr-[8px]"
           size="small"
           defaultChecked={ true }
@@ -109,9 +109,9 @@ function Danmu(props: DanmuProps): ReactElement {
           unCheckedChildren="弹幕关闭"
           onChange={ handleSwitchChange }
         />
-        <i>弹幕最上面是最新的消息。</i>
+        <i className="align-[-2px]">弹幕最上面是最新的消息。</i>
       </div>
-      <div className="h-[500px] relative z-50 overflow-auto">
+      <div className="grow relative z-50 max-h-[500px] overflow-auto">
         { danMuList }
       </div>
     </Fragment>

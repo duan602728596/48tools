@@ -57,7 +57,7 @@ function PlayerWindow(props: {}): ReactElement {
         <LiveInfo search={ search } info={ info } />
         <Video search={ search } info={ info } />
       </div>
-      <div className="shrink-0 mr-[16px] mt-[16px] w-[300px] text-[12px]">
+      <div className="flex flex-col shrink-0 mr-[16px] mt-[16px] mb-[16px] w-[300px] text-[12px]">
         <Danmu info={ info } />
       </div>
     </div>
