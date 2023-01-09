@@ -2,8 +2,6 @@ import { ipcRenderer } from 'electron';
 import type { ReactElement, ReactNode, MouseEvent } from 'react';
 import { Avatar, Button, Tag } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
-import * as classNames from 'classnames';
-import style from './liveInfo.sass';
 import { source } from '../../../utils/utils';
 import type { Search } from '../PlayerWindow';
 import type { LiveRoomInfo } from '../../48/services/interface';
@@ -30,7 +28,7 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
 
     return [
       <Avatar key="avatar" src={ source(content.user.userAvatar) } />,
-      <span key="username" className={ classNames('ml-[6px] text-[12px]', style.text) }>
+      <span key="username" className="ml-[6px] text-[12px]">
         { content.user.userName }
       </span>
     ];
@@ -38,7 +36,7 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
 
   return (
     <header className="mb-[8px]">
-      <h1 className={ classNames('inline-block mb-[8px] mr-[6px] text-[16px]', style.text) }>
+      <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">
         { search.title }
       </h1>
       { search.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }

@@ -27,7 +27,7 @@ function open(title: string, query: string): void {
   }
 
   let win: BrowserWindow | null = new BrowserWindow({
-    width: 300,
+    width: 650,
     height: 680,
     webPreferences: {
       nodeIntegration: true,

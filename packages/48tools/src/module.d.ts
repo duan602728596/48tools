@@ -71,3 +71,9 @@ declare module 'filenamify/browser' {
 
   export default filenamify;
 }
+
+declare module 'SDK' {
+  const sdk: any;
+
+  export default sdk;
+}

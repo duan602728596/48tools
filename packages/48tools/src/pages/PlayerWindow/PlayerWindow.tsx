@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
+import * as classNames from 'classnames';
+import style from './playerWindow.sass';
 import LiveInfo from './LiveInfo/LiveInfo';
 import Video from './Video/Video';
+import Danmu from './Danmu/Danmu';
 import { requestLiveRoomInfo } from '../48/services/pocket48';
 import type { LiveRoomInfo } from '../48/services/interface';
 
@@ -48,9 +51,14 @@ function PlayerWindow(props: {}): ReactElement {
   }, []);
 
   return (
-    <div className="p-[16px]">
-      <LiveInfo search={ search } info={ info } />
-      <Video search={ search } info={ info } />
+    <div className={ classNames('flex', style.text) }>
+      <div className="p-[16px] grow-1">
+        <LiveInfo search={ search } info={ info } />
+        <Video search={ search } info={ info } />
+      </div>
+      <div className="shrink-0 mr-[16px] mt-[16px] w-[300px] text-[12px]">
+        <Danmu info={ info } />
+      </div>
     </div>
   );
 }

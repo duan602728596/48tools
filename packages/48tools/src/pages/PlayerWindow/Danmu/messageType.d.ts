@@ -36,7 +36,7 @@ export interface LiveRoomCustom {
 
 export interface LiveRoomMessage {
   chatroomId: `${ number }`;
-  custom: `{ ${ string } }`;
+  custom: `{${ string }}`;
   flow: string;
   from: string;
   fromAvatar: string;
@@ -48,6 +48,7 @@ export interface LiveRoomMessage {
   status: string;
   text: string;
   time: number;
-  type: 'text' | string;
+  type: 'text' | 'custom' | string;
   userUpdateTime: number;
+  vid: string;
 }
