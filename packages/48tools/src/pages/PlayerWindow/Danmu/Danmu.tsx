@@ -109,7 +109,7 @@ function Danmu(props: DanmuProps): ReactElement {
           unCheckedChildren="弹幕关闭"
           onChange={ handleSwitchChange }
         />
-        <i>弹幕最上面是最新的。</i>
+        <i>弹幕最上面是最新的消息。</i>
       </div>
       <div className="h-[500px] relative z-50 overflow-auto">
         { danMuList }
