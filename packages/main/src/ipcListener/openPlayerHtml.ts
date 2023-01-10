@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import { BrowserWindow, ipcMain, type IpcMainEvent } from 'electron';
+import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import { isDevelopment, wwwPath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import store from '../store';
@@ -36,6 +36,8 @@ function open(title: string, query: string): void {
       contextIsolation: false
     },
     title,
+    icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png'),
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined,
     show: false
   });
 
@@ -43,10 +45,9 @@ function open(title: string, query: string): void {
     win!.show();
   });
 
+  // 切换主题
   function handleThemeEvent(value: ThemeValue): void {
-    if (win) {
-      win.webContents.send('themeSource', value);
-    }
+    win && win.webContents.send('themeSource', value);
   }
 
   // initialState
@@ -54,25 +55,22 @@ function open(title: string, query: string): void {
     theme: store.get('theme') ?? 'system'
   }));
 
-  if (win) {
-    win.loadFile(
-      isDevelopment
-        ? path.join(wwwPath, '48tools/dist/player.html')
-        : path.join(wwwPath, 'dist/player.html'),
-      {
-        search: searchParams.toString()
-      }
-    );
+  win.loadFile(
+    isDevelopment
+      ? path.join(wwwPath, '48tools/dist/player.html')
+      : path.join(wwwPath, 'dist/player.html'),
+    {
+      search: searchParams.toString()
+    }
+  );
 
-    win.on('closed', function(): void {
-      themeEvent.off('themeSource', handleThemeEvent);
-      playerWindowMaps.delete(id);
-      win = null;
-    });
+  win.on('closed', function(): void {
+    themeEvent.off('themeSource', handleThemeEvent);
+    playerWindowMaps.delete(id);
+    win = null;
+  });
 
-    themeEvent.on('themeSource', handleThemeEvent);
-  }
-
+  themeEvent.on('themeSource', handleThemeEvent);
   playerWindowMaps.set(id, win);
 }
 

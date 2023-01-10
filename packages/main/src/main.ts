@@ -34,7 +34,6 @@ function createWindow(): void {
     },
     title: `48tools - ${ packageJson.version }`,
     icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png'),
-    show: true,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
 
