@@ -58,7 +58,10 @@ function createWindow(): void {
   Menu.setApplicationMenu(null);
 
   ipc(win);
-  ipcRemoteHandle(win);
+
+  try {
+    ipcRemoteHandle(win);
+  } catch {}
 
   win.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();
