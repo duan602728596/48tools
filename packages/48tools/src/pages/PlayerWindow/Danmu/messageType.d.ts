@@ -10,6 +10,38 @@ export interface LiveRoomCustomUser {
   userId: number;
 }
 
+// 礼物custom类型
+export interface LiveRoomGiftInfoCustom {
+  giftInfo: {
+    giftId: number;
+    giftName: string;
+    picPath: string;
+    switchTime: number;
+    click: boolean;
+    special: boolean;
+    giftNum: number;
+    zipPath: string;
+    sourceId: string;
+    acceptUser: {
+      userId: number;
+      userAvatar: string;
+      userName: string;
+    };
+  };
+  liveBubbleId: string;
+  liveBubbleIosUrl: string;
+  liveBubbleAndroidUrl: string;
+  specialBadge: Array<unknown>;
+  fromApp: string;
+  roomId: string;
+  module: 'LIVE';
+  sourceId: string;
+  messageType: 'PRESENT_NORMAL';
+  user: LiveRoomCustomUser;
+  sessionRole: string;
+}
+
+// 弹幕custom类型
 export interface LiveRoomCustom {
   sourceId: string;
   liveBubbleId: number;
@@ -37,18 +69,18 @@ export interface LiveRoomCustom {
 export interface LiveRoomMessage {
   chatroomId: `${ number }`;
   custom: `{${ string }}`;
-  flow: string;
-  from: string;
+  flow: string | 'in';
+  from: string | 'admin';
   fromAvatar: string;
-  fromClientType: string;
+  fromClientType: string | 'Server';
   fromCustom: string;
-  fromNick: string;
+  fromNick: string | '不是革青韦';
   idClient: string;
   resend: boolean;
   status: string;
   text: string;
   time: number;
-  type: 'text' | 'custom' | string;
+  type: 'text' | 'custom';
   userUpdateTime: number;
   vid: string;
 }
