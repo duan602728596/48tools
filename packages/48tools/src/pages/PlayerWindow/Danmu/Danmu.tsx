@@ -21,17 +21,23 @@ interface DanmuItemProps {
 }
 
 /* 显示单条弹幕 */
-function DanmuItem(props: DanmuItemProps): ReactElement {
-  const { item }: DanmuItemProps = props;
-  const custom: LiveRoomCustom = JSON.parse(item.custom);
+function DanmuItem(props: DanmuItemProps): ReactElement | null {
+  try {
+    const { item }: DanmuItemProps = props;
+    const custom: LiveRoomCustom = JSON.parse(item.custom);
 
-  return (
-    <div className="py-[1px]">
-      <Avatar size="small" src={ source(custom.user.avatar) } />
-      <span className="ml-[3px]">{ custom.user.nickName }：</span>
-      { item.text }
-    </div>
-  );
+    return (
+      <div className="py-[1px]">
+        <Avatar size="small" src={ source(custom.user.avatar) } />
+        <span className="ml-[3px]">{ custom.user.nickName }：</span>
+        { item.text }
+      </div>
+    );
+  } catch (err) {
+    console.error(err, props);
+
+    return null;
+  }
 }
 
 interface DanmuProps {
@@ -111,8 +117,10 @@ function Danmu(props: DanmuProps): ReactElement {
         />
         <i className="align-[-2px]">弹幕最上面是最新的消息。</i>
       </div>
-      <div className="grow relative z-50 max-h-[500px] overflow-auto">
-        { danMuList }
+      <div className="grow relative z-50 overflow-auto">
+        <div className="h-full overflow-auto">
+          { danMuList }
+        </div>
       </div>
     </Fragment>
   );

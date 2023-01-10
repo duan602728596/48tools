@@ -86,9 +86,9 @@ function Video(props: VideoProps): ReactElement {
   }, [info, search]);
 
   return (
-    <div>
+    <div className="grow relative">
       <video ref={ videoRef }
-        className="block w-full min-h-[500px] outline-0"
+        className="absolute inset-0 w-full h-full bg-[#000] outline-0"
         controls={ true }
         poster={ source(search.coverPath) }
       />

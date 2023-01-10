@@ -27,7 +27,7 @@ function open(title: string, query: string): void {
   }
 
   let win: BrowserWindow | null = new BrowserWindow({
-    width: 650,
+    width: 643,
     height: 680,
     webPreferences: {
       nodeIntegration: true,
@@ -37,12 +37,7 @@ function open(title: string, query: string): void {
     },
     title,
     icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png'),
-    backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined,
-    show: false
-  });
-
-  win.on('ready-to-show', function(): void {
-    win!.show();
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
 
   // 切换主题

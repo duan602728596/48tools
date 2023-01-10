@@ -4,6 +4,7 @@ import AntdConfig from './components/AntdConfig/AntdConfig';
 import ThemeProvider from './components/Theme/ThemeProvider';
 import PlayerWindow from './pages/PlayerWindow/PlayerWindow';
 import './main.tailwindcss.css';
+import './player.global.sass';
 
 /* app */
 const root: Root = createRoot(document.getElementById('app')!);

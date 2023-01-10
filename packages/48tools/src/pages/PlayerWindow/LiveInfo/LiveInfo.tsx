@@ -35,7 +35,7 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
   }
 
   return (
-    <header className="mb-[8px]">
+    <header className="shrink-0 mb-[8px]">
       <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">
         { search.title }
       </h1>

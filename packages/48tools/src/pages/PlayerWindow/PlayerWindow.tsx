@@ -52,12 +52,12 @@ function PlayerWindow(props: {}): ReactElement {
   }, []);
 
   return (
-    <div className={ classNames('flex', style.text) }>
-      <div className="p-[16px] grow-1">
+    <div className={ classNames('flex w-full h-full', style.text) }>
+      <div className="flex flex-col grow p-[16px] h-full">
         <LiveInfo search={ search } info={ info } />
         <Video search={ search } info={ info } />
       </div>
-      <div className="flex flex-col shrink-0 mr-[16px] mt-[16px] mb-[16px] w-[300px] text-[12px]">
+      <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
         <Danmu info={ info } />
       </div>
     </div>
