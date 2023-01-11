@@ -126,7 +126,7 @@ function Danmu(props: DanmuProps): ReactElement {
 
     return function(): void {
       danmuClose();
-      resizeObserverRef?.current?.disconnect();
+      resizeObserverRef.current?.disconnect?.();
       resizeObserverRef.current = null;
     };
 
