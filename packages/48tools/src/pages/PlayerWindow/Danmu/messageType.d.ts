@@ -42,7 +42,7 @@ export interface LiveRoomGiftInfoCustom {
 }
 
 // 弹幕custom类型
-export interface LiveRoomCustom {
+export interface LiveRoomTextCustom {
   sourceId: string;
   liveBubbleId: number;
   sessionRole: number;
@@ -66,21 +66,35 @@ export interface LiveRoomCustom {
   md5: string;
 }
 
-export interface LiveRoomMessage {
+interface LiveRoomBasicEvent {
   chatroomId: `${ number }`;
   custom: `{${ string }}`;
-  flow: string | 'in';
-  from: string | 'admin';
   fromAvatar: string;
-  fromClientType: string | 'Server';
   fromCustom: string;
-  fromNick: string | '不是革青韦';
   idClient: string;
   resend: boolean;
   status: string;
-  text: string;
   time: number;
-  type: 'text' | 'custom';
   userUpdateTime: number;
-  vid: string;
+  vid: string; // vid是后添加的，用来标识不同的弹幕
 }
+
+export interface LiveRoomTextMessage extends LiveRoomBasicEvent {
+  flow: string;
+  from: string;
+  fromClientType: string;
+  fromNick: string;
+  text: string;
+  type: 'text';
+}
+
+export interface LiveRoomServerGiftInfoMessage extends LiveRoomBasicEvent {
+  content: `{${ string }}`;
+  flow: 'in';
+  from: 'admin';
+  fromClientType: 'Server';
+  fromNick: '不是革青韦';
+  type: 'custom';
+}
+
+export type LiveRoomMessage = LiveRoomTextMessage | LiveRoomServerGiftInfoMessage;

@@ -14,17 +14,17 @@ import { Avatar, Switch } from 'antd';
 import NimChatroomSocket from './NimChatroomSocket';
 import { source } from '../../../utils/utils';
 import type { LiveRoomInfo } from '../../48/services/interface';
-import type { LiveRoomMessage, LiveRoomCustom } from './messageType';
+import type { LiveRoomMessage, LiveRoomTextMessage, LiveRoomTextCustom } from './messageType';
 
 interface DanmuItemProps {
-  item: LiveRoomMessage;
+  item: LiveRoomTextMessage;
 }
 
 /* 显示单条弹幕 */
 function DanmuItem(props: DanmuItemProps): ReactElement | null {
   try {
     const { item }: DanmuItemProps = props;
-    const custom: LiveRoomCustom = JSON.parse(item.custom);
+    const custom: LiveRoomTextCustom = JSON.parse(item.custom);
 
     return (
       <div className="py-[1px]">
@@ -47,16 +47,16 @@ interface DanmuProps {
 /* 显示弹幕 */
 function Danmu(props: DanmuProps): ReactElement {
   const { info }: DanmuProps = props;
-  const [danmuData, setDanmuData]: [Array<LiveRoomMessage>, D<S<Array<LiveRoomMessage>>>] = useState([]);
+  const [danmuData, setDanmuData]: [Array<LiveRoomTextMessage>, D<S<Array<LiveRoomTextMessage>>>] = useState([]);
   const nimRef: MutableRefObject<NimChatroomSocket | null> = useRef(null);
 
   const danMuList: Array<ReactElement> = useMemo(function(): Array<ReactElement> {
-    return danmuData.map((o: LiveRoomMessage): ReactElement => <DanmuItem key={ o.vid } item={ o } />);
+    return danmuData.map((o: LiveRoomTextMessage): ReactElement => <DanmuItem key={ o.vid } item={ o } />);
   }, [danmuData]);
 
   // 获取到新信息
   function handleNewMessage(t: NimChatroomSocket, event: Array<LiveRoomMessage>): void {
-    const filterMessage: Array<LiveRoomMessage> = [];
+    const filterMessage: Array<LiveRoomTextMessage> = [];
 
     for (const item of event) {
       if (item.type === 'text') {
@@ -65,7 +65,7 @@ function Danmu(props: DanmuProps): ReactElement {
       }
     }
 
-    setDanmuData((prevState: Array<LiveRoomMessage>) => filterMessage.concat(prevState));
+    setDanmuData((prevState: Array<LiveRoomTextMessage>) => filterMessage.concat(prevState));
   }
 
   // 开启弹幕功能
