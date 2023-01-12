@@ -45,7 +45,7 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
       const custom: LiveRoomTextCustom = JSON.parse(item.custom);
 
       return (
-        <div ref={ ref } className="py-[1px] pr-[30px]" style={{ height }}>
+        <div ref={ ref } className="py-[1px] pl-[3px] pr-[20px]" style={{ height }}>
           <div ref={ divRef }>
             <Avatar size="small" src={ source(custom.user.avatar) } />
             <span className="ml-[3px]">{ custom.user.nickName }：</span>
