@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import type { ReactElement, ReactNode, MouseEvent } from 'react';
-import { Avatar, Button, Tag } from 'antd';
+import { Avatar, Button, Tag, Tooltip } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import { source } from '../../../utils/utils';
 import type { PlayerInfo } from '../PlayerWindow';
@@ -43,7 +43,9 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
       <div className="flex">
         <div className="grow">{ infoRender() }</div>
         <div className="shrink-0">
-          <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+          <Tooltip title="开发者工具">
+            <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+          </Tooltip>
         </div>
       </div>
     </header>
