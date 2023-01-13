@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import type { ParsedPath } from 'node:path';
 import { promises as fsP } from 'node:fs';
-import { clipboard, type SaveDialogReturnValue } from 'electron';
+import { clipboard, ipcRenderer, type SaveDialogReturnValue } from 'electron';
 import {
   Fragment,
   useState,
@@ -57,6 +57,7 @@ import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
+import { pick } from '../../../../utils/lodash';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
@@ -65,9 +66,9 @@ import type { UseModalReturnType, UseMessageReturnType } from '../../../../commo
 /**
  * 格式化m3u8文件内视频的地址
  * @param { string } data: m3u8文件内容
+ * @param { number } port: 代理的端口号
  */
-function formatTsUrl(data: string): string {
-  const port: number = getProxyServerPort().port;
+export function formatTsUrl(data: string, port: number): string {
   const dataArr: string[] = data.split('\n');
   const newStrArr: string[] = [];
 
@@ -161,6 +162,25 @@ function Pocket48Record(props: {}): ReactElement {
     messageApi.info('直播地址复制到剪贴板。');
   }
 
+  // 打开新窗口播放视频
+  function handleOpenPlayerClick(record: LiveInfo, event: MouseEvent): void {
+    const searchParams: URLSearchParams = new URLSearchParams(Object.assign(
+      {
+        id: record.liveId,    // rtmp服务器id
+        playerType: 'record', // 'live' | 'record': 直播还是录播
+        proxyPort: getProxyServerPort().port // 代理服务器端口号
+      },
+      pick(record, [
+        'coverPath', // 头像
+        'title',     // 直播间标题
+        'liveId',    // 直播id
+        'liveType'   // 直播类型
+      ])
+    ));
+
+    ipcRenderer.send('player.html', record.title, searchParams.toString());
+  }
+
   // 下载图片
   async function handleDownloadImagesClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
@@ -204,8 +224,8 @@ function Pocket48Record(props: {}): ReactElement {
           'User-Agent': 'SNH48 ENGINE'
         });
 
-        await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data)); // 写入m3u8文件
-        downloadFile = m3u8File;                              // m3u8文件地址
+        await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, getProxyServerPort().port)); // 写入m3u8文件
+        downloadFile = m3u8File; // m3u8文件地址
       } else {
         downloadFile = resInfo.content.playStreamPath;
       }
@@ -361,7 +381,7 @@ function Pocket48Record(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 275,
+      width: 310,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = recordChildList.findIndex(
           (o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
@@ -410,6 +430,9 @@ function Pocket48Record(props: {}): ReactElement {
               </Button>
               <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadImagesClick(record, event) }>
                 下载图片
+              </Button>
+              <Button onClick={ (event: MouseEvent): void => handleOpenPlayerClick(record, event) }>
+                播放
               </Button>
               <Button onClick={ (event: MouseEvent): Promise<void> => handleCopyLiveUrlClick(record, event) }>
                 复制录播地址

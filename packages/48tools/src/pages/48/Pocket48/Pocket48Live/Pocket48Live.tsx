@@ -215,8 +215,9 @@ function Pocket48Live(props: {}): ReactElement {
     const port: NetMediaServerPort = getNetMediaServerPort();
     const searchParams: URLSearchParams = new URLSearchParams(Object.assign(
       {
-        id: record.liveId, // rtmp服务器id
-        ...port            // 端口号
+        id: record.liveId,  // rtmp服务器id
+        playerType: 'live', // 'live' | 'record': 直播还是录播
+        ...port             // 端口号
       },
       pick(record, [
         'coverPath', // 头像

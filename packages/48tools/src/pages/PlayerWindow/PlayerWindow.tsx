@@ -3,6 +3,7 @@ import * as classNames from 'classnames';
 import style from './playerWindow.sass';
 import LiveInfo from './LiveInfo/LiveInfo';
 import Video from './Video/Video';
+import RecordVideo from './Video/RecordVideo';
 import Danmu from './Danmu/Danmu';
 import { requestLiveRoomInfo } from '../48/services/pocket48';
 import type { LiveRoomInfo } from '../48/services/interface';
@@ -15,9 +16,12 @@ export interface PlayerInfo {
   liveType: number;
   rtmpPort: number;
   httpPort: number;
+  proxyPort: number;
+  playerType: 'live' | 'record';
 }
 
 const playerInfo: PlayerInfo = globalThis.__INITIAL_STATE__.playerInfo;
+const inRecord: boolean = playerInfo.playerType === 'record';
 
 /* 直播窗口 */
 function PlayerWindow(props: {}): ReactElement {
@@ -44,11 +48,19 @@ function PlayerWindow(props: {}): ReactElement {
     <div className={ classNames('flex w-full h-full', style.text) }>
       <div className="flex flex-col grow p-[16px] h-full">
         <LiveInfo playerInfo={ playerInfo } info={ info } />
-        <Video playerInfo={ playerInfo } info={ info } />
+        {
+          inRecord
+            ? <RecordVideo playerInfo={ playerInfo } info={ info } />
+            : <Video playerInfo={ playerInfo } info={ info } />
+        }
       </div>
-      <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
-        <Danmu info={ info } />
-      </div>
+      {
+        !inRecord && (
+          <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
+            <Danmu info={ info } />
+          </div>
+        )
+      }
     </div>
   );
 }

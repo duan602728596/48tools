@@ -88,7 +88,7 @@ function Video(props: VideoProps): ReactElement {
   return (
     <div className="grow relative">
       <video ref={ videoRef }
-        className="absolute inset-0 w-full h-full bg-[#000] outline-0"
+        className="absolute z-10 inset-0 w-full h-full bg-[#000] outline-0"
         controls={ true }
         poster={ source(playerInfo.coverPath) }
       />
