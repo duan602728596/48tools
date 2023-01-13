@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
-import videojs from 'video.js';
+import videojs from 'video.js/dist/video.es.js';
 import * as classNames from 'classnames';
 import style from './recordVideo.sass';
 import { source } from '../../../utils/utils';
