@@ -46,8 +46,17 @@ function open(title: string, query: string): void {
   }
 
   // initialState
-  searchParams.set('initialState', ils({
-    theme: store.get('theme') ?? 'system'
+  const initialStateSearchParams: URLSearchParams = new URLSearchParams();
+  const player: Record<string, string> = Object.fromEntries(searchParams);
+
+  initialStateSearchParams.set('initialState', ils({
+    theme: store.get('theme') ?? 'system',
+    playerInfo: {
+      ...player,
+      liveType: Number(player.liveType),
+      rtmpPort: Number(player.rtmpPort),
+      httpPort: Number(player.httpPort)
+    }
   }));
 
   win.loadFile(
@@ -55,7 +64,7 @@ function open(title: string, query: string): void {
       ? path.join(wwwPath, '48tools/dist/player.html')
       : path.join(wwwPath, 'dist/player.html'),
     {
-      search: searchParams.toString()
+      search: initialStateSearchParams.toString()
     }
   );
 

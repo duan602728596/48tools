@@ -2,7 +2,7 @@ import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import flvjs from 'flv.js';
 import { getFFmpeg, source } from '../../../utils/utils';
-import type { Search } from '../PlayerWindow';
+import type { PlayerInfo } from '../PlayerWindow';
 import type { LiveRoomInfo } from '../../48/services/interface';
 
 function handleChildProcessStdoutOrStderr(data: Buffer): void {
@@ -18,13 +18,13 @@ function handleChildProcessError(err: Error): void {
 }
 
 interface VideoProps {
-  search: Search;
+  playerInfo: PlayerInfo;
   info: LiveRoomInfo | undefined;
 }
 
 /* 视频的播放 */
 function Video(props: VideoProps): ReactElement {
-  const { search, info }: VideoProps = props;
+  const { playerInfo, info }: VideoProps = props;
   const childRef: MutableRefObject<ChildProcessWithoutNullStreams | undefined> = useRef();
   const flvPlayerRef: MutableRefObject<flvjs.Player | undefined> = useRef();
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
@@ -35,7 +35,7 @@ function Video(props: VideoProps): ReactElement {
       flvPlayerRef.current = flvjs.createPlayer({
         type: 'flv',
         isLive: true,
-        url: `http://localhost:${ search.httpPort }/live/${ search.id }.flv`
+        url: `http://localhost:${ playerInfo.httpPort }/live/${ playerInfo.id }.flv`
       });
 
       flvPlayerRef.current.attachMediaElement(videoRef.current);
@@ -63,7 +63,7 @@ function Video(props: VideoProps): ReactElement {
       '44100',
       '-f',
       'flv',
-      `rtmp://localhost:${ search.rtmpPort }/live/${ search.id }`
+      `rtmp://localhost:${ playerInfo.rtmpPort }/live/${ playerInfo.id }`
     ];
     const child: ChildProcessWithoutNullStreams = spawn(getFFmpeg(), args);
 
@@ -83,14 +83,14 @@ function Video(props: VideoProps): ReactElement {
       childRef.current && childRef.current.kill();
       flvPlayerRef.current && flvPlayerRef.current.destroy();
     };
-  }, [info, search]);
+  }, [info, playerInfo]);
 
   return (
     <div className="grow relative">
       <video ref={ videoRef }
         className="absolute inset-0 w-full h-full bg-[#000] outline-0"
         controls={ true }
-        poster={ source(search.coverPath) }
+        poster={ source(playerInfo.coverPath) }
       />
     </div>
   );
