@@ -27,9 +27,10 @@ function open(title: string, query: string): void {
     return;
   }
 
+  const isRecord: boolean = playerType === 'record';
   let win: BrowserWindow | null = new BrowserWindow({
-    width: playerType === 'record' ? 327 : 643,
-    height: 680,
+    width: isRecord ? 327 : 643,
+    height: isRecord ? 638 : 680,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
