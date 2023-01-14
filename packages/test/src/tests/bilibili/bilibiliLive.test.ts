@@ -47,7 +47,7 @@ export function callback(): void {
       })()
     ]);
 
-    await liveRecordingTypeRoomIdAndStart(app, liveList.data.room_list[0].list[0].roomid.toString());
+    await liveRecordingTypeRoomIdAndStart(app, liveList.data.room_list[1].list[0].roomid.toString());
     await stopAndDeleteRoomId(app);
     expect(await isFileExists(downloadVideoPath)).toEqual(true);
   });

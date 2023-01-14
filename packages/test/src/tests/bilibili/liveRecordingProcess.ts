@@ -27,7 +27,7 @@ export async function stopAndDeleteRoomId(app: ElectronApp): Promise<void> {
   const actionBtns: Locator = await app.win.locator('.ant-table-cell button');
 
   await actionBtns.nth(0).click();
-  await app.win.locator('.ant-popover-buttons button.ant-btn-primary').click();
+  await app.win.locator('.ant-popover button.ant-btn-primary').click();
 
   // 删除数据库内的所有直播号
   const actionBtnsHandle: Array<ElementHandle> = await app.win.$$('.ant-table-cell button');
