@@ -30,9 +30,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
       const blob: Blob = new Blob([formatTsUrl(m3u8Data, playerInfo.proxyPort)], { type: 'application/vnd.apple.mpegurl' });
       const m3u8Url: string = URL.createObjectURL(blob);
 
-      flvjsPlayerRef.current = videojs(videoRef.current, {
-        children: []
-      });
+      flvjsPlayerRef.current = videojs(videoRef.current, { children: [] });
 
       const tech: HTMLVideoElement | null | undefined = videoContainerRef.current?.querySelector('.vjs-tech');
 

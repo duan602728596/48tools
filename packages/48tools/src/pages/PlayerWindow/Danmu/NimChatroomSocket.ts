@@ -1,9 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import NIM_SDK from 'SDK';
+import NIM_SDK from '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js';
+import type NIM_Web_Chatroom from '@yxim/nim-web-sdk/dist/SDK/NIM_Web_Chatroom';
 import appKey from './sdk/appKey.mjs';
 import type { LiveRoomMessage } from './messageType';
-
-const { Chatroom }: any = NIM_SDK;
 
 type OnMessage = (t: NimChatroomSocket, event: Array<LiveRoomMessage>) => void | Promise<void>;
 
@@ -20,7 +19,7 @@ interface NIMError {
 /* 创建网易云信sdk的socket连接 */
 class NimChatroomSocket {
   public roomId: string;
-  public nimChatroomSocket: any; // 口袋48
+  public nimChatroomSocket: NIM_Web_Chatroom | undefined; // 口袋48
   public onMessage: OnMessage;
 
   constructor(arg: NimChatroomSocketArgs) {
@@ -30,7 +29,7 @@ class NimChatroomSocket {
 
   // 初始化
   init(): void {
-    this.nimChatroomSocket = Chatroom.getInstance({
+    this.nimChatroomSocket = NIM_SDK.Chatroom.getInstance({
       appKey: atob(appKey),
       chatroomId: this.roomId,
       chatroomAddresses: ['chatweblink01.netease.im:443'],
@@ -63,7 +62,7 @@ class NimChatroomSocket {
 
   // 断开连接
   disconnect(): void {
-    this.nimChatroomSocket.disconnect();
+    this.nimChatroomSocket?.disconnect?.({ done(): void { /* noop */ } });
     this.nimChatroomSocket = undefined;
   }
 }

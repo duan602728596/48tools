@@ -64,7 +64,7 @@ const externalsName: Array<string> = nodeModules([
   'playwright-core'
 ]);
 
-export default function(info: object): { [key: string]: any } {
+export default function(info: object): Record<string, any> {
   const plugins: Array<any> = [
     !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }],
     ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName }]
@@ -75,6 +75,7 @@ export default function(info: object): { [key: string]: any } {
     dll: [
       '@indexeddb-tools/indexeddb',
       '@indexeddb-tools/indexeddb-redux',
+      '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js',
       'array-move',
       'classnames',
       'filenamify/browser',
@@ -97,10 +98,7 @@ export default function(info: object): { [key: string]: any } {
       { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
       { template: path.join(__dirname, 'src/player.pug'), minify: htmlWebpackPluginMinify }
     ],
-    externals: {
-      SDK: 'window.SDK',
-      ...nodeExternals(externalsName)
-    },
+    externals: nodeExternals(externalsName),
     javascript: {
       ecmascript: true,
       plugins,
@@ -120,7 +118,7 @@ export default function(info: object): { [key: string]: any } {
     },
     rules: [
       {
-        test: /NIM_Web_SDK|toutiaosdk-(acrawler|captcha)\.js/,
+        test: /toutiaosdk-(acrawler|captcha)\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]'
