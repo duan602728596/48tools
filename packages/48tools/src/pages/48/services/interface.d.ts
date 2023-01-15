@@ -57,14 +57,6 @@ export interface LiveRoomInfo {
 }
 
 /* ========== live48 ========== */
-export interface LiveStreamInfo {
-  lc_url: string;
-  status: number;
-  suid: string;
-  token: string;
-  url: string;
-}
-
 interface LiveOnePlayStreams {
   streamName: '标清' | '高清' | '超清';
   streamPath?: string;

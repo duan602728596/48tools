@@ -1,7 +1,6 @@
 import got, { type Response as GotResponse } from 'got';
-import getLive48Worker from './live48.worker/getLive48Worker';
 import { createHeaders } from '../../../utils/snh48';
-import type { LiveStreamInfo, LiveOne } from './interface';
+import type { LiveOne } from './interface';
 
 /**
  * 抓取网页地址
@@ -12,26 +11,6 @@ export async function requestFetchHtml(uri: string): Promise<string> {
   const res: Response = await fetch(uri);
 
   return await res.text();
-}
-
-/**
- * 获取直播地址
- * @param { string } param
- * @param { string } video_id
- * @param { string } suid
- * @param { string } id
- */
-export function requestStreamInfo(param: string, video_id: string, suid: string, id: string): Promise<LiveStreamInfo> {
-  return new Promise((resolve: Function, reject: Function): void => {
-    const worker: Worker = getLive48Worker();
-
-    worker.addEventListener('message', function(event: MessageEvent<LiveStreamInfo>) {
-      resolve(event.data);
-      worker.terminate();
-    }, false);
-
-    worker.postMessage({ param, video_id, suid, id });
-  });
 }
 
 /**
