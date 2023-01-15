@@ -73,9 +73,9 @@ function Douyin(props: {}): ReactElement {
       // 对抖音视频地址302重定向的处理
       if (/douyin\.com/.test(uri)) {
         const res: string = await requestGetVideoRedirectUrl(item.url);
-        const document: Document = new DOMParser().parseFromString(res, 'text/html');
+        const parseDocument: Document = new DOMParser().parseFromString(res, 'text/html');
 
-        uri = document.querySelector('a')!.getAttribute('href')!;
+        uri = parseDocument.querySelector('a')!.getAttribute('href')!;
       }
 
       worker.postMessage({

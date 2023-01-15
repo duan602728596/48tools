@@ -145,8 +145,8 @@ function Add(props: {}): ReactElement {
 
       // 解析dom
       onion.use(function(ctx: GetVideoUrlOnionContext, next: Function): void {
-        const document: Document = new DOMParser().parseFromString(ctx.html!, 'text/html');
-        const rendedData: HTMLElement | null = document.getElementById('RENDER_DATA');
+        const parseDocument: Document = new DOMParser().parseFromString(ctx.html!, 'text/html');
+        const rendedData: HTMLElement | null = parseDocument.getElementById('RENDER_DATA');
 
         if (rendedData) {
           const data: string = decodeURIComponent(rendedData.innerText);

@@ -41,8 +41,8 @@ function md5Crypto(data: string): string {
  * @param { string } html
  */
 function parseHtml(html: string): ParseHtmlResult {
-  const document: Document = new DOMParser().parseFromString(html, 'text/html');
-  const scripts: NodeListOf<HTMLScriptElement> = document.querySelectorAll('script');
+  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
+  const scripts: NodeListOf<HTMLScriptElement> = parseDocument.querySelectorAll('script');
   let initialState: InitialState | undefined = undefined;
 
   for (const script of scripts) {
@@ -60,7 +60,7 @@ function parseHtml(html: string): ParseHtmlResult {
 
   return {
     initialState,
-    h1Title: document.querySelector('#viewbox_report .tit')?.innerHTML ?? ''
+    h1Title: parseDocument.querySelector('#viewbox_report .tit')?.innerHTML ?? ''
   };
 }
 

@@ -11,11 +11,11 @@ export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ck
 export async function parseInLive(type: string): Promise<Array<{ label: string; value: string }>> {
   const indexUrl: string = `https://live.48.cn/Index/main/club/${ LIVE_TYPE.indexOf(type) + 1 }`;
   const html: string = await requestFetchHtml(indexUrl);
-  const document: Document = new DOMParser().parseFromString(html, 'text/html');
-  const watchcontent: NodeListOf<HTMLDivElement> = document.querySelectorAll<HTMLDivElement>('.watchcontent');
+  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
+  const watchContent: NodeListOf<HTMLDivElement> = parseDocument.querySelectorAll<HTMLDivElement>('.watchcontent');
   const result: Array<{ label: string; value: string }> = [];
 
-  for (const item of watchcontent) {
+  for (const item of watchContent) {
     const vText: HTMLDivElement = item.querySelector<HTMLDivElement>('.v-text')!;
     const title: string = vText.querySelector('h2')!.innerHTML;
     const sid: string = vText.querySelector('a')!.getAttribute('sid')!;
@@ -33,16 +33,16 @@ export async function parseInLive(type: string): Promise<Array<{ label: string; 
  */
 export async function parseLiveUrl(id: string, quality: string): Promise<{ url: string; title: string } | null> {
   const html: string = await requestFetchHtml(`https://live.48.cn/Index/inlive/id/${ id }`);
-  const document: Document = new DOMParser().parseFromString(html, 'text/html');
-  const urlInput: HTMLElement | null = document.getElementById(`${ quality }_url`);
+  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
+  const urlInput: HTMLElement | null = parseDocument.getElementById(`${ quality }_url`);
 
   // 没有直播
   if (!urlInput) {
     return null;
   }
 
-  const video_id: string = (document.getElementById('video_id')
-    ?? document.getElementById('vedio_id'))!.getAttribute('value')!;
+  const video_id: string = (parseDocument.getElementById('video_id')
+    ?? parseDocument.getElementById('vedio_id'))!.getAttribute('value')!;
   const res: LiveOne = await requestLiveOne(video_id);
 
   if (quality === 'liuchang') {
@@ -65,14 +65,14 @@ export async function parseInVideoUrl(inVideoQuery: InVideoQuery | undefined, pa
     current: number = page ?? inVideoQuery?.page ?? 1;
   const pageUrl: string = `https://live.48.cn/Index/main/club/${ liveType + 1 }/p/${ current }.html`; // 网站地址
   const html: string = await requestFetchHtml(pageUrl);
-  const document: Document = new DOMParser().parseFromString(html, 'text/html');
+  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
 
   // 获取当前数据总数
-  const totalStr: string | null = document.querySelector('.p-skip')!.innerHTML;
+  const totalStr: string | null = parseDocument.querySelector('.p-skip')!.innerHTML;
   const total: number = Number(totalStr ? totalStr.match(/[0-9]+/g)?.[0] ?? '0' : '0') * 15;
 
   // 获取数据列表
-  const videos: NodeListOf<HTMLLIElement> = document.querySelectorAll('.videolist .videos');
+  const videos: NodeListOf<HTMLLIElement> = parseDocument.querySelectorAll('.videolist .videos');
   const data: Array<InVideoItem> = [];
 
   for (const video of videos) {
@@ -100,9 +100,9 @@ export async function parseVideoItem(record: InVideoItem, quality: string): Prom
   const liveType: number = LIVE_TYPE.indexOf(record.liveType);
   const pageUrl: string = `https://live.48.cn/Index/invideo/club/${ liveType + 1 }/id/${ record.id }`; // 网站地址
   const html: string = await requestFetchHtml(pageUrl);
-  const document: Document = new DOMParser().parseFromString(html, 'text/html');
-  const video_id: string = (document.getElementById('video_id')
-    ?? document.getElementById('vedio_id'))!.getAttribute('value')!;
+  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
+  const video_id: string = (parseDocument.getElementById('video_id')
+    ?? parseDocument.getElementById('vedio_id'))!.getAttribute('value')!;
   const res: LiveOne = await requestLiveOne(video_id);
 
   if (quality === 'liuchang') {

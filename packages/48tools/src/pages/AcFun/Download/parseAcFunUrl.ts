@@ -6,8 +6,8 @@ import type { KsPlayJson, PageInfo, Representation } from '../types';
  * @param { string } html
  */
 function getWindowPageInfo(html: string): PageInfo | undefined {
-  const document: Document = new DOMParser().parseFromString(html, 'text/html');
-  const scripts: NodeListOf<HTMLScriptElement> = document.querySelectorAll('script');
+  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
+  const scripts: NodeListOf<HTMLScriptElement> = parseDocument.querySelectorAll('script');
   let pageInfo: PageInfo | undefined = undefined;
 
   for (const script of scripts) {
