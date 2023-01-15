@@ -64,3 +64,47 @@ export interface LiveStreamInfo {
   token: string;
   url: string;
 }
+
+interface LiveOnePlayStreams {
+  streamName: '标清' | '高清' | '超清';
+  streamPath?: string;
+  streamType: 1 | 2 | 3;
+  vipShow: boolean;
+  logonPicture?: string;
+}
+
+export interface LiveOne {
+  content: {
+    liveId: string;
+    title: string;
+    coverPath: string;
+    roomId: string;
+    status: number;
+    playNum: string;
+    stime: string;
+    hasPraise: boolean;
+    praiseNum: string;
+    dengPaiGiftId: string;
+    danMuInfo: {
+      giftId: string;
+      money: string;
+    };
+    type: number;
+    liveJoiners: Array<unknown>;
+    playStreams: Array<LiveOnePlayStreams>;
+    module: {
+      resourceId: string;
+      resourceType: number;
+      resourceMd: string;
+    };
+    mute: boolean;
+    liveType: 0;
+    isCollection: number;
+    crm: string;
+    subTitle: string;
+    endTime: string;
+  };
+  message: string;
+  status: number;
+  success: boolean;
+}

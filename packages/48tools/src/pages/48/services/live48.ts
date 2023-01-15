@@ -1,5 +1,7 @@
+import got, { type Response as GotResponse } from 'got';
 import getLive48Worker from './live48.worker/getLive48Worker';
-import type { LiveStreamInfo } from './interface';
+import { createHeaders } from '../../../utils/snh48';
+import type { LiveStreamInfo, LiveOne } from './interface';
 
 /**
  * 抓取网页地址
@@ -30,4 +32,19 @@ export function requestStreamInfo(param: string, video_id: string, suid: string,
 
     worker.postMessage({ param, video_id, suid, id });
   });
+}
+
+/**
+ * 获取直播地址（app）
+ * @param { string } liveId
+ */
+export async function requestLiveOne(liveId: string): Promise<LiveOne> {
+  const res: GotResponse<LiveOne> = await got('https://pocketapi.48.cn/live/api/v1/live/getOpenLiveOne', {
+    method: 'POST',
+    headers: createHeaders(),
+    responseType: 'json',
+    json: { liveId }
+  });
+
+  return res.body;
 }

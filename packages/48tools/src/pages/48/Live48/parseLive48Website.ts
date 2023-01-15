@@ -1,6 +1,6 @@
-import { requestFetchHtml, requestStreamInfo } from '../services/live48';
+import { requestFetchHtml, requestLiveOne } from '../services/live48';
 import type { InVideoQuery, InVideoItem } from '../types';
-import type { LiveStreamInfo } from '../services/interface';
+import type { LiveOne } from '../services/interface';
 
 export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48'];
 
@@ -41,16 +41,14 @@ export async function parseLiveUrl(id: string, quality: string): Promise<{ url: 
     return null;
   }
 
-  const title: string = document.querySelector('.titles .title1')!.innerHTML;
-  const param: string = document.getElementById('param')!.getAttribute('value')!;
-  const video_id: string = document.getElementById('vedio_id')!.getAttribute('value')!;
-  const suid: string = document.getElementById('suid')!.getAttribute('value')!;
-  const res: LiveStreamInfo = await requestStreamInfo(param, video_id, suid, id);
+  const video_id: string = (document.getElementById('video_id')
+    ?? document.getElementById('vedio_id'))!.getAttribute('value')!;
+  const res: LiveOne = await requestLiveOne(video_id);
 
   if (quality === 'liuchang') {
-    return { url: res.lc_url, title };
+    return { url: res.content.playStreams[0].streamPath!, title: res.content.title };
   } else {
-    return { url: res.url, title };
+    return { url: res.content.playStreams[1].streamPath!, title: res.content.title };
   }
 }
 
@@ -103,14 +101,13 @@ export async function parseVideoItem(record: InVideoItem, quality: string): Prom
   const pageUrl: string = `https://live.48.cn/Index/invideo/club/${ liveType + 1 }/id/${ record.id }`; // 网站地址
   const html: string = await requestFetchHtml(pageUrl);
   const document: Document = new DOMParser().parseFromString(html, 'text/html');
-  const input: HTMLElement | null = document.getElementById(`${ quality }_url`);
+  const video_id: string = (document.getElementById('video_id')
+    ?? document.getElementById('vedio_id'))!.getAttribute('value')!;
+  const res: LiveOne = await requestLiveOne(video_id);
 
-  if (input) {
-    return {
-      url: input.getAttribute('value')!,
-      title: document.querySelector('.titles .title1')!.innerHTML
-    };
+  if (quality === 'liuchang') {
+    return { url: res.content.playStreams[0].streamPath!, title: res.content.title };
   } else {
-    return null;
+    return { url: res.content.playStreams[1].streamPath!, title: res.content.title };
   }
 }
