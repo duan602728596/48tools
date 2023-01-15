@@ -46,7 +46,7 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
 
       try {
         // 追加log
-        const log: string = path.join(dir, 'log.txt');
+        const log: string = path.join(dir, 'pocket48_live_log.txt');
         const logData: string = `直播标题：${ item.title }
 直播ID：${ item.liveId }
 直播人：${ item.userInfo.nickname }
