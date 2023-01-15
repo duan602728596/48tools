@@ -1,9 +1,3 @@
-declare module '*dark-theme.min.css' {
-  const url: string;
-
-  export default url;
-}
-
 declare module '*.css' {
   const style: { [key: string]: string };
 
@@ -70,10 +64,4 @@ declare module 'filenamify/browser' {
   import filenamify from 'filenamify/filenamify';
 
   export default filenamify;
-}
-
-declare module 'SDK' {
-  const sdk: any;
-
-  export default sdk;
 }
