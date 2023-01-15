@@ -102,12 +102,12 @@ export default function(info: object): Record<string, any> {
     javascript: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules|NIM_Web_SDK|toutiaosdk-(acrawler|captcha)\.js/i
+      exclude: /node_modules|toutiaosdk-(acrawler|captcha)\.js/i
     },
     typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
       plugins,
-      exclude: /node_modules|NIM_Web_SDK/
+      exclude: /node_modules/
     },
     sass: {
       include: /src/
