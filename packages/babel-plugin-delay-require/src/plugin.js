@@ -26,13 +26,26 @@ function variableRename(path, importInfo) {
  */
 function createGlobalRequireExpressionStatement(t, importInfo) {
   return t.expressionStatement(
-    t.assignmentExpression('??=',
+    t.assignmentExpression(
+      '??=',
       t.identifier(importInfo.formatVariableName),
       t.callExpression(
         t.memberExpression(t.identifier('globalThis'), t.identifier('require')),
         [t.stringLiteral(importInfo.moduleName)]
       )
     )
+  );
+}
+
+/**
+ * 创建Node: let variableName;
+ * @param { import('@babel/types') } t
+ * @param { ImportInfo } importInfo
+ */
+function createVariableDeclaration(t, importInfo) {
+  return t.variableDeclaration(
+    'let',
+    [t.variableDeclarator(t.identifier(importInfo.formatVariableName))]
   );
 }
 
@@ -185,8 +198,7 @@ function plugin(t, moduleNames, variableName) {
           const index = body.findLastIndex((o) => t.isImportDeclaration(o));
 
           if (index >= 0) {
-            const inject = this.importInfoArray.map((o) => t.variableDeclaration(
-              'let', [t.variableDeclarator(t.identifier(o.formatVariableName))]));
+            const inject = this.importInfoArray.map((o) => createVariableDeclaration(t, o));
 
             body.splice(index + 1, 0, ...inject);
           }
@@ -220,7 +232,12 @@ function plugin(t, moduleNames, variableName) {
         const members = path.node.name.split('.');
 
         if (members.length > 1) {
-          path.replaceWith(t.memberExpression(t.Identifier(members[0]), t.Identifier(members[1])));
+          path.replaceWith(
+            t.memberExpression(
+              t.Identifier(members[0]),
+              t.Identifier(members[1])
+            )
+          );
         }
       },
 
@@ -253,14 +270,17 @@ function plugin(t, moduleNames, variableName) {
         if (hasExpressionStatement(t, body, importInfo.formatVariableName)) return;
 
         // 插入表达式
-        const scopePathIsProgram = t.isProgram(scopePath);
-        const index = body.findLastIndex((o) => (t.isExpressionStatement(o)
+        const index = body.findLastIndex((o) => (
+          // 局部作用域，添加到global.require之后
+          t.isExpressionStatement(o)
           && t.isAssignmentExpression(o.expression, { operator: '??=' })
-          && prefixVariableNameRegexp.test(o.expression.left.name))
-          || (scopePathIsProgram
+          && prefixVariableNameRegexp.test(o.expression.left.name)
+        ) || (
+          // 全局作用域时，添加到let之后
+          t.isProgram(scopePath)
           && t.isVariableDeclaration(o, { kind: 'let' })
-          && prefixVariableNameRegexp.test(o.declarations[0].id.name))
-        );
+          && prefixVariableNameRegexp.test(o.declarations[0].id.name)
+        ));
         const node = createGlobalRequireExpressionStatement(t, importInfo);
 
         if (index >= 0) {
