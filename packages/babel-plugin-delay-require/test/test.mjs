@@ -106,10 +106,6 @@ function test(m) {
   deepStrictEqual(/test\s*\(m\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+const v/.test(result.code), true);
 });
 
-if (args[0] === 'debug') {
-  await setTimeoutPromise(60_000_000);
-}
-
 // 多个同名的包
 test('multiple same name packages(1)', async function() {
   const code = `import * as b from 'b';
@@ -169,3 +165,7 @@ c();`;
     /globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__c \?{2}= globalThis\.require\(["']c["']\)\)/g
       .test(result.code), true);
 });
+
+if (args[0] === 'debug') {
+  await setTimeoutPromise(60_000_000);
+}
