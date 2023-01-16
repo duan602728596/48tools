@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { promises as fsP } from 'node:fs';
 import ncc from '@vercel/ncc';
-import fse from 'fs-extra';
+import fse from 'fs-extra/esm';
 import rimraf from 'rimraf';
 import { requireJson } from '@sweet-milktea/utils';
 import { cwd } from './utils.mjs';
