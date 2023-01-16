@@ -22,7 +22,7 @@ const NodeMediaServerModule: typeof NodeMediaServer = (function(): typeof NodeMe
 
 // node-medie-server
 const server: NodeMediaServer = new NodeMediaServerModule({
-  logType: isDevelopment ? 3 : 1,
+  logType: 1,
   rtmp: {
     port: rtmpPort,
     chunk_size: 60000,
