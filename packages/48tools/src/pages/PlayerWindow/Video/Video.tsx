@@ -31,11 +31,11 @@ function Video(props: VideoProps): ReactElement {
 
   // 加载视频
   function loadVideo(): void {
-    if (videoRef.current && info) {
+    if (videoRef.current) {
       flvPlayerRef.current = flvjs.createPlayer({
         type: 'flv',
         isLive: true,
-        url: `http://localhost:${ playerInfo.httpPort }/live/${ playerInfo.id }.flv`
+        url: `ws://localhost:${ playerInfo.httpPort }/live/${ playerInfo.id }.flv`
       });
 
       flvPlayerRef.current.attachMediaElement(videoRef.current);
@@ -48,21 +48,8 @@ function Video(props: VideoProps): ReactElement {
     if (!info) return;
 
     const args: Array<string> = [
-      '-re',
-      '-i',
-      info.content.playStreamPath,
-      '-c:v',
-      'libx264',
-      '-preset',
-      'superfast',
-      '-tune',
-      'zerolatency',
-      '-c:a',
-      'aac',
-      '-ar',
-      '44100',
-      '-f',
-      'flv',
+      '-re', '-i', info.content.playStreamPath, '-c:v', 'libx264', '-preset', 'superfast',
+      '-tune', 'zerolatency', '-c:a', 'aac', '-ar', '44100', '-f', 'flv',
       `rtmp://localhost:${ playerInfo.rtmpPort }/live/${ playerInfo.id }`
     ];
     const child: ChildProcessWithoutNullStreams = spawn(getFFmpeg(), args);
