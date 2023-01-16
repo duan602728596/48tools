@@ -3,10 +3,11 @@ import babelPluginDelayRequire from '../src/index.js';
 
 const moduleNames = ['a', 'b', 'c'];
 
-export async function transform(code) {
+export async function transform(code, idle) {
   return await transformAsync(code, {
     plugins: [[babelPluginDelayRequire, {
-      moduleNames
+      moduleNames,
+      idle
     }]],
     ast: true
   });

@@ -144,3 +144,31 @@ console.log(g());`;
   deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
   deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
 });
+
+// 使用requestIdleCallback在空闲时间加载模块
+test('use requestIdleCallback for require modules', async function() {
+  const code = `import a from 'a';
+import b from 'b';
+import c from 'c';
+
+a();
+b();
+c();`;
+  const result = await transform(code, true);
+
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
+  deepStrictEqual(
+    /requestIdleCallback\(\(\) => __ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result.code),
+    true
+  );
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 2);
+  deepStrictEqual(
+    /requestIdleCallback\(\(\) => __ELECTRON__DELAY_REQUIRE__b \?{2}= globalThis\.require\(["']b["']\)\)/g.test(result.code),
+    true
+  );
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 2);
+  deepStrictEqual(
+    /requestIdleCallback\(\(\) => __ELECTRON__DELAY_REQUIRE__c \?{2}= globalThis\.require\(["']c["']\)\)/g.test(result.code),
+    true
+  );
+});

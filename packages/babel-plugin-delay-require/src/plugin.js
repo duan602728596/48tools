@@ -50,6 +50,28 @@ function createVariableDeclaration(t, importInfo) {
 }
 
 /**
+ * 创建node: requestIdleCallback(() => variableName ??= globalThis.require(moduleName))
+ * @param { import('@babel/types') } t
+ * @param { ImportInfo } importInfo
+ */
+function createIdleExpressionStatement(t, importInfo) {
+  return t.expressionStatement(t.callExpression(
+    t.identifier('requestIdleCallback'),
+    [t.arrowFunctionExpression(
+      [],
+      t.assignmentExpression(
+        '??=',
+        t.identifier(importInfo.formatVariableName),
+        t.callExpression(
+          t.memberExpression(t.identifier('globalThis'), t.identifier('require')),
+          [t.stringLiteral(importInfo.moduleName)]
+        )
+      )
+    )]
+  ));
+}
+
+/**
  * 查找作用域
  * @param { import('@babel/types') } t
  * @param { import('@babel/core').NodePath } path
@@ -101,8 +123,9 @@ function hasExpressionStatement(t, body, name, node) {
  * @param { import('@babel/types') } t
  * @param { Array<string> } moduleNames
  * @param { string } variableName
+ * @param { boolean } idle
  */
-function plugin(t, moduleNames, variableName) {
+function plugin({ t, moduleNames, variableName, idle }) {
   const prefixVariableName = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
   const prefixVariableNameRegexp = new RegExp(`^${ prefixVariableName }`);
   const filterGlobalTypes = [
@@ -210,6 +233,10 @@ function plugin(t, moduleNames, variableName) {
 
       exit(path) {
         path.traverse(ProgramLevelVisitor);
+
+        if (idle && this?.importInfoArray?.length) {
+          path.node.body.push(...this.importInfoArray.map((importInfo) => createIdleExpressionStatement(t, importInfo)));
+        }
       }
     },
 

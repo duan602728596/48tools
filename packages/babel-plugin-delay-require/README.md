@@ -25,7 +25,15 @@ async function requestAPI() {
   
   return res.body;
 }
+
+requestIdleCallback(() => __ELECTRON__DELAY_REQUIRE__got ??= global.require('got'));
 ```
+
+### 配置
+
+* { Array<string> } moduleNames: 用于延迟加载的模块数组
+* { string | undefined } variableName: 模块的变量名称的开头，用来标识是延迟加载的模块
+* { boolean } idle: 使用requestIdleCallback在空闲时间加载模块
 
 ### Debug
 
