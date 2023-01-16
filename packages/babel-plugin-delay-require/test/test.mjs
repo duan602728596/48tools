@@ -158,17 +158,14 @@ c();`;
 
   deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
   deepStrictEqual(
-    /requestIdleCallback\(\(\) => __ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result.code),
-    true
-  );
+    /globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g
+      .test(result.code), true);
   deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 2);
   deepStrictEqual(
-    /requestIdleCallback\(\(\) => __ELECTRON__DELAY_REQUIRE__b \?{2}= globalThis\.require\(["']b["']\)\)/g.test(result.code),
-    true
-  );
+    /globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__b \?{2}= globalThis\.require\(["']b["']\)\)/g
+      .test(result.code), true);
   deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 2);
   deepStrictEqual(
-    /requestIdleCallback\(\(\) => __ELECTRON__DELAY_REQUIRE__c \?{2}= globalThis\.require\(["']c["']\)\)/g.test(result.code),
-    true
-  );
+    /globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__c \?{2}= globalThis\.require\(["']c["']\)\)/g
+      .test(result.code), true);
 });

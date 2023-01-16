@@ -50,25 +50,28 @@ function createVariableDeclaration(t, importInfo) {
 }
 
 /**
- * 创建node: requestIdleCallback(() => variableName ??= globalThis.require(moduleName))
+ * 创建node: globalThis.requestIdleCallback(() => variableName ??= globalThis.require(moduleName))
  * @param { import('@babel/types') } t
  * @param { ImportInfo } importInfo
  */
 function createIdleExpressionStatement(t, importInfo) {
-  return t.expressionStatement(t.callExpression(
-    t.identifier('requestIdleCallback'),
-    [t.arrowFunctionExpression(
-      [],
-      t.assignmentExpression(
-        '??=',
-        t.identifier(importInfo.formatVariableName),
-        t.callExpression(
-          t.memberExpression(t.identifier('globalThis'), t.identifier('require')),
-          [t.stringLiteral(importInfo.moduleName)]
+  return t.expressionStatement(
+    t.optionalCallExpression(
+      t.memberExpression(t.identifier('globalThis'), t.identifier('requestIdleCallback')),
+      [t.arrowFunctionExpression(
+        [],
+        t.assignmentExpression(
+          '??=',
+          t.identifier(importInfo.formatVariableName),
+          t.callExpression(
+            t.memberExpression(t.identifier('globalThis'), t.identifier('require')),
+            [t.stringLiteral(importInfo.moduleName)]
+          )
         )
-      )
-    )]
-  ));
+      )],
+      true
+    )
+  );
 }
 
 /**
