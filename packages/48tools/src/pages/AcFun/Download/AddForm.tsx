@@ -11,11 +11,11 @@ import {
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Select, Input, Alert, message, type FormInstance } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
 import { parseAcFunUrl } from './parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
-import type { UseMessageReturnType } from '../../../commonTypes';
 import type { Representation } from '../types';
 
 /* 视频分类 */

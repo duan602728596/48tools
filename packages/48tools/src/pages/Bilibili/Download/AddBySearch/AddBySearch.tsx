@@ -12,13 +12,13 @@ import {
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Input, Form, Table, Spin, message, type FormInstance } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { ColumnsType } from 'antd/es/table';
 import * as classNames from 'classnames';
 import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
 import { parseVideoList, parseVideoUrlV2 } from '../parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
-import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
 
 interface PageQuery {

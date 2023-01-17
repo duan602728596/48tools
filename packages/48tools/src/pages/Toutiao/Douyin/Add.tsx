@@ -14,12 +14,12 @@ import {
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Input, Button, Modal, message, Select } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { Onion } from '@bbkkbkk/q';
 import style from './add.sass';
 import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
 import { setAddDownloadList } from '../reducers/douyin';
 import douyinCookieCache from './DouyinCookieCache';
-import type { UseMessageReturnType } from '../../../commonTypes';
 import type {
   AwemeDetail,
   ScriptRendedData,

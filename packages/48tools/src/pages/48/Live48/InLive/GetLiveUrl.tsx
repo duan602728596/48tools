@@ -12,6 +12,7 @@ import {
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Form, Select, message, Button, Space, type FormInstance } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import style from './getLiveUrl.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
@@ -20,7 +21,7 @@ import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import autoInLiveTimer from './autoInLiveTimer';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
-import type { UseMessageReturnType, MessageEventData } from '../../../../commonTypes';
+import type { MessageEventData } from '../../../../commonTypes';
 import type { InLiveFormValue } from '../../types';
 
 /* 抓取直播信息表单 */

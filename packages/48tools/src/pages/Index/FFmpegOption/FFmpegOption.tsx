@@ -2,6 +2,7 @@ import { shell, type OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Modal, Form, Input, message, Alert, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import {
   ThunderboltOutlined as IconThunderboltOutlined,
   DownloadOutlined as IconDownloadOutlined,
@@ -10,7 +11,6 @@ import {
 import * as classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
-import type { UseMessageReturnType } from '../../../commonTypes';
 
 /* 配置ffmpeg地址 */
 function FFmpegOption(props: {}): ReactElement {

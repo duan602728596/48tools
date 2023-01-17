@@ -4,11 +4,11 @@ import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Alert, Space, message, Divider } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo } from '../services/WeiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import UserBrowserLogin from './UserBrowserLogin';
-import type { UseMessageReturnType } from '../../../commonTypes';
 import type { UserInfo } from '../services/interface';
 
 /* 打开微博窗口 */

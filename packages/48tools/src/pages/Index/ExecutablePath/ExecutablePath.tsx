@@ -2,11 +2,11 @@ import type { OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Modal, Form, Alert, Input, message, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { ChromeFilled as IconChromeFilled, QuestionCircleTwoTone as IconQuestionCircleTwoTone } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './executablePath.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
-import type { UseMessageReturnType } from '../../../commonTypes';
 
 /* 配置无头浏览器地址 */
 function ExecutablePath(props: {}): ReactElement {

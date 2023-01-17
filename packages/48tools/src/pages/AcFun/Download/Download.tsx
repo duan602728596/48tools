@@ -5,6 +5,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm, Progress } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './download.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
@@ -19,7 +20,7 @@ import {
   type AcFunDownloadInitialState
 } from '../reducers/download';
 import { getFFmpeg } from '../../../utils/utils';
-import type { UseMessageReturnType, WebWorkerChildItem } from '../../../commonTypes';
+import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem, Representation } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
 

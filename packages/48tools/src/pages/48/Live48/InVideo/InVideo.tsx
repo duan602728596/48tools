@@ -15,6 +15,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Table, message, Space, Popconfirm, Progress } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import style from './inVideo.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
@@ -32,7 +33,6 @@ import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
-import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 

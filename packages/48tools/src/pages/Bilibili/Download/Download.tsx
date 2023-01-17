@@ -8,6 +8,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from './downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from './downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
@@ -22,7 +23,6 @@ import {
   type BilibiliDownloadInitialState
 } from '../reducers/download';
 import { requestDownloadFileByStream } from '../../48/services/pocket48';
-import type { UseMessageReturnType } from '../../../commonTypes';
 import type { DownloadItem } from '../types';
 
 /* redux selector */

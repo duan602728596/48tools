@@ -11,6 +11,7 @@ import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Empty, Button, message } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import { IDBSaveAccount } from '../../reducers/weiboLogin';
 import {
@@ -20,7 +21,6 @@ import {
   requestCrossDomainUrl,
   requestUserInfo
 } from '../../services/WeiboLogin';
-import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { QrcodeImage, QrcodeCheck, LoginReturn, UserInfo } from '../../services/interface';
 
 let qrcodeLoginTimer: NodeJS.Timeout | null = null; // 轮循，判断是否登陆

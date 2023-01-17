@@ -5,6 +5,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
 import Header from '../../../components/Header/Header';
@@ -20,7 +21,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
+import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
 

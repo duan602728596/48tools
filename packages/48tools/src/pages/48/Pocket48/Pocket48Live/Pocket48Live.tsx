@@ -13,6 +13,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, message, Table, Tag, Popconfirm, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
@@ -40,7 +41,7 @@ import {
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from './autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
-import type { UseModalReturnType, UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
+import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 import type { LiveInfo, LiveRoomInfo } from '../../services/interface';
 

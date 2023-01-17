@@ -33,6 +33,7 @@ import {
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
+import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
@@ -61,7 +62,6 @@ import { pick } from '../../../../utils/lodash';
 import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
-import type { UseModalReturnType, UseMessageReturnType } from '../../../../commonTypes';
 
 /**
  * 格式化m3u8文件内视频的地址

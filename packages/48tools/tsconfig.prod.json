@@ -3,7 +3,10 @@
   "compilerOptions": {
     "module": "ESNext",
     "jsx": "react-jsx",
-    "importHelpers": true
+    "importHelpers": true,
+    "paths": {
+      "@48tools-types/*": ["./src/types/*"]
+    }
   },
   "exclude": [
     "node_modules"

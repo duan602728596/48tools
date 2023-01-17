@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, List, message } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { FileFilled as IconFileFilled, MenuOutlined as IconMenuOutlined } from '@ant-design/icons';
 import {
   SortableContainer,
@@ -33,7 +34,7 @@ import {
   type ConcatInitialState
 } from '../reducers/concat';
 import { getFFmpeg } from '../../../utils/utils';
-import type { UseMessageReturnType, MessageEventData } from '../../../commonTypes';
+import type { MessageEventData } from '../../../commonTypes';
 import type { ConcatItem } from '../types';
 
 /* 拖拽组件 */

@@ -5,6 +5,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Button, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getCutWorker from './cut.worker/getCutWorker';
 import Header from '../../../components/Header/Header';
@@ -16,7 +17,7 @@ import {
   type VideoCutInitialState
 } from '../reducers/videoCut';
 import { getFFmpeg } from '../../../utils/utils';
-import type { UseMessageReturnType, WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
+import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { CutItem } from '../types';
 
 /* redux selector */

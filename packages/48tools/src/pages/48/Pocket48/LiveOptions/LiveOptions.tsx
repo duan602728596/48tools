@@ -3,11 +3,11 @@ import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Form, Input, InputNumber, Button, message, type FormInstance } from 'antd';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './liveOptions.sass';
 import { showOpenDialog } from '../../../../utils/remote/dialog';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
 import { IDBGetPocket48LiveOptions, IDBSavePocket48LiveOptions } from '../../reducers/pocket48';
-import type { UseMessageReturnType } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 
 export const OPTIONS_NAME: string = 'pocket48LiveAutoGrabOptions';

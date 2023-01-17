@@ -7,13 +7,13 @@ import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 're
 import * as PropTypes from 'prop-types';
 import { message, Button, Image } from 'antd';
 import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/icons';
 import style from './downloadImages.sass';
 import { showOpenDialog, showSaveDialog } from '../../../../../utils/remote/dialog';
 import ImagePreview from './ImagePreview';
 import { source } from '../../../../../utils/utils';
 import { requestDownloadFileByStream } from '../../../services/pocket48';
-import type { UseMessageReturnType } from '../../../../../commonTypes';
 import type { LiveInfo } from '../../../services/interface';
 
 interface DownloadImagesProps {
