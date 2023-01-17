@@ -50,7 +50,7 @@ function createVariableDeclaration(t, importInfo) {
 }
 
 /**
- * 创建node: globalThis.requestIdleCallback(() => variableName ??= globalThis.require(moduleName))
+ * 创建node: globalThis.requestIdleCallback?.(() => variableName ??= globalThis.require(moduleName))
  * @param { import('@babel/types') } t
  * @param { ImportInfo } importInfo
  */

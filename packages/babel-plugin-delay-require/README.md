@@ -26,7 +26,7 @@ async function requestAPI() {
   return res.body;
 }
 
-requestIdleCallback(() => __ELECTRON__DELAY_REQUIRE__got ??= global.require('got'));
+globalThis.requestIdleCallback?.(() => __ELECTRON__DELAY_REQUIRE__got ??= global.require('got'));
 ```
 
 ### 配置
