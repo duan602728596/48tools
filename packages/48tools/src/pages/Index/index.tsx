@@ -12,6 +12,7 @@ import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';
 import ThemeContext, { type Theme } from '../../components/Theme/ThemeContext';
+import License from './License/License';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
 import IconMicrophoneSvgComponent from './images/microphone.component.svg';
@@ -171,7 +172,7 @@ function Index(props: {}): ReactElement {
     <div className="p-[16px]">
       { nativeRender() }
       <div>
-        <Space size={ 16 }>
+        <Space size={ 8 }>
           <FFmpegOption />
           <ExecutablePath />
           { theme.ChangeThemeElement }
@@ -181,6 +182,7 @@ function Index(props: {}): ReactElement {
           <Tooltip title="问题反馈">
             <Button type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
           </Tooltip>
+          <License />
         </Space>
       </div>
       <Divider />

@@ -25,7 +25,7 @@
 
 ## 许可证
 
-本软件遵循**GNU General Public License v3.0**许可证。
+本软件以及所有源代码受**GNU General Public License v3.0**许可证的约束。
 
 ## 技术栈
 
