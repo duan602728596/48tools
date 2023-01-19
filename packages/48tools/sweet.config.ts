@@ -118,7 +118,7 @@ export default function(info: object): Record<string, any> {
     },
     rules: [
       {
-        test: /toutiaosdk-(acrawler|captcha)\.js/,
+        test: /toutiaosdk-(acrawler|captcha|webmssdk\.es5)\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]'
