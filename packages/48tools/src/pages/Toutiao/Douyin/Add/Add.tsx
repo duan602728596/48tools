@@ -17,9 +17,10 @@ import { Input, Button, Modal, message, Select } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { Onion } from '@bbkkbkk/q';
 import style from './add.sass';
-import { requestDouyinVideoHtml, type DouyinVideo } from '../services/douyin';
-import { setAddDownloadList } from '../reducers/douyin';
-import douyinCookieCache from './DouyinCookieCache';
+import { requestDouyinVideoHtml, type DouyinVideo } from '../../services/douyin';
+import { setAddDownloadList } from '../../reducers/douyin';
+import douyinCookieCache from '../DouyinCookieCache';
+import * as toutiaosdk from '../sdk/toutiaosdk';
 import type {
   AwemeDetail,
   ScriptRendedData,
@@ -28,7 +29,7 @@ import type {
   CVersionObj,
   GetVideoUrlOnionContext,
   VerifyData
-} from '../types';
+} from '../../types';
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactNode> {
@@ -88,8 +89,7 @@ function Add(props: {}): ReactElement {
           html = douyinFirstRes.value;
         } else {
           // 计算__ac_signature并获取html
-          const acSignature: string = Reflect.get(Reflect.get(globalThis, 'byted_acrawler'), 'sign')
-            .call(undefined, '', douyinFirstRes.value);
+          const acSignature: string = await toutiaosdk.acrawler('sign', ['', douyinFirstRes.value]);
           const douyinAcCookie: string = `__ac_nonce=${ douyinFirstRes.value }; __ac_signature=${ acSignature };`;
           const douyinSecondRes: DouyinVideo = await requestDouyinVideoHtml(urlValue, douyinAcCookie);
 
@@ -115,7 +115,7 @@ function Add(props: {}): ReactElement {
             ctx.fp = verifyDataJson.fp;
             ipcRenderer.send('toutiao-fp', verifyDataJson.fp); // 将fp发送到主线程
             await setTimeout(2_000);
-            globalThis.TTGCaptcha.init({
+            await toutiaosdk.captcha('init', [{
               commonOptions: {
                 aid: 6383,
                 iid: '0',
@@ -133,8 +133,8 @@ function Add(props: {}): ReactElement {
                   next();
                 }
               }
-            });
-            globalThis.TTGCaptcha.render({ verify_data: verifyDataJson });
+            }]);
+            await toutiaosdk.captcha('render', [{ verify_data: verifyDataJson }]);
 
             return;
           }

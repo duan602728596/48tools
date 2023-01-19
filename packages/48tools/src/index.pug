@@ -16,8 +16,5 @@ html
 
     include ./components/initialState/initialState.pug
 
-    script(src=require('./pages/Toutiao/Douyin/sdk/toutiaosdk-acrawler'))
-    script(src=require('./pages/Toutiao/Douyin/sdk/toutiaosdk-captcha'))
-
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)

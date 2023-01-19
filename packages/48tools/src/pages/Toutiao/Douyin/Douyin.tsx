@@ -11,7 +11,7 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
-import Add from './Add';
+import Add from './Add/Add';
 import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,
@@ -96,6 +96,7 @@ function Douyin(props: {}): ReactElement {
     {
       title: '下载进度',
       dataIndex: 'qid',
+      width: 95,
       render: (value: string, record: DownloadItem, index: number): ReactNode => {
         const inDownload: boolean = value in downloadProgress;
 
