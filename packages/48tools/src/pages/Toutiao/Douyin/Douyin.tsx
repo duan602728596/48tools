@@ -11,7 +11,8 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
-import Add from './Add/Add';
+import VideoOrUserParse from './VideoOrUserParse/VideoOrUserParse';
+import douyinCookieCache from './DouyinCookieCache';
 import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,
@@ -40,6 +41,12 @@ function Douyin(props: {}): ReactElement {
   const { downloadList, downloadProgress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+
+  // 清除抖音的cookie
+  function handleClearDouyinCookie(event: MouseEvent): void {
+    douyinCookieCache.clearCookie();
+    messageApi.success('Cookie已清除！');
+  }
 
   // 删除一个任务
   function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent): void {
@@ -137,8 +144,10 @@ function Douyin(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Add />
+        <VideoOrUserParse />
+        <Button type="primary" danger={ true } onClick={ handleClearDouyinCookie }>清除抖音Cookie的缓存</Button>
       </Header>
+      <p className="mb-[4px] text-[12px]">输入视频ID下载单个视频，输入用户ID或用户主页地址可解析用户的所有视频并选择下载。</p>
       <Table size="middle"
         columns={ columns }
         dataSource={ downloadList }

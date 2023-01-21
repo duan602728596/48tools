@@ -1,3 +1,6 @@
+import type { Dispatch as D, SetStateAction as S } from 'react';
+import type { MessageInstance } from 'antd/es/message/interface';
+
 type noProtocolUrl = `//${ string }`;
 
 export interface AwemeDetail {
@@ -51,9 +54,17 @@ export interface DownloadItem {
 
 /* 解析头条验证码 */
 export interface GetVideoUrlOnionContext {
+  messageApi: MessageInstance;
   html?: string;
   fp?: `verify_${ string }`;
   cookie?: string;
+  type?: 'video' | 'user';
+  value: string;
+  id?: string;
+  setUrlLoading: D<S<boolean>>;
+  setVisible: D<S<boolean>>;
+  setDownloadUrl: D<S<DownloadUrlItem[]>>;
+  setTitle: D<S<string>>;
 }
 
 export interface VerifyData {

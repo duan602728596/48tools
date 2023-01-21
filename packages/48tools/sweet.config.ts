@@ -80,6 +80,7 @@ export default function(info: object): Record<string, any> {
       'classnames',
       'filenamify/browser',
       'flv.js',
+      'path-to-regexp',
       'qrcode/lib/browser',
       'video.js/dist/video.es.js',
       'react',

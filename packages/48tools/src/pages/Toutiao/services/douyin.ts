@@ -45,6 +45,47 @@ export async function requestDouyinVideoHtml(id: string, cookie: string = ''): P
   };
 }
 
+type RequestDouyinHtmlReturn =
+  (urlCb: string | ((url?: string) => string), cookie?: string) => Promise<DouyinVideo>;
+
+/**
+ * 获取抖音网页的html
+ * @param { string } url: 抖音地址
+ */
+function requestDouyinHtml(url?: string): RequestDouyinHtmlReturn {
+  async function _requestDouyinHtml(urlCb: string | ((url?: string) => string), cookie: string = ''): Promise<DouyinVideo> {
+    const uri: string = typeof urlCb === 'function' ? urlCb(url) : urlCb;
+    const res: GotResponse<string> = await got.get(uri, {
+      responseType: 'text',
+      headers: {
+        'User-Agent': userAgent,
+        Cookie: '__ac_referer=__ac_blank;' + cookie,
+        Host: new URL(uri).host
+      },
+      followRedirect: false
+    });
+
+    const acNonceStr: string | undefined = res?.headers?.['set-cookie']?.find?.(
+      (o: string): boolean => o.includes('__ac_nonce'));
+
+    return acNonceStr ? {
+      type: 'cookie',
+      value: acNonceStr.split(/s*;s*/)[0].split(/=/)[1],
+      body: res.body
+    } : {
+      type: 'html',
+      value: res.body,
+      body: res.body
+    };
+  }
+
+  return _requestDouyinHtml;
+}
+
+export const requestDouyinVideo: RequestDouyinHtmlReturn = requestDouyinHtml('https://www.douyin.com/video/');
+export const requestDouyinUser: RequestDouyinHtmlReturn = requestDouyinHtml('https://www.douyin.com/user/');
+export const requestDouyinUrl: RequestDouyinHtmlReturn = requestDouyinHtml();
+
 /**
  * 抖音302地址的处理
  * @param { string } uri
