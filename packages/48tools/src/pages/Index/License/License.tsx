@@ -8,7 +8,7 @@ function License(props: {}): ReactElement {
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
 
   // 打开许可证网站
-  function handleOpenTopicLinkClick(event: MouseEvent<HTMLAnchorElement>): void {
+  function handleOpenLicenseWebsiteClick(event: MouseEvent<HTMLAnchorElement>): void {
     shell.openExternal('https://www.gnu.org/licenses/');
   }
 
@@ -36,7 +36,7 @@ along with this program.  If not, see ` }
           <a role="button"
             aria-label="打开GNU许可证的网站"
             tabIndex={ 0 }
-            onClick={ handleOpenTopicLinkClick }
+            onClick={ handleOpenLicenseWebsiteClick }
           >
             &lt;https://www.gnu.org/licenses/&gt;
           </a>.
