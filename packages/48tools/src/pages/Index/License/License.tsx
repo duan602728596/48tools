@@ -43,7 +43,7 @@ along with this program.  If not, see ` }
         </pre>
       ),
       icon: null,
-      width: 580,
+      width: 600,
       centered: true,
       okText: '关闭'
     });
