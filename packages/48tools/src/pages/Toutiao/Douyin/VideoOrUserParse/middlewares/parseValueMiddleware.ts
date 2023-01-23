@@ -27,7 +27,12 @@ interface TypeAndId {
   id: string | undefined;
 }
 
-/* URL解析地址 */
+/**
+ * URL解析地址
+ * @param { URL } urlParse: 地址的解析
+ * @param { string | undefined } cookie: 请求时使用的cookie
+ * @param { GetVideoUrlOnionContext } ctx
+ */
 async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefined, ctx: GetVideoUrlOnionContext): Promise<TypeAndId> {
   let type: 'video' | 'user' | undefined;
   let id: string | undefined;
@@ -85,7 +90,10 @@ async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefine
   return { type, id };
 }
 
-/* 非URL解析ID */
+/**
+ * 非URL解析ID
+ * @param { GetVideoUrlOnionContext } ctx
+ */
 function getTypeAndId(ctx: GetVideoUrlOnionContext): TypeAndId {
   let type: 'video' | 'user' | undefined;
   let id: string | undefined;

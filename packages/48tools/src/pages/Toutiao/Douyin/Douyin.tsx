@@ -56,9 +56,13 @@ function Douyin(props: {}): ReactElement {
   // 下载（测试ID：6902337717137329412）
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
-      const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[抖音]${ filenamify(item.title) }.mp4`
-      });
+      let defaultPathTitle: string = `[抖音]${ filenamify(item.title) }`;
+
+      if (typeof item.width === 'number' && typeof item.height === 'number') {
+        defaultPathTitle += `_${ item.width }x${ item.height }`;
+      }
+
+      const result: SaveDialogReturnValue = await showSaveDialog({ defaultPath: `${ defaultPathTitle }.mp4` });
 
       if (result.canceled || !result.filePath) return;
 
@@ -100,6 +104,18 @@ function Douyin(props: {}): ReactElement {
 
   const columns: ColumnsType<DownloadItem> = [
     { title: '标题', dataIndex: 'title' },
+    {
+      title: '视频尺寸',
+      key: 'width_height',
+      width: 120,
+      render: (value: undefined, record: DownloadItem, index: number): ReactNode => {
+        if (typeof record.width === 'number' && typeof record.height === 'number') {
+          return `${ record.width } * ${ record.height }`;
+        } else {
+          return '无水印';
+        }
+      }
+    },
     {
       title: '下载进度',
       dataIndex: 'qid',
