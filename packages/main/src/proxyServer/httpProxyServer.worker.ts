@@ -4,6 +4,7 @@ import type { ClientRequest, IncomingMessage, ServerResponse, OutgoingHttpHeader
 import { workerData } from 'node:worker_threads';
 
 const baseUrl: string = `http://localhost:${ workerData.port }`;
+const maxAge: number = 7 * 24 * 60 * 60;
 
 /**
  * @param { URL } urlParse
@@ -26,6 +27,7 @@ function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: 
 
       response.on('end', (): void => {
         httpResponse.setHeader('Content-type', 'video/mp2ts');
+        httpResponse.setHeader('Cache-Control', `max-age=${ maxAge }`);
         httpResponse.end(Buffer.concat(buffer));
       });
 
