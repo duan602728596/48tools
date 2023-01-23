@@ -22,7 +22,7 @@ class DouyinCookieCache {
   getCookie(callback: (v: string) => void): void {
     const cookie: CookieSessionValue | undefined = this.cookie;
 
-    if (cookie && dayjs().diff(cookie.time, 'second') < 3600) { // 缓存
+    if (cookie && dayjs().diff(cookie.time, 'second') < 600) { // 缓存
       callback(cookie.value);
     }
   }

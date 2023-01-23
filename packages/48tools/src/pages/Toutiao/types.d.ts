@@ -1,5 +1,6 @@
 import type { Dispatch as D, SetStateAction as S } from 'react';
 import type { MessageInstance } from 'antd/es/message/interface';
+import type { AwemeItem } from './services/interface';
 
 type noProtocolUrl = `//${ string }`;
 
@@ -100,6 +101,7 @@ export interface UserItem2 {
     maxCursor: number;
     minCursor: number;
     data: Array<UserDataItem>;
+    hasMore: 1 | 0;
   };
   user: {
     user: {
@@ -108,6 +110,7 @@ export interface UserItem2 {
       nickname: string;
       uid: string;
       uniqueId: string;
+      secUid: string;
     };
   };
 }
@@ -117,11 +120,17 @@ export interface UserScriptRendedData {
   [key: `${ number }`]: UserItem1 | UserItem2;
 }
 
+export interface VideoQuery {
+  secUserId: string;
+  maxCursor: number;
+  webId: string;
+  hasMore: 1 | 0;
+}
+
 /* context */
 export interface GetVideoUrlOnionContext {
   messageApi: MessageInstance;
   html?: string;
-  fp?: `verify_${ string }`;
   cookie?: string;
   type?: 'video' | 'user';
   value: string;
@@ -131,7 +140,7 @@ export interface GetVideoUrlOnionContext {
   setDownloadUrl: D<S<DownloadUrlItem[]>>;
   setTitle: D<S<string>>;
   setUserModalVisible: D<S<boolean>>;
-  setUserVideoList: D<S<UserDataItem[]>>;
-  setVideoCursor: D<S<number | undefined>>;
+  setUserVideoList: D<S<(UserDataItem | AwemeItem)[]>>;
+  setVideoQuery: D<S<VideoQuery | undefined>>;
   setUserTitle: D<S<string>>;
 }

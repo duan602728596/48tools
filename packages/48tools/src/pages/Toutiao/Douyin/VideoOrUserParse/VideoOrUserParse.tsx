@@ -18,10 +18,14 @@ import { Onion } from '@bbkkbkk/q';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './videoOrUserParse.sass';
 import parseValueMiddleware from './middlewares/parseValueMiddleware';
-import verifyMiddleware from './middlewares/verifyMiddleware';
+import verifyMiddleware, { verifyCookie } from './middlewares/verifyMiddleware';
 import rendedDataMiddleware from './middlewares/rendedDataMiddleware';
 import { setAddDownloadList } from '../../reducers/douyin';
-import type { DownloadUrlItem, UserDataItem, VideoInfoItem } from '../../types';
+import douyinCookieCache from '../DouyinCookieCache';
+import { requestAwemePost, requestDouyinUser, type DouyinVideo } from '../../services/douyin';
+import * as toutiaosdk from '../sdk/toutiaosdk';
+import type { DownloadUrlItem, UserDataItem, VideoQuery } from '../../types';
+import type { AwemePostResponse, AwemeItem } from '../../services/interface';
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactElement> {
@@ -30,38 +34,62 @@ function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactEl
   });
 }
 
+function isUserDataItem(x: UserDataItem | AwemeItem): x is UserDataItem {
+  return 'playApi' in x.video;
+}
+
 /* userData select渲染 */
-function userDataSelectOptionsRender(video: VideoInfoItem): Array<ReactElement> {
+function userDataSelectOptionsRender(record: UserDataItem | AwemeItem): Array<ReactElement> {
   const element: Array<ReactElement> = [];
-  const noWatchMarkValue: string = `https:${ video.playApi }`;
-
-  element.push(
-    <Select.Option key={ '无水印' + noWatchMarkValue }
-      value={ noWatchMarkValue }
-      item={{ label: '无水印', value: noWatchMarkValue }}
-      alert={ true }
-    >
-      无水印
-    </Select.Option>
-  );
-
   let i: number = 1;
 
-  for (const bitRate of video.bitRateList) {
-    for (const addr of bitRate.playAddr) {
-      const labelText: string = `下载地址-${ i++ }(${ bitRate.width }*${ bitRate.height })`;
-      const value: string = `https:${ addr.src }`;
+  if (isUserDataItem(record)) {
+    const noWatchMarkValue: string = `https:${ record.video.playApi }`;
 
-      element.push(
-        <Select.Option key={ labelText + value } value={ value } item={{
-          label: labelText,
-          value,
-          width: bitRate.width,
-          height: bitRate.height
-        }}>
-          { labelText }
-        </Select.Option>
-      );
+    element.push(
+      <Select.Option key={ `${ record.awemeId }无水印@${ noWatchMarkValue }@a` }
+        value={ noWatchMarkValue }
+        item={{ label: '无水印', value: noWatchMarkValue }}
+        alert={ true }
+      >
+        无水印
+      </Select.Option>
+    );
+
+    for (const bitRate of record.video.bitRateList) {
+      for (const addr of bitRate.playAddr) {
+        const labelText: string = `下载地址-${ i++ }(${ bitRate.width }*${ bitRate.height })`;
+        const value: string = `https:${ addr.src }`;
+
+        element.push(
+          <Select.Option key={ `${ record.awemeId }@${ labelText }@${ value }@b` } value={ value } item={{
+            label: labelText,
+            value,
+            width: bitRate.width,
+            height: bitRate.height
+          }}>
+            { labelText }
+          </Select.Option>
+        );
+        i += 1;
+      }
+    }
+  } else {
+    for (const bitRate of record.video.bit_rate) {
+      for (const videoUrl of bitRate.play_addr.url_list) {
+        const labelText: string = `下载地址-${ i++ }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`;
+
+        element.push(
+          <Select.Option key={ `${ record.aweme_id }@${ labelText }@${ videoUrl }@c` } value={ videoUrl } item={{
+            label: labelText,
+            value: videoUrl,
+            width: bitRate.play_addr.width,
+            height: bitRate.play_addr.height
+          }}>
+            { labelText }
+          </Select.Option>
+        );
+      }
     }
   }
 
@@ -83,9 +111,64 @@ function VideoOrUserParse(props: {}): ReactElement {
 
   // 用户视频列表
   const [userModalVisible, setUserModalVisible]: [boolean, D<S<boolean>>] = useState(false); // 多个视频下载的弹出层的显示隐藏
-  const [userVideoList, setUserVideoList]: [Array<UserDataItem>, D<S<UserDataItem[]>>] = useState([]); // 用户视频列表
-  const [videoCursor, setVideoCursor]: [number | undefined, D<S<undefined>>] = useState(undefined); // 加载下一页时用
+  const [userVideoList, setUserVideoList]: [Array<UserDataItem | AwemeItem>, D<S<(UserDataItem | AwemeItem)[]>>]
+    = useState([]); // 用户视频列表
+  const [videoQuery, setVideoQuery]: [VideoQuery | undefined, D<S<VideoQuery | undefined>>]
+    = useState(undefined); // 加载下一页时用
   const [userTitle, setUserTitle]: [string, D<S<string>>] = useState('');
+  const [userVideoLoadDataLoading, setUserVideoLoadDataLoading]: [boolean, D<S<boolean>>] = useState(false);
+
+  // 点击加载下一页
+  async function handleLoadUserVideoDataClick(event: MouseEvent): Promise<void> {
+    if (videoQuery?.hasMore === 0) {
+      messageApi.warning('暂时没有更多了'!);
+
+      return;
+    }
+
+    setUserVideoLoadDataLoading(true);
+
+    try {
+      let douyinCookie: string | undefined = undefined;
+
+      douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
+
+      // 重新请求验证码数据
+      if (!douyinCookie || !videoQuery) {
+        const sxrId: string = 'MS4wLjABAAAAGSCToXHJLbkSaouYNJU68raa3TYVliiEW0tWp2dpNio';
+        const sxrDouyinUser: DouyinVideo = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
+
+        if (sxrDouyinUser.type === 'cookie') {
+          // 计算__ac_signature并获取html
+          const acSignature: string = await toutiaosdk.acrawler('sign', ['', sxrDouyinUser.value]);
+          const douyinAcCookie: string = `__ac_nonce=${ sxrDouyinUser.value }; __ac_signature=${ acSignature };`;
+          const douyinVideo: DouyinVideo = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinAcCookie);
+
+          if (douyinVideo.body && douyinVideo.body.includes('验证码中间页')) {
+            douyinCookie = await verifyCookie(douyinVideo.body, douyinAcCookie);
+
+            douyinCookieCache.setCookie(douyinCookie);
+          }
+        }
+      }
+
+      const res: AwemePostResponse = await requestAwemePost(douyinCookie!, videoQuery!);
+      const awemeList: Array<AwemeItem> = (res?.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
+
+      setVideoQuery((prevState: VideoQuery): VideoQuery => ({
+        ...prevState,
+        maxCursor: res.max_cursor,
+        hasMore: res.has_more ?? 0
+      }));
+      setUserVideoList((prevState: Array<UserDataItem | AwemeItem>): Array<UserDataItem | AwemeItem> =>
+        prevState.concat(awemeList));
+    } catch (err) {
+      console.error(err);
+      messageApi.error('数据加载失败！');
+    }
+
+    setUserVideoLoadDataLoading(false);
+  }
 
   // 添加新的下载地址
   function handleAddClick(event: MouseEvent): void {
@@ -104,7 +187,7 @@ function VideoOrUserParse(props: {}): ReactElement {
 
   // 选择下载地址
   function handleUserListDownloadUrlSelect(
-    record: UserDataItem,
+    record: UserDataItem | AwemeItem,
     value: string,
     option: { item: DownloadUrlItem } & BaseOptionType
   ): void {
@@ -132,7 +215,7 @@ function VideoOrUserParse(props: {}): ReactElement {
 
   function userModalAfterClose(): void {
     setUserVideoList([]);
-    setVideoCursor(undefined);
+    setVideoQuery(undefined);
     setUserTitle('');
   }
 
@@ -156,23 +239,24 @@ function VideoOrUserParse(props: {}): ReactElement {
       setTitle,
       setUserModalVisible,
       setUserVideoList,
-      setVideoCursor,
+      setVideoQuery,
       setUserTitle
     });
   }
 
-  const columns: ColumnsType<UserDataItem> = [
+  const columns: ColumnsType<UserDataItem | AwemeItem> = [
     { title: '视频标题', dataIndex: 'desc' },
     {
       title: '操作',
       key: 'action',
-      render: (value: undefined, record: UserDataItem, index: number): ReactNode => (
+      width: 240,
+      render: (value: undefined, record: UserDataItem | AwemeItem, index: number): ReactNode => (
         <Select className={ style.userListUrlSelect }
           size="small"
           onSelect={ (v: string, option: { item: DownloadUrlItem } & BaseOptionType): void =>
             handleUserListDownloadUrlSelect(record, v, option) }
         >
-          { userDataSelectOptionsRender(record.video) }
+          { userDataSelectOptionsRender(record) }
         </Select>
       )
     }
@@ -214,20 +298,24 @@ function VideoOrUserParse(props: {}): ReactElement {
         closable={ false }
         maskClosable={ false }
         afterClose={ userModalAfterClose }
+        confirmLoading={ userVideoLoadDataLoading }
         okText="加载下一页视频"
+        okButtonProps={{ disabled: videoQuery?.['hasMore'] === 0 }}
         cancelText="关闭"
+        onOk={ handleLoadUserVideoDataClick }
         onCancel={ (event: MouseEvent): void => setUserModalVisible(false) }
       >
-        <div className="h-[370px] overflow-auto">
+        <div className="h-[410px] overflow-auto">
           <Table size="small"
             dataSource={ userVideoList }
             columns={ columns }
-            rowKey="awemeId"
+            rowKey={ (o: UserDataItem | AwemeItem): string => ('awemeId' in o) ? o.awemeId : o.aweme_id }
             pagination={{
               pageSize: 10,
               showQuickJumper: true,
               showSizeChanger: false
             }}
+            scroll={{ y: 310 }}
           />
         </div>
       </Modal>

@@ -163,7 +163,9 @@ function Douyin(props: {}): ReactElement {
         <VideoOrUserParse />
         <Button type="primary" danger={ true } onClick={ handleClearDouyinCookie }>清除抖音Cookie的缓存</Button>
       </Header>
-      <p className="mb-[4px] text-[12px]">输入视频ID下载单个视频，输入用户ID或用户主页地址可解析用户的所有视频并选择下载。</p>
+      <p className="mb-[4px] text-[12px]">
+        输入视频ID或视频地址下载单个视频，输入用户ID或用户主页地址可解析用户的所有视频并选择下载。支持短链接。
+      </p>
       <Table size="middle"
         columns={ columns }
         dataSource={ downloadList }

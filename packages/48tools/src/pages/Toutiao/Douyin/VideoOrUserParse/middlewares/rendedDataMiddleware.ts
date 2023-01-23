@@ -7,7 +7,8 @@ import type {
   DownloadUrlItem,
   UserScriptRendedData,
   UserItem1,
-  UserItem2
+  UserItem2,
+  UserDataItem
 } from '../../../types';
 
 /* 解析RENDER_DATA */
@@ -25,8 +26,8 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
   const data: string = decodeURIComponent(rendedData.innerText);
   const json: ScriptRendedData | UserScriptRendedData = JSON.parse(data);
 
-  // 处理视频
   if (ctx.type === 'video') {
+    // 处理视频
     const cVersion: CVersionObj | undefined = Object.values(json).find(
       (o: C0Obj | CVersionObj): o is CVersionObj => typeof o === 'object' && ('aweme' in o));
 
@@ -37,29 +38,31 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       return;
     }
 
-    const awemeDetail: AwemeDetail = cVersion.aweme.detail;
-    const urls: DownloadUrlItem[] = [{ label: '无水印', value: `https:${ awemeDetail.video.playApi }` }];
-    let i: number = 1;
+    const awemeDetail: AwemeDetail | undefined = cVersion?.aweme?.detail;
 
-    for (const bitRate of awemeDetail.video.bitRateList) {
-      for (const addr of bitRate.playAddr) {
-        urls.push({
-          label: `下载地址-${ i++ }(${ bitRate.width }*${ bitRate.height })`,
-          value: `https:${ addr.src }`,
-          width: bitRate.width,
-          height: bitRate.height
-        });
+    if (awemeDetail) {
+      const urls: DownloadUrlItem[] = [{ label: '无水印', value: `https:${ awemeDetail.video.playApi }` }];
+      let i: number = 1;
+
+      for (const bitRate of awemeDetail.video.bitRateList) {
+        for (const addr of bitRate.playAddr) {
+          urls.push({
+            label: `下载地址-${ i++ }(${ bitRate.width }*${ bitRate.height })`,
+            value: `https:${ addr.src }`,
+            width: bitRate.width,
+            height: bitRate.height
+          });
+        }
       }
+
+      ctx.setDownloadUrl(urls);
+      ctx.setTitle(awemeDetail.desc);
+      ctx.setVisible(true);
+    } else {
+      ctx.messageApi.warning('视频不存在！');
     }
-
-    ctx.setDownloadUrl(urls);
-    ctx.setTitle(awemeDetail.desc);
-    ctx.setVisible(true);
-    ctx.setUrlLoading(false);
-  }
-
-  // 处理用户
-  if (ctx.type === 'user') {
+  } else if (ctx.type === 'user') {
+    // 处理用户
     const userItemArray: Array<UserItem1 | UserItem2 | string> = Object.values(json);
     const userItem1: UserItem1 | undefined = userItemArray.find(
       (o: UserItem1 | UserItem2 | string): o is UserItem1 => typeof o === 'object' && ('odin' in o));
@@ -73,12 +76,26 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       return;
     }
 
-    ctx.setUserVideoList(userItem2.post.data);
-    ctx.setVideoCursor(userItem2.post.maxCursor);
-    ctx.setUserTitle(userItem2.user.user.nickname);
-    ctx.setUserModalVisible(true);
-    ctx.setUrlLoading(false);
+    const userData: Array<UserDataItem> | undefined = userItem2?.post?.data;
+
+    if (userData) {
+      ctx.setUserVideoList(userItem2.post.data);
+      ctx.setVideoQuery({
+        secUserId: userItem2.uid,
+        maxCursor: userItem2.post.maxCursor,
+        webId: userItem1.odin.user_unique_id,
+        hasMore: userItem2.post.hasMore
+      });
+      ctx.setUserTitle(userItem2.user.user.nickname);
+      ctx.setUserModalVisible(true);
+    } else {
+      ctx.messageApi.warning('用户不存在！');
+    }
+  } else {
+    ctx.messageApi.warning('无法解析该地址！');
   }
+
+  ctx.setUrlLoading(false);
 }
 
 export default rendedDataMiddleware;

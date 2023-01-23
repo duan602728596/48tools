@@ -1,4 +1,8 @@
 import got, { type Response as GotResponse } from 'got';
+import { rStr } from '../../../utils/utils';
+import * as toutiaosdk from '../Douyin/sdk/toutiaosdk';
+import type { AwemePostResponse } from './interface';
+import type { VideoQuery } from '../types';
 
 const userAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
   + 'Chrome/91.0.4472.164 Safari/537.36';
@@ -99,6 +103,67 @@ export async function requestGetVideoRedirectUrl(uri: string): Promise<string> {
     },
     followRedirect: false
   });
+
+  return res.body;
+}
+
+/**
+ * 请求user的视频列表
+ * @param { string } cookie: string
+ * @param { VideoQuery } videoQuery: user id
+ */
+export async function requestAwemePost(cookie: string, videoQuery: VideoQuery): Promise<AwemePostResponse> {
+  const frontierSign: { 'X-Bogus'?: string } = {};
+
+  await toutiaosdk.webmssdkES5('frontierSign', [frontierSign]);
+
+  const urlParam: URLSearchParams = new URLSearchParams({
+    device_platform: 'webapp',
+    aid: '6383',
+    channel: 'channel_pc_web',
+    sec_user_id: videoQuery.secUserId,
+    max_cursor: `${ videoQuery.maxCursor }`,
+    locate_query: 'false',
+    show_live_replay_strategy: '1',
+    count: '10',
+    publish_video_strategy_type: '2',
+    pc_client_type: '1',
+    version_code: '170400',
+    version_name: '17.4.0',
+    cookie_enabled: 'true',
+    screen_width: '1440',
+    screen_height: '900',
+    browser_language: 'zh-CN',
+    browser_platform: 'MacIntel',
+    browser_name: 'Edge',
+    browser_version: '109.0.1518.52',
+    browser_online: 'true',
+    engine_name: 'Blink',
+    engine_version: '109.0.0.0',
+    os_name: 'Mac+OS',
+    os_version: '10.15.7',
+    cpu_core_num: '4',
+    device_memory: '8',
+    platform: 'PC',
+    downlink: '0.95',
+    effective_type: '3g',
+    round_trip_time: '650',
+    webid: videoQuery.webId,
+    msToken: `${ rStr(36) }-${ rStr(43) }-${ rStr(47) }`,
+    'X-Bogus': frontierSign['X-Bogus']!
+  });
+
+  const res: GotResponse<AwemePostResponse> = await got.get(
+    `https://www.douyin.com/aweme/v1/web/aweme/post/?${ urlParam.toString() }`, {
+      responseType: 'json',
+      headers: {
+        Referer: `https://www.douyin.com/user/${ videoQuery.secUserId }`,
+        Host: 'www.douyin.com',
+        'User-Agent': userAgent,
+        Cookie: cookie
+      },
+      followRedirect: false
+    });
 
   return res.body;
 }

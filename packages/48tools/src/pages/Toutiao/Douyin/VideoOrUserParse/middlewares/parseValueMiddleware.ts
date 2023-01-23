@@ -152,7 +152,11 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
       douyinVideo = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinCookie);
     }
 
-    if (douyinVideo === null) return;
+    if (douyinVideo === null) {
+      ctx.setUrlLoading(false);
+
+      return;
+    }
 
     // 根据请求的结果判断是否继续请求
     if ((douyinVideo as DouyinVideo).type === 'html') {
