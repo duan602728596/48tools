@@ -120,6 +120,8 @@ function VideoOrUserParse(props: {}): ReactElement {
 
   // 点击加载下一页
   async function handleLoadUserVideoDataClick(event: MouseEvent): Promise<void> {
+    if (!videoQuery) return;
+
     if (videoQuery?.hasMore === 0) {
       messageApi.warning('暂时没有更多了'!);
 
@@ -134,7 +136,7 @@ function VideoOrUserParse(props: {}): ReactElement {
       douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
 
       // 重新请求验证码数据
-      if (!douyinCookie || !videoQuery) {
+      if (!douyinCookie) {
         const sxrId: string = 'MS4wLjABAAAAGSCToXHJLbkSaouYNJU68raa3TYVliiEW0tWp2dpNio';
         const sxrDouyinUser: DouyinVideo = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
 
@@ -152,7 +154,7 @@ function VideoOrUserParse(props: {}): ReactElement {
         }
       }
 
-      const res: AwemePostResponse = await requestAwemePost(douyinCookie!, videoQuery!);
+      const res: AwemePostResponse = await requestAwemePost(douyinCookie!, videoQuery);
       const awemeList: Array<AwemeItem> = (res?.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
 
       setVideoQuery((prevState: VideoQuery): VideoQuery => ({
