@@ -3,14 +3,13 @@ import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStat
 import { Button, Modal, Form, Input, message, Alert, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import {
-  ThunderboltOutlined as IconThunderboltOutlined,
-  DownloadOutlined as IconDownloadOutlined,
-  SwapLeftOutlined as IconSwapLeftOutlined
-} from '@ant-design/icons';
+import Icon, { DownloadOutlined as IconDownloadOutlined, SwapLeftOutlined as IconSwapLeftOutlined } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
+import IconFFmpegSvgComponent from '../images/ffmpeg.component.svg';
+
+const IconFFmpeg: ReactElement = <Icon className={ style.ffmpegIcon } component={ IconFFmpegSvgComponent } />;
 
 /* 配置ffmpeg地址 */
 function FFmpegOption(props: {}): ReactElement {
@@ -78,7 +77,7 @@ function FFmpegOption(props: {}): ReactElement {
     <Fragment>
       <Button type="primary"
         danger={ true }
-        icon={ <IconThunderboltOutlined /> }
+        icon={ IconFFmpeg }
         onClick={ handleOpenFFmpegOptionClick }
       >
         FFmpeg配置
