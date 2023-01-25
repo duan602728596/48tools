@@ -27,3 +27,10 @@ export interface ProcessItem {
   console: Array<ProcessItemConsole>;
   worker: Worker;
 }
+
+/* 数据库 */
+export interface dbTemplateItem {
+  id: string;
+  name: string;
+  args: string;
+}

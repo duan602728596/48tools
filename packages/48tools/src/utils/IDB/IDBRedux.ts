@@ -8,4 +8,5 @@ export const bilibiliLiveObjectStoreName: string = dbConfig.objectStore[0].name;
 export const acfunLiveObjectStoreName: string = dbConfig.objectStore[1].name;
 export const optionsObjectStoreName: string = dbConfig.objectStore[2].name;
 export const weiboLoginListObjectStoreName: string = dbConfig.objectStore[3].name;
+export const ffmpegTemplateObjectStore: string = dbConfig.objectStore[4].name;
 export default IDBRedux;
