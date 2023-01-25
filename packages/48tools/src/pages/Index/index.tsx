@@ -22,6 +22,7 @@ import IconAcFunLogoSvgComponent from './images/acfunlogo.component.svg';
 import IconDouyinSvgComponent from './images/douyin.component.svg';
 import IconCutSvgComponent from './images/cut.component.svg';
 import IconConcatSvgComponent from './images/concat.component.svg';
+import IconPowerShellSvgComponent from './images/powershell.component.svg';
 import imageUrlZfbAvif from './images/zfb.avif';
 import imageUrlWxAvif from './images/wx.avif';
 
@@ -116,6 +117,11 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       name: '视频合并',
       url: '/VideoEdit/Concat',
       icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconConcatSvgComponent } />
+    },
+    {
+      name: '执行FFmpeg命令',
+      url: '/VideoEdit/FFmpegProcess',
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconPowerShellSvgComponent } />
     }
   ]
 ];

@@ -34,6 +34,7 @@
     "react-router-dom": "^6.6.1",
     "react-sortable-hoc": "^2.0.0",
     "reselect": "^4.1.7",
+    "string-argv": "^0.3.0",
     "video.js": "^8.0.3"
   },
   "devDependencies": {

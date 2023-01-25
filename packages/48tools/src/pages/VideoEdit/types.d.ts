@@ -13,3 +13,17 @@ export interface CutItem {
   startTime?: string; // 开始时间
   endTime?: string;   // 结束时间
 }
+
+/* ========== FFmpegProcess ========== */
+export interface ProcessItemConsole {
+  text: string;
+  key: string;
+}
+
+export interface ProcessItem {
+  id: string;
+  args: string;
+  status: 'running' | 'stop' | 'error';
+  console: Array<ProcessItemConsole>;
+  worker: Worker;
+}

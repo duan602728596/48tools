@@ -53,6 +53,7 @@ const externalsName: Array<string> = nodeModules([
   'net',
   'path',
   'stream/promises',
+  'timers',
   'timers/promises',
   'url',
   'util'
