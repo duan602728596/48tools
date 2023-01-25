@@ -1,4 +1,5 @@
 import { promisify } from 'node:util';
+import { setTimeout, clearTimeout } from 'timers';
 import { Fragment, useMemo, useEffect, useRef, type ReactElement, type RefObject, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { message, Button, Alert } from 'antd';
