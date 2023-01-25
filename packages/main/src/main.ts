@@ -6,6 +6,7 @@ import { ipc, removeIpc } from './ipc';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
+import weiboResourceRequestInit from './weiboResourceRequest/weiboResourceRequest';
 import store from './store';
 import type { ThemeValue } from './ipcListener/themeChange';
 
@@ -70,6 +71,7 @@ function createWindow(): void {
   });
 
   toutiaoRequestInit();
+  weiboResourceRequestInit();
 }
 
 // https://github.com/microsoft/vscode/issues/116715#issuecomment-917783861
