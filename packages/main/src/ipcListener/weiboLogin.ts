@@ -12,6 +12,7 @@ function login(win: BrowserWindow): void {
   }
 
   weiboLoginWin = new BrowserWindow({
+    width: 1250,
     webPreferences: {
       contextIsolation: false
     },
