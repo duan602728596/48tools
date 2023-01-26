@@ -19,7 +19,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import style from './inVideo.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
 import {
   setInVideoQuery,
@@ -33,7 +33,7 @@ import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
-import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
+import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
 /**
@@ -129,7 +129,7 @@ function InVideo(props: {}): ReactElement {
       await fsP.writeFile(m3u8File, m3u8UrlF);
 
       let requestIdleID: number | null = null;
-      const worker: Worker = getFFMpegDownloadWorker();
+      const worker: Worker = getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
         const { type }: MessageEventData = workerEvent.data;

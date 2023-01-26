@@ -38,7 +38,7 @@ import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getRecordVideoDownloadWorker from './RecordVideoDownload.worker/getRecordVideoDownloadWorker';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
 import {
   setRecordList,
@@ -59,7 +59,7 @@ import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { pick } from '../../../../utils/lodash';
-import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
+import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
@@ -231,7 +231,7 @@ function Pocket48Record(props: {}): ReactElement {
       }
 
       let requestIdleID: number | null = null;
-      const worker: Worker = (isM3u8 && downloadType === 1 ? getRecordVideoDownloadWorker : getFFMpegDownloadWorker)();
+      const worker: Worker = (isM3u8 && downloadType === 1 ? getRecordVideoDownloadWorker : getFFmpegDownloadWorker)();
 
       worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
         const { type }: MessageEventData = workerEvent.data;

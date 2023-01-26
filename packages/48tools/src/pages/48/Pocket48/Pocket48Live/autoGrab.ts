@@ -4,7 +4,7 @@ import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
@@ -61,7 +61,7 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
 
       const filePath: string = path.join(dir, filename);
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
-      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFMpegDownloadWorker();
+      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event.data;

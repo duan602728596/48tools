@@ -16,7 +16,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import style from './getLiveUrl.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import { parseInLive, parseLiveUrl } from '../parseLive48Website';
 import autoInLiveTimer from './autoInLiveTimer';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
@@ -60,7 +60,7 @@ function GetLiveUrl(props: {}): ReactElement {
     if (result.canceled || !result.filePath) return;
 
     const id: string = randomUUID();
-    const worker: Worker = getFFMpegDownloadWorker();
+    const worker: Worker = getFFmpegDownloadWorker();
 
     worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
       const { type, error }: MessageEventData = event.data;

@@ -7,7 +7,7 @@ import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AddForm from './AddForm';
@@ -63,7 +63,7 @@ function Live(props: {}): ReactElement {
     try {
       const resInit: RoomInit = await requestRoomInitData(record.roomId);
       const resPlayUrl: RoomPlayUrl = await requestRoomPlayerUrl(`${ resInit.data.room_id }`);
-      const worker: Worker = getFFMpegDownloadWorker();
+      const worker: Worker = getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;

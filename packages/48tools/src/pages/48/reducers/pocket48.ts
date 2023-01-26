@@ -13,7 +13,7 @@ import { requestLiveList } from '../services/pocket48';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { LiveInfo, LiveData } from '../services/interface';
-import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
 
 export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;

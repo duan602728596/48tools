@@ -18,7 +18,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import { Onion } from '@bbkkbkk/q';
 import style from './live.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../functionalComponents/AcFunLogin/AcFunLogin';
 import AddForm from './AddForm';
@@ -69,7 +69,7 @@ function Live(props: {}): ReactElement {
     const { record, player, filePath }: { record: LiveItem; player: string; filePath: string } = ctx;
 
     try {
-      const worker: Worker = getFFMpegDownloadWorker();
+      const worker: Worker = getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event.data;
