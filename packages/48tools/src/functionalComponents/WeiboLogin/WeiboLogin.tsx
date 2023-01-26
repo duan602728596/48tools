@@ -32,7 +32,7 @@ function WeiboLogin(props: {}): ReactElement {
         onCancel={ handleCloseQrcodeClick }
       >
         <div className="h-[420px]">
-          <OpenWeiboWindow onCancel={ handleCloseQrcodeClick } />
+          <OpenWeiboWindow />
           <LoginTable />
         </div>
       </Modal>

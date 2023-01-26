@@ -12,7 +12,7 @@ import UserBrowserLogin from './UserBrowserLogin';
 import type { UserInfo } from '../services/interface';
 
 /* 打开微博窗口 */
-function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
+function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
@@ -38,8 +38,8 @@ function OpenWeiboWindow(props: { onCancel: Function }): ReactElement {
               lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
             }
           }));
-          props.onCancel();
           messageApi.success('登陆成功！');
+          props?.onCancel?.();
         } else {
           messageApi.error('账号的uid获取失败！');
         }
