@@ -14,7 +14,8 @@ function login(win: BrowserWindow): void {
   weiboLoginWin = new BrowserWindow({
     webPreferences: {
       contextIsolation: false
-    }
+    },
+    title: '微博账号登录'
   });
   weiboLoginWin.loadURL(weiboUrl, {
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36'
