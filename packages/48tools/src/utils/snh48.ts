@@ -19,3 +19,12 @@ export function createHeaders(): { [key: string]: string } {
     Host: 'pocketapi.48.cn'
   };
 }
+
+/* 拼接静态文件地址 */
+export function source(pathname: string): string {
+  if (/^https?/i.test(pathname)) {
+    return pathname;
+  } else {
+    return `https://source3.48.cn/${ pathname.replace(/^\//, '') }`;
+  }
+}

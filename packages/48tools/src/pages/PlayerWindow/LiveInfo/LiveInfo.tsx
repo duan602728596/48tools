@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import type { ReactElement, ReactNode, MouseEvent } from 'react';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
-import { source } from '../../../utils/utils';
+import { source } from '../../../utils/snh48';
 import type { PlayerInfo } from '../PlayerWindow';
 import type { LiveRoomInfo } from '../../48/services/interface';
 

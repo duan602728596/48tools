@@ -12,7 +12,7 @@ import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/
 import style from './downloadImages.sass';
 import { showOpenDialog, showSaveDialog } from '../../../../../utils/remote/dialog';
 import ImagePreview from './ImagePreview';
-import { source } from '../../../../../utils/utils';
+import { source } from '../../../../../utils/snh48';
 import { requestDownloadFileByStream } from '../../../services/pocket48';
 import type { LiveInfo } from '../../../services/interface';
 

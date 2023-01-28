@@ -2,7 +2,7 @@ import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefOb
 import videojs from 'video.js/dist/video.es.js';
 import * as classNames from 'classnames';
 import style from './recordVideo.sass';
-import { source } from '../../../utils/utils';
+import { source } from '../../../utils/snh48';
 import { requestDownloadFile } from '../../48/services/pocket48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
 import type { PlayerInfo } from '../PlayerWindow';
