@@ -22,7 +22,7 @@ export function createHeaders(): { [key: string]: string } {
 
 /* 拼接静态文件地址 */
 export function source(pathname: string): string {
-  if (/^https?/i.test(pathname)) {
+  if (/^https?\/{2}/i.test(pathname)) {
     return pathname;
   } else {
     const url: URL = new URL(pathname, 'https://source3.48.cn/');
