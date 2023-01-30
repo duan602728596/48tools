@@ -39,7 +39,11 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
       <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">
         { playerInfo.title }
       </h1>
-      { playerInfo.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
+      {
+        playerInfo.liveMode === 1
+          ? <Tag color="blue">录屏</Tag>
+          : (playerInfo.liveType === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>)
+      }
       <div className="flex">
         <div className="grow">{ infoRender() }</div>
         <div className="shrink-0">

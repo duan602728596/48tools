@@ -224,7 +224,8 @@ function Pocket48Live(props: {}): ReactElement {
         'coverPath', // 头像
         'title',     // 直播间标题
         'liveId',    // 直播id
-        'liveType'   // 直播类型
+        'liveType',  // 直播类型
+        'liveMode'
       ])
     ));
 
@@ -255,7 +256,11 @@ function Pocket48Live(props: {}): ReactElement {
       render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => {
         return (
           <Fragment>
-            { value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
+            {
+              record.liveMode === 1
+                ? <Tag color="blue">录屏</Tag>
+                : (value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>)
+            }
             { record.inMicrophoneConnection && <Tag className="m-0" color="cyan">连麦</Tag> }
           </Fragment>
         );
