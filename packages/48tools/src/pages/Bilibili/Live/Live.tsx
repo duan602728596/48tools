@@ -54,14 +54,22 @@ function Live(props: {}): ReactElement {
   // 开始录制
   async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
     const time: string = getFileTime();
-    const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
-    });
-
-    if (result.canceled || !result.filePath) return;
 
     try {
       const resInit: RoomInit = await requestRoomInitData(record.roomId);
+
+      if (resInit.data.live_status !== 1) {
+        messageApi.warning('直播未开始。');
+
+        return;
+      }
+
+      const result: SaveDialogReturnValue = await showSaveDialog({
+        defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
+      });
+
+      if (result.canceled || !result.filePath) return;
+
       const resPlayUrl: RoomPlayUrl = await requestRoomPlayerUrl(`${ resInit.data.room_id }`);
       const worker: Worker = getFFmpegDownloadWorker();
 
