@@ -55,6 +55,7 @@ import {
   requestDownloadFile
 } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { engineUserAgent } from '../../../../utils/snh48';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
@@ -221,7 +222,7 @@ function Pocket48Record(props: {}): ReactElement {
 
         const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath, {
           'Host': 'cychengyuan-vod.48.cn',
-          'User-Agent': 'SNH48 ENGINE'
+          'User-Agent': engineUserAgent
         });
 
         await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, getProxyServerPort().port)); // 写入m3u8文件

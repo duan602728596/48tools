@@ -1,6 +1,6 @@
 import got, { type Response as GotResponse, Agents as GotAgents } from 'got';
 import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
-import { getBilibiliCookie } from '../../../utils/utils';
+import { getBilibiliCookie, pcUserAgent } from '../../../utils/utils';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData } from './interface';
 
 const proxyAgentOptions: HttpProxyAgentOptions | HttpsProxyAgentOptions = {
@@ -24,8 +24,7 @@ export async function requestBilibiliHtml(url: string, proxy: boolean): Promise<
     responseType: 'text',
     headers: {
       Host: 'www.bilibili.com',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) '
-        + 'Chrome/84.0.4147.38 Safari/537.36 Edg/84.0.522.15',
+      'User-Agent': pcUserAgent,
       Cookie: getBilibiliCookie()
     },
     agent: proxy ? gotAgent : undefined

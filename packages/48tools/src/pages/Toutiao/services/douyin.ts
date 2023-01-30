@@ -1,11 +1,9 @@
 import got, { type Response as GotResponse } from 'got';
-import { rStr } from '../../../utils/utils';
+import { rStr, pcUserAgent } from '../../../utils/utils';
 import * as toutiaosdk from '../Douyin/sdk/toutiaosdk';
 import type { AwemePostResponse } from './interface';
 import type { VideoQuery } from '../types';
 
-const userAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
-  + 'Chrome/91.0.4472.164 Safari/537.36';
 
 // 抖音可能返回中间页，需要根据cookie判断一下
 export interface DouyinVideo {
@@ -23,7 +21,7 @@ export async function requestDouyinVideoHtml(id: string, cookie: string = ''): P
   const res: GotResponse<string> = await got.get(`https://www.douyin.com/video/${ id }`, {
     responseType: 'text',
     headers: {
-      'User-Agent': userAgent,
+      'User-Agent': pcUserAgent,
       Cookie: '__ac_referer=__ac_blank;' + cookie,
       Host: 'www.douyin.com'
     }
@@ -62,7 +60,7 @@ function requestDouyinHtml(url?: string): RequestDouyinHtmlReturn {
     const res: GotResponse<string> = await got.get(uri, {
       responseType: 'text',
       headers: {
-        'User-Agent': userAgent,
+        'User-Agent': pcUserAgent,
         Cookie: '__ac_referer=__ac_blank;' + cookie,
         Host: new URL(uri).host
       },
@@ -99,7 +97,7 @@ export async function requestGetVideoRedirectUrl(uri: string): Promise<string> {
     responseType: 'text',
     headers: {
       Host: 'www.douyin.com',
-      'User-Agent': userAgent
+      'User-Agent': pcUserAgent
     },
     followRedirect: false
   });
@@ -159,7 +157,7 @@ export async function requestAwemePost(cookie: string, videoQuery: VideoQuery): 
       headers: {
         Referer: `https://www.douyin.com/user/${ videoQuery.secUserId }`,
         Host: 'www.douyin.com',
-        'User-Agent': userAgent,
+        'User-Agent': pcUserAgent,
         Cookie: cookie
       },
       followRedirect: false

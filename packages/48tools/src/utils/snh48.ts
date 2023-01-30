@@ -1,5 +1,9 @@
 import { rStr } from './utils';
 
+// app端口袋48ua
+export const engineUserAgent: string = 'SNH48 ENGINE';
+export const appUserAgent: string = 'PocketFans201807/6.0.16 (iPhone; iOS 13.5.1; Scale/2.00)';
+
 /* 创建请求头 */
 export function createHeaders(): { [key: string]: string } {
   return {
@@ -14,7 +18,7 @@ export function createHeaders(): { [key: string]: string } {
       deviceName: 'iPhone XR',
       os: 'ios'
     }),
-    'User-Agent': 'PocketFans201807/6.0.16 (iPhone; iOS 13.5.1; Scale/2.00)',
+    'User-Agent': appUserAgent,
     'Accept-Language': 'zh-Hans-AW;q=1',
     Host: 'pocketapi.48.cn'
   };
