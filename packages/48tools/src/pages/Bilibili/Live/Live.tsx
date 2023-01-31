@@ -11,6 +11,7 @@ import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWork
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AddForm from './AddForm/AddForm';
+import AutoRecordingSavePath from './AutoRecordingSavePath/AutoRecordingSavePath';
 import {
   IDBCursorBilibiliLiveList,
   IDBDeleteBilibiliLiveList,
@@ -164,6 +165,7 @@ Origin: https://live.bilibili.com\r`
         <Button.Group>
           <BilibiliLogin />
           <AddForm />
+          <AutoRecordingSavePath />
         </Button.Group>
       </Header>
       <Table size="middle"
