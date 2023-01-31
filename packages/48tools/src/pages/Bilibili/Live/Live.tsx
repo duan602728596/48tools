@@ -3,8 +3,9 @@ import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message, Popconfirm } from 'antd';
+import { Button, Table, message, Popconfirm, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
@@ -15,6 +16,7 @@ import AutoRecordingSavePath from './AutoRecordingSavePath/AutoRecordingSavePath
 import {
   IDBCursorBilibiliLiveList,
   IDBDeleteBilibiliLiveList,
+  IDBUpdateBilibiliLiveList,
   setAddLiveBilibiliChildList,
   setDeleteLiveBilibiliChildList,
   type BilibiliLiveInitialState
@@ -34,14 +36,27 @@ const selector: Selector<RState, BilibiliLiveInitialState> = createStructuredSel
   bilibiliLiveList: ({ bilibiliLive }: RState): Array<LiveItem> => bilibiliLive.bilibiliLiveList,
 
   // 直播下载
-  liveChildList: ({ bilibiliLive }: RState): Array<WebWorkerChildItem> => bilibiliLive.liveChildList
+  liveChildList: ({ bilibiliLive }: RState): Array<WebWorkerChildItem> => bilibiliLive.liveChildList,
+
+  // 自动录制直播
+  autoRecordTimer: ({ bilibiliLive }: RState): NodeJS.Timer | null => bilibiliLive.autoRecordTimer
 });
 
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
-  const { bilibiliLiveList, liveChildList }: BilibiliLiveInitialState = useSelector(selector);
+  const { bilibiliLiveList, liveChildList, autoRecordTimer }: BilibiliLiveInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+
+  // 修改自动录制的checkbox
+  function handleAutoRecordCheck(record: LiveItem, event: CheckboxChangeEvent): void {
+    dispatch(IDBUpdateBilibiliLiveList({
+      data: {
+        ...record,
+        autoRecord: event.target.checked
+      }
+    }));
+  }
 
   // 停止
   function handleStopClick(record: LiveItem, event?: MouseEvent): void {
@@ -118,6 +133,17 @@ Origin: https://live.bilibili.com\r`
   const columns: ColumnsType<LiveItem> = [
     { title: '说明', dataIndex: 'description' },
     { title: '房间ID', dataIndex: 'roomId' },
+    {
+      title: '自动录制',
+      dataIndex: 'autoRecord',
+      width: 100,
+      render: (value: boolean, record: LiveItem, index: number): ReactElement => (
+        <Checkbox checked={ value }
+          disabled={ autoRecordTimer !== null }
+          onChange={ (event: CheckboxChangeEvent): void => handleAutoRecordCheck(record, event) }
+        />
+      )
+    },
     {
       title: '操作',
       key: 'handle',

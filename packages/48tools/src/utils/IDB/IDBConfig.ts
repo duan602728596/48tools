@@ -13,13 +13,13 @@ export interface IDBConfig {
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 5,
+  version: 6,
   objectStore: [
     // b站直播间信息
     {
       name: 'bilibili_live',
       key: 'id',
-      data: ['description', 'roomId']
+      data: ['description', 'roomId', 'autoRecord']
     },
 
     // a站直播间信息
