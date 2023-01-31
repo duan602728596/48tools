@@ -59,7 +59,13 @@ function Live(props: {}): ReactElement {
 
   // 自动录制
   function handleAutoRecordStartClick(event: MouseEvent): void {
-    dispatch(setAutoRecordTimer(setInterval(bilibiliAutoRecord, 60_000)));
+    const bilibiliAutoRecordSavePath: string | null = localStorage.getItem('BILIBILI_AUTO_RECORD_SAVE_PATH');
+
+    if (bilibiliAutoRecordSavePath) {
+      dispatch(setAutoRecordTimer(setInterval(bilibiliAutoRecord, 60_000)));
+    } else {
+      messageApi.warning('请先配置视频自动保存的目录！');
+    }
   }
 
   // 修改自动录制的checkbox
