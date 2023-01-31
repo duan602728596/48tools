@@ -1,3 +1,4 @@
+import { setInterval, clearInterval } from 'node:timers';
 import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,11 +20,13 @@ import {
   IDBUpdateBilibiliLiveList,
   setAddLiveBilibiliChildList,
   setDeleteLiveBilibiliChildList,
+  setAutoRecordTimer,
   type BilibiliLiveInitialState
 } from '../reducers/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
+import bilibiliAutoRecord from './bilibiliAutoRecord';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';
@@ -48,13 +51,21 @@ function Live(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
+  // 停止自动录制
+  function handleAutoRecordStopClick(event: MouseEvent): void {
+    clearInterval(autoRecordTimer!);
+    dispatch(setAutoRecordTimer(null));
+  }
+
+  // 自动录制
+  function handleAutoRecordStartClick(event: MouseEvent): void {
+    dispatch(setAutoRecordTimer(setInterval(bilibiliAutoRecord, 60_000)));
+  }
+
   // 修改自动录制的checkbox
   function handleAutoRecordCheck(record: LiveItem, event: CheckboxChangeEvent): void {
     dispatch(IDBUpdateBilibiliLiveList({
-      data: {
-        ...record,
-        autoRecord: event.target.checked
-      }
+      data: { ...record, autoRecord: event.target.checked }
     }));
   }
 
@@ -192,6 +203,11 @@ Origin: https://live.bilibili.com\r`
           <BilibiliLogin />
           <AddForm />
           <AutoRecordingSavePath />
+          {
+            autoRecordTimer === null
+              ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
+              : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
+          }
         </Button.Group>
       </Header>
       <Table size="middle"
