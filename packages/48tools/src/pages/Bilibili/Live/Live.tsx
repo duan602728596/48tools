@@ -10,7 +10,7 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
-import AddForm from './AddForm';
+import AddForm from './AddForm/AddForm';
 import {
   IDBCursorBilibiliLiveList,
   IDBDeleteBilibiliLiveList,
