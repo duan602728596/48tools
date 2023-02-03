@@ -27,7 +27,7 @@ const api: QueryApi = createApi({
                         id
                         ownerName
                         roomId
-                        account
+                        serverId
                     }
                 }
             }

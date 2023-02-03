@@ -9,7 +9,7 @@
     "build:api": "npm run clean && cross-env NODE_ENV=production gulp",
     "build:website": "cross-env NODE_ENV=production milktea-esm vite-build",
     "build": "npm run clean && npm run build:api && npm run build:website",
-    "clean": "rimraf dist/api dist/package.json dist/**/*.{html,css,js,map,svg,ico,jpg,png,webp,avif}"
+    "clean": "rimraf dist/api dist/package.json !dist/vercel.json"
   },
   "dependencies": {
     "express": "^4.18.2",

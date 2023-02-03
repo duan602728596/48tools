@@ -4,6 +4,7 @@ export default /* GraphQL */ `
         ownerName: String
         roomId: String
         account: String
+        serverId: String
     }
 
     type RoomInfo {

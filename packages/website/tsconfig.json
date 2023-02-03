@@ -5,7 +5,8 @@
     "jsx": "react-jsx",
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules"

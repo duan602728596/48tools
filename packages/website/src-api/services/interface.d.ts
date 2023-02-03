@@ -62,6 +62,7 @@ export interface RoomId {
   ownerName: string;
   roomId: string;
   account: string;
+  serverId: string;
 }
 
 export interface RoomInfo {

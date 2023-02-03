@@ -62,5 +62,5 @@ export const {
   setLiveInfoItemCheckedChange,
   setLiveListCheckedClean,
   setInDownloading
-}: CaseReducerActions<CaseReducers> = actions;
+}: Record<string, Function> = actions;
 export default { record: reducer };
