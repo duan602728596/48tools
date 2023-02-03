@@ -30,15 +30,6 @@ export function rStr(len: number): string {
   return result;
 }
 
-/* 拼接静态文件地址 */
-export function source(pathname: string): string {
-  if (/^https?/i.test(pathname)) {
-    return pathname;
-  } else {
-    return `https://source3.48.cn/${ pathname.replace(/^\//, '') }`;
-  }
-}
-
 /* 获取bilibili的cookie */
 export function getBilibiliCookie(): string | undefined {
   const cookieStr: string | null = localStorage.getItem(BILIBILI_COOKIE_KEY);
@@ -127,3 +118,7 @@ export async function detectPort(port: number, ignorePort: Array<number> = []): 
 
   return newNumber;
 }
+
+// pc端ua
+export const pcUserAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
+  + '(KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.52';

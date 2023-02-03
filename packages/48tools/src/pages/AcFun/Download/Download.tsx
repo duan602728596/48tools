@@ -8,7 +8,7 @@ import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './download.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getFFMpegDownloadWorker from '../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../functionalComponents/AcFunLogin/AcFunLogin';
 import AddForm, { acfunVideoTypesMap } from './AddForm';
@@ -22,7 +22,7 @@ import {
 import { getFFmpeg } from '../../../utils/utils';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem, Representation } from '../types';
-import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
 
 /* redux selector */
 type RState = { acfunDownload: AcFunDownloadInitialState };
@@ -63,7 +63,7 @@ function Download(props: {}): ReactElement {
     if (result.canceled || !result.filePath) return;
 
     let requestIdleID: number | null = null;
-    const worker: Worker = getFFMpegDownloadWorker();
+    const worker: Worker = getFFmpegDownloadWorker();
 
     worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
       const { type }: MessageEventData = event.data;

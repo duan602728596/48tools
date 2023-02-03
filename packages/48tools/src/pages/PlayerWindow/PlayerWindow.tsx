@@ -14,6 +14,7 @@ export interface PlayerInfo {
   liveId: string;
   id: string;
   liveType: number;
+  liveMode: number;
   rtmpPort: number;
   httpPort: number;
   proxyPort: number;

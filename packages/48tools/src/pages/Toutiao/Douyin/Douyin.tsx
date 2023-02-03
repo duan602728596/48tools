@@ -11,7 +11,8 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
-import Add from './Add';
+import VideoOrUserParse from './VideoOrUserParse/VideoOrUserParse';
+import douyinCookieCache from './DouyinCookieCache';
 import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,
@@ -41,6 +42,12 @@ function Douyin(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
+  // 清除抖音的cookie
+  function handleClearDouyinCookie(event: MouseEvent): void {
+    douyinCookieCache.clearCookie();
+    messageApi.success('Cookie已清除！');
+  }
+
   // 删除一个任务
   function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent): void {
     dispatch(setDeleteDownloadList(item.qid));
@@ -49,9 +56,13 @@ function Douyin(props: {}): ReactElement {
   // 下载（测试ID：6902337717137329412）
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
-      const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[抖音]${ filenamify(item.title) }.mp4`
-      });
+      let defaultPathTitle: string = `[抖音]${ filenamify(item.title) }`;
+
+      if (typeof item.width === 'number' && typeof item.height === 'number') {
+        defaultPathTitle += `_${ item.width }x${ item.height }`;
+      }
+
+      const result: SaveDialogReturnValue = await showSaveDialog({ defaultPath: `${ defaultPathTitle }.mp4` });
 
       if (result.canceled || !result.filePath) return;
 
@@ -94,8 +105,21 @@ function Douyin(props: {}): ReactElement {
   const columns: ColumnsType<DownloadItem> = [
     { title: '标题', dataIndex: 'title' },
     {
+      title: '视频尺寸',
+      key: 'width_height',
+      width: 120,
+      render: (value: undefined, record: DownloadItem, index: number): ReactNode => {
+        if (typeof record.width === 'number' && typeof record.height === 'number') {
+          return `${ record.width } * ${ record.height }`;
+        } else {
+          return '无水印';
+        }
+      }
+    },
+    {
       title: '下载进度',
       dataIndex: 'qid',
+      width: 95,
       render: (value: string, record: DownloadItem, index: number): ReactNode => {
         const inDownload: boolean = value in downloadProgress;
 
@@ -136,8 +160,12 @@ function Douyin(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Add />
+        <VideoOrUserParse />
+        <Button type="primary" danger={ true } onClick={ handleClearDouyinCookie }>清除抖音Cookie的缓存</Button>
       </Header>
+      <p className="mb-[4px] text-[12px]">
+        输入视频ID或视频地址下载单个视频，输入用户ID或用户主页地址可解析用户的所有视频并选择下载。支持短链接。
+      </p>
       <Table size="middle"
         columns={ columns }
         dataSource={ downloadList }

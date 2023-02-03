@@ -44,7 +44,7 @@ function waitFunc(): boolean {
 }
 
 /* 无头浏览器登陆 */
-function UserBrowserLogin(props: { onCancel: Function }): ReactElement {
+function UserBrowserLogin(props: { onCancel?: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
@@ -118,8 +118,8 @@ function UserBrowserLogin(props: { onCancel: Function }): ReactElement {
           lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
         }
       }));
-      props.onCancel();
       messageApi.success('登陆成功！');
+      props?.onCancel?.();
     } catch (err) {
       console.error(err);
       browser?.close();

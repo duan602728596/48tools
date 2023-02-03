@@ -26,11 +26,13 @@ function WeiboLogin(props: {}): ReactElement {
         width={ 750 }
         centered={ true }
         destroyOnClose={ true }
+        closable={ false }
+        maskClosable={ false }
         footer={ <Button onClick={ handleCloseQrcodeClick }>关闭</Button> }
         onCancel={ handleCloseQrcodeClick }
       >
         <div className="h-[420px]">
-          <OpenWeiboWindow onCancel={ handleCloseQrcodeClick } />
+          <OpenWeiboWindow />
           <LoginTable />
         </div>
       </Modal>

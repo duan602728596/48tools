@@ -5,7 +5,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Form, Modal, Input, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
 import style from './addForm.sass';
-import { IDBSaveBilibiliLiveList } from '../reducers/live';
+import { IDBSaveBilibiliLiveList } from '../../reducers/live';
 
 /* 添加一个直播间 */
 function AddForm(props: {}): ReactElement {

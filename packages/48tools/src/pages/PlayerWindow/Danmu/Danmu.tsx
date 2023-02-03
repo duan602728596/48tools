@@ -16,7 +16,7 @@ import {
 import { Avatar, Switch } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import NimChatroomSocket from './NimChatroomSocket';
-import { source } from '../../../utils/utils';
+import { source } from '../../../utils/snh48';
 import type { LiveRoomInfo } from '../../48/services/interface';
 import type { LiveRoomMessage, LiveRoomTextMessage, LiveRoomTextCustom } from './messageType';
 
@@ -129,7 +129,6 @@ function Danmu(props: DanmuProps): ReactElement {
       resizeObserverRef.current?.disconnect?.();
       resizeObserverRef.current = null;
     };
-
   }, [info]);
 
   return (

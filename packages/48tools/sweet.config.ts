@@ -53,6 +53,7 @@ const externalsName: Array<string> = nodeModules([
   'net',
   'path',
   'stream/promises',
+  'timers',
   'timers/promises',
   'url',
   'util'
@@ -80,6 +81,7 @@ export default function(info: object): Record<string, any> {
       'classnames',
       'filenamify/browser',
       'flv.js',
+      'path-to-regexp',
       'qrcode/lib/browser',
       'video.js/dist/video.es.js',
       'react',
@@ -102,7 +104,7 @@ export default function(info: object): Record<string, any> {
     javascript: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules|toutiaosdk-(acrawler|captcha)\.js/i
+      exclude: /node_modules|toutiaosdk-(acrawler|captcha|webmssdk\.es5)\.js/i
     },
     typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',

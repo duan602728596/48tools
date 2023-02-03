@@ -2,7 +2,7 @@ import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefOb
 import videojs from 'video.js/dist/video.es.js';
 import * as classNames from 'classnames';
 import style from './recordVideo.sass';
-import { source } from '../../../utils/utils';
+import { source, engineUserAgent } from '../../../utils/snh48';
 import { requestDownloadFile } from '../../48/services/pocket48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
 import type { PlayerInfo } from '../PlayerWindow';
@@ -25,7 +25,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
     if (videoRef.current && info) {
       const m3u8Data: string = await requestDownloadFile(info.content.playStreamPath, {
         'Host': 'cychengyuan-vod.48.cn',
-        'User-Agent': 'SNH48 ENGINE'
+        'User-Agent': engineUserAgent
       });
       const blob: Blob = new Blob([formatTsUrl(m3u8Data, playerInfo.proxyPort)], { type: 'application/vnd.apple.mpegurl' });
       const m3u8Url: string = URL.createObjectURL(blob);

@@ -1,7 +1,7 @@
 import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem } from '../types';
-import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
 
 export interface AcFunDownloadInitialState {
   downloadList: Array<DownloadItem>;

@@ -56,6 +56,7 @@ function open(title: string, query: string): void {
     playerInfo: {
       ...player,
       liveType: Number(player.liveType),
+      liveMode: Number(player.liveMode),
       rtmpPort: player.rtmpPort ? Number(player.rtmpPort) : undefined,
       httpPort: player.httpPort ? Number(player.httpPort) : undefined,
       proxyPort: player.proxyPort ? Number(player.proxyPort) : undefined

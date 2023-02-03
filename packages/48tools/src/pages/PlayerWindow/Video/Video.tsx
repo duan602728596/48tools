@@ -1,7 +1,8 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import flvjs from 'flv.js';
-import { getFFmpeg, source } from '../../../utils/utils';
+import { getFFmpeg } from '../../../utils/utils';
+import { source } from '../../../utils/snh48';
 import type { PlayerInfo } from '../PlayerWindow';
 import type { LiveRoomInfo } from '../../48/services/interface';
 

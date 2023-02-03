@@ -1,6 +1,6 @@
 import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import { store } from '../../../../store/store';
 import { setAddWorkerInLiveList, setStopInLiveList } from '../../reducers/live48';
 import { parseLiveUrl } from '../parseLive48Website';
@@ -22,7 +22,7 @@ async function autoInLiveTimer(messageApi: MessageInstance, id: string, value: I
 
   if (!liveUrl) return;
 
-  const worker: Worker = getFFMpegDownloadWorker();
+  const worker: Worker = getFFmpegDownloadWorker();
 
   worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
     const { type, error }: MessageEventData = event.data;

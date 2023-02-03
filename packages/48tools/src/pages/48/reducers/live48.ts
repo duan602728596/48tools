@@ -1,6 +1,6 @@
 import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
 import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
-import type { MessageEventData } from '../../../utils/worker/FFMpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
 
 export interface Live48InitialState {
   inLiveList: Array<InLiveWebWorkerItem>;

@@ -38,7 +38,7 @@ import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getRecordVideoDownloadWorker from './RecordVideoDownload.worker/getRecordVideoDownloadWorker';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
 import {
   setRecordList,
@@ -55,11 +55,12 @@ import {
   requestDownloadFile
 } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { engineUserAgent } from '../../../../utils/snh48';
 import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { pick } from '../../../../utils/lodash';
-import type { MessageEventData } from '../../../../utils/worker/FFMpegDownload.worker';
+import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
 
@@ -174,7 +175,8 @@ function Pocket48Record(props: {}): ReactElement {
         'coverPath', // 头像
         'title',     // 直播间标题
         'liveId',    // 直播id
-        'liveType'   // 直播类型
+        'liveType',  // 直播类型
+        'liveMode'
       ])
     ));
 
@@ -221,7 +223,7 @@ function Pocket48Record(props: {}): ReactElement {
 
         const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath, {
           'Host': 'cychengyuan-vod.48.cn',
-          'User-Agent': 'SNH48 ENGINE'
+          'User-Agent': engineUserAgent
         });
 
         await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, getProxyServerPort().port)); // 写入m3u8文件
@@ -231,7 +233,7 @@ function Pocket48Record(props: {}): ReactElement {
       }
 
       let requestIdleID: number | null = null;
-      const worker: Worker = (isM3u8 && downloadType === 1 ? getRecordVideoDownloadWorker : getFFMpegDownloadWorker)();
+      const worker: Worker = (isM3u8 && downloadType === 1 ? getRecordVideoDownloadWorker : getFFmpegDownloadWorker)();
 
       worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
         const { type }: MessageEventData = workerEvent.data;
@@ -355,8 +357,9 @@ function Pocket48Record(props: {}): ReactElement {
     {
       title: '类型',
       dataIndex: 'liveType',
-      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => value === 2
-        ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>
+      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => record.liveMode === 1
+        ? <Tag color="blue">录屏</Tag>
+        : (value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>)
     },
     {
       title: '时间',

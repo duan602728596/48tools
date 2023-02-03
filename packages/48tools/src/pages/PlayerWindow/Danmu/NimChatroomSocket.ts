@@ -41,7 +41,9 @@ class NimChatroomSocket {
       ondisconnect: this.handleRoomSocketDisconnect,
       isAnonymous: true,
       chatroomNick: randomUUID(),
-      chatroomAvatar: ''
+      chatroomAvatar: '',
+      db: false,
+      dbLog: false
     });
   }
 

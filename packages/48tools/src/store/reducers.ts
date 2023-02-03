@@ -8,6 +8,7 @@ import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyin';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
+import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';
 import weiboLoginReducers from '../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import weiboSuperReducers from '../pages/WeiboSuper/reducers/weiboSuper';
 
@@ -22,6 +23,7 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   douyinDownloadReducers,
   videoEditConcatReducers,
   videoEditVideoCutReducers,
+  FFmpegProcessReducer,
   weiboLoginReducers,
   weiboSuperReducers
 );
@@ -34,10 +36,12 @@ export const ignoreOptions: any = {
     'live48.inLiveList',
     'live48.videoListChild',
     'bilibiliLive.liveChildList',
+    'bilibiliLive.autoRecordTimer',
     'acfunDownload.ffmpegDownloadWorkers',
     'acfunLive.liveWorkers',
     'concat.concatWorker',
-    'videoCut.cutChildList'
+    'videoCut.cutChildList',
+    'FFmpegProcess.entities'
   ],
   ignoredActions: [
     'pocket48/setAddLiveChildList',
@@ -53,12 +57,15 @@ export const ignoreOptions: any = {
     'live48/setVideoListChildDelete',
     'bilibiliLive/setAddLiveBilibiliChildList',
     'bilibiliLive/setDeleteLiveBilibiliChildList',
+    'bilibiliLive/setAutoRecordTimer',
     'acfunDownload/setAddDownloadWorker',
     'acfunDownload/setDeleteDownloadWorker',
     'acfunLive/setAddLiveWorker',
     'acfunLive/setDeleteLiveWorker',
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
-    'videoCut/setCutChildListDelete'
+    'videoCut/setCutChildListDelete',
+    'FFmpegProcess/setAddProcess',
+    'FFmpegProcess/setUpdateProcess'
   ]
 };

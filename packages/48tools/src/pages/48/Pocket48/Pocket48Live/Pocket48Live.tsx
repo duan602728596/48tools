@@ -18,7 +18,7 @@ import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getFFMpegDownloadWorker from '../../../../utils/worker/getFFMpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
@@ -179,7 +179,7 @@ function Pocket48Live(props: {}): ReactElement {
       if (result.canceled || !result.filePath) return;
 
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFMpegDownloadWorker();
+      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;
@@ -224,7 +224,8 @@ function Pocket48Live(props: {}): ReactElement {
         'coverPath', // 头像
         'title',     // 直播间标题
         'liveId',    // 直播id
-        'liveType'   // 直播类型
+        'liveType',  // 直播类型
+        'liveMode'
       ])
     ));
 
@@ -255,7 +256,11 @@ function Pocket48Live(props: {}): ReactElement {
       render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => {
         return (
           <Fragment>
-            { value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag> }
+            {
+              record.liveMode === 1
+                ? <Tag color="blue">录屏</Tag>
+                : (value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>)
+            }
             { record.inMicrophoneConnection && <Tag className="m-0" color="cyan">连麦</Tag> }
           </Fragment>
         );

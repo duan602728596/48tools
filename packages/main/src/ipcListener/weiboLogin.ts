@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, type Session, type Cookie, type IpcMainEvent } from 'electron';
+import { BrowserWindow, ipcMain, nativeTheme, type Session, type Cookie, type IpcMainEvent } from 'electron';
 
 export const type: string = 'weibo-login';
 
@@ -12,9 +12,12 @@ function login(win: BrowserWindow): void {
   }
 
   weiboLoginWin = new BrowserWindow({
+    width: 1250,
     webPreferences: {
       contextIsolation: false
-    }
+    },
+    title: '微博账号登录',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
   weiboLoginWin.loadURL(weiboUrl, {
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36'
