@@ -6,7 +6,7 @@
     "start:api": "npm run clean && cross-env NODE_ENV=development gulp",
     "start:vercel": "vercel dev --listen 5054",
     "start:website": "cross-env NODE_ENV=development milktea-esm vite-start",
-    "build:api": "npm run clean && cross-env NODE_ENV=production gulp",
+    "build:api": "cross-env NODE_ENV=production gulp",
     "build:website": "cross-env NODE_ENV=production milktea-esm vite-build",
     "build": "npm run clean && npm run build:api && npm run build:website",
     "clean": "rimraf dist/api dist/package.json dist/*.{html,css,js,jpg,webp,avif,ico,map}"
