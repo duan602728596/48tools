@@ -24,6 +24,7 @@ export default /* GraphQL */ `
         liveId: String
         roomId: String
         liveType: Int
+        liveMode: Int
         title: String
         userInfo: RecordUserInfo
         liveRoomInfo: RecordLiveRoomInfo

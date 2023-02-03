@@ -76,6 +76,7 @@ function Download(props: {}): ReactElement {
                     liveId
                     ctime
                     liveType
+                    liveMode
                     userInfo {
                         nickname
                     }
@@ -241,9 +242,11 @@ ${ time }\n`;
             </div>
             <div className="shrink-0 w-[70px]">
               {
-                item.liveType === 2
-                  ? <Tag className="ml-[16px]" color="warning">电台</Tag>
-                  : <Tag className="ml-[16px]" color="purple">视频</Tag>
+                item.liveMode === 1
+                  ? <Tag className="ml-[16px]" color="blue">录屏</Tag>
+                  : (item.liveType === 2
+                    ? <Tag className="ml-[16px]" color="warning">电台</Tag>
+                    : <Tag className="ml-[16px]" color="purple">视频</Tag>)
               }
             </div>
             <time className="shrink-0 w-[90px] text-[14px]">
