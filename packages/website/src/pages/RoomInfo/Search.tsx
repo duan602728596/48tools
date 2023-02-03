@@ -43,20 +43,20 @@ function Search(props: {}): ReactElement {
       if (func === undefined || func(item)) {
         element.push(
           <List.Item key={ `${ item.id }` }>
-            <div className="mb-[8px] font-bold">{ item.ownerName }</div>
             <div className="mb-[8px] grid grid-cols-3 gap-3 text-[14px]">
+              <div className="mr-[16px] font-bold">{ item.ownerName }</div>
               <div className="mr-[16px]">
                 小偶像ID：
                 <br />{ item.id }
               </div>
-              <div className="mr-[16px]">
-                房间ID：
-                <br />{ item.roomId }
-              </div>
-              <div>
-                ServerId：
-                <br />{ item.serverId }
-              </div>
+              {
+                item.serverId && (
+                  <div>
+                    ServerId：
+                    <br />{ item.serverId }
+                  </div>
+                )
+              }
             </div>
           </List.Item>
         );

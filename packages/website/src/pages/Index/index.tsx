@@ -24,7 +24,7 @@ function Index(props: {}): ReactElement {
       <div className="h-full">
         <picture className="block w-full">
           <source srcSet={ bg1Avif } type="image/avif" />
-          <source srcSet={ bg1Webp } type="image/avif" />
+          <source srcSet={ bg1Webp } type="image/webp" />
           <img className="block w-full" src={ bg1Jpg } />
         </picture>
         <List>
