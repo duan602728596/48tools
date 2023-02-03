@@ -1,18 +1,16 @@
-import util from 'node:util';
 import process from 'node:process';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { promises as fsP } from 'node:fs';
 import ncc from '@vercel/ncc';
 import fse from 'fs-extra/esm';
-import rimraf from 'rimraf';
+import { rimraf } from 'rimraf';
 import { requireJson } from '@sweet-milktea/utils';
 import { cwd } from './utils.mjs';
 import packageJson from '../packages/app/package.json' assert { type: 'json' };
 import dependenciesOtherFilesJson from '../packages/app/dependenciesOtherFiles.json' assert { type: 'json' };
 
 const require = createRequire(import.meta.url);
-const rimrafPromise = util.promisify(rimraf);
 
 const argv = process.argv.slice(2);
 
@@ -93,7 +91,7 @@ async function createFilesByDependenciesName(dependenciesName) {
 }
 
 async function taskFile() {
-  await rimrafPromise(appNodeModules);
+  await rimraf(appNodeModules);
 
   // 创建目录和文件
   for (const depName of Object.keys(packageJson.dependencies)) {
