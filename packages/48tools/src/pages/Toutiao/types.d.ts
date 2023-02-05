@@ -92,6 +92,14 @@ export interface UserDataItem {
   awemeId: string;
   desc: string;
   video: VideoInfoItem;
+  createTime: number;
+  tag: {
+    inReviewing: boolean;
+    isStory: boolean;
+    isTop: boolean;
+    relationLabels: boolean;
+    reviewStatus: number;
+  };
 }
 
 export interface UserItem2 {
