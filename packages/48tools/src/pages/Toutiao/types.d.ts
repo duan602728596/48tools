@@ -18,6 +18,8 @@ export interface VideoInfoItem {
   }>;
   playApi: noProtocolUrl; // 无水印
   ratio: string;
+  cover: string;
+  coverUrlList: Array<string>;
 }
 
 export interface AwemeDetail {
