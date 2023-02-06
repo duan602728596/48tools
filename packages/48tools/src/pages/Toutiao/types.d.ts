@@ -18,7 +18,7 @@ export interface VideoInfoItem {
   }>;
   playApi: noProtocolUrl; // 无水印
   ratio: string;
-  cover: string;
+  cover: noProtocolUrl;
   coverUrlList: Array<string>;
 }
 
