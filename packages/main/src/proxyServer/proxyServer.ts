@@ -20,7 +20,7 @@ export async function proxyServerClose(): Promise<void> {
 }
 
 /* 新线程启动代理服务 */
-function nodeMediaServer(): void {
+function proxyServer(): void {
   ipcMain.on(type, async function(event: IpcMainEvent, arg: ProxyServerArg): Promise<void> {
     await proxyServerClose();
 
@@ -35,4 +35,4 @@ function nodeMediaServer(): void {
   });
 }
 
-export default nodeMediaServer;
+export default proxyServer;
