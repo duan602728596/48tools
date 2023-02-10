@@ -1,13 +1,10 @@
-import util from 'node:util';
 import path from 'node:path';
-import rimraf from 'rimraf';
+import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
 import { cwd, appDir, staticsDir, build, output, unpacked, isMacOS } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
-
-const rimrafPromise = util.promisify(rimraf);
 
 const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
@@ -119,8 +116,8 @@ function copy(unpackedDir, isMac) {
 async function unpack() {
   // 删除中间代码文件夹和编译后的文件夹
   await Promise.all([
-    rimrafPromise(appDir),
-    rimrafPromise(build)
+    rimraf(appDir),
+    rimraf(build)
   ]);
 
   // 拷贝编译的临时文件到中间代码文件夹
