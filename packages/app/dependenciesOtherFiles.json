@@ -1,9 +1,3 @@
 {
-  "dependenciesOtherFiles": {
-    "node-media-server": [{
-      "type": "write",
-      "output": "src/node_media_server.js",
-      "content": "module.exports = require('../index.js');"
-    }]
-  }
+  "dependenciesOtherFiles": {}
 }
