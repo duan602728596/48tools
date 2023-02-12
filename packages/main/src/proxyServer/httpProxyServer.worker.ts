@@ -6,6 +6,11 @@ import { workerData } from 'node:worker_threads';
 const baseUrl: string = `http://localhost:${ workerData.port }`;
 const maxAge: number = 7 * 24 * 60 * 60;
 
+function response404NotFound(httpResponse: ServerResponse): void {
+  httpResponse.statusCode = 404;
+  httpResponse.end('404 not found.');
+}
+
 /**
  * @param { URL } urlParse
  * @param { ServerResponse } httpResponse
@@ -47,7 +52,9 @@ function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: 
 
 /* 开启代理服务，加载ts文件 */
 http.createServer(function(httpRequest: IncomingMessage, httpResponse: ServerResponse): void {
-  if (!httpRequest.url) return;
+  if (!httpRequest.url) {
+    return response404NotFound(httpResponse);
+  }
 
   const urlParse: URL = new URL(httpRequest.url, baseUrl);
 
@@ -64,5 +71,7 @@ http.createServer(function(httpRequest: IncomingMessage, httpResponse: ServerRes
       Host: 'cychengyuan-vod.48.cn',
       'User-Agent': 'SNH48 ENGINE'
     });
+  } else {
+    response404NotFound(httpResponse);
   }
 }).listen(workerData.port);
