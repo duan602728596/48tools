@@ -19,7 +19,7 @@ function response404NotFound(httpResponse: ServerResponse): void {
 function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: OutgoingHttpHeaders): void {
   const tsUrl: string | null = urlParse.searchParams.get('url');
 
-  if (!tsUrl) return;
+  if (!tsUrl) return response404NotFound(httpResponse);
 
   const deTsUrl: string = decodeURIComponent(tsUrl);
   const deTsUrlParse: URL = new URL(deTsUrl);
