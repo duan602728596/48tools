@@ -4,12 +4,13 @@ import {
   combineReducers,
   type Reducer,
   type Store,
-  type DeepPartial,
   type ImmutableStateInvariantMiddlewareOptions,
   type SerializableStateInvariantMiddlewareOptions,
   type Middleware
 } from '@reduxjs/toolkit';
+import type { NoInfer } from '@reduxjs/toolkit/src/tsHelpers';
 import type { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import type { PreloadedState, CombinedState } from 'redux';
 import { reducersMapObject, ignoreOptions } from './reducers';
 
 interface ThunkOptions<E = any> {
@@ -22,13 +23,15 @@ interface GetDefaultMiddlewareOptions {
   serializableCheck?: boolean | SerializableStateInvariantMiddlewareOptions;
 }
 
+type InitialState<S = any> = PreloadedState<CombinedState<NoInfer<S>>>;
+
 /* reducer列表 */
 const reducer: Reducer = combineReducers(reducersMapObject);
 
 /* store */
 export let store: Store;
 
-function createStore(initialState: DeepPartial<any> = {}): void {
+function createStore(initialState: InitialState = {}): void {
   store = configureStore({
     reducer,
     preloadedState: initialState,
@@ -41,7 +44,7 @@ function createStore(initialState: DeepPartial<any> = {}): void {
   });
 }
 
-export function storeFactory(initialState: DeepPartial<any> = {}): Store {
+export function storeFactory(initialState: InitialState = {}): Store {
   if (!store) {
     createStore(initialState);
   }
