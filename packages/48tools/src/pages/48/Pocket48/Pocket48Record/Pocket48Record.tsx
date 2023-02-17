@@ -1,6 +1,7 @@
 import * as path from 'node:path';
 import type { ParsedPath } from 'node:path';
 import { promises as fsP } from 'node:fs';
+import { setTimeout, clearTimeout } from 'node:timers';
 import { clipboard, ipcRenderer, type SaveDialogReturnValue } from 'electron';
 import {
   Fragment,
@@ -23,16 +24,17 @@ import {
   Tag,
   Select,
   Form,
-  InputNumber,
   Space,
   Popconfirm,
   Progress,
   Input,
   Modal,
+  AutoComplete,
   type FormInstance
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
+import type { BaseOptionType } from 'rc-select/es/select';
 import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
@@ -51,6 +53,7 @@ import {
 import {
   requestLiveList,
   requestLiveRoomInfo,
+  requestSearch,
   requestDownloadFileByStream,
   requestDownloadFile
 } from '../../services/pocket48';
@@ -62,7 +65,7 @@ import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServ
 import { pick } from '../../../../utils/lodash';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
-import type { LiveData, LiveInfo, LiveRoomInfo } from '../../services/interface';
+import type { LiveData, LiveInfo, LiveRoomInfo, SearchResult, SearchMemberIndex } from '../../services/interface';
 
 /**
  * 格式化m3u8文件内视频的地址
@@ -85,6 +88,9 @@ export function formatTsUrl(data: string, port: number): string {
 
   return newStrArr.join('\n');
 }
+
+/* 搜索 */
+let searchTimer: NodeJS.Timeout | null = null;
 
 /* redux selector */
 type RSelector = Pick<Pocket48InitialState, 'recordList' | 'recordNext' | 'recordChildList' | 'recordFields' | 'progress'>;
@@ -115,6 +121,7 @@ function Pocket48Record(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
+  const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
   const [form]: [FormInstance] = Form.useForm();
   const recordListQueryResult: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
     if (query && !/^\s*$/.test(query)) {
@@ -125,6 +132,33 @@ function Pocket48Record(props: {}): ReactElement {
       return recordList;
     }
   }, [query, recordList]);
+
+  // 输入xox名字搜索
+  function handleByContentSearch(value: string): void {
+    if (searchTimer !== null) {
+      clearTimeout(searchTimer);
+    }
+
+    if (!(value && /[\u4E00-\u9FFF]+/.test(value))) {
+      searchTimer = null;
+      setUserIdSearchResult([]);
+
+      return;
+    }
+
+    searchTimer = setTimeout(async (): Promise<void> => {
+      const res: SearchResult = await requestSearch(value);
+
+      if (res.content?.memberIndexTemplates?.length) {
+        setUserIdSearchResult(
+          res.content.memberIndexTemplates.map((o: SearchMemberIndex): BaseOptionType => ({
+            label: `${ o.nickname }（${ o.memberId }）`,
+            value: `${ o.memberId }`
+          }))
+        );
+      }
+    }, 1000);
+  }
 
   // 表单的onFieldsChange事件
   function handleFormFieldsChange(changedFields: RecordFieldData[], allFields: RecordFieldData[]): void {
@@ -476,7 +510,11 @@ function Pocket48Record(props: {}): ReactElement {
                   </Select>
                 </Form.Item>
                 <Form.Item name="userId" noStyle={ true }>
-                  <InputNumber className="w-[130px]" placeholder="请输入成员ID" />
+                  <AutoComplete className="w-[300px]"
+                    placeholder="请输入成员姓名查询或直接输入成员ID"
+                    onSearch={ handleByContentSearch }
+                    options={ userIdSearchResult }
+                  />
                 </Form.Item>
               </Input.Group>
             </div>

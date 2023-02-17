@@ -2,7 +2,7 @@ import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import got, { type Response as GotResponse, type Headers as GotHeaders } from 'got';
 import { createHeaders } from '../../../utils/snh48';
-import type { LiveData, LiveRoomInfo } from './interface';
+import type { LiveInfo, LiveData, LiveRoomInfo, SearchResult } from './interface';
 
 /**
  * 获取单个直播间的信息
@@ -51,13 +51,30 @@ export async function requestLiveList(
     record?: boolean;
   } = { debug: true, next };
 
+  // 直播
   if (inLive) {
     body.groupId = 0;
     body.record = false;
   }
 
-  if (typeof userId === 'number') {
-    body.userId = userId;
+  // 录播
+  const isUserQuery: boolean = typeof userId === 'number' || (typeof userId === 'string' && !/^\s*$/.test(userId));
+  let firstData: LiveInfo | null = null;
+
+  if (isUserQuery) {
+    const firstRes: LiveData = await requestLiveList('0', false);
+
+    if (firstRes.content?.liveList?.[0]) {
+      body.next = firstRes.content.liveList[0].liveId;
+
+      if (firstRes.content.liveList[0].userInfo.userId === userId) {
+        firstData = firstRes.content.liveList[0];
+      }
+    }
+  }
+
+  if (isUserQuery) {
+    body.userId = Number(userId);
   } else if (typeof groupId === 'number') {
     body.groupId = groupId;
   }
@@ -67,6 +84,26 @@ export async function requestLiveList(
     headers: createHeaders(),
     responseType: 'json',
     json: body
+  });
+
+  if (firstData && res?.body?.content?.liveList) {
+    res.body.content.liveList.unshift(firstData);
+  }
+
+  return res.body;
+}
+
+/* 搜索 */
+export async function requestSearch(content: string): Promise<SearchResult> {
+  const res: GotResponse<SearchResult> = await got('https://pocketapi.48.cn/search/api/search/v1/query', {
+    method: 'POST',
+    headers: createHeaders(),
+    responseType: 'json',
+    json: {
+      content,
+      limit: 100,
+      pagePra: ''
+    }
   });
 
   return res.body;

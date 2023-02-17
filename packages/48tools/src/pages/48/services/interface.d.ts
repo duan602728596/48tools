@@ -57,6 +57,24 @@ export interface LiveRoomInfo {
   success: boolean;
 }
 
+// 搜索
+export interface SearchMemberIndex {
+  memberId: number;
+  nickname: string;
+  avatar: string;
+  suggest: Array<unknown>;
+}
+
+export interface SearchResult {
+  content: {
+    pagePra: string;
+    memberIndexTemplates: null | Array<SearchMemberIndex>;
+  };
+  message: string;
+  status: number;
+  success: boolean;
+}
+
 /* ========== live48 ========== */
 interface LiveOnePlayStreams {
   streamName: '标清' | '高清' | '超清';
