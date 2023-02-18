@@ -1,11 +1,13 @@
 import type { ReactElement } from 'react';
 import { useRoutes } from 'react-router-dom';
+import style from './RoomMessage/roomMessage.sass';
 import Content from '../../components/Content/Content';
 import Pocket48Live from './Pocket48/Pocket48Live/Pocket48Live';
 import LiveOptions from './Pocket48/LiveOptions/LiveOptions';
 import Pocket48Record from './Pocket48/Pocket48Record/Pocket48Record';
 import InLive from './Live48/InLive/InLive';
 import InVideo from './Live48/InVideo/InVideo';
+import RoomMessage from './RoomMessage/RoomMessage';
 
 /* 直播和录播下载 */
 function Index(props: {}): ReactElement | null {
@@ -14,10 +16,11 @@ function Index(props: {}): ReactElement | null {
     { path: 'LiveOptions', element: <LiveOptions /> },
     { path: 'Pocket48Record', element: <Pocket48Record /> },
     { path: 'InLive', element: <InLive /> },
-    { path: 'InVideo', element: <InVideo /> }
+    { path: 'InVideo', element: <InVideo /> },
+    { path: 'RoomMessage', element: <RoomMessage /> }
   ]);
 
-  return <Content>{ routes }</Content>;
+  return <Content className={ style.content }>{ routes }</Content>;
 }
 
 export default Index;

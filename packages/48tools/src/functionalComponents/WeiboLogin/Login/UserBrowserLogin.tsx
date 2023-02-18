@@ -15,7 +15,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
-import { requestUid, requestUserInfo } from '../services/WeiboLogin';
+import { requestUid, requestUserInfo } from '../services/weiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import { errorNativeMessage } from '../../../utils/remote/nativeMessage';
 import type { UserInfo } from '../services/interface';

@@ -4,7 +4,8 @@ import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
   ToolTwoTone as IconToolTwoTone,
   BugTwoTone as IconBugTwoTone,
-  WeiboOutlined as IconWeiboOutlined
+  WeiboOutlined as IconWeiboOutlined,
+  MessageFilled as IconMessageFilled
 } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './index.sass';
@@ -105,6 +106,11 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       name: '微博超话签到',
       url: '/WeiboSuper',
       icon: <IconWeiboOutlined />
+    },
+    {
+      name: '口袋房间消息下载',
+      url: '/48/RoomMessage',
+      icon: <IconMessageFilled />
     }
   ],
   [

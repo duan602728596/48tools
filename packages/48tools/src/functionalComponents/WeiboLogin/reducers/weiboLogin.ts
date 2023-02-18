@@ -9,7 +9,7 @@ export interface WeiboLoginInitialState {
 
 type CaseReducers = SliceCaseReducers<WeiboLoginInitialState>;
 
-const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseReducers>({
+const { actions, reducer }: Slice = createSlice<WeiboLoginInitialState, CaseReducers, 'weiboLogin'>({
   name: 'weiboLogin',
   initialState: {
     accountList: [] // 微博已登陆账号

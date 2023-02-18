@@ -1,10 +1,12 @@
 import type { ReactElement, ReactNode } from 'react';
 import * as PropTypes from 'prop-types';
+import * as classNames from 'classnames';
 import ButtonLink from '../ButtonLink/ButtonLink';
 
 interface HeaderProps {
   to?: string;
   children?: ReactNode;
+  className?: string;
 }
 
 /**
@@ -13,10 +15,10 @@ interface HeaderProps {
  * @param { ReactNode } props.children: 网站右侧组件
  */
 function Header(props: HeaderProps): ReactElement {
-  const { to = '/', children }: HeaderProps = props;
+  const { to = '/', children, className }: HeaderProps = props;
 
   return (
-    <header className="flex mb-[8px]">
+    <header className={ classNames('flex mb-[8px]', className) }>
       <div className="grow">
         <ButtonLink linkProps={{ to }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>
       </div>
