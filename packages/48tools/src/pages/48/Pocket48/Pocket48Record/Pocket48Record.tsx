@@ -30,12 +30,14 @@ import {
   Input,
   Modal,
   AutoComplete,
+  Spin,
   type FormInstance
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import type { BaseOptionType } from 'rc-select/es/select';
 import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
+import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
@@ -122,6 +124,7 @@ function Pocket48Record(props: {}): ReactElement {
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
   const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
+  const [userIdSearchLoading, setUserIdSearchLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
   const recordListQueryResult: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
     if (query && !/^\s*$/.test(query)) {
@@ -137,15 +140,17 @@ function Pocket48Record(props: {}): ReactElement {
   function handleByContentSearch(value: string): void {
     if (searchTimer !== null) {
       clearTimeout(searchTimer);
+      searchTimer = null;
     }
 
     if (!(value && /[\u4E00-\u9FFF]+/.test(value))) {
-      searchTimer = null;
+      setUserIdSearchLoading(false);
       setUserIdSearchResult([]);
 
       return;
     }
 
+    setUserIdSearchLoading(true);
     searchTimer = setTimeout(async (): Promise<void> => {
       const res: SearchResult = await requestSearch(value);
 
@@ -157,7 +162,9 @@ function Pocket48Record(props: {}): ReactElement {
           }))
         );
       }
-    }, 1000);
+
+      setUserIdSearchLoading(false);
+    }, 1_000);
   }
 
   // 表单的onFieldsChange事件
@@ -492,7 +499,7 @@ function Pocket48Record(props: {}): ReactElement {
         {/* 队伍和当前人的搜索 */}
         <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
           <Space size={ 0 }>
-            <div className="inline-block mr-[8px] align-super">
+            <div className="relative inline-block mr-[8px] align-super">
               <Input.Group compact={ true }>
                 <Form.Item name="groupId" noStyle={ true }>
                   <Select className="w-[130px]">
@@ -510,13 +517,16 @@ function Pocket48Record(props: {}): ReactElement {
                   </Select>
                 </Form.Item>
                 <Form.Item name="userId" noStyle={ true }>
-                  <AutoComplete className="w-[300px]"
-                    placeholder="请输入成员姓名查询或直接输入成员ID"
+                  <AutoComplete className="w-[250px]"
+                    placeholder="输入成员姓名查询或输入成员ID"
                     onSearch={ handleByContentSearch }
                     options={ userIdSearchResult }
                   />
                 </Form.Item>
               </Input.Group>
+              <div className="absolute z-10 top-[4px] right-[6px] pointer-events-none">
+                { userIdSearchLoading && <Spin size="small" indicator={ <IconLoadingOutlined spin={ true } /> } /> }
+              </div>
             </div>
             <Button.Group>
               <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>

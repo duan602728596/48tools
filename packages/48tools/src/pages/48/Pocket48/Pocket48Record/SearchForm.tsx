@@ -29,11 +29,11 @@ function SearchForm(props: { onSubmit: OnSubmitFunc }): ReactElement {
 
   return (
     <Form form={ form } component={ false }>
-      <div className="inline-block mr-[16px] w-[170px]">
+      <div className="inline-block mr-[16px] w-[130px]">
         <Form.Item name="q" noStyle={ true }>
           <Input className="align-[1px]"
             allowClear={ true }
-            placeholder="输入小偶像名称过滤"
+            placeholder="输入姓名过滤"
             onPressEnter={ handleInputPressEnter }
           />
         </Form.Item>
