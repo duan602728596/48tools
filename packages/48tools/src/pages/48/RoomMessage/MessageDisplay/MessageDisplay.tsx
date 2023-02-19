@@ -1,3 +1,4 @@
+import { setTimeout } from 'node:timers';
 import { shell } from 'electron';
 import {
   useState,
@@ -10,14 +11,17 @@ import {
   type MutableRefObject,
   type RefObject,
   type ForwardedRef,
-  type FunctionComponent, MouseEvent
+  type FunctionComponent,
+  type MouseEvent,
+  type FocusEvent
 } from 'react';
 import { List, Popover, Typography, Empty, Spin, type TypographyProps } from 'antd';
-import VirtualList from 'rc-virtual-list';
+import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
 import style from './messageDisplay.sass';
 import { omit } from '../../../../utils/lodash';
 import { mp4Source } from '../../../../utils/snh48';
+import { accessibilityClassName } from '../../../../Accessibility/Accessibility';
 import type { FormatCustomMessage, FlipCardInfo, FlipCardAudioInfo, FlipCardVideoInfo } from '../../types';
 
 const { Paragraph }: TypographyProps = Typography;
@@ -36,14 +40,30 @@ function handleOpenFileClick(event: MouseEvent<HTMLAnchorElement>): void {
   shell.openExternal(event.target['getAttribute']('data-href'));
 }
 
+// 链接的无障碍
+function handleLinkFocus(event: FocusEvent<HTMLAnchorElement>): void {
+  if (document.body.classList.contains(accessibilityClassName)) {
+    setTimeout((): void => {
+      event.target.dispatchEvent(new Event('mouseover', { bubbles: true }));
+    }, 1_000);
+  }
+}
+
+function handleLinkBlur(event: FocusEvent<HTMLAnchorElement>): void {
+  if (document.body.classList.contains(accessibilityClassName)) {
+    event.target.dispatchEvent(new Event('mouseout', { bubbles: true }));
+  }
+}
+
 /* 显示单个消息 */
 interface MessageItemProps {
   item: FormatCustomMessage;
+  index: number;
 }
 
 const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
   function(props: MessageItemProps, ref: ForwardedRef<any>): ReactElement {
-    const { item }: MessageItemProps = props;
+    const { item, index }: MessageItemProps = props;
     const [height, setHeight]: [number, D<S<number>>] = useState(26); // 高度
     const divRef: RefObject<HTMLDivElement> = useRef(null);
 
@@ -79,6 +99,8 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
                   tabIndex={ 0 }
                   data-href={ item.attach.url }
                   onClick={ handleOpenFileClick }
+                  onFocus={ handleLinkFocus }
+                  onBlur={ handleLinkBlur }
                 >
                   { item.attach.url }
                 </a>
@@ -95,6 +117,8 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
                   tabIndex={ 0 }
                   data-href={ item.attach.url }
                   onClick={ handleOpenFileClick }
+                  onFocus={ handleLinkFocus }
+                  onBlur={ handleLinkBlur }
                 >
                   { item.attach.url }
                 </a>
@@ -140,6 +164,8 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
                     tabIndex={ 0 }
                     data-href={ answerUrl }
                     onClick={ handleOpenFileClick }
+                    onFocus={ handleLinkFocus }
+                    onBlur={ handleLinkBlur }
                   >
                     { answerUrl }
                   </a>
@@ -180,6 +206,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
       <List.Item ref={ ref }
         className={ classNames('mr-[30px] text-[12px]', style.item) }
         style={{ height }}
+        data-index={ index }
       >
         <div ref={ divRef } className={ classNames('flex w-full min-h-[20px]', style.itemChildren) }>
           { messageRender() }
@@ -199,16 +226,39 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
   const [messageListHeight, setMessageListHeight]: [number, D<S<number>>] = useState(0); // 当前content的高度
   const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
   const messageListRef: RefObject<HTMLDivElement> = useRef(null);
+  const virtualListRef: RefObject<ListRef> = useRef(null);
 
   function handleResizeObserverCallback(entries: ResizeObserverEntry[], observer: ResizeObserver): void {
     setMessageListHeight((prevState: number): number => entries[0].contentRect.height);
   }
 
+  // 上下滚动
+  function handleScrollKeydown(event: KeyboardEvent): void {
+    if (messageListRef.current && virtualListRef.current && (event.code === 'ArrowUp' || event.code === 'ArrowDown')) {
+      const antListItem: HTMLElement | null = messageListRef.current.querySelector('.ant-list-item');
+
+      if (antListItem) {
+        const indexStr: string | null = antListItem.getAttribute('data-index');
+
+        if (indexStr) {
+          const index: number = Number(indexStr);
+
+          virtualListRef.current.scrollTo({
+            index: event.code === 'ArrowUp' ? (index - 2) : (index + 2),
+            align: 'top'
+          });
+        }
+      }
+    }
+  }
+
   useEffect(function(): () => void {
+    document.addEventListener('keydown', handleScrollKeydown);
     resizeObserverRef.current = new ResizeObserver(handleResizeObserverCallback);
     messageListRef.current && resizeObserverRef.current.observe(messageListRef.current);
 
     return function(): void {
+      document.removeEventListener('keydown', handleScrollKeydown);
       resizeObserverRef.current?.disconnect?.();
       resizeObserverRef.current = null;
     };
@@ -220,8 +270,16 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
         <List size="small">
           {
             data.length > 0 ? (
-              <VirtualList data={ data } height={ messageListHeight } itemHeight={ 26 } itemKey="msgIdClient">
-                { (item: FormatCustomMessage): ReactElement => <MessageItem key={ item.msgIdClient } item={ item } /> }
+              <VirtualList ref={ virtualListRef }
+                data={ data }
+                height={ messageListHeight }
+                itemHeight={ 26 }
+                itemKey="msgIdClient"
+              >
+                {
+                  (item: FormatCustomMessage, index: number): ReactElement =>
+                    <MessageItem key={ item.msgIdClient } item={ item } index={ index } />
+                }
               </VirtualList>
             ) : <Empty className={ style.empty } />
           }
