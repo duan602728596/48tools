@@ -73,7 +73,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
           renderElement.splice(1, 0,
             <Paragraph key="body" className="grow break-all">
               { typeCNName[item.type] }&nbsp;-&nbsp;
-              <Popover content={ <img className="max-w-[200px] max-h-[200px]" src={ item.attach.url } /> }>
+              <Popover content={ <img className="max-w-[400px] max-h-[400px]" src={ item.attach.url } /> }>
                 <a role="button"
                   aria-label="浏览器内打开图片"
                   tabIndex={ 0 }
