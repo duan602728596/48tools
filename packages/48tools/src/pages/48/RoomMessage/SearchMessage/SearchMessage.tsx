@@ -117,6 +117,7 @@ function SearchMessage(props: {}): ReactElement {
     try {
       let queryRecord: QueryRecord | {} = query;
 
+      // 如果没有query或者query的ownerId和select的不一致，需要重置query
       if (!('ownerId' in query) || query.ownerId !== Number(searchSelectValue.value)) {
         const jumpRes: ServerJumpResult | undefined = await requestServerJump(Number(searchSelectValue.value));
 
@@ -131,11 +132,13 @@ function SearchMessage(props: {}): ReactElement {
         }
       }
 
+      // 请求房间消息
       const homeownerMessageRes: HomeMessageResult | undefined = await requestHomeownerMessage(
         (queryRecord as QueryRecord).channelId,
         (queryRecord as QueryRecord).serverId,
         (queryRecord as QueryRecord).nextTime);
 
+      // 判断是否有数据
       if (homeownerMessageRes?.content?.message?.length) {
         if ((queryRecord as QueryRecord).nextTime === 0) {
           dispatch(setHomeMessage({
@@ -155,7 +158,7 @@ function SearchMessage(props: {}): ReactElement {
           nextTime: homeownerMessageRes.content.nextTime
         }));
       } else {
-        messageApi.error('获取数据失败！');
+        messageApi.warning('没有获取到数据！');
       }
     } catch (err) {
       console.error(err);

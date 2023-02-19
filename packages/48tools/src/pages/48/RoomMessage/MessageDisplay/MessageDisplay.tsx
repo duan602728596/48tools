@@ -44,7 +44,7 @@ interface MessageItemProps {
 const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
   function(props: MessageItemProps, ref: ForwardedRef<any>): ReactElement {
     const { item }: MessageItemProps = props;
-    const [height, setHeight]: [number, D<S<number>>] = useState(26);
+    const [height, setHeight]: [number, D<S<number>>] = useState(26); // 高度
     const divRef: RefObject<HTMLDivElement> = useRef(null);
 
     // 根据不同类型渲染消息
@@ -167,7 +167,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
     );
   });
 
-/* 显示消息 */
+/* 使用虚拟列表显示房间消息 */
 interface MessageDisplayProps {
   data: Array<FormatCustomMessage>;
   loading?: boolean;
@@ -175,7 +175,7 @@ interface MessageDisplayProps {
 
 function MessageDisplay(props: MessageDisplayProps): ReactElement {
   const { data, loading }: MessageDisplayProps = props;
-  const [messageListHeight, setMessageListHeight]: [number, D<S<number>>] = useState(0);
+  const [messageListHeight, setMessageListHeight]: [number, D<S<number>>] = useState(0); // 当前content的高度
   const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
   const messageListRef: RefObject<HTMLDivElement> = useRef(null);
 
