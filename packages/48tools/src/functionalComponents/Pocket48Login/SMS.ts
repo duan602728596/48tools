@@ -19,7 +19,7 @@ class SMS {
   };
 
   start(): void {
-    this.time = 60;
+    this.time = 180;
     this.timer = setInterval(this.smsTimer, 1_000);
   }
 }
