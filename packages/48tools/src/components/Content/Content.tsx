@@ -19,6 +19,7 @@ function Content(props: ContentProps): ReactElement {
 }
 
 Content.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.node
 };
 

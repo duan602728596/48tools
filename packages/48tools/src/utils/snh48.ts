@@ -1,12 +1,17 @@
 import { rStr } from './utils';
+import type { UserInfoString, UserInfo } from '../functionalComponents/Pocket48Login/types';
 
 // app端口袋48ua
 export const engineUserAgent: string = 'SNH48 ENGINE';
 export const appUserAgent: string = 'PocketFans201807/6.0.16 (iPhone; iOS 13.5.1; Scale/2.00)';
 
+function $token(): string {
+  return Reflect.get(globalThis, '__x6c2adf8__').call();
+}
+
 /* 创建请求头 */
-export function createHeaders(): { [key: string]: string } {
-  return {
+export function createHeaders(token?: string | undefined, pa?: boolean): { [key: string]: string } {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json;charset=utf-8',
     appInfo: JSON.stringify({
       vendor: 'apple',
@@ -22,6 +27,16 @@ export function createHeaders(): { [key: string]: string } {
     'Accept-Language': 'zh-Hans-AW;q=1',
     Host: 'pocketapi.48.cn'
   };
+
+  if (token) {
+    headers.token = token;
+  }
+
+  if (token || pa) {
+    headers.pa = $token();
+  }
+
+  return headers;
 }
 
 /* 拼接静态文件地址 */
@@ -32,5 +47,22 @@ export function source(pathname: string): string {
     const url: URL = new URL(pathname, 'https://source3.48.cn/');
 
     return url.href;
+  }
+}
+
+export function mp4Source(pathname: string): string {
+  const url: URL = new URL(pathname, 'https://mp4.48.cn/');
+
+  return url.href;
+}
+
+/* 获取登录的token */
+export function getPocket48Token(): string | undefined {
+  const userInfoStr: string | null = sessionStorage.getItem('POCKET48_USER_INFO');
+
+  if (userInfoStr !== null) {
+    const userInfo: UserInfo = JSON.parse(userInfoStr as UserInfoString);
+
+    return userInfo.token;
   }
 }

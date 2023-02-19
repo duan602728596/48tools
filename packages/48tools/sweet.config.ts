@@ -104,12 +104,12 @@ export default function(info: object): Record<string, any> {
     javascript: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules|toutiaosdk-(acrawler|captcha|webmssdk\.es5)\.js/i
+      exclude: /node_modules|BlythE|toutiaosdk-(acrawler|captcha|webmssdk\.es5)\.js/i
     },
     typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
       plugins,
-      exclude: /node_modules/
+      exclude: /node_modules|BlythE/
     },
     sass: {
       include: /src/

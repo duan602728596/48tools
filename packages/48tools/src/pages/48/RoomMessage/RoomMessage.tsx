@@ -1,7 +1,6 @@
-import { Fragment, useEffect, type ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import style from './roomMessage.sass';
-import Pocket48Login from '../../../functionalComponents/Pocket48Login/Pocket48Login';
-import Header from '../../../components/Header/Header';
+import SearchMessage from './SearchMessage/SearchMessage';
 
 /* 导出房间消息 */
 function RoomMessage(props: {}): ReactElement {
@@ -13,14 +12,7 @@ function RoomMessage(props: {}): ReactElement {
     };
   }, []);
 
-  return (
-    <Fragment>
-      <Header>
-        <Pocket48Login />
-      </Header>
-      <div className="flex-grow" />
-    </Fragment>
-  );
+  return <SearchMessage />;
 }
 
 export default RoomMessage;

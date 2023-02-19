@@ -1,4 +1,10 @@
 /* ========== pocket48 ========== */
+interface Pocket48ResponseBase {
+  message: string;
+  status: number;
+  success: boolean;
+}
+
 // 当前的用户信息
 export interface UserInfo {
   avatar: string;
@@ -21,19 +27,16 @@ export interface LiveInfo {
 }
 
 // 返回的直播数据
-export interface LiveData {
+export interface LiveData extends Pocket48ResponseBase {
   content: {
     liveList: Array<LiveInfo>;
     next: string;
     slideUpAndDown: boolean;
   };
-  message: string;
-  status: number;
-  success: boolean;
 }
 
 // 直播间信息
-export interface LiveRoomInfo {
+export interface LiveRoomInfo extends Pocket48ResponseBase {
   content: {
     carousels?: {
       carouselTime: number;
@@ -52,9 +55,6 @@ export interface LiveRoomInfo {
     title: string;
     ctime: string;
   };
-  message: string;
-  status: number;
-  success: boolean;
 }
 
 // 搜索
@@ -65,14 +65,56 @@ export interface SearchMemberIndex {
   suggest: Array<unknown>;
 }
 
-export interface SearchResult {
+export interface SearchResult extends Pocket48ResponseBase {
   content: {
     pagePra: string;
     memberIndexTemplates: null | Array<SearchMemberIndex>;
   };
-  message: string;
-  status: number;
-  success: boolean;
+}
+
+// server search
+export interface ServerApiItem {
+  showButton: boolean;
+  teamId: number;
+  serverOwner: number;
+  serverId: number;
+  serverName: string;
+  serverIcon: string;
+  serverDefaultName: string;
+  serverDefaultIcon: string;
+  serverType: number;
+  followStatus: number;
+}
+
+export interface ServerSearchResult extends Pocket48ResponseBase {
+  content: {
+    serverApiList: Array<ServerApiItem>;
+  };
+}
+
+export interface ServerJumpResult extends Pocket48ResponseBase {
+  content: {
+    serverId: number;
+    channelId: number;
+  };
+}
+
+/* ========== 口袋48房间消息 ========== */
+// roleId = 3为xox
+export interface CustomMessageV2 {
+  msgIdServer: number;
+  msgIdClient: string;
+  bodys: string;
+  extInfo: string;
+  msgType: string;
+  msgTime: number; // 最上是最新的
+}
+
+export interface HomeMessageResult extends Pocket48ResponseBase {
+  content: {
+    message: Array<CustomMessageV2>;
+    nextTime: number;
+  };
 }
 
 /* ========== live48 ========== */

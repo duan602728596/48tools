@@ -7,21 +7,34 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Form, Input, message, type FormInstance } from 'antd';
+import { createStructuredSelector, type Selector } from 'reselect';
+import { Button, Modal, Form, Input, message, Avatar, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './pocket48Login.sass';
 import SMS from './SMS';
 import { requestSMS, requestMobileCodeLogin } from './services/pocket48Login';
 import { pick } from '../../utils/lodash';
 import { setUserInfo } from './reducers/pocket48Login';
+import { source } from '../../utils/snh48';
 import type { SMSResult, LoginUserInfo } from './services/interface';
+import type { Pocket48LoginInitialState } from './reducers/pocket48Login';
+import type { UserInfo } from './types';
 
 const sms: SMS = new SMS();
 
+/* redux selector */
+type RState = { pocket48Login: Pocket48LoginInitialState };
+
+const selector: Selector<RState, Pocket48LoginInitialState> = createStructuredSelector({
+  // 口袋48已登陆账号
+  userInfo: ({ pocket48Login }: RState): UserInfo | null => pocket48Login.userInfo
+});
+
 /* 口袋48登录 */
 function Pocket48Login(props: {}): ReactElement {
+  const { userInfo }: Pocket48LoginInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false);
@@ -45,6 +58,7 @@ function Pocket48Login(props: {}): ReactElement {
         dispatch(setUserInfo(
           pick(res.content.userInfo, ['token', 'nickname', 'avatar'])
         ));
+        setOpen(false);
         messageApi.success('登录成功！');
       } else {
         console.error(res);
@@ -97,7 +111,11 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button onClick={ (event: MouseEvent): void => setOpen(true) }>口袋48登录</Button>
+      <Button icon={ userInfo && <Avatar className={ style.avatar } size="small" src={ source(userInfo.avatar) } /> }
+        onClick={ (event: MouseEvent): void => setOpen(true) }
+      >
+        { userInfo ? userInfo.nickname : '口袋48登录' }
+      </Button>
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }
@@ -105,6 +123,7 @@ function Pocket48Login(props: {}): ReactElement {
         destroyOnClose={ true }
         closable={ false }
         maskClosable={ false }
+        afterClose={ form.resetFields }
         okText="登录"
         onOk={ handleLoginClick }
         onCancel={ (event: MouseEvent): void => setOpen(false) }

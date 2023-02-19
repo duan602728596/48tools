@@ -1,6 +1,7 @@
 import type { ReducersMapObject } from '@reduxjs/toolkit';
 import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
+import roomMessageReducers from '../pages/48/reducers/roomMessage';
 import pocket48LoginReducers from '../functionalComponents/Pocket48Login/reducers/pocket48Login';
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/download';
 import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
@@ -17,6 +18,7 @@ import weiboSuperReducers from '../pages/WeiboSuper/reducers/weiboSuper';
 export const reducersMapObject: ReducersMapObject = Object.assign({},
   l48Pocket48Reducers,
   l48Live48Reducers,
+  roomMessageReducers,
   pocket48LoginReducers,
   bilibiliDownloadReducers,
   bilibiliLiveReducers,

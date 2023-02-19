@@ -8,3 +8,10 @@ import type { MessageInstance } from 'antd/es/message/interface';
 
 export type UseModalReturnType = readonly [Omit<ModalStaticFunctions, 'warn'>, ReactElement];
 export type UseMessageReturnType = readonly [MessageInstance, ReactElement<any, string | JSXElementConstructor<any>>];
+
+
+/* select */
+export interface LabeledValue {
+  label: string;
+  value: string | number;
+}

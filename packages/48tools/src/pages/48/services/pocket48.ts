@@ -1,8 +1,16 @@
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import got, { type Response as GotResponse, type Headers as GotHeaders } from 'got';
-import { createHeaders } from '../../../utils/snh48';
-import type { LiveInfo, LiveData, LiveRoomInfo, SearchResult } from './interface';
+import { createHeaders, getPocket48Token } from '../../../utils/snh48';
+import type {
+  LiveInfo,
+  LiveData,
+  LiveRoomInfo,
+  SearchResult,
+  ServerSearchResult,
+  ServerJumpResult,
+  HomeMessageResult
+} from './interface';
 
 /**
  * 获取单个直播间的信息
@@ -105,6 +113,72 @@ export async function requestSearch(content: string): Promise<SearchResult> {
       pagePra: ''
     }
   });
+
+  return res.body;
+}
+
+/* server search */
+export async function requestServerSearch(searchContent: string): Promise<ServerSearchResult | undefined> {
+  const token: string | undefined = getPocket48Token();
+
+  if (!token) return;
+
+  const res: GotResponse<ServerSearchResult> = await got('https://pocketapi.48.cn/im/api/v1/im/server/search', {
+    method: 'POST',
+    headers: createHeaders(token),
+    responseType: 'json',
+    json: { searchContent }
+  });
+
+  return res.body;
+}
+
+/* server jump */
+export async function requestServerJump(id: number): Promise<ServerJumpResult | undefined> {
+  const token: string | undefined = getPocket48Token();
+
+  if (!token) return;
+
+  const res: GotResponse<ServerJumpResult> = await got('https://pocketapi.48.cn/im/api/v1/im/server/jump', {
+    method: 'POST',
+    headers: createHeaders(token),
+    responseType: 'json',
+    json: {
+      starId: id,
+      targetType: 1
+    }
+  });
+
+  return res.body;
+}
+
+/**
+ * 请求口袋房间的信息
+ * @param { number } channelId: 频道ID
+ * @param { number } serverId: 服务的ID
+ * @param { number } nextTime: 查询的位置
+ */
+export async function requestHomeownerMessage(
+  channelId: number,
+  serverId: number,
+  nextTime: number = 0
+): Promise<HomeMessageResult | undefined> {
+  const token: string | undefined = getPocket48Token();
+
+  if (!token) return;
+
+  const res: GotResponse<HomeMessageResult> = await got(
+    'https://pocketapi.48.cn/im/api/v1/team/message/list/homeowner', {
+      method: 'POST',
+      headers: createHeaders(token),
+      responseType: 'json',
+      json: {
+        channelId,
+        serverId,
+        nextTime,
+        limit: 300
+      }
+    });
 
   return res.body;
 }

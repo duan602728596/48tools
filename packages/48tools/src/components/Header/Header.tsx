@@ -29,7 +29,8 @@ function Header(props: HeaderProps): ReactElement {
 
 Header.propTypes = {
   to: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
+  className: PropTypes.string
 };
 
 export default Header;
