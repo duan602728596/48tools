@@ -70,6 +70,7 @@ export async function requestLiveList(
   let firstData: LiveInfo | null = null;
 
   if (isUserQuery) {
+    // fix: 当next为0时，无法根据userId查询到指定的数据，所以取列表最新的liveId作为next参数
     const firstRes: LiveData = await requestLiveList('0', false);
 
     if (firstRes.content?.liveList?.[0]) {
