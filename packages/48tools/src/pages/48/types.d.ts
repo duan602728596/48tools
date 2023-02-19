@@ -65,6 +65,7 @@ export interface QueryRecord {
   serverId: number;
   channelId: number;
   ownerId: number;
+  ownerName: string;
   nextTime: number;
 }
 
@@ -396,3 +397,11 @@ export type FormatCustomMessage =
   | CLOSE_ROOM_CHATMessageV2
   | ZHONGQIU_ACTIVITY_LANTERN_FANSMessageV2
   | RawData;
+
+/* 保存的数据 */
+export interface SendDataItem {
+  bodys: string | Record<string, any>;
+  extInfo: string | Record<string, any>;
+  msgType: string;
+  msgTime: string;
+}

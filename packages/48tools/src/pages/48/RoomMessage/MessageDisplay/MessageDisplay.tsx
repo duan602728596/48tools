@@ -12,7 +12,7 @@ import {
   type ForwardedRef,
   type FunctionComponent, MouseEvent
 } from 'react';
-import { List, Popover, Typography, type TypographyProps } from 'antd';
+import { List, Popover, Typography, Empty, Spin, type TypographyProps } from 'antd';
 import VirtualList from 'rc-virtual-list';
 import * as classNames from 'classnames';
 import style from './messageDisplay.sass';
@@ -51,7 +51,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
     function messageRender(): Array<ReactElement> {
       const renderElement: Array<ReactElement> = [
         <div key="user" className="shrink-0">{ item.user.nickName }：</div>,
-        <time key="time" className="shrink-0 block">{ item.time }</time>
+        <time key="time" className="shrink-0 block pl-[12px]">{ item.time }</time>
       ];
 
       try {
@@ -74,7 +74,14 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
             <Paragraph key="body" className="grow break-all">
               { typeCNName[item.type] }&nbsp;-&nbsp;
               <Popover content={ <img className="max-w-[200px] max-h-[200px]" src={ item.attach.url } /> }>
-                <a data-href={ item.attach.url } onClick={ handleOpenFileClick }>{ item.attach.url }</a>
+                <a role="button"
+                  aria-label="浏览器内打开图片"
+                  tabIndex={ 0 }
+                  data-href={ item.attach.url }
+                  onClick={ handleOpenFileClick }
+                >
+                  { item.attach.url }
+                </a>
               </Popover>
             </Paragraph>);
         } else if (item.type === 'video' || item.type === 'audio') {
@@ -83,7 +90,14 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
             <Paragraph key="body" className="grow break-all">
               { typeCNName[item.type] }&nbsp;-&nbsp;
               <Popover content={ <video className="max-w-[400px] max-h-[400px]" src={ item.attach.url } controls={ true } /> }>
-                <a data-href={ item.attach.url } onClick={ handleOpenFileClick }>{ item.attach.url }</a>
+                <a role="button"
+                  aria-label="浏览器内打开媒体文件"
+                  tabIndex={ 0 }
+                  data-href={ item.attach.url }
+                  onClick={ handleOpenFileClick }
+                >
+                  { item.attach.url }
+                </a>
               </Popover>
             </Paragraph>);
         } else if (item.type === 'custom' && item.attach.messageType === 'LIVEPUSH') {
@@ -121,7 +135,14 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
               <div>
                 回答：
                 <Popover content={ <video className="max-w-[200px] max-h-[200px]" src={ answerUrl } controls={ true } /> }>
-                  <a data-href={ answerUrl } onClick={ handleOpenFileClick }>{ answerUrl }</a>
+                  <a role="button"
+                    aria-label="浏览器内打开媒体文件"
+                    tabIndex={ 0 }
+                    data-href={ answerUrl }
+                    onClick={ handleOpenFileClick }
+                  >
+                    { answerUrl }
+                  </a>
                 </Popover>
               </div>
             </Paragraph>);
@@ -132,16 +153,16 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
             </div>);
         } else {
           renderElement.splice(1, 0,
-            <div key="body" className="grow">
+            <code key="body" className="grow block">
               { JSON.stringify(omit(item, ['msgIdClient'])) }
-            </div>);
+            </code>);
         }
       } catch (err) {
         console.error(err, item);
         renderElement.splice(1, 0,
-          <Paragraph key="body" className="grow">
+          <code key="body" className="grow block">
             { JSON.stringify(omit(item, ['msgIdClient'])) }
-          </Paragraph>);
+          </code>);
       }
 
       return renderElement;
@@ -157,7 +178,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
 
     return (
       <List.Item ref={ ref }
-        className={ classNames('text-[12px]', style.item) }
+        className={ classNames('mr-[30px] text-[12px]', style.item) }
         style={{ height }}
       >
         <div ref={ divRef } className={ classNames('flex w-full min-h-[20px]', style.itemChildren) }>
@@ -195,11 +216,17 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
 
   return (
     <div ref={ messageListRef } className="relative z-50 h-full overflow-hidden">
-      <List size="small" loading={ loading }>
-        <VirtualList data={ data } height={ messageListHeight } itemHeight={ 26 } itemKey="msgIdClient">
-          { (item: FormatCustomMessage): ReactElement => <MessageItem key={ item.msgIdClient } item={ item } /> }
-        </VirtualList>
-      </List>
+      <Spin size="large" spinning={ loading }>
+        <List size="small">
+          {
+            data.length > 0 ? (
+              <VirtualList data={ data } height={ messageListHeight } itemHeight={ 26 } itemKey="msgIdClient">
+                { (item: FormatCustomMessage): ReactElement => <MessageItem key={ item.msgIdClient } item={ item } /> }
+              </VirtualList>
+            ) : <Empty className={ style.empty } />
+          }
+        </List>
+      </Spin>
     </div>
   );
 }
