@@ -121,16 +121,11 @@ export function formatSendData(data: Array<CustomMessageV2>): Array<SendDataItem
     try {
       if ((o.msgType === 'FLIPCARD_AUDIO' || o.msgType === 'FLIPCARD_VIDEO') && typeof bodys === 'object') {
         const keys: string[] = Object.keys(bodys);
-        const keyName: string | undefined = keys.find((key: string): boolean => {
-          return [
-            'filpCardInfo',
-            'flipCardInfo',
-            'filpCardAudioInfo',
-            'flipCardAudioInfo',
-            'filpCardVideoInfo',
-            'flipCardVideoInfo'
-          ].includes(key);
-        });
+        const keyName: string | undefined = keys.find((key: string): boolean => [
+          'filpCardInfo', 'flipCardInfo',
+          'filpCardAudioInfo', 'flipCardAudioInfo',
+          'filpCardVideoInfo', 'flipCardVideoInfo'
+        ].includes(key));
 
         if (keyName) {
           const answer: { url: string } = JSON.parse(bodys[keyName].answer);
