@@ -1,4 +1,4 @@
-import { setTimeout } from 'node:timers';
+import { setTimeout, clearTimeout } from 'node:timers';
 import { shell } from 'electron';
 import {
   useState,
@@ -26,6 +26,7 @@ import type { FormatCustomMessage, FlipCardInfo, FlipCardAudioInfo, FlipCardVide
 
 const { Paragraph }: TypographyProps = Typography;
 
+const timerMap: Map<string, NodeJS.Timer> = new Map(); // 记录定时器，在没有焦点时需要清除定时器
 const typeCNName: Record<string, string> = {
   video: '视频',
   audio: '音频',
@@ -43,14 +44,28 @@ function handleOpenFileClick(event: MouseEvent<HTMLAnchorElement>): void {
 
 // 链接的无障碍
 function handleLinkFocus(event: FocusEvent<HTMLAnchorElement>): void {
+  const id: string = event.target['getAttribute']('data-client-id')!;
+
+  if (timerMap.has(id)) {
+    clearTimeout(timerMap.get(id));
+  }
+
   if (document.body.classList.contains(accessibilityClassName)) {
-    setTimeout((): void => {
+    const timer: NodeJS.Timer = setTimeout((): void => {
       event.target.dispatchEvent(new Event('mouseover', { bubbles: true }));
     }, 1_000);
+
+    timerMap.set(id, timer);
   }
 }
 
 function handleLinkBlur(event: FocusEvent<HTMLAnchorElement>): void {
+  const id: string = event.target['getAttribute']('data-client-id')!;
+
+  if (timerMap.has(id)) {
+    clearTimeout(timerMap.get(id));
+  }
+
   if (document.body.classList.contains(accessibilityClassName)) {
     event.target.dispatchEvent(new Event('mouseout', { bubbles: true }));
   }
@@ -99,6 +114,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
                   aria-label="浏览器内打开图片"
                   tabIndex={ 0 }
                   data-href={ item.attach.url }
+                  data-client-id={ item.msgIdClient }
                   onClick={ handleOpenFileClick }
                   onFocus={ handleLinkFocus }
                   onBlur={ handleLinkBlur }
@@ -117,6 +133,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
                   aria-label="浏览器内打开媒体文件"
                   tabIndex={ 0 }
                   data-href={ item.attach.url }
+                  data-client-id={ item.msgIdClient }
                   onClick={ handleOpenFileClick }
                   onFocus={ handleLinkFocus }
                   onBlur={ handleLinkBlur }
@@ -164,6 +181,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
                     aria-label="浏览器内打开媒体文件"
                     tabIndex={ 0 }
                     data-href={ answerUrl }
+                    data-client-id={ item.msgIdClient }
                     onClick={ handleOpenFileClick }
                     onFocus={ handleLinkFocus }
                     onBlur={ handleLinkBlur }
