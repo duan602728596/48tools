@@ -108,7 +108,7 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       icon: <IconWeiboOutlined />
     },
     {
-      name: '口袋房间消息下载',
+      name: '口袋房间消息',
       url: '/48/RoomMessage',
       icon: <IconMessageFilled />
     }

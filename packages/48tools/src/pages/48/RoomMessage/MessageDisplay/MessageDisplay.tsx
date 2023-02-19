@@ -34,6 +34,7 @@ const typeCNName: Record<string, string> = {
   FLIPCARD_AUDIO: '语音翻牌',
   FLIPCARD_VIDEO: '视频翻牌'
 };
+const VirtualItemClassName: string = 'Virtual-Item-1';
 
 // 打开网站
 function handleOpenFileClick(event: MouseEvent<HTMLAnchorElement>): void {
@@ -204,7 +205,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
 
     return (
       <List.Item ref={ ref }
-        className={ classNames('mr-[30px] text-[12px]', style.item) }
+        className={ classNames('mr-[30px] text-[12px]', VirtualItemClassName, style.item) }
         style={{ height }}
         data-index={ index }
       >
@@ -235,7 +236,7 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
   // 上下滚动
   function handleScrollKeydown(event: KeyboardEvent): void {
     if (messageListRef.current && virtualListRef.current && (event.code === 'ArrowUp' || event.code === 'ArrowDown')) {
-      const antListItem: HTMLElement | null = messageListRef.current.querySelector('.ant-list-item');
+      const antListItem: HTMLElement | null = messageListRef.current.querySelector(`.${ VirtualItemClassName }`);
 
       if (antListItem) {
         const indexStr: string | null = antListItem.getAttribute('data-index');
@@ -244,7 +245,7 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
           const index: number = Number(indexStr);
 
           virtualListRef.current.scrollTo({
-            index: event.code === 'ArrowUp' ? (index - 2) : (index + 2),
+            index: event.code === 'ArrowUp' ? (index - 3) : (index + 3),
             align: 'top'
           });
         }
