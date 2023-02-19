@@ -5,7 +5,7 @@ import ThemeProvider from './components/Theme/ThemeProvider';
 import PlayerWindow from './pages/PlayerWindow/PlayerWindow';
 import './main.tailwindcss.css';
 import './player.global.sass';
-import './Accessibility/Accessibility';
+import './components/Accessibility/Accessibility';
 
 /* app */
 const root: Root = createRoot(document.getElementById('app')!);

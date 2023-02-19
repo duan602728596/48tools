@@ -21,7 +21,7 @@ import * as classNames from 'classnames';
 import style from './messageDisplay.sass';
 import { omit } from '../../../../utils/lodash';
 import { mp4Source } from '../../../../utils/snh48';
-import { accessibilityClassName } from '../../../../Accessibility/Accessibility';
+import { accessibilityClassName } from '../../../../components/Accessibility/Accessibility';
 import type { FormatCustomMessage, FlipCardInfo, FlipCardAudioInfo, FlipCardVideoInfo } from '../../types';
 
 const { Paragraph }: TypographyProps = Typography;
