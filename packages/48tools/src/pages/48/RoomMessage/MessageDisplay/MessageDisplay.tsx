@@ -15,6 +15,7 @@ import {
   type MouseEvent,
   type FocusEvent
 } from 'react';
+import * as PropTypes from 'prop-types';
 import { List, Popover, Typography, Empty, Spin, type TypographyProps } from 'antd';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
@@ -307,5 +308,10 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
     </div>
   );
 }
+
+MessageDisplay.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object),
+  loading: PropTypes.bool
+};
 
 export default MessageDisplay;

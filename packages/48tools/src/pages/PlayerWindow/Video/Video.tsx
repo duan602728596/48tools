@@ -1,5 +1,6 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
+import * as PropTypes from 'prop-types';
 import flvjs from 'flv.js';
 import { getFFmpeg } from '../../../utils/utils';
 import { source } from '../../../utils/snh48';
@@ -83,5 +84,10 @@ function Video(props: VideoProps): ReactElement {
     </div>
   );
 }
+
+Video.propTypes = {
+  playerInfo: PropTypes.object,
+  info: PropTypes.object
+};
 
 export default Video;

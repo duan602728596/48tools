@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
+import * as PropTypes from 'prop-types';
 import videojs from 'video.js/dist/video.es.js';
 import * as classNames from 'classnames';
 import style from './recordVideo.sass';
@@ -65,5 +66,10 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
     </div>
   );
 }
+
+RecordVideo.propTypes = {
+  playerInfo: PropTypes.object,
+  info: PropTypes.object
+};
 
 export default RecordVideo;

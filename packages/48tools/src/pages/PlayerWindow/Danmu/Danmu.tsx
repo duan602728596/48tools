@@ -13,6 +13,7 @@ import {
   type FunctionComponent,
   type ForwardedRef
 } from 'react';
+import * as PropTypes from 'prop-types';
 import { Avatar, Switch } from 'antd';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
@@ -23,12 +24,12 @@ import type { LiveRoomMessage, LiveRoomTextMessage, LiveRoomTextCustom } from '.
 
 const VirtualItemClassName: string = 'Virtual-Item-2';
 
+/* 显示单条弹幕 */
 interface DanmuItemProps {
   item: LiveRoomTextMessage;
   index: number;
 }
 
-/* 显示单条弹幕 */
 const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
   function(props: DanmuItemProps, ref: ForwardedRef<any>): ReactElement | null {
     const { item, index }: DanmuItemProps = props;
@@ -68,11 +69,11 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
     }
   });
 
+/* 显示弹幕 */
 interface DanmuProps {
   info: LiveRoomInfo | undefined;
 }
 
-/* 显示弹幕 */
 function Danmu(props: DanmuProps): ReactElement {
   const { info }: DanmuProps = props;
   const [danmuData, setDanmuData]: [Array<LiveRoomTextMessage>, D<S<Array<LiveRoomTextMessage>>>] = useState([]);
@@ -184,5 +185,9 @@ function Danmu(props: DanmuProps): ReactElement {
     </Fragment>
   );
 }
+
+Danmu.propTypes = {
+  info: PropTypes.object
+};
 
 export default Danmu;
