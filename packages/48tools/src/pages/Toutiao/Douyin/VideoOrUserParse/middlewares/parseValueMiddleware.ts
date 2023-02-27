@@ -6,7 +6,7 @@ import {
   type DouyinVideo
 } from '../../../services/douyin';
 import douyinCookieCache from '../../DouyinCookieCache';
-import * as toutiaosdk from '../../sdk/toutiaosdk';
+import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import type { GetVideoUrlOnionContext } from '../../../types';
 
 const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接

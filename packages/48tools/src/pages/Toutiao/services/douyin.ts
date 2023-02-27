@@ -1,6 +1,6 @@
 import got, { type Response as GotResponse } from 'got';
 import { rStr, pcUserAgent } from '../../../utils/utils';
-import * as toutiaosdk from '../Douyin/sdk/toutiaosdk';
+import * as toutiaosdk from '../sdk/toutiaosdk';
 import type { AwemePostResponse } from './interface';
 import type { VideoQuery } from '../types';
 

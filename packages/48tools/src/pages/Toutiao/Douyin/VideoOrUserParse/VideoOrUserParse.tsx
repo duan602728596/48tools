@@ -23,7 +23,7 @@ import rendedDataMiddleware from './middlewares/rendedDataMiddleware';
 import { setAddDownloadList } from '../../reducers/douyin';
 import douyinCookieCache from '../DouyinCookieCache';
 import { requestAwemePost, requestDouyinUser, type DouyinVideo } from '../../services/douyin';
-import * as toutiaosdk from '../sdk/toutiaosdk';
+import * as toutiaosdk from '../../sdk/toutiaosdk';
 import type { DownloadUrlItem, UserDataItem, VideoQuery } from '../../types';
 import type { AwemePostResponse, AwemeItem } from '../../services/interface';
 

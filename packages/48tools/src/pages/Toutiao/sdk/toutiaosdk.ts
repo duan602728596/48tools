@@ -1,4 +1,4 @@
-import loadScript from '../../../../utils/loadScript';
+import loadScript from '../../../utils/loadScript';
 
 /* 头条sdk */
 let bytedAcrawler: any;
