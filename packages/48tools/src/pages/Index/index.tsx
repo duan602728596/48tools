@@ -166,19 +166,24 @@ function nativeRender(): Array<ReactNode> {
   return element;
 }
 
+// 打开issues
+function handleOpenIssuesClick(event: MouseEvent): void {
+  shell.openExternal('https://github.com/duan602728596/48tools/issues');
+}
+
+// 打开开发者工具
+function handleOpenDeveloperToolsClick(event: MouseEvent): void {
+  ipcRenderer.send('developer-tools');
+}
+
+// 打开软件下载地址
+function handleOpenDownloadUrlClick(event: MouseEvent): void {
+  shell.openExternal('https://github.com/duan602728596/48tools/releases');
+}
+
 /* 首页 */
 function Index(props: {}): ReactElement {
   const theme: Theme = useContext(ThemeContext);
-
-  // 打开issues
-  function handleOpenIssuesClick(event: MouseEvent): void {
-    shell.openExternal('https://github.com/duan602728596/48tools/issues');
-  }
-
-  // 打开开发者工具
-  function handleOpenDeveloperToolsClick(event: MouseEvent): void {
-    ipcRenderer.send('developer-tools');
-  }
 
   return (
     <div className="p-[16px]">
@@ -198,12 +203,22 @@ function Index(props: {}): ReactElement {
         </Space>
       </div>
       <Divider />
-      {/* 二维码 */}
-      <p>欢迎打赏：</p>
-      <Space size={ 8 }>
-        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
-        <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
-      </Space>
+      <div className="flex">
+        <div>
+          {/* 二维码 */}
+          <p>欢迎打赏：</p>
+          <Space size={ 8 }>
+            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
+            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
+          </Space>
+        </div>
+        <div className="ml-[32px]">
+          <p>软件最新版本下载地址：</p>
+          <Button type="link" onClick={ handleOpenDownloadUrlClick }>
+            https://github.com/duan602728596/48tools/releases
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
