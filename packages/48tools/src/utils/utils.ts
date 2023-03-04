@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as net from 'node:net';
 import type { Server as NetServer } from 'node:net';
+import { chromium, firefox, webkit, type BrowserType } from 'playwright-core';
 import * as dayjs from 'dayjs';
 import { BILIBILI_COOKIE_KEY, type BilibiliCookie } from '../functionalComponents/BilibiliLogin/Qrcode';
 import { ACFUN_COOKIE_KEY, type AcFunCookie } from '../functionalComponents/AcFunLogin/Qrcode';
@@ -117,6 +118,17 @@ export async function detectPort(port: number, ignorePort: Array<number> = []): 
   }
 
   return newNumber;
+}
+
+/* 根据路径获取不同的启动器 */
+export function getBrowser(executablePath: string): BrowserType {
+  if (/Safari/i.test(executablePath)) {
+    return webkit;
+  } else if (/(Firefox|火狐)/i.test(executablePath)) {
+    return firefox;
+  } else {
+    return chromium;
+  }
 }
 
 // pc端ua

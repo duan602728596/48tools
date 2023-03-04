@@ -1,13 +1,4 @@
-import {
-  chromium,
-  firefox,
-  webkit,
-  type BrowserType,
-  type Browser,
-  type BrowserContext,
-  type Page,
-  type Cookie
-} from 'playwright-core';
+import type { Browser, BrowserContext, Page, Cookie } from 'playwright-core';
 import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
@@ -15,23 +6,13 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
+import { getBrowser } from '../../../utils/utils';
 import { requestUid, requestUserInfo } from '../services/weiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import { errorNativeMessage } from '../../../utils/remote/nativeMessage';
 import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;
-
-/* 根据路径获取不同的启动器 */
-function getBrowser(executablePath: string): BrowserType {
-  if (/Safari/i.test(executablePath)) {
-    return webkit;
-  } else if (/(Firefox|火狐)/i.test(executablePath)) {
-    return firefox;
-  } else {
-    return chromium;
-  }
-}
 
 /* 判断是否登陆成功（有cookie） */
 function waitFunc(): boolean {
