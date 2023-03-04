@@ -86,6 +86,7 @@ export default function(info: object): Record<string, any> {
       'video.js/dist/video.es.js',
       'react',
       'react-dom/client',
+      'react-dom/server.browser',
       'prop-types',
       '@reduxjs/toolkit',
       'react-redux',

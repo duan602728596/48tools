@@ -12,12 +12,13 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import { Button, message, Pagination } from 'antd';
-import type { DefaultOptionType } from 'rc-select/es/select';
-import type { LabeledValue, UseMessageReturnType } from '@48tools-types/antd';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, Selector } from 'reselect';
+import { Button, message, Modal, Pagination, Space } from 'antd';
+import type { DefaultOptionType } from 'rc-select/es/select';
+import type { LabeledValue, UseMessageReturnType } from '@48tools-types/antd';
+import Icon, { Html5Filled as IconHtml5Filled } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
 import style from './searchMessage.sass';
 import FixSelect from './FixSelect';
@@ -31,10 +32,12 @@ import {
   type RoomMessageInitialState
 } from '../../reducers/roomMessage';
 import { requestServerSearch, requestServerJump, requestHomeownerMessage } from '../../services/pocket48';
-import { formatDataArray, formatSendData } from '../formatData';
+import { formatDataArray, formatSendData } from '../function/formatData';
+import createHtml from '../function/createHtml';
 import MessageDisplay from '../MessageDisplay/MessageDisplay';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import { fileTimeFormat } from '../../../../utils/utils';
+import IconJSONSvgComponent from '../../images/JSON.component.svg';
 import type {
   ServerSearchResult,
   ServerApiItem,
@@ -44,14 +47,15 @@ import type {
 } from '../../services/interface';
 import type { QueryRecord, FormatCustomMessage, SendDataItem } from '../../types';
 
+const IconJSONFile: ReactElement = <Icon component={ IconJSONSvgComponent } />;
+
 /* 分页 */
 interface Page {
   current: number;
   pageSize: number;
 }
 
-/* 搜索 */
-let serverSearchTimer: NodeJS.Timeout | null = null;
+let serverSearchTimer: NodeJS.Timeout | null = null; // 搜索
 
 /* redux selector */
 type RState = { roomMessage: RoomMessageInitialState };
@@ -86,16 +90,46 @@ function SearchMessage(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [searchLoading, setSearchLoading]: [boolean, D<S<boolean>>] = useState(false); // 搜索的loading状态
   const [homeMessageLoading, setHomeMessageLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载数据的loading状态
-  const [homeMessagePage, setHomeMessagePagePage]: [Page, D<S<Page>>] = useState({
+  const [homeMessagePage, setHomeMessagePage]: [Page, D<S<Page>>] = useState({
     current: 0,
     pageSize: 350
   });
+  const [exportMessageModalOpen, setExportMessageModalOpen]: [boolean, D<S<boolean>>] = useState(false); // 导出消息
 
-  // 点击导出数据到文件夹中
-  async function handleSaveDataClick(event: MouseEvent): Promise<void> {
+  // 点击导出PDF到文件夹中
+  async function handleSavePDFDataClick(event: MouseEvent): Promise<void> {
+    const result: SaveDialogReturnValue = await showSaveDialog({
+      defaultPath: `html_${ query['ownerName'] }_${ query['ownerId'] }_${ dayjs().format(fileTimeFormat) }`
+    });
+
+    if (result.canceled || !result.filePath) return;
+
+    messageApi.info('正在创建文件夹并保存数据。');
+
+    // 创建目录
+    if (!fs.existsSync(result.filePath)) {
+      await fsP.mkdir(result.filePath);
+    }
+
+    // 创建pdf文件
+    for (let i: number = 0, j: number = homeMessageRaw.length, k: number = 0; i < j; i += 3_000, k++) {
+      const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + 3_000));
+
+      await createHtml({
+        data: dataSlice,
+        filePath: result.filePath,
+        k
+      });
+    }
+
+    messageApi.success('成功保存数据！');
+  }
+
+  // 点击导出JSON数据到文件夹中
+  async function handleSaveJSONDataClick(event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `${ query['ownerName'] }_${ query['ownerId'] }_${ dayjs().format(fileTimeFormat) }`
+        defaultPath: `json_${ query['ownerName'] }_${ query['ownerId'] }_${ dayjs().format(fileTimeFormat) }`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -108,8 +142,8 @@ function SearchMessage(props: {}): ReactElement {
       }
 
       // 写入json文件
-      for (let i: number = 0, j: number = homeMessageRaw.length, k: number = 0; i < j; i += 3000, k++) {
-        const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + 3000));
+      for (let i: number = 0, j: number = homeMessageRaw.length, k: number = 0; i < j; i += 3_000, k++) {
+        const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + 3_000));
         const fileName: string = path.join(result.filePath, `${ k }.json`);
 
         await fsP.writeFile(fileName, JSON.stringify({ message: dataSlice }, null, 2), {
@@ -141,7 +175,7 @@ function SearchMessage(props: {}): ReactElement {
 
   // 分页变化
   function handlePageChange(page: number, pageSize: number): void {
-    setHomeMessagePagePage((prevState: Page): Page => ({ ...prevState, current: page - 1 }));
+    setHomeMessagePage((prevState: Page): Page => ({ ...prevState, current: page - 1 }));
   }
 
   // 获取数据
@@ -186,7 +220,7 @@ function SearchMessage(props: {}): ReactElement {
             formatData: formatDataArray(homeownerMessageRes.content.message),
             rawData: homeownerMessageRes.content.message
           }));
-          setHomeMessagePagePage((prevState: Page): Page => ({ ...prevState, current: 0 }));
+          setHomeMessagePage((prevState: Page): Page => ({ ...prevState, current: 0 }));
         } else {
           dispatch(setHomeMessage({
             formatData: homeMessage.concat(formatDataArray(homeownerMessageRes.content.message)),
@@ -260,10 +294,7 @@ function SearchMessage(props: {}): ReactElement {
         >
           加载数据
         </Button>
-        <Button className="mr-[8px]"
-          disabled={ homeMessageRaw.length === 0 }
-          onClick={ handleSaveDataClick }
-        >
+        <Button className="mr-[8px]" onClick={ (event: MouseEvent): void => setExportMessageModalOpen(true) }>
           导出当前数据
         </Button>
         <Pocket48Login />
@@ -281,6 +312,36 @@ function SearchMessage(props: {}): ReactElement {
           onChange={ handlePageChange }
         />
       </div>
+      <Modal title="导出当前数据"
+        open={ exportMessageModalOpen }
+        width={ 320 }
+        closable={ false }
+        centered={ true }
+        destroyOnClose={ true }
+        footer={ <Button onClick={ (event: MouseEvent): void => setExportMessageModalOpen(false) }>关闭</Button> }
+      >
+        <Space className="w-full" direction="vertical" size={ 8 }>
+          <div>
+            <Button icon={ <IconHtml5Filled /> }
+              block={ true }
+              disabled={ homeMessageRaw.length === 0 }
+              onClick={ handleSavePDFDataClick }
+            >
+              导出HTML格式的数据
+            </Button>
+          </div>
+          <div>
+            <Button className="mr-[8px]"
+              icon={ IconJSONFile }
+              block={ true }
+              disabled={ homeMessageRaw.length === 0 }
+              onClick={ handleSaveJSONDataClick }
+            >
+              导出JSON格式的数据
+            </Button>
+          </div>
+        </Space>
+      </Modal>
       { messageContextHolder }
     </Fragment>
   );

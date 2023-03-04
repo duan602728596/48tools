@@ -131,6 +131,13 @@ export function getBrowser(executablePath: string): BrowserType {
   }
 }
 
+/* 获取executablePath的路径 */
+export function getExecutablePath(): string | null {
+  const executablePath: string | null = localStorage.getItem('PUPPETEER_EXECUTABLE_PATH');
+
+  return executablePath;
+}
+
 // pc端ua
 export const pcUserAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
   + '(KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.52';

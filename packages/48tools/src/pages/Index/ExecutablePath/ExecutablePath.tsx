@@ -1,6 +1,6 @@
 import type { OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
-import { Button, Modal, Form, Alert, Input, message, type FormInstance } from 'antd';
+import { Button, Modal, Form, Alert, Input, message, type FormInstance, type ModalProps, type ButtonProps } from 'antd';
 import type { Store } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { ChromeFilled as IconChromeFilled, QuestionCircleTwoTone as IconQuestionCircleTwoTone } from '@ant-design/icons';
@@ -8,8 +8,14 @@ import * as classNames from 'classnames';
 import style from './executablePath.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 
+interface ExecutablePathProps {
+  modalProps?: ModalProps;
+  buttonProps?: ButtonProps;
+}
+
 /* 配置无头浏览器地址 */
-function ExecutablePath(props: {}): ReactElement {
+function ExecutablePath(props: ExecutablePathProps): ReactElement {
+  const { modalProps = {}, buttonProps = {} }: ExecutablePathProps = props;
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 弹出层
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [form]: [FormInstance] = Form.useForm();
@@ -67,7 +73,7 @@ function ExecutablePath(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button icon={ <IconChromeFilled /> } onClick={ handleOpenExecutablePathClick }>无头浏览器配置</Button>
+      <Button icon={ <IconChromeFilled /> } onClick={ handleOpenExecutablePathClick } { ...buttonProps }>无头浏览器配置</Button>
       <Modal title="无头浏览器配置"
         open={ visible }
         width={ 600 }
@@ -75,6 +81,7 @@ function ExecutablePath(props: {}): ReactElement {
         afterClose={ handleResetExecutablePathClick }
         onOk={ handleSetExecutablePathClick }
         onCancel={ handleCloseExecutablePathModalClick }
+        { ...modalProps }
       >
         <Form className="h-[445px]" form={ form }>
           <Form.Item name="executablePath" label="浏览器可执行文件">

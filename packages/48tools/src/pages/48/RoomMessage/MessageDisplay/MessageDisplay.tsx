@@ -27,8 +27,7 @@ import type { FormatCustomMessage, FlipCardInfo, FlipCardAudioInfo, FlipCardVide
 
 const { Paragraph }: TypographyProps = Typography;
 
-const timerMap: Map<string, NodeJS.Timer> = new Map(); // 记录定时器，在没有焦点时需要清除定时器
-const typeCNName: Record<string, string> = {
+export const typeCNName: Record<string, string> = {
   video: '视频',
   audio: '音频',
   image: '图片',
@@ -36,6 +35,7 @@ const typeCNName: Record<string, string> = {
   FLIPCARD_AUDIO: '语音翻牌',
   FLIPCARD_VIDEO: '视频翻牌'
 };
+const timerMap: Map<string, NodeJS.Timer> = new Map(); // 记录定时器，在没有焦点时需要清除定时器
 const VirtualItemClassName: string = 'Virtual-Item-1';
 
 // 打开网站

@@ -1,8 +1,8 @@
 import * as dayjs from 'dayjs';
-import { source, mp4Source } from '../../../utils/snh48';
-import { rStr } from '../../../utils/utils';
-import type { CustomMessageV2 } from '../services/interface';
-import type { FormatCustomMessage, VIDEOMessageV2, AUDIOMessageV2, IMAGEMessageV2, UserV2, SendDataItem } from '../types';
+import { source, mp4Source } from '../../../../utils/snh48';
+import { rStr } from '../../../../utils/utils';
+import type { CustomMessageV2 } from '../../services/interface';
+import type { FormatCustomMessage, VIDEOMessageV2, AUDIOMessageV2, IMAGEMessageV2, UserV2, SendDataItem } from '../../types';
 
 /* 将数据格式化 */
 export function FormatData(item: CustomMessageV2): FormatCustomMessage {
@@ -39,7 +39,6 @@ export function FormatData(item: CustomMessageV2): FormatCustomMessage {
       time,
       msgIdClient: id
     } as VIDEOMessageV2 | AUDIOMessageV2 | IMAGEMessageV2;
-    newItem.attach.url = source(newItem.attach.url);
   } else if ([
     'REPLY',
     'GIFTREPLY',
@@ -105,14 +104,6 @@ export function formatSendData(data: Array<CustomMessageV2>): Array<SendDataItem
         extInfo['user']['teamLogo'] = source(extInfo['user']['teamLogo']);
         extInfo['user']['avatar'] = source(extInfo['user']['avatar']);
         extInfo['user']['pfUrl'] = source(extInfo['user']['pfUrl']);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-
-    try {
-      if ((o.msgType === 'AUDIO' || o.msgType === 'VIDEO' || o.msgType === 'IMAGE') && typeof bodys === 'object') {
-        bodys['url'] = source(bodys['url']);
       }
     } catch (err) {
       console.error(err);

@@ -6,7 +6,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
-import { getBrowser } from '../../../utils/utils';
+import { getBrowser, getExecutablePath } from '../../../utils/utils';
 import { requestUid, requestUserInfo } from '../services/weiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import { errorNativeMessage } from '../../../utils/remote/nativeMessage';
@@ -33,7 +33,7 @@ function UserBrowserLogin(props: { onCancel?: Function }): ReactElement {
   async function handleLoginClick(event: MouseEvent): Promise<void> {
     if (browser !== null) return;
 
-    const executablePath: string | null = localStorage.getItem('PUPPETEER_EXECUTABLE_PATH');
+    const executablePath: string | null = getExecutablePath();
 
     if (!(executablePath && !/^\s*$/.test(executablePath))) {
       errorNativeMessage('请先配置无头浏览器！');
