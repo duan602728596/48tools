@@ -6,7 +6,7 @@ import {
   requestBangumiVideoInfo,
   requestWebInterfaceView
 } from '../services/download';
-import type { InitialState } from '../types';
+import type { InitialState, EpisodesItem, NextDataMediaInfo, NextData } from '../types';
 import type {
   VideoInfo,
   AudioInfo,
@@ -60,7 +60,56 @@ function parseHtml(html: string): ParseHtmlResult {
 
   return {
     initialState,
-    h1Title: parseDocument.querySelector('#viewbox_report .tit')?.innerHTML ?? ''
+    h1Title: parseDocument.querySelector('#viewbox_report .tit')?.innerHTML
+      ?? parseDocument.querySelector('.media-title')?.innerHTML
+      ?? ''
+  };
+}
+
+/**
+ * 解析nextjs的__NEXT_DATA__
+ * @param { string } html
+ * @param { 'ss' | 'ep' } type: 类型为ss时，取第一个
+ * @param { string } id: ss id或ep id，需要根据这个来查具体信息
+ */
+function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult {
+  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
+  const nextData: HTMLElement | null = parseDocument.getElementById('__NEXT_DATA__');
+  let initialState: InitialState | undefined = undefined;
+
+  if (nextData) {
+    const scriptStr: string = nextData.innerHTML;
+    const nextDataJson: NextData = JSON.parse(scriptStr);
+    const mediaInfo: NextDataMediaInfo | undefined = nextDataJson?.props?.pageProps?.dehydratedState?.queries
+      ?.[0]?.state?.data?.mediaInfo;
+
+    if (mediaInfo) {
+      const epInfo: EpisodesItem = type === 'ss'
+        ? mediaInfo.episodes[0]
+        : (mediaInfo.episodes.find((o: EpisodesItem): boolean => o.id === Number(id)) ?? mediaInfo.episodes[0]);
+
+      initialState = {
+        aid: epInfo.aid,
+        videoData: {
+          aid: epInfo.aid,
+          bvid: epInfo.bvid,
+          pages: mediaInfo.episodes.map((o: EpisodesItem): { cid: number; part: string } => ({
+            cid: o.cid,
+            part: o.long_title
+          })),
+          title: mediaInfo.title
+        },
+        epInfo: {
+          aid: epInfo.aid,
+          cid: epInfo.cid
+        }
+      };
+    }
+  }
+
+  return {
+    initialState,
+    h1Title: initialState?.videoData?.title ?? ''
   };
 }
 
@@ -164,13 +213,17 @@ export async function parseVideoList(bvid: string): Promise<Array<{ cid: number;
 export async function parseBangumiVideo(type: string, id: string, proxy: boolean): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/bangumi/play/${ type }${ id }`;
   const html: string = await requestBilibiliHtml(videoUrl, proxy);
-  const { initialState }: ParseHtmlResult = parseHtml(html);
+  let parseHtmlResult: ParseHtmlResult = parseHtmlNext(html, type, id);
 
-  if (!initialState) {
+  if (!parseHtmlResult.initialState) {
+    parseHtmlResult = parseHtml(html);
+  }
+
+  if (!parseHtmlResult.initialState) {
     return undefined;
   }
 
-  const { aid, cid }: { aid: number; cid: number } = initialState.epInfo;
+  const { aid, cid }: { aid: number; cid: number } = parseHtmlResult.initialState.epInfo;
   const res: BangumiVideoInfo = await requestBangumiVideoInfo(aid, cid, proxy);
 
   if (res.data) {

@@ -26,6 +26,38 @@ export interface InitialState {
   };
 }
 
+// 番剧__NEXT_DATA__的数据结构
+export interface EpisodesItem {
+  aid: number;
+  bvid: string;
+  cid: number;
+  id: number;
+  long_title: string;
+}
+
+export interface NextDataMediaInfo {
+  media_id: number;  // ss id
+  season_id: number; // ss id
+  title: string;     // 标题
+  episodes: Array<EpisodesItem>;
+}
+
+export interface NextData {
+  props: {
+    pageProps: {
+      dehydratedState: {
+        queries: [{
+          state: {
+            data: {
+              mediaInfo: NextDataMediaInfo;
+            };
+          };
+        }];
+      };
+    };
+  };
+}
+
 // 进度条信息
 export interface ProgressEventData {
   percent: number;
