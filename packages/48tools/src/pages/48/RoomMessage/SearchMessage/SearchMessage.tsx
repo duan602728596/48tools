@@ -57,6 +57,8 @@ interface Page {
 
 let serverSearchTimer: NodeJS.Timeout | null = null; // 搜索
 
+export const PAGE_SIZE: number = 1_000; // 每页数据
+
 /* redux selector */
 type RState = { roomMessage: RoomMessageInitialState };
 
@@ -111,14 +113,18 @@ function SearchMessage(props: {}): ReactElement {
       await fsP.mkdir(result.filePath);
     }
 
+    const time: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
+
     // 创建pdf文件
-    for (let i: number = 0, j: number = homeMessageRaw.length, k: number = 0; i < j; i += 3_000, k++) {
-      const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + 3_000));
+    for (let i: number = 0, j: number = homeMessageRaw.length, page: number = 1; i < j; i += PAGE_SIZE, page++) {
+      const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + PAGE_SIZE));
 
       await createHtml({
         data: dataSlice,
         filePath: result.filePath,
-        k
+        page,
+        length: j,
+        time
       });
     }
 
@@ -142,9 +148,9 @@ function SearchMessage(props: {}): ReactElement {
       }
 
       // 写入json文件
-      for (let i: number = 0, j: number = homeMessageRaw.length, k: number = 0; i < j; i += 3_000, k++) {
+      for (let i: number = 0, j: number = homeMessageRaw.length, page: number = 1; i < j; i += 3_000, page++) {
         const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + 3_000));
-        const fileName: string = path.join(result.filePath, `${ k }.json`);
+        const fileName: string = path.join(result.filePath, `${ page }.json`);
 
         await fsP.writeFile(fileName, JSON.stringify({ message: dataSlice }, null, 2), {
           encoding: 'utf8'

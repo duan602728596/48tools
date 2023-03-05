@@ -177,7 +177,7 @@ export async function requestHomeownerMessage(
         channelId,
         serverId,
         nextTime,
-        limit: 500
+        limit: 700
       }
     });
 
