@@ -100,13 +100,36 @@ export interface ServerJumpResult extends Pocket48ResponseBase {
 }
 
 /* ========== 口袋48房间消息 ========== */
+export type MsgType = 'TEXT'
+  | 'IMAGE'
+  | 'REPLY'
+  | 'GIFTREPLY'
+  | 'AUDIO'
+  | 'VIDEO'
+  | 'LIVEPUSH'
+  | 'FLIPCARD'
+  | 'EXPRESS'
+  | 'DELETE'
+  | 'DISABLE_SPEAK'
+  | 'SESSION_DIANTAI'
+  | 'FLIPCARD_AUDIO'
+  | 'FLIPCARD_VIDEO'
+  | 'EXPRESSIMAGE'
+  | 'OPEN_LIVE'
+  | 'TRIP_INFO'
+  | 'PRESENT_NORMAL'
+  | 'PRESENT_TEXT'
+  | 'VOTE'
+  | 'CLOSE_ROOM_CHAT'
+  | 'ZHONGQIU_ACTIVITY_LANTERN_FANS';
+
 // roleId = 3为xox
 export interface CustomMessageV2 {
   msgIdServer: number;
   msgIdClient: string;
   bodys: string;
   extInfo: string;
-  msgType: string;
+  msgType: MsgType;
   msgTime: number; // 最上是最新的
 }
 

@@ -79,8 +79,8 @@ export function formatSendData(data: Array<CustomMessageV2>): Array<SendDataItem
   const newData: Array<SendDataItem> = [];
 
   data.forEach((o: CustomMessageV2) => {
-    let bodys: string | Record<string, any>;
-    let extInfo: string | Record<string, any>;
+    let bodys: string | SendDataItem['bodys'];
+    let extInfo: string | SendDataItem['extInfo'];
 
     if (o.msgType === 'TEXT') {
       bodys = o.bodys;
@@ -129,7 +129,7 @@ export function formatSendData(data: Array<CustomMessageV2>): Array<SendDataItem
       console.error(err);
     }
 
-    newData.push({
+    newData.push(<SendDataItem>{
       bodys,
       extInfo,
       msgType: o.msgType,

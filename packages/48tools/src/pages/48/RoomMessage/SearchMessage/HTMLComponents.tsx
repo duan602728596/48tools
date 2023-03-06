@@ -11,7 +11,15 @@ import type {
   FlipCardInfo,
   FlipCardAudioInfo,
   FlipCardVideoInfo,
-  EXPRESSIMAGEMessageV2
+  EXPRESSIMAGEMessageV2,
+  TEXTSendData,
+  REPLYSendData,
+  MEDIASendData,
+  LIVEPUSHSendData,
+  FLIPCARDSendData,
+  FLIPCARD_AUDIOSendData,
+  FLIPCARD_VIDEOSendData,
+  EXPRESSIMAGESendData
 } from '../../types';
 
 /**
@@ -162,14 +170,18 @@ interface UserInfoProps {
 
 function Basic(props: UserInfoProps): ReactElement {
   const { item, children }: UserInfoProps = props;
-  const user: UserV2 = item.extInfo['user'];
+  const user: UserV2 | undefined = typeof item.extInfo === 'object' ? item.extInfo.user : undefined;
 
   return (
     <li className="Box-row">
-      <div className="mb-2">
-        <img className="avatar avatar-5 mr-2" src={ user.avatar } />
-        <span>{ user.nickName }</span>
-      </div>
+      {
+        user && (
+          <div className="mb-2">
+            <img className="avatar avatar-5 mr-2" src={ user.avatar } />
+            <span>{ user.nickName }</span>
+          </div>
+        )
+      }
       { children }
       <time className="d-block">2023-02-03 16:23:19</time>
     </li>
@@ -182,14 +194,14 @@ Basic.propTypes = {
 };
 
 /* 类型对应的组件 */
-interface ComponentProps {
-  item: SendDataItem;
+interface ComponentProps<T = SendDataItem> {
+  item: T;
 }
 
 /* 文字消息 */
-export function Text(props: ComponentProps): ReactElement {
-  const { item }: ComponentProps = props;
-  const bodys: string = item.bodys as string;
+export function Text(props: ComponentProps<TEXTSendData>): ReactElement {
+  const item: TEXTSendData = props.item;
+  const bodys: string = item.bodys;
 
   return (
     <Basic item={ item }>
@@ -199,9 +211,9 @@ export function Text(props: ComponentProps): ReactElement {
 }
 
 /* 回复消息 */
-export function Reply(props: ComponentProps): ReactElement {
-  const { item }: ComponentProps = props;
-  const replyInfo: ReplyInfo = item.bodys['replyInfo'] as ReplyInfo;
+export function Reply(props: ComponentProps<REPLYSendData>): ReactElement {
+  const item: REPLYSendData = props.item;
+  const replyInfo: ReplyInfo = item.bodys.replyInfo;
 
   return (
     <Basic item={ item }>
@@ -214,9 +226,9 @@ export function Reply(props: ComponentProps): ReactElement {
 }
 
 /* 图片，音频、视频 */
-export function Media(props: ComponentProps): ReactElement {
-  const { item }: ComponentProps = props;
-  const bodys: UploadFileResult = item.bodys as UploadFileResult;
+export function Media(props: ComponentProps<MEDIASendData>): ReactElement {
+  const item: MEDIASendData = props.item;
+  const bodys: UploadFileResult = item.bodys;
 
   return (
     <Basic item={ item }>
@@ -250,9 +262,9 @@ export function Media(props: ComponentProps): ReactElement {
 }
 
 /* 直播 */
-export function LivePush(props: ComponentProps): ReactElement {
-  const { item }: ComponentProps = props;
-  const bodys: LIVEPUSHMessageV2['attach']['livePushInfo'] = item.bodys['livePushInfo'];
+export function LivePush(props: ComponentProps<LIVEPUSHSendData>): ReactElement {
+  const item: LIVEPUSHSendData = props.item;
+  const bodys: LIVEPUSHMessageV2['attach']['livePushInfo'] = item.bodys.livePushInfo;
 
   return (
     <Basic item={ item }>
@@ -263,9 +275,9 @@ export function LivePush(props: ComponentProps): ReactElement {
 }
 
 /* 翻牌 */
-export function FlipCard(props: ComponentProps): ReactElement {
-  const { item }: ComponentProps = props;
-  const info: FlipCardInfo = item.bodys['filpCardInfo'] ?? item.bodys['flipCardInfo'];
+export function FlipCard(props: ComponentProps<FLIPCARDSendData>): ReactElement {
+  const item: FLIPCARDSendData = props.item;
+  const info: FlipCardInfo = item.bodys.filpCardInfo ?? item.bodys.flipCardInfo;
 
   return (
     <Basic item={ item }>
@@ -276,12 +288,12 @@ export function FlipCard(props: ComponentProps): ReactElement {
 }
 
 /* 视频或音频翻牌 */
-export function FlipMedia(props: ComponentProps): ReactElement {
-  const { item }: ComponentProps = props;
-  const info: FlipCardAudioInfo | FlipCardVideoInfo = (item.bodys['filpCardInfo'] ?? item.bodys['flipCardInfo'])
+export function FlipMedia(props: ComponentProps<FLIPCARD_AUDIOSendData | FLIPCARD_VIDEOSendData>): ReactElement {
+  const item: FLIPCARD_AUDIOSendData | FLIPCARD_VIDEOSendData = props.item;
+  const info: FlipCardAudioInfo | FlipCardVideoInfo = (item.bodys.filpCardInfo ?? item.bodys.flipCardInfo)
     ?? (item.msgType === 'FLIPCARD_AUDIO'
-      ? (item.bodys['filpCardAudioInfo'] ?? item.bodys['flipCardAudioInfo'])
-      : (item.bodys['filpCardVideoInfo'] ?? item.bodys['flipCardVideoInfo']));
+      ? (item.bodys.filpCardAudioInfo ?? item.bodys.flipCardAudioInfo)
+      : (item.bodys.filpCardVideoInfo ?? item.bodys.flipCardVideoInfo));
   const answer: { url: string } = JSON.parse(info.answer);
 
   return (
@@ -303,9 +315,9 @@ export function FlipMedia(props: ComponentProps): ReactElement {
 }
 
 /* 表情包 */
-export function ExpressImage(props: ComponentProps): ReactElement {
-  const { item }: ComponentProps = props;
-  const expressImgInfo: EXPRESSIMAGEMessageV2['attach']['expressImgInfo'] = item.bodys['expressImgInfo'];
+export function ExpressImage(props: ComponentProps<EXPRESSIMAGESendData>): ReactElement {
+  const item: EXPRESSIMAGESendData = props.item;
+  const expressImgInfo: EXPRESSIMAGEMessageV2['attach']['expressImgInfo'] = item.bodys.expressImgInfo;
 
   return (
     <Basic item={ item }>

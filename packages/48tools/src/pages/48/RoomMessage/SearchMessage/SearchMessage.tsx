@@ -55,9 +55,8 @@ interface Page {
   pageSize: number;
 }
 
+export const PAGE_SIZE: number = 1_000; // 导出html的每页数据
 let serverSearchTimer: NodeJS.Timeout | null = null; // 搜索
-
-export const PAGE_SIZE: number = 1_000; // 每页数据
 
 /* redux selector */
 type RState = { roomMessage: RoomMessageInitialState };
@@ -150,11 +149,11 @@ function SearchMessage(props: {}): ReactElement {
       // 写入json文件
       for (let i: number = 0, j: number = homeMessageRaw.length, page: number = 1; i < j; i += 3_000, page++) {
         const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + 3_000));
-        const fileName: string = path.join(result.filePath, `${ page }.json`);
 
-        await fsP.writeFile(fileName, JSON.stringify({ message: dataSlice }, null, 2), {
-          encoding: 'utf8'
-        });
+        await fsP.writeFile(
+          path.join(result.filePath, `${ page }.json`),
+          JSON.stringify({ message: dataSlice }, null, 2),
+          { encoding: 'utf8' });
       }
 
       messageApi.success('成功保存数据！');

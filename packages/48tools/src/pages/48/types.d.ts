@@ -1,6 +1,7 @@
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
 import type { FieldData } from 'rc-field-form/es/interface';
 import type { WebWorkerChildItem } from '../../commonTypes';
+import type { MsgType } from './services/interface';
 
 export interface InLiveFormValue {
   type?: string;
@@ -366,6 +367,7 @@ export interface ZHONGQIU_ACTIVITY_LANTERN_FANSMessageV2 extends CustomMessageV2
   };
 }
 
+// 未格式化的原始数据，有些数据不想处理了
 export interface RawData extends CustomMessageV2 {
   type: 'raw';
   body: string;
@@ -399,9 +401,58 @@ export type FormatCustomMessage =
   | RawData;
 
 /* 保存的数据 */
-export interface SendDataItem {
-  bodys: string | Record<string, any>;
-  extInfo: string | Record<string, any>;
-  msgType: string;
+interface SendDataBase {
   msgTime: string;
+  extInfo: string | { user: UserV2 };
+  msgType: MsgType;
+  bodys: Record<string, any> | string;
 }
+
+export interface TEXTSendData extends SendDataBase {
+  msgType: 'TEXT';
+  bodys: string;
+}
+
+export interface REPLYSendData extends SendDataBase {
+  msgType: 'REPLY';
+  bodys: REPLYMessageV2['attach'];
+}
+
+export interface MEDIASendData extends SendDataBase {
+  msgType: 'IMAGE' | 'VIDEO' | 'AUDIO';
+  bodys: UploadFileResult;
+}
+
+export interface LIVEPUSHSendData extends SendDataBase {
+  msgType: 'LIVEPUSH';
+  bodys: LIVEPUSHMessageV2['attach'];
+}
+
+export interface FLIPCARDSendData extends SendDataBase {
+  msgType: 'FLIPCARD';
+  bodys: FLIPCARDMessageV2['attach'];
+}
+
+export interface FLIPCARD_AUDIOSendData extends SendDataBase {
+  msgType: 'FLIPCARD_AUDIO';
+  bodys: FLIPCARD_AUDIOMessageV2['attach'];
+}
+
+export interface FLIPCARD_VIDEOSendData extends SendDataBase {
+  msgType: 'FLIPCARD_VIDEO';
+  bodys: FLIPCARD_VIDEOMessageV2['attach'];
+}
+
+export interface EXPRESSIMAGESendData extends SendDataBase {
+  msgType: 'EXPRESSIMAGE';
+  bodys: EXPRESSIMAGEMessageV2['attach'];
+}
+
+export type SendDataItem = TEXTSendData
+  | REPLYSendData
+  | MEDIASendData
+  | LIVEPUSHSendData
+  | FLIPCARDSendData
+  | FLIPCARD_AUDIOSendData
+  | FLIPCARD_VIDEOSendData
+  | EXPRESSIMAGESendData;

@@ -24,7 +24,7 @@ async function createHtml({ data, filePath, page, length, time }: CreatePDFObjec
         pdfComponents.push(<HtmlComponents.Text key={ index } item={ item } />);
       } else if (item.msgType === 'REPLY') {
         pdfComponents.push(<HtmlComponents.Reply key={ index } item={ item } />);
-      } else if (['IMAGE', 'VIDEO', 'AUDIO'].includes(item.msgType)) {
+      } else if (item.msgType === 'IMAGE' || item.msgType === 'VIDEO' || item.msgType === 'AUDIO') {
         pdfComponents.push(<HtmlComponents.Media key={ index } item={ item } />);
       } else if (item.msgType === 'LIVEPUSH') {
         pdfComponents.push(<HtmlComponents.LivePush key={ index } item={ item } />);
@@ -43,9 +43,7 @@ async function createHtml({ data, filePath, page, length, time }: CreatePDFObjec
     }
   });
 
-  const htmlPath: string = path.join(filePath, `${ page }.html`);
-
-  await fsP.writeFile(htmlPath, `<!--
+  await fsP.writeFile(path.join(filePath, `${ page }.html`), `<!--
   Created by 48tools at ${ time }.
   https://github.com/duan602728596/48tools
 
