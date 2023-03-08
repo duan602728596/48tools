@@ -19,7 +19,7 @@ import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
-import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
+import getDownloadAndTranscodingWorker from '../function/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
@@ -39,7 +39,7 @@ import {
   type NetMediaServerPort
 } from '../../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages/downloadImages';
-import autoGrab from './autoGrab';
+import autoGrab from '../function/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';

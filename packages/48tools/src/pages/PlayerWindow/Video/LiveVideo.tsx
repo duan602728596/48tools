@@ -25,7 +25,7 @@ interface VideoProps {
 }
 
 /* 视频的播放 */
-function Video(props: VideoProps): ReactElement {
+function LiveVideo(props: VideoProps): ReactElement {
   const { playerInfo, info }: VideoProps = props;
   const childRef: MutableRefObject<ChildProcessWithoutNullStreams | undefined> = useRef();
   const flvPlayerRef: MutableRefObject<flvjs.Player | undefined> = useRef();
@@ -85,9 +85,9 @@ function Video(props: VideoProps): ReactElement {
   );
 }
 
-Video.propTypes = {
+LiveVideo.propTypes = {
   playerInfo: PropTypes.object,
   info: PropTypes.object
 };
 
-export default Video;
+export default LiveVideo;

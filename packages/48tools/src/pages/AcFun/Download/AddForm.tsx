@@ -14,7 +14,7 @@ import { Button, Modal, Form, Select, Input, Alert, message, type FormInstance }
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
-import { parseAcFunUrl } from './parseAcFunUrl';
+import { parseAcFunUrl } from './function/parseAcFunUrl';
 import { setAddDownloadList } from '../reducers/download';
 import type { Representation } from '../types';
 

@@ -26,7 +26,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import bilibiliAutoRecord from './bilibiliAutoRecord';
+import bilibiliAutoRecord from './function/bilibiliAutoRecord';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveItem } from '../types';
 import type { RoomInit, RoomPlayUrl } from '../services/interface';

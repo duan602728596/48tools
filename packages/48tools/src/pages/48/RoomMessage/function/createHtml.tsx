@@ -2,7 +2,7 @@ import { promises as fsP } from 'node:fs';
 import * as path from 'node:path';
 import type { ReactElement } from 'react';
 import { renderToString } from 'react-dom/server.browser';
-import * as HtmlComponents from '../SearchMessage/HTMLComponents';
+import * as HtmlComponents from './HTMLComponents';
 import type { SendDataItem } from '../../types';
 
 interface CreatePDFObject {

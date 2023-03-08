@@ -5,7 +5,7 @@ import {
   requestDouyinUser,
   type DouyinVideo
 } from '../../../services/douyin';
-import douyinCookieCache from '../../DouyinCookieCache';
+import douyinCookieCache from '../DouyinCookieCache';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import type { GetVideoUrlOnionContext } from '../../../types';
 

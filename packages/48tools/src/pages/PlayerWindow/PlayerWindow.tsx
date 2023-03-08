@@ -2,7 +2,7 @@ import { useState, useEffect, type ReactElement, type Dispatch as D, type SetSta
 import * as classNames from 'classnames';
 import style from './playerWindow.sass';
 import LiveInfo from './LiveInfo/LiveInfo';
-import Video from './Video/Video';
+import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
 import Danmu from './Danmu/Danmu';
 import { requestLiveRoomInfo } from '../48/services/pocket48';
@@ -52,7 +52,7 @@ function PlayerWindow(props: {}): ReactElement {
         {
           inRecord
             ? <RecordVideo playerInfo={ playerInfo } info={ info } />
-            : <Video playerInfo={ playerInfo } info={ info } />
+            : <LiveVideo playerInfo={ playerInfo } info={ info } />
         }
       </div>
       {

@@ -24,7 +24,7 @@ import * as dayjs from 'dayjs';
 import * as classNames from 'classnames';
 import style from './concat.sass';
 import { showOpenDialog, showSaveDialog } from '../../../utils/remote/dialog';
-import getConcatVideoWorker from './concatVideo.worker/getConcatVideoWorker';
+import getConcatVideoWorker from './function/concatVideo.worker/getConcatVideoWorker';
 import Header from '../../../components/Header/Header';
 import {
   setConcatListAdd,

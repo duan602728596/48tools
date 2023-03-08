@@ -29,7 +29,7 @@ import {
   setDownloadProgress,
   type Live48InitialState
 } from '../../reducers/live48';
-import { parseInVideoUrl, parseVideoItem } from '../parseLive48Website';
+import { parseInVideoUrl, parseVideoItem } from '../function/parseLive48Website';
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';

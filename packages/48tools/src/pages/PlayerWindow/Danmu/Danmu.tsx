@@ -17,7 +17,7 @@ import * as PropTypes from 'prop-types';
 import { Avatar, Switch } from 'antd';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
-import NimChatroomSocket from './NimChatroomSocket';
+import NimChatroomSocket from '../function/NimChatroomSocket';
 import { source } from '../../../utils/snh48';
 import type { LiveRoomInfo } from '../../48/services/interface';
 import type { LiveRoomMessage, LiveRoomTextMessage, LiveRoomTextCustom } from './messageType';

@@ -1,7 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { setInterval, clearInterval } from 'node:timers';
 import { parseArgsStringToArgv } from 'string-argv';
-import type { ProcessItem } from '../../types';
+import type { ProcessItem } from '../../../types';
 
 export type WorkerEventData = {
   type: 'start' | 'stop'; // 执行的方法

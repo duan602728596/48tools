@@ -20,7 +20,7 @@ import Header from '../../components/Header/Header';
 import WeiboLogin from '../../functionalComponents/WeiboLogin/WeiboLogin';
 import { IDBCursorAccountList } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import dbConfig from '../../utils/IDB/IDBConfig';
-import weiboCheckIn from './weiboCheckIn';
+import weiboCheckIn from './function/weiboCheckIn';
 import { setCheckIn, type WeiboSuperInitialState } from './reducers/weiboSuper';
 import type { WeiboLoginInitialState } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../commonTypes';

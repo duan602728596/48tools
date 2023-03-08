@@ -11,7 +11,7 @@ import * as classNames from 'classnames';
 import style from './cutForm.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 import { setCutListAdd } from '../reducers/videoCut';
-import { getFullTime } from './function';
+import { getFullTime } from './function/function';
 import type { CutItem } from '../types';
 
 const timeRules: Rule[] = [{

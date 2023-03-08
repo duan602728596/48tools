@@ -5,15 +5,15 @@ import {
   requestAudioInfo,
   requestBangumiVideoInfo,
   requestWebInterfaceView
-} from '../services/download';
-import type { InitialState, EpisodesItem, NextDataMediaInfo, NextData } from '../types';
+} from '../../services/download';
+import type { InitialState, EpisodesItem, NextDataMediaInfo, NextData } from '../../types';
 import type {
   VideoInfo,
   AudioInfo,
   BangumiVideoInfo,
   WebInterfaceViewData,
   WebInterfaceViewDataPageItem
-} from '../services/interface';
+} from '../../services/interface';
 
 // b站请求接口需要的key
 const APP_KEY: string = 'iVGUTjsxvpLeuDCf';

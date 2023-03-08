@@ -1,7 +1,7 @@
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import got, { type Headers } from 'got';
-import type { ProgressEventData } from '../../types';
+import type { ProgressEventData } from '../../../types';
 
 type WorkerEventData = {
   type: 'start';

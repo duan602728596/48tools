@@ -3,7 +3,7 @@ import type { MessageInstance } from 'antd/es/message/interface';
 import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import { store } from '../../../../store/store';
 import { setAddWorkerInLiveList, setStopInLiveList } from '../../reducers/live48';
-import { parseLiveUrl } from '../parseLive48Website';
+import { parseLiveUrl } from './parseLive48Website';
 import { getFFmpeg } from '../../../../utils/utils';
 import type { InLiveFormValue } from '../../types';
 import type { MessageEventData } from '../../../../commonTypes';

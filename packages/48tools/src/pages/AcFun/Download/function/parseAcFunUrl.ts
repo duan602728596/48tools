@@ -1,5 +1,5 @@
-import { requestAcFunHtml } from '../services/download';
-import type { KsPlayJson, PageInfo, Representation } from '../types';
+import { requestAcFunHtml } from '../../services/download';
+import type { KsPlayJson, PageInfo, Representation } from '../../types';
 
 /**
  * 解析window.pageInfo

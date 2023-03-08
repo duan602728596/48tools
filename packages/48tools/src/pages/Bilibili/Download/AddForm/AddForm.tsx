@@ -13,7 +13,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, type FormInstance } from 'antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo } from '../parseBilibiliUrl';
+import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
 
 /* 视频分类 */

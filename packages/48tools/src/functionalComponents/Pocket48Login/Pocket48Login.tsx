@@ -13,7 +13,7 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Modal, Form, Input, message, Avatar, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './pocket48Login.sass';
-import SMS from './SMS';
+import SMS from './function/SMS';
 import { requestSMS, requestMobileCodeLogin } from './services/pocket48Login';
 import { pick } from '../../utils/lodash';
 import { setUserInfo } from './reducers/pocket48Login';

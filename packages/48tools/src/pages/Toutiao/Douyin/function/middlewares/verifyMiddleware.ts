@@ -1,7 +1,7 @@
 import { setTimeout } from 'node:timers/promises';
 import { ipcRenderer } from 'electron';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
-import douyinCookieCache from '../../DouyinCookieCache';
+import douyinCookieCache from '../DouyinCookieCache';
 import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
 import { requestDouyinVideo, requestDouyinUser, type DouyinVideo } from '../../../services/douyin';
 

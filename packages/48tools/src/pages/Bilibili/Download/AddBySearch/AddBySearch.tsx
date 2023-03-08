@@ -17,7 +17,7 @@ import type { ColumnsType } from 'antd/es/table';
 import * as classNames from 'classnames';
 import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
-import { parseVideoList, parseVideoUrlV2 } from '../parseBilibiliUrl';
+import { parseVideoList, parseVideoUrlV2 } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
 import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
 

@@ -8,11 +8,11 @@ import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
-import type { MessageEventData } from '../../Bilibili/Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
+import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
+import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
 import VideoOrUserParse from './VideoOrUserParse/VideoOrUserParse';
-import douyinCookieCache from './DouyinCookieCache';
+import douyinCookieCache from './function/DouyinCookieCache';
 import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,

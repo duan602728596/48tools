@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from 'react';
 import * as PropTypes from 'prop-types';
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
 import { typeCNName } from '../MessageDisplay/MessageDisplay';
-import { PAGE_SIZE } from './SearchMessage';
+import { PAGE_SIZE } from '../SearchMessage/SearchMessage';
 import type {
   UserV2,
   SendDataItem,

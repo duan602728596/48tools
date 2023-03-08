@@ -1,13 +1,13 @@
 import * as path from 'node:path';
 import type { Store } from '@reduxjs/toolkit';
-import { store } from '../../../store/store';
-import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import { setAddLiveBilibiliChildList, setDeleteLiveBilibiliChildList } from '../reducers/live';
-import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
-import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
-import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
-import type { BilibiliLiveInitialState } from '../reducers/live';
-import type { RoomInit, RoomPlayUrl } from '../services/interface';
+import { store } from '../../../../store/store';
+import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { setAddLiveBilibiliChildList, setDeleteLiveBilibiliChildList } from '../../reducers/live';
+import { requestRoomInitData, requestRoomPlayerUrl } from '../../services/live';
+import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
+import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
+import type { BilibiliLiveInitialState } from '../../reducers/live';
+import type { RoomInit, RoomPlayUrl } from '../../services/interface';
 
 /* 自动录制直播 */
 async function bilibiliAutoRecord(): Promise<void> {

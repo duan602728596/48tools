@@ -9,7 +9,7 @@ import {
   type PayloadAction
 } from '@reduxjs/toolkit';
 import type { DownloadItem } from '../types';
-import type { MessageEventData } from '../Download/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
+import type { MessageEventData } from '../Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 
 // 下载列表
 export const bilibiliDownloadListAdapter: EntityAdapter<DownloadItem> = createEntityAdapter({
