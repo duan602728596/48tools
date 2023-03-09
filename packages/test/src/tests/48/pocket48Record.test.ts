@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import type { Locator, ElementHandle } from 'playwright';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
+import { testTitle } from '../../utils/testUtils.js';
 
 /* 口袋48录播下载测试 */
 export const title: string = '48/Pocket48Record Page';
@@ -18,7 +19,7 @@ export function callback(): void {
     await app.close();
   });
 
-  test('[25]Should get record data', async function(): Promise<void> {
+  test(testTitle(25, 'Should get record data'), async function(): Promise<void> {
     await testIdClick(app, 'pocket48-record-link');
 
     // 测试能够正常加载数据

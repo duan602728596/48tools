@@ -9,6 +9,7 @@ import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js'
 import * as config from '../../utils/config.js';
 import { getLiveList } from '../../services/services.js';
 import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from './liveRecordingProcess.js';
+import { testTitle } from '../../utils/testUtils.js';
 import type { BilibiliLiveListResponse } from '../../services/interface.js';
 
 /* B站直播测试 */
@@ -27,7 +28,7 @@ export function callback(): void {
     app = null;
   });
 
-  test('[44]Should get bilibili live video', async function(): Promise<void> {
+  test(testTitle(44, 'Should get bilibili live video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

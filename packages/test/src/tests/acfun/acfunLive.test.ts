@@ -11,6 +11,7 @@ import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js'
 import * as config from '../../utils/config.js';
 import { getAcfunLiveHtml } from '../../services/services.js';
 import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../bilibili/liveRecordingProcess.js';
+import { testTitle } from '../../utils/testUtils.js';
 
 /* A站直播测试 */
 export const title: string = 'AcFun/Live Page';
@@ -28,7 +29,7 @@ export function callback(): void {
     app = null;
   });
 
-  test('[32]Should get bilibili live video', async function(): Promise<void> {
+  test(testTitle(32, 'Should get bilibili live video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

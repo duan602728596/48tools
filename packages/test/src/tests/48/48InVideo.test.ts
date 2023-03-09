@@ -3,6 +3,7 @@ import type { Locator, ElementHandle } from 'playwright';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
+import { testTitle } from '../../utils/testUtils.js';
 
 /* 48官方公演录播下载测试 */
 export const title: string = '48/InVideo Page';
@@ -45,19 +46,19 @@ export function callback(): void {
     expect(images.length).toEqual(15);
   }
 
-  test('[21]Should get SNH48 public performance video data', async function(): Promise<void> {
+  test(testTitle(21, 'Should get SNH48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('SNH48');
   });
 
-  test('[22]Should get BEJ48 public performance video data', async function(): Promise<void> {
+  test(testTitle(22, 'Should get BEJ48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('BEJ48');
   });
 
-  test('[23]Should get GNZ48 public performance video data', async function(): Promise<void> {
+  test(testTitle(23, 'Should get GNZ48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('GNZ48');
   });
 
-  test('[24]Should get CKG48 public performance video data', async function(): Promise<void> {
+  test(testTitle(24, 'Should get CKG48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('CKG48');
   });
 }
