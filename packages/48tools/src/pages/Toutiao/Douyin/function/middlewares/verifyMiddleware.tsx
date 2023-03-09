@@ -1,10 +1,62 @@
 import { setTimeout } from 'node:timers/promises';
 import { ipcRenderer } from 'electron';
+import type { ReactElement, MouseEvent } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
+import { Button } from 'antd';
+import { CloseCircleFilled as IconCloseCircleFilled } from '@ant-design/icons';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import douyinCookieCache from '../DouyinCookieCache';
 import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
 import { requestDouyinVideo, requestDouyinUser, type DouyinVideo } from '../../../services/douyin';
 
+let closeBtnElement: HTMLElement | null = null;
+let closeBtnRoot: Root | null = null;
+
+/* 销毁关闭按钮 */
+function closeCaptchaDestroy(): void {
+  if (closeBtnElement) {
+    document.body.removeChild(closeBtnElement);
+    closeBtnElement = null;
+  }
+
+  if (closeBtnRoot) {
+    closeBtnRoot.unmount();
+    closeBtnRoot = null;
+  }
+}
+
+/* 显示关闭按钮 */
+function closeCaptchaDisplay(resolve: Function): void {
+  closeBtnElement = document.createElement('div');
+  document.body.appendChild(closeBtnElement);
+  closeBtnRoot = createRoot(closeBtnElement);
+
+  /* 关闭 */
+  function handleCaptchaCloseClick(event: MouseEvent): void {
+    const captchaContainer: HTMLElement | null = document.getElementById('captcha_container');
+
+    captchaContainer && document.body.removeChild(captchaContainer);
+    closeCaptchaDestroy();
+    resolve();
+  }
+
+  function Close(props: {}): ReactElement {
+    return (
+      <Button className="absolute z-[150000] top-[120px] right-[120px]"
+        type="primary"
+        danger={ true }
+        icon={ <IconCloseCircleFilled /> }
+        onClick={ handleCaptchaCloseClick }
+      >
+        关闭
+      </Button>
+    );
+  }
+
+  closeBtnRoot.render(<Close />);
+}
+
+/* 解析verify_data */
 function parseVerifyData(html: string): VerifyData {
   const verifyDataArr: string[] = html.split(/\n/);
   const verifyData: string | undefined = verifyDataArr.find((o: string): boolean => /const\s+verify_data\s+=\s+/i.test(o));
@@ -13,7 +65,7 @@ function parseVerifyData(html: string): VerifyData {
   return verifyDataJson;
 }
 
-export function verifyCookie(html: string, cookie: string): Promise<string> {
+export function verifyCookie(html: string, cookie: string | undefined): Promise<string | undefined> {
   return new Promise(async (resolve: Function, reject: Function): Promise<void> => {
     const verifyDataJson: VerifyData = parseVerifyData(html);
 
@@ -25,11 +77,13 @@ export function verifyCookie(html: string, cookie: string): Promise<string> {
         hideCloseBtn: true,
         showMode: 'mask',
         successCb(): void {
-          resolve(`${ cookie } s_v_web_id=${ verifyDataJson.fp };`); // 需要的完整的cookie
+          closeCaptchaDestroy();
+          resolve(`${ cookie ?? '' } s_v_web_id=${ verifyDataJson.fp };`); // 需要的完整的cookie
         }
       }
     }]);
     await toutiaosdk.captcha('render', [{ verify_data: verifyDataJson }]);
+    closeCaptchaDisplay(resolve);
   });
 }
 
@@ -42,7 +96,14 @@ async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): P
   }
 
   try {
-    const douyinCompleteCookie: string = await verifyCookie(ctx.html, ctx.cookie!);
+    const douyinCompleteCookie: string | undefined = await verifyCookie(ctx.html, ctx.cookie);
+
+    if (!douyinCompleteCookie) {
+      ctx.setUrlLoading(false);
+
+      return;
+    }
+
     let res: DouyinVideo | undefined;
 
     if (ctx.type === 'video') {

@@ -148,22 +148,23 @@ function VideoOrUserParse(props: {}): ReactElement {
 
           if (douyinVideo.body && douyinVideo.body.includes('验证码中间页')) {
             douyinCookie = await verifyCookie(douyinVideo.body, douyinAcCookie);
-
-            douyinCookieCache.setCookie(douyinCookie);
+            douyinCookie && douyinCookieCache.setCookie(douyinCookie);
           }
         }
       }
 
-      const res: AwemePostResponse = await requestAwemePost(douyinCookie!, videoQuery);
-      const awemeList: Array<AwemeItem> = (res?.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
+      if (douyinCookie) {
+        const res: AwemePostResponse = await requestAwemePost(douyinCookie!, videoQuery);
+        const awemeList: Array<AwemeItem> = (res?.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
 
-      setVideoQuery((prevState: VideoQuery): VideoQuery => ({
-        ...prevState,
-        maxCursor: res.max_cursor,
-        hasMore: res.has_more ?? 0
-      }));
-      setUserVideoList((prevState: Array<UserDataItem | AwemeItem>): Array<UserDataItem | AwemeItem> =>
-        prevState.concat(awemeList));
+        setVideoQuery((prevState: VideoQuery): VideoQuery => ({
+          ...prevState,
+          maxCursor: res.max_cursor,
+          hasMore: res.has_more ?? 0
+        }));
+        setUserVideoList((prevState: Array<UserDataItem | AwemeItem>): Array<UserDataItem | AwemeItem> =>
+          prevState.concat(awemeList));
+      }
     } catch (err) {
       console.error(err);
       messageApi.error('数据加载失败！');

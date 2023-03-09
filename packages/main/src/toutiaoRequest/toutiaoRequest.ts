@@ -12,7 +12,7 @@ let fpCache: string;
 /* 拦截头条的请求，并赋值fp */
 export function toutiaoRequestInit(): void {
   session.defaultSession.webRequest.onBeforeRequest({
-    urls: ['*://verify.snssdk.com/*']
+    urls: ['*://verify.snssdk.com/*', '*://verify.zijieapi.com/*']
   }, function(details: OnBeforeRequestListenerDetails, callback: (res: CallbackResponse) => void): void {
     if (details.url.includes('captcha/get') || details.url.includes('captcha/verify')) {
       const urlResult: URL = new URL(details.url);
