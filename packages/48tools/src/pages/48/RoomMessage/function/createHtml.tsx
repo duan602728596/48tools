@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server.browser';
 import * as HtmlComponents from './HTMLComponents';
 import type { SendDataItem } from '../../types';
 
-interface CreatePDFObject {
+interface CreateHtmlObject {
   data: Array<SendDataItem>; // 数据
   filePath: string;          // 根目录
   page: number;              // 索引
@@ -13,8 +13,8 @@ interface CreatePDFObject {
   time: string;              // 文件创建时间
 }
 
-/* 生成PDF */
-async function createHtml({ data, filePath, page, length, time }: CreatePDFObject): Promise<void> {
+/* 生成html */
+async function createHtml({ data, filePath, page, length, time }: CreateHtmlObject): Promise<void> {
   // 创建组件
   const pdfComponents: Array<ReactElement> = [];
 
