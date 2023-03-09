@@ -31,7 +31,7 @@ function closeCaptchaDisplay(resolve: Function): void {
   document.body.appendChild(closeBtnElement);
   closeBtnRoot = createRoot(closeBtnElement);
 
-  /* 关闭 */
+  // 关闭验证码
   function handleCaptchaCloseClick(event: MouseEvent): void {
     const captchaContainer: HTMLElement | null = document.getElementById('captcha_container');
 
@@ -42,7 +42,7 @@ function closeCaptchaDisplay(resolve: Function): void {
 
   function Close(props: {}): ReactElement {
     return (
-      <Button className="absolute z-[150000] top-[120px] right-[120px]"
+      <Button className="absolute z-[150000] top-[50%] left-[50%] mt-[-170px] ml-[88px]"
         type="primary"
         danger={ true }
         icon={ <IconCloseCircleFilled /> }
@@ -65,12 +65,34 @@ function parseVerifyData(html: string): VerifyData {
   return verifyDataJson;
 }
 
+/**
+ * 弹出验证码并获取cookie
+ * @param { string } html: 验证码中间页的html
+ * @param { string | undefined } cookie: 显示的cookie
+ * @return { string | undefined } 返回cookie或关闭时返回undefined
+ */
 export function verifyCookie(html: string, cookie: string | undefined): Promise<string | undefined> {
   return new Promise(async (resolve: Function, reject: Function): Promise<void> => {
     const verifyDataJson: VerifyData = parseVerifyData(html);
 
     ipcRenderer.send('toutiao-fp', verifyDataJson.fp); // 将fp发送到主线程
     await setTimeout(2_000);
+
+    // 监听验证码的出现
+    let mutationObserver: MutationObserver | null = new MutationObserver((mutations: MutationRecord[]): void => {
+      if (
+        mutations.some((mutation: MutationRecord) =>
+          mutation?.addedNodes?.length
+            ? Array.from(mutation.addedNodes).some((node: Node) => node['id'] === 'captcha_container')
+            : false)
+      ) {
+        closeCaptchaDisplay(resolve);
+        mutationObserver!.disconnect();
+        mutationObserver = null;
+      }
+    });
+
+    mutationObserver.observe(document.body, { childList: true });
     await toutiaosdk.captcha('init', [{
       commonOptions: { aid: 6383, iid: '0', did: '0' },
       captchaOptions: {
@@ -83,7 +105,6 @@ export function verifyCookie(html: string, cookie: string | undefined): Promise<
       }
     }]);
     await toutiaosdk.captcha('render', [{ verify_data: verifyDataJson }]);
-    closeCaptchaDisplay(resolve);
   });
 }
 
