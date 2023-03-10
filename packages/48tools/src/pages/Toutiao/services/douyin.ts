@@ -4,7 +4,6 @@ import * as toutiaosdk from '../sdk/toutiaosdk';
 import type { AwemePostResponse } from './interface';
 import type { VideoQuery } from '../types';
 
-
 // 抖音可能返回中间页，需要根据cookie判断一下
 export interface DouyinVideo {
   type: 'html' | 'cookie';
@@ -12,43 +11,7 @@ export interface DouyinVideo {
   body: string;
 }
 
-/**
- * 获取抖音网页的html
- * @param { string } id: 视频id
- * @param { string } cookie: __ac_nonce和__ac_signature
- */
-export async function requestDouyinVideoHtml(id: string, cookie: string = ''): Promise<DouyinVideo> {
-  const res: GotResponse<string> = await got.get(`https://www.douyin.com/video/${ id }`, {
-    responseType: 'text',
-    headers: {
-      'User-Agent': pcUserAgent,
-      Cookie: '__ac_referer=__ac_blank;' + cookie,
-      Host: 'www.douyin.com'
-    }
-  });
-
-  // 判断是否有__ac_nonce
-  if (res.headers['set-cookie']) {
-    const val: string | undefined = res.headers['set-cookie'].find((o: string): boolean => o.includes('__ac_nonce'));
-
-    if (val) {
-      return {
-        type: 'cookie',
-        value: val.split(/s*;s*/)[0].split(/=/)[1],
-        body: res.body
-      };
-    }
-  }
-
-  return {
-    type: 'html',
-    value: res.body,
-    body: res.body
-  };
-}
-
-type RequestDouyinHtmlReturn =
-  (urlCb: string | ((url?: string) => string), cookie?: string) => Promise<DouyinVideo>;
+type RequestDouyinHtmlReturn = (urlCb: string | ((url?: string) => string), cookie?: string) => Promise<DouyinVideo>;
 
 /**
  * 获取抖音网页的html
