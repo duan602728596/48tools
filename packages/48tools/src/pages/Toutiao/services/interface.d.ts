@@ -9,7 +9,7 @@ export interface AwemeItem {
   video: {
     bit_rate: Array<{
       play_addr: AwemeItemRate;
-      download_addr: AwemeItemRate;
+      download_addr?: AwemeItemRate;
     }>;
   };
   aweme_id: string;
