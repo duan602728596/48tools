@@ -1,12 +1,8 @@
-import { match, type MatchFunction, type Match } from 'path-to-regexp';
-import {
-  requestDouyinUrl,
-  requestDouyinVideo,
-  requestDouyinUser,
-  type DouyinVideo
-} from '../../../services/douyin';
+import { match, type Match, type MatchFunction } from 'path-to-regexp';
+import { requestDouyinUrl, requestDouyinUser, requestDouyinVideo, type DouyinVideo } from '../../../services/douyin';
 import douyinCookieCache from '../DouyinCookieCache';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
+import { DouyinUrlType } from '../toutiao.enum';
 import type { GetVideoUrlOnionContext } from '../../../types';
 
 const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接
@@ -23,7 +19,7 @@ const douyinShareVideoUrlMatch: MatchFunction = match('/share/video/:videoId');
 const douyinShareUserUrlMatch: MatchFunction = match('/share/user/:userId');
 
 interface TypeAndId {
-  type: 'video' | 'user' | undefined;
+  type: DouyinUrlType | undefined;
   id: string | undefined;
 }
 
@@ -34,7 +30,7 @@ interface TypeAndId {
  * @param { GetVideoUrlOnionContext } ctx
  */
 async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefined, ctx: GetVideoUrlOnionContext): Promise<TypeAndId> {
-  let type: 'video' | 'user' | undefined;
+  let type: DouyinUrlType | undefined;
   let id: string | undefined;
   const modalId: string | null = urlParse.searchParams.get('modal_id');
 
@@ -54,27 +50,27 @@ async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefine
         const matchResult: Match = douyinShareVideoUrlMatch(new URL(href).pathname);
 
         if (typeof matchResult === 'object') {
-          type = 'video';
+          type = DouyinUrlType.Video;
           id = matchResult.params['videoId'];
         }
       } else {
         const matchResult: Match = douyinShareUserUrlMatch(new URL(href).pathname);
 
         if (typeof matchResult === 'object') {
-          type = 'user';
+          type = DouyinUrlType.User;
           id = matchResult.params['userId'];
         }
       }
     }
   } else if (modalId) {
-    type = 'video';
+    type = DouyinUrlType.Video;
     id = modalId;
   } else if (douyinRegexp.test(urlParse.hostname) && douyinVideoRegexp.test(urlParse.pathname)) {
     // /video/:videoId
     const matchResult: Match = douyinVideoUrlMatch(urlParse.pathname);
 
     if (typeof matchResult === 'object') {
-      type = 'video';
+      type = DouyinUrlType.Video;
       id = matchResult.params['videoId'];
     }
   } else if (douyinRegexp.test(urlParse.hostname) && douyinUserRegexp.test(urlParse.pathname)) {
@@ -82,7 +78,7 @@ async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefine
     const matchResult: Match = douyinUserUrlMatch(urlParse.pathname);
 
     if (typeof matchResult === 'object') {
-      type = 'user';
+      type = DouyinUrlType.User;
       id = matchResult.params['userId'];
     }
   }
@@ -95,14 +91,14 @@ async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefine
  * @param { GetVideoUrlOnionContext } ctx
  */
 function getTypeAndId(ctx: GetVideoUrlOnionContext): TypeAndId {
-  let type: 'video' | 'user' | undefined;
+  let type: DouyinUrlType | undefined;
   let id: string | undefined;
 
   if (videoIdRegexp.test(ctx.value)) {
-    type = 'video';
+    type = DouyinUrlType.Video;
     id = ctx.value;
   } else {
-    type = 'user';
+    type = DouyinUrlType.User;
     id = ctx.value;
   }
 
@@ -146,9 +142,9 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
       ctx.id = result.id;
     }
 
-    if (ctx.type === 'video') {
+    if (ctx.type === DouyinUrlType.Video) {
       douyinVideo = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinCookie);
-    } else {
+    } else if (ctx.type === DouyinUrlType.User) {
       douyinVideo = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinCookie);
     }
 
@@ -159,21 +155,21 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
     }
 
     // 根据请求的结果判断是否继续请求
-    if ((douyinVideo as DouyinVideo).type === 'html') {
-      html = (douyinVideo as DouyinVideo).body;
+    if (douyinVideo.type === 'html') {
+      html = douyinVideo.body;
     } else {
       // 计算__ac_signature并获取html
-      const acSignature: string = await toutiaosdk.acrawler('sign', ['', (douyinVideo as DouyinVideo).value]);
-      const douyinAcCookie: string = `__ac_nonce=${ (douyinVideo as DouyinVideo).value }; __ac_signature=${ acSignature };`;
+      const acSignature: string = await toutiaosdk.acrawler('sign', ['', douyinVideo.value]);
+      const douyinAcCookie: string = `__ac_nonce=${ douyinVideo.value }; __ac_signature=${ acSignature };`;
 
-      if (ctx.type === 'video') {
+      if (ctx.type === DouyinUrlType.Video) {
         douyinVideo = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
-      } else {
+      } else if (ctx.type === DouyinUrlType.User) {
         douyinVideo = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
       }
 
       ctx.cookie = douyinAcCookie;
-      html = (douyinVideo as DouyinVideo).body;
+      html = douyinVideo.body;
     }
 
     ctx.html = html;

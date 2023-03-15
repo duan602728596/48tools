@@ -154,7 +154,7 @@ function VideoOrUserParse(props: {}): ReactElement {
       }
 
       if (douyinCookie) {
-        const res: AwemePostResponse = await requestAwemePost(douyinCookie!, videoQuery);
+        const res: AwemePostResponse = await requestAwemePost(douyinCookie, videoQuery);
         const awemeList: Array<AwemeItem> = (res?.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
 
         setVideoQuery((prevState: VideoQuery): VideoQuery => ({

@@ -1,3 +1,4 @@
+import { DouyinUrlType } from '../toutiao.enum';
 import type { GetVideoUrlOnionContext } from '../../../types';
 import type {
   ScriptRendedData,
@@ -26,7 +27,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
   const data: string = decodeURIComponent(rendedData.innerText);
   const json: ScriptRendedData | UserScriptRendedData = JSON.parse(data);
 
-  if (ctx.type === 'video') {
+  if (ctx.type === DouyinUrlType.Video) {
     // 处理视频
     const cVersion: CVersionObj | undefined = Object.values(json).find(
       (o: C0Obj | CVersionObj): o is CVersionObj => typeof o === 'object' && ('aweme' in o));
@@ -61,7 +62,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
     } else {
       ctx.messageApi.warning('视频不存在！');
     }
-  } else if (ctx.type === 'user') {
+  } else if (ctx.type === DouyinUrlType.User) {
     // 处理用户
     const userItemArray: Array<UserItem1 | UserItem2 | string> = Object.values(json);
     const userItem1: UserItem1 | undefined = userItemArray.find(

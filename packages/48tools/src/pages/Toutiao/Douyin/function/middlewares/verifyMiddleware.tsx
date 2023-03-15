@@ -6,8 +6,9 @@ import { Button } from 'antd';
 import { CloseCircleFilled as IconCloseCircleFilled } from '@ant-design/icons';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import douyinCookieCache from '../DouyinCookieCache';
-import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
+import { DouyinUrlType } from '../toutiao.enum';
 import { requestDouyinVideo, requestDouyinUser, type DouyinVideo } from '../../../services/douyin';
+import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
 
 let closeBtnElement: HTMLElement | null = null;
 let closeBtnRoot: Root | null = null;
@@ -127,11 +128,11 @@ async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): P
 
     let res: DouyinVideo | undefined;
 
-    if (ctx.type === 'video') {
+    if (ctx.type === DouyinUrlType.Video) {
       res = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinCompleteCookie);
     }
 
-    if (ctx.type === 'user') {
+    if (ctx.type === DouyinUrlType.User) {
       res = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinCompleteCookie);
     }
 

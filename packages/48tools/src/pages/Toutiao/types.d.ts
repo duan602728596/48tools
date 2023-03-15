@@ -1,6 +1,7 @@
 import type { Dispatch as D, SetStateAction as S } from 'react';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { AwemeItem } from './services/interface';
+import type { DouyinUrlType } from './Douyin/function/toutiao.enum';
 
 type noProtocolUrl = `//${ string }`;
 
@@ -142,7 +143,7 @@ export interface GetVideoUrlOnionContext {
   messageApi: MessageInstance;
   html?: string;
   cookie?: string;
-  type?: 'video' | 'user';
+  type?: DouyinUrlType;
   value: string;
   id?: string;
   setUrlLoading: D<S<boolean>>;
