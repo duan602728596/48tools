@@ -6,7 +6,7 @@ import { Button } from 'antd';
 import { CloseCircleFilled as IconCloseCircleFilled } from '@ant-design/icons';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import douyinCookieCache from '../DouyinCookieCache';
-import { DouyinUrlType } from '../toutiao.enum';
+import { DouyinUrlType } from '../parser';
 import { requestDouyinVideo, requestDouyinUser } from '../../../services/douyin';
 import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
 import type { DouyinHtmlResponseType } from '../../../services/interface';
@@ -112,13 +112,14 @@ export function verifyCookie(html: string, cookie: string | undefined): Promise<
 
 /* 验证码中间页 */
 async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
-  if (!(ctx.html && ctx.html.includes('验证码中间页'))) {
+  if (ctx.data || !ctx?.html?.includes('验证码中间页')) {
     next();
 
     return;
   }
 
   try {
+    // 验证码获取到的cookie
     const douyinCompleteCookie: string | undefined = await verifyCookie(ctx.html, ctx.cookie);
 
     if (!douyinCompleteCookie) {
@@ -127,14 +128,15 @@ async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): P
       return;
     }
 
+    // 获取数据
     let res: DouyinHtmlResponseType | undefined;
 
-    if (ctx.type === DouyinUrlType.Video) {
-      res = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinCompleteCookie);
+    if (ctx.parseResult.type === DouyinUrlType.Video) {
+      res = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCompleteCookie);
     }
 
-    if (ctx.type === DouyinUrlType.User) {
-      res = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinCompleteCookie);
+    if (ctx.parseResult.type === DouyinUrlType.User) {
+      res = await requestDouyinUser((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCompleteCookie);
     }
 
     if (res && res.type === 'html') {

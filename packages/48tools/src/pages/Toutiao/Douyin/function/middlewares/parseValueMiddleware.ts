@@ -1,109 +1,38 @@
-import { match, type Match, type MatchFunction } from 'path-to-regexp';
-import { requestDouyinUrl, requestDouyinUser, requestDouyinVideo } from '../../../services/douyin';
+import { requestDouyinUser, requestDouyinVideo } from '../../../services/douyin';
 import douyinCookieCache from '../DouyinCookieCache';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
-import { DouyinUrlType } from '../toutiao.enum';
+import parser, { DouyinUrlType, type ParseResult } from '../parser';
+import { requestTtwidCookie, requestAwemePostReturnType } from '../../../services/douyin';
 import type { GetVideoUrlOnionContext } from '../../../types';
 import type { DouyinHtmlResponseType } from '../../../services/interface';
 
-const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接
-const iesdouyinRegexp: RegExp = /www.iesdouyin.com/i; // 抖音分享长链接
-const iesdouyinhrefHtmlRegexp: RegExp = /<a href="https?:\/\/www\.iesdouyin\.com\//i; // 是一个链接
-const shareVideo: RegExp = /share\/video/i;       // 分享视频
-const douyinRegexp: RegExp = /www\.douyin\.com/i;     // 抖音域名
-const douyinVideoRegexp: RegExp = /\/video\/[0-9]+/i; // 抖音视频
-const videoIdRegexp: RegExp = /^[0-9]+$/;         // 视频id
-const douyinUserRegexp: RegExp = /\/user\//i;     // 抖音用户
-const douyinVideoUrlMatch: MatchFunction = match('/video/:videoId');
-const douyinUserUrlMatch: MatchFunction = match('/user/:userId');
-const douyinShareVideoUrlMatch: MatchFunction = match('/share/video/:videoId');
-const douyinShareUserUrlMatch: MatchFunction = match('/share/user/:userId');
-
-interface TypeAndId {
-  type: DouyinUrlType | undefined;
-  id: string | undefined;
-}
-
 /**
- * URL解析地址
- * @param { URL } urlParse: 地址的解析
- * @param { string | undefined } cookie: 请求时使用的cookie
+ * 获取抖音的数据
  * @param { GetVideoUrlOnionContext } ctx
+ * @param { string | undefined } cookie
  */
-async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefined, ctx: GetVideoUrlOnionContext): Promise<TypeAndId> {
-  let type: DouyinUrlType | undefined;
-  let id: string | undefined;
-  const modalId: string | null = urlParse.searchParams.get('modal_id');
+async function getDouyinData(ctx: GetVideoUrlOnionContext, cookie: string | undefined): Promise<DouyinHtmlResponseType | null> {
+  let douyinResponse: DouyinHtmlResponseType | null = null; // 抖音请求的结果
 
-  if (vdouinRegexp.test(urlParse.hostname)) {
-    // 处理分享链接
-    const douyinShareVideo: DouyinHtmlResponseType = await requestDouyinUrl(ctx.value, cookie);
-
-    if (
-      douyinShareVideo.type === 'html'
-      && iesdouyinhrefHtmlRegexp.test(douyinShareVideo.html)
-      && iesdouyinRegexp.test(douyinShareVideo.html)
-    ) {
-      const parseDocument: Document = new DOMParser().parseFromString(douyinShareVideo.html, 'text/html');
-      const href: string = parseDocument.querySelector('a')!.getAttribute('href')!;
-
-      if (shareVideo.test(href)) {
-        const matchResult: Match = douyinShareVideoUrlMatch(new URL(href).pathname);
-
-        if (typeof matchResult === 'object') {
-          type = DouyinUrlType.Video;
-          id = matchResult.params['videoId'];
-        }
-      } else {
-        const matchResult: Match = douyinShareUserUrlMatch(new URL(href).pathname);
-
-        if (typeof matchResult === 'object') {
-          type = DouyinUrlType.User;
-          id = matchResult.params['userId'];
-        }
-      }
+  if (ctx.parseResult.type === DouyinUrlType.Video) {
+    douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, cookie);
+  } else if (ctx.parseResult.type === DouyinUrlType.User) {
+    // 先请求接口
+    if (cookie) {
+      douyinResponse = await requestAwemePostReturnType(cookie, {
+        secUserId: ctx.parseResult.id,
+        maxCursor: new Date().getTime(),
+        hasMore: 1
+      });
     }
-  } else if (modalId) {
-    type = DouyinUrlType.Video;
-    id = modalId;
-  } else if (douyinRegexp.test(urlParse.hostname) && douyinVideoRegexp.test(urlParse.pathname)) {
-    // /video/:videoId
-    const matchResult: Match = douyinVideoUrlMatch(urlParse.pathname);
 
-    if (typeof matchResult === 'object') {
-      type = DouyinUrlType.Video;
-      id = matchResult.params['videoId'];
-    }
-  } else if (douyinRegexp.test(urlParse.hostname) && douyinUserRegexp.test(urlParse.pathname)) {
-    // /user/:userId
-    const matchResult: Match = douyinUserUrlMatch(urlParse.pathname);
-
-    if (typeof matchResult === 'object') {
-      type = DouyinUrlType.User;
-      id = matchResult.params['userId'];
+    // 接口失败回退到html
+    if (!(douyinResponse?.type === 'userApi' && douyinResponse?.data)) {
+      douyinResponse = await requestDouyinUser((u: string) => `${ u }${ ctx.parseResult.id }`, cookie);
     }
   }
 
-  return { type, id };
-}
-
-/**
- * 非URL解析ID
- * @param { GetVideoUrlOnionContext } ctx
- */
-function getTypeAndId(ctx: GetVideoUrlOnionContext): TypeAndId {
-  let type: DouyinUrlType | undefined;
-  let id: string | undefined;
-
-  if (videoIdRegexp.test(ctx.value)) {
-    type = DouyinUrlType.Video;
-    id = ctx.value;
-  } else {
-    type = DouyinUrlType.User;
-    id = ctx.value;
-  }
-
-  return { type, id };
+  return douyinResponse;
 }
 
 /**
@@ -119,34 +48,33 @@ function getTypeAndId(ctx: GetVideoUrlOnionContext): TypeAndId {
  * https://v.douyin.com/kG3Cu1b/
  */
 async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
-  let urlParse: URL | undefined = undefined;                // url的解析结果
   let douyinResponse: DouyinHtmlResponseType | null = null; // 抖音请求的结果
   let douyinCookie: string | undefined = undefined;         // 抖音的cookie
+  let ttwidCookie: string | undefined = undefined;
 
   douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
 
   try {
-    urlParse = new URL(ctx.value);
-  } catch { /* noop */ }
+    // 获取ttwid的cookie
+    if (!douyinCookie) {
+      const ttwid: string | undefined = await requestTtwidCookie();
 
-  try {
-    if (urlParse) {
-      const result: TypeAndId = await getTypeAndIdWithUrlParse(urlParse, douyinCookie, ctx);
-
-      ctx.type = result.type;
-      ctx.id = result.id;
-    } else {
-      const result: TypeAndId = getTypeAndId(ctx);
-
-      ctx.type = result.type;
-      ctx.id = result.id;
+      ttwid && (ttwidCookie = `${ ttwid };`);
     }
 
-    if (ctx.type === DouyinUrlType.Video) {
-      douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinCookie);
-    } else if (ctx.type === DouyinUrlType.User) {
-      douyinResponse = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinCookie);
+    // 解析url
+    const parseResult: ParseResult | undefined = await parser(ctx.value, douyinCookie ?? ttwidCookie);
+
+    if (!parseResult) {
+      ctx.setUrlLoading(false);
+
+      return;
     }
+
+    ctx.parseResult = parseResult;
+
+    // 第一次请求，可能会有验证码
+    douyinResponse = await getDouyinData(ctx, douyinCookie ?? ttwidCookie);
 
     if (douyinResponse === null) {
       ctx.setUrlLoading(false);
@@ -158,18 +86,29 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
     if (douyinResponse.type === 'cookie') {
       // 计算__ac_signature并获取html
       const acSignature: string = await toutiaosdk.acrawler('sign', ['', douyinResponse.cookie]);
-      const douyinAcCookie: string = `__ac_nonce=${ douyinResponse.cookie }; __ac_signature=${ acSignature };`;
+      let douyinAcCookie: string = `__ac_nonce=${ douyinResponse.cookie }; __ac_signature=${ acSignature };`;
 
-      if (ctx.type === DouyinUrlType.Video) {
-        douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
-      } else if (ctx.type === DouyinUrlType.User) {
-        douyinResponse = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
+      // 加上ttwid
+      if (ttwidCookie) {
+        douyinAcCookie += `${ ttwidCookie } ${ douyinAcCookie }`;
       }
 
+      douyinResponse = await getDouyinData(ctx, douyinAcCookie);
       ctx.cookie = douyinAcCookie;
     }
 
-    ctx.html = douyinResponse.html;
+    if (douyinResponse === null) {
+      ctx.setUrlLoading(false);
+
+      return;
+    }
+
+    if (douyinResponse.type === 'userApi') {
+      ctx.data = douyinResponse.data;
+    } else {
+      ctx.html = douyinResponse.html; // 可能是验证码中间页
+    }
+
     next();
   } catch (err) {
     console.error(err);

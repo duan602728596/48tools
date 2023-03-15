@@ -1,5 +1,4 @@
-import { DouyinUrlType } from '../toutiao.enum';
-import type { GetVideoUrlOnionContext } from '../../../types';
+import { DouyinUrlType } from '../parser';
 import type {
   ScriptRendedData,
   CVersionObj,
@@ -9,16 +8,53 @@ import type {
   UserScriptRendedData,
   UserItem1,
   UserItem2,
-  UserDataItem
+  UserDataItem,
+  GetVideoUrlOnionContext
 } from '../../../types';
+import type { AwemeItem } from '../../../services/interface';
+
+/* 有api时的渲染 */
+function userApiRender(ctx: GetVideoUrlOnionContext): void {
+  if (ctx.data) {
+    const awemeList: Array<AwemeItem> = (ctx.data.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
+
+    if (awemeList.length > 0) {
+      ctx.setUserVideoList(awemeList);
+      ctx.setVideoQuery({
+        secUserId: ctx.parseResult.id,
+        maxCursor: ctx.data.max_cursor,
+        hasMore: ctx.data.has_more
+      });
+      ctx.setUserTitle(awemeList[0].author.nickname);
+      ctx.setUserModalVisible(true);
+    } else {
+      ctx.messageApi.warning('该用户没有视频！');
+    }
+  }
+
+  ctx.setUrlLoading(false);
+}
 
 /* 解析RENDER_DATA */
 function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): void {
-  const parseDocument: Document = new DOMParser().parseFromString(ctx.html!, 'text/html');
+  if (ctx.data) {
+    userApiRender(ctx);
+
+    return;
+  }
+
+  if (!ctx.html) {
+    ctx.messageApi.error('找不到相关信息！');
+    ctx.setUrlLoading(false);
+
+    return;
+  }
+
+  const parseDocument: Document = new DOMParser().parseFromString(ctx.html, 'text/html');
   const rendedData: HTMLElement | null = parseDocument.getElementById('RENDER_DATA');
 
   if (!rendedData) {
-    ctx.messageApi.error('找不到视频相关信息！');
+    ctx.messageApi.error('找不到相关信息！');
     ctx.setUrlLoading(false);
 
     return;
@@ -27,7 +63,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
   const data: string = decodeURIComponent(rendedData.innerText);
   const json: ScriptRendedData | UserScriptRendedData = JSON.parse(data);
 
-  if (ctx.type === DouyinUrlType.Video) {
+  if (ctx.parseResult.type === DouyinUrlType.Video) {
     // 处理视频
     const cVersion: CVersionObj | undefined = Object.values(json).find(
       (o: C0Obj | CVersionObj): o is CVersionObj => typeof o === 'object' && ('aweme' in o));
@@ -62,7 +98,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
     } else {
       ctx.messageApi.warning('视频不存在！');
     }
-  } else if (ctx.type === DouyinUrlType.User) {
+  } else if (ctx.parseResult.type === DouyinUrlType.User) {
     // 处理用户
     const userItemArray: Array<UserItem1 | UserItem2 | string> = Object.values(json);
     const userItem1: UserItem1 | undefined = userItemArray.find(
@@ -84,7 +120,6 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       ctx.setVideoQuery({
         secUserId: userItem2.uid,
         maxCursor: userItem2.post.maxCursor,
-        webId: userItem1.odin.user_unique_id,
         hasMore: userItem2.post.hasMore
       });
       ctx.setUserTitle(userItem2.user.user.nickname);

@@ -13,6 +13,10 @@ export interface AwemeItem {
     }>;
   };
   aweme_id: string;
+  create_time: number;
+  author: {
+    nickname: string;
+  };
 }
 
 export interface AwemePostResponse {
@@ -32,4 +36,9 @@ export interface DouyinHtmlType {
   html: string;
 }
 
-export type DouyinHtmlResponseType = DouyinHtmlCookieType | DouyinHtmlType;
+export interface DouyinUserApiType {
+  type: 'userApi';
+  data: AwemePostResponse | undefined;
+}
+
+export type DouyinHtmlResponseType = DouyinHtmlCookieType | DouyinHtmlType | DouyinUserApiType;

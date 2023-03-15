@@ -22,7 +22,7 @@ import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMi
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
 import { setAddDownloadList } from '../../reducers/douyin';
 import douyinCookieCache from '../function/DouyinCookieCache';
-import { requestAwemePost, requestDouyinUser } from '../../services/douyin';
+import { requestAwemePost, requestDouyinUser, requestTtwidCookie } from '../../services/douyin';
 import * as toutiaosdk from '../../sdk/toutiaosdk';
 import type { DownloadUrlItem, UserDataItem, VideoQuery } from '../../types';
 import type { AwemePostResponse, AwemeItem, DouyinHtmlResponseType } from '../../services/interface';
@@ -130,31 +130,11 @@ function VideoOrUserParse(props: {}): ReactElement {
 
     setUserVideoLoadDataLoading(true);
 
-    try {
-      let douyinCookie: string | undefined = undefined;
+    // 请求数据并变更状态
+    const response: Function = async (cookie: string): Promise<boolean> => {
+      const res: AwemePostResponse | string = await requestAwemePost(cookie, videoQuery);
 
-      douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
-
-      // 重新请求验证码数据
-      if (!douyinCookie) {
-        const sxrId: string = 'MS4wLjABAAAAGSCToXHJLbkSaouYNJU68raa3TYVliiEW0tWp2dpNio';
-        const sxrDouyinUser: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
-
-        if (sxrDouyinUser.type === 'cookie') {
-          // 计算__ac_signature并获取html
-          const acSignature: string = await toutiaosdk.acrawler('sign', ['', sxrDouyinUser.cookie]);
-          const douyinAcCookie: string = `__ac_nonce=${ sxrDouyinUser.cookie }; __ac_signature=${ acSignature };`;
-          const douyinVideo: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinAcCookie);
-
-          if (douyinVideo.html && douyinVideo.html.includes('验证码中间页')) {
-            douyinCookie = await verifyCookie(douyinVideo.html, douyinAcCookie);
-            douyinCookie && douyinCookieCache.setCookie(douyinCookie);
-          }
-        }
-      }
-
-      if (douyinCookie) {
-        const res: AwemePostResponse = await requestAwemePost(douyinCookie, videoQuery);
+      if (typeof res === 'object') {
         const awemeList: Array<AwemeItem> = (res?.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
 
         setVideoQuery((prevState: VideoQuery): VideoQuery => ({
@@ -164,6 +144,42 @@ function VideoOrUserParse(props: {}): ReactElement {
         }));
         setUserVideoList((prevState: Array<UserDataItem | AwemeItem>): Array<UserDataItem | AwemeItem> =>
           prevState.concat(awemeList));
+
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    try {
+      let douyinCookie: string | undefined = undefined;
+
+      douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
+
+      if (!douyinCookie) {
+        const ttwidCookie: string | undefined = await requestTtwidCookie();
+
+        ttwidCookie && (douyinCookie = `${ ttwidCookie };`);
+      }
+
+      if (douyinCookie) {
+        if (!await response(douyinCookie)) {
+          const sxrId: string = 'MS4wLjABAAAAGSCToXHJLbkSaouYNJU68raa3TYVliiEW0tWp2dpNio';
+          const sxrDouyinUser: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
+
+          if (sxrDouyinUser.type === 'cookie') {
+            // 计算__ac_signature并获取html
+            const acSignature: string = await toutiaosdk.acrawler('sign', ['', sxrDouyinUser.cookie]);
+            const douyinAcCookie: string = `__ac_nonce=${ sxrDouyinUser.cookie }; __ac_signature=${ acSignature };`;
+            const douyinVideo: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinAcCookie);
+
+            if (douyinVideo.type === 'html' && douyinVideo.html && douyinVideo.html.includes('验证码中间页')) {
+              douyinCookie = await verifyCookie(douyinVideo.html, douyinAcCookie);
+              douyinCookie && douyinCookieCache.setCookie(douyinCookie);
+              await response(douyinCookie);
+            }
+          }
+        }
       }
     } catch (err) {
       console.error(err);
