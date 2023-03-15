@@ -1,24 +1,17 @@
 import got, { type Response as GotResponse } from 'got';
 import { rStr, pcUserAgent } from '../../../utils/utils';
 import * as toutiaosdk from '../sdk/toutiaosdk';
-import type { AwemePostResponse } from './interface';
+import type { AwemePostResponse, DouyinHtmlResponseType } from './interface';
 import type { VideoQuery } from '../types';
 
-// 抖音可能返回中间页，需要根据cookie判断一下
-export interface DouyinVideo {
-  type: 'html' | 'cookie';
-  value: string;
-  body: string;
-}
-
-type RequestDouyinHtmlReturn = (urlCb: string | ((url?: string) => string), cookie?: string) => Promise<DouyinVideo>;
+type RequestDouyinHtmlReturn = (urlCb: string | ((url?: string) => string), cookie?: string) => Promise<DouyinHtmlResponseType>;
 
 /**
  * 获取抖音网页的html
  * @param { string } url: 抖音地址
  */
 function requestDouyinHtml(url?: string): RequestDouyinHtmlReturn {
-  async function _requestDouyinHtml(urlCb: string | ((url?: string) => string), cookie: string = ''): Promise<DouyinVideo> {
+  async function _requestDouyinHtml(urlCb: string | ((url?: string) => string), cookie: string = ''): Promise<DouyinHtmlResponseType> {
     const uri: string = typeof urlCb === 'function' ? urlCb(url) : urlCb;
     const res: GotResponse<string> = await got.get(uri, {
       responseType: 'text',
@@ -35,12 +28,11 @@ function requestDouyinHtml(url?: string): RequestDouyinHtmlReturn {
 
     return acNonceStr ? {
       type: 'cookie',
-      value: acNonceStr.split(/s*;s*/)[0].split(/=/)[1],
-      body: res.body
+      cookie: acNonceStr.split(/s*;s*/)[0].split(/=/)[1],
+      html: res.body
     } : {
       type: 'html',
-      value: res.body,
-      body: res.body
+      html: res.body
     };
   }
 

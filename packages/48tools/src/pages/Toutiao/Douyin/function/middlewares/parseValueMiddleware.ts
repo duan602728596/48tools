@@ -1,9 +1,10 @@
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
-import { requestDouyinUrl, requestDouyinUser, requestDouyinVideo, type DouyinVideo } from '../../../services/douyin';
+import { requestDouyinUrl, requestDouyinUser, requestDouyinVideo } from '../../../services/douyin';
 import douyinCookieCache from '../DouyinCookieCache';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import { DouyinUrlType } from '../toutiao.enum';
 import type { GetVideoUrlOnionContext } from '../../../types';
+import type { DouyinHtmlResponseType } from '../../../services/interface';
 
 const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接
 const iesdouyinRegexp: RegExp = /www.iesdouyin.com/i; // 抖音分享长链接
@@ -36,14 +37,14 @@ async function getTypeAndIdWithUrlParse(urlParse: URL, cookie: string | undefine
 
   if (vdouinRegexp.test(urlParse.hostname)) {
     // 处理分享链接
-    const douyinShareVideo: DouyinVideo = await requestDouyinUrl(ctx.value, cookie);
+    const douyinShareVideo: DouyinHtmlResponseType = await requestDouyinUrl(ctx.value, cookie);
 
     if (
       douyinShareVideo.type === 'html'
-      && iesdouyinhrefHtmlRegexp.test(douyinShareVideo.body)
-      && iesdouyinRegexp.test(douyinShareVideo.body)
+      && iesdouyinhrefHtmlRegexp.test(douyinShareVideo.html)
+      && iesdouyinRegexp.test(douyinShareVideo.html)
     ) {
-      const parseDocument: Document = new DOMParser().parseFromString(douyinShareVideo.body, 'text/html');
+      const parseDocument: Document = new DOMParser().parseFromString(douyinShareVideo.html, 'text/html');
       const href: string = parseDocument.querySelector('a')!.getAttribute('href')!;
 
       if (shareVideo.test(href)) {
@@ -118,10 +119,9 @@ function getTypeAndId(ctx: GetVideoUrlOnionContext): TypeAndId {
  * https://v.douyin.com/kG3Cu1b/
  */
 async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
-  let urlParse: URL | undefined = undefined;
-  let douyinVideo: DouyinVideo | null = null;
-  let douyinCookie: string | undefined = undefined;
-  let html: string;
+  let urlParse: URL | undefined = undefined;                // url的解析结果
+  let douyinResponse: DouyinHtmlResponseType | null = null; // 抖音请求的结果
+  let douyinCookie: string | undefined = undefined;         // 抖音的cookie
 
   douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
 
@@ -143,36 +143,33 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
     }
 
     if (ctx.type === DouyinUrlType.Video) {
-      douyinVideo = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinCookie);
+      douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinCookie);
     } else if (ctx.type === DouyinUrlType.User) {
-      douyinVideo = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinCookie);
+      douyinResponse = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinCookie);
     }
 
-    if (douyinVideo === null) {
+    if (douyinResponse === null) {
       ctx.setUrlLoading(false);
 
       return;
     }
 
     // 根据请求的结果判断是否继续请求
-    if (douyinVideo.type === 'html') {
-      html = douyinVideo.body;
-    } else {
+    if (douyinResponse.type === 'cookie') {
       // 计算__ac_signature并获取html
-      const acSignature: string = await toutiaosdk.acrawler('sign', ['', douyinVideo.value]);
-      const douyinAcCookie: string = `__ac_nonce=${ douyinVideo.value }; __ac_signature=${ acSignature };`;
+      const acSignature: string = await toutiaosdk.acrawler('sign', ['', douyinResponse.cookie]);
+      const douyinAcCookie: string = `__ac_nonce=${ douyinResponse.cookie }; __ac_signature=${ acSignature };`;
 
       if (ctx.type === DouyinUrlType.Video) {
-        douyinVideo = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
+        douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
       } else if (ctx.type === DouyinUrlType.User) {
-        douyinVideo = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
+        douyinResponse = await requestDouyinUser((u: string) => `${ u }${ ctx.id }`, douyinAcCookie);
       }
 
       ctx.cookie = douyinAcCookie;
-      html = douyinVideo.body;
     }
 
-    ctx.html = html;
+    ctx.html = douyinResponse.html;
     next();
   } catch (err) {
     console.error(err);

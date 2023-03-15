@@ -7,8 +7,9 @@ import { CloseCircleFilled as IconCloseCircleFilled } from '@ant-design/icons';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import douyinCookieCache from '../DouyinCookieCache';
 import { DouyinUrlType } from '../toutiao.enum';
-import { requestDouyinVideo, requestDouyinUser, type DouyinVideo } from '../../../services/douyin';
+import { requestDouyinVideo, requestDouyinUser } from '../../../services/douyin';
 import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
+import type { DouyinHtmlResponseType } from '../../../services/interface';
 
 let closeBtnElement: HTMLElement | null = null;
 let closeBtnRoot: Root | null = null;
@@ -126,7 +127,7 @@ async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): P
       return;
     }
 
-    let res: DouyinVideo | undefined;
+    let res: DouyinHtmlResponseType | undefined;
 
     if (ctx.type === DouyinUrlType.Video) {
       res = await requestDouyinVideo((u: string) => `${ u }${ ctx.id }`, douyinCompleteCookie);
@@ -137,7 +138,7 @@ async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): P
     }
 
     if (res && res.type === 'html') {
-      ctx.html = res.body;
+      ctx.html = res.html;
     }
 
     douyinCookieCache.setCookie(douyinCompleteCookie);

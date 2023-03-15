@@ -22,10 +22,10 @@ import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMi
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
 import { setAddDownloadList } from '../../reducers/douyin';
 import douyinCookieCache from '../function/DouyinCookieCache';
-import { requestAwemePost, requestDouyinUser, type DouyinVideo } from '../../services/douyin';
+import { requestAwemePost, requestDouyinUser } from '../../services/douyin';
 import * as toutiaosdk from '../../sdk/toutiaosdk';
 import type { DownloadUrlItem, UserDataItem, VideoQuery } from '../../types';
-import type { AwemePostResponse, AwemeItem } from '../../services/interface';
+import type { AwemePostResponse, AwemeItem, DouyinHtmlResponseType } from '../../services/interface';
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactElement> {
@@ -138,16 +138,16 @@ function VideoOrUserParse(props: {}): ReactElement {
       // 重新请求验证码数据
       if (!douyinCookie) {
         const sxrId: string = 'MS4wLjABAAAAGSCToXHJLbkSaouYNJU68raa3TYVliiEW0tWp2dpNio';
-        const sxrDouyinUser: DouyinVideo = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
+        const sxrDouyinUser: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
 
         if (sxrDouyinUser.type === 'cookie') {
           // 计算__ac_signature并获取html
-          const acSignature: string = await toutiaosdk.acrawler('sign', ['', sxrDouyinUser.value]);
-          const douyinAcCookie: string = `__ac_nonce=${ sxrDouyinUser.value }; __ac_signature=${ acSignature };`;
-          const douyinVideo: DouyinVideo = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinAcCookie);
+          const acSignature: string = await toutiaosdk.acrawler('sign', ['', sxrDouyinUser.cookie]);
+          const douyinAcCookie: string = `__ac_nonce=${ sxrDouyinUser.cookie }; __ac_signature=${ acSignature };`;
+          const douyinVideo: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinAcCookie);
 
-          if (douyinVideo.body && douyinVideo.body.includes('验证码中间页')) {
-            douyinCookie = await verifyCookie(douyinVideo.body, douyinAcCookie);
+          if (douyinVideo.html && douyinVideo.html.includes('验证码中间页')) {
+            douyinCookie = await verifyCookie(douyinVideo.html, douyinAcCookie);
             douyinCookie && douyinCookieCache.setCookie(douyinCookie);
           }
         }

@@ -20,3 +20,16 @@ export interface AwemePostResponse {
   max_cursor: number;
   has_more: 1 | 0;
 }
+
+export interface DouyinHtmlCookieType {
+  type: 'cookie';
+  cookie: string;
+  html: string;
+}
+
+export interface DouyinHtmlType {
+  type: 'html';
+  html: string;
+}
+
+export type DouyinHtmlResponseType = DouyinHtmlCookieType | DouyinHtmlType;
