@@ -25,6 +25,7 @@ import { setAddDownloadList } from '../../reducers/douyin';
 import douyinCookieCache from '../function/DouyinCookieCache';
 import { requestAwemePost, requestDouyinUser, requestTtwidCookie } from '../../services/douyin';
 import * as toutiaosdk from '../../sdk/toutiaosdk';
+import { rStr } from '../../../../utils/utils';
 import type { DownloadUrlItem, UserDataItem, VideoQuery } from '../../types';
 import type { AwemePostResponse, AwemeItem, DouyinHtmlResponseType } from '../../services/interface';
 
@@ -179,6 +180,15 @@ function VideoOrUserParse(props: {}): ReactElement {
         const ttwidCookie: string | undefined = await requestTtwidCookie();
 
         ttwidCookie && (douyinCookie = `${ ttwidCookie };`);
+        // @ts-ignore
+      } else if (typeof douyinCookie === 'string' && !douyinCookie.includes('ttwid=')) {
+        const ttwidCookie: string | undefined = await requestTtwidCookie();
+
+        ttwidCookie && (douyinCookie = `${ douyinCookie } ${ ttwidCookie };`);
+      }
+
+      if (!douyinCookie?.includes('passport_csrf_token')) {
+        douyinCookie = `${ douyinCookie } passport_csrf_token=${ rStr(32) }`;
       }
 
       if (douyinCookie) {

@@ -3,6 +3,7 @@ import douyinCookieCache from '../DouyinCookieCache';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import parser, { DouyinUrlType, type ParseResult } from '../parser';
 import { requestTtwidCookie, requestAwemePostReturnType, requestAwemeDetailReturnType } from '../../../services/douyin';
+import { rStr } from '../../../../../utils/utils';
 import type { GetVideoUrlOnionContext } from '../../../types';
 import type { DouyinHtmlResponseType } from '../../../services/interface';
 
@@ -73,7 +74,7 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
     if (!douyinCookie) {
       const ttwid: string | undefined = await requestTtwidCookie();
 
-      ttwid && (ttwidCookie = `${ ttwid };`);
+      ttwid && (ttwidCookie = `${ ttwid }; passport_csrf_token=${ rStr(32) };`);
     }
 
     // 解析url
