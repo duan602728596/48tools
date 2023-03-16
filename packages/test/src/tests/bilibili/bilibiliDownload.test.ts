@@ -9,7 +9,7 @@ import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
 import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
-import { testTitle, testLog } from '../../utils/testUtils.js';
+import { testTitle } from '../../utils/testUtils.js';
 
 /* B站视频下载测试 */
 export const title: string = 'Bilibili/Download Page';
@@ -75,23 +75,18 @@ export function callback(): void {
 
     // 【4月/主题曲/官方歌词】剃须。然后捡到女高中生 OP&ED【中文字幕】https://www.bilibili.com/video/BV1Hp4y1t7Nd
     await query('视频（BV）', '1Hp4y1t7Nd');
-    testLog(41, 'Add BV1Hp4y1t7Nd');
 
     // 【心灵终结3.3.6】全战役终结难度通关合集 https://www.bilibili.com/video/av370522884
     await query('视频（av）', '724265559', '140');
-    testLog(41, 'Add av724265559');
 
     // 有点甜（cover汪苏泷、BY2）翻唱：胡丽芝、田姝丽 https://www.bilibili.com/audio/au590187
     await query('音频（au）', '590187');
-    testLog(41, 'Add au590187');
 
     // 魔法少女小圆 https://www.bilibili.com/bangumi/play/ep63470
     await query('番剧（ep）', '63470');
-    testLog(41, 'Add ep63470');
 
     // 吹响吧！上低音号 https://www.bilibili.com/bangumi/play/ss1547
     await query('番剧（ss）', '1547');
-    testLog(41, 'Add ss1547');
 
     // 等待查询结果
     await app.win.waitForTimeout(2_000);
@@ -111,19 +106,15 @@ export function callback(): void {
 
     // SHADOWS HOUSE-影宅-（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ep398517
     await query('番剧（ep）', '398517', undefined, true);
-    testLog(42, 'Add ep398517');
 
     // 刮掉鬍子的我與撿到的女高中生（僅限港澳台地區）https://www.bilibili.com/bangumi/play/ep398301
     await query('番剧（ep）', '398301', undefined, true);
-    testLog(42, 'Add ep398301');
 
     // 繼母的拖油瓶是我的前女友（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss42121
     await query('番剧（ss）', '42121', undefined, true);
-    testLog(42, 'Add ss42121');
 
     // 青梅竹馬絕對不會輸的戀愛喜劇（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss38396
     await query('番剧（ss）', '38396', undefined, true);
-    testLog(42, 'Add ss38396');
 
     // 等待查询结果
     await app.win.waitForTimeout(2_000);
@@ -190,15 +181,12 @@ export function callback(): void {
 
     // 犬山玉姬Official https://space.bilibili.com/12362451/
     await queryBySpaceId(12362451, 1);
-    testLog(43, 'Add 12362451');
 
     // 時雨羽衣Official https://space.bilibili.com/2601367/
     await queryBySpaceId(2601367, 2, true);
-    testLog(43, 'Add 2601367');
 
     // 音乐世界CytusII https://space.bilibili.com/270735958/
     await queryBySpaceId(270735958, 3, true);
-    testLog(43, 'Add 270735958');
 
     // 结果
     await app.win.waitForSelector('.ant-table-row');
