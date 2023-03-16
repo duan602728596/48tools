@@ -61,17 +61,19 @@ function AddForm(props: {}): ReactElement {
     setLoading(true);
 
     try {
+      const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
+        ? formValue.proxy : undefined;
       let result: string | { flvUrl: string; pic: string } | void;
 
       if (formValue.type === 'au') {
         // 下载音频
-        result = await parseAudioUrl(formValue.id, !!formValue.proxy);
+        result = await parseAudioUrl(formValue.id, proxy);
       } else if (formValue.type === 'ss' || formValue.type === 'ep') {
         // 下载番剧
-        result = await parseBangumiVideo(formValue.type, formValue.id, !!formValue.proxy);
+        result = await parseBangumiVideo(formValue.type, formValue.id, proxy);
       } else {
         // 下载av、bv视频，会返回视频封面
-        result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page, !!formValue.proxy);
+        result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page, proxy);
       }
 
       if (result) {
@@ -97,7 +99,7 @@ function AddForm(props: {}): ReactElement {
 
   // 关闭窗口后重置表单
   function handleAddModalClose(): void {
-    form.resetFields();
+    form.resetFields(['type', 'id', 'page']);
   }
 
   // 打开弹出层
@@ -138,9 +140,21 @@ function AddForm(props: {}): ReactElement {
           <Form.Item name="page" label="Page">
             <InputNumber />
           </Form.Item>
-          <Form.Item name="proxy" label="Proxy" valuePropName="checked">
-            <Checkbox>用于港澳台番剧地址的获取</Checkbox>
+          <Form.Item label="代理地址">
+            <div className="flex">
+              <div className="leading-[32px]">
+                <Form.Item name="useProxy" noStyle={ true } valuePropName="checked">
+                  <Checkbox>开启</Checkbox>
+                </Form.Item>
+              </div>
+              <div className="grow">
+                <Form.Item name="proxy" noStyle={ true }>
+                  <Input placeholder="代理地址" />
+                </Form.Item>
+              </div>
+            </div>
           </Form.Item>
+
         </Form>
       </Modal>
       { messageContextHolder }

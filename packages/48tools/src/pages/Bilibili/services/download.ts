@@ -3,23 +3,28 @@ import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type Https
 import { getBilibiliCookie, pcUserAgent } from '../../../utils/utils';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData } from './interface';
 
-const proxyAgentOptions: HttpProxyAgentOptions | HttpsProxyAgentOptions = {
-  keepAlive: true,
-  keepAliveMsecs: 1000,
-  maxSockets: 256,
-  maxFreeSockets: 256,
-  scheduling: 'lifo',
-  proxy: atob('aHR0cDovL2Nocm9tZXR3LnVmdW5yLm1lOjc3Nzc=')
-};
+function gotAgent(proxy: string | undefined): GotAgents | undefined {
+  if (!proxy) return;
 
-const gotAgent: GotAgents = {
-  http: new HttpProxyAgent(proxyAgentOptions),
-  https: new HttpsProxyAgent(proxyAgentOptions)
-};
+  const proxyAgentOptions: HttpProxyAgentOptions | HttpsProxyAgentOptions = {
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 256,
+    maxFreeSockets: 256,
+    scheduling: 'lifo',
+    proxy
+  };
+  const agent: GotAgents = {
+    http: new HttpProxyAgent(proxyAgentOptions),
+    https: new HttpsProxyAgent(proxyAgentOptions)
+  };
+
+  return agent;
+}
 
 // B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
 // 请求bilibili的html
-export async function requestBilibiliHtml(url: string, proxy: boolean): Promise<string> {
+export async function requestBilibiliHtml(url: string, proxy: string | undefined): Promise<string> {
   const res: GotResponse<string> = await got.get(url, {
     responseType: 'text',
     headers: {
@@ -27,7 +32,7 @@ export async function requestBilibiliHtml(url: string, proxy: boolean): Promise<
       'User-Agent': pcUserAgent,
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : undefined
+    agent: gotAgent(proxy)
   });
 
   return res.body;
@@ -37,16 +42,16 @@ export async function requestBilibiliHtml(url: string, proxy: boolean): Promise<
  * 请求视频信息
  * @param { string } payload: 查询参数
  * @param { string } sign: 加密后的sign
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
-export async function requestVideoInfo(payload: string, sign: string, proxy: boolean): Promise<VideoInfo> {
+export async function requestVideoInfo(payload: string, sign: string, proxy: string | undefined): Promise<VideoInfo> {
   const apiUrl: string = `https://interface.bilibili.com/v2/playurl?${ payload }&sign=${ sign }`;
   const res: GotResponse<VideoInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : undefined
+    agent: gotAgent(proxy)
   });
 
   return res.body;
@@ -56,16 +61,16 @@ export async function requestVideoInfo(payload: string, sign: string, proxy: boo
  * 请求番剧信息
  * @param { number } aid
  * @param { number } cid
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
-export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: boolean): Promise<BangumiVideoInfo> {
+export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: string | undefined): Promise<BangumiVideoInfo> {
   const apiUrl: string = `https://api.bilibili.com/x/player/playurl?avid=${ aid }&cid=${ cid }&qn=112`;
   const res: GotResponse<BangumiVideoInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : undefined
+    agent: gotAgent(proxy)
   });
 
   return res.body;
@@ -74,16 +79,16 @@ export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: b
 /**
  * 请求音频信息
  * @param { string } auid: 音频id
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
-export async function requestAudioInfo(auid: string, proxy: boolean): Promise<AudioInfo> {
+export async function requestAudioInfo(auid: string, proxy: string | undefined): Promise<AudioInfo> {
   const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`;
   const res: GotResponse<AudioInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : undefined
+    agent: gotAgent(proxy)
   });
 
   return res.body;
@@ -111,16 +116,16 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
  * 根据https://api.bilibili.com/x/web-interface/view?bvid=1V341177FV接口查询视频信息
  * @param { string } id: av或bv的id
  * @param { 'av' | 'bv' } type
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
-export async function requestWebInterfaceView(id: string, type: string, proxy: boolean): Promise<WebInterfaceViewData> {
+export async function requestWebInterfaceView(id: string, type: string, proxy: string | undefined): Promise<WebInterfaceViewData> {
   const apiUrl: string = `https://api.bilibili.com/x/web-interface/view?${ type === 'av' ? 'a' : 'bv' }id=${ id }`;
   const res: GotResponse<WebInterfaceViewData> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
     },
-    agent: proxy ? gotAgent : undefined
+    agent: gotAgent(proxy)
   });
 
   return res.body;

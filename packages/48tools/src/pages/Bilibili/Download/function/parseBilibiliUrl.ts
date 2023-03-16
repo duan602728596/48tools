@@ -119,9 +119,9 @@ function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult 
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
  * @param { number } page: 分页
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
-export async function parseVideoUrl(type: string, id: string, page: number = 1, proxy: boolean): Promise<string | void> {
+export async function parseVideoUrl(type: string, id: string, page: number = 1, proxy: string | undefined): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/video/${ type === 'av' ? 'av' : 'BV' }${ id }?p=${ page }`;
   const html: string = await requestBilibiliHtml(videoUrl, proxy);
   const { initialState }: ParseHtmlResult = parseHtml(html);
@@ -152,13 +152,13 @@ export async function parseVideoUrl(type: string, id: string, page: number = 1, 
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
  * @param { number } page: 分页
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
 export async function parseVideoUrlV2(
   type: string,
   id: string,
   page: number = 1,
-  proxy: boolean
+  proxy: string | undefined
 ): Promise<{ flvUrl: string; pic: string } | undefined> {
   const res: WebInterfaceViewData = await requestWebInterfaceView(id, type, proxy);
   let result: { flvUrl: string; pic: string } | undefined = undefined;
@@ -193,7 +193,7 @@ export async function parseVideoUrlV2(
  */
 export async function parseVideoList(bvid: string): Promise<Array<{ cid: number; part: string }> | void> {
   const videoUrl: string = `https://www.bilibili.com/video/${ bvid }`;
-  const html: string = await requestBilibiliHtml(videoUrl, false);
+  const html: string = await requestBilibiliHtml(videoUrl, undefined);
   const { initialState }: ParseHtmlResult = parseHtml(html);
 
   if (!initialState) {
@@ -208,9 +208,9 @@ export async function parseVideoList(bvid: string): Promise<Array<{ cid: number;
  * 参考：https://github.com/Henryhaohao/Bilibili_video_download/blob/master/bilibili_video_download_bangumi.py
  * @param { string } type: 番剧类型
  * @param { string } id: 番剧id
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
-export async function parseBangumiVideo(type: string, id: string, proxy: boolean): Promise<string | void> {
+export async function parseBangumiVideo(type: string, id: string, proxy: string | undefined): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/bangumi/play/${ type }${ id }`;
   const html: string = await requestBilibiliHtml(videoUrl, proxy);
   let parseHtmlResult: ParseHtmlResult = parseHtmlNext(html, type, id);
@@ -236,9 +236,9 @@ export async function parseBangumiVideo(type: string, id: string, proxy: boolean
 /**
  * 解析音频地址
  * @param { string } id: 音频id
- * @param { boolean } proxy: 是否使用代理
+ * @param { string | undefined } proxy: 是否使用代理
  */
-export async function parseAudioUrl(id: string, proxy: boolean): Promise<string | void> {
+export async function parseAudioUrl(id: string, proxy: string | undefined): Promise<string | void> {
   const res: AudioInfo = await requestAudioInfo(id, proxy);
 
   return res.data.cdns?.[0];
