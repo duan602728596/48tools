@@ -30,8 +30,36 @@ export function callback(): void {
     await antBtn.nth(2).click();
     await app.win.waitForSelector('.ant-table-row');
 
-    const images: Array<ElementHandle> = await app.win.$$('.ant-table-row');
+    const rows: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
-    expect(images.length).toEqual(10);
+    expect(rows.length).toEqual(10);
+  });
+
+  test(testTitle(26, 'Should search record data'), async function(): Promise<void> {
+    await testIdClick(app, 'pocket48-record-link');
+
+    // 测试能够正常加载数据
+    await Promise.all([
+      app.win.waitForSelector('.ant-table-wrapper'),
+      app.win.waitForSelector('#userId')
+    ]);
+
+    await app.win.click('#userId');
+    await app.win.keyboard.type('刘倩倩');
+    await app.win.waitForTimeout(5_000);
+
+    const selectItem: Locator = await app.win.locator('.ant-select-item[title="刘倩倩（327568）"]');
+
+    await selectItem.click();
+    await app.win.waitForTimeout(1_000);
+
+    const antBtn: Locator = await app.win.locator('.ant-btn');
+
+    await antBtn.nth(2).click();
+    await app.win.waitForSelector('.ant-table-row');
+
+    const rows: Array<ElementHandle> = await app.win.$$('.ant-table-row');
+
+    expect(rows.length).toEqual(10);
   });
 }
