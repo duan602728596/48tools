@@ -42,7 +42,7 @@ export function callback(): void {
     return rows;
   }
 
-  test(testTitle(55, 'Should get user info by full url'), async function(): Promise<void> {
+  test(testTitle(57, 'Should get user info by full url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -53,7 +53,7 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(56, 'Should get user info by user id'), async function(): Promise<void> {
+  test(testTitle(58, 'Should get user info by user id'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -63,7 +63,7 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(57, 'Should get user info by share url'), async function(): Promise<void> {
+  test(testTitle(59, 'Should get user info by share url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
