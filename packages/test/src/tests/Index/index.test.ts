@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import type { ElementHandle } from 'playwright';
 import type { ElementHandleForTag } from 'playwright-core/types/structs';
-import ElectronApp from '../utils/ElectronApp.js';
-import { testTitle } from '../utils/testUtils.js';
+import ElectronApp from '../../utils/ElectronApp';
+import { testTitle } from '../../utils/testUtils';
 
 /* 客户端主界面入口测试 */
 export const title: string = 'Index Page';
