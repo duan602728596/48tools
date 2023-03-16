@@ -100,7 +100,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '抖音视频下载',
       url: '/Toutiao/Douyin',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />,
+      testId: 'douyin-download-link'
     },
     {
       name: '微博超话签到',
