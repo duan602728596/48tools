@@ -128,7 +128,7 @@ function Pocket48Login(props: {}): ReactElement {
         onOk={ handleLoginClick }
         onCancel={ (event: MouseEvent): void => setOpen(false) }
       >
-        <Form form={ form } initialValues={{ area: '86' }}>
+        <Form form={ form } initialValues={{ area: '86' }} labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
           <Form.Item className={ style.formItem } label="手机" required={ true }>
             <div className="flex">
               <div className="w-[90px]">
