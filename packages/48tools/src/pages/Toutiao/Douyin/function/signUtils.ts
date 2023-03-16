@@ -95,3 +95,14 @@ export function awemeDetailQuery(id: string, signature: string): string {
 
   return urlParam.toString();
 }
+
+/* 地址处理 */
+export function staticUrl(u: string): string {
+  if (/^http:?/.test(u)) {
+    return u;
+  } else if (/^\/\//.test(u)) {
+    return `https:${ u }`;
+  } else {
+    return u;
+  }
+}

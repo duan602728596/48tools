@@ -52,10 +52,14 @@ async function getDouyinData(ctx: GetVideoUrlOnionContext, cookie: string | unde
  * https://v.douyin.com/kt5s7j4/
  * 图文：
  * https://www.douyin.com/note/7160299412965657888
+ * 7160299412965657888
+ * https://v.douyin.com/StwKB7s/
  * 用户：
  * https://www.douyin.com/user/MS4wLjABAAAAc6-xMO2J77mP_3h_pOdPT-47qE0cywiTLB7PF4csqPM
  * MS4wLjABAAAAc6-xMO2J77mP_3h_pOdPT-47qE0cywiTLB7PF4csqPM
  * https://v.douyin.com/kG3Cu1b/
+ *
+ * 控制台获取数据：JSON.parse(decodeURIComponent(document.getElementById('RENDER_DATA').innerHTML))
  */
 async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
   let douyinResponse: DouyinHtmlResponseType | null = null; // 抖音请求的结果

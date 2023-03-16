@@ -17,10 +17,16 @@ export interface VideoInfoItem {
   playAddr: Array<{
     src: noProtocolUrl;
   }>;
-  playApi: noProtocolUrl; // 无水印
+  playApi: noProtocolUrl | ''; // 无水印
   ratio: string;
   cover: noProtocolUrl;
   coverUrlList: Array<string>;
+}
+
+export interface ImageInfo {
+  width: number;
+  height: number;
+  urlList: Array<string>;
 }
 
 export interface AwemeDetail {
@@ -30,6 +36,7 @@ export interface AwemeDetail {
     url?: string; // 有水印
   };
   video: VideoInfoItem;
+  images: Array<ImageInfo>;
 }
 
 export interface C0Obj {

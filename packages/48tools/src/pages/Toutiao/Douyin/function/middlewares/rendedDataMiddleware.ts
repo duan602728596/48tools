@@ -1,4 +1,5 @@
 import { DouyinUrlType } from '../parser';
+import { staticUrl } from '../signUtils';
 import type {
   ScriptRendedData,
   CVersionObj,
@@ -117,16 +118,33 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
     const awemeDetail: AwemeDetail | undefined = cVersion?.aweme?.detail;
 
     if (awemeDetail) {
-      const urls: DownloadUrlItem[] = [{ label: '无水印', value: `https:${ awemeDetail.video.playApi }` }];
+      const urls: DownloadUrlItem[] = [];
+
+      if (awemeDetail.video.playApi) {
+        urls.push({ label: '无水印', value: `https:${ awemeDetail.video.playApi }` });
+      }
+
       let i: number = 1;
 
-      for (const bitRate of awemeDetail.video.bitRateList) {
+      for (const bitRate of (awemeDetail.video.bitRateList ?? [])) {
         for (const addr of bitRate.playAddr) {
           urls.push({
             label: `下载地址-${ i++ }(${ bitRate.width }*${ bitRate.height })`,
-            value: `https:${ addr.src }`,
+            value: staticUrl(addr.src),
             width: bitRate.width,
             height: bitRate.height
+          });
+        }
+      }
+
+      for (const image of (awemeDetail?.images ?? [])) {
+        for (const addr of image.urlList) {
+          urls.push({
+            label: `图片地址-${ i++ }(${ image.width }*${ image.height })`,
+            value: addr,
+            width: image.width,
+            height: image.height,
+            isImage: true
           });
         }
       }
