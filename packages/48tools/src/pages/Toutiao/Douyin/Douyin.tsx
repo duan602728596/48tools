@@ -80,10 +80,10 @@ function Douyin(props: {}): ReactElement {
 
       const worker: Worker = getDownloadBilibiliVideoWorker();
 
-      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
-        const { type }: MessageEventData = event1.data;
+      worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
+        const { type }: MessageEventData = messageEvent.data;
 
-        dispatch(setDownloadProgress(event1.data));
+        dispatch(setDownloadProgress(messageEvent.data));
 
         if (type === 'success') {
           messageApi.success('下载完成！');
