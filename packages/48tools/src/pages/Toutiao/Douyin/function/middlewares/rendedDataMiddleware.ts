@@ -11,7 +11,7 @@ import type {
   UserDataItem,
   GetVideoUrlOnionContext
 } from '../../../types';
-import type { AwemeItem, BitRateItem } from '../../../services/interface';
+import type { AwemeItem, AwemeItemRate, BitRateItem } from '../../../services/interface';
 
 /* 有api时的渲染 */
 function userApiRender(ctx: GetVideoUrlOnionContext): void {
@@ -38,6 +38,7 @@ function userApiRender(ctx: GetVideoUrlOnionContext): void {
 function detailApiRender(ctx: GetVideoUrlOnionContext): void {
   if (ctx.data && ('aweme_detail' in ctx.data)) {
     const awemeList: Array<BitRateItem> = ctx.data.aweme_detail.video.bit_rate ?? [];
+    const images: Array<AwemeItemRate> = ctx.data.aweme_detail.images ?? [];
     const urls: DownloadUrlItem[] = [];
     let i: number = 1;
 
@@ -52,6 +53,19 @@ function detailApiRender(ctx: GetVideoUrlOnionContext): void {
       }
     }
 
+    for (const image of images) {
+      for (const addr of image.url_list) {
+        urls.push({
+          label: `图片地址-${ i++ }(${ image.width }*${ image.height })`,
+          value: addr,
+          width: image.width,
+          height: image.height,
+          isImage: true
+        });
+      }
+    }
+
+    ctx.setUrlLoading(false);
     ctx.setDownloadUrl(urls);
     ctx.setTitle(ctx.data.aweme_detail.desc);
     ctx.setVisible(true);

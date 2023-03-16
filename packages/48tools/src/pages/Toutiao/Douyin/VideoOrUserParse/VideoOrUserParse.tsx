@@ -17,6 +17,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './videoOrUserParse.sass';
+import douyinStyle from '../douyin.sass';
 import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
 import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMiddleware';
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
@@ -75,7 +76,7 @@ function userDataSelectOptionsRender(record: UserDataItem | AwemeItem): Array<Re
       }
     }
   } else {
-    for (const bitRate of record.video.bit_rate) {
+    for (const bitRate of (record.video.bit_rate ?? [])) {
       for (const videoUrl of bitRate.play_addr.url_list) {
         const labelText: string = `下载地址-${ i++ }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`;
 
@@ -85,6 +86,24 @@ function userDataSelectOptionsRender(record: UserDataItem | AwemeItem): Array<Re
             value: videoUrl,
             width: bitRate.play_addr.width,
             height: bitRate.play_addr.height
+          }}>
+            { labelText }
+          </Select.Option>
+        );
+      }
+    }
+
+    for (const image of (record.images ?? [])) {
+      for (const addr of image.url_list) {
+        const labelText: string = `图片地址-${ i++ }(${ image.width }*${ image.height })`;
+
+        element.push(
+          <Select.Option key={ `${ record.aweme_id }@${ labelText }@${ addr }@d` } value={ addr } item={{
+            label: labelText,
+            value: addr,
+            width: image.width,
+            height: image.height,
+            isImage: true
           }}>
             { labelText }
           </Select.Option>
@@ -197,7 +216,8 @@ function VideoOrUserParse(props: {}): ReactElement {
         url: selectedUrl.value,
         title,
         width: selectedUrl.width,
-        height: selectedUrl.height
+        height: selectedUrl.height,
+        isImage: selectedUrl.isImage
       }));
     }
 
@@ -215,7 +235,8 @@ function VideoOrUserParse(props: {}): ReactElement {
       url: option.item.value,
       title: record.desc,
       width: option.item.width,
-      height: option.item.height
+      height: option.item.height,
+      isImage: option.item.isImage
     }));
     messageApi.info('添加到下载列表。');
   }
@@ -264,7 +285,12 @@ function VideoOrUserParse(props: {}): ReactElement {
   }
 
   const columns: ColumnsType<UserDataItem | AwemeItem> = [
-    { title: '视频标题', dataIndex: 'desc' },
+    {
+      title: '视频标题',
+      dataIndex: 'desc',
+      render: (value: string, record: UserDataItem | AwemeItem, index: number): ReactElement =>
+        <span className={ ('images' in record) && record?.images?.length ? douyinStyle.isImageMark : undefined }>{ value }</span>
+    },
     {
       title: '操作',
       key: 'action',

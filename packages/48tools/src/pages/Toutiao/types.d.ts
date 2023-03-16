@@ -54,6 +54,7 @@ export interface DownloadUrlItem {
   label: string;
   width?: number;
   height?: number;
+  isImage?: boolean;
 }
 
 /* 下载相关 */
@@ -63,6 +64,7 @@ export interface DownloadItem {
   title: string; // 视频标题
   width?: number;
   height?: number;
+  isImage?: boolean;
 }
 
 /* 解析头条验证码 */

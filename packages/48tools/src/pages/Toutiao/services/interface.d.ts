@@ -15,6 +15,7 @@ export interface AwemeItem {
   video: {
     bit_rate: Array<BitRateItem>;
   };
+  images: Array<AwemeItemRate>;
   aweme_id: string;
   create_time: number;
   author: {

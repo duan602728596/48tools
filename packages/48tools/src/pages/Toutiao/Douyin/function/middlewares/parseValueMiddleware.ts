@@ -50,6 +50,8 @@ async function getDouyinData(ctx: GetVideoUrlOnionContext, cookie: string | unde
  * https://www.douyin.com/video/7141964711570066722
  * 7184782545546939709
  * https://v.douyin.com/kt5s7j4/
+ * 图文：
+ * https://www.douyin.com/note/7160299412965657888
  * 用户：
  * https://www.douyin.com/user/MS4wLjABAAAAc6-xMO2J77mP_3h_pOdPT-47qE0cywiTLB7PF4csqPM
  * MS4wLjABAAAAc6-xMO2J77mP_3h_pOdPT-47qE0cywiTLB7PF4csqPM

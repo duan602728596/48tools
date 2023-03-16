@@ -1,3 +1,4 @@
+import * as path from 'node:path';
 import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +8,7 @@ import { Button, Table, Progress, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
+import style from './douyin.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
@@ -53,7 +55,7 @@ function Douyin(props: {}): ReactElement {
     dispatch(setDeleteDownloadList(item.qid));
   }
 
-  // 下载（测试ID：6902337717137329412）
+  // 下载
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       let defaultPathTitle: string = `[抖音]${ filenamify(item.title) }`;
@@ -62,7 +64,15 @@ function Douyin(props: {}): ReactElement {
         defaultPathTitle += `_${ item.width }x${ item.height }`;
       }
 
-      const result: SaveDialogReturnValue = await showSaveDialog({ defaultPath: `${ defaultPathTitle }.mp4` });
+      let fileExt: string = '.mp4';
+
+      if (item.isImage) {
+        const urlResult: URL = new URL(item.url);
+
+        fileExt = path.parse(urlResult.pathname).ext;
+      }
+
+      const result: SaveDialogReturnValue = await showSaveDialog({ defaultPath: `${ defaultPathTitle }${ fileExt }` });
 
       if (result.canceled || !result.filePath) return;
 
@@ -98,14 +108,20 @@ function Douyin(props: {}): ReactElement {
       });
     } catch (err) {
       console.error(err);
-      messageApi.error('视频下载失败！');
+      messageApi.error('下载失败！');
     }
   }
 
   const columns: ColumnsType<DownloadItem> = [
-    { title: '标题', dataIndex: 'title' },
     {
-      title: '视频尺寸',
+      title: '标题',
+      dataIndex: 'title',
+      key: 'title',
+      render: (value: string, record: DownloadItem, index: number): ReactElement =>
+        <span className={ record.isImage ? style.isImageMark : undefined }>{ value }</span>
+    },
+    {
+      title: '尺寸',
       key: 'width_height',
       width: 120,
       render: (value: undefined, record: DownloadItem, index: number): ReactNode => {
