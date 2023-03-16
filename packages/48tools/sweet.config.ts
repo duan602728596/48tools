@@ -79,6 +79,7 @@ export default function(info: object): Record<string, any> {
       '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js',
       'array-move',
       'classnames',
+      'cookie',
       'filenamify/browser',
       'flv.js',
       'path-to-regexp',
