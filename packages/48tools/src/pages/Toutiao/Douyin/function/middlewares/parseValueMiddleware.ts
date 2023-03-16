@@ -2,7 +2,7 @@ import { requestDouyinUser, requestDouyinVideo } from '../../../services/douyin'
 import douyinCookieCache from '../DouyinCookieCache';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import parser, { DouyinUrlType, type ParseResult } from '../parser';
-import { requestTtwidCookie, requestAwemePostReturnType } from '../../../services/douyin';
+import { requestTtwidCookie, requestAwemePostReturnType, requestAwemeDetailReturnType } from '../../../services/douyin';
 import type { GetVideoUrlOnionContext } from '../../../types';
 import type { DouyinHtmlResponseType } from '../../../services/interface';
 
@@ -15,7 +15,15 @@ async function getDouyinData(ctx: GetVideoUrlOnionContext, cookie: string | unde
   let douyinResponse: DouyinHtmlResponseType | null = null; // 抖音请求的结果
 
   if (ctx.parseResult.type === DouyinUrlType.Video) {
-    douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, cookie);
+    if (cookie) {
+      const signature: string = await toutiaosdk.acrawler('sign', ['', cookie]);
+
+      douyinResponse = await requestAwemeDetailReturnType(cookie, ctx.parseResult.id, signature);
+    }
+
+    if (!(douyinResponse?.type === 'detailApi' && douyinResponse?.data)) {
+      douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, cookie);
+    }
   } else if (ctx.parseResult.type === DouyinUrlType.User) {
     // 先请求接口
     if (cookie) {
@@ -103,8 +111,9 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
       return;
     }
 
-    if (douyinResponse.type === 'userApi') {
+    if (douyinResponse.type === 'userApi' || douyinResponse.type === 'detailApi') {
       ctx.data = douyinResponse.data;
+      ctx.dataType = douyinResponse.type;
     } else {
       ctx.html = douyinResponse.html; // 可能是验证码中间页
     }

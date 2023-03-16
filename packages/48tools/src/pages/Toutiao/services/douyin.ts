@@ -1,7 +1,7 @@
 import got, { type Response as GotResponse } from 'got';
 import { pcUserAgent } from '../../../utils/utils';
-import { awemePostQuery } from '../Douyin/function/signUtils';
-import type { AwemePostResponse, DouyinHtmlResponseType, DouyinUserApiType } from './interface';
+import { awemePostQuery, awemeDetailQuery } from '../Douyin/function/signUtils';
+import type { AwemePostResponse, AwemeDetailResponse, DouyinHtmlResponseType, DouyinUserApiType, DouyinDetailApiType } from './interface';
 import type { VideoQuery } from '../types';
 
 type RequestDouyinHtmlReturn = (urlCb: string | ((url?: string) => string), cookie?: string) => Promise<DouyinHtmlResponseType>;
@@ -67,7 +67,7 @@ export async function requestGetVideoRedirectUrl(uri: string): Promise<string> {
  */
 export async function requestAwemePost(cookie: string, videoQuery: VideoQuery): Promise<AwemePostResponse | string> {
   const query: string = awemePostQuery(videoQuery.secUserId, videoQuery.maxCursor);
-  const res: GotResponse<AwemePostResponse> = await got.get(
+  const res: GotResponse<AwemePostResponse | string> = await got.get(
     `https://www.douyin.com/aweme/v1/web/aweme/post/?${ query }`, {
       responseType: 'json',
       headers: {
@@ -86,6 +86,30 @@ export async function requestAwemePostReturnType(cookie: string, videoQuery: Vid
   const res: AwemePostResponse | string = await requestAwemePost(cookie, videoQuery);
 
   return { type: 'userApi', data: typeof res === 'object' ? res : undefined };
+}
+
+/* 请求视频的detail */
+export async function requestAwemeDetail(cookie: string, id: string, signature: string): Promise<AwemeDetailResponse | string> {
+  const query: string = awemeDetailQuery(id, signature);
+  const res: GotResponse<AwemeDetailResponse | string> = await got.get(
+    `https://www.douyin.com/aweme/v1/web/aweme/detail/?${ query }`, {
+      responseType: 'json',
+      headers: {
+        Referer: `https://www.douyin.com/video/${ id }`,
+        Host: 'www.douyin.com',
+        'User-Agent': pcUserAgent,
+        Cookie: cookie
+      },
+      followRedirect: false
+    });
+
+  return res.body;
+}
+
+export async function requestAwemeDetailReturnType(cookie: string, id: string, signature: string): Promise<DouyinDetailApiType> {
+  const res: AwemeDetailResponse | string = await requestAwemeDetail(cookie, id, signature);
+
+  return { type: 'detailApi', data: typeof res === 'object' ? res : undefined };
 }
 
 /* 请求ttwid */

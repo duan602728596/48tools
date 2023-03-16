@@ -1,6 +1,6 @@
 import type { Dispatch as D, SetStateAction as S } from 'react';
 import type { MessageInstance } from 'antd/es/message/interface';
-import type { AwemeItem, AwemePostResponse } from './services/interface';
+import type { AwemeItem, AwemePostResponse, AwemeDetailResponse } from './services/interface';
 import type { ParseResult } from './Douyin/function/parser';
 
 type noProtocolUrl = `//${ string }`;
@@ -143,7 +143,8 @@ export interface GetVideoUrlOnionContext {
   value: string;               // 表单里原始的值
   parseResult: ParseResult;    // 解析结果
   html?: string;               // 请求到的html
-  data?: AwemePostResponse;    // 请求api接口获取到的数据
+  data?: AwemePostResponse | AwemeDetailResponse; // 请求api接口获取到的数据
+  dataType?: 'userApi' | 'detailApi';
   cookie?: string;             // 获取到的cookie
   setUrlLoading: D<S<boolean>>;
   setVisible: D<S<boolean>>;

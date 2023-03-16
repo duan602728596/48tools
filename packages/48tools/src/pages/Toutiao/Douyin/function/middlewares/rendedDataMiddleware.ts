@@ -11,11 +11,11 @@ import type {
   UserDataItem,
   GetVideoUrlOnionContext
 } from '../../../types';
-import type { AwemeItem } from '../../../services/interface';
+import type { AwemeItem, BitRateItem } from '../../../services/interface';
 
 /* 有api时的渲染 */
 function userApiRender(ctx: GetVideoUrlOnionContext): void {
-  if (ctx.data) {
+  if (ctx.data && ('aweme_list' in ctx.data)) {
     const awemeList: Array<AwemeItem> = (ctx.data.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));
 
     if (awemeList.length > 0) {
@@ -35,12 +35,37 @@ function userApiRender(ctx: GetVideoUrlOnionContext): void {
   ctx.setUrlLoading(false);
 }
 
+function detailApiRender(ctx: GetVideoUrlOnionContext): void {
+  if (ctx.data && ('aweme_detail' in ctx.data)) {
+    const awemeList: Array<BitRateItem> = ctx.data.aweme_detail.video.bit_rate ?? [];
+    const urls: DownloadUrlItem[] = [];
+    let i: number = 1;
+
+    for (const bitRate of awemeList) {
+      for (const addr of bitRate.play_addr.url_list) {
+        urls.push({
+          label: `下载地址-${ i++ }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`,
+          value: addr,
+          width: bitRate.play_addr.width,
+          height: bitRate.play_addr.height
+        });
+      }
+    }
+
+    ctx.setDownloadUrl(urls);
+    ctx.setTitle(ctx.data.aweme_detail.desc);
+    ctx.setVisible(true);
+  }
+}
+
 /* 解析RENDER_DATA */
 function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): void {
-  if (ctx.data) {
-    userApiRender(ctx);
+  if (ctx.dataType === 'userApi' && ctx.data) {
+    return userApiRender(ctx);
+  }
 
-    return;
+  if (ctx.dataType === 'detailApi' && ctx.data) {
+    return detailApiRender(ctx);
   }
 
   if (!ctx.html) {
