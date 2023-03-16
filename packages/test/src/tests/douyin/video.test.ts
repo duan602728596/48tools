@@ -97,7 +97,7 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StwKB7s/', '下载地址-3(1440*1920)');
+    const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StwKB7s/', '图片地址-3(1440*1920)');
 
     expect(rows.length).toEqual(1);
   });
