@@ -9,7 +9,8 @@ import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
 import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
-import { testTitle } from '../../utils/testUtils.js';
+import { testTitle, testLog } from '../../utils/testUtils.js';
+import { testConfig } from '../../testConfig.js';
 
 /* B站视频下载测试 */
 export const title: string = 'Bilibili/Download Page';
@@ -48,7 +49,10 @@ export function callback(): void {
 
     // 港澳台
     if (proxy) {
+      await app.win.click('#useProxy');
+      await app.win.waitForTimeout(1_500);
       await app.win.click('#proxy');
+      await app.win.keyboard.type(testConfig.bilibili.proxy);
       await app.win.waitForTimeout(1_000);
     }
 
@@ -102,19 +106,25 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
+    if (!testConfig.bilibili.useProxy) {
+      testLog(42, 'Do not run test because proxy closed');
+
+      return;
+    }
+
     await testIdClick(app, 'bilibili-download-link');
 
     // SHADOWS HOUSE-影宅-（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ep398517
-    await query('番剧（ep）', '398517', undefined, true);
+    await query('番剧（ep）', '398517', undefined, true); // 关闭后会保存proxy的选择，所以只执行一次
 
     // 刮掉鬍子的我與撿到的女高中生（僅限港澳台地區）https://www.bilibili.com/bangumi/play/ep398301
-    await query('番剧（ep）', '398301', undefined, true);
+    await query('番剧（ep）', '398301', undefined, false);
 
     // 繼母的拖油瓶是我的前女友（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss42121
-    await query('番剧（ss）', '42121', undefined, true);
+    await query('番剧（ss）', '42121', undefined, false);
 
     // 青梅竹馬絕對不會輸的戀愛喜劇（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss38396
-    await query('番剧（ss）', '38396', undefined, true);
+    await query('番剧（ss）', '38396', undefined, false);
 
     // 等待查询结果
     await app.win.waitForTimeout(2_000);
