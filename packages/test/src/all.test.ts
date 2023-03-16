@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import * as indexTest from './tests/index/index.test';
+import * as indexTest from './tests/index/index.test.js';
 import * as pocket48RecordTest from './tests/48/pocket48Record.test.js';
 import * as fortyEightInVideo from './tests/48/48InVideo.test.js';
 import * as bilibiliDownload from './tests/bilibili/bilibiliDownload.test.js';
