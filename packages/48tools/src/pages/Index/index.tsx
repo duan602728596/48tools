@@ -203,7 +203,7 @@ function Index(props: {}): ReactElement {
         </Space>
       </div>
       <Divider />
-      <div className="flex">
+      <div className={ classNames('flex', style.text) }>
         <div>
           {/* 二维码 */}
           <p>欢迎打赏：</p>

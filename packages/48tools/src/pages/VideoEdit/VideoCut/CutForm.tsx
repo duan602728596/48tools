@@ -76,7 +76,7 @@ function CutForm(props: {}): ReactElement {
           <Button onClick={ handleOpenVideoFileClick }>选择文件</Button>
         </Form.Item>
         <Form.Item label="裁剪时间">
-          <label>开始时间：</label>
+          <label className="align-[-4px]">开始时间：</label>
           <Form.Item name="startH" rules={ timeRules } noStyle={ true }>
             <InputNumber placeholder="时" />
           </Form.Item>
@@ -88,7 +88,7 @@ function CutForm(props: {}): ReactElement {
           <Form.Item name="startS" rules={ timeRules } noStyle={ true }>
             <InputNumber placeholder="秒" />
           </Form.Item>
-          <label className="ml-[12px]">结束时间：</label>
+          <label className="ml-[12px] align-[-4px]">结束时间：</label>
           <Form.Item name="endH" rules={ timeRules } noStyle={ true }>
             <InputNumber placeholder="时" />
           </Form.Item>
