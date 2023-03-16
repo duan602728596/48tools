@@ -8,7 +8,7 @@ import { testTitle } from '../../utils/testUtils.js';
 export const title: string = 'index Page';
 
 export function callback(): void {
-  let app: ElectronApp;
+  let app: ElectronApp | null = null;
 
   test.beforeEach(async function(): Promise<void> {
     app = new ElectronApp();
@@ -16,10 +16,15 @@ export function callback(): void {
   });
 
   test.afterEach(async function(): Promise<void> {
-    await app.close();
+    await app!.close();
+    app = null;
   });
 
   test(testTitle(11, 'Should render navs and images'), async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
     await Promise.all([
       app.win.waitForSelector('nav', { state: 'attached' }),
       app.win.waitForSelector('.ant-image', { state: 'attached' })

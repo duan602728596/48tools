@@ -8,7 +8,7 @@ import { testTitle } from '../../utils/testUtils.js';
 export const title: string = '48/Pocket48Record Page';
 
 export function callback(): void {
-  let app: ElectronApp;
+  let app: ElectronApp | null = null;
 
   test.beforeEach(async function(): Promise<void> {
     app = new ElectronApp();
@@ -16,10 +16,15 @@ export function callback(): void {
   });
 
   test.afterEach(async function(): Promise<void> {
-    await app.close();
+    await app!.close();
+    app = null;
   });
 
   test(testTitle(25, 'Should get record data'), async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
     await testIdClick(app, 'pocket48-record-link');
 
     // 测试能够正常加载数据
@@ -36,6 +41,10 @@ export function callback(): void {
   });
 
   test(testTitle(26, 'Should search record data'), async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
     await testIdClick(app, 'pocket48-record-link');
 
     // 测试能够正常加载数据
