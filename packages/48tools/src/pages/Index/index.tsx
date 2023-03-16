@@ -9,6 +9,7 @@ import Icon, {
 } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './index.sass';
+import commonStyle from '../../common.sass';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';
@@ -204,7 +205,7 @@ function Index(props: {}): ReactElement {
         </Space>
       </div>
       <Divider />
-      <div className={ classNames('flex', style.text) }>
+      <div className={ classNames('flex', commonStyle.text) }>
         <div>
           {/* 二维码 */}
           <p>欢迎打赏：</p>

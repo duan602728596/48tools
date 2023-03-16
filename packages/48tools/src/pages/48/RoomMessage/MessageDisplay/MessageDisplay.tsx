@@ -20,6 +20,7 @@ import { List, Popover, Typography, Empty, Spin, type TypographyProps } from 'an
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
 import style from './messageDisplay.sass';
+import commonStyle from '../../../../common.sass';
 import { omit } from '../../../../utils/lodash';
 import { mp4Source } from '../../../../utils/snh48';
 import { accessibilityClassName } from '../../../../components/Accessibility/Accessibility';
@@ -228,7 +229,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
         style={{ height }}
         data-index={ index }
       >
-        <div ref={ divRef } className={ classNames('flex w-full min-h-[20px]', style.itemChildren) }>
+        <div ref={ divRef } className={ classNames('flex w-full min-h-[20px]', commonStyle.text) }>
           { messageRender() }
         </div>
       </List.Item>
@@ -301,7 +302,7 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
                     <MessageItem key={ item.msgIdClient } item={ item } index={ index } />
                 }
               </VirtualList>
-            ) : <Empty className={ style.empty } />
+            ) : <Empty className="pt-[20px]" />
           }
         </List>
       </Spin>

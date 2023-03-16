@@ -1,0 +1,14 @@
+$text-dark: rgba(255, 255, 255, .85) //暗黑模式下的文字颜色
+$dust-red: #ff4d4f      // 红色
+$dust-red-dark: #dc4446 // 暗黑模式红色
+
+// 红色提示文字
+.tips
+  color: $dust-red
+
+@media (prefers-color-scheme: dark)
+  .text
+    color: $text-dark
+
+  .tips
+    color: $dust-red-dark

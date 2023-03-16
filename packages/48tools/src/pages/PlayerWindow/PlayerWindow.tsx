@@ -1,6 +1,6 @@
 import { useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
 import * as classNames from 'classnames';
-import style from './playerWindow.sass';
+import commonStyle from '../../common.sass';
 import LiveInfo from './LiveInfo/LiveInfo';
 import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
@@ -46,7 +46,7 @@ function PlayerWindow(props: {}): ReactElement {
   }, []);
 
   return (
-    <div className={ classNames('flex w-full h-full', style.text) }>
+    <div className={ classNames('flex w-full h-full', commonStyle.text) }>
       <div className="flex flex-col grow p-[16px] h-full">
         <LiveInfo playerInfo={ playerInfo } info={ info } />
         {

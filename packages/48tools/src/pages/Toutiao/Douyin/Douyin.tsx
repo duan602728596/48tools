@@ -10,6 +10,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import * as classNames from 'classnames';
 import style from './douyin.sass';
+import commonStyle from '../../../common.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
@@ -180,7 +181,7 @@ function Douyin(props: {}): ReactElement {
         <VideoOrUserParse />
         <Button type="primary" danger={ true } onClick={ handleClearDouyinCookie }>清除抖音Cookie的缓存</Button>
       </Header>
-      <p className={ classNames('mb-[4px] text-[12px]', style.text) }>
+      <p className={ classNames('mb-[4px] text-[12px]', commonStyle.text) }>
         输入视频ID或视频地址下载单个视频，输入用户ID或用户主页地址可解析用户的所有视频并选择下载。支持短链接。
       </p>
       <Table size="middle"
