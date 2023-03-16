@@ -121,7 +121,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       const urls: DownloadUrlItem[] = [];
 
       if (awemeDetail.video.playApi) {
-        urls.push({ label: '无水印', value: `https:${ awemeDetail.video.playApi }` });
+        urls.push({ label: '无水印', value: staticUrl(awemeDetail.video.playApi) });
       }
 
       let i: number = 1;
