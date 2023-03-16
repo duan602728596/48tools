@@ -72,12 +72,32 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(54, 'Should get images by note id'), async function(): Promise<void> {
+  test(testTitle(54, 'Should get images by full url'), async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    const rows: Array<ElementHandle> = await queryVideo('https://www.douyin.com/note/7144312918660746508', '图片地址-3(1440*1920)');
+
+    expect(rows.length).toEqual(1);
+  });
+
+  test(testTitle(55, 'Should get images by note id'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
     const rows: Array<ElementHandle> = await queryVideo('7081995835235519756', '图片地址-3(1080*1438)');
+
+    expect(rows.length).toEqual(1);
+  });
+
+  test(testTitle(56, 'Should get images by share url'), async function(): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StwKB7s/', '下载地址-3(1440*1920)');
 
     expect(rows.length).toEqual(1);
   });
