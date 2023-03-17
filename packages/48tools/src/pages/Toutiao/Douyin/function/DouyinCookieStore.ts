@@ -6,7 +6,14 @@ class DouyinCookieStore {
   #cookieMap: Map<string, string> = new Map();
 
   constructor() {
-    this.#cookieMap.set('passport_csrf_token', rStr(32));
+    this.#setDefaultCookie();
+  }
+
+  #setDefaultCookie(): void {
+    const passportCsrfToken: string = rStr(32);
+
+    this.#cookieMap.set('passport_csrf_token', passportCsrfToken);
+    this.#cookieMap.set('passport_csrf_token_default', passportCsrfToken);
   }
 
   // 解析cookie
@@ -39,7 +46,7 @@ class DouyinCookieStore {
   // 重置cookie
   reset(): void {
     this.#cookieMap.clear();
-    this.#cookieMap.set('passport_csrf_token', rStr(32));
+    this.#setDefaultCookie();
   }
 }
 
