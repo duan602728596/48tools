@@ -4,6 +4,8 @@ import type { ReactElement, MouseEvent } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { Button } from 'antd';
 import { CloseCircleFilled as IconCloseCircleFilled } from '@ant-design/icons';
+import AntdConfig from '../../../../../components/AntdConfig/AntdConfig';
+import ThemeProvider from '../../../../../components/Theme/ThemeProvider';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import { douyinCookie } from '../DouyinCookieStore';
 import { DouyinUrlType } from '../parser';
@@ -44,14 +46,18 @@ function closeCaptchaDisplay(resolve: Function): void {
 
   function Close(props: {}): ReactElement {
     return (
-      <Button className="absolute z-[150000] top-[50%] left-[50%] mt-[-170px] ml-[88px]"
-        type="primary"
-        danger={ true }
-        icon={ <IconCloseCircleFilled /> }
-        onClick={ handleCaptchaCloseClick }
-      >
-        关闭
-      </Button>
+      <ThemeProvider>
+        <AntdConfig>
+          <Button className="absolute z-[150000] top-[50%] left-[50%] mt-[-170px] ml-[88px]"
+            type="primary"
+            danger={ true }
+            icon={ <IconCloseCircleFilled /> }
+            onClick={ handleCaptchaCloseClick }
+          >
+            关闭
+          </Button>
+        </AntdConfig>
+      </ThemeProvider>
     );
   }
 

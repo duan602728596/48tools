@@ -8,7 +8,7 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import { render } from 'react-dom';
+import { createRoot, type Root } from 'react-dom/client';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -32,11 +32,14 @@ import {
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
+import AntdConfig from '../../../components/AntdConfig/AntdConfig';
+import ThemeProvider from '../../../components/Theme/ThemeProvider';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveRepresentation, LiveVideoPlayRes, LiveItem } from '../types';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';
 
 let divElement: HTMLDivElement | null = null;
+let divRoot: Root | null = null;
 
 /* redux selector */
 type RState = { acfunLive: AcFunLiveInitialState };
@@ -112,8 +115,12 @@ function Live(props: {}): ReactElement {
 
       // 全部关闭后清除
       function afterClose(): void {
-        document.body.removeChild(divElement!);
-        divElement = null;
+        requestAnimationFrame((): void => {
+          document.body.removeChild(divElement!);
+          divRoot?.unmount();
+          divRoot = null;
+          divElement = null;
+        });
       }
 
       // 确认
@@ -140,32 +147,37 @@ function Live(props: {}): ReactElement {
       }
 
       return (
-        <Modal title="选择直播源"
-          open={ visible }
-          width={ 400 }
-          centered={ true }
-          okText="开始录制"
-          getContainer={ (): HTMLDivElement => divElement! }
-          afterClose={ afterClose }
-          onOk={ handleOkClick }
-          onCancel={ handleCloseClick }
-        >
-          <div className="h-[60px]" data-test-id="acfun-live-type">
-            <Select className={ style.selectInput } onSelect={ (value: string): string => (ctx.player = value) }>
-              {
-                representation.map((o: LiveRepresentation): ReactElement => (
-                  <Select.Option key={ o.url } value={ o.url }>{ o.name }</Select.Option>
-                ))
-              }
-            </Select>
-          </div>
-        </Modal>
+        <ThemeProvider>
+          <AntdConfig>
+            <Modal title="选择直播源"
+              open={ visible }
+              width={ 400 }
+              centered={ true }
+              okText="开始录制"
+              getContainer={ (): HTMLDivElement => divElement! }
+              afterClose={ afterClose }
+              onOk={ handleOkClick }
+              onCancel={ handleCloseClick }
+            >
+              <div className="h-[60px]" data-test-id="acfun-live-type">
+                <Select className={ style.selectInput } onSelect={ (value: string): string => (ctx.player = value) }>
+                  {
+                    representation.map((o: LiveRepresentation): ReactElement => (
+                      <Select.Option key={ o.url } value={ o.url }>{ o.name }</Select.Option>
+                    ))
+                  }
+                </Select>
+              </div>
+            </Modal>
+          </AntdConfig>
+        </ThemeProvider>
       );
     }
 
     divElement = document.createElement('div');
-    render(<SelectPlayerUrl />, divElement);
     document.body.appendChild(divElement);
+    divRoot = createRoot(divElement);
+    divRoot.render(<SelectPlayerUrl />);
   }
 
   // 获取直播地址
