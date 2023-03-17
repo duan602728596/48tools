@@ -14,7 +14,6 @@ import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';
 import ThemeContext, { type Theme } from '../../components/Theme/ThemeContext';
-import License from './License/License';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
 import IconMicrophoneSvgComponent from './images/microphone.component.svg';
@@ -201,7 +200,7 @@ function Index(props: {}): ReactElement {
           <Tooltip title="问题反馈">
             <Button type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
           </Tooltip>
-          <License />
+          <ButtonLink linkProps={{ to: '/Credits' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
         </Space>
       </div>
       <Divider />

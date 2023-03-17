@@ -7,6 +7,7 @@ import AcFun from '../pages/AcFun/index';
 import Toutiao from '../pages/Toutiao/index';
 import VideoEdit from '../pages/VideoEdit/index';
 import WeiboSuper from '../pages/WeiboSuper/index';
+import Credits from '../pages/Credits/Credits';
 
 function Routers(props: {}): ReactElement | null {
   const routes: ReactElement | null = useRoutes([
@@ -16,7 +17,8 @@ function Routers(props: {}): ReactElement | null {
     { path: 'AcFun/*', element: <AcFun /> },
     { path: 'Toutiao/*', element: <Toutiao /> },
     { path: 'VideoEdit/*', element: <VideoEdit /> },
-    { path: 'WeiboSuper', element: <WeiboSuper /> }
+    { path: 'WeiboSuper', element: <WeiboSuper /> },
+    { path: 'Credits', element: <Credits /> }
   ]);
 
   return routes;
