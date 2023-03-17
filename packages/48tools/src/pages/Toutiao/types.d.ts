@@ -154,7 +154,6 @@ export interface GetVideoUrlOnionContext {
   html?: string;               // 请求到的html
   data?: AwemePostResponse | AwemeDetailResponse; // 请求api接口获取到的数据
   dataType?: 'userApi' | 'detailApi';
-  cookie?: string;             // 获取到的cookie
   setUrlLoading: D<S<boolean>>;
   setVisible: D<S<boolean>>;
   setDownloadUrl: D<S<DownloadUrlItem[]>>;

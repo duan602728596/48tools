@@ -1,6 +1,7 @@
 import got, { type Response as GotResponse } from 'got';
 import { pcUserAgent } from '../../../utils/utils';
 import { awemePostQuery, awemeDetailQuery } from '../Douyin/function/signUtils';
+import { douyinCookie } from '../Douyin/function/DouyinCookieStore';
 import type { AwemePostResponse, AwemeDetailResponse, DouyinHtmlResponseType, DouyinUserApiType, DouyinDetailApiType } from './interface';
 import type { VideoQuery } from '../types';
 
@@ -113,7 +114,7 @@ export async function requestAwemeDetailReturnType(cookie: string, id: string, s
 }
 
 /* 请求ttwid */
-export async function requestTtwidCookie(): Promise<string | undefined> {
+export async function requestTtwidCookie(): Promise<void> {
   const res: GotResponse = await got.post('https://ttwid.bytedance.com/ttwid/union/register/', {
     responseType: 'json',
     json: {
@@ -127,5 +128,9 @@ export async function requestTtwidCookie(): Promise<string | undefined> {
     }
   });
 
-  return res.headers?.['set-cookie']?.[0];
+  if (res.headers?.['set-cookie']) {
+    for (const cookieStr of res.headers['set-cookie']) {
+      douyinCookie.set(cookieStr);
+    }
+  }
 }

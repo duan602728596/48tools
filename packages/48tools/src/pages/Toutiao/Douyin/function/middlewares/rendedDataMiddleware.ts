@@ -153,7 +153,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       ctx.setTitle(awemeDetail.desc);
       ctx.setVisible(true);
     } else {
-      ctx.messageApi.warning('视频不存在！');
+      ctx.messageApi.warning('视频不存在或解析失败！');
     }
   } else if (ctx.parseResult.type === DouyinUrlType.User) {
     // 处理用户
@@ -182,7 +182,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       ctx.setUserTitle(userItem2.user.user.nickname);
       ctx.setUserModalVisible(true);
     } else {
-      ctx.messageApi.warning('用户不存在！');
+      ctx.messageApi.warning('用户不存在或解析失败！');
     }
   } else {
     ctx.messageApi.warning('无法解析该地址！');

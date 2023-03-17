@@ -22,10 +22,9 @@ import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
 import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMiddleware';
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
 import { setAddDownloadList } from '../../reducers/douyin';
-import douyinCookieCache from '../function/DouyinCookieCache';
+import { douyinCookie } from '../function/DouyinCookieStore';
 import { requestAwemePost, requestDouyinUser, requestTtwidCookie } from '../../services/douyin';
 import * as toutiaosdk from '../../sdk/toutiaosdk';
-import { rStr } from '../../../../utils/utils';
 import type { DownloadUrlItem, UserDataItem, VideoQuery } from '../../types';
 import type { AwemePostResponse, AwemeItem, DouyinHtmlResponseType } from '../../services/interface';
 
@@ -172,41 +171,26 @@ function VideoOrUserParse(props: {}): ReactElement {
     };
 
     try {
-      let douyinCookie: string | undefined = undefined;
 
-      douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
+      if (!await response(douyinCookie.toString())) {
+        const sxrId: string = 'MS4wLjABAAAAGSCToXHJLbkSaouYNJU68raa3TYVliiEW0tWp2dpNio';
+        const sxrDouyinUser: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
 
-      if (!douyinCookie) {
-        const ttwidCookie: string | undefined = await requestTtwidCookie();
+        if (sxrDouyinUser.type === 'cookie') {
+          // 计算__ac_signature并获取html
+          const acSignature: string = await toutiaosdk.acrawler('sign', ['', sxrDouyinUser.cookie]);
 
-        ttwidCookie && (douyinCookie = `${ ttwidCookie };`);
-        // @ts-ignore
-      } else if (typeof douyinCookie === 'string' && !douyinCookie.includes('ttwid=')) {
-        const ttwidCookie: string | undefined = await requestTtwidCookie();
+          await requestTtwidCookie();
+          douyinCookie.setKV('__ac_nonce', sxrDouyinUser.cookie);
+          douyinCookie.setKV('__ac_signature', acSignature);
 
-        ttwidCookie && (douyinCookie = `${ douyinCookie } ${ ttwidCookie };`);
-      }
+          const douyinVideo: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinCookie.toString());
 
-      if (!douyinCookie?.includes('passport_csrf_token')) {
-        douyinCookie = `${ douyinCookie } passport_csrf_token=${ rStr(32) }`;
-      }
+          if (douyinVideo.type === 'html' && douyinVideo.html && douyinVideo.html.includes('验证码中间页')) {
+            const verifyCookieValue: string | undefined = await verifyCookie(douyinVideo.html, douyinCookie.toString());
 
-      if (douyinCookie) {
-        if (!await response(douyinCookie)) {
-          const sxrId: string = 'MS4wLjABAAAAGSCToXHJLbkSaouYNJU68raa3TYVliiEW0tWp2dpNio';
-          const sxrDouyinUser: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`);
-
-          if (sxrDouyinUser.type === 'cookie') {
-            // 计算__ac_signature并获取html
-            const acSignature: string = await toutiaosdk.acrawler('sign', ['', sxrDouyinUser.cookie]);
-            const douyinAcCookie: string = `__ac_nonce=${ sxrDouyinUser.cookie }; __ac_signature=${ acSignature };`;
-            const douyinVideo: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinAcCookie);
-
-            if (douyinVideo.type === 'html' && douyinVideo.html && douyinVideo.html.includes('验证码中间页')) {
-              douyinCookie = await verifyCookie(douyinVideo.html, douyinAcCookie);
-              douyinCookie && douyinCookieCache.setCookie(douyinCookie);
-              await response(douyinCookie);
-            }
+            verifyCookieValue && douyinCookie.set(verifyCookieValue);
+            await response(douyinCookie.toString());
           }
         }
       }

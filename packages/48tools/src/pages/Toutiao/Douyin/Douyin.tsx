@@ -16,7 +16,7 @@ import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/function/dow
 import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import Header from '../../../components/Header/Header';
 import VideoOrUserParse from './VideoOrUserParse/VideoOrUserParse';
-import douyinCookieCache from './function/DouyinCookieCache';
+import { douyinCookie } from './function/DouyinCookieStore';
 import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,
@@ -48,7 +48,7 @@ function Douyin(props: {}): ReactElement {
 
   // 清除抖音的cookie
   function handleClearDouyinCookie(event: MouseEvent): void {
-    douyinCookieCache.clearCookie();
+    douyinCookie.reset();
     messageApi.success('Cookie已清除！');
   }
 

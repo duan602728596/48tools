@@ -5,7 +5,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { Button } from 'antd';
 import { CloseCircleFilled as IconCloseCircleFilled } from '@ant-design/icons';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
-import douyinCookieCache from '../DouyinCookieCache';
+import { douyinCookie } from '../DouyinCookieStore';
 import { DouyinUrlType } from '../parser';
 import { requestDouyinVideo, requestDouyinUser } from '../../../services/douyin';
 import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
@@ -102,7 +102,7 @@ export function verifyCookie(html: string, cookie: string | undefined): Promise<
         showMode: 'mask',
         successCb(): void {
           closeCaptchaDestroy();
-          resolve(`${ cookie ?? '' } s_v_web_id=${ verifyDataJson.fp };`); // 需要的完整的cookie
+          resolve(`s_v_web_id=${ verifyDataJson.fp };`); // 需要的完整的cookie
         }
       }
     }]);
@@ -120,31 +120,31 @@ async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): P
 
   try {
     // 验证码获取到的cookie
-    const douyinCompleteCookie: string | undefined = await verifyCookie(ctx.html, ctx.cookie);
+    const verifyCookieValue: string | undefined = await verifyCookie(ctx.html, douyinCookie.toString());
 
-    if (!douyinCompleteCookie) {
+    if (!verifyCookieValue) {
       ctx.setUrlLoading(false);
 
       return;
     }
 
+    douyinCookie.set(verifyCookieValue);
+
     // 获取数据
     let res: DouyinHtmlResponseType | undefined;
 
     if (ctx.parseResult.type === DouyinUrlType.Video) {
-      res = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCompleteCookie);
+      res = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCookie.toString());
     }
 
     if (ctx.parseResult.type === DouyinUrlType.User) {
-      res = await requestDouyinUser((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCompleteCookie);
+      res = await requestDouyinUser((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCookie.toString());
     }
 
     if (res && res.type === 'html') {
       ctx.html = res.html;
     }
 
-    douyinCookieCache.setCookie(douyinCompleteCookie);
-    ctx.cookie = douyinCompleteCookie;
     next();
   } catch (err) {
     console.error(err);

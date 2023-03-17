@@ -1,9 +1,8 @@
 import { requestDouyinUser, requestDouyinVideo } from '../../../services/douyin';
-import douyinCookieCache from '../DouyinCookieCache';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import parser, { DouyinUrlType, type ParseResult } from '../parser';
 import { requestTtwidCookie, requestAwemePostReturnType, requestAwemeDetailReturnType } from '../../../services/douyin';
-import { rStr } from '../../../../../utils/utils';
+import { douyinCookie } from '../DouyinCookieStore';
 import type { GetVideoUrlOnionContext } from '../../../types';
 import type { DouyinHtmlResponseType } from '../../../services/interface';
 
@@ -12,28 +11,24 @@ import type { DouyinHtmlResponseType } from '../../../services/interface';
  * @param { GetVideoUrlOnionContext } ctx
  * @param { string | undefined } cookie
  */
-async function getDouyinData(ctx: GetVideoUrlOnionContext, cookie: string | undefined): Promise<DouyinHtmlResponseType | null> {
+async function getDouyinData(ctx: GetVideoUrlOnionContext, cookie: string): Promise<DouyinHtmlResponseType | null> {
   let douyinResponse: DouyinHtmlResponseType | null = null; // 抖音请求的结果
 
   if (ctx.parseResult.type === DouyinUrlType.Video) {
-    if (cookie) {
-      const signature: string = await toutiaosdk.acrawler('sign', ['', cookie]);
+    const signature: string = await toutiaosdk.acrawler('sign', ['', douyinCookie.toString()]);
 
-      douyinResponse = await requestAwemeDetailReturnType(cookie, ctx.parseResult.id, signature);
-    }
+    douyinResponse = await requestAwemeDetailReturnType(cookie, ctx.parseResult.id, signature);
 
     if (!(douyinResponse?.type === 'detailApi' && douyinResponse?.data)) {
       douyinResponse = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, cookie);
     }
   } else if (ctx.parseResult.type === DouyinUrlType.User) {
     // 先请求接口
-    if (cookie) {
-      douyinResponse = await requestAwemePostReturnType(cookie, {
-        secUserId: ctx.parseResult.id,
-        maxCursor: new Date().getTime(),
-        hasMore: 1
-      });
-    }
+    douyinResponse = await requestAwemePostReturnType(cookie, {
+      secUserId: ctx.parseResult.id,
+      maxCursor: new Date().getTime(),
+      hasMore: 1
+    });
 
     // 接口失败回退到html
     if (!(douyinResponse?.type === 'userApi' && douyinResponse?.data)) {
@@ -64,21 +59,13 @@ async function getDouyinData(ctx: GetVideoUrlOnionContext, cookie: string | unde
  */
 async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
   let douyinResponse: DouyinHtmlResponseType | null = null; // 抖音请求的结果
-  let douyinCookie: string | undefined = undefined;         // 抖音的cookie
-  let ttwidCookie: string | undefined = undefined;
-
-  douyinCookieCache.getCookie((c: string): unknown => douyinCookie = c); // 取缓存的cookie
 
   try {
     // 获取ttwid的cookie
-    if (!douyinCookie) {
-      const ttwid: string | undefined = await requestTtwidCookie();
-
-      ttwid && (ttwidCookie = `${ ttwid }; passport_csrf_token=${ rStr(32) };`);
-    }
+    await requestTtwidCookie();
 
     // 解析url
-    const parseResult: ParseResult | undefined = await parser(ctx.value, douyinCookie ?? ttwidCookie);
+    const parseResult: ParseResult | undefined = await parser(ctx.value, douyinCookie.toString());
 
     if (!parseResult) {
       ctx.setUrlLoading(false);
@@ -89,7 +76,7 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
     ctx.parseResult = parseResult;
 
     // 第一次请求，可能会有验证码
-    douyinResponse = await getDouyinData(ctx, douyinCookie ?? ttwidCookie);
+    douyinResponse = await getDouyinData(ctx, douyinCookie.toString());
 
     if (douyinResponse === null) {
       ctx.setUrlLoading(false);
@@ -101,15 +88,11 @@ async function parseValueMiddleware(ctx: GetVideoUrlOnionContext, next: Function
     if (douyinResponse.type === 'cookie') {
       // 计算__ac_signature并获取html
       const acSignature: string = await toutiaosdk.acrawler('sign', ['', douyinResponse.cookie]);
-      let douyinAcCookie: string = `__ac_nonce=${ douyinResponse.cookie }; __ac_signature=${ acSignature };`;
 
-      // 加上ttwid
-      if (ttwidCookie) {
-        douyinAcCookie += `${ ttwidCookie } ${ douyinAcCookie }`;
-      }
+      douyinCookie.setKV('__ac_nonce', douyinResponse.cookie);
+      douyinCookie.setKV('__ac_signature', acSignature);
 
-      douyinResponse = await getDouyinData(ctx, douyinAcCookie);
-      ctx.cookie = douyinAcCookie;
+      douyinResponse = await getDouyinData(ctx, douyinCookie.toString());
     }
 
     if (douyinResponse === null) {
