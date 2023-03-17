@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "cross-zip": "^4.0.0",
-    "jsdom": "^21.1.0",
     "rimraf": "*"
   }
 }

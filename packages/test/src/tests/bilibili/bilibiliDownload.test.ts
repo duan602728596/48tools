@@ -108,8 +108,7 @@ export function callback(): void {
 
     if (!testConfig.bilibili.useProxy) {
       testLog(42, 'Do not run test because proxy closed');
-
-      return;
+      test.skip();
     }
 
     await testIdClick(app, 'bilibili-download-link');
