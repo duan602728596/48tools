@@ -23,7 +23,7 @@ export function callback(): void {
   });
 
   // 输入并查询用户
-  async function queryUser(text: string, select: string): Promise<Array<ElementHandle>> {
+  async function queryUser(text: string): Promise<Array<ElementHandle>> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -31,7 +31,7 @@ export function callback(): void {
     await testIdClick(app, 'douyin-download-link');
     await app.win.type('.ant-input', text);
     await app.win.click('.ant-input-search-with-button .ant-btn');
-    await selectItemClick(app, await app.win.locator('.ant-modal-body .ant-table-cell .ant-select').nth(0), select);
+    await selectItemClick(app, await app.win.locator('.ant-modal-body .ant-table-cell .ant-select').nth(0), 0);
     await app.win.click('.ant-modal-footer .ant-btn-default');
     await setTimeoutPromise(2_000);
 
@@ -48,7 +48,7 @@ export function callback(): void {
     }
 
     const rows: Array<ElementHandle> = await queryUser(
-      'https://www.douyin.com/user/MS4wLjABAAAAu9em5FdpmFgYC_6QgtXzWDyE9qMxwq0A9hlFwvExBavnl_xPhXXtVO61gE1NhgP3', '下载地址-3(1080*1920)');
+      'https://www.douyin.com/user/MS4wLjABAAAAu9em5FdpmFgYC_6QgtXzWDyE9qMxwq0A9hlFwvExBavnl_xPhXXtVO61gE1NhgP3');
 
     expect(rows.length).toEqual(1);
   });
@@ -58,7 +58,7 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const rows: Array<ElementHandle> = await queryUser('MS4wLjABAAAAtYUHX7y_z3dgtH4_Bgia4OAJx7O7WlduM6vDemvecMQ', '下载地址-3(1080*1920)');
+    const rows: Array<ElementHandle> = await queryUser('MS4wLjABAAAAtYUHX7y_z3dgtH4_Bgia4OAJx7O7WlduM6vDemvecMQ');
 
     expect(rows.length).toEqual(1);
   });
@@ -68,7 +68,7 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const rows: Array<ElementHandle> = await queryUser('https://v.douyin.com/StAuqGL/', '下载地址-3(1920*1080)');
+    const rows: Array<ElementHandle> = await queryUser('https://v.douyin.com/StAuqGL/');
 
     expect(rows.length).toEqual(1);
   });
