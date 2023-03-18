@@ -15,3 +15,8 @@ export function testTitle(serialNumber: number, title: string): string {
 export function testLog(serialNumber: number, title: string): void {
   console.log(testTitle(serialNumber, title));
 }
+
+/* 生成vp测试的图片 */
+export function vpImage(dir: string, filename: string): Array<string> {
+  return [dir, `${ filename }.png`];
+}

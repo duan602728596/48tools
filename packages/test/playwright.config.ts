@@ -1,10 +1,10 @@
 import * as path from 'node:path';
 import * as os from 'node:os';
 import { metaHelper } from '@sweet-milktea/utils';
-import type { PlaywrightTestConfig } from '@playwright/test';
+import { defineConfig, type PlaywrightTestConfig } from '@playwright/test';
 
 const { __dirname }: { __dirname: string } = metaHelper(import.meta.url);
-const config: PlaywrightTestConfig = {
+const config: PlaywrightTestConfig = defineConfig({
   use: {
     locale: 'zh-CN',
     ignoreHTTPSErrors: true
@@ -14,8 +14,9 @@ const config: PlaywrightTestConfig = {
   workers: os.cpus().length,
   timeout: 1_200_000,
   testIgnore: [
-    '**/src/tests'
+    '**/src/tests',
+    '**/src/vpTests'
   ]
-};
+});
 
 export default config;

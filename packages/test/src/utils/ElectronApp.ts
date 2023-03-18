@@ -6,6 +6,10 @@ import { metaHelper } from '@sweet-milktea/utils';
 
 const { __dirname }: { __dirname: string } = metaHelper(import.meta.url);
 
+interface InitOptions {
+  dark?: boolean;
+}
+
 /* 获取electron相关的对象 */
 class ElectronApp {
   electronApp: ElectronApplication;
@@ -14,7 +18,7 @@ class ElectronApp {
   timer?: NodeJS.Timer;
 
   // 初始化
-  async init(): Promise<void> {
+  async init(options?: InitOptions): Promise<void> {
     this.mediaDir && await fse.ensureDir(this.mediaDir);
     this.electronApp = await electron.launch({
       args: [path.join(__dirname, '../../../main/lib/main.js')],
@@ -22,7 +26,7 @@ class ElectronApp {
         NODE_ENV: 'development',
         TEST: 'true'
       },
-      colorScheme: 'light',
+      colorScheme: options?.dark ? 'dark' : 'light',
       executablePath: electronPath
     });
     this.win = await this.electronApp.firstWindow();

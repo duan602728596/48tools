@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "rimraf ./dist && playwright test",
+    "test": "rimraf ./dist && playwright test ./src/all.test.ts",
+    "test:vp": "playwright test ./src/all.vp.test.ts",
+    "test:vp:update": "playwright test ./src/all.vp.test.ts --update-snapshots",
     "download": "rimraf ./ffmpeg && node ffmpegDownload.mjs"
   },
   "dependencies": {
