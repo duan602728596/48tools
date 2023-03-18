@@ -32,7 +32,16 @@ const selector: Selector<RState, Pocket48LoginInitialState> = createStructuredSe
   userInfo: ({ pocket48Login }: RState): UserInfo | null => pocket48Login.userInfo
 });
 
-/* 口袋48登录 */
+/**
+ * 口袋48登录
+ * 快速设置账号debug:
+sessionStorage.setItem('POCKET48_USER_INFO', JSON.stringify({
+  "token": "",
+  "nickname": "test",
+  "avatar": "/avatar/2023/0130/338518xzn4qph5wislm87p46xqpsf7.jpg"
+}));
+ *
+ */
 function Pocket48Login(props: {}): ReactElement {
   const { userInfo }: Pocket48LoginInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
