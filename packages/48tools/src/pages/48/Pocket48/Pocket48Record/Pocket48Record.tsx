@@ -500,7 +500,7 @@ function Pocket48Record(props: {}): ReactElement {
         <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
           <Space size={ 0 }>
             <div className="relative inline-block mr-[8px] align-super">
-              <Input.Group compact={ true }>
+              <Space.Compact>
                 <Form.Item name="groupId" noStyle={ true }>
                   <Select className="w-[130px]">
                     <Select.Option value="all">全部</Select.Option>
@@ -523,7 +523,7 @@ function Pocket48Record(props: {}): ReactElement {
                     options={ userIdSearchResult }
                   />
                 </Form.Item>
-              </Input.Group>
+              </Space.Compact>
               <div className="absolute z-10 top-[4px] right-[6px] pointer-events-none">
                 { userIdSearchLoading && <Spin size="small" indicator={ <IconLoadingOutlined spin={ true } /> } /> }
               </div>
