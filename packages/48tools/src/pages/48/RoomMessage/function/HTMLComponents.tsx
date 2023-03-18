@@ -183,7 +183,7 @@ function Basic(props: UserInfoProps): ReactElement {
         )
       }
       { children }
-      <time className="d-block">2023-02-03 16:23:19</time>
+      <time className="d-block">{ item.msgTime }</time>
     </li>
   );
 }
