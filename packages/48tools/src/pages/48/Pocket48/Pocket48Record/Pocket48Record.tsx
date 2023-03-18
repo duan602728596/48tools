@@ -405,6 +405,7 @@ function Pocket48Record(props: {}): ReactElement {
     {
       title: '时间',
       dataIndex: 'ctime',
+      width: 165,
       render: (value: string, record: LiveInfo, index: number): string => {
         return dayjs(Number(value)).format('YYYY-MM-DD HH:mm:ss');
       }

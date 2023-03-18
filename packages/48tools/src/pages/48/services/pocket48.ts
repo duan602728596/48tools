@@ -69,7 +69,7 @@ export async function requestLiveList(
   const isUserQuery: boolean = typeof userId === 'number' || (typeof userId === 'string' && !/^\s*$/.test(userId));
   let firstData: LiveInfo | null = null;
 
-  if (isUserQuery) {
+  if (isUserQuery && Number(next) === 0) {
     // fix: 当next为0时，无法根据userId查询到指定的数据，所以取列表最新的liveId作为next参数
     const firstRes: LiveData = await requestLiveList('0', false);
 
