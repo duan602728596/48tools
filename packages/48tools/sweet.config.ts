@@ -89,7 +89,6 @@ export default function(info: object): Record<string, any> {
       'mpegts.js',
       'path-to-regexp',
       'qrcode/lib/browser',
-      'video.js/dist/video.es.js',
       'react',
       'react-dom/client',
       'react-dom/server.browser',
