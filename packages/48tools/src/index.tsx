@@ -10,7 +10,6 @@ import ThemeProvider from './components/Theme/ThemeProvider';
 import Routers from './router/Routers';
 import IDBInit from './utils/IDB/IDBInit';
 import './main.tailwindcss.css';
-import './pages/48/sdk/BlythE.min.js';
 import './components/Accessibility/Accessibility';
 
 dayjs.locale('zh-cn');

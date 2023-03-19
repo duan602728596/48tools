@@ -2,6 +2,8 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 // @ts-ignore
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+// @ts-ignore
+import CopyPlugin from 'copy-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
 
@@ -135,6 +137,12 @@ export default function(info: object): Record<string, any> {
       }
     ],
     plugins: [
+      new CopyPlugin({
+        patterns: [{
+          from: path.join(__dirname, 'src/pages/48/sdk'),
+          to: path.join(__dirname, 'dist')
+        }]
+      }),
       analyzer && new BundleAnalyzerPlugin()
     ].filter(Boolean)
   };
