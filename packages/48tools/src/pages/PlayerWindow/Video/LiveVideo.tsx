@@ -1,7 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import * as PropTypes from 'prop-types';
-import flvjs from 'flv.js';
+import mpegts from 'mpegts.js';
 import { getFFmpeg } from '../../../utils/utils';
 import { source } from '../../../utils/snh48';
 import type { PlayerInfo } from '../PlayerWindow';
@@ -28,13 +28,13 @@ interface VideoProps {
 function LiveVideo(props: VideoProps): ReactElement {
   const { playerInfo, info }: VideoProps = props;
   const childRef: MutableRefObject<ChildProcessWithoutNullStreams | undefined> = useRef();
-  const flvPlayerRef: MutableRefObject<flvjs.Player | undefined> = useRef();
+  const flvPlayerRef: MutableRefObject<mpegts.Player | undefined> = useRef();
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
 
   // 加载视频
   function loadVideo(): void {
     if (videoRef.current) {
-      flvPlayerRef.current = flvjs.createPlayer({
+      flvPlayerRef.current = mpegts.createPlayer({
         type: 'flv',
         isLive: true,
         url: `ws://localhost:${ playerInfo.httpPort }/live/${ playerInfo.id }.flv`

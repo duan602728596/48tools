@@ -5,8 +5,9 @@
     { "name": "babel", "href": "https://babeljs.io" },
     { "name": "electron", "href": "https://www.electronjs.org" },
     { "name": "electron-builder", "href": "https://www.electron.build" },
-    { "name": "flv.js", "href": "https://github.com/Bilibili/flv.js" },
     { "name": "got", "href": "https://github.com/sindresorhus/got" },
+    { "name": "hls.js", "href": "https://github.com/video-dev/hls.js" },
+    { "name": "mpegts.js", "href": "https://github.com/xqq/mpegts.js" },
     { "name": "node-media-server", "href": "https://github.com/illuspas/Node-Media-Server" },
     { "name": "playwright", "href": "https://playwright.dev" },
     { "name": "react", "href": "https://github.com/facebook/react" },
@@ -16,7 +17,6 @@
     { "name": "sass", "href": "https://sass-lang.com" },
     { "name": "tailwindcss", "href": "https://tailwindcss.com" },
     { "name": "typescript", "href": "https://www.typescriptlang.org" },
-    { "name": "video.js", "href": "https://videojs.com" },
     { "name": "webpack", "href": "https://github.com/webpack/webpack" }
   ]
 }

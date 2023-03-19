@@ -1,8 +1,6 @@
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import * as PropTypes from 'prop-types';
-import videojs from 'video.js/dist/video.es.js';
-import * as classNames from 'classnames';
-import style from './recordVideo.sass';
+import Hls, { type Events, type ManifestParsedData } from 'hls.js';
 import { source, engineUserAgent } from '../../../utils/snh48';
 import { requestDownloadFile } from '../../48/services/pocket48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
@@ -17,8 +15,7 @@ interface RecordVideoProps {
 /* 录播视频的播放 */
 function RecordVideo(props: RecordVideoProps): ReactElement {
   const { playerInfo, info }: RecordVideoProps = props;
-  const flvjsPlayerRef: MutableRefObject<any | undefined> = useRef();
-  const videoContainerRef: RefObject<HTMLDivElement> = useRef(null);
+  const flvjsPlayerRef: MutableRefObject<Hls | undefined> = useRef();
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
 
   // 加载视频
@@ -38,20 +35,18 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
       const blob: Blob = new Blob([formatTsUrl(m3u8Data, playerInfo.proxyPort)], { type: 'application/vnd.apple.mpegurl' });
       const m3u8Url: string = URL.createObjectURL(blob);
 
-      flvjsPlayerRef.current = videojs(videoRef.current, { children: [] });
+      flvjsPlayerRef.current = new Hls();
 
-      const tech: HTMLVideoElement | null | undefined = videoContainerRef.current?.querySelector('.vjs-tech');
-
-      if (tech) {
-        tech.controls = true;
-        tech.tabIndex = 0;
-      }
-
-      flvjsPlayerRef.current.src({
-        src: m3u8Url,
-        type: 'application/vnd.apple.mpegURL',
-        withCredentials: true
+      flvjsPlayerRef.current.on(Hls.Events.MEDIA_ATTACHED, (): void => {
+        console.log('Video and hls.js are now bound together!');
       });
+
+      flvjsPlayerRef.current.on(Hls.Events.MANIFEST_PARSED, (event: Events.MANIFEST_PARSED, data: ManifestParsedData): void => {
+        console.log(`Manifest loaded, found ${ data.levels.length } quality level.`);
+      });
+
+      flvjsPlayerRef.current.loadSource(m3u8Url);
+      flvjsPlayerRef.current.attachMedia(videoRef.current);
     }
   }
 
@@ -59,12 +54,12 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
     loadVideo();
 
     return function(): void {
-      flvjsPlayerRef.current?.dispose?.();
+      flvjsPlayerRef.current?.destroy?.();
     };
   }, [info, playerInfo]);
 
   return (
-    <div ref={ videoContainerRef } className={ classNames('grow relative', style.videoContainer) }>
+    <div className="grow relative">
       <video ref={ videoRef }
         className="absolute z-10 inset-0 w-full h-full bg-[#000] outline-0"
         controls={ true }
