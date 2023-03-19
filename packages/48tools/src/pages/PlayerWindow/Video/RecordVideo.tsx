@@ -24,6 +24,13 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
   // 加载视频
   async function loadVideo(): Promise<void> {
     if (videoRef.current && info) {
+      // 兼容早期的mp4格式的电台
+      if (/\.mp4$/.test(info.content.playStreamPath)) {
+        videoRef.current.src = info.content.playStreamPath;
+
+        return;
+      }
+
       const m3u8Data: string = await requestDownloadFile(info.content.playStreamPath, {
         'Host': 'cychengyuan-vod.48.cn',
         'User-Agent': engineUserAgent
