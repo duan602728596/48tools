@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle, vpImage } from '../../utils/testUtils.js';
+import testIdClick from '../../actions/testIdClick.js';
 
-/* 客户端主界面入口测试 */
-export const title: string = 'VP index Page';
+/* 抖音 */
+export const title: string = 'VP douyin Page';
 
 export function callback(): void {
   let app: ElectronApp | null = null;
@@ -20,26 +21,24 @@ export function callback(): void {
   });
 
   // 测试
-  async function indexVPTest(isDark?: boolean): Promise<void> {
+  async function douyinVPTest(isDark?: boolean): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
-    await Promise.all([
-      app.win.waitForSelector('nav', { state: 'attached' }),
-      app.win.waitForSelector('.ant-image', { state: 'attached' })
-    ]);
-    await expect(app.win).toHaveScreenshot(vpImage('index', 'index', isDark));
+    await testIdClick(app, 'douyin-download-link');
+    await app.win.waitForSelector('div header+p');
+    await expect(app.win).toHaveScreenshot(vpImage('douyin', 'douyin', isDark));
   }
 
-  test(testTitle(1000, 'index page'), async function(): Promise<void> {
-    await indexVPTest();
+  test(testTitle(5000, 'douyin page'), async function(): Promise<void> {
+    await douyinVPTest();
 
     // 为下一个测试用例做修改
     dark = true;
   });
 
-  test(testTitle(1001, 'index page dark mode'), async function(): Promise<void> {
-    await indexVPTest(true);
+  test(testTitle(5001, 'douyin page dark mode'), async function(): Promise<void> {
+    await douyinVPTest(true);
   });
 }

@@ -16,7 +16,12 @@ export function testLog(serialNumber: number, title: string): void {
   console.log(testTitle(serialNumber, title));
 }
 
-/* 生成vp测试的图片 */
-export function vpImage(dir: string, filename: string): Array<string> {
-  return [dir, `${ filename }.png`];
+/**
+ * 生成vp测试的图片
+ * @param { string } dir: 目录
+ * @param { string } filename: 文件名
+ * @param { boolean } dark: 暗黑模式文件
+ */
+export function vpImage(dir: string, filename: string, dark?: boolean): Array<string> {
+  return [dir, `${ filename }${ dark ? '-dark' : '' }.png`];
 }

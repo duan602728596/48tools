@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test';
 import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle, vpImage } from '../../utils/testUtils.js';
 
-/* 客户端主界面入口测试 */
-export const title: string = 'VP index Page';
+/* 口袋48 */
+export const title: string = 'VP 48 Page';
 
 export function callback(): void {
   let app: ElectronApp | null = null;
@@ -20,26 +20,25 @@ export function callback(): void {
   });
 
   // 测试
-  async function indexVPTest(isDark?: boolean): Promise<void> {
+  async function liveOptionsVPTest(isDark?: boolean): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
-    await Promise.all([
-      app.win.waitForSelector('nav', { state: 'attached' }),
-      app.win.waitForSelector('.ant-image', { state: 'attached' })
-    ]);
-    await expect(app.win).toHaveScreenshot(vpImage('index', 'index', isDark));
+    await app.win.locator('.ant-btn').nth(0).click();
+    await app.win.locator('header .ant-btn').nth(3).click();
+    await app.win.waitForSelector('.ant-form');
+    await expect(app.win).toHaveScreenshot(vpImage('48', 'pocket48-live-options', isDark));
   }
 
-  test(testTitle(1000, 'index page'), async function(): Promise<void> {
-    await indexVPTest();
+  test(testTitle(2000, 'pocket48 live options page'), async function(): Promise<void> {
+    await liveOptionsVPTest();
 
     // 为下一个测试用例做修改
     dark = true;
   });
 
-  test(testTitle(1001, 'index page dark mode'), async function(): Promise<void> {
-    await indexVPTest(true);
+  test(testTitle(2001, 'pocket48 live options page dark mode'), async function(): Promise<void> {
+    await liveOptionsVPTest(true);
   });
 }
