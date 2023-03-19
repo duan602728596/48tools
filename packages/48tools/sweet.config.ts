@@ -21,6 +21,7 @@ const htmlWebpackPluginMinify: boolean | HtmlMinifierOptions = isDev ? false : {
   useShortDoctype: true,
   minifyCSS: true,
   minifyJS: {
+    module: true,
     ecma: 2020,
     safari10: true
   }
