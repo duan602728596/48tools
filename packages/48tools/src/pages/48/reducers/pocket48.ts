@@ -2,8 +2,9 @@ import {
   createSlice,
   createAsyncThunk,
   type Slice,
-  type SliceCaseReducers,
   type PayloadAction,
+  type CaseReducer,
+  type CaseReducerActions,
   type AsyncThunk,
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
@@ -26,7 +27,17 @@ export interface Pocket48InitialState {
   progress: Record<string, number>;
 }
 
-type CaseReducers = SliceCaseReducers<Pocket48InitialState>;
+type SliceReducers = {
+  setLiveList: CaseReducer<Pocket48InitialState, PayloadAction<Array<LiveInfo>>>;
+  setAddLiveChildList: CaseReducer<Pocket48InitialState, PayloadAction<WebWorkerChildItem>>;
+  setDeleteLiveChildList: CaseReducer<Pocket48InitialState, PayloadAction<LiveInfo>>;
+  setAutoGrab: CaseReducer<Pocket48InitialState, PayloadAction<number | null>>;
+  setRecordList: CaseReducer<Pocket48InitialState, PayloadAction<{ next: string; data: Array<LiveInfo> }>>;
+  setAddRecordChildList: CaseReducer<Pocket48InitialState, PayloadAction<RecordVideoDownloadWebWorkerItem>>;
+  setDeleteRecordChildList: CaseReducer<Pocket48InitialState, PayloadAction<LiveInfo>>;
+  setRecordFields: CaseReducer<Pocket48InitialState, PayloadAction<Array<RecordFieldData>>>;
+  setDownloadProgress: CaseReducer<Pocket48InitialState, PayloadAction<MessageEventData>>;
+};
 
 // 刷新直播列表
 export const reqLiveList: AsyncThunk<Array<LiveInfo>, void, {}> = createAsyncThunk(
@@ -37,8 +48,9 @@ export const reqLiveList: AsyncThunk<Array<LiveInfo>, void, {}> = createAsyncThu
     return res.content.liveList;
   });
 
-const { actions, reducer }: Slice = createSlice<Pocket48InitialState, CaseReducers, 'pocket48'>({
-  name: 'pocket48',
+const sliceName: 'pocket48' = 'pocket48';
+const { actions, reducer }: Slice<Pocket48InitialState, SliceReducers, typeof sliceName> = createSlice({
+  name: sliceName,
   initialState: {
     liveList: [],        // 直播信息
     liveChildList: [],   // 直播下载
@@ -156,5 +168,5 @@ export const {
   setDeleteRecordChildList,
   setRecordFields,
   setDownloadProgress
-}: Record<string, Function> = actions;
-export default { pocket48: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };

@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { LabeledValue } from '@48tools-types/antd';
 import type { ServerApiItem, CustomMessageV2 } from '../services/interface';
 import type { QueryRecord, FormatCustomMessage } from '../types';
@@ -11,10 +11,19 @@ export interface RoomMessageInitialState {
   homeMessageRaw: Array<CustomMessageV2>; // 原始数据
 }
 
-type CaseReducers = SliceCaseReducers<RoomMessageInitialState>;
+type SliceReducers = {
+  setSearchSelectValue: CaseReducer<RoomMessageInitialState, PayloadAction<LabeledValue | undefined>>;
+  setSearchServerResult: CaseReducer<RoomMessageInitialState, PayloadAction<ServerApiItem[]>>;
+  setQueryRecord: CaseReducer<RoomMessageInitialState, PayloadAction<QueryRecord>>;
+  setHomeMessage: CaseReducer<RoomMessageInitialState, PayloadAction<{
+    formatData: FormatCustomMessage[];
+    rawData: CustomMessageV2[];
+  }>>;
+};
 
-const { actions, reducer }: Slice = createSlice<RoomMessageInitialState, CaseReducers, 'roomMessage'>({
-  name: 'roomMessage',
+const sliceName: 'roomMessage' = 'roomMessage';
+const { actions, reducer }: Slice<RoomMessageInitialState, SliceReducers, typeof sliceName> = createSlice({
+  name: sliceName,
   initialState: {
     searchSelectValue: undefined,
     searchServerResult: [],
@@ -50,5 +59,5 @@ export const {
   setSearchServerResult,
   setQueryRecord,
   setHomeMessage
-}: Record<string, Function> = actions;
-export default { roomMessage: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };

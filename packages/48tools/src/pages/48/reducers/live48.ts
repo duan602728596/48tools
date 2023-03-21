@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
 
@@ -10,10 +10,21 @@ export interface Live48InitialState {
   progress: Record<string, number>;
 }
 
-type CaseReducers = SliceCaseReducers<Live48InitialState>;
+type SliceReducers = {
+  setAddInLiveList: CaseReducer<Live48InitialState, PayloadAction<InLiveWebWorkerItem>>;
+  setAddWorkerInLiveList: CaseReducer<Live48InitialState, PayloadAction<{ id: string; worker: Worker }>>;
+  setStopInLiveList: CaseReducer<Live48InitialState, PayloadAction<string>>;
+  setDeleteInLiveList: CaseReducer<Live48InitialState, PayloadAction<string>>;
+  setInVideoQuery: CaseReducer<Live48InitialState, PayloadAction<InVideoQuery>>;
+  setInVideoList: CaseReducer<Live48InitialState, PayloadAction<{ data: InVideoItem[]; page: number; total: number }>>;
+  setVideoListChildAdd: CaseReducer<Live48InitialState, PayloadAction<InVideoWebWorkerItem>>;
+  setVideoListChildDelete: CaseReducer<Live48InitialState, PayloadAction<InVideoItem>>;
+  setDownloadProgress: CaseReducer<Live48InitialState, PayloadAction<MessageEventData>>;
+};
 
-const { actions, reducer }: Slice = createSlice<Live48InitialState, CaseReducers, 'live48'>({
-  name: 'live48',
+const sliceName: 'live48' = 'live48';
+const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof sliceName> = createSlice({
+  name: sliceName,
   initialState: {
     inLiveList: [],          // 当前抓取的直播列表
     inVideoQuery: undefined, // 录播分页的查询条件
@@ -117,5 +128,5 @@ export const {
   setVideoListChildAdd,
   setVideoListChildDelete,
   setDownloadProgress
-}: Record<string, Function> = actions;
-export default { live48: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };
