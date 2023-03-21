@@ -1,7 +1,7 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { acfunLiveObjectStoreName } from '../../../utils/IDB/IDBRedux';
-import type { WebWorkerChildItem, IDBActionFunc } from '../../../commonTypes';
+import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { LiveItem } from '../types';
 
 export interface AcFunLiveInitialState {
@@ -9,9 +9,16 @@ export interface AcFunLiveInitialState {
   liveWorkers: Array<WebWorkerChildItem>;
 }
 
-type CaseReducers = SliceCaseReducers<AcFunLiveInitialState>;
+type SliceReducers = {
+  setAcFunLiveList: CaseReducer<AcFunLiveInitialState, PayloadAction<{ result: Array<LiveItem> }>>;
+  setAcFunLiveListAddRoom: CaseReducer<AcFunLiveInitialState, PayloadAction<{ data: LiveItem }>>;
+  setAcFunListDeleteRoom: CaseReducer<AcFunLiveInitialState, PayloadAction<{ query: string }>>;
+  setAddLiveWorker: CaseReducer<AcFunLiveInitialState, PayloadAction<WebWorkerChildItem>>;
+  setDeleteLiveWorker: CaseReducer<AcFunLiveInitialState, PayloadAction<LiveItem>>;
+};
 
-const { actions, reducer }: Slice = createSlice<AcFunLiveInitialState, CaseReducers, 'acfunLive'>({
+const sliceName: 'acfunLive' = 'acfunLive';
+const { actions, reducer }: Slice<AcFunLiveInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: 'acfunLive',
   initialState: {
     acfunLiveList: [], // 配置的acfun直播间信息
@@ -63,24 +70,24 @@ export const {
   setAcFunListDeleteRoom,
   setAddLiveWorker,
   setDeleteLiveWorker
-}: Record<string, Function> = actions;
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 
 // 保存数据
 export const IDBSaveAcFunLiveList: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: acfunLiveObjectStoreName,
-  successAction: setAcFunLiveListAddRoom as IDBActionFunc
+  successAction: setAcFunLiveListAddRoom
 });
 
 // 请求所有列表
 export const IDBCursorAcFunLiveList: CursorDispatchFunc = IDBRedux.cursorAction({
   objectStoreName: acfunLiveObjectStoreName,
-  successAction: setAcFunLiveList as IDBActionFunc
+  successAction: setAcFunLiveList
 });
 
 // 删除
 export const IDBDeleteAcFunLiveList: QueryDispatchFunc = IDBRedux.deleteAction({
   objectStoreName: acfunLiveObjectStoreName,
-  successAction: setAcFunListDeleteRoom as IDBActionFunc
+  successAction: setAcFunListDeleteRoom
 });
 
-export default { acfunLive: reducer };
+export default { [sliceName]: reducer };

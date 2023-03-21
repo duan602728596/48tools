@@ -2,11 +2,12 @@ import {
   createSlice,
   createEntityAdapter,
   type Slice,
-  type SliceCaseReducers,
+  type PayloadAction,
+  type CaseReducer,
+  type CaseReducerActions,
   type EntityAdapter,
   type EntityState,
-  type EntitySelectors,
-  type PayloadAction
+  type EntitySelectors
 } from '@reduxjs/toolkit';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
@@ -22,10 +23,15 @@ export interface BilibiliDownloadInitialState extends EntityState<DownloadItem> 
   downloadProgress: { [key: string]: number };
 }
 
-type CaseReducers = SliceCaseReducers<BilibiliDownloadInitialState>;
+type SliceReducers = {
+  setAddDownloadList: CaseReducer<BilibiliDownloadInitialState, PayloadAction<DownloadItem>>;
+  setDeleteDownloadList: CaseReducer<BilibiliDownloadInitialState, PayloadAction<string>>;
+  setDownloadProgress: CaseReducer<BilibiliDownloadInitialState, PayloadAction<MessageEventData>>;
+};
 
-const { actions, reducer }: Slice = createSlice<BilibiliDownloadInitialState, CaseReducers, 'bilibiliDownload'>({
-  name: 'bilibiliDownload',
+const sliceName: 'bilibiliDownload' = 'bilibiliDownload';
+const { actions, reducer }: Slice<BilibiliDownloadInitialState, SliceReducers, typeof sliceName> = createSlice({
+  name: sliceName,
   initialState: bilibiliDownloadListAdapter.getInitialState({
     downloadProgress: {} // 下载进度
   }),
@@ -52,5 +58,5 @@ export const {
   setAddDownloadList,
   setDeleteDownloadList,
   setDownloadProgress
-}: Record<string, Function> = actions;
-export default { bilibiliDownload: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };

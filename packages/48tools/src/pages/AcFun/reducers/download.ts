@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
@@ -9,10 +9,17 @@ export interface AcFunDownloadInitialState {
   progress: Record<string, number>;
 }
 
-type CaseReducers = SliceCaseReducers<AcFunDownloadInitialState>;
+type SliceReducers = {
+  setAddDownloadList: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
+  setDeleteDownloadList: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
+  setAddDownloadWorker: CaseReducer<AcFunDownloadInitialState, PayloadAction<WebWorkerChildItem>>;
+  setDeleteDownloadWorker: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
+  setDownloadProgress: CaseReducer<AcFunDownloadInitialState, PayloadAction<MessageEventData>>;
+};
 
-const { actions, reducer }: Slice = createSlice<AcFunDownloadInitialState, CaseReducers, 'acfunDownload'>({
-  name: 'acfunDownload',
+const sliceName: 'acfunDownload' = 'acfunDownload';
+const { actions, reducer }: Slice<AcFunDownloadInitialState, SliceReducers, typeof sliceName> = createSlice({
+  name: sliceName,
   initialState: {
     downloadList: [],          // acfun下载列表
     ffmpegDownloadWorkers: [], // 正在下载的线程
@@ -72,5 +79,5 @@ export const {
   setAddDownloadWorker,
   setDeleteDownloadWorker,
   setDownloadProgress
-}: Record<string, Function> = actions;
-export default { acfunDownload: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };

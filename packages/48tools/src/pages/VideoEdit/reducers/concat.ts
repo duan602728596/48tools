@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { ConcatItem } from '../types';
 
 export interface ConcatInitialState {
@@ -6,9 +6,15 @@ export interface ConcatInitialState {
   concatWorker: Worker | null;
 }
 
-type CaseReducers = SliceCaseReducers<ConcatInitialState>;
+type SliceReducers = {
+  setConcatListAdd: CaseReducer<ConcatInitialState, PayloadAction<Array<ConcatItem>>>;
+  setConcatList: CaseReducer<ConcatInitialState, PayloadAction<Array<ConcatItem>>>;
+  setConcatListDelete: CaseReducer<ConcatInitialState, PayloadAction<ConcatItem>>;
+  setConcatWorker: CaseReducer<ConcatInitialState, PayloadAction<Worker | null>>;
+};
 
-const { actions, reducer }: Slice = createSlice<ConcatInitialState, CaseReducers, 'concat'>({
+const sliceName: 'concat' = 'concat';
+const { actions, reducer }: Slice<ConcatInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: 'concat',
   initialState: {
     concatList: [],    // 合并列表
@@ -47,5 +53,5 @@ export const {
   setConcatList,
   setConcatListDelete,
   setConcatWorker
-}: Record<string, Function> = actions;
-export default { concat: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };

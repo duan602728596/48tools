@@ -2,8 +2,9 @@ import {
   createSlice,
   createAsyncThunk,
   type Slice,
-  type SliceCaseReducers,
   type PayloadAction,
+  type CaseReducer,
+  type CaseReducerActions,
   type AsyncThunk,
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
@@ -17,7 +18,9 @@ export interface WeiboSuperInitialState {
   quantity: Quantity;
 }
 
-type CaseReducers = SliceCaseReducers<WeiboSuperInitialState>;
+type SliceReducers = {
+  setCheckIn: CaseReducer<WeiboSuperInitialState, PayloadAction<boolean>>;
+};
 
 // 微博签到
 interface ReqTopicCheckinReturn {
@@ -48,7 +51,8 @@ export const reqTopicCheckin: AsyncThunk<ReqTopicCheckinReturn, ReqTopicCheckinP
     };
   });
 
-const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseReducers, 'weiboSuper'>({
+const sliceName: 'weiboSuper' = 'weiboSuper';
+const { actions, reducer }: Slice<WeiboSuperInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: 'weiboSuper',
   initialState: {
     weiboCheckinList: [], // 超话签到结果
@@ -82,5 +86,5 @@ const { actions, reducer }: Slice = createSlice<WeiboSuperInitialState, CaseRedu
   }
 });
 
-export const { setCheckIn }: Record<string, Function> = actions;
-export default { weiboSuper: reducer };
+export const { setCheckIn }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };

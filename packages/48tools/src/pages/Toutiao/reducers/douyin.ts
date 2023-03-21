@@ -2,11 +2,12 @@ import {
   createSlice,
   createEntityAdapter,
   type Slice,
-  type SliceCaseReducers,
+  type PayloadAction,
+  type CaseReducer,
+  type CaseReducerActions,
   type EntityAdapter,
   type EntityState,
-  type EntitySelectors,
-  type PayloadAction
+  type EntitySelectors
 } from '@reduxjs/toolkit';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
@@ -22,10 +23,15 @@ export interface DouyinDownloadInitialState extends EntityState<DownloadItem> {
   downloadProgress: Record<string, number>;
 }
 
-type CaseReducers = SliceCaseReducers<DouyinDownloadInitialState>;
+type SliceReducers = {
+  setAddDownloadList: CaseReducer<DouyinDownloadInitialState, PayloadAction<DownloadItem>>;
+  setDeleteDownloadList: CaseReducer<DouyinDownloadInitialState, PayloadAction<string>>;
+  setDownloadProgress: CaseReducer<DouyinDownloadInitialState, PayloadAction<MessageEventData>>;
+};
 
-const { actions, reducer }: Slice = createSlice<DouyinDownloadInitialState, CaseReducers, 'douyinDownload'>({
-  name: 'douyinDownload',
+const sliceName: 'douyinDownload' = 'douyinDownload';
+const { actions, reducer }: Slice<DouyinDownloadInitialState, SliceReducers, typeof sliceName> = createSlice({
+  name: sliceName,
   initialState: douyinDownloadListAdapter.getInitialState({
     downloadProgress: {} // 下载进度
   }),
@@ -52,5 +58,5 @@ export const {
   setAddDownloadList,
   setDeleteDownloadList,
   setDownloadProgress
-}: Record<string, Function> = actions;
-export default { douyinDownload: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };

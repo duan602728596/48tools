@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { CutItem } from '../types';
 
@@ -7,9 +7,15 @@ export interface VideoCutInitialState {
   cutChildList: Array<WebWorkerChildItem>;
 }
 
-type CaseReducers = SliceCaseReducers<VideoCutInitialState>;
+type SliceReducers = {
+  setCutListAdd: CaseReducer<VideoCutInitialState, PayloadAction<CutItem>>;
+  setCutListDelete: CaseReducer<VideoCutInitialState, PayloadAction<CutItem>>;
+  setCutChildListAdd: CaseReducer<VideoCutInitialState, PayloadAction<WebWorkerChildItem>>;
+  setCutChildListDelete: CaseReducer<VideoCutInitialState, PayloadAction<WebWorkerChildItem>>;
+};
 
-const { actions, reducer }: Slice = createSlice<VideoCutInitialState, CaseReducers, 'videoCut'>({
+const sliceName: 'videoCut' = 'videoCut';
+const { actions, reducer }: Slice<VideoCutInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: 'videoCut',
   initialState: {
     cutList: [],     // 视频裁剪队列
@@ -53,5 +59,5 @@ export const {
   setCutListDelete,
   setCutChildListAdd,
   setCutChildListDelete
-}: Record<string, Function> = actions;
-export default { videoCut: reducer };
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };
