@@ -1,15 +1,18 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { UserInfo, UserInfoString } from '../types';
 
 export interface Pocket48LoginInitialState {
   userInfo: UserInfo | null;
 }
 
-type CaseReducers = SliceCaseReducers<Pocket48LoginInitialState>;
+type SliceReducers = {
+  setUserInfo: CaseReducer<Pocket48LoginInitialState, PayloadAction<UserInfo>>;
+}
 
-const { actions, reducer }: Slice = createSlice<Pocket48LoginInitialState, CaseReducers, 'pocket48Login'>({
-  name: 'pocket48Login',
-  initialState: (): Pocket48LoginInitialState => {
+const sliceName: 'pocket48Login' = 'pocket48Login';
+const { actions, reducer }: Slice<Pocket48LoginInitialState, SliceReducers, typeof sliceName> = createSlice({
+  name: sliceName,
+  initialState(): Pocket48LoginInitialState {
     const userInfoStr: string | null = sessionStorage.getItem('POCKET48_USER_INFO');
 
     return { userInfo: userInfoStr !== null ? JSON.parse(userInfoStr as UserInfoString) : null };
@@ -22,5 +25,5 @@ const { actions, reducer }: Slice = createSlice<Pocket48LoginInitialState, CaseR
   }
 });
 
-export const { setUserInfo }: Record<string, Function> = actions;
-export default { pocket48Login: reducer };
+export const { setUserInfo }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export default { [sliceName]: reducer };
