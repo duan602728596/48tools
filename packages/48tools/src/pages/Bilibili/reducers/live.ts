@@ -1,7 +1,7 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { bilibiliLiveObjectStoreName } from '../../../utils/IDB/IDBRedux';
-import type { WebWorkerChildItem, IDBActionFunc } from '../../../commonTypes';
+import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { LiveItem } from '../types';
 
 export interface BilibiliLiveInitialState {
@@ -10,9 +10,18 @@ export interface BilibiliLiveInitialState {
   autoRecordTimer: NodeJS.Timer | null;
 }
 
-type CaseReducers = SliceCaseReducers<BilibiliLiveInitialState>;
+type SliceReducers = {
+  setBilibiliLiveList: CaseReducer<BilibiliLiveInitialState, PayloadAction<{ result: Array<LiveItem> }>>;
+  setBilibiliLiveListAddRoom: CaseReducer<BilibiliLiveInitialState, PayloadAction<{ data: LiveItem }>>;
+  setBilibiliLiveListUpdateRoom: CaseReducer<BilibiliLiveInitialState, PayloadAction<{ data: LiveItem }>>;
+  setBilibiliLiveListDeleteRoom: CaseReducer<BilibiliLiveInitialState, PayloadAction<{ query: string }>>;
+  setAddLiveBilibiliChildList: CaseReducer<BilibiliLiveInitialState, PayloadAction<WebWorkerChildItem>>;
+  setDeleteLiveBilibiliChildList: CaseReducer<BilibiliLiveInitialState, PayloadAction<LiveItem>>;
+  setAutoRecordTimer: CaseReducer<BilibiliLiveInitialState, PayloadAction<NodeJS.Timer>>;
+};
 
-const { actions, reducer }: Slice = createSlice<BilibiliLiveInitialState, CaseReducers, 'bilibiliLive'>({
+const sliceName: 'bilibiliLive' = 'bilibiliLive';
+const { actions, reducer }: Slice<BilibiliLiveInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: 'bilibiliLive',
   initialState: {
     bilibiliLiveList: [], // 数据库内获取的直播间列表
@@ -84,30 +93,30 @@ export const {
   setAddLiveBilibiliChildList,
   setDeleteLiveBilibiliChildList,
   setAutoRecordTimer
-}: Record<string, Function> = actions;
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 
 // 保存数据
 export const IDBSaveBilibiliLiveList: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: bilibiliLiveObjectStoreName,
-  successAction: setBilibiliLiveListAddRoom as IDBActionFunc
+  successAction: setBilibiliLiveListAddRoom
 });
 
 // 更新数据
 export const IDBUpdateBilibiliLiveList: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: bilibiliLiveObjectStoreName,
-  successAction: setBilibiliLiveListUpdateRoom as IDBActionFunc
+  successAction: setBilibiliLiveListUpdateRoom
 });
 
 // 请求所有列表
 export const IDBCursorBilibiliLiveList: CursorDispatchFunc = IDBRedux.cursorAction({
   objectStoreName: bilibiliLiveObjectStoreName,
-  successAction: setBilibiliLiveList as IDBActionFunc
+  successAction: setBilibiliLiveList
 });
 
 // 删除
 export const IDBDeleteBilibiliLiveList: QueryDispatchFunc = IDBRedux.deleteAction({
   objectStoreName: bilibiliLiveObjectStoreName,
-  successAction: setBilibiliLiveListDeleteRoom as IDBActionFunc
+  successAction: setBilibiliLiveListDeleteRoom
 });
 
-export default { bilibiliLive: reducer };
+export default { [sliceName]: reducer };
