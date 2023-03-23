@@ -143,24 +143,26 @@ function nativeRender(): Array<ReactNode> {
 
     for (const navItem of group) {
       groupElement.push(
-        <ButtonLink key={ navItem.name }
-          linkProps={{ to: navItem.url }}
-          buttonProps={{
-            className: navItem.hBtn ? 'overflow-hidden' : undefined,
-            icon: navItem.icon,
-            'data-test-id': navItem.testId
-          }}
-        >
-          { navItem.name }
-        </ButtonLink>
+        <div key={ navItem.name }>
+          <ButtonLink linkProps={{ to: navItem.url }}
+            buttonProps={{
+              className: navItem.hBtn ? 'overflow-hidden' : undefined,
+              icon: navItem.icon,
+              block: true,
+              'data-test-id': navItem.testId
+            }}
+          >
+            { navItem.name }
+          </ButtonLink>
+        </div>
       );
     }
 
     element.push(
-      <nav key={ `nav-${ i }` }>
-        <Space size={ 16 }>{ groupElement }</Space>
+      <nav key={ `nav-${ i }` } className="grid grid-cols-4 gap-[16px] w-[755px]">
+        { groupElement }
       </nav>,
-      <Divider key={ `divider-${ i }` } />
+      <Divider key={ `driver-${ i }` } />
     );
   }
 

@@ -29,7 +29,7 @@ function SearchForm(props: { onSubmit: OnSubmitFunc }): ReactElement {
 
   return (
     <Form form={ form } component={ false }>
-      <div className="inline-block mr-[16px] w-[130px] align-[4px]">
+      <div className="w-[130px]">
         <Form.Item name="q" noStyle={ true }>
           <Input className="align-[1px]"
             allowClear={ true }

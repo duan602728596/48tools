@@ -496,45 +496,47 @@ function Pocket48Record(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <SearchForm onSubmit={ onSubmit } />
-        {/* 队伍和当前人的搜索 */}
-        <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
-          <Space size={ 0 }>
-            <div className="relative inline-block mr-[8px] align-super">
-              <Space.Compact>
-                <Form.Item name="groupId" noStyle={ true }>
-                  <Select className="w-[130px]">
-                    <Select.Option value="all">全部</Select.Option>
-                    <Select.Option value={ 19 }>明星殿堂</Select.Option>
-                    <Select.Option value={ 17 }>THE9</Select.Option>
-                    <Select.Option value={ 18 }>硬糖少女303</Select.Option>
-                    <Select.Option value={ 20 }>丝芭影视</Select.Option>
-                    <Select.Option value={ 10 }>SNH48</Select.Option>
-                    <Select.Option value={ 11 }>BEJ48</Select.Option>
-                    <Select.Option value={ 12 }>GNZ48</Select.Option>
-                    <Select.Option value={ 14 }>CKG48</Select.Option>
-                    <Select.Option value={ 15 }>IDFT</Select.Option>
-                    <Select.Option value={ 16 }>海外练习生</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item name="userId" noStyle={ true }>
-                  <AutoComplete className="w-[250px]"
-                    placeholder="输入成员姓名查询或输入成员ID"
-                    onSearch={ handleByContentSearch }
-                    options={ userIdSearchResult }
-                  />
-                </Form.Item>
-              </Space.Compact>
-              <div className="absolute z-10 top-[4px] right-[6px] pointer-events-none">
-                { userIdSearchLoading && <Spin size="small" indicator={ <IconLoadingOutlined spin={ true } /> } /> }
+        <Space>
+          <SearchForm onSubmit={ onSubmit } />
+          {/* 队伍和当前人的搜索 */}
+          <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
+            <Space size={ 0 }>
+              <div className="relative inline-block mr-[8px] align-super">
+                <Space.Compact>
+                  <Form.Item name="groupId" noStyle={ true }>
+                    <Select className="w-[130px]">
+                      <Select.Option value="all">全部</Select.Option>
+                      <Select.Option value={ 19 }>明星殿堂</Select.Option>
+                      <Select.Option value={ 17 }>THE9</Select.Option>
+                      <Select.Option value={ 18 }>硬糖少女303</Select.Option>
+                      <Select.Option value={ 20 }>丝芭影视</Select.Option>
+                      <Select.Option value={ 10 }>SNH48</Select.Option>
+                      <Select.Option value={ 11 }>BEJ48</Select.Option>
+                      <Select.Option value={ 12 }>GNZ48</Select.Option>
+                      <Select.Option value={ 14 }>CKG48</Select.Option>
+                      <Select.Option value={ 15 }>IDFT</Select.Option>
+                      <Select.Option value={ 16 }>海外练习生</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item name="userId" noStyle={ true }>
+                    <AutoComplete className="w-[250px]"
+                      placeholder="输入成员姓名查询或输入成员ID"
+                      onSearch={ handleByContentSearch }
+                      options={ userIdSearchResult }
+                    />
+                  </Form.Item>
+                </Space.Compact>
+                <div className="absolute z-10 top-[4px] right-[6px] pointer-events-none">
+                  { userIdSearchLoading && <Spin size="small" indicator={ <IconLoadingOutlined spin={ true } /> } /> }
+                </div>
               </div>
-            </div>
-            <Button.Group>
-              <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
-              <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
-            </Button.Group>
-          </Space>
-        </Form>
+              <Button.Group>
+                <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
+                <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+              </Button.Group>
+            </Space>
+          </Form>
+        </Space>
       </Header>
       <Table size="middle"
         columns={ columns }
