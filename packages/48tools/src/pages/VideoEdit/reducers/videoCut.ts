@@ -11,7 +11,7 @@ type SliceReducers = {
   setCutListAdd: CaseReducer<VideoCutInitialState, PayloadAction<CutItem>>;
   setCutListDelete: CaseReducer<VideoCutInitialState, PayloadAction<CutItem>>;
   setCutChildListAdd: CaseReducer<VideoCutInitialState, PayloadAction<WebWorkerChildItem>>;
-  setCutChildListDelete: CaseReducer<VideoCutInitialState, PayloadAction<WebWorkerChildItem>>;
+  setCutChildListDelete: CaseReducer<VideoCutInitialState, PayloadAction<WebWorkerChildItem | CutItem>>;
 };
 
 const sliceName: 'videoCut' = 'videoCut';
@@ -43,7 +43,7 @@ const { actions, reducer }: Slice<VideoCutInitialState, SliceReducers, typeof sl
     },
 
     // 删除一个裁剪线程
-    setCutChildListDelete(state: VideoCutInitialState, action: PayloadAction<WebWorkerChildItem>): void {
+    setCutChildListDelete(state: VideoCutInitialState, action: PayloadAction<WebWorkerChildItem | CutItem>): void {
       const index: number = state.cutChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.id);
 
       if (index >= 0) {

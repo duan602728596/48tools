@@ -197,48 +197,51 @@ function SearchMessage(props: {}): ReactElement {
       let queryRecord: QueryRecord | {} = query;
 
       // 如果没有query或者query的ownerId和select的不一致，需要重置query
-      if (!('ownerId' in query) || query.ownerId !== Number(searchSelectValue.value)) {
+      if (!('ownerId' in queryRecord) || queryRecord.ownerId !== Number(searchSelectValue.value)) {
         const jumpRes: ServerJumpResult | undefined = await requestServerJump(Number(searchSelectValue.value));
 
         if (jumpRes?.content?.channelId && jumpRes?.content?.serverId) {
-          queryRecord = {
+          const qr: QueryRecord = queryRecord = {
             ownerName: searchSelectValue.label,
             ownerId: Number(searchSelectValue.value),
             channelId: jumpRes.content.channelId,
             serverId: jumpRes.content.serverId,
             nextTime: 0
           };
-          dispatch(setQueryRecord(queryRecord));
+
+          dispatch(setQueryRecord(qr));
         }
       }
 
-      // 请求房间消息
-      const homeownerMessageRes: HomeMessageResult | undefined = await requestHomeownerMessage(
-        (queryRecord as QueryRecord).channelId,
-        (queryRecord as QueryRecord).serverId,
-        (queryRecord as QueryRecord).nextTime);
+      if ('ownerId' in queryRecord) {
+        // 请求房间消息
+        const homeownerMessageRes: HomeMessageResult | undefined = await requestHomeownerMessage(
+          queryRecord.channelId,
+          queryRecord.serverId,
+          queryRecord.nextTime);
 
-      // 判断是否有数据
-      if (homeownerMessageRes?.content?.message?.length) {
-        if ((queryRecord as QueryRecord).nextTime === 0) {
-          dispatch(setHomeMessage({
-            formatData: formatDataArray(homeownerMessageRes.content.message),
-            rawData: homeownerMessageRes.content.message
+        // 判断是否有数据
+        if (homeownerMessageRes?.content?.message?.length) {
+          if (queryRecord.nextTime === 0) {
+            dispatch(setHomeMessage({
+              formatData: formatDataArray(homeownerMessageRes.content.message),
+              rawData: homeownerMessageRes.content.message
+            }));
+            setHomeMessagePage((prevState: Page): Page => ({ ...prevState, current: 0 }));
+          } else {
+            dispatch(setHomeMessage({
+              formatData: homeMessage.concat(formatDataArray(homeownerMessageRes.content.message)),
+              rawData: homeMessageRaw.concat(homeownerMessageRes.content.message)
+            }));
+          }
+
+          dispatch(setQueryRecord({
+            ...queryRecord,
+            nextTime: homeownerMessageRes.content.nextTime
           }));
-          setHomeMessagePage((prevState: Page): Page => ({ ...prevState, current: 0 }));
         } else {
-          dispatch(setHomeMessage({
-            formatData: homeMessage.concat(formatDataArray(homeownerMessageRes.content.message)),
-            rawData: homeMessageRaw.concat(homeownerMessageRes.content.message)
-          }));
+          messageApi.warning('没有获取到数据！');
         }
-
-        dispatch(setQueryRecord({
-          ...queryRecord,
-          nextTime: homeownerMessageRes.content.nextTime
-        }));
-      } else {
-        messageApi.warning('没有获取到数据！');
       }
     } catch (err) {
       console.error(err);
@@ -249,7 +252,7 @@ function SearchMessage(props: {}): ReactElement {
   }
 
   // 选择一个房间
-  function handleOwnerSelect(value: string, option: DefaultOptionType): void {
+  function handleOwnerSelect(value: string, option: LabeledValue): void {
     dispatch(setSearchSelectValue({
       label: option.label,
       value: option.value

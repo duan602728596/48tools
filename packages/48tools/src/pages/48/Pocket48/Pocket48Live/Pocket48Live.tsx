@@ -131,7 +131,7 @@ function Pocket48Live(props: {}): ReactElement {
       messageApi.info('开始自动抓取。');
       autoGrab(messageApi, r.value.dir, usersArr, transcoding);
       dispatch(setAutoGrab(
-        setInterval(autoGrab, r.value.time * 60_000, messageApi, r.value.dir, usersArr, transcoding)
+        window.setInterval(autoGrab, r.value.time * 60_000, messageApi, r.value.dir, usersArr, transcoding)
       ));
       next();
     });

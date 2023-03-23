@@ -22,7 +22,7 @@ import autoInLiveTimer from '../function/autoInLiveTimer';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import type { MessageEventData } from '../../../../commonTypes';
-import type { InLiveFormValue } from '../../types';
+import type { InLiveFormValue, InLiveWebWorkerItemNoplayStreamPath } from '../../types';
 
 /* 抓取直播信息表单 */
 function GetLiveUrl(props: {}): ReactElement {
@@ -82,7 +82,12 @@ function GetLiveUrl(props: {}): ReactElement {
       ffmpeg: getFFmpeg()
     });
 
-    dispatch(setAddInLiveList({ id, worker, ...value }));
+    dispatch(setAddInLiveList(
+      Object.assign<
+        Pick<InLiveWebWorkerItemNoplayStreamPath, 'id' | 'worker'>,
+        Required<InLiveFormValue>
+      >({ id, worker }, value as Required<InLiveFormValue>)
+    ));
   }
 
   // 自动录制
@@ -113,7 +118,12 @@ function GetLiveUrl(props: {}): ReactElement {
     // 开始轮询
     const timer: NodeJS.Timeout = setInterval(autoInLiveTimer, 120_000, messageApi, id, value, result.filePath);
 
-    dispatch(setAddInLiveList({ id, timer, ...value }));
+    dispatch(setAddInLiveList(
+      Object.assign<
+        Pick<InLiveWebWorkerItemNoplayStreamPath, 'id' | 'timer'>,
+        Required<InLiveFormValue>
+      >({ id, timer }, value as Required<InLiveFormValue>)
+    ));
     setTimeout(autoInLiveTimer, 0, messageApi, id, value, result.filePath);
   }
 

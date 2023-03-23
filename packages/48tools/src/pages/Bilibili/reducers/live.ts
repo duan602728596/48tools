@@ -17,7 +17,7 @@ type SliceReducers = {
   setBilibiliLiveListDeleteRoom: CaseReducer<BilibiliLiveInitialState, PayloadAction<{ query: string }>>;
   setAddLiveBilibiliChildList: CaseReducer<BilibiliLiveInitialState, PayloadAction<WebWorkerChildItem>>;
   setDeleteLiveBilibiliChildList: CaseReducer<BilibiliLiveInitialState, PayloadAction<LiveItem>>;
-  setAutoRecordTimer: CaseReducer<BilibiliLiveInitialState, PayloadAction<NodeJS.Timer>>;
+  setAutoRecordTimer: CaseReducer<BilibiliLiveInitialState, PayloadAction<NodeJS.Timer | null>>;
 };
 
 const sliceName: 'bilibiliLive' = 'bilibiliLive';

@@ -22,6 +22,8 @@ export interface InLiveWebWorkerItem {
   worker?: Worker;
 }
 
+export type InLiveWebWorkerItemNoplayStreamPath = Omit<InLiveWebWorkerItem, 'playStreamPath'>;
+
 /* ========== pocket48 ========== */
 // 直播自动录制配置
 export interface Pocket48LiveAutoGrabOptions {
@@ -32,9 +34,9 @@ export interface Pocket48LiveAutoGrabOptions {
 
 /* ========== inVideo ========== */
 export interface InVideoQuery {
-  page: number;     // 当前页数
-  total: number;    // 数据总数
-  liveType: string;
+  page?: number;     // 当前页数
+  total?: number;    // 数据总数
+  liveType?: string;
 }
 
 export interface InVideoItem {

@@ -1,9 +1,9 @@
 import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
-import type { InLiveWebWorkerItem, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
+import type { InLiveWebWorkerItemNoplayStreamPath, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
 
 export interface Live48InitialState {
-  inLiveList: Array<InLiveWebWorkerItem>;
+  inLiveList: Array<InLiveWebWorkerItemNoplayStreamPath>;
   inVideoQuery?: InVideoQuery;
   inVideoList: Array<InVideoItem>;
   videoListChild: Array<InVideoWebWorkerItem>;
@@ -11,7 +11,7 @@ export interface Live48InitialState {
 }
 
 type SliceReducers = {
-  setAddInLiveList: CaseReducer<Live48InitialState, PayloadAction<InLiveWebWorkerItem>>;
+  setAddInLiveList: CaseReducer<Live48InitialState, PayloadAction<InLiveWebWorkerItemNoplayStreamPath>>;
   setAddWorkerInLiveList: CaseReducer<Live48InitialState, PayloadAction<{ id: string; worker: Worker }>>;
   setStopInLiveList: CaseReducer<Live48InitialState, PayloadAction<string>>;
   setDeleteInLiveList: CaseReducer<Live48InitialState, PayloadAction<string>>;
@@ -34,13 +34,13 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
   },
   reducers: {
     // 添加当前抓取的直播列表
-    setAddInLiveList(state: Live48InitialState, action: PayloadAction<InLiveWebWorkerItem>): void {
+    setAddInLiveList(state: Live48InitialState, action: PayloadAction<InLiveWebWorkerItemNoplayStreamPath>): void {
       state.inLiveList = state.inLiveList.concat([action.payload]);
     },
 
     // 设置当前的worker，自动录制直播
     setAddWorkerInLiveList(state: Live48InitialState, action: PayloadAction<{ id: string; worker: Worker }>): void {
-      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItem): boolean => o.id === action.payload.id);
+      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItemNoplayStreamPath): boolean => o.id === action.payload.id);
 
       if (index >= 0) {
         clearInterval(state.inLiveList[index].timer!);
@@ -52,7 +52,7 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
 
     // 当前直播设置为停止
     setStopInLiveList(state: Live48InitialState, action: PayloadAction<string>): void {
-      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItem): boolean => o.id === action.payload);
+      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItemNoplayStreamPath): boolean => o.id === action.payload);
 
       if (index >= 0) {
         state.inLiveList[index].status = 0;
@@ -62,7 +62,7 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
 
     // 删除当前抓取的直播列表
     setDeleteInLiveList(state: Live48InitialState, action: PayloadAction<string>): void {
-      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItem): boolean => o.id === action.payload);
+      const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItemNoplayStreamPath): boolean => o.id === action.payload);
 
       if (index >= 0) {
         state.inLiveList.splice(index, 1);
@@ -72,7 +72,7 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
 
     // 设置分页的查询条件
     setInVideoQuery(state: Live48InitialState, action: PayloadAction<InVideoQuery>): void {
-      state.inVideoQuery = Object.assign(state.inVideoQuery ?? {}, action.payload);
+      state.inVideoQuery = Object.assign<InVideoQuery, InVideoQuery>(state.inVideoQuery ?? {}, action.payload);
     },
 
     // 设置录播列表
@@ -80,7 +80,7 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
       const { payload }: { payload: { data: Array<InVideoItem>; page: number; total: number } } = action;
 
       state.inVideoList = payload.data;
-      state.inVideoQuery = Object.assign<any, any>(state.inVideoQuery ?? {}, {
+      state.inVideoQuery = Object.assign<InVideoQuery, InVideoQuery>(state.inVideoQuery ?? {}, {
         page: payload.page,
         total: payload.total
       }) ;

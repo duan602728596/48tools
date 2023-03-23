@@ -7,7 +7,7 @@ import type { ColumnsType } from 'antd/es/table';
 import Header from '../../../../components/Header/Header';
 import GetLiveUrl from './GetLiveUrl';
 import { setDeleteInLiveList, setStopInLiveList, type Live48InitialState } from '../../reducers/live48';
-import type { InLiveWebWorkerItem } from '../../types';
+import type { InLiveWebWorkerItemNoplayStreamPath } from '../../types';
 
 /* redux selector */
 type RSelector = Pick<Live48InitialState, 'inLiveList'>;
@@ -15,7 +15,7 @@ type RState = { live48: Live48InitialState };
 
 const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 公演直播列表
-  inLiveList: ({ live48 }: RState): Array<InLiveWebWorkerItem> => live48.inLiveList
+  inLiveList: ({ live48 }: RState): Array<InLiveWebWorkerItemNoplayStreamPath> => live48.inLiveList
 });
 
 /* 官网公演直播抓取 */
@@ -24,12 +24,12 @@ function InLive(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
 
   // 删除
-  function handleDeleteClick(item: InLiveWebWorkerItem, event: MouseEvent): void {
+  function handleDeleteClick(item: InLiveWebWorkerItemNoplayStreamPath, event: MouseEvent): void {
     dispatch(setDeleteInLiveList(item.id));
   }
 
   // 停止
-  function handleStopClick(item: InLiveWebWorkerItem, event?: MouseEvent): void {
+  function handleStopClick(item: InLiveWebWorkerItemNoplayStreamPath, event?: MouseEvent): void {
     item.timer && clearInterval(item.timer);
 
     if (item.worker) {
@@ -39,13 +39,13 @@ function InLive(props: {}): ReactElement {
     }
   }
 
-  const columns: ColumnsType<InLiveWebWorkerItem> = [
+  const columns: ColumnsType<InLiveWebWorkerItemNoplayStreamPath> = [
     { title: '团体', dataIndex: 'type' },
     { title: '直播ID', dataIndex: 'live' },
     {
       title: '画质',
       dataIndex: 'quality',
-      render: (value: string, record: InLiveWebWorkerItem, index: number): string => {
+      render: (value: string, record: InLiveWebWorkerItemNoplayStreamPath, index: number): string => {
         switch (value) {
           case 'chao':
             return '超清';
@@ -65,7 +65,7 @@ function InLive(props: {}): ReactElement {
       title: '状态',
       dataIndex: 'status',
       width: 100,
-      render: (value: number | undefined, record: InLiveWebWorkerItem, index: number): ReactElement => value === 0
+      render: (value: number | undefined, record: InLiveWebWorkerItemNoplayStreamPath, index: number): ReactElement => value === 0
         ? <Tag color="red">已停止</Tag>
         : (record.worker ? <Tag color="cyan">录制中</Tag> : <Tag color="lime">等待录制</Tag>)
     },
@@ -73,7 +73,7 @@ function InLive(props: {}): ReactElement {
       title: '操作',
       key: 'handle',
       width: 150,
-      render: (value: undefined, record: InLiveWebWorkerItem, index: number): ReactElement => record.status === 0 ? (
+      render: (value: undefined, record: InLiveWebWorkerItemNoplayStreamPath, index: number): ReactElement => record.status === 0 ? (
         <Button type="primary"
           danger={ true }
           onClick={ (event: MouseEvent): void => handleDeleteClick(record, event) }
