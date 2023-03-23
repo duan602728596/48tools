@@ -21,7 +21,7 @@ import type { LabeledValue, UseMessageReturnType } from '@48tools-types/antd';
 import Icon, { Html5Filled as IconHtml5Filled } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
 import style from './searchMessage.sass';
-import FixSelect from './FixSelect';
+import FixSelect from '../../components/FixSelect/FixSelect';
 import Header from '../../../../components/Header/Header';
 import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
 import {
