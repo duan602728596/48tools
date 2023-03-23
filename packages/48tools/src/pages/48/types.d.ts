@@ -458,3 +458,11 @@ export type SendDataItem = TEXTSendData
   | FLIPCARD_AUDIOSendData
   | FLIPCARD_VIDEOSendData
   | EXPRESSIMAGESendData;
+
+/* ========== Room voice ========== */
+export interface RoomVoiceItem {
+  id: string;
+  channelId: number;
+  serverId: number;
+  nickname: string;
+}

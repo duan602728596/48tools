@@ -9,7 +9,8 @@ import type {
   SearchResult,
   ServerSearchResult,
   ServerJumpResult,
-  HomeMessageResult
+  HomeMessageResult,
+  VoiceOperate
 } from './interface';
 
 /**
@@ -180,6 +181,26 @@ export async function requestHomeownerMessage(
         limit: 700
       }
     });
+
+  return res.body;
+}
+
+/**
+ * 房间电台
+ * @param { number } serverId
+ * @param { number } channelId
+ */
+export async function requestVoiceOperate(serverId: number, channelId: number): Promise<VoiceOperate | undefined> {
+  const token: string | undefined = getPocket48Token();
+
+  if (!token) return;
+
+  const res: GotResponse<VoiceOperate> = await got('https://pocketapi.48.cn/im/api/v1/team/voice/operate', {
+    method: 'POST',
+    headers: createHeaders(token),
+    responseType: 'json',
+    json: { serverId, channelId, operateCode: 2 }
+  });
 
   return res.body;
 }
