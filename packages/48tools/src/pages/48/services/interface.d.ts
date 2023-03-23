@@ -140,6 +140,20 @@ export interface HomeMessageResult extends Pocket48ResponseBase {
   };
 }
 
+// 房间电台
+export interface VoiceOperate extends Pocket48ResponseBase {
+  content: {
+    streamUrl?: `rtmp://${ string }`;
+    voiceUserList: Array<{
+      voiceStatus: boolean;
+      nickname: string;
+      userId: string;
+      pfUrl: string;
+      avatar: string;
+    }>;
+  };
+}
+
 /* ========== live48 ========== */
 interface LiveOnePlayStreams {
   streamName: '标清' | '高清' | '超清';
