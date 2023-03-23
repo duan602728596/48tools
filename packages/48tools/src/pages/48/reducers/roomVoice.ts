@@ -9,7 +9,9 @@ import {
   type EntityState,
   type EntitySelectors
 } from '@reduxjs/toolkit';
-import { RoomVoiceItem } from '../types';
+import type { DataDispatchFunc, CursorDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
+import IDBRedux, { pocket48RoomVoiceObjectStoreName } from '../../../utils/IDB/IDBRedux';
+import type { RoomVoiceItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 
 // 录制时的webworker
@@ -26,6 +28,7 @@ export interface RoomVoiceInitialState extends EntityState<WebWorkerChildItem> {
 type SliceReducers = {
   setAddDownloadWorker: CaseReducer<RoomVoiceInitialState, PayloadAction<WebWorkerChildItem>>;
   setRemoveDownloadWorker: CaseReducer<RoomVoiceInitialState, PayloadAction<string>>;
+  setAddRoomVoice: CaseReducer<RoomVoiceInitialState, PayloadAction<{ data: RoomVoiceItem }>>;
   setRoomVoiceFromDB: CaseReducer<RoomVoiceInitialState, PayloadAction<{ result: Array<RoomVoiceItem> }>>;
   setDeleteRoomVoiceFromDB: CaseReducer<RoomVoiceInitialState, PayloadAction<{ query: string }>>;
 };
@@ -45,7 +48,17 @@ const { actions, reducer }: Slice<RoomVoiceInitialState, SliceReducers, typeof s
       state.roomVoice = action.payload.result;
     },
 
-    // 直播间列表内删除一个直播间
+    // 添加
+    setAddRoomVoice(state: RoomVoiceInitialState, action: PayloadAction<{ data: RoomVoiceItem }>): void {
+      const index: number = state.roomVoice.findIndex(
+        (o: RoomVoiceItem): boolean => o.serverId === action.payload.data.serverId);
+
+      if (index < 0) {
+        state.roomVoice = state.roomVoice.concat([action.payload.data]);
+      }
+    },
+
+    // 删除
     setDeleteRoomVoiceFromDB(state: RoomVoiceInitialState, action: PayloadAction<{ query: string }>): void {
       const index: number = state.roomVoice.findIndex((o: RoomVoiceItem): boolean => o.id === action.payload.query);
 
@@ -63,6 +76,20 @@ export const {
   setAddDownloadWorker,
   setRemoveDownloadWorker,
   setRoomVoiceFromDB,
+  setAddRoomVoice,
   setDeleteRoomVoiceFromDB
 }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+
+// 获取数据
+export const IDBCursorRoomVoiceInfo: CursorDispatchFunc = IDBRedux.cursorAction({
+  objectStoreName: pocket48RoomVoiceObjectStoreName,
+  successAction: setRoomVoiceFromDB
+});
+
+// 保存数据
+export const IDBSaveRoomVoiceInfo: DataDispatchFunc = IDBRedux.putAction({
+  objectStoreName: pocket48RoomVoiceObjectStoreName,
+  successAction: setAddRoomVoice
+});
+
 export default { [sliceName]: reducer };

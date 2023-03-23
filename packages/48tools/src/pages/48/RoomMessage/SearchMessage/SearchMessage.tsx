@@ -20,7 +20,6 @@ import type { DefaultOptionType } from 'rc-select/es/select';
 import type { LabeledValue, UseMessageReturnType } from '@48tools-types/antd';
 import Icon, { Html5Filled as IconHtml5Filled } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
-import style from './searchMessage.sass';
 import FixSelect from '../../components/FixSelect/FixSelect';
 import Header from '../../../../components/Header/Header';
 import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
@@ -287,9 +286,7 @@ function SearchMessage(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <FixSelect className={ style.searchSelect }
-          showSearch={ true }
-          value={ searchSelectValue }
+        <FixSelect value={ searchSelectValue }
           loading={ searchLoading }
           options={ serverResultOptions }
           placeholder="输入成员名字搜索"

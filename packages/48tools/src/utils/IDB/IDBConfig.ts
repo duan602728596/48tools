@@ -13,7 +13,7 @@ export interface IDBConfig {
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 6,
+  version: 7,
   objectStore: [
     // b站直播间信息
     {
@@ -48,6 +48,13 @@ const dbConfig: IDBConfig = {
       name: 'ffmpeg_template',
       key: 'id',
       data: ['name', 'args']
+    },
+
+    // 48房间电台
+    {
+      name: '48_room_voice',
+      key: 'id',
+      data: ['channelId', 'serverId', 'nickname']
     }
   ]
 };

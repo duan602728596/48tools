@@ -9,4 +9,5 @@ export const acfunLiveObjectStoreName: string = dbConfig.objectStore[1].name;
 export const optionsObjectStoreName: string = dbConfig.objectStore[2].name;
 export const weiboLoginListObjectStoreName: string = dbConfig.objectStore[3].name;
 export const ffmpegTemplateObjectStore: string = dbConfig.objectStore[4].name;
+export const pocket48RoomVoiceObjectStoreName: string = dbConfig.objectStore[5].name;
 export default IDBRedux;
