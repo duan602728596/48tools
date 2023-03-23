@@ -24,6 +24,7 @@ import IconDouyinSvgComponent from './images/douyin.component.svg';
 import IconCutSvgComponent from './images/cut.component.svg';
 import IconConcatSvgComponent from './images/concat.component.svg';
 import IconPowerShellSvgComponent from './images/powershell.component.svg';
+import IconDiantaiSvgComponent from './images/diantai.component.svg';
 import imageUrlZfbAvif from './images/zfb.avif';
 import imageUrlWxAvif from './images/wx.avif';
 
@@ -68,6 +69,16 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   ],
   [
     {
+      name: '口袋房间电台',
+      url: '/48/Voice',
+      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDiantaiSvgComponent } />
+    },
+    {
+      name: '口袋房间消息',
+      url: '/48/RoomMessage',
+      icon: <IconMessageFilled />
+    },
+    {
       name: 'B站视频下载',
       url: '/Bilibili/Download',
       icon: IconBilibiliLogo,
@@ -80,7 +91,9 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       icon: IconBilibiliLogo,
       hBtn: true,
       testId: 'bilibili-live-link'
-    },
+    }
+  ],
+  [
     {
       name: 'A站视频下载',
       url: '/AcFun/Download',
@@ -94,27 +107,20 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       icon: IconAcFunLogo,
       hBtn: true,
       testId: 'acfun-live-link'
-    }
-  ],
-  [
+    },
     {
       name: '抖音视频下载',
       url: '/Toutiao/Douyin',
       icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />,
       testId: 'douyin-download-link'
-    },
+    }
+  ],
+  [
     {
       name: '微博超话签到',
       url: '/WeiboSuper',
       icon: <IconWeiboOutlined />
     },
-    {
-      name: '口袋房间消息',
-      url: '/48/RoomMessage',
-      icon: <IconMessageFilled />
-    }
-  ],
-  [
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',

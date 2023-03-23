@@ -8,6 +8,7 @@ import Pocket48Record from './Pocket48/Pocket48Record/Pocket48Record';
 import InLive from './Live48/InLive/InLive';
 import InVideo from './Live48/InVideo/InVideo';
 import RoomMessage from './RoomMessage/RoomMessage';
+import Voice from './Voice/Voice';
 
 /* 直播和录播下载 */
 function Index(props: {}): ReactElement | null {
@@ -17,7 +18,8 @@ function Index(props: {}): ReactElement | null {
     { path: 'Pocket48Record', element: <Pocket48Record /> },
     { path: 'InLive', element: <InLive /> },
     { path: 'InVideo', element: <InVideo /> },
-    { path: 'RoomMessage', element: <RoomMessage /> }
+    { path: 'RoomMessage', element: <RoomMessage /> },
+    { path: 'Voice', element: <Voice /> }
   ]);
 
   return <Content className={ style.content }>{ routes }</Content>;
