@@ -42,6 +42,7 @@ const dbConfig: IDBConfig = {
       key: 'id',
       data: ['username', 'cookie', 'lastLoginTime']
     },
+
     // ffmpeg命令模板
     {
       name: 'ffmpeg_template',

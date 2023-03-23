@@ -1,28 +1,20 @@
-import {
-  Fragment,
-  useState,
-  useEffect,
-  type ReactElement,
-  type Dispatch as D,
-  type SetStateAction as S,
-  type MouseEvent
-} from 'react';
+import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Modal, Form, Input, message, Avatar, type FormInstance } from 'antd';
+import { Button, Modal, Form, message, Avatar, Tabs, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import type { Tab } from 'rc-tabs/es/interface';
 import style from './pocket48Login.sass';
-import SMS from './function/SMS';
-import { requestSMS, requestMobileCodeLogin } from './services/pocket48Login';
+import { requestMobileCodeLogin } from './services/pocket48Login';
 import { pick } from '../../utils/lodash';
 import { setUserInfo } from './reducers/pocket48Login';
 import { source } from '../../utils/snh48';
-import type { SMSResult, LoginUserInfo } from './services/interface';
+import LoginForm from './LoginForm/LoginForm';
+import TokenForm from './TokenForm/TokenForm';
+import type { LoginUserInfo } from './services/interface';
 import type { Pocket48LoginInitialState } from './reducers/pocket48Login';
 import type { UserInfo } from './types';
-
-const sms: SMS = new SMS();
 
 /* redux selector */
 type RState = { pocket48Login: Pocket48LoginInitialState };
@@ -47,15 +39,16 @@ function Pocket48Login(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false);
-  const [second, setSecond]: [number, D<S<number>>] = useState(sms.time);
-  const [form]: [FormInstance] = Form.useForm();
+  const [tabsKey, setTabsKey]: [string, D<S<string>>] = useState('loginForm');
+  const [loginForm]: [FormInstance] = Form.useForm();
+  const [tokenForm]: [FormInstance] = Form.useForm();
 
   // 登录并保存token
   async function handleLoginClick(event: MouseEvent): Promise<void> {
     let value: { area: string; mobile: string; code: string };
 
     try {
-      value = await form.validateFields();
+      value = await loginForm.validateFields();
     } catch {
       return;
     }
@@ -79,52 +72,68 @@ function Pocket48Login(props: {}): ReactElement {
     }
   }
 
-  // 发送验证码
-  async function handleSendSMSCodeClick(event: MouseEvent): Promise<void> {
-    let value: { area: string; mobile: string };
+  // 直接保存token
+  async function handleSaveTokenClick(event: MouseEvent): Promise<void> {
+    let value: { token: string };
 
     try {
-      value = await form.validateFields(['area', 'mobile']);
+      value = await tokenForm.validateFields();
     } catch {
       return;
     }
 
-    sms.start();
+    dispatch(setUserInfo({
+      token: value.token,
+      nickname: '',
+      avatar: '',
+      unknown: true
+    }));
+    setOpen(false);
+  }
 
-    try {
-      const res: SMSResult = await requestSMS(value.mobile, value.area);
+  function afterClose(): void {
+    loginForm.resetFields();
+    tokenForm.resetFields();
+    setTabsKey('loginForm');
+  }
 
-      if (!res.success) {
-        messageApi.error('验证码发送失败！');
+  // button的渲染
+  function loginButtonRender(): ReactElement {
+    let icon: ReactElement | null = null;
+    let nickname: string = '口袋48登录';
 
-        return;
-      }
-    } catch (err) {
-      console.error(err);
-      messageApi.error('验证码发送失败！');
+    if (userInfo) {
+      icon = (
+        <Avatar className={ style.avatar } size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
+          { userInfo?.unknown ? '?' : undefined }
+        </Avatar>
+      );
+      nickname = userInfo.unknown ? '未知用户' : userInfo.nickname;
     }
+
+    return (
+      <Button icon={ icon } onClick={ (event: MouseEvent): void => setOpen(true) }>
+        { nickname }
+      </Button>
+    );
   }
 
-  // 更新验证码
-  function handleSMSUpdate(event: Event): void {
-    setSecond(event['data']);
-  }
-
-  useEffect(function(): () => void {
-    document.addEventListener(sms.event.type, handleSMSUpdate);
-
-    return function(): void {
-      document.removeEventListener(sms.event.type, handleSMSUpdate);
-    };
-  }, []);
+  const tabsItem: Array<Tab> = [
+    {
+      key: 'loginForm',
+      label: '验证码登录',
+      children: <LoginForm form={ loginForm } />
+    },
+    {
+      key: 'tokenForm',
+      label: 'Token',
+      children: <TokenForm form={ tokenForm } />
+    }
+  ];
 
   return (
     <Fragment>
-      <Button icon={ userInfo && <Avatar className={ style.avatar } size="small" src={ source(userInfo.avatar) } /> }
-        onClick={ (event: MouseEvent): void => setOpen(true) }
-      >
-        { userInfo ? userInfo.nickname : '口袋48登录' }
-      </Button>
+      { loginButtonRender() }
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }
@@ -132,39 +141,14 @@ function Pocket48Login(props: {}): ReactElement {
         destroyOnClose={ true }
         closable={ false }
         maskClosable={ false }
-        afterClose={ form.resetFields }
+        afterClose={ afterClose }
         okText="登录"
-        onOk={ handleLoginClick }
+        onOk={ tabsKey === 'tokenForm' ? handleSaveTokenClick : handleLoginClick }
         onCancel={ (event: MouseEvent): void => setOpen(false) }
       >
-        <Form form={ form } initialValues={{ area: '86' }} labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
-          <Form.Item className={ style.formItem } label="手机" required={ true }>
-            <div className="flex">
-              <div className="w-[90px]">
-                <Form.Item name="area" rules={ [{ required: true, message: '请输入地区' }] } noStyle={ true }>
-                  <Input prefix="+" />
-                </Form.Item>
-              </div>
-              <div className="flex-grow ml-[8px]">
-                <Form.Item name="mobile" rules={ [{ required: true, message: '请输入手机号' }] } noStyle={ true }>
-                  <Input />
-                </Form.Item>
-              </div>
-            </div>
-          </Form.Item>
-          <Form.Item className={ style.formItem } label="验证码" required={ true }>
-            <div className="flex">
-              <div className="flex-grow mr-[8px]">
-                <Form.Item name="code" rules={ [{ required: true, message: '请输入验证码' }] } noStyle={ true }>
-                  <Input />
-                </Form.Item>
-              </div>
-              <Button className="w-[120px]" disabled={ second !== 0 } onClick={ handleSendSMSCodeClick }>
-                { second === 0 ? '发送验证码' : `${ second }秒` }
-              </Button>
-            </div>
-          </Form.Item>
-        </Form>
+        <div className="h-[200px]">
+          <Tabs type="card" activeKey={ tabsKey } items={ tabsItem } onChange={ (key: string): void => setTabsKey(key) } />
+        </div>
       </Modal>
       { messageContextHolder }
     </Fragment>
