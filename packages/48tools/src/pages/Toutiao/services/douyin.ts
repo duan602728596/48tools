@@ -2,7 +2,16 @@ import got, { type Response as GotResponse } from 'got';
 import { pcUserAgent } from '../../../utils/utils';
 import { awemePostQuery, awemeDetailQuery } from '../Douyin/function/signUtils';
 import { douyinCookie } from '../Douyin/function/DouyinCookieStore';
-import type { AwemePostResponse, AwemeDetailResponse, DouyinHtmlResponseType, DouyinUserApiType, DouyinDetailApiType } from './interface';
+import { msToken } from '../Douyin/function/signUtils';
+import Signer from '../sdk/Signer';
+import type {
+  AwemePostResponse,
+  AwemeDetailResponse,
+  DouyinHtmlResponseType,
+  DouyinUserApiType,
+  DouyinDetailApiType,
+  LiveEnter
+} from './interface';
 import type { VideoQuery } from '../types';
 
 type RequestDouyinHtmlReturn = (urlCb: string | ((url?: string) => string), cookie?: string) => Promise<DouyinHtmlResponseType>;
@@ -133,4 +142,35 @@ export async function requestTtwidCookie(): Promise<void> {
       douyinCookie.set(cookieStr);
     }
   }
+}
+
+/**
+ * 抖音直播
+ * @param { string } cookie
+ * @param { string } rid
+ */
+export async function requestLiveEnter(cookie: string, rid: string): Promise<LiveEnter | string> {
+  const token: string = msToken();
+  const searchParams: URLSearchParams = new URLSearchParams({
+    aid: '6383',
+    device_platform: 'web',
+    web_rid: rid,
+    msToken: token
+  });
+  const xbogus: string = Signer.sign(searchParams.toString(), pcUserAgent);
+
+  searchParams.set('X-Bogus', xbogus);
+
+  const res: GotResponse<LiveEnter | string> = await got.get(
+    `https://live.douyin.com/webcast/room/web/enter/?${ searchParams.toString() }`, {
+      responseType: 'json',
+      headers: {
+        Referer: 'https://live.douyin.com/',
+        Host: 'live.douyin.com',
+        'User-Agent': pcUserAgent,
+        Cookie: cookie
+      }
+    });
+
+  return res.body;
 }

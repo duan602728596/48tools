@@ -58,3 +58,33 @@ export interface DouyinDetailApiType {
 }
 
 export type DouyinHtmlResponseType = DouyinHtmlCookieType | DouyinHtmlType | DouyinUserApiType | DouyinDetailApiType;
+
+/* 抖音直播的数据结构 */
+export interface LiveEnterData {
+  status: 2;
+  stream_url: {
+    // flv
+    flv_pull_url: {
+      FULL_HD1: string;
+      HD1: string;
+      SD1: string;
+      SD2: string;
+    };
+    // m3u8
+    hls_pull_url_map: {
+      FULL_HD1: string;
+      HD1: string;
+      SD1: string;
+      SD2: string;
+    };
+    hls_pull_url: string;
+  };
+}
+
+export interface LiveEnter {
+  data: {
+    data: [LiveEnterData] | [];
+    room_status: 0 | 2; // 0 开启 2 未直播
+  };
+  status_code: number;
+}
