@@ -9,7 +9,7 @@ import {
   type EntityState,
   type EntitySelectors
 } from '@reduxjs/toolkit';
-import type { DataDispatchFunc, CursorDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
+import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { pocket48RoomVoiceObjectStoreName } from '../../../utils/IDB/IDBRedux';
 import type { RoomVoiceItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
@@ -90,6 +90,12 @@ export const IDBCursorRoomVoiceInfo: CursorDispatchFunc = IDBRedux.cursorAction(
 export const IDBSaveRoomVoiceInfo: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: pocket48RoomVoiceObjectStoreName,
   successAction: setAddRoomVoice
+});
+
+// 删除数据
+export const IDBDeleteRoomVoiceInfo: QueryDispatchFunc = IDBRedux.deleteAction({
+  objectStoreName: pocket48RoomVoiceObjectStoreName,
+  successAction: setDeleteRoomVoiceFromDB
 });
 
 export default { [sliceName]: reducer };
