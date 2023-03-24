@@ -28,8 +28,8 @@ export interface RoomVoiceInitialState extends EntityState<WebWorkerChildItem> {
 type SliceReducers = {
   setAddDownloadWorker: CaseReducer<RoomVoiceInitialState, PayloadAction<WebWorkerChildItem>>;
   setRemoveDownloadWorker: CaseReducer<RoomVoiceInitialState, PayloadAction<string>>;
-  setAddRoomVoice: CaseReducer<RoomVoiceInitialState, PayloadAction<{ data: RoomVoiceItem }>>;
   setRoomVoiceFromDB: CaseReducer<RoomVoiceInitialState, PayloadAction<{ result: Array<RoomVoiceItem> }>>;
+  setAddRoomVoice: CaseReducer<RoomVoiceInitialState, PayloadAction<{ data: RoomVoiceItem }>>;
   setDeleteRoomVoiceFromDB: CaseReducer<RoomVoiceInitialState, PayloadAction<{ query: string }>>;
 };
 

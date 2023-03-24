@@ -9,6 +9,7 @@ import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
 import acfunDownloadReducers from '../pages/AcFun/reducers/download';
 import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyinDownload';
+import douyinLiveReducers from '../pages/Toutiao/reducers/douyinLive';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';
@@ -27,6 +28,7 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   acfunDownloadReducers,
   acfunLiveReducers,
   douyinDownloadReducers,
+  douyinLiveReducers,
   videoEditConcatReducers,
   videoEditVideoCutReducers,
   FFmpegProcessReducer,
@@ -46,6 +48,7 @@ export const ignoreOptions: any = {
     'bilibiliLive.autoRecordTimer',
     'acfunDownload.ffmpegDownloadWorkers',
     'acfunLive.liveWorkers',
+    'douyinLive.entities',
     'concat.concatWorker',
     'videoCut.cutChildList',
     'FFmpegProcess.entities'
@@ -71,6 +74,8 @@ export const ignoreOptions: any = {
     'acfunDownload/setDeleteDownloadWorker',
     'acfunLive/setAddLiveWorker',
     'acfunLive/setDeleteLiveWorker',
+    'douyin/setAddDownloadWorker',
+    'douyin/setRemoveDownloadWorker',
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete',
