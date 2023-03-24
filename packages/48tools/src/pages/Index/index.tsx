@@ -39,7 +39,9 @@ interface NativeItem {
 const IconBilibiliLogo: ReactElement
     = <Icon className={ classNames('relative', style.iconBilibili) } component={ IconBilibiliLogoSvgComponent } />,
   IconAcFunLogo: ReactElement
-    = <Icon className={ classNames('relative', style.iconAcFun) } component={ IconAcFunLogoSvgComponent } />;
+    = <Icon className={ classNames('relative', style.iconAcFun) } component={ IconAcFunLogoSvgComponent } />,
+  IconDouyinLogo: ReactElement
+    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />;
 
 /* 导航配置 */
 const navLinkConfig: Array<Array<NativeItem>> = [
@@ -111,8 +113,14 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '抖音视频下载',
       url: '/Toutiao/Douyin',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />,
+      icon: IconDouyinLogo,
       testId: 'douyin-download-link'
+    },
+    {
+      name: '抖音直播抓取',
+      url: '/Toutiao/DouyinLive',
+      icon: IconDouyinLogo,
+      testId: 'douyin-live-link'
     }
   ],
   [
