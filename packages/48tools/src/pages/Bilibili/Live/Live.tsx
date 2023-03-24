@@ -11,10 +11,11 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
+import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
-import AddForm from './AddForm/AddForm';
 import AutoRecordingSavePath from './AutoRecordingSavePath/AutoRecordingSavePath';
 import {
+  IDBSaveBilibiliLiveList,
   IDBCursorBilibiliLiveList,
   IDBDeleteBilibiliLiveList,
   IDBUpdateBilibiliLiveList,
@@ -207,7 +208,11 @@ Origin: https://live.bilibili.com\r`
       <Header>
         <Button.Group>
           <BilibiliLogin />
-          <AddForm />
+          <AddLiveRoomForm dataTestId="bilibili-add-live-id-btn"
+            modalTitle="添加B站直播间信息"
+            tips="直播间ID支持配置短ID。"
+            IDBSaveDataFunc={ IDBSaveBilibiliLiveList }
+          />
           <AutoRecordingSavePath />
           {
             autoRecordTimer === null

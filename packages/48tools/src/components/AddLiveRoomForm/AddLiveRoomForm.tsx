@@ -1,13 +1,29 @@
 import { randomUUID } from 'node:crypto';
-import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Form, Modal, Input, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
-import { IDBSaveAcFunLiveList } from '../reducers/live';
+import type { DataDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
+import commonStyle from '../../common.sass';
 
-/* 添加一个A站直播间 */
-function AddForm(props: {}): ReactElement {
+/* 添加A站 B站 抖音的直播间ID，保存到数据库 */
+interface AddLiveRoomFormProps {
+  dataTestId?: string;
+  modalTitle: string;
+  tips?: string;
+  IDBSaveDataFunc: DataDispatchFunc;
+}
+
+function AddLiveRoomForm(props: AddLiveRoomFormProps): ReactElement {
+  const { dataTestId, modalTitle, tips, IDBSaveDataFunc }: AddLiveRoomFormProps = props;
   const dispatch: Dispatch = useDispatch();
   const [form]: [FormInstance] = Form.useForm();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
@@ -22,7 +38,7 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    dispatch(IDBSaveAcFunLiveList({
+    dispatch(IDBSaveDataFunc({
       data: {
         ...formValue,
         id: randomUUID()
@@ -48,16 +64,15 @@ function AddForm(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button type="primary" data-test-id="acfun-add-live-id-btn" onClick={ handleOpenAddModalClick }>添加直播间信息</Button>
-      <Modal bodyStyle={{ height: '150px' }}
-        title="添加A站直播间信息"
+      <Button type="primary" data-test-id={ dataTestId } onClick={ handleOpenAddModalClick }>添加直播间信息</Button>
+      <Modal title={ modalTitle }
         open={ visible }
         width={ 500 }
         afterClose={ handleAddModalClose }
         onOk={ handleAddRoomIdClick }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form form={ form } labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+        <Form className="h-[150px]" form={ form } labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
           <Form.Item name="description"
             label="直播间说明"
             rules={ [{ required: true, message: '请填写直播间说明', whitespace: true }] }
@@ -70,10 +85,11 @@ function AddForm(props: {}): ReactElement {
           >
             <Input />
           </Form.Item>
+          { tips && <p className={ commonStyle.tips }>{ tips }</p> }
         </Form>
       </Modal>
     </Fragment>
   );
 }
 
-export default AddForm;
+export default AddLiveRoomForm;

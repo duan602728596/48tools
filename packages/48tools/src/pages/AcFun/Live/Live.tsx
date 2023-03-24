@@ -20,9 +20,10 @@ import style from './live.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
+import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import AcFunLogin from '../../../functionalComponents/AcFunLogin/AcFunLogin';
-import AddForm from './AddForm';
 import {
+  IDBSaveAcFunLiveList,
   IDBCursorAcFunLiveList,
   IDBDeleteAcFunLiveList,
   setAddLiveWorker,
@@ -287,7 +288,10 @@ function Live(props: {}): ReactElement {
       <Header>
         <Button.Group>
           <AcFunLogin />
-          <AddForm />
+          <AddLiveRoomForm dataTestId="acfun-add-live-id-btn"
+            modalTitle="添加A站直播间信息"
+            IDBSaveDataFunc={ IDBSaveAcFunLiveList }
+          />
         </Button.Group>
       </Header>
       <Table size="middle"
