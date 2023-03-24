@@ -23,7 +23,7 @@ import style from './messageDisplay.sass';
 import commonStyle from '../../../../common.sass';
 import { omit } from '../../../../utils/lodash';
 import { mp4Source } from '../../../../utils/snh48';
-import { accessibilityClassName } from '../../../../components/Accessibility/Accessibility';
+import { accessibilityClassName } from '../../../../components/basic/Accessibility/Accessibility';
 import type { FormatCustomMessage, FlipCardInfo, FlipCardAudioInfo, FlipCardVideoInfo } from '../../types';
 
 const { Paragraph }: TypographyProps = Typography;

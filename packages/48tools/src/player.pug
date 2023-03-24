@@ -6,13 +6,13 @@ html
     meta(charset='utf-8')
     meta(name='renderer' content='webkit')
     meta(name='viewport' content='width=device-width, initial-scale=1')
-    include components/Theme/stylesheet
+    include ./components/basic/Theme/stylesheet
 
   body.theme
     div.app#app
-      include components/loading/loading
+      include ./components/basic/loading/loading
 
-    include components/initialState/initialState
+    include ./components/basic/initialState/initialState
 
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)

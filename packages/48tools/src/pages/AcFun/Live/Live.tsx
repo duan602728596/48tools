@@ -32,8 +32,8 @@ import {
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
-import AntdConfig from '../../../components/AntdConfig/AntdConfig';
-import ThemeProvider from '../../../components/Theme/ThemeProvider';
+import AntdConfig from '../../../components/basic/AntdConfig/AntdConfig';
+import ThemeProvider from '../../../components/basic/Theme/ThemeProvider';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveRepresentation, LiveVideoPlayRes, LiveItem } from '../types';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';

@@ -13,7 +13,7 @@ import commonStyle from '../../common.sass';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';
-import ThemeContext, { type Theme } from '../../components/Theme/ThemeContext';
+import ThemeContext, { type Theme } from '../../components/basic/Theme/ThemeContext';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
 import IconMicrophoneSvgComponent from './images/microphone.component.svg';

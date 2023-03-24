@@ -5,12 +5,12 @@ import 'antd/dist/reset.css';
 import * as dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { storeFactory } from './store/store';
-import AntdConfig from './components/AntdConfig/AntdConfig';
-import ThemeProvider from './components/Theme/ThemeProvider';
+import AntdConfig from './components/basic/AntdConfig/AntdConfig';
+import ThemeProvider from './components/basic/Theme/ThemeProvider';
 import Routers from './router/Routers';
 import IDBInit from './utils/IDB/IDBInit';
 import './main.tailwindcss.css';
-import './components/Accessibility/Accessibility';
+import './components/basic/Accessibility/Accessibility';
 
 dayjs.locale('zh-cn');
 
