@@ -69,6 +69,8 @@ function AddLiveRoomForm(props: AddLiveRoomFormProps): ReactElement {
         open={ visible }
         width={ 500 }
         afterClose={ handleAddModalClose }
+        centered={ true }
+        maskClosable={ false }
         onOk={ handleAddRoomIdClick }
         onCancel={ handleCloseAddModalClick }
       >
