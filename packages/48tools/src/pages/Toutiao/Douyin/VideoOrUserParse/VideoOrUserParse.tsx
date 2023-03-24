@@ -21,7 +21,7 @@ import douyinStyle from '../douyin.sass';
 import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
 import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMiddleware';
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
-import { setAddDownloadList } from '../../reducers/douyin';
+import { setAddDownloadList } from '../../reducers/douyinDownload';
 import { douyinCookie } from '../function/DouyinCookieStore';
 import { requestAwemePost, requestDouyinUser, requestTtwidCookie } from '../../services/douyin';
 import * as toutiaosdk from '../../sdk/toutiaosdk';

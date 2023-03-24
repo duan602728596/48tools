@@ -13,48 +13,55 @@ export interface IDBConfig {
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 7,
+  version: 8,
   objectStore: [
-    // b站直播间信息
+    // 0：b站直播间信息
     {
       name: 'bilibili_live',
       key: 'id',
       data: ['description', 'roomId', 'autoRecord']
     },
 
-    // a站直播间信息
+    // 1：a站直播间信息
     {
       name: 'acfun_live',
       key: 'id',
       data: ['description', 'roomId']
     },
 
-    // 一些配置
+    // 2：一些配置
     {
       name: 'options',
       key: 'name',
       data: ['value']
     },
 
-    // 微博登陆列表
+    // 3：微博登陆列表
     {
       name: 'weibo_login_list',
       key: 'id',
       data: ['username', 'cookie', 'lastLoginTime']
     },
 
-    // ffmpeg命令模板
+    // 4：ffmpeg命令模板
     {
       name: 'ffmpeg_template',
       key: 'id',
       data: ['name', 'args']
     },
 
-    // 48房间电台
+    // 5：48房间电台
     {
       name: '48_room_voice',
       key: 'id',
       data: ['channelId', 'serverId', 'nickname']
+    },
+
+    // 6：抖音直播间信息
+    {
+      name: 'douyin_live',
+      key: 'id',
+      data: ['description', 'roomId']
     }
   ]
 };

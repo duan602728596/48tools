@@ -8,7 +8,7 @@ import bilibiliDownloadReducers from '../pages/Bilibili/reducers/download';
 import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
 import acfunDownloadReducers from '../pages/AcFun/reducers/download';
 import acfunLiveReducers from '../pages/AcFun/reducers/live';
-import douyinDownloadReducers from '../pages/Toutiao/reducers/douyin';
+import douyinDownloadReducers from '../pages/Toutiao/reducers/douyinDownload';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';

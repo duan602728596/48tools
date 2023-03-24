@@ -22,7 +22,7 @@ import {
   setDeleteDownloadList,
   setDownloadProgress,
   type DouyinDownloadInitialState
-} from '../reducers/douyin';
+} from '../reducers/douyinDownload';
 import { requestGetVideoRedirectUrl } from '../services/douyin';
 import type { DownloadItem } from '../types';
 
