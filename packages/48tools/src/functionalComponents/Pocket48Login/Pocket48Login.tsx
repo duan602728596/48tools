@@ -83,7 +83,7 @@ function Pocket48Login(props: {}): ReactElement {
     }
 
     dispatch(setUserInfo({
-      token: value.token,
+      token: value.token.trim(),
       nickname: '',
       avatar: '',
       unknown: true
