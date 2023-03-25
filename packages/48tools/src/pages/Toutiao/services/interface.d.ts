@@ -62,7 +62,7 @@ export type DouyinHtmlResponseType = DouyinHtmlCookieType | DouyinHtmlType | Dou
 /* 抖音直播的数据结构 */
 export interface LiveEnterData {
   status: 2;
-  stream_url: {
+  stream_url?: {
     // flv
     flv_pull_url: {
       FULL_HD1: string;

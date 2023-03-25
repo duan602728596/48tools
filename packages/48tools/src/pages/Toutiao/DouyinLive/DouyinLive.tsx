@@ -129,7 +129,7 @@ function DouyinLive(props: {}): ReactElement {
       const res: LiveEnter | string = await requestLiveEnter(douyinCookie.toString(), record.roomId);
 
       if (typeof res === 'object') {
-        if (res?.data?.data?.length) {
+        if (res?.data?.data?.length && res.data.data[0]?.stream_url) {
           const options: Array<BaseOptionType> = [];
 
           for (const key in res.data.data[0].stream_url.flv_pull_url) {
