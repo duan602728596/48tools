@@ -7,8 +7,8 @@ import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
 import * as config from '../../utils/config.js';
-import { getBilibiliLiveList } from '../../services/services.js';
-import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from './liveRecordingProcess.js';
+import { requestBilibiliLiveList } from '../../services/services.js';
+import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess';
 import { testTitle } from '../../utils/testUtils.js';
 import type { BilibiliLiveListResponse } from '../../services/interface.js';
 
@@ -40,7 +40,7 @@ export function callback(): void {
 
     // 设置ffmpeg的位置
     const [liveList]: [BilibiliLiveListResponse, JSHandle<void>, void] = await Promise.all([
-      getBilibiliLiveList(),
+      requestBilibiliLiveList(),
       setFFmpegPath(app),
       (async (): Promise<void> => {
         await testIdClick(app, 'bilibili-live-link');

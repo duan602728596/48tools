@@ -1,6 +1,6 @@
 import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import type { ElementHandle, Locator } from 'playwright';
-import type ElectronApp from '../../utils/ElectronApp.js';
+import type ElectronApp from '../utils/ElectronApp';
 
 /* 输入房间号并开始录制 */
 export async function liveRecordingTypeRoomIdAndStart(app: ElectronApp, roomId: string): Promise<void> {

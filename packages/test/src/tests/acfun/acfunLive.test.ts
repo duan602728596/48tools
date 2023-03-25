@@ -8,8 +8,8 @@ import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
 import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
 import * as config from '../../utils/config.js';
-import { getAcfunLiveList } from '../../services/services.js';
-import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../bilibili/liveRecordingProcess.js';
+import { requestAcfunLiveList } from '../../services/services.js';
+import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess';
 import { testTitle } from '../../utils/testUtils.js';
 import type { AcfunLiveListResponse } from '../../services/interface';
 
@@ -41,7 +41,7 @@ export function callback(): void {
 
     // 设置ffmpeg的位置
     const [liveList]: [AcfunLiveListResponse, JSHandle<void>, void] = await Promise.all([
-      getAcfunLiveList(),
+      requestAcfunLiveList(),
       setFFmpegPath(app),
       (async (): Promise<void> => {
         await testIdClick(app, 'acfun-live-link');
