@@ -9,7 +9,7 @@ import selectItemClick from '../../actions/selectItemClick.js';
 import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
 import * as config from '../../utils/config.js';
 import { requestAcfunLiveList } from '../../services/services.js';
-import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess';
+import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess.js';
 import { testTitle } from '../../utils/testUtils.js';
 import type { AcfunLiveListResponse } from '../../services/interface';
 

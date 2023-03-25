@@ -8,7 +8,7 @@ import testIdClick from '../../actions/testIdClick.js';
 import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
 import * as config from '../../utils/config.js';
 import { requestBilibiliLiveList } from '../../services/services.js';
-import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess';
+import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess.js';
 import { testTitle } from '../../utils/testUtils.js';
 import type { BilibiliLiveListResponse } from '../../services/interface.js';
 
