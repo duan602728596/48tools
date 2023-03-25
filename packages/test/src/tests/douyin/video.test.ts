@@ -47,8 +47,10 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const rows: Array<ElementHandle> = await queryVideo('https://www.douyin.com/video/7207875630820527416', '下载地址-3(1080*1920)');
+    const rows: Array<ElementHandle> = await queryVideo(
+      'https://www.douyin.com/video/7207875630820527416', '下载地址-3(1080*1920)');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 
@@ -59,6 +61,7 @@ export function callback(): void {
 
     const rows: Array<ElementHandle> = await queryVideo('7199998424823991556', '下载地址-3(1920*1080)');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 
@@ -69,6 +72,7 @@ export function callback(): void {
 
     const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StBFgWn/', '下载地址-3(1080*1920)');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 
@@ -77,8 +81,10 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const rows: Array<ElementHandle> = await queryVideo('https://www.douyin.com/note/7144312918660746508', '图片地址-3(1440*1920)');
+    const rows: Array<ElementHandle> = await queryVideo(
+      'https://www.douyin.com/note/7144312918660746508', '图片地址-3(1440*1920)');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 
@@ -89,6 +95,7 @@ export function callback(): void {
 
     const rows: Array<ElementHandle> = await queryVideo('7081995835235519756', '图片地址-3(1080*1438)');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 
@@ -99,6 +106,7 @@ export function callback(): void {
 
     const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StwKB7s/', '图片地址-3(1440*1920)');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 }

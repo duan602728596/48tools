@@ -50,6 +50,7 @@ export function callback(): void {
     const rows: Array<ElementHandle> = await queryUser(
       'https://www.douyin.com/user/MS4wLjABAAAAu9em5FdpmFgYC_6QgtXzWDyE9qMxwq0A9hlFwvExBavnl_xPhXXtVO61gE1NhgP3');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 
@@ -60,6 +61,7 @@ export function callback(): void {
 
     const rows: Array<ElementHandle> = await queryUser('MS4wLjABAAAAtYUHX7y_z3dgtH4_Bgia4OAJx7O7WlduM6vDemvecMQ');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 
@@ -70,6 +72,7 @@ export function callback(): void {
 
     const rows: Array<ElementHandle> = await queryUser('https://v.douyin.com/StAuqGL/');
 
+    await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
   });
 }
