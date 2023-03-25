@@ -7,6 +7,7 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
+import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Form, Modal, Input, type FormInstance } from 'antd';
@@ -93,5 +94,12 @@ function AddLiveRoomForm(props: AddLiveRoomFormProps): ReactElement {
     </Fragment>
   );
 }
+
+AddLiveRoomForm.propTypes = {
+  dataTestId: PropTypes.string,
+  modalTitle: PropTypes.string.isRequired,
+  tips: PropTypes.string,
+  IDBSaveDataFunc: PropTypes.func.isRequired
+};
 
 export default AddLiveRoomForm;
