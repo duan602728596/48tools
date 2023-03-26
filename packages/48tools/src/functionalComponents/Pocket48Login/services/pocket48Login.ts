@@ -1,6 +1,6 @@
 import got, { type Response as GotResponse } from 'got';
 import { createHeaders } from '../../../utils/snh48';
-import type { SMSResult, LoginUserInfo } from './interface';
+import type { SMSResult, LoginUserInfo, IMUserInfo } from './interface';
 
 /**
  * 发送验证码
@@ -29,6 +29,20 @@ export async function requestMobileCodeLogin(mobile: string, code: string): Prom
     headers: createHeaders(undefined, true),
     responseType: 'json',
     json: { mobile, code }
+  });
+
+  return res.body;
+}
+
+/**
+ * 获取im信息
+ * @param { string } token
+ */
+export async function requestImUserInfo(token: string): Promise<IMUserInfo> {
+  const res: GotResponse<IMUserInfo> = await got.post('https://pocketapi.48.cn/im/api/v1/im/userinfo', {
+    responseType: 'json',
+    headers: createHeaders(token),
+    json: {}
   });
 
   return res.body;

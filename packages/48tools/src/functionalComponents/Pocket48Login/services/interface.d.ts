@@ -19,3 +19,14 @@ export interface LoginUserInfo {
   success: boolean;
   message: string;
 }
+
+/* IM */
+export interface IMUserInfo {
+  status: 200 | number;
+  success: boolean;
+  content: {
+    userId: number;
+    accid: string;
+    pwd: string;
+  };
+}

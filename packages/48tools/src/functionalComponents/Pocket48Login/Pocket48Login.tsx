@@ -6,13 +6,13 @@ import { Button, Modal, Form, message, Avatar, Tabs, type FormInstance } from 'a
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Tab } from 'rc-tabs/es/interface';
 import style from './pocket48Login.sass';
-import { requestMobileCodeLogin } from './services/pocket48Login';
-import { pick } from '../../utils/lodash';
+import { requestMobileCodeLogin, requestImUserInfo } from './services/pocket48Login';
+import { pick, omit } from '../../utils/lodash';
 import { setUserInfo } from './reducers/pocket48Login';
 import { source } from '../../utils/snh48';
 import LoginForm from './LoginForm/LoginForm';
 import TokenForm from './TokenForm/TokenForm';
-import type { LoginUserInfo } from './services/interface';
+import type { LoginUserInfo, IMUserInfo } from './services/interface';
 import type { Pocket48LoginInitialState } from './reducers/pocket48Login';
 import type { UserInfo } from './types';
 
@@ -43,6 +43,19 @@ function Pocket48Login(props: {}): ReactElement {
   const [loginForm]: [FormInstance] = Form.useForm();
   const [tokenForm]: [FormInstance] = Form.useForm();
 
+  // 获取IM信息
+  async function getIMInfo(token: string): Promise<IMUserInfo['content'] | undefined> {
+    const imUserInfoRes: IMUserInfo = await requestImUserInfo(token);
+
+    console.log('IM信息：', imUserInfoRes);
+
+    if (imUserInfoRes.status === 200) {
+      return imUserInfoRes.content;
+    } else {
+      messageApi.error('获取IM信息失败！');
+    }
+  }
+
   // 登录并保存token
   async function handleLoginClick(event: MouseEvent): Promise<void> {
     let value: { area: string; mobile: string; code: string };
@@ -57,11 +70,18 @@ function Pocket48Login(props: {}): ReactElement {
       const res: LoginUserInfo = await requestMobileCodeLogin(value.mobile, value.code);
 
       if (res.success) {
-        dispatch(setUserInfo(
-          pick(res.content.userInfo, ['token', 'nickname', 'avatar'])
-        ));
-        setOpen(false);
-        messageApi.success('登录成功！');
+        const im: IMUserInfo['content'] | undefined = await getIMInfo(res.content.userInfo.token);
+
+        if (im) {
+          dispatch(setUserInfo(
+            {
+              ...pick(res.content.userInfo, ['token', 'nickname', 'avatar']),
+              ...omit(im, ['userId'])
+            }
+          ));
+          setOpen(false);
+          messageApi.success('登录成功！');
+        }
       } else {
         console.error(res);
         messageApi.error('登录失败！');
@@ -82,13 +102,19 @@ function Pocket48Login(props: {}): ReactElement {
       return;
     }
 
-    dispatch(setUserInfo({
-      token: value.token.trim(),
-      nickname: '',
-      avatar: '',
-      unknown: true
-    }));
-    setOpen(false);
+    const im: IMUserInfo['content'] | undefined = await getIMInfo(value.token);
+
+    if (im) {
+      dispatch(setUserInfo({
+        token: value.token.trim(),
+        nickname: '',
+        avatar: '',
+        accid: im.accid,
+        pwd: im.pwd,
+        unknown: true
+      }));
+      setOpen(false);
+    }
   }
 
   function afterClose(): void {
