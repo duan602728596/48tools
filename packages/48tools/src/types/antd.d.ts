@@ -6,7 +6,7 @@ import type { ReactElement, JSXElementConstructor } from 'react';
 import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { NotificationInstance } from 'antd/es/notification/interface';
-import type { DefaultOptionType } from 'rc-select/es/select';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 
 type ContextHolderType = ReactElement<any, string | JSXElementConstructor<any>>;
 

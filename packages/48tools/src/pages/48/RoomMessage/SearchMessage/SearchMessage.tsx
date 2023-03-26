@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, Selector } from 'reselect';
 import { Button, message, Modal, Pagination, Space } from 'antd';
-import type { DefaultOptionType } from 'rc-select/es/select';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { LabeledValue, UseMessageReturnType } from '@48tools-types/antd';
 import Icon, { Html5Filled as IconHtml5Filled } from '@ant-design/icons';
 import * as dayjs from 'dayjs';

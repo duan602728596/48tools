@@ -13,7 +13,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Popconfirm, Table, message, Modal, Select } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { BaseOptionType } from 'rc-select/es/select';
+import type { BaseOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './douyinLive.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
