@@ -8,13 +8,49 @@ import QChatSocket from '../../sdk/QChatSocket';
 import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
 import { setAddDownloadWorker, setRemoveDownloadWorker, setAutoRecord } from '../../reducers/roomVoice';
 import { getFFmpeg, getFileTime, rStr } from '../../../../utils/utils';
+import { requestVoiceOperate } from '../../services/pocket48';
 import type { RoomVoiceItem, TeamVoiceMessage } from '../../types';
 import type { UserInfo } from '../../../../functionalComponents/Pocket48Login/types';
 import type { MessageEventData } from '../../../../commonTypes';
+import type { VoiceOperate } from '../../services/interface';
 
 let QChatSocketList: Array<QChatSocket> = [];
 
 type HandleRoomSocketMessageFunc = (event: QChatMessage | TeamVoiceMessage) => void;
+
+/* 创建worker */
+function createWorker( messageApi: MessageInstance, voiceItem: RoomVoiceItem, playStreamPath: string, saveDir: string): void {
+  const time: string = getFileTime();
+  const tsFilePath: string = path.join(saveDir,
+    `[口袋48房间电台]${ voiceItem.nickname }_${ voiceItem.serverId }_${ voiceItem.channelId }_${ time }_${ rStr(5) }.ts`);
+  const { dispatch }: Store = store;
+  const worker: Worker = getFFmpegDownloadWorker();
+
+  worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
+    const { type, error }: MessageEventData = event1.data;
+
+    if (type === 'close' || type === 'error') {
+      if (type === 'error') {
+        messageApi.error(`口袋48房间电台${ voiceItem.nickname }录制失败！`);
+      }
+
+      worker.terminate();
+      dispatch(setRemoveDownloadWorker(voiceItem.id));
+    }
+  }, false);
+
+  worker.postMessage({
+    type: 'start',
+    playStreamPath,
+    filePath: tsFilePath,
+    ffmpeg: getFFmpeg()
+  });
+
+  dispatch(setAddDownloadWorker({
+    id: voiceItem.id,
+    worker
+  }));
+}
 
 /**
  * 创建onmsg的方法
@@ -27,39 +63,9 @@ function createHandleRoomSocketMessage(
   voiceItem: RoomVoiceItem,
   saveDir: string
 ): HandleRoomSocketMessageFunc {
-  const { dispatch }: Store = store;
-  const time: string = getFileTime();
-  const tsFilePath: string = path.join(saveDir,
-    `[口袋48房间电台]${ voiceItem.nickname }_${ voiceItem.serverId }_${ voiceItem.channelId }_${ time }_${ rStr(5) }.ts`);
-
   return function(event: QChatMessage | TeamVoiceMessage): void {
     if (event.type === 'custom' && event.attach?.messageType === 'TEAM_VOICE') {
-      const worker: Worker = getFFmpegDownloadWorker();
-
-      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
-        const { type, error }: MessageEventData = event1.data;
-
-        if (type === 'close' || type === 'error') {
-          if (type === 'error') {
-            messageApi.error(`口袋48房间电台${ voiceItem.nickname }录制失败！`);
-          }
-
-          worker.terminate();
-          dispatch(setRemoveDownloadWorker(voiceItem.id));
-        }
-      }, false);
-
-      worker.postMessage({
-        type: 'start',
-        playStreamPath: event.attach.voiceInfo.streamUrl,
-        filePath: tsFilePath,
-        ffmpeg: getFFmpeg()
-      });
-
-      dispatch(setAddDownloadWorker({
-        id: voiceItem.id,
-        worker
-      }));
+      createWorker(messageApi, voiceItem, event.attach.voiceInfo.streamUrl, saveDir);
     }
   };
 }
@@ -71,6 +77,13 @@ async function record(
   voiceItem: RoomVoiceItem,
   userInfo: UserInfo, saveDir: string
 ): Promise<void> {
+  // 先判断是否开始
+  const res: VoiceOperate | undefined = await requestVoiceOperate(voiceItem.serverId, voiceItem.channelId);
+
+  if (res && res?.content?.streamUrl) {
+    createWorker(messageApi, voiceItem, res.content.streamUrl, saveDir);
+  }
+
   const serverId: string = `${ voiceItem.serverId }`;
   // // 判断socket列表内是否有当前房间的socket连接
   const index: number = QChatSocketList.findIndex((o: QChatSocket): boolean => o.pocket48ServerId === serverId);
