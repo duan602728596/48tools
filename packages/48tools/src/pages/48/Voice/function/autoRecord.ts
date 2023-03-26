@@ -6,12 +6,17 @@ import type { NotificationInstance } from 'antd/es/notification/interface';
 import { store } from '../../../../store/store';
 import QChatSocket from '../../sdk/QChatSocket';
 import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
-import { setAddDownloadWorker, setRemoveDownloadWorker, setAutoRecord } from '../../reducers/roomVoice';
+import {
+  setAddDownloadWorker,
+  setRemoveDownloadWorker,
+  setAutoRecord,
+  roomVoiceListSelectors
+} from '../../reducers/roomVoice';
 import { getFFmpeg, getFileTime, rStr } from '../../../../utils/utils';
 import { requestVoiceOperate } from '../../services/pocket48';
 import type { RoomVoiceItem, TeamVoiceMessage } from '../../types';
 import type { UserInfo } from '../../../../functionalComponents/Pocket48Login/types';
-import type { MessageEventData } from '../../../../commonTypes';
+import type { MessageEventData, WebWorkerChildItem } from '../../../../commonTypes';
 import type { VoiceOperate } from '../../services/interface';
 
 let QChatSocketList: Array<QChatSocket> = [];
@@ -65,7 +70,12 @@ function createHandleRoomSocketMessage(
 ): HandleRoomSocketMessageFunc {
   return function(event: QChatMessage | TeamVoiceMessage): void {
     if (event.type === 'custom' && event.attach?.messageType === 'TEAM_VOICE') {
-      createWorker(messageApi, voiceItem, event.attach.voiceInfo.streamUrl, saveDir);
+      const roomVoiceWorkerList: Array<WebWorkerChildItem> = roomVoiceListSelectors.selectAll(store.getState().roomVoice);
+      const workerIndex: number = roomVoiceWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === voiceItem.id);
+
+      if (workerIndex < 0) {
+        createWorker(messageApi, voiceItem, event.attach.voiceInfo.streamUrl, saveDir);
+      }
     }
   };
 }
@@ -78,10 +88,15 @@ async function record(
   userInfo: UserInfo, saveDir: string
 ): Promise<void> {
   // 先判断是否开始
-  const res: VoiceOperate | undefined = await requestVoiceOperate(voiceItem.serverId, voiceItem.channelId);
+  const roomVoiceWorkerList: Array<WebWorkerChildItem> = roomVoiceListSelectors.selectAll(store.getState().roomVoice);
+  const workerIndex: number = roomVoiceWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === voiceItem.id);
 
-  if (res && res?.content?.streamUrl) {
-    createWorker(messageApi, voiceItem, res.content.streamUrl, saveDir);
+  if (workerIndex < 0) {
+    const res: VoiceOperate | undefined = await requestVoiceOperate(voiceItem.serverId, voiceItem.channelId);
+
+    if (res && res?.content?.streamUrl) {
+      createWorker(messageApi, voiceItem, res.content.streamUrl, saveDir);
+    }
   }
 
   const serverId: string = `${ voiceItem.serverId }`;
