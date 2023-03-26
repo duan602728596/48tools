@@ -7,7 +7,7 @@
     "newLine": "LF",
     "resolveJsonModule": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": [
     "node_modules"
