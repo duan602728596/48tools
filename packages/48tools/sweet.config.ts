@@ -87,6 +87,8 @@ export default function(info: object): Record<string, any> {
       'filenamify/browser',
       'hls.js',
       'mpegts.js',
+      'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK',
+      'nim-web-sdk-ng/dist/NIM_BROWSER_SDK',
       'path-to-regexp',
       'qrcode/lib/browser',
       'react',

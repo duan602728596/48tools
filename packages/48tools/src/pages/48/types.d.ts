@@ -465,4 +465,24 @@ export interface RoomVoiceItem {
   channelId: number;
   serverId: number;
   nickname: string;
+  autoRecord?: boolean;
+}
+
+// 房间电台
+export interface TeamVoiceMessage {
+  type: 'custom';
+  attach: {
+    messageType: 'TEAM_VOICE';
+    voiceInfo: {
+      voiceStarInfoList: Array<{
+        userId: number;
+        nickname: string;
+        avatar: string;
+        pfUrl: string;
+        voiceStatus: boolean;
+      }>;
+      streamUrl: string;
+      operateType: 'upVoice';
+    };
+  };
 }

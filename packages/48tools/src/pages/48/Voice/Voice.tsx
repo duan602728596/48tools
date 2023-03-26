@@ -1,6 +1,6 @@
 import { setTimeout, clearTimeout } from 'node:timers';
 import { randomUUID } from 'node:crypto';
-import type { SaveDialogReturnValue } from 'electron';
+import type { SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
 import {
   Fragment,
   useState,
@@ -14,11 +14,12 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Popconfirm, Table } from 'antd';
+import { Button, message, Popconfirm, Table, notification, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { UseMessageReturnType } from '@48tools-types/antd';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import type { UseMessageReturnType, UseNotificationReturnType } from '@48tools-types/antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
-import { showSaveDialog } from '../../../utils/remote/dialog';
+import { showSaveDialog, showOpenDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import Pocket48Login from '../../../functionalComponents/Pocket48Login/Pocket48Login';
 import FixSelect from '../components/FixSelect/FixSelect';
@@ -26,6 +27,7 @@ import { requestServerJump, requestServerSearch, requestVoiceOperate } from '../
 import {
   IDBCursorRoomVoiceInfo,
   IDBSaveRoomVoiceInfo,
+  IDBUpdateRoomVoiceInfo,
   IDBDeleteRoomVoiceInfo,
   setAddDownloadWorker,
   setRemoveDownloadWorker,
@@ -35,6 +37,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
+import { startAutoRecord, stopAutoRecord } from './function/autoRecord';
 import type { ServerSearchResult, ServerApiItem, ServerJumpResult, VoiceOperate } from '../services/interface';
 import type { RoomVoiceItem } from '../types';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
@@ -42,7 +45,7 @@ import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes'
 let serverSearchTimer: NodeJS.Timeout | null = null; // 搜索
 
 /* redux selector */
-type RSelector = Pick<RoomVoiceInitialState, 'roomVoice'> & {
+type RSelector = Pick<RoomVoiceInitialState, 'roomVoice' | 'isAutoRecord'> & {
   roomVoiceWorkerList: Array<WebWorkerChildItem>;
 };
 type RState = { roomVoice: RoomVoiceInitialState };
@@ -52,18 +55,38 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   roomVoiceWorkerList: ({ roomVoice }: RState): Array<WebWorkerChildItem> => roomVoiceListSelectors.selectAll(roomVoice),
 
   // 数据库保存的数据
-  roomVoice: ({ roomVoice }: RState): Array<RoomVoiceItem> => roomVoice.roomVoice
+  roomVoice: ({ roomVoice }: RState): Array<RoomVoiceItem> => roomVoice.roomVoice,
+
+  // 自动录制
+  isAutoRecord: ({ roomVoice }: RState): boolean => roomVoice.isAutoRecord
 });
 
 /* 口袋房间电台 */
 function Voice(props: {}): ReactElement {
-  const { roomVoice, roomVoiceWorkerList }: RSelector = useSelector(selector);
+  const { roomVoice, roomVoiceWorkerList, isAutoRecord }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+  const [notificationApi, notificationContextHolder]: UseNotificationReturnType = notification.useNotification();
   const [searchLoading, setSearchLoading]: [boolean, D<S<boolean>>] = useState(false); // 搜索的loading状态
   const [searchResult, setSearchResult]: [Array<ServerApiItem>, D<S<ServerApiItem[]>>] = useState([]); // 搜索结果
   const [searchValue, setSearchValue]: [DefaultOptionType | undefined, D<S<DefaultOptionType | undefined>>]
     = useState(undefined);
+
+  // 停止自动录制
+  function handleStopAutoRecordClick(event: MouseEvent): void {
+    stopAutoRecord();
+  }
+
+  // 开始自动录制
+  async function handleStartAutoRecordClick(event: MouseEvent): Promise<void> {
+    const result: OpenDialogReturnValue = await showOpenDialog({
+      properties: ['openDirectory']
+    });
+
+    if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
+
+    startAutoRecord(messageApi, notificationApi, result.filePaths[0]);
+  }
 
   // 删除serverId和channelId
   function handleDeleteServerIdClick(record: RoomVoiceItem, event: MouseEvent): void {
@@ -201,10 +224,28 @@ function Voice(props: {}): ReactElement {
     });
   }
 
+  // 修改自动录制的checkbox
+  function handleAutoRecordCheck(record: RoomVoiceItem, event: CheckboxChangeEvent): void {
+    dispatch(IDBUpdateRoomVoiceInfo({
+      data: { ...record, autoRecord: event.target.checked }
+    }));
+  }
+
   const columns: ColumnsType<RoomVoiceItem> = [
-    { title: '姓名', dataIndex: 'nickname', width: '25%' },
-    { title: 'serverId', dataIndex: 'serverId', width: '25%' },
-    { title: 'channelId', dataIndex: 'channelId', width: '25%' },
+    { title: '姓名', dataIndex: 'nickname', width: '20%' },
+    { title: 'serverId', dataIndex: 'serverId', width: '20%' },
+    { title: 'channelId', dataIndex: 'channelId', width: '20%' },
+    {
+      title: '自动录制',
+      dataIndex: 'autoRecord',
+      width: '15%',
+      render: (value: boolean, record: RoomVoiceItem, index: number): ReactElement => (
+        <Checkbox checked={ value }
+          disabled={ isAutoRecord }
+          onChange={ (event: CheckboxChangeEvent): void => handleAutoRecordCheck(record, event) }
+        />
+      )
+    },
     {
       title: '操作',
       key: 'handle',
@@ -256,7 +297,14 @@ function Voice(props: {}): ReactElement {
           onSearch={ handleServerSearch }
           onSelect={ handleOwnerSelect }
         />
-        <Button className="mx-[8px]" onClick={ handleSaveClick }>保存</Button>
+        <Button.Group className="mx-[8px]">
+          <Button onClick={ handleSaveClick }>保存</Button>
+          {
+            isAutoRecord
+              ? <Button type="primary" danger={ true } onClick={ handleStopAutoRecordClick }>停止录制</Button>
+              : <Button type="primary" onClick={ handleStartAutoRecordClick }>自动录制</Button>
+          }
+        </Button.Group>
         <Pocket48Login />
       </Header>
       <Table size="middle"
@@ -269,6 +317,7 @@ function Voice(props: {}): ReactElement {
         }}
       />
       { messageContextHolder }
+      { notificationContextHolder }
     </Fragment>
   );
 }

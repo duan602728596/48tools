@@ -23,6 +23,7 @@ export const roomVoiceListSelectors: EntitySelectors<WebWorkerChildItem, EntityS
 
 export interface RoomVoiceInitialState extends EntityState<WebWorkerChildItem> {
   roomVoice: Array<RoomVoiceItem>;
+  isAutoRecord: boolean;
 }
 
 type SliceReducers = {
@@ -30,14 +31,17 @@ type SliceReducers = {
   setRemoveDownloadWorker: CaseReducer<RoomVoiceInitialState, PayloadAction<string>>;
   setRoomVoiceFromDB: CaseReducer<RoomVoiceInitialState, PayloadAction<{ result: Array<RoomVoiceItem> }>>;
   setAddRoomVoice: CaseReducer<RoomVoiceInitialState, PayloadAction<{ data: RoomVoiceItem }>>;
+  setUpdateRoomVoice: CaseReducer<RoomVoiceInitialState, PayloadAction<{ data: RoomVoiceItem }>>;
   setDeleteRoomVoiceFromDB: CaseReducer<RoomVoiceInitialState, PayloadAction<{ query: string }>>;
+  setAutoRecord: CaseReducer<RoomVoiceInitialState, PayloadAction<boolean>>;
 };
 
 const sliceName: 'roomVoice' = 'roomVoice';
 const { actions, reducer }: Slice<RoomVoiceInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: sliceName,
   initialState: roomVoiceWorkerListAdapter.getInitialState({
-    roomVoice: [] // 从数据库中查找的记录serverId和channel的列表
+    roomVoice: [],      // 从数据库中查找的记录serverId和channel的列表
+    isAutoRecord: false // 自动抓取
   }),
   reducers: {
     setAddDownloadWorker: roomVoiceWorkerListAdapter.addOne,       // 添加下载
@@ -58,6 +62,18 @@ const { actions, reducer }: Slice<RoomVoiceInitialState, SliceReducers, typeof s
       }
     },
 
+    // 更新
+    setUpdateRoomVoice(state: RoomVoiceInitialState, action: PayloadAction<{ data: RoomVoiceItem }>): void {
+      const index: number = state.roomVoice.findIndex((o: RoomVoiceItem): boolean => o.id === action.payload.data.id);
+
+      if (index >= 0) {
+        const nextRoomVoice: Array<RoomVoiceItem> = [...state.roomVoice];
+
+        nextRoomVoice[index].autoRecord = action.payload.data.autoRecord;
+        state.roomVoice = nextRoomVoice;
+      }
+    },
+
     // 删除
     setDeleteRoomVoiceFromDB(state: RoomVoiceInitialState, action: PayloadAction<{ query: string }>): void {
       const index: number = state.roomVoice.findIndex((o: RoomVoiceItem): boolean => o.id === action.payload.query);
@@ -68,6 +84,11 @@ const { actions, reducer }: Slice<RoomVoiceInitialState, SliceReducers, typeof s
         nextRoomVoice.splice(index, 1);
         state.roomVoice = nextRoomVoice;
       }
+    },
+
+    // 自动抓取
+    setAutoRecord(state: RoomVoiceInitialState, action: PayloadAction<boolean>): void {
+      state.isAutoRecord = action.payload;
     }
   }
 });
@@ -77,7 +98,9 @@ export const {
   setRemoveDownloadWorker,
   setRoomVoiceFromDB,
   setAddRoomVoice,
-  setDeleteRoomVoiceFromDB
+  setUpdateRoomVoice,
+  setDeleteRoomVoiceFromDB,
+  setAutoRecord
 }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 
 // 获取数据
@@ -90,6 +113,12 @@ export const IDBCursorRoomVoiceInfo: CursorDispatchFunc = IDBRedux.cursorAction(
 export const IDBSaveRoomVoiceInfo: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: pocket48RoomVoiceObjectStoreName,
   successAction: setAddRoomVoice
+});
+
+// 更新数据
+export const IDBUpdateRoomVoiceInfo: DataDispatchFunc = IDBRedux.putAction({
+  objectStoreName: pocket48RoomVoiceObjectStoreName,
+  successAction: setUpdateRoomVoice
 });
 
 // 删除数据
