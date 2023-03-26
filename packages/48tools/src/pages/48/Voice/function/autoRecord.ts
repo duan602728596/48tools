@@ -100,7 +100,7 @@ async function record(
   }
 
   const serverId: string = `${ voiceItem.serverId }`;
-  // // 判断socket列表内是否有当前房间的socket连接
+  // 判断socket列表内是否有当前房间的socket连接
   const index: number = QChatSocketList.findIndex((o: QChatSocket): boolean => o.pocket48ServerId === serverId);
 
   if (index < 0) {
