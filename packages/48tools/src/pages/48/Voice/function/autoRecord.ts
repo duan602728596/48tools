@@ -70,6 +70,8 @@ function createHandleRoomSocketMessage(
 ): HandleRoomSocketMessageFunc {
   return function(event: QChatMessage | TeamVoiceMessage): void {
     if (event.type === 'custom' && event.attach?.messageType === 'TEAM_VOICE') {
+      console.log(event);
+
       const roomVoiceWorkerList: Array<WebWorkerChildItem> = roomVoiceListSelectors.selectAll(store.getState().roomVoice);
       const workerIndex: number = roomVoiceWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === voiceItem.id);
 
