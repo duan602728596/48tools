@@ -16,11 +16,8 @@ import type {
 } from '../../services/interface';
 
 // b站请求接口需要的key
-const APP_KEY: string = 'iVGUTjsxvpLeuDCf';
-const BILIBILI_KEY: string = 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt';
-
-// 查询参数
-const QUERY_ARRAY: [string, string] = ['qn=116&quality=80&type=', 'quality=2&type=mp4'];
+const APP_KEY: string = 'YvirImLGlLANCLvM';
+const BILIBILI_KEY: string = 'JNlZNgfNGKZEpaDTkCdPQVXntXhuiJEM';
 
 interface ParseHtmlResult {
   initialState?: InitialState;
@@ -114,41 +111,7 @@ function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult 
 }
 
 /**
- * @deprecated: 使用parseVideoUrlV2方法，通过接口请求信息
- * 解析视频url
- * @param { string } type: 视频类型
- * @param { string } id: 视频id
- * @param { number } page: 分页
- * @param { string | undefined } proxy: 是否使用代理
- */
-export async function parseVideoUrl(type: string, id: string, page: number = 1, proxy: string | undefined): Promise<string | void> {
-  const videoUrl: string = `https://www.bilibili.com/video/${ type === 'av' ? 'av' : 'BV' }${ id }?p=${ page }`;
-  const html: string = await requestBilibiliHtml(videoUrl, proxy);
-  const { initialState }: ParseHtmlResult = parseHtml(html);
-
-  if (!initialState) {
-    return undefined;
-  }
-
-  const { cid }: { cid: number; part: string } = initialState.videoData.pages[page - 1]; // cid
-  let flvUrl: string | undefined = undefined; // 视频地址
-
-  for (const query of QUERY_ARRAY) {
-    const payload: string = `appkey=${ APP_KEY }&cid=${ cid }&otype=json&page=${ page }&${ query }`;
-    const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
-    const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
-
-    if (videoInfoRes?.durl?.length) {
-      flvUrl = videoInfoRes.durl[0].url;
-      break;
-    }
-  }
-
-  return flvUrl;
-}
-
-/**
- * 解析视频url
+ * 解析视频url。testID：1rp4y1e745
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
  * @param { number } page: 分页
@@ -162,25 +125,28 @@ export async function parseVideoUrlV2(
 ): Promise<{ flvUrl: string; pic: string } | undefined> {
   const res: WebInterfaceViewData = await requestWebInterfaceView(id, type, proxy);
   let result: { flvUrl: string; pic: string } | undefined = undefined;
-  let flvUrl: string | undefined = undefined; // 视频地址
 
   if (res?.data?.pages) {
     const { cid }: WebInterfaceViewDataPageItem = res.data.pages[page - 1]; // cid
+    const isAV: boolean = type === 'av';
+    const searchParams: URLSearchParams = new URLSearchParams({
+      appkey: APP_KEY,
+      [isAV ? 'avid' : 'bvid']: `${ isAV ? '' : 'BV' }${ id }`,
+      cid: `${ cid }`,
+      fnval: '0',
+      fnver: '0',
+      fourk: '1',
+      qn: '112'
+    });
+    const payload: string = searchParams.toString();
+    const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
+    const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
 
-    for (const query of QUERY_ARRAY) {
-      const payload: string = `appkey=${ APP_KEY }&cid=${ cid }&otype=json&page=${ page }&${ query }`;
-      const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
-      const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
-
-      if (videoInfoRes?.durl?.length) {
-        result = {
-          flvUrl: videoInfoRes.durl[0].url,
-          pic: res.data.pic
-        };
-
-        flvUrl = videoInfoRes.durl[0].url;
-        break;
-      }
+    if (videoInfoRes?.data?.durl?.length) {
+      result = {
+        flvUrl: videoInfoRes.data.durl[0].url,
+        pic: res.data.pic
+      };
     }
   }
 

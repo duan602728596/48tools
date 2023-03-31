@@ -1,11 +1,31 @@
 /* ========== Download ========== */
+export interface DashVideoItem {
+  backupUrl: Array<string>;
+  backup_url: Array<string>;
+  baseUrl: string;
+  base_url: string;
+}
+
+export interface DashSupportFormats {
+  display_desc: string;
+  new_description: string;
+}
+
 // 接口请求到的视频信息
 export interface VideoInfo {
-  durl?: Array<{
-    backup_url: string;
-    url: string;
-  }>;
-  format: string;
+  code: number;
+  message: string;
+  data: {
+    durl?: Array<{
+      backup_url: Array<string>;
+      url: string;
+    }>;
+    dash?: {
+      audio: Array<DashVideoItem>;
+      video: Array<DashVideoItem>;
+      support_formats: Array<DashSupportFormats>;
+    };
+  };
 }
 
 // 接口请求到的音频信息

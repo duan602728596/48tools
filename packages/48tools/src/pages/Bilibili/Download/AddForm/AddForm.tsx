@@ -154,7 +154,6 @@ function AddForm(props: {}): ReactElement {
               </div>
             </div>
           </Form.Item>
-
         </Form>
       </Modal>
       { messageContextHolder }

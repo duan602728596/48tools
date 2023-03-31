@@ -45,7 +45,7 @@ export async function requestBilibiliHtml(url: string, proxy: string | undefined
  * @param { string | undefined } proxy: 是否使用代理
  */
 export async function requestVideoInfo(payload: string, sign: string, proxy: string | undefined): Promise<VideoInfo> {
-  const apiUrl: string = `https://interface.bilibili.com/v2/playurl?${ payload }&sign=${ sign }`;
+  const apiUrl: string = `https://api.bilibili.com/x/player/playurl?${ payload }&sign=${ sign }`;
   const res: GotResponse<VideoInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
