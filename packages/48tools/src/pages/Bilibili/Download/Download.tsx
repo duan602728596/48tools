@@ -125,7 +125,7 @@ function Download(props: {}): ReactElement {
         const inDownload: boolean = value in downloadProgress;
 
         if (inDownload) {
-          return <Progress type="circle" width={ 30 } percent={ downloadProgress[value] } />;
+          return <Progress type="circle" size={ 30 } percent={ downloadProgress[value] } />;
         } else {
           return '等待下载';
         }
