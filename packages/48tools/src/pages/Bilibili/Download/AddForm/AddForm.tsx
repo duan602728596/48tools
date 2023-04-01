@@ -266,7 +266,7 @@ function AddForm(props: {}): ReactElement {
             </Form.Item>
           </Form>
           {/* DASH视频下载 */}
-          <div className="w-[200px] mx-auto">{ supportFormatsRender() }</div>
+          <div className="w-[200px] mx-auto" data-test-id="bilibili-DASH-video">{ supportFormatsRender() }</div>
         </div>
       </Modal>
       { messageContextHolder }

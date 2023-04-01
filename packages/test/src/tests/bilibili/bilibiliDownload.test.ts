@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { test, expect } from '@playwright/test';
-import type { Locator, ElementHandle } from 'playwright';
+import type { Locator, ElementHandle, JSHandle } from 'playwright';
 import fse from 'fs-extra';
 import { isFileExists } from '@sweet-milktea/utils';
 import * as config from '../../utils/config.js';
@@ -238,4 +238,34 @@ export function callback(): void {
     });
     expect(await isFileExists(downloadVideoPath)).toEqual(true);
   });
+
+  // 选择其他的分辨率
+  test(testTitle(46, 'Should download bilibili video with other resolution'),
+    async function(): Promise<void> {
+      if (!app) {
+        throw new Error('app is null');
+      }
+
+      await testIdClick(app, 'bilibili-download-link');
+      await testIdClick(app, 'bilibili-download-add-btn');
+      await Promise.all([
+        app.win.waitForSelector('#type'),
+        app.win.waitForSelector('#id'),
+        app.win.waitForSelector('#page'),
+        app.win.waitForSelector('#proxy')
+      ]);
+
+      // 选择视频类型并输入查询
+      await selectItemClick(app, 'bilibili-download-form-type', '视频（BV）');
+      await app.win.type('#id', '1rp4y1e745');
+      await app.win.locator('.ant-modal-footer button.ant-btn-default').nth(1).click();
+      await app.win.waitForFunction((): boolean =>
+        document.querySelectorAll('[data-test-id="bilibili-DASH-video"] button.ant-btn').length > 0);
+
+      const count: JSHandle<{ length: number }> = await app.win.waitForFunction((): { length: number } => ({
+        length: document.querySelectorAll('[data-test-id="bilibili-DASH-video"] button.ant-btn').length
+      }));
+
+      expect((await count.jsonValue()).length).toEqual(7);
+    });
 }
