@@ -9,6 +9,7 @@ import {
 import type { InitialState, EpisodesItem, NextDataMediaInfo, NextData } from '../../types';
 import type {
   VideoInfo,
+  VideoData,
   AudioInfo,
   BangumiVideoInfo,
   WebInterfaceViewData,
@@ -111,6 +112,50 @@ function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult 
 }
 
 /**
+ * 解析的通用方法
+ * @param { string } type: 视频类型
+ * @param { string } id: 视频id
+ * @param { number } page: 分页
+ * @param { string | undefined } proxy: 是否使用代理
+ * @param { boolean } isDash
+ */
+async function parseVideoUrlCore(
+  type: string,
+  id: string,
+  page: number = 1,
+  proxy: string | undefined,
+  isDash: boolean
+): Promise<{ videoInfo: VideoInfo; pic: string } | undefined> {
+  const res: WebInterfaceViewData = await requestWebInterfaceView(id, type, proxy);
+
+  if (res?.data?.pages) {
+    const { cid }: WebInterfaceViewDataPageItem = res.data.pages[page - 1]; // cid
+    const isAV: boolean = type === 'av';
+    const searchParams: URLSearchParams = new URLSearchParams({
+      appkey: APP_KEY,
+      [isAV ? 'avid' : 'bvid']: `${ isAV ? '' : 'BV' }${ id }`,
+      cid: `${ cid }`,
+      ...isDash ? {
+        fnval: '80',
+        fnver: '0',
+        fourk: '1',
+        qn: '0'
+      } : {
+        fnval: '0',
+        fnver: '0',
+        fourk: '1',
+        qn: '112'
+      }
+    });
+    const payload: string = searchParams.toString();
+    const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
+    const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
+
+    return { videoInfo: videoInfoRes, pic: res.data.pic };
+  }
+}
+
+/**
  * 解析视频url。testID：1rp4y1e745
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
@@ -123,31 +168,40 @@ export async function parseVideoUrlV2(
   page: number = 1,
   proxy: string | undefined
 ): Promise<{ flvUrl: string; pic: string } | undefined> {
-  const res: WebInterfaceViewData = await requestWebInterfaceView(id, type, proxy);
+  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(type, id, page, proxy, false);
   let result: { flvUrl: string; pic: string } | undefined = undefined;
 
-  if (res?.data?.pages) {
-    const { cid }: WebInterfaceViewDataPageItem = res.data.pages[page - 1]; // cid
-    const isAV: boolean = type === 'av';
-    const searchParams: URLSearchParams = new URLSearchParams({
-      appkey: APP_KEY,
-      [isAV ? 'avid' : 'bvid']: `${ isAV ? '' : 'BV' }${ id }`,
-      cid: `${ cid }`,
-      fnval: '0',
-      fnver: '0',
-      fourk: '1',
-      qn: '112'
-    });
-    const payload: string = searchParams.toString();
-    const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
-    const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
+  if (videoResult?.videoInfo?.data?.durl?.length) {
+    result = {
+      flvUrl: videoResult.videoInfo.data.durl[0].url,
+      pic: videoResult.pic
+    };
+  }
 
-    if (videoInfoRes?.data?.durl?.length) {
-      result = {
-        flvUrl: videoInfoRes.data.durl[0].url,
-        pic: res.data.pic
-      };
-    }
+  return result;
+}
+
+/**
+ * 解析视频url。testID：1rp4y1e745
+ * @param { string } type: 视频类型
+ * @param { string } id: 视频id
+ * @param { number } page: 分页
+ * @param { string | undefined } proxy: 是否使用代理
+ */
+export async function parseVideoUrlDASH(
+  type: string,
+  id: string,
+  page: number = 1,
+  proxy: string | undefined
+): Promise<{ videoData: VideoData; pic: string } | undefined> {
+  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(type, id, page, proxy, true);
+  let result: { videoData: VideoData; pic: string } | undefined = undefined;
+
+  if (videoResult?.videoInfo?.data?.dash) {
+    result = {
+      videoData: videoResult.videoInfo.data,
+      pic: videoResult.pic
+    };
   }
 
   return result;

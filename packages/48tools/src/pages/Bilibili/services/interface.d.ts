@@ -11,21 +11,25 @@ export interface DashSupportFormats {
   new_description: string;
 }
 
+export interface DashVideoInfo {
+  audio: Array<DashVideoItem>;
+  video: Array<DashVideoItem>;
+}
+
+export interface VideoData {
+  durl?: Array<{
+    backup_url: Array<string>;
+    url: string;
+  }>;
+  dash?: DashVideoInfo;
+  support_formats: Array<DashSupportFormats>;
+}
+
 // 接口请求到的视频信息
 export interface VideoInfo {
   code: number;
   message: string;
-  data: {
-    durl?: Array<{
-      backup_url: Array<string>;
-      url: string;
-    }>;
-    dash?: {
-      audio: Array<DashVideoItem>;
-      video: Array<DashVideoItem>;
-      support_formats: Array<DashSupportFormats>;
-    };
-  };
+  data: VideoData;
 }
 
 // 接口请求到的音频信息

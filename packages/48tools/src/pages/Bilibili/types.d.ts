@@ -6,6 +6,10 @@ export interface DownloadItem {
   page: number;             // 分页
   durl: string;             // 下载地址
   pic?: string;             // 封面图
+  dash?: {
+    video: string;
+    audio: string;
+  };
 }
 
 // b站页面上的视频信息

@@ -4,15 +4,16 @@ import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
  * ffmpeg下载线程
  */
 export type WorkerEventData = {
-  type: 'start' | 'stop';      // 执行的方法
-  playStreamPath: string;      // 媒体地址
-  filePath: string;            // 文件保存地址
-  ffmpeg: string;              // ffmpeg地址
-  ua?: boolean;                // 是否添加"-user_agent"参数
-  protocolWhitelist?: boolean; // 是否添加"-protocol_whitelist"参数
-  libx264?: boolean;           // 转换为libx264
-  qid?: string;                // id
-  ffmpegHeaders?: string;      // ffmpeg的headers
+  type: 'start' | 'stop';                 // 执行的方法
+  playStreamPath: Array<string> | string; // 媒体地址
+  filePath: string;                       // 文件保存地址
+  ffmpeg: string;                         // ffmpeg地址
+  ua?: boolean;                           // 是否添加"-user_agent"参数
+  protocolWhitelist?: boolean;            // 是否添加"-protocol_whitelist"参数
+  libx264?: boolean;                      // 转换为libx264
+  qid?: string;                           // id
+  ffmpegHeaders?: string;                 // ffmpeg的headers
+  concat?: boolean;                       // 合并
 };
 
 export interface ErrorMessageEventData {
@@ -83,6 +84,15 @@ function ffmpegProgressParse(qid: string, str: string): void {
   }
 }
 
+/* 处理playStreamPath */
+function playStreamPathArray(playStreamPath: Array<string> | string): Array<string> {
+  if (typeof playStreamPath === 'string') {
+    return ['-i', playStreamPath];
+  }
+
+  return playStreamPath.map((p: string, index: number): ['-i', string] => ['-i', p]).flat();
+}
+
 /* 下载 */
 function download(workerData: WorkerEventData): void {
   const {
@@ -93,12 +103,14 @@ function download(workerData: WorkerEventData): void {
     protocolWhitelist,
     libx264,
     qid,
-    ffmpegHeaders
+    ffmpegHeaders,
+    concat
   }: WorkerEventData = workerData;
-  let ffmpegArgs: Array<string> = ['-i', playStreamPath, '-c', 'copy', filePath];
+  let ffmpegArgs: Array<string> = playStreamPathArray(playStreamPath).concat(
+    concat ? ['-c:v', 'copy', '-c:a', 'aac', filePath] : ['-c', 'copy', filePath]);
 
   if (libx264) {
-    ffmpegArgs = ['-i', playStreamPath, '-vcodec', 'libx264', filePath];
+    ffmpegArgs = playStreamPathArray(playStreamPath).concat(['-vcodec', 'libx264', filePath]);
   }
 
   if (ffmpegHeaders) {
@@ -116,11 +128,11 @@ function download(workerData: WorkerEventData): void {
   child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
-    // console.log(data.toString());
+    console.log(data.toString());
   });
 
   child.stderr.on('data', function(data: Buffer): void {
-    // console.log(data.toString());
+    console.log(data.toString());
     qid && ffmpegProgressParse(qid, data.toString());
   });
 
