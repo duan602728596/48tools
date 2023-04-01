@@ -214,7 +214,7 @@ function AddForm(props: {}): ReactElement {
     <Fragment>
       <Button type="primary" data-test-id="bilibili-download-add-btn" onClick={ handleOpenAddModalClick }>添加下载任务</Button>
       <Modal open={ visible }
-        title={ dash ? 'DASH分辨率选择' : '添加下载任务' }
+        title={ dash ? '选择其他分辨率' : '添加下载任务' }
         width={ 480 }
         centered={ true }
         maskClosable={ false }
@@ -226,7 +226,7 @@ function AddForm(props: {}): ReactElement {
           ) : (
             <Fragment>
               <Button onClick={ handleCloseAddModalClick }>取消</Button>
-              <Button key="dash-btn" onClick={ handleDASHVideoClick }>DASH分辨率选择</Button>
+              <Button key="dash-btn" onClick={ handleDASHVideoClick }>选择其他分辨率</Button>
               <Button key="ok-btn" type="primary" onClick={ handleAddDownloadQueueClick }>确定</Button>
             </Fragment>
           )
