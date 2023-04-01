@@ -128,11 +128,11 @@ function download(workerData: WorkerEventData): void {
   child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
-    console.log(data.toString());
+    // console.log(data.toString());
   });
 
   child.stderr.on('data', function(data: Buffer): void {
-    console.log(data.toString());
+    // console.log(data.toString());
     qid && ffmpegProgressParse(qid, data.toString());
   });
 
