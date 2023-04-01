@@ -57,7 +57,7 @@ function AddForm(props: {}): ReactElement {
   const [dash, setDash]: [dashInfo | undefined, D<S<dashInfo | undefined>>] = useState(undefined);
   const [form]: [FormInstance] = Form.useForm();
 
-  // 选择dash video并准备下载
+  // 选择DASH video并准备下载
   function handleDownloadDashVideoClick(index: number, event: MouseEvent): void {
     if (!dash) return;
 
@@ -83,8 +83,8 @@ function AddForm(props: {}): ReactElement {
     setVisible(false);
   }
 
-  // 选择dash video
-  async function handleDashVideoClick(event: MouseEvent): Promise<void> {
+  // 选择DASH video
+  async function handleDASHVideoClick(event: MouseEvent): Promise<void> {
     let formValue: FormStore;
 
     try {
@@ -226,7 +226,7 @@ function AddForm(props: {}): ReactElement {
           ) : (
             <Fragment>
               <Button onClick={ handleCloseAddModalClick }>取消</Button>
-              <Button key="dash-btn" onClick={ handleDashVideoClick }>DASH分辨率选择</Button>
+              <Button key="dash-btn" onClick={ handleDASHVideoClick }>DASH分辨率选择</Button>
               <Button key="ok-btn" type="primary" onClick={ handleAddDownloadQueueClick }>确定</Button>
             </Fragment>
           )
