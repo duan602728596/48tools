@@ -111,5 +111,3 @@ http.createServer(function(httpRequest: IncomingMessage, httpResponse: ServerRes
     response404NotFound(httpResponse);
   }
 }).listen(workerData.port);
-
-console.log(23);
