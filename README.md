@@ -1,5 +1,9 @@
 # 口袋48工具
 
+## 文档
+
+文档地址：[https://yzb1g5r02h.feishu.cn/docx/MxfydWlNaovZ5sxsbJ5crnAlnVb](https://yzb1g5r02h.feishu.cn/docx/MxfydWlNaovZ5sxsbJ5crnAlnVb) 。
+
 ## 软件下载链接
 
 进入到 https://github.com/duan602728596/48tools/releases 、 https://gitee.com/duanhaochen/a48tools/releases      
