@@ -1,14 +1,24 @@
-import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import { clipboard } from 'electron';
+import {
+  Fragment,
+  createElement,
+  useState,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Modal, Form, message, Avatar, Tabs, type FormInstance } from 'antd';
+import { Button, Modal, Form, message, Avatar, Tabs, Dropdown, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Tab } from 'rc-tabs/es/interface';
+import type { ItemType, MenuInfo } from 'rc-menu/es/interface';
 import style from './pocket48Login.sass';
 import { requestMobileCodeLogin, requestImUserInfo } from './services/pocket48Login';
 import { pick, omit } from '../../utils/lodash';
-import { setUserInfo } from './reducers/pocket48Login';
+import { setUserInfo, setClearInfo } from './reducers/pocket48Login';
 import { source } from '../../utils/snh48';
 import LoginForm from './LoginForm/LoginForm';
 import TokenForm from './TokenForm/TokenForm';
@@ -123,6 +133,38 @@ function Pocket48Login(props: {}): ReactElement {
     setTabsKey('loginForm');
   }
 
+  // menu的选择
+  function handleMenuClick(e: MenuInfo): void {
+    switch (e.key) {
+      case 'copyToken':
+        if (userInfo) {
+          clipboard.writeText(userInfo.token);
+          messageApi.success('Token复制到剪贴板。');
+        }
+
+        break;
+
+      case 'copyInfo':
+        if (userInfo) {
+          clipboard.writeText(JSON.stringify(userInfo, null, 2));
+          messageApi.success('登录信息复制到剪贴板。');
+        }
+
+        break;
+
+      case 'exit':
+        dispatch(setClearInfo());
+        break;
+    }
+  }
+
+  const menuItems: Array<ItemType> = [
+    { label: '复制Token', key: 'copyToken' },
+    { label: '复制登录信息', key: 'copyInfo' },
+    { type: 'divider' },
+    { label: '退出', key: 'exit' }
+  ];
+
   // button的渲染
   function loginButtonRender(): ReactElement {
     let icon: ReactElement | null = null;
@@ -130,17 +172,23 @@ function Pocket48Login(props: {}): ReactElement {
 
     if (userInfo) {
       icon = (
-        <Avatar className={ style.avatar } size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
+        <Avatar key="icon" className={ style.avatar } size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
           { userInfo?.unknown ? '?' : undefined }
         </Avatar>
       );
       nickname = userInfo.unknown ? '未知用户' : userInfo.nickname;
     }
 
-    return (
-      <Button icon={ icon } onClick={ (event: MouseEvent): void => setOpen(true) }>
-        { nickname }
-      </Button>
+    return createElement(
+      userInfo ? Dropdown.Button : Button,
+      {
+        onClick: (event: MouseEvent): void => setOpen(true),
+        menu: userInfo ? {
+          items: menuItems,
+          onClick: handleMenuClick
+        } : undefined
+      },
+      [icon, nickname]
     );
   }
 
@@ -159,7 +207,7 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      { loginButtonRender() }
+      <div className="inline-block">{ loginButtonRender() }</div>
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }

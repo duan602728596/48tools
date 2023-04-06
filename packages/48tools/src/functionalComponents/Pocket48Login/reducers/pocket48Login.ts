@@ -7,6 +7,7 @@ export interface Pocket48LoginInitialState {
 
 type SliceReducers = {
   setUserInfo: CaseReducer<Pocket48LoginInitialState, PayloadAction<UserInfo>>;
+  setClearInfo: CaseReducer<Pocket48LoginInitialState, PayloadAction>;
 }
 
 const sliceName: 'pocket48Login' = 'pocket48Login';
@@ -21,9 +22,14 @@ const { actions, reducer }: Slice<Pocket48LoginInitialState, SliceReducers, type
     setUserInfo(state: Pocket48LoginInitialState, action: PayloadAction<UserInfo>): void {
       sessionStorage.setItem('POCKET48_USER_INFO', JSON.stringify(action.payload));
       state.userInfo = action.payload;
+    },
+
+    setClearInfo(state: Pocket48LoginInitialState, action: PayloadAction): void {
+      sessionStorage.removeItem('POCKET48_USER_INFO');
+      state.userInfo = null;
     }
   }
 });
 
-export const { setUserInfo }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export const { setUserInfo, setClearInfo }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 export default { [sliceName]: reducer };
