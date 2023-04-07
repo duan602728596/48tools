@@ -1,4 +1,3 @@
-import { createHash, type Hash } from 'node:crypto';
 import {
   requestBilibiliHtml,
   requestVideoInfo,
@@ -16,22 +15,9 @@ import type {
   WebInterfaceViewDataPageItem
 } from '../../services/interface';
 
-// b站请求接口需要的key
-const APP_KEY: string = 'YvirImLGlLANCLvM';
-const BILIBILI_KEY: string = 'JNlZNgfNGKZEpaDTkCdPQVXntXhuiJEM';
-
 interface ParseHtmlResult {
   initialState?: InitialState;
   h1Title: string;
-}
-
-/* md5加密 */
-function md5Crypto(data: string): string {
-  const md5Hash: Hash = createHash('md5');
-
-  md5Hash.update(data);
-
-  return md5Hash.digest('hex');
 }
 
 /**
@@ -130,26 +116,7 @@ async function parseVideoUrlCore(
 
   if (res?.data?.pages) {
     const { cid }: WebInterfaceViewDataPageItem = res.data.pages[page - 1]; // cid
-    const isAV: boolean = type === 'av';
-    const searchParams: URLSearchParams = new URLSearchParams({
-      appkey: APP_KEY,
-      [isAV ? 'avid' : 'bvid']: `${ isAV ? '' : 'BV' }${ id }`,
-      cid: `${ cid }`,
-      ...isDash ? {
-        fnval: '80',
-        fnver: '0',
-        fourk: '1',
-        qn: '0'
-      } : {
-        fnval: '0',
-        fnver: '0',
-        fourk: '1',
-        qn: '112'
-      }
-    });
-    const payload: string = searchParams.toString();
-    const sign: string = md5Crypto(`${ payload }${ BILIBILI_KEY }`);
-    const videoInfoRes: VideoInfo = await requestVideoInfo(payload, sign, proxy);
+    const videoInfoRes: VideoInfo = await requestVideoInfo({ type, id, cid, proxy, isDash });
 
     return { videoInfo: videoInfoRes, pic: res.data.pic };
   }
@@ -168,7 +135,8 @@ export async function parseVideoUrlV2(
   page: number = 1,
   proxy: string | undefined
 ): Promise<{ flvUrl: string; pic: string } | undefined> {
-  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(type, id, page, proxy, false);
+  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(
+    type, id, page, proxy, false);
   let result: { flvUrl: string; pic: string } | undefined = undefined;
 
   if (videoResult?.videoInfo?.data?.durl?.length) {
@@ -194,7 +162,8 @@ export async function parseVideoUrlDASH(
   page: number = 1,
   proxy: string | undefined
 ): Promise<{ videoData: VideoData; pic: string } | undefined> {
-  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(type, id, page, proxy, true);
+  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(
+    type, id, page, proxy, true);
   let result: { videoData: VideoData; pic: string } | undefined = undefined;
 
   if (videoResult?.videoInfo?.data?.dash) {

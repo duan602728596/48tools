@@ -40,12 +40,31 @@ export async function requestBilibiliHtml(url: string, proxy: string | undefined
 
 /**
  * 请求视频信息
- * @param { string } payload: 查询参数
- * @param { string } sign: 加密后的sign
- * @param { string | undefined } proxy: 是否使用代理
  */
-export async function requestVideoInfo(payload: string, sign: string, proxy: string | undefined): Promise<VideoInfo> {
-  const apiUrl: string = `https://api.bilibili.com/x/player/playurl?${ payload }&sign=${ sign }`;
+export async function requestVideoInfo({ type, id, cid, proxy, isDash }: {
+  type: string;
+  id: string;
+  cid: number;
+  proxy: string | undefined;
+  isDash: boolean;
+}): Promise<VideoInfo> {
+  const isAV: boolean = type === 'av';
+  const searchParams: URLSearchParams = new URLSearchParams({
+    [isAV ? 'avid' : 'bvid']: `${ isAV ? '' : 'BV' }${ id }`,
+    cid: `${ cid }`,
+    ...(isDash ? {
+      fnval: '80',
+      fnver: '0',
+      fourk: '1',
+      qn: '0'
+    } : {
+      fnval: '0',
+      fnver: '0',
+      fourk: '1',
+      qn: '112'
+    })
+  });
+  const apiUrl: string = `https://api.bilibili.com/x/player/playurl?${ searchParams.toString() }`;
   const res: GotResponse<VideoInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
