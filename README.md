@@ -1,5 +1,7 @@
 # 口袋48工具
 
+> 根据[Electron的支持政策](https://www.electronjs.org/docs/latest/tutorial/electron-timelines)，软件将会在下一个版本升级Electron的版本。Electron版本大于v22，软件将不支持win8及以下版本。
+
 ## 文档
 
 文档地址：[https://yzb1g5r02h.feishu.cn/docx/MxfydWlNaovZ5sxsbJ5crnAlnVb](https://yzb1g5r02h.feishu.cn/docx/MxfydWlNaovZ5sxsbJ5crnAlnVb) 。
