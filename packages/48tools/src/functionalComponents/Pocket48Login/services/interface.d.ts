@@ -30,3 +30,23 @@ export interface IMUserInfo {
     pwd: string;
   };
 }
+
+/* User info reload */
+interface UserItem {
+  nickname: string;
+  userId: number;
+  avatar: string;
+}
+
+export interface UserInfoReloadOrSwitch {
+  content: UserItem & {
+    token: string | null;
+    bigSmallInfo: {
+      bigUserInfo: UserItem;
+      smallUserInfo: Array<UserItem>;
+    };
+  };
+  status: number;
+  success: boolean;
+  message: string;
+}
