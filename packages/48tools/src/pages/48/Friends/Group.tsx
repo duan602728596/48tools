@@ -8,14 +8,14 @@ import style from './group.sass';
 import { requestFriendshipAdd } from '../services/pocket48';
 import type { RoomItem } from '../services/interface';
 
+const colProps: Record<string, number> = { xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 };
+
 interface GroupProps {
   title: string;
   data: Array<RoomItem>;
   readonly addLoading: boolean;
   readonly setAddLoading: D<S<boolean>>;
 }
-
-const colProps: Record<string, number> = { xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 };
 
 /* 渲染组 */
 function Group(props: GroupProps): ReactElement {
