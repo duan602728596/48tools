@@ -24,7 +24,7 @@ import commonStyle from '../../../../common.sass';
 import { omit } from '../../../../utils/lodash';
 import { mp4Source } from '../../../../utils/snh48';
 import { accessibilityClassName } from '../../../../components/basic/Accessibility/Accessibility';
-import type { FormatCustomMessage, FlipCardInfo, FlipCardAudioInfo, FlipCardVideoInfo } from '../../types';
+import type { FormatCustomMessage, FlipCardInfo, FlipCardAudioInfo, FlipCardVideoInfo, ReplyInfo } from '../../types';
 
 const { Paragraph }: TypographyProps = Typography;
 
@@ -97,13 +97,15 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
           // 普通消息
           renderElement.splice(1, 0,
             <Paragraph key="body" className="grow whitespace-pre-wrap break-all">{ item.body }</Paragraph>);
-        } else if (item.type === 'custom' && item.attach.messageType === 'REPLY') {
+        } else if (item.type === 'custom' && (item.attach.messageType === 'REPLY' || item.attach.messageType === 'GIFTREPLY')) {
           // 回复消息
+          const replyInfo: ReplyInfo = item.attach.replyInfo ?? item.attach.giftReplyInfo;
+
           renderElement.splice(1, 0,
             <Paragraph key="body" className="grow whitespace-pre-wrap break-all">
-              { item.attach.replyInfo.text }
+              { replyInfo.text }
               <blockquote className="whitespace-pre-wrap">
-                { item.attach.replyInfo.replyName }：{ item.attach.replyInfo.replyText }
+                { replyInfo.replyName }：{ replyInfo.replyText }
               </blockquote>
             </Paragraph>);
         } else if (item.type === 'image') {

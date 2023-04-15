@@ -22,7 +22,7 @@ async function createHtml({ data, filePath, page, length, time }: CreateHtmlObje
     try {
       if (item.msgType === 'TEXT') {
         pdfComponents.push(<HtmlComponents.Text key={ index } item={ item } />);
-      } else if (item.msgType === 'REPLY') {
+      } else if (item.msgType === 'REPLY' || item.msgType === 'GIFTREPLY') {
         pdfComponents.push(<HtmlComponents.Reply key={ index } item={ item } />);
       } else if (item.msgType === 'IMAGE' || item.msgType === 'VIDEO' || item.msgType === 'AUDIO') {
         pdfComponents.push(<HtmlComponents.Media key={ index } item={ item } />);

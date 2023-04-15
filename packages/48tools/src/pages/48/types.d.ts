@@ -416,7 +416,7 @@ export interface TEXTSendData extends SendDataBase {
 }
 
 export interface REPLYSendData extends SendDataBase {
-  msgType: 'REPLY';
+  msgType: 'REPLY' | 'GIFTREPLY';
   bodys: REPLYMessageV2['attach'];
 }
 

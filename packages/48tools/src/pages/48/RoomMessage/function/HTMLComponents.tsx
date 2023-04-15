@@ -213,7 +213,7 @@ export function Text(props: ComponentProps<TEXTSendData>): ReactElement {
 /* 回复消息 */
 export function Reply(props: ComponentProps<REPLYSendData>): ReactElement {
   const item: REPLYSendData = props.item;
-  const replyInfo: ReplyInfo = item.bodys.replyInfo;
+  const replyInfo: ReplyInfo = item.bodys.replyInfo ?? item.bodys.giftReplyInfo;
 
   return (
     <Basic item={ item }>
