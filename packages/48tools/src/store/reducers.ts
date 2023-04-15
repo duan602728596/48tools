@@ -15,7 +15,7 @@ import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';
 import weiboLoginReducers from '../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import weiboSuperReducers from '../pages/WeiboSuper/reducers/weiboSuper';
-import pocketFriendsApi from '../pages/48/reducers/pocketFriends';
+import pocketFriendsApi from '../pages/48/reducers/pocketFriends.api';
 
 /* reducers */
 export const reducersMapObject: ReducersMapObject = Object.assign({},

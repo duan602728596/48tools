@@ -13,7 +13,7 @@ import { Button, Spin, Empty, Divider } from 'antd';
 import * as classNames from 'classnames';
 import commonStyle from '../../../common.sass';
 import Header from '../../../components/Header/Header';
-import { useReqRoomIdQuery, type ReqRoomId } from '../reducers/pocketFriends';
+import { useReqRoomIdQuery, type ReqRoomId } from '../reducers/pocketFriends.api';
 import Group from './Group';
 import type { RoomItem } from '../services/interface';
 
