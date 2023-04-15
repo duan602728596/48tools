@@ -143,7 +143,7 @@ export default function(info: object): Record<string, any> {
     plugins: [
       new CopyPlugin({
         patterns: [{
-          from: path.join(__dirname, 'src/pages/48/sdk'),
+          from: path.join(__dirname, 'src/pages/48/sdk/1'),
           to: path.join(__dirname, 'dist')
         }]
       }),
