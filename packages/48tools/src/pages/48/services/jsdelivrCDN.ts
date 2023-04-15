@@ -8,7 +8,8 @@ export async function requestRoomId(): Promise<RoomIdObj> {
     controller.abort();
   }, 10_000);
   const res: Response = await fetch(
-    `https://cdn.jsdelivr.net/gh/duan602728596/qqtools@main/packages/NIMTest/node/roomId.json?t=${ new Date().getTime() }`, {
+    'https://fastly.jsdelivr.net/gh/duan602728596/qqtools@main/packages/NIMTest/node/roomId.json'
+    + `?t=${ new Date().getTime() }`, {
       method: 'GET',
       signal: controller.signal
     });
