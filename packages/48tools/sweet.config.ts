@@ -96,6 +96,7 @@ export default function(info: object): Record<string, any> {
       'react-dom/server.browser',
       'prop-types',
       '@reduxjs/toolkit',
+      '@reduxjs/toolkit/query/react',
       'react-redux',
       'reselect',
       'react-router-dom'

@@ -13,6 +13,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
+import { useLocation, useNavigate, type Location, type NavigateFunction } from 'react-router-dom';
 import { Button, Modal, Form, message, Avatar, Tabs, Dropdown, Select, type FormInstance } from 'antd';
 import type { ModalFunc } from 'antd/es/modal/confirm';
 import type { UseMessageReturnType, UseModalReturnType, LabeledValue } from '@48tools-types/antd';
@@ -69,6 +70,8 @@ interface ReloadInfoReturn {
 function Pocket48Login(props: {}): ReactElement {
   const { userInfo }: Pocket48LoginInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const location: Location = useLocation(),
+    navigate: NavigateFunction = useNavigate();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false);
@@ -278,6 +281,12 @@ function Pocket48Login(props: {}): ReactElement {
 
         break;
 
+      case 'friends':
+        navigate('/48/Friends', {
+          state: { from: location.pathname }
+        });
+        break;
+
       case 'exit':
         dispatch(setClearInfo());
         break;
@@ -287,6 +296,7 @@ function Pocket48Login(props: {}): ReactElement {
   const menuItems: Array<ItemType> = [
     { label: '复制Token', key: 'copyToken' },
     { label: '复制登录信息', key: 'copyInfo' },
+    { label: '一键关注', key: 'friends' },
     { type: 'divider' },
     { label: '退出', key: 'exit' }
   ];

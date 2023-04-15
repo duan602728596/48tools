@@ -11,7 +11,7 @@ import {
 import type { NoInfer } from '@reduxjs/toolkit/src/tsHelpers';
 import type { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
 import type { PreloadedState, CombinedState } from 'redux';
-import { reducersMapObject, ignoreOptions } from './reducers';
+import { reducersMapObject, ignoreOptions, apiMiddlewares } from './reducers';
 
 interface ThunkOptions<E = any> {
   extraArgument: E;
@@ -39,7 +39,7 @@ function createStore(initialState: InitialState = {}): void {
       return getDefaultMiddleware<GetDefaultMiddlewareOptions>({
         immutableCheck: ignoreOptions,
         serializableCheck: ignoreOptions
-      });
+      }).concat(apiMiddlewares);
     }
   });
 }

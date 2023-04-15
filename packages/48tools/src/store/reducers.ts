@@ -1,4 +1,4 @@
-import type { ReducersMapObject } from '@reduxjs/toolkit';
+import type { ReducersMapObject, Middleware } from '@reduxjs/toolkit';
 import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
 import roomMessageReducers from '../pages/48/reducers/roomMessage';
@@ -15,6 +15,7 @@ import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';
 import weiboLoginReducers from '../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import weiboSuperReducers from '../pages/WeiboSuper/reducers/weiboSuper';
+import pocketFriendsApi from '../pages/48/reducers/pocketFriends';
 
 /* reducers */
 export const reducersMapObject: ReducersMapObject = Object.assign({},
@@ -33,7 +34,8 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   videoEditVideoCutReducers,
   FFmpegProcessReducer,
   weiboLoginReducers,
-  weiboSuperReducers
+  weiboSuperReducers,
+  { [pocketFriendsApi.reducerPath]: pocketFriendsApi.reducer }
 );
 
 export const ignoreOptions: any = {
@@ -86,3 +88,8 @@ export const ignoreOptions: any = {
     'FFmpegProcess/setUpdateProcess'
   ]
 };
+
+/* middlewares */
+export const apiMiddlewares: Array<Middleware> = [
+  pocketFriendsApi.middleware
+];

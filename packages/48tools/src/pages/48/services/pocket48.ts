@@ -10,7 +10,8 @@ import type {
   ServerSearchResult,
   ServerJumpResult,
   HomeMessageResult,
-  VoiceOperate
+  VoiceOperate,
+  FriendShipAdd
 } from './interface';
 
 /**
@@ -224,6 +225,24 @@ export async function requestDownloadFile(fileUrl: string, headers?: GotHeaders)
     method: 'GET',
     responseType: 'text',
     headers
+  });
+
+  return res.body;
+}
+
+/* 关注 */
+export async function requestFriendshipAdd(toSourceId: number): Promise<FriendShipAdd | undefined> {
+  const token: string | undefined = getPocket48Token();
+
+  if (!token) return;
+
+  const res: GotResponse<FriendShipAdd> = await got.post('https://pocketapi.48.cn/user/api/v2/friendships/friends/add', {
+    headers: createHeaders(token),
+    responseType: 'json',
+    json: {
+      toSourceId,
+      toType: 1
+    }
   });
 
   return res.body;

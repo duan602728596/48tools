@@ -99,6 +99,15 @@ export interface ServerJumpResult extends Pocket48ResponseBase {
   };
 }
 
+export interface FriendShipAdd extends Pocket48ResponseBase {
+  content: {
+    serverIcon: string;
+    serverId: string;
+    serverName: string;
+    custom: string;
+  };
+}
+
 /* ========== 口袋48房间消息 ========== */
 export type MsgType = 'TEXT'
   | 'IMAGE'
@@ -197,4 +206,19 @@ export interface LiveOne {
   message: string;
   status: number;
   success: boolean;
+}
+
+/* ========== jsdelivrCDN ========== */
+export interface RoomItem {
+  id: number;
+  ownerName: string;
+  roomId?: string;
+  account?: string;
+  serverId?: number;
+  team?: string;
+}
+
+export interface RoomIdObj {
+  roomId: Array<RoomItem>;
+  buildTime: string;
 }
