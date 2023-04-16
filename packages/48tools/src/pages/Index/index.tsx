@@ -5,7 +5,8 @@ import Icon, {
   ToolTwoTone as IconToolTwoTone,
   BugTwoTone as IconBugTwoTone,
   WeiboOutlined as IconWeiboOutlined,
-  MessageFilled as IconMessageFilled
+  MessageFilled as IconMessageFilled,
+  FileSyncOutlined as IconFileSyncOutlined
 } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './index.sass';
@@ -147,6 +148,11 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   ]
 ];
 
+// 打开使用说明
+function handleOpenHelpClick(event: MouseEvent): void {
+  shell.openExternal('https://yzb1g5r02h.feishu.cn/docx/MxfydWlNaovZ5sxsbJ5crnAlnVb');
+}
+
 /* 导航渲染 */
 function nativeRender(): Array<ReactNode> {
   const element: Array<ReactElement> = [];
@@ -206,9 +212,10 @@ function Index(props: {}): ReactElement {
     <div className="p-[16px]">
       { nativeRender() }
       <div>
-        <Space size={ 8 }>
+        <Space>
           <FFmpegOption />
           <ExecutablePath />
+          <Button icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
           { theme.ChangeThemeElement }
           <Tooltip title="开发者工具">
             <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
