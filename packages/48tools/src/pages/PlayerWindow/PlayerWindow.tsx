@@ -5,6 +5,7 @@ import LiveInfo from './LiveInfo/LiveInfo';
 import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
 import Danmu from './Danmu/Danmu';
+import RecordDanmu from './Danmu/RecordDanmu';
 import { requestLiveRoomInfo } from '../48/services/pocket48';
 import type { LiveRoomInfo } from '../48/services/interface';
 
@@ -55,13 +56,9 @@ function PlayerWindow(props: {}): ReactElement {
             : <LiveVideo playerInfo={ playerInfo } info={ info } />
         }
       </div>
-      {
-        !inRecord && (
-          <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
-            <Danmu info={ info } />
-          </div>
-        )
-      }
+      <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
+        { inRecord ? <RecordDanmu info={ info } /> : <Danmu info={ info } /> }
+      </div>
     </div>
   );
 }

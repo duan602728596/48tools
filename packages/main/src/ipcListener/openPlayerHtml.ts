@@ -17,9 +17,8 @@ export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
 function open(title: string, query: string): void {
   const searchParams: URLSearchParams = new URLSearchParams(query);
   const id: string | null = searchParams.get('id');
-  const playerType: 'live' | 'record' | null = searchParams.get('playerType') as 'live' | 'record' | null;
 
-  if (!id || !playerType) return;
+  if (!id) return;
 
   if (playerWindowMaps.has(id)) {
     playerWindowMaps.get(id)!.show();
@@ -27,10 +26,9 @@ function open(title: string, query: string): void {
     return;
   }
 
-  const isRecord: boolean = playerType === 'record';
   let win: BrowserWindow | null = new BrowserWindow({
-    width: isRecord ? 327 : 643,
-    height: isRecord ? 638 : 680,
+    width: 643,
+    height: 680,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,

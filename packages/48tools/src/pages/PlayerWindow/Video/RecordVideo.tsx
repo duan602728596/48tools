@@ -12,6 +12,8 @@ interface RecordVideoProps {
   info: LiveRoomInfo | undefined;
 }
 
+export const VIDEO_ID: string = 'record-video';
+
 /* 录播视频的播放 */
 function RecordVideo(props: RecordVideoProps): ReactElement {
   const { playerInfo, info }: RecordVideoProps = props;
@@ -62,6 +64,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
     <div className="grow relative">
       <video ref={ videoRef }
         className="absolute z-10 inset-0 w-full h-full bg-[#000] outline-0"
+        id={ VIDEO_ID }
         controls={ true }
         poster={ source(playerInfo.coverPath) }
       />
