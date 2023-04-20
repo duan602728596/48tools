@@ -12,3 +12,8 @@ $dust-red-dark: #dc4446 // 暗黑模式红色
 
   .tips
     color: $dust-red-dark
+
+// 修复rc-virtual-list组件的暗黑模式下滚动条颜色
+@media (prefers-color-scheme: dark)
+  .virtualList :global(.rc-virtual-list-scrollbar-thumb)
+    background: rgba(255, 255, 255, .5) !important

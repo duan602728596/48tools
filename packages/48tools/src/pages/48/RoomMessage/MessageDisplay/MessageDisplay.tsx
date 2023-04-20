@@ -290,7 +290,7 @@ function MessageDisplay(props: MessageDisplayProps): ReactElement {
   return (
     <div ref={ messageListRef } className="relative z-50 h-full overflow-hidden">
       <Spin size="large" spinning={ loading }>
-        <List size="small">
+        <List className={ commonStyle.virtualList } size="small">
           {
             data.length > 0 ? (
               <VirtualList ref={ virtualListRef }

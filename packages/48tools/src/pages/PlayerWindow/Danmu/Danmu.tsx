@@ -17,7 +17,7 @@ import * as PropTypes from 'prop-types';
 import { Avatar, Switch } from 'antd';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
-import style from './danmu.sass';
+import commonStyle from '../../../common.sass';
 import NimChatroomSocket from '../sdk/NimChatroomSocket';
 import { source } from '../../../utils/snh48';
 import type { LiveRoomInfo } from '../../48/services/interface';
@@ -175,7 +175,7 @@ function Danmu(props: DanmuProps): ReactElement {
         />
         <i className="block mt-[4px]">弹幕最上面是最新的消息，鼠标滚轮向下滚动可以查看其他消息。</i>
       </div>
-      <div ref={ danmuListRef } className={ classNames('grow relative z-50 overflow-hidden', style.virtualList) }>
+      <div ref={ danmuListRef } className={ classNames('grow relative z-50 overflow-hidden', commonStyle.virtualList) }>
         <VirtualList ref={ virtualListRef } data={ danmuData } height={ danmuListHeight } itemHeight={ 26 } itemKey="vid">
           {
             (item: LiveRoomTextMessage, index: number): ReactElement =>

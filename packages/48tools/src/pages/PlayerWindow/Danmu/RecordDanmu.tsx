@@ -14,7 +14,7 @@ import {
 import { Spin, Empty } from 'antd';
 import * as classNames from 'classnames';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
-import style from './danmu.sass';
+import commonStyle from '../../../common.sass';
 import { requestDanmuFile } from '../services/danmu';
 import formatDanmu from '../function/formatDanmu';
 import { VIDEO_ID } from '../Video/RecordVideo';
@@ -160,7 +160,7 @@ function RecordDanmu(props: DanmuProps): ReactElement {
   }, [info]);
 
   return (
-    <div ref={ danmuListRef } className={ classNames('grow relative z-50 overflow-hidden', style.virtualList) }>
+    <div ref={ danmuListRef } className={ classNames('grow relative z-50 overflow-hidden', commonStyle.virtualList) }>
       {
         loading && (
           <div className="text-center">
