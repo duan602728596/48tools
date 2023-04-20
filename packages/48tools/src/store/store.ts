@@ -8,9 +8,7 @@ import {
   type SerializableStateInvariantMiddlewareOptions,
   type Middleware
 } from '@reduxjs/toolkit';
-import type { NoInfer } from '@reduxjs/toolkit/src/tsHelpers';
 import type { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
-import type { PreloadedState, CombinedState } from 'redux';
 import { reducersMapObject, ignoreOptions, apiMiddlewares } from './reducers';
 
 interface ThunkOptions<E = any> {
@@ -23,15 +21,13 @@ interface GetDefaultMiddlewareOptions {
   serializableCheck?: boolean | SerializableStateInvariantMiddlewareOptions;
 }
 
-type InitialState<S = any> = PreloadedState<CombinedState<NoInfer<S>>>;
-
 /* reducer列表 */
 const reducer: Reducer = combineReducers(reducersMapObject);
 
 /* store */
 export let store: Store;
 
-function createStore(initialState: InitialState = {}): void {
+function createStore(initialState: any = {}): void {
   store = configureStore({
     reducer,
     preloadedState: initialState,
@@ -44,7 +40,7 @@ function createStore(initialState: InitialState = {}): void {
   });
 }
 
-export function storeFactory(initialState: InitialState = {}): Store {
+export function storeFactory(initialState: any = {}): Store {
   if (!store) {
     createStore(initialState);
   }
