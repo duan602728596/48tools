@@ -12,8 +12,15 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Form, Modal, Input, type FormInstance } from 'antd';
 import type { Store } from 'antd/es/form/interface';
+import type { Rule } from 'rc-field-form/es/interface';
 import type { DataDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import commonStyle from '../../common.sass';
+
+const descriptionRule: Array<Rule> = [{ required: true, message: '请填写直播间说明', whitespace: true }];
+const roomIdRule: Array<Rule> = [
+  { required: true, message: '请填写直播间ID', whitespace: true },
+  { pattern: /^\d+$/, message: '直播间ID必须是数字' }
+];
 
 /* 添加A站 B站 抖音的直播间ID，保存到数据库 */
 interface AddLiveRoomFormProps {
@@ -78,13 +85,13 @@ function AddLiveRoomForm(props: AddLiveRoomFormProps): ReactElement {
         <Form className="h-[150px]" form={ form } labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
           <Form.Item name="description"
             label="直播间说明"
-            rules={ [{ required: true, message: '请填写直播间说明', whitespace: true }] }
+            rules={ descriptionRule }
           >
             <Input />
           </Form.Item>
           <Form.Item name="roomId"
             label="直播间ID"
-            rules={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
+            rules={ roomIdRule }
           >
             <Input />
           </Form.Item>
