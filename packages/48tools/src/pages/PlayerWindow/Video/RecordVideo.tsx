@@ -5,6 +5,7 @@ import { source, engineUserAgent } from '../../../utils/snh48';
 import { requestDownloadFile } from '../../48/services/pocket48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
 import { danmuStore } from '../function/DanmuStore';
+import { getDanmuLocal } from '../function/danmuLocal';
 import type { PlayerInfo } from '../PlayerWindow';
 import type { LiveRoomInfo } from '../../48/services/interface';
 import type { DanmuItem } from '../types';
@@ -15,7 +16,6 @@ interface RecordVideoProps {
 }
 
 export const VIDEO_ID: string = 'record-video';
-export const VIDEO_TRACK_ID: string = 'record-video-track';
 
 /* 录播视频的播放 */
 function RecordVideo(props: RecordVideoProps): ReactElement {
@@ -63,7 +63,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
 
   // 生成弹幕文件
   function createVideoTrack(): void {
-    if (videoLoaded && danmuList.length && videoRef.current) {
+    if (videoLoaded && danmuList.length && videoRef.current && getDanmuLocal()) {
       const track: TextTrack = videoRef.current.addTextTrack('subtitles', '弹幕', 'zh');
 
       track.mode = 'showing';
@@ -71,6 +71,8 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
       for (const item of danmuList) {
         const vttcue: VTTCue = new VTTCue(item.currentTime, item.currentTime + 3, `${ item.nickname }：${ item.message }`);
 
+        vttcue.align = 'left';
+        vttcue.line = 500;
         track.addCue(vttcue);
       }
     }

@@ -1,9 +1,14 @@
 import { ipcRenderer } from 'electron';
-import type { ReactElement, ReactNode, MouseEvent } from 'react';
+import { useState, type ReactElement, type ReactNode, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import { Avatar, Button, Tag, Tooltip } from 'antd';
-import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
+import { Avatar, Button, Tag, Tooltip, Space } from 'antd';
+import {
+  ToolTwoTone as IconToolTwoTone,
+  UnorderedListOutlined as IconUnorderedListOutlined,
+  StopOutlined as IconStopOutlined
+} from '@ant-design/icons';
 import { source } from '../../../utils/snh48';
+import { getDanmuLocal, setDanmuLocal } from '../function/danmuLocal';
 import type { PlayerInfo } from '../PlayerWindow';
 import type { LiveRoomInfo } from '../../48/services/interface';
 
@@ -15,6 +20,13 @@ interface LiveInfoProps {
 /* 显示直播信息 */
 function LiveInfo(props: LiveInfoProps): ReactElement {
   const { playerInfo, info }: LiveInfoProps = props;
+  const [dl, setDl]: [boolean, D<S<boolean>>] = useState(getDanmuLocal());
+
+  // 设置弹幕
+  function handleDanmuSwitchClick(value: boolean, event: MouseEvent): void {
+    setDl(value);
+    setDanmuLocal(value);
+  }
 
   // 打开开发者工具
   function handleOpenDeveloperToolsClick(event: MouseEvent): void {
@@ -46,9 +58,31 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
       <div className="flex">
         <div className="grow">{ infoRender() }</div>
         <div className="shrink-0">
-          <Tooltip title="开发者工具">
-            <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
-          </Tooltip>
+          <Space>
+            {
+              dl ? (
+                <Tooltip title="在下一次看录播时不加载弹幕">
+                  <Button type="primary"
+                    danger={ true }
+                    icon={ <IconStopOutlined /> }
+                    aria-label="在下一次看录播时关闭弹幕"
+                    onClick={ (event: MouseEvent): void => handleDanmuSwitchClick(false, event) }
+                  />
+                </Tooltip>
+              ) : (
+                <Tooltip title="在下一次看录播时加载弹幕">
+                  <Button type="primary"
+                    icon={ <IconUnorderedListOutlined /> }
+                    aria-label="在下一次看录播时开启弹幕"
+                    onClick={ (event: MouseEvent): void => handleDanmuSwitchClick(true, event) }
+                  />
+                </Tooltip>
+              )
+            }
+            <Tooltip title="开发者工具">
+              <Button icon={ <IconToolTwoTone /> } aria-label="开发者工具" onClick={ handleOpenDeveloperToolsClick } />
+            </Tooltip>
+          </Space>
         </div>
       </div>
     </header>
