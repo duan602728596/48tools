@@ -60,7 +60,7 @@ function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: 
   const deTsUrlParse: URL = new URL(deTsUrl);
 
   const req: ClientRequest = (deTsUrlParse.protocol === 'https:' ? https : http)
-    .get(deTsUrl, { headers }, function(response: IncomingMessage): void {
+    .get(deTsUrl, { headers, timeout: 10_000 }, function(response: IncomingMessage): void {
       const buffer: Array<Buffer> = [];
 
       response.on('data', (chunk: Buffer): unknown => buffer.push(chunk));
