@@ -32,17 +32,21 @@ function formatDanmu(str: string): Array<DanmuItem> {
     const time: string | undefined = item.match(regexp)?.[0]
       ?.replace?.('[', '')
       .replace(']', '');
-    const noTime: string = item.replace(regexp, '');
-    const message: string[] = noTime.split(/\t/);
-    const nickname: string = message[0];
 
-    result.push({
-      time,
-      currentTime: time ? formatCurrentTime(time) : undefined,
-      nickname,
-      message: message.slice(1).join(''),
-      vid: String(index)
-    });
+    if (time) {
+      const noTime: string = item.replace(regexp, '');
+      const message: string[] = noTime.split(/\t/);
+      const nickname: string = message[0];
+
+      result.push({
+        time,
+        currentTime: formatCurrentTime(time),
+        nickname,
+        message: message.slice(1).join(''),
+        vid: String(index)
+      });
+    }
+
     index++;
   }
 

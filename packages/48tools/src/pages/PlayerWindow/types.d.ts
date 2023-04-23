@@ -1,6 +1,6 @@
 export interface DanmuItem {
-  time: string | undefined;
-  currentTime: number | undefined;
+  time: string;
+  currentTime: number;
   nickname: string;
   message: string;
   vid: string;

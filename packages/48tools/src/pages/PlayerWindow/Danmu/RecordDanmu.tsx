@@ -68,21 +68,17 @@ const DanmuItemComponent: FunctionComponent<DanmuItemProps> = forwardRef(
       >
         <div ref={ divRef }>
           <div className="flex leading-[26px]">
-            {
-              item.time && (
-                <div className="shrink-0 mr-[6px]">
-                  <a className={ commonStyle.link }
-                    role="button"
-                    aria-label="时间"
-                    tabIndex={ 0 }
-                    data-time={ item.currentTime }
-                    onClick={ handleVideoGoToClick }
-                  >
-                    [{ item.time }]
-                  </a>
-                </div>
-              )
-            }
+            <div className="shrink-0 mr-[6px]">
+              <a className={ commonStyle.link }
+                role="button"
+                aria-label="时间"
+                tabIndex={ 0 }
+                data-time={ item.currentTime }
+                onClick={ handleVideoGoToClick }
+              >
+                [{ item.time }]
+              </a>
+            </div>
             <div className="grow">
               { item.nickname }：
               { item.message }
