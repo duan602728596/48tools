@@ -1,11 +1,13 @@
-import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
+import { useEffect, useRef, useSyncExternalStore, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import * as PropTypes from 'prop-types';
 import Hls, { type Events, type ManifestParsedData } from 'hls.js';
 import { source, engineUserAgent } from '../../../utils/snh48';
 import { requestDownloadFile } from '../../48/services/pocket48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
+import { danmuStore } from '../function/DanmuStore';
 import type { PlayerInfo } from '../PlayerWindow';
 import type { LiveRoomInfo } from '../../48/services/interface';
+import type { DanmuItem } from '../types';
 
 interface RecordVideoProps {
   playerInfo: PlayerInfo;
@@ -13,10 +15,13 @@ interface RecordVideoProps {
 }
 
 export const VIDEO_ID: string = 'record-video';
+export const VIDEO_TRACK_ID: string = 'record-video-track';
 
 /* 录播视频的播放 */
 function RecordVideo(props: RecordVideoProps): ReactElement {
   const { playerInfo, info }: RecordVideoProps = props;
+  const danmuList: Array<DanmuItem> = useSyncExternalStore(danmuStore.subscribe, danmuStore.getDanmuList);
+  const videoLoaded: boolean = useSyncExternalStore(danmuStore.subscribe, danmuStore.getVideoLoaded);
   const flvjsPlayerRef: MutableRefObject<Hls | undefined> = useRef();
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
 
@@ -26,9 +31,12 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
       // 兼容早期的mp4格式的电台
       if (/\.mp4$/.test(info.content.playStreamPath)) {
         videoRef.current.src = info.content.playStreamPath;
+        danmuStore.setVideoLoaded(true);
 
         return;
       }
+
+      if (flvjsPlayerRef.current) return;
 
       const m3u8Data: string = await requestDownloadFile(info.content.playStreamPath, {
         'Host': 'cychengyuan-vod.48.cn',
@@ -40,6 +48,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
       flvjsPlayerRef.current = new Hls();
 
       flvjsPlayerRef.current.on(Hls.Events.MEDIA_ATTACHED, (): void => {
+        danmuStore.setVideoLoaded(true);
         console.log('Video and hls.js are now bound together!');
       });
 
@@ -52,6 +61,21 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
     }
   }
 
+  // 生成弹幕文件
+  function createVideoTrack(): void {
+    if (videoLoaded && danmuList.length && videoRef.current) {
+      const track: TextTrack = videoRef.current.addTextTrack('subtitles', '弹幕', 'zh');
+
+      track.mode = 'showing';
+
+      for (const item of danmuList) {
+        const vttcue: VTTCue = new VTTCue(item.currentTime, item.currentTime + 3, `${ item.nickname }：${ item.message }`);
+
+        track.addCue(vttcue);
+      }
+    }
+  }
+
   useEffect(function(): () => void {
     loadVideo();
 
@@ -59,6 +83,10 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
       flvjsPlayerRef.current?.destroy?.();
     };
   }, [info, playerInfo]);
+
+  useEffect(function() {
+    createVideoTrack();
+  }, [danmuList, videoLoaded]);
 
   return (
     <div className="grow relative">

@@ -37,9 +37,7 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
 
   return (
     <header className="shrink-0 mb-[8px]">
-      <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">
-        { playerInfo.title }
-      </h1>
+      <h1 className="inline-block mb-[8px] mr-[6px] text-[16px]">{ playerInfo.title }</h1>
       {
         playerInfo.liveMode === 1
           ? <Tag color="blue">录屏</Tag>

@@ -2,6 +2,7 @@ import {
   useState,
   useEffect,
   useRef,
+  useSyncExternalStore,
   forwardRef,
   type ReactElement,
   type Dispatch as D,
@@ -17,6 +18,7 @@ import VirtualList, { type ListRef } from 'rc-virtual-list';
 import commonStyle from '../../../common.sass';
 import { requestDanmuFile } from '../services/danmu';
 import formatDanmu from '../function/formatDanmu';
+import { danmuStore } from '../function/DanmuStore';
 import { VIDEO_ID } from '../Video/RecordVideo';
 import type { LiveRoomInfo } from '../../48/services/interface';
 import type { DanmuItem } from '../types';
@@ -97,7 +99,7 @@ interface DanmuProps {
 function RecordDanmu(props: DanmuProps): ReactElement {
   const { info }: DanmuProps = props;
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState<boolean>(false); // 加载状态
-  const [danmuList, setDanmuList]: [Array<DanmuItem>, D<S<Array<DanmuItem>>>] = useState([]);
+  const danmuList: Array<DanmuItem> = useSyncExternalStore(danmuStore.subscribe, danmuStore.getDanmuList);
   const [danmuListHeight, setDanmuListHeight]: [number, D<S<number>>] = useState(0);
   const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
   const danmuListRef: RefObject<HTMLDivElement> = useRef(null);
@@ -113,7 +115,7 @@ function RecordDanmu(props: DanmuProps): ReactElement {
       const res: string = await requestDanmuFile(info.content.msgFilePath);
       const formatRes: Array<DanmuItem> = formatDanmu(res);
 
-      setDanmuList((): Array<DanmuItem> => formatRes);
+      danmuStore.setDanmuList(formatRes);
     } catch (err) {
       console.error(err);
     }
