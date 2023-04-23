@@ -27,8 +27,7 @@ const inRecord: boolean = playerInfo.playerType === 'record';
 
 /* 直播窗口 */
 function PlayerWindow(props: {}): ReactElement {
-  const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>]
-    = useState(undefined); // 直播信息
+  const [info, setInfo]: [LiveRoomInfo | undefined, D<S<LiveRoomInfo | undefined>>] = useState(undefined); // 直播信息
 
   // 请求直播间信息
   async function getLiveRoomInfo(): Promise<void> {

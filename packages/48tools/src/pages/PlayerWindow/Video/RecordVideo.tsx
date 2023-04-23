@@ -22,7 +22,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
   const { playerInfo, info }: RecordVideoProps = props;
   const danmuList: Array<DanmuItem> = useSyncExternalStore(danmuStore.subscribe, danmuStore.getDanmuList);
   const videoLoaded: boolean = useSyncExternalStore(danmuStore.subscribe, danmuStore.getVideoLoaded);
-  const flvjsPlayerRef: MutableRefObject<Hls | undefined> = useRef();
+  const hlsPlayerRef: MutableRefObject<Hls | undefined> = useRef();
   const videoRef: RefObject<HTMLVideoElement> = useRef(null);
 
   // 加载视频
@@ -36,7 +36,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
         return;
       }
 
-      if (flvjsPlayerRef.current) return;
+      if (hlsPlayerRef.current) return;
 
       const m3u8Data: string = await requestDownloadFile(info.content.playStreamPath, {
         'Host': 'cychengyuan-vod.48.cn',
@@ -45,19 +45,19 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
       const blob: Blob = new Blob([formatTsUrl(m3u8Data, playerInfo.proxyPort)], { type: 'application/vnd.apple.mpegurl' });
       const m3u8Url: string = URL.createObjectURL(blob);
 
-      flvjsPlayerRef.current = new Hls();
+      hlsPlayerRef.current = new Hls();
 
-      flvjsPlayerRef.current.on(Hls.Events.MEDIA_ATTACHED, (): void => {
+      hlsPlayerRef.current.on(Hls.Events.MEDIA_ATTACHED, (): void => {
         danmuStore.setVideoLoaded(true);
         console.log('Video and hls.js are now bound together!');
       });
 
-      flvjsPlayerRef.current.on(Hls.Events.MANIFEST_PARSED, (event: Events.MANIFEST_PARSED, data: ManifestParsedData): void => {
+      hlsPlayerRef.current.on(Hls.Events.MANIFEST_PARSED, (event: Events.MANIFEST_PARSED, data: ManifestParsedData): void => {
         console.log(`Manifest loaded, found ${ data.levels.length } quality level.`);
       });
 
-      flvjsPlayerRef.current.loadSource(m3u8Url);
-      flvjsPlayerRef.current.attachMedia(videoRef.current);
+      hlsPlayerRef.current.loadSource(m3u8Url);
+      hlsPlayerRef.current.attachMedia(videoRef.current);
     }
   }
 
@@ -82,7 +82,7 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
     loadVideo();
 
     return function(): void {
-      flvjsPlayerRef.current?.destroy?.();
+      hlsPlayerRef.current?.destroy?.();
     };
   }, [info, playerInfo]);
 
