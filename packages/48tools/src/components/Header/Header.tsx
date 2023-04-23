@@ -1,11 +1,10 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, PropsWithChildren } from 'react';
 import * as PropTypes from 'prop-types';
 import * as classNames from 'classnames';
 import ButtonLink from '../ButtonLink/ButtonLink';
 
-interface HeaderProps {
+interface HeaderProps extends PropsWithChildren {
   to?: string;
-  children?: ReactNode;
   className?: string;
 }
 

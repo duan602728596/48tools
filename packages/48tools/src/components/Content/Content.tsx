@@ -1,10 +1,9 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, PropsWithChildren } from 'react';
 import * as PropTypes from 'prop-types';
 import * as classNames from 'classnames';
 
-interface ContentProps {
+interface ContentProps extends Required<PropsWithChildren> {
   className?: string;
-  children: ReactNode;
 }
 
 /**

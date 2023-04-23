@@ -1,13 +1,12 @@
-import type { ReactElement, ReactNode, MouseEvent } from 'react';
+import type { ReactElement, MouseEvent, PropsWithChildren } from 'react';
 import * as PropTypes from 'prop-types';
 import { useHref, useLinkClickHandler, type LinkProps } from 'react-router-dom';
 import { Button, type ButtonProps } from 'antd';
 import { pick } from '../../utils/lodash';
 
-interface ButtonLinkProps {
+interface ButtonLinkProps extends PropsWithChildren {
   linkProps: LinkProps;
   buttonProps?: ButtonProps & Record<string, unknown>;
-  children?: ReactNode;
 }
 
 /**

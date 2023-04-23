@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, PropsWithChildren } from 'react';
 import * as PropTypes from 'prop-types';
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
 import { typeCNName } from '../MessageDisplay/MessageDisplay';
@@ -29,11 +29,10 @@ import type {
  */
 
 /* template总体的html布局 */
-interface HtmlProps {
+interface HtmlProps extends Required<PropsWithChildren> {
   time: string;
   page: number;
   length: number;
-  children: ReactNode;
 }
 
 export function Html(props: HtmlProps): ReactElement {
@@ -163,9 +162,8 @@ Html.propTypes = {
 };
 
 /* 通用的item，显示用户头像和消息时间 */
-interface UserInfoProps {
+interface UserInfoProps extends PropsWithChildren {
   item: SendDataItem;
-  children?: ReactNode;
 }
 
 function Basic(props: UserInfoProps): ReactElement {

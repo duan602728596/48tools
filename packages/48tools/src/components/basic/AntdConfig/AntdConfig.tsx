@@ -1,4 +1,4 @@
-import { useContext, type ReactNode, type ReactElement } from 'react';
+import { useContext, type ReactElement, type PropsWithChildren } from 'react';
 import * as PropTypes from 'prop-types';
 import { ConfigProvider } from 'antd';
 import darkDerivative from 'antd/es/theme/themes/dark/index';
@@ -7,7 +7,7 @@ import { cyan } from '@ant-design/colors';
 import ThemeContext, { type Theme } from '../Theme/ThemeContext';
 
 /* antd ConfigProvider */
-function AntdConfig(props: { children: ReactNode }): ReactElement {
+function AntdConfig(props: Required<PropsWithChildren>): ReactElement {
   const { isDark }: Theme = useContext(ThemeContext);
 
   return (

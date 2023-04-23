@@ -4,10 +4,10 @@ import {
   useMemo,
   useEffect,
   type ReactElement,
-  type ReactNode,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent
+  type MouseEvent,
+  type PropsWithChildren
 } from 'react';
 import * as PropTypes from 'prop-types';
 import { Button, Tooltip, Modal, Radio } from 'antd';
@@ -25,9 +25,8 @@ const themeOptions: Array<{ label: string; value: string }> = [
 
 type ThemeValue = 'light' | 'dark' | 'system';
 
-interface ThemeProviderProps {
+interface ThemeProviderProps extends Required<PropsWithChildren>{
   isChildrenWindow?: boolean; // 是否为子窗口
-  children: ReactNode;
 }
 
 /**
