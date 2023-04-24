@@ -47,7 +47,7 @@ export function awemePostQuery(secUserId: string, maxCursor: number): string {
     downlink: '3.6',
     effective_type: '4g',
     round_trip_time: '100',
-    webid: `${ Math.random() }`.replace(/^0\\./, ''),
+    webid: `${ Math.random() }`.replace(/^0\./, ''),
     msToken: token
   });
   const xbogus: string = Signer.sign(urlParam.toString(), pcUserAgent);
@@ -85,7 +85,7 @@ export function awemeDetailQuery(id: string, signature: string): string {
     downlink: '3.6',
     effective_type: '4g',
     round_trip_time: '100',
-    webid: `${ Math.random() }`.replace(/^0\\./, ''),
+    webid: `${ Math.random() }`.replace(/^0\./, ''),
     msToken: token,
     _signature: signature
   });
