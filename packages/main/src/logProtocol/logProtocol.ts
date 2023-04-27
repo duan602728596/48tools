@@ -39,7 +39,7 @@ function registerStringProtocolCallback(request: ProtocolRequest, callback: (res
   let resData: string | null = null;
 
   if (template?.[type]?.[fn]) {
-    resData = template?.[type]?.[fn](type, fn, data);
+    resData = template[type][fn](type, fn, data);
   }
 
   if (resData) {
