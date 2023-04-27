@@ -8,6 +8,7 @@ import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
 import weiboResourceRequestInit from './weiboResourceRequest/weiboResourceRequest';
 import store from './store';
+import logProtocol from './logProtocol/logProtocol';
 import type { ThemeValue } from './ipcListener/themeChange';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
@@ -23,6 +24,8 @@ function createWindow(): void {
   if (themeSource) {
     nativeTheme.themeSource = themeSource;
   }
+
+  logProtocol();
 
   win = new BrowserWindow({
     width: 1000,
