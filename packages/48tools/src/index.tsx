@@ -11,6 +11,7 @@ import Routers from './router/Routers';
 import IDBInit from './utils/IDB/IDBInit';
 import './main.tailwindcss.css';
 import './components/basic/Accessibility/Accessibility';
+import './utils/logProtocol/logProtocolBroadcastChannel';
 
 dayjs.locale('zh-cn');
 

@@ -1,5 +1,7 @@
 import got, { type Response as GotResponse } from 'got';
+import type { _PlayUrlObject } from '@48tools/main/src/logProtocol/logTemplate/bilibiliLive';
 import { getBilibiliCookie } from '../../../utils/utils';
+import { _bilibiliLiveLogProtocol } from '../../../utils/logProtocol/logActions';
 import type { RoomInit, RoomPlayUrl } from './interface';
 
 /**
@@ -29,6 +31,11 @@ export async function requestRoomPlayerUrl(roomId: string): Promise<RoomPlayUrl>
     headers: {
       Cookie: getBilibiliCookie()
     }
+  });
+
+  _bilibiliLiveLogProtocol.post<_PlayUrlObject>('playurl', {
+    roomId,
+    response: JSON.stringify(res.body, null, 2)
   });
 
   return res.body;

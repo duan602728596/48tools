@@ -1,4 +1,8 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
+import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
+import { _ffmpegLogProtocol } from '../logProtocol/logActions';
+
+const _stdout: Array<string> = [];
 
 /**
  * ffmpeg下载线程
@@ -129,14 +133,23 @@ function download(workerData: WorkerEventData): void {
 
   child.stdout.on('data', function(data: Buffer): void {
     // console.log(data.toString());
+    _stdout.push(data.toString());
   });
 
   child.stderr.on('data', function(data: Buffer): void {
     // console.log(data.toString());
+    _stdout.push(data.toString());
     qid && ffmpegProgressParse(qid, data.toString());
   });
 
   child.on('close', function(...args: string[]): void {
+    _ffmpegLogProtocol.post<_UtilObject>('util', {
+      ffmpeg,
+      input: playStreamPath,
+      output: filePath,
+      cmd: ffmpegArgs,
+      stdout: _stdout.join('\n')
+    });
     postMessage({ type: 'close', qid });
   });
 

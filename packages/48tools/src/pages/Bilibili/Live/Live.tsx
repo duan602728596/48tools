@@ -128,7 +128,7 @@ function Live(props: {}): ReactElement {
         ua: true,
         ffmpegHeaders: `Referer: https://live.bilibili.com/${ record.roomId }\r
 Host: live.bilibili.com\r
-Origin: https://live.bilibili.com\r`
+Origin: https://live.bilibili.com\r\n`
       });
 
       dispatch(setAddLiveBilibiliChildList({
