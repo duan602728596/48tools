@@ -25,6 +25,7 @@ export interface DouyinDownloadInitialState extends EntityState<DownloadItem> {
 
 type SliceReducers = {
   setAddDownloadList: CaseReducer<DouyinDownloadInitialState, PayloadAction<DownloadItem>>;
+  setAddDownloadListAll: CaseReducer<DouyinDownloadInitialState, PayloadAction<DownloadItem[]>>;
   setDeleteDownloadList: CaseReducer<DouyinDownloadInitialState, PayloadAction<string>>;
   setDownloadProgress: CaseReducer<DouyinDownloadInitialState, PayloadAction<MessageEventData>>;
 };
@@ -37,6 +38,7 @@ const { actions, reducer }: Slice<DouyinDownloadInitialState, SliceReducers, typ
   }),
   reducers: {
     setAddDownloadList: douyinDownloadListAdapter.addOne,       // 添加下载
+    setAddDownloadListAll: douyinDownloadListAdapter.addMany,   // 添加下载列表
     setDeleteDownloadList: douyinDownloadListAdapter.removeOne, // 删除下载
 
     // 设置下载进度
@@ -56,6 +58,7 @@ const { actions, reducer }: Slice<DouyinDownloadInitialState, SliceReducers, typ
 
 export const {
   setAddDownloadList,
+  setAddDownloadListAll,
   setDeleteDownloadList,
   setDownloadProgress
 }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;

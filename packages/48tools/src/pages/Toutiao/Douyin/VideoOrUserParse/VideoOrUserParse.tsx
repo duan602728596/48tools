@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Input, message, Modal, Select, Table } from 'antd';
+import { Input, message, Modal, Select, Table, Button } from 'antd';
 import type { BaseOptionType } from 'rc-select/es/Select';
 import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
@@ -21,12 +21,12 @@ import douyinStyle from '../douyin.sass';
 import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
 import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMiddleware';
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
-import { setAddDownloadList } from '../../reducers/douyinDownload';
+import { setAddDownloadList, setAddDownloadListAll } from '../../reducers/douyinDownload';
 import { douyinCookie } from '../function/DouyinCookieStore';
 import { requestAwemePost, requestDouyinUser, requestTtwidCookie } from '../../services/douyin';
 import * as toutiaosdk from '../../sdk/toutiaosdk';
-import type { DownloadUrlItem, UserDataItem, VideoQuery } from '../../types';
-import type { AwemePostResponse, AwemeItem, DouyinHtmlResponseType } from '../../services/interface';
+import type { DownloadUrlItem, DownloadItem, UserDataItem, VideoQuery } from '../../types';
+import type { AwemePostResponse, AwemeItem, DouyinHtmlResponseType, AwemeItemRate } from '../../services/interface';
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactElement> {
@@ -218,6 +218,29 @@ function VideoOrUserParse(props: {}): ReactElement {
     setVisible(false);
   }
 
+  // 全部下载
+  function handleUserListDownloadImageAllClick(record: UserDataItem | AwemeItem, event: MouseEvent): void {
+    if (('images' in record) && record?.images?.length) {
+      const downloadPayload: Array<DownloadItem> = [];
+
+      for (const image of record.images) {
+        for (const url of image.url_list) {
+          downloadPayload.push({
+            qid: randomUUID(),
+            url,
+            title: record.desc,
+            width: image.width,
+            height: image.height,
+            isImage: true
+          });
+        }
+      }
+
+      dispatch(setAddDownloadListAll(downloadPayload));
+      messageApi.info('添加到下载列表。');
+    }
+  }
+
   // 选择下载地址
   function handleUserListDownloadUrlSelect(
     record: UserDataItem | AwemeItem,
@@ -288,15 +311,27 @@ function VideoOrUserParse(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 240,
+      width: 330,
       render: (value: undefined, record: UserDataItem | AwemeItem, index: number): ReactNode => (
-        <Select className={ style.userListUrlSelect }
-          size="small"
-          onSelect={ (v: string, option: { item: DownloadUrlItem } & BaseOptionType): void =>
-            handleUserListDownloadUrlSelect(record, v, option) }
-        >
-          { userDataSelectOptionsRender(record) }
-        </Select>
+        <Fragment>
+          <Select className={ style.userListUrlSelect }
+            size="small"
+            onSelect={ (v: string, option: { item: DownloadUrlItem } & BaseOptionType): void =>
+              handleUserListDownloadUrlSelect(record, v, option) }
+          >
+            { userDataSelectOptionsRender(record) }
+          </Select>
+          {
+            ('images' in record) && record?.images?.length && (
+              <Button className="ml-[4px]"
+                size="small"
+                onClick={ (event: MouseEvent): void => handleUserListDownloadImageAllClick(record, event) }
+              >
+                全部下载
+              </Button>
+            )
+          }
+        </Fragment>
       )
     }
   ];
@@ -331,7 +366,7 @@ function VideoOrUserParse(props: {}): ReactElement {
       {/* 用户视频列表 */}
       <Modal title={ userTitle }
         open={ userModalVisible }
-        width={ 600 }
+        width={ 800 }
         centered={ true }
         destroyOnClose={ true }
         closable={ false }
