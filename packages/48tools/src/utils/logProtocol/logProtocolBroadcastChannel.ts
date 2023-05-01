@@ -7,6 +7,7 @@ interface MessageEventData {
   data: string;
 }
 
+/* 上报日志 */
 function handleLogProtocolMessage(event: MessageEvent<MessageEventData>): void {
   const { type, fn, data }: MessageEventData = event.data;
 
