@@ -3,23 +3,25 @@ import type { MessageInstance } from 'antd/es/message/interface';
 import type { AwemeItem, AwemePostResponse, AwemeDetailResponse } from './services/interface';
 import type { ParseResult } from './Douyin/function/parser';
 
-type noProtocolUrl = `//${ string }`;
+type NoProtocolUrl = `//${ string }`;
+
+export interface HtmlBitRateItem {
+  playApi: NoProtocolUrl;
+  playAddr: Array<{
+    src: NoProtocolUrl;
+  }>;
+  width: number;
+  height: number;
+}
 
 export interface VideoInfoItem {
-  bitRateList: Array<{
-    playApi: noProtocolUrl;
-    playAddr: Array<{
-      src: noProtocolUrl;
-    }>;
-    width: number;
-    height: number;
-  }>;
+  bitRateList: Array<HtmlBitRateItem>;
   playAddr: Array<{
-    src: noProtocolUrl;
+    src: NoProtocolUrl;
   }>;
-  playApi: noProtocolUrl | ''; // 无水印
+  playApi: NoProtocolUrl | ''; // 无水印
   ratio: string;
-  cover: noProtocolUrl;
+  cover: NoProtocolUrl;
   coverUrlList: Array<string>;
 }
 
@@ -62,6 +64,7 @@ export interface DownloadUrlItem {
   width?: number;
   height?: number;
   isImage?: boolean;
+  isFirstImage?: boolean;
 }
 
 /* 下载相关 */

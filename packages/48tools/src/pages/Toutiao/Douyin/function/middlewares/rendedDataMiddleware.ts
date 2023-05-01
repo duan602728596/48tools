@@ -10,7 +10,10 @@ import type {
   UserItem1,
   UserItem2,
   UserDataItem,
-  GetVideoUrlOnionContext
+  GetVideoUrlOnionContext,
+  HtmlBitRateItem,
+  ImageInfo,
+  NoProtocolUrl
 } from '../../../types';
 import type { AwemeItem, AwemeItemRate, BitRateItem } from '../../../services/interface';
 
@@ -41,12 +44,16 @@ function detailApiRender(ctx: GetVideoUrlOnionContext): void {
     const awemeList: Array<BitRateItem> = ctx.data.aweme_detail.video.bit_rate ?? [];
     const images: Array<AwemeItemRate> = ctx.data.aweme_detail.images ?? [];
     const urls: DownloadUrlItem[] = [];
-    let i: number = 1;
 
-    for (const bitRate of awemeList) {
-      for (const addr of bitRate.play_addr.url_list) {
+    // 视频
+    for (let i: number = 0; i < awemeList.length; i) {
+      const bitRate: BitRateItem = awemeList[i];
+
+      for (let k: number = 0; i < bitRate.play_addr.url_list.length; k) {
+        const addr: string = bitRate.play_addr.url_list[k];
+
         urls.push({
-          label: `下载地址-${ i++ }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`,
+          label: `下载地址-${ i + 1 }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`,
           value: addr,
           width: bitRate.play_addr.width,
           height: bitRate.play_addr.height
@@ -54,14 +61,20 @@ function detailApiRender(ctx: GetVideoUrlOnionContext): void {
       }
     }
 
-    for (const image of images) {
-      for (const addr of image.url_list) {
+    // 图片
+    for (let i: number = 0; i < images.length; i++) {
+      const image: AwemeItemRate = images[i];
+
+      for (let k: number = 0; k < image.url_list.length; k++) {
+        const addr: string = image.url_list[k];
+
         urls.push({
-          label: `图片地址-${ i++ }(${ image.width }*${ image.height })`,
+          label: `图片${ i + 1 }-下载地址${ k + 1 }(${ image.width }*${ image.height })`,
           value: addr,
           width: image.width,
           height: image.height,
-          isImage: true
+          isImage: true,
+          isFirstImage: k === 0
         });
       }
     }
@@ -124,12 +137,17 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
         urls.push({ label: '无水印', value: staticUrl(awemeDetail.video.playApi) });
       }
 
-      let i: number = 1;
+      const bitRateList: Array<HtmlBitRateItem> = awemeDetail.video.bitRateList ?? [];
+      const images: Array<ImageInfo> = awemeDetail?.images ?? [];
 
-      for (const bitRate of (awemeDetail.video.bitRateList ?? [])) {
-        for (const addr of bitRate.playAddr) {
+      for (let i: number = 0; i < bitRateList.length; i++) {
+        const bitRate: HtmlBitRateItem = bitRateList[i];
+
+        for (let k: number = 0; k < bitRate.playAddr.length; k++) {
+          const addr: { src: NoProtocolUrl } = bitRate.playAddr[k];
+
           urls.push({
-            label: `下载地址-${ i++ }(${ bitRate.width }*${ bitRate.height })`,
+            label: `下载地址-${ i + 1 }(${ bitRate.width }*${ bitRate.height })`,
             value: staticUrl(addr.src),
             width: bitRate.width,
             height: bitRate.height
@@ -137,14 +155,19 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
         }
       }
 
-      for (const image of (awemeDetail?.images ?? [])) {
-        for (const addr of image.urlList) {
+      for (let i: number = 0; i < images.length; i++) {
+        const image: ImageInfo = images[i];
+
+        for (let k: number = 0; k < image.urlList.length; k++) {
+          const addr: string = image.urlList[k];
+
           urls.push({
-            label: `图片地址-${ i++ }(${ image.width }*${ image.height })`,
+            label: `图片${ i + 1 }-下载地址${ k + 1 }${ image.width }*${ image.height })`,
             value: addr,
             width: image.width,
             height: image.height,
-            isImage: true
+            isImage: true,
+            isFirstImage: i === 0
           });
         }
       }
