@@ -53,6 +53,7 @@ const externalsName: Array<string> = nodeModules([
   'child_process',
   'crypto',
   'fs',
+  'fs/promises',
   'net',
   'path',
   'stream/promises',

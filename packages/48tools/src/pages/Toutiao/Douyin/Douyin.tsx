@@ -1,6 +1,16 @@
 import * as path from 'node:path';
+import * as fs from 'node:fs';
+import * as fsP from 'node:fs/promises';
 import type { SaveDialogReturnValue } from 'electron';
-import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  type ReactElement,
+  type ReactNode,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -9,6 +19,7 @@ import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import * as classNames from 'classnames';
+import * as dayjs from 'dayjs';
 import style from './douyin.sass';
 import commonStyle from '../../../common.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
@@ -24,6 +35,7 @@ import {
   type DouyinDownloadInitialState
 } from '../reducers/douyinDownload';
 import { requestGetVideoRedirectUrl } from '../services/douyin';
+import { fileTimeFormat } from '../../../utils/utils';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
@@ -45,6 +57,8 @@ function Douyin(props: {}): ReactElement {
   const { downloadList, downloadProgress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+  const [downloadSelectedRowKeys, setDownloadSelectedRowKeys]: [Array<string>, D<S<Array<string>>>] = useState([]); // 选中状态
+  const [downloadSelectedLoading, setDownloadSelectedLoading]: [boolean, D<S<boolean>>] = useState(false); // 下载loading
 
   // 清除抖音的cookie
   function handleClearDouyinCookie(event: MouseEvent): void {
@@ -55,6 +69,94 @@ function Douyin(props: {}): ReactElement {
   // 删除一个任务
   function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent): void {
     dispatch(setDeleteDownloadList(item.qid));
+
+    // 删除选中
+    const index: number = downloadSelectedRowKeys.indexOf(item.qid);
+
+    if (index >= 0) {
+      downloadSelectedRowKeys.splice(index, 1);
+      setDownloadSelectedRowKeys([...downloadSelectedRowKeys]);
+    }
+  }
+
+  // 下载单个
+  function downloadItem(item: DownloadItem, filePath: string): Promise<void> {
+    return new Promise(async (resolve: Function, reject: Function): Promise<void> => {
+      const worker: Worker = getDownloadBilibiliVideoWorker();
+
+      worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
+        const { type }: MessageEventData = messageEvent.data;
+
+        dispatch(setDownloadProgress(messageEvent.data));
+
+        if (type === 'success') {
+          messageApi.success('下载完成！');
+          worker.terminate();
+          resolve();
+        }
+      });
+
+      let uri: string = item.url;
+
+      // 对抖音视频地址302重定向的处理
+      if (/douyin\.com/.test(uri)) {
+        const res: string = await requestGetVideoRedirectUrl(item.url);
+        const parseDocument: Document = new DOMParser().parseFromString(res, 'text/html');
+
+        uri = parseDocument.querySelector('a')!.getAttribute('href')!;
+      }
+
+      worker.postMessage({
+        type: 'start',
+        filePath,
+        durl: uri,
+        qid: item.qid,
+        headers: {}
+      });
+    });
+  }
+
+  // 下载选中
+  async function handleDownloadSelectedClick(event: MouseEvent): Promise<void> {
+    const selectedDownloadList: Array<DownloadItem> = downloadList.filter(
+      (o: DownloadItem): boolean => downloadSelectedRowKeys.includes(o.qid));
+
+    try {
+      if (selectedDownloadList.length) {
+        const defaultDir: string = `[抖音]下载合集_${ dayjs().format(fileTimeFormat) }`;
+        const result: SaveDialogReturnValue = await showSaveDialog({
+          properties: ['createDirectory'],
+          defaultPath: defaultDir
+        });
+
+        if (result.canceled || !result.filePath) return;
+
+        setDownloadSelectedLoading(true);
+
+        if (!fs.existsSync(result.filePath)) {
+          await fsP.mkdir(result.filePath);
+        }
+
+        for (let i: number = 0, j: number = selectedDownloadList.length; i < j; i++) {
+          const item: DownloadItem = selectedDownloadList[i];
+          let fileExt: string = '.mp4';
+
+          if (item.isImage) {
+            const urlResult: URL = new URL(item.url);
+
+            fileExt = path.parse(urlResult.pathname).ext;
+          }
+
+          await downloadItem(item, path.join(result.filePath, `${ filenamify(selectedDownloadList[i].title) }_${ i }${ fileExt }`));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      messageApi.error('下载失败！');
+    }
+
+    setDownloadSelectedLoading(false);
+    setDownloadSelectedRowKeys([]);
   }
 
   // 下载
@@ -78,36 +180,7 @@ function Douyin(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const worker: Worker = getDownloadBilibiliVideoWorker();
-
-      worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
-        const { type }: MessageEventData = messageEvent.data;
-
-        dispatch(setDownloadProgress(messageEvent.data));
-
-        if (type === 'success') {
-          messageApi.success('下载完成！');
-          worker.terminate();
-        }
-      });
-
-      let uri: string = item.url;
-
-      // 对抖音视频地址302重定向的处理
-      if (/douyin\.com/.test(uri)) {
-        const res: string = await requestGetVideoRedirectUrl(item.url);
-        const parseDocument: Document = new DOMParser().parseFromString(res, 'text/html');
-
-        uri = parseDocument.querySelector('a')!.getAttribute('href')!;
-      }
-
-      worker.postMessage({
-        type: 'start',
-        filePath: result.filePath,
-        durl: uri,
-        qid: item.qid,
-        headers: {}
-      });
+      await downloadItem(item, result.filePath);
     } catch (err) {
       console.error(err);
       messageApi.error('下载失败！');
@@ -142,14 +215,26 @@ function Douyin(props: {}): ReactElement {
         const inDownload: boolean = value in downloadProgress;
 
         if (inDownload) {
-          return <Progress type="circle" width={ 30 } percent={ downloadProgress[value] } />;
+          return <Progress type="circle" size={ 30 } percent={ downloadProgress[value] } />;
         } else {
           return '等待下载';
         }
       }
     },
     {
-      title: '操作',
+      title: (
+        <Fragment>
+          操作
+          <Button className="ml-[6px]"
+            type="primary"
+            ghost={ true }
+            disabled={ downloadSelectedRowKeys.length <= 0 }
+            onClick={ handleDownloadSelectedClick }
+          >
+            下载选中
+          </Button>
+        </Fragment>
+      ),
       key: 'action',
       width: 155,
       render: (value: undefined, record: DownloadItem, index: number): ReactElement => {
@@ -189,8 +274,18 @@ function Douyin(props: {}): ReactElement {
         dataSource={ downloadList }
         bordered={ true }
         rowKey="qid"
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys: downloadSelectedRowKeys,
+          onChange(selectedRowKeys: Array<string>): void {
+            setDownloadSelectedRowKeys(selectedRowKeys);
+          }
+        }}
         pagination={{
-          showQuickJumper: true
+          showQuickJumper: true,
+          onChange(): void {
+            setDownloadSelectedRowKeys([]);
+          }
         }}
       />
       { messageContextHolder }
