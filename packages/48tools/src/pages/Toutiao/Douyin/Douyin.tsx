@@ -229,6 +229,7 @@ function Douyin(props: {}): ReactElement {
             type="primary"
             ghost={ true }
             disabled={ downloadSelectedRowKeys.length <= 0 }
+            loading={ downloadSelectedLoading }
             onClick={ handleDownloadSelectedClick }
           >
             下载选中
