@@ -46,14 +46,14 @@ function detailApiRender(ctx: GetVideoUrlOnionContext): void {
     const urls: DownloadUrlItem[] = [];
 
     // 视频
-    for (let i: number = 0; i < awemeList.length; i) {
+    for (let i: number = 0, u: number = 1; i < awemeList.length; i++) {
       const bitRate: BitRateItem = awemeList[i];
 
-      for (let k: number = 0; i < bitRate.play_addr.url_list.length; k) {
+      for (let k: number = 0; k < bitRate.play_addr.url_list.length; k++, u++) {
         const addr: string = bitRate.play_addr.url_list[k];
 
         urls.push({
-          label: `下载地址-${ i + 1 }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`,
+          label: `下载地址-${ u }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`,
           value: addr,
           width: bitRate.play_addr.width,
           height: bitRate.play_addr.height
@@ -140,14 +140,14 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       const bitRateList: Array<HtmlBitRateItem> = awemeDetail.video.bitRateList ?? [];
       const images: Array<ImageInfo> = awemeDetail?.images ?? [];
 
-      for (let i: number = 0; i < bitRateList.length; i++) {
+      for (let i: number = 0, u: number = 1; i < bitRateList.length; i++) {
         const bitRate: HtmlBitRateItem = bitRateList[i];
 
-        for (let k: number = 0; k < bitRate.playAddr.length; k++) {
+        for (let k: number = 0; k < bitRate.playAddr.length; k++, u++) {
           const addr: { src: NoProtocolUrl } = bitRate.playAddr[k];
 
           urls.push({
-            label: `下载地址-${ i + 1 }(${ bitRate.width }*${ bitRate.height })`,
+            label: `下载地址-${ u }(${ bitRate.width }*${ bitRate.height })`,
             value: staticUrl(addr.src),
             width: bitRate.width,
             height: bitRate.height

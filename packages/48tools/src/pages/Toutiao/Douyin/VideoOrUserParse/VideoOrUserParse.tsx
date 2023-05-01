@@ -95,7 +95,7 @@ function userDataSelectOptionsRender(record: UserDataItem | AwemeItem): Array<Re
 
     for (const image of (record.images ?? [])) {
       for (const addr of image.url_list) {
-        const labelText: string = `图片地址-${ i++ }(${ image.width }*${ image.height })`;
+        const labelText: string = `图片-下载地址${ i++ }(${ image.width }*${ image.height })`;
 
         element.push(
           <Select.Option key={ `${ record.aweme_id }@${ labelText }@${ addr }@d` } value={ addr } item={{
@@ -200,6 +200,27 @@ function VideoOrUserParse(props: {}): ReactElement {
     }
 
     setUserVideoLoadDataLoading(false);
+  }
+
+  // 添加所有的下载地址
+  function handleAddAllClick(event: MouseEvent): void {
+    const downloadPayload: Array<DownloadItem> = [];
+
+    for (const url of downloadUrl) {
+      if (url.isFirstImage) {
+        downloadPayload.push({
+          qid: randomUUID(),
+          url: url.value,
+          title,
+          width: url.width,
+          height: url.height,
+          isImage: true
+        });
+      }
+    }
+
+    dispatch(setAddDownloadListAll(downloadPayload));
+    setVisible(false);
   }
 
   // 添加新的下载地址
@@ -353,7 +374,17 @@ function VideoOrUserParse(props: {}): ReactElement {
         closable={ false }
         maskClosable={ false }
         afterClose={ videoDownloadModalAfterClose }
-        onOk={ handleAddClick }
+        footer={
+          <Fragment>
+            <Button onClick={ (event: MouseEvent): void => setVisible(false) }>取消</Button>
+            {
+              downloadUrl.length && downloadUrl.find((o: DownloadUrlItem): boolean => !!o.isImage) && (
+                <Button key="downloadAll" onClick={ handleAddAllClick }>下载全部</Button>
+              )
+            }
+            <Button type="primary" onClick={ handleAddClick }>确定</Button>
+          </Fragment>
+        }
         onCancel={ (event: MouseEvent): void => setVisible(false) }
       >
         <Select className={ style.urlSelect }
