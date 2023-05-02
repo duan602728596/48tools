@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react';
-import * as classNames from 'classnames';
 import commonStyle from '../../common.sass';
 import ProgressSet from './ProgressSet';
 
@@ -15,7 +14,7 @@ function ProgressNative(props: ProgressNativeProps): ReactElement {
   const { progressSet }: ProgressNativeProps = props;
 
   return (
-    <span className={ classNames('ml-[6px]', commonStyle.tips) }
+    <span className={ commonStyle.tips }
       id={ progressSet.progressId }
       aria-label="progress"
       aria-valuemin={ 0 }
