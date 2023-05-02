@@ -9,6 +9,7 @@ import {
   type EntityState,
   type EntitySelectors
 } from '@reduxjs/toolkit';
+import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 import type { WebWorkerChildItem } from '../../../commonTypes';
@@ -21,7 +22,7 @@ export const bilibiliDownloadListSelectors: EntitySelectors<DownloadItem, Entity
   = bilibiliDownloadListAdapter.getSelectors();
 
 export interface BilibiliDownloadInitialState extends EntityState<DownloadItem> {
-  downloadProgress: { [key: string]: number };
+  downloadProgress: { [key: string]: ProgressSet };
   downloadWorkerList: Array<WebWorkerChildItem>;
 }
 
@@ -49,12 +50,16 @@ const { actions, reducer }: Slice<BilibiliDownloadInitialState, SliceReducers, t
       const { type, qid, data }: MessageEventData = action.payload;
 
       if (type === 'progress') {
-        state.downloadProgress[qid] = data;
+        if (!state.downloadProgress[qid]) {
+          state.downloadProgress[qid] = new ProgressSet(qid);
+          state.downloadProgress = { ...state.downloadProgress };
+        }
+
+        state.downloadProgress[qid].value = data;
       } else if (type === 'success') {
         delete state.downloadProgress[qid]; // 下载完成
+        state.downloadProgress = { ...state.downloadProgress };
       }
-
-      state.downloadProgress = { ...state.downloadProgress };
     },
 
     // 添加一个下载线程

@@ -9,6 +9,7 @@ import {
   type EntityState,
   type EntitySelectors
 } from '@reduxjs/toolkit';
+import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
 
@@ -20,7 +21,7 @@ export const douyinDownloadListSelectors: EntitySelectors<DownloadItem, EntitySt
   = douyinDownloadListAdapter.getSelectors();
 
 export interface DouyinDownloadInitialState extends EntityState<DownloadItem> {
-  downloadProgress: Record<string, number>;
+  downloadProgress: Record<string, ProgressSet>;
 }
 
 type SliceReducers = {
@@ -46,12 +47,16 @@ const { actions, reducer }: Slice<DouyinDownloadInitialState, SliceReducers, typ
       const { type, qid, data }: MessageEventData = action.payload;
 
       if (type === 'progress') {
-        state.downloadProgress[qid] = data;
+        if (!state.downloadProgress[qid]) {
+          state.downloadProgress[qid] = new ProgressSet(qid);
+          state.downloadProgress = { ...state.downloadProgress };
+        }
+
+        state.downloadProgress[qid].value = data;
       } else if (type === 'success') {
         delete state.downloadProgress[qid]; // 下载完成
+        state.downloadProgress = { ...state.downloadProgress };
       }
-
-      state.downloadProgress = { ...state.downloadProgress };
     }
   }
 });

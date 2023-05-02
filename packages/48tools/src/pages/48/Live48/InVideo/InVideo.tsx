@@ -13,7 +13,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Select, Button, Table, message, Space, Popconfirm, Progress } from 'antd';
+import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
@@ -33,6 +33,7 @@ import { parseInVideoUrl, parseVideoItem } from '../function/parseLive48Website'
 import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
+import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
@@ -84,7 +85,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   videoListChild: ({ live48 }: RState): Array<InVideoWebWorkerItem> => live48.videoListChild,
 
   // 进度条列表
-  progress: ({ live48 }: RState): Record<string, number> => live48.progress
+  progress: ({ live48 }: RState): Record<string, ProgressSet> => live48.progress
 });
 
 /* 录播下载 */
@@ -128,22 +129,16 @@ function InVideo(props: {}): ReactElement {
 
       await fsP.writeFile(m3u8File, m3u8UrlF);
 
-      let requestIdleID: number | null = null;
       const worker: Worker = getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
         const { type }: MessageEventData = workerEvent.data;
 
         if (type === 'progress') {
-          requestIdleID !== null && cancelIdleCallback(requestIdleID);
-          requestIdleID = requestIdleCallback((): void => {
-            dispatch(setDownloadProgress(workerEvent.data));
-          });
+          dispatch(setDownloadProgress(workerEvent.data));
         }
 
         if (type === 'close' || type === 'error') {
-          requestIdleID !== null && cancelIdleCallback(requestIdleID);
-
           if (type === 'error') {
             messageApi.error(`视频：${ record.title } 下载失败！`);
           }
@@ -239,11 +234,13 @@ function InVideo(props: {}): ReactElement {
       dataIndex: 'id',
       render: (value: string, record: InVideoItem, index: number): ReactNode => {
         const inDownload: boolean = Object.hasOwn(progress, value);
+        const idx: number = videoListChild.findIndex(
+          (o: InVideoWebWorkerItem): boolean => o.id === record.id && o.liveType === record.liveType);
 
         if (inDownload) {
-          return <Progress type="circle" width={ 30 } percent={ progress[value] } />;
+          return <ProgressNative progressSet={ progress[value] } />;
         } else {
-          return '未下载';
+          return idx >= 0 ? '准备中' : '未下载';
         }
       }
     },

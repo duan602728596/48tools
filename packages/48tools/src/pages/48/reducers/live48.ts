@@ -1,4 +1,5 @@
 import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
+import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { InLiveWebWorkerItemNoplayStreamPath, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
 
@@ -7,7 +8,7 @@ export interface Live48InitialState {
   inVideoQuery?: InVideoQuery;
   inVideoList: Array<InVideoItem>;
   videoListChild: Array<InVideoWebWorkerItem>;
-  progress: Record<string, number>;
+  progress: Record<string, ProgressSet>;
 }
 
 type SliceReducers = {
@@ -108,12 +109,16 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
     // 设置下载进度
     setDownloadProgress(state: Live48InitialState, action: PayloadAction<MessageEventData>): void {
       if (action.payload.type === 'progress') {
-        state.progress[action.payload.qid] = action.payload.data;
+        if (!state.progress[action.payload.qid]) {
+          state.progress[action.payload.qid] = new ProgressSet(action.payload.qid);
+          state.progress = { ...state.progress };
+        }
+
+        state.progress[action.payload.qid].value = action.payload.data;
       } else if (action.payload.type === 'close' && action.payload.qid) {
         delete state.progress[action.payload.qid]; // 下载完成
+        state.progress = { ...state.progress };
       }
-
-      state.progress = { ...state.progress };
     }
   }
 });

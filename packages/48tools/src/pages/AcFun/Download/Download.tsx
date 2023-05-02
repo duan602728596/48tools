@@ -3,7 +3,7 @@ import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 're
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Table, Select, Button, message, Popconfirm, Progress } from 'antd';
+import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './download.sass';
@@ -20,6 +20,7 @@ import {
   type AcFunDownloadInitialState
 } from '../reducers/download';
 import { getFFmpeg } from '../../../utils/utils';
+import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem, Representation } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
@@ -35,7 +36,7 @@ const selector: Selector<RState, AcFunDownloadInitialState> = createStructuredSe
   ffmpegDownloadWorkers: ({ acfunDownload }: RState): Array<WebWorkerChildItem> => acfunDownload.ffmpegDownloadWorkers,
 
   // 进度条列表
-  progress: ({ acfunDownload }: RState): Record<string, number> => acfunDownload.progress
+  progress: ({ acfunDownload }: RState): Record<string, ProgressSet> => acfunDownload.progress
 });
 
 /* A站视频下载 */
@@ -131,7 +132,7 @@ function Download(props: {}): ReactElement {
         const inDownload: boolean = Object.hasOwn(progress, value);
 
         if (inDownload) {
-          return <Progress type="circle" width={ 30 } percent={ progress[value] } />;
+          return <ProgressNative progressSet={ progress[value] } />;
         } else {
           return '等待下载';
         }

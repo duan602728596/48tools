@@ -6,7 +6,7 @@ import { Fragment, useMemo, type ReactElement, type ReactNode, type MouseEvent }
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, Progress, message, Popconfirm } from 'antd';
+import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
@@ -32,6 +32,7 @@ import {
 import { requestDownloadFileByStream } from '../../48/services/pocket48';
 import { getFFmpeg } from '../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../utils/proxyServer/proxyServer';
+import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 
@@ -46,7 +47,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   downloadList: ({ bilibiliDownload }: RState): Array<DownloadItem> => bilibiliDownloadListSelectors.selectAll(bilibiliDownload),
 
   // 进度条列表
-  downloadProgress: ({ bilibiliDownload }: RState): { [key: string]: number } => bilibiliDownload.downloadProgress,
+  downloadProgress: ({ bilibiliDownload }: RState): { [key: string]: ProgressSet } => bilibiliDownload.downloadProgress,
 
   // 下载的worker
   downloadWorkerList: ({ bilibiliDownload }: RState): Array<WebWorkerChildItem> => bilibiliDownload.downloadWorkerList
@@ -202,10 +203,10 @@ function Download(props: {}): ReactElement {
       title: '下载进度',
       dataIndex: 'qid',
       render: (value: string, record: DownloadItem, index: number): ReactNode => {
-        const inDownload: boolean = value in downloadProgress;
+        const inDownload: boolean = Object.hasOwn(downloadProgress, value);
 
         if (inDownload) {
-          return <Progress type="circle" size={ 30 } percent={ downloadProgress[value] } />;
+          return <ProgressNative progressSet={ downloadProgress[value] } />;
         } else {
           return '等待下载';
         }

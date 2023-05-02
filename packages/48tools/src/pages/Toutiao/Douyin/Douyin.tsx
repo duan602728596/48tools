@@ -14,7 +14,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, Progress, message } from 'antd';
+import { Button, Table, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
@@ -36,6 +36,7 @@ import {
 } from '../reducers/douyinDownload';
 import { requestGetVideoRedirectUrl } from '../services/douyin';
 import { fileTimeFormat } from '../../../utils/utils';
+import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
@@ -49,7 +50,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   downloadList: ({ douyinDownload }: RState): Array<DownloadItem> => douyinDownloadListSelectors.selectAll(douyinDownload),
 
   // 进度条列表
-  downloadProgress: ({ douyinDownload }: RState): { [key: string]: number } => douyinDownload.downloadProgress
+  downloadProgress: ({ douyinDownload }: RState): { [key: string]: ProgressSet } => douyinDownload.downloadProgress
 });
 
 /* 抖音视频下载 */
@@ -215,7 +216,7 @@ function Douyin(props: {}): ReactElement {
         const inDownload: boolean = value in downloadProgress;
 
         if (inDownload) {
-          return <Progress type="circle" size={ 30 } percent={ downloadProgress[value] } />;
+          return <ProgressNative progressSet={ downloadProgress[value] } />;
         } else {
           return '等待下载';
         }
@@ -239,7 +240,7 @@ function Douyin(props: {}): ReactElement {
       key: 'action',
       width: 155,
       render: (value: undefined, record: DownloadItem, index: number): ReactElement => {
-        const inDownload: boolean = record.qid in downloadProgress;
+        const inDownload: boolean = Object.hasOwn(downloadProgress, record.qid);
 
         return (
           <Button.Group>

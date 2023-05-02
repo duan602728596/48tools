@@ -11,6 +11,7 @@ import {
 import type { QueryDispatchFunc, DataDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { optionsObjectStoreName } from '../../../utils/IDB/IDBRedux';
 import { requestLiveList } from '../services/pocket48';
+import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { LiveInfo, LiveData } from '../services/interface';
@@ -24,7 +25,7 @@ export interface Pocket48InitialState {
   recordNext: string;
   recordChildList: Array<RecordVideoDownloadWebWorkerItem>;
   recordFields: Array<RecordFieldData>;
-  progress: Record<string, number>;
+  progress: Record<string, ProgressSet>;
 }
 
 type SliceReducers = {
@@ -131,12 +132,16 @@ const { actions, reducer }: Slice<Pocket48InitialState, SliceReducers, typeof sl
     // 设置下载进度
     setDownloadProgress(state: Pocket48InitialState, action: PayloadAction<MessageEventData>): void {
       if (action.payload.type === 'progress') {
-        state.progress[action.payload.qid] = action.payload.data;
+        if (!state.progress[action.payload.qid]) {
+          state.progress[action.payload.qid] = new ProgressSet(action.payload.qid);
+          state.progress = { ...state.progress };
+        }
+
+        state.progress[action.payload.qid].value = action.payload.data;
       } else if (action.payload.type === 'close' && action.payload.qid) {
         delete state.progress[action.payload.qid];
+        state.progress = { ...state.progress };
       }
-
-      state.progress = { ...state.progress };
     }
   },
   extraReducers(builder: ActionReducerMapBuilder<Pocket48InitialState>): void {

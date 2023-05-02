@@ -26,7 +26,6 @@ import {
   Form,
   Space,
   Popconfirm,
-  Progress,
   Modal,
   AutoComplete,
   Spin,
@@ -64,6 +63,7 @@ import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { pick } from '../../../../utils/lodash';
+import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo, SearchResult, SearchMemberIndex } from '../../services/interface';
@@ -111,7 +111,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   recordFields: ({ pocket48 }: RState): Array<RecordFieldData> => pocket48.recordFields,
 
   // 进度条列表
-  progress: ({ pocket48 }: RState): Record<string, number> => pocket48.progress
+  progress: ({ pocket48 }: RState): Record<string, ProgressSet> => pocket48.progress
 });
 
 /* 录播列表 */
@@ -414,11 +414,13 @@ function Pocket48Record(props: {}): ReactElement {
       dataIndex: 'liveId',
       render: (value: string, record: LiveInfo, index: number): ReactNode => {
         const inDownload: boolean = Object.hasOwn(progress, value);
+        const idx: number = recordChildList.findIndex(
+          (o: RecordVideoDownloadWebWorkerItem): boolean => o.id === record.liveId);
 
         if (inDownload) {
-          return <Progress type="circle" width={ 30 } percent={ progress[value] } />;
+          return <ProgressNative progressSet={ progress[value] } />;
         } else {
-          return '未下载';
+          return idx >= 0 ? '准备中' : '未下载';
         }
       }
     },
