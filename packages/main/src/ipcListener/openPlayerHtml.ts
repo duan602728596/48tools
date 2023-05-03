@@ -1,5 +1,6 @@
 import * as path from 'node:path';
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
+import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState';
 import { isDevelopment, wwwPath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import store from '../store';
@@ -53,7 +54,7 @@ function open(title: string, query: string): void {
   initialStateSearchParams.set('initialState', ils({
     theme: store.get('theme') ?? 'system',
     commandLineOptions,
-    playerInfo: {
+    playerInfo: <PlayerInfo>{
       ...player,
       liveType: Number(player.liveType),
       liveMode: Number(player.liveMode),

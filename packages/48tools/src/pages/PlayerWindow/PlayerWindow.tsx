@@ -7,20 +7,8 @@ import RecordVideo from './Video/RecordVideo';
 import Danmu from './Danmu/Danmu';
 import RecordDanmu from './Danmu/RecordDanmu';
 import { requestLiveRoomInfo } from '../48/services/pocket48';
+import type { PlayerInfo } from '../../components/basic/initialState/initialState';
 import type { LiveRoomInfo } from '../48/services/interface';
-
-export interface PlayerInfo {
-  coverPath: string;
-  title: string;
-  liveId: string;
-  id: string;
-  liveType: number;
-  liveMode: number;
-  rtmpPort: number;
-  httpPort: number;
-  proxyPort: number;
-  playerType: 'live' | 'record';
-}
 
 const playerInfo: PlayerInfo = globalThis.__INITIAL_STATE__.playerInfo;
 const inRecord: boolean = playerInfo.playerType === 'record';

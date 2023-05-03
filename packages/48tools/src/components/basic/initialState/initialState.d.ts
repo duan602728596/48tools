@@ -1,5 +1,18 @@
 import type { CommandLineOptions } from '@48tools/main/src/commend';
-import type { PlayerInfo } from '../../../pages/PlayerWindow/PlayerWindow';
+
+// 播放器窗口初始化参数
+export interface PlayerInfo {
+  coverPath: string;
+  title: string;
+  liveId: string;
+  id: string;
+  liveType: number;
+  liveMode: number;
+  rtmpPort: number;
+  httpPort: number;
+  proxyPort: number;
+  playerType: 'live' | 'record';
+}
 
 export interface InitialState {
   theme: 'light' | 'dark' | 'system';
