@@ -72,9 +72,7 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
   // 下载所有图片
   async function handleDownloadAllImagesClick(event: MouseEvent): Promise<void> {
     try {
-      const result: OpenDialogReturnValue = await showOpenDialog({
-        properties: ['openDirectory']
-      });
+      const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openDirectory'] });
 
       if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 

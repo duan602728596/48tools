@@ -39,9 +39,7 @@ function LiveOptions(props: {}): ReactElement {
 
   // 选择目录
   async function handleChangeDirClick(event: MouseEvent): Promise<void> {
-    const result: OpenDialogReturnValue = await showOpenDialog({
-      properties: ['openDirectory']
-    });
+    const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openDirectory'] });
 
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 

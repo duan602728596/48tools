@@ -40,9 +40,7 @@ function CutForm(props: {}): ReactElement {
 
   // 选择文件
   async function handleOpenVideoFileClick(event: MouseEvent): Promise<void> {
-    const result: OpenDialogReturnValue = await showOpenDialog({
-      properties: ['openFile']
-    });
+    const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openFile'] });
 
     if (result.canceled || !(result?.filePaths?.length)) return;
 

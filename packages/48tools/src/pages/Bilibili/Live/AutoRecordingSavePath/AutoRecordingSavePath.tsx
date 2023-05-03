@@ -46,9 +46,7 @@ function AutoRecordingSavePath(props: {}): ReactElement {
 
   // 选择浏览器文件的位置
   async function handleSelectExecutablePathClick(event: MouseEvent): Promise<void> {
-    const result: OpenDialogReturnValue = await showOpenDialog({
-      properties: ['openDirectory']
-    });
+    const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openDirectory'] });
 
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 

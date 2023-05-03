@@ -79,9 +79,7 @@ function Voice(props: {}): ReactElement {
 
   // 开始自动录制
   async function handleStartAutoRecordClick(event: MouseEvent): Promise<void> {
-    const result: OpenDialogReturnValue = await showOpenDialog({
-      properties: ['openDirectory']
-    });
+    const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openDirectory'] });
 
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 

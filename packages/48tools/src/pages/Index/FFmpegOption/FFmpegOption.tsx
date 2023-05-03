@@ -62,9 +62,7 @@ function FFmpegOption(props: {}): ReactElement {
 
   // 选择ffmpeg文件的位置
   async function handleSelectFFmpegClick(event: MouseEvent): Promise<void> {
-    const result: OpenDialogReturnValue = await showOpenDialog({
-      properties: ['openFile']
-    });
+    const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openFile'] });
 
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 

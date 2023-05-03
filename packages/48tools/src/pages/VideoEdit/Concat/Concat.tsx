@@ -131,9 +131,7 @@ function Concat(props: {}): ReactElement {
 
   // 选择视频
   async function handleSelectVideosClick(event: MouseEvent): Promise<void> {
-    const result: OpenDialogReturnValue = await showOpenDialog({
-      properties: ['openFile', 'multiSelections']
-    });
+    const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openFile', 'multiSelections'] });
 
     if (result.canceled || !(result?.filePaths?.length)) return;
 

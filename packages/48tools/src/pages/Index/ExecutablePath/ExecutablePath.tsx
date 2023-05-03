@@ -60,9 +60,7 @@ function ExecutablePath(props: ExecutablePathProps): ReactElement {
 
   // 选择浏览器文件的位置
   async function handleSelectExecutablePathClick(event: MouseEvent): Promise<void> {
-    const result: OpenDialogReturnValue = await showOpenDialog({
-      properties: ['openFile']
-    });
+    const result: OpenDialogReturnValue = await showOpenDialog({ properties: ['openFile'] });
 
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 
