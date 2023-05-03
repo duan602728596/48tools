@@ -3,6 +3,7 @@ import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron
 import { isDevelopment, wwwPath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import store from '../store';
+import { commandLineOptions } from '../commend';
 
 export const type: string = 'player.html';
 
@@ -51,6 +52,7 @@ function open(title: string, query: string): void {
 
   initialStateSearchParams.set('initialState', ils({
     theme: store.get('theme') ?? 'system',
+    commandLineOptions,
     playerInfo: {
       ...player,
       liveType: Number(player.liveType),

@@ -10,7 +10,6 @@ import {
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type FunctionComponent,
   type MouseEvent
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,6 +34,7 @@ import { requestServerSearch, requestServerJump, requestHomeownerMessage } from 
 import { formatDataArray, formatSendData } from '../function/formatData';
 import createHtml from '../function/createHtml';
 import MessageDisplay from '../MessageDisplay/MessageDisplay';
+import LocalMessage from '../LocalMessage/LocalMessage';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import { fileTimeFormat } from '../../../../utils/utils';
 import IconJSONSvgComponent from '../../images/JSON.component.svg';
@@ -46,12 +46,6 @@ import type {
   CustomMessageV2
 } from '../../services/interface';
 import type { QueryRecord, FormatCustomMessage, SendDataItem } from '../../types';
-
-let LocalMessage: FunctionComponent | null = null;
-
-if (process.env.NODE_ENV === 'development') {
-  LocalMessage = (await import('../LocalMessage/LocalMessage')).default;
-}
 
 const IconJSONFile: ReactElement = <Icon component={ IconJSONSvgComponent } />;
 
@@ -354,7 +348,7 @@ function SearchMessage(props: {}): ReactElement {
             </Button>
           </div>
           {
-            LocalMessage && (
+            globalThis.__INITIAL_STATE__.commandLineOptions['enable-48-room-message-local-message'] && (
               <div>
                 <LocalMessage />
               </div>
