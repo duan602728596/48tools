@@ -36,6 +36,7 @@ import createHtml from '../function/createHtml';
 import MessageDisplay from '../MessageDisplay/MessageDisplay';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import { fileTimeFormat } from '../../../../utils/utils';
+import LocalMessage from '../LocalMessage/LocalMessage';
 import IconJSONSvgComponent from '../../images/JSON.component.svg';
 import type {
   ServerSearchResult,
@@ -58,9 +59,10 @@ export const PAGE_SIZE: number = 1_000; // 导出html的每页数据
 let serverSearchTimer: NodeJS.Timeout | null = null; // 搜索
 
 /* redux selector */
+type RSelector = Omit<RoomMessageInitialState, 'localMessageBrowser'>;
 type RState = { roomMessage: RoomMessageInitialState };
 
-const selector: Selector<RState, RoomMessageInitialState> = createStructuredSelector({
+const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 搜索的值
   searchSelectValue: ({ roomMessage }: RState): LabeledValue | undefined => roomMessage.searchSelectValue,
 
@@ -85,7 +87,7 @@ function SearchMessage(props: {}): ReactElement {
     query,
     homeMessage,
     homeMessageRaw
-  }: RoomMessageInitialState = useSelector(selector);
+  }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [searchLoading, setSearchLoading]: [boolean, D<S<boolean>>] = useState(false); // 搜索的loading状态
@@ -344,6 +346,9 @@ function SearchMessage(props: {}): ReactElement {
             >
               导出JSON格式的数据
             </Button>
+          </div>
+          <div>
+            <LocalMessage />
           </div>
         </Space>
       </Modal>
