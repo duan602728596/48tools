@@ -5,7 +5,7 @@ import { source, engineUserAgent } from '../../../utils/snh48';
 import { requestDownloadFile } from '../../48/services/pocket48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
 import { danmuStore } from '../function/DanmuStore';
-import type { PlayerInfo } from '../PlayerWindow';
+import type { PlayerInfo } from '../../../components/basic/initialState/initialState';
 import type { LiveRoomInfo } from '../../48/services/interface';
 import type { DanmuItem } from '../types';
 

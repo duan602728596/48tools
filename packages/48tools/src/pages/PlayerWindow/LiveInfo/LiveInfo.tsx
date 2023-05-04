@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import { source } from '../../../utils/snh48';
-import type { PlayerInfo } from '../PlayerWindow';
+import type { PlayerInfo } from '../../../components/basic/initialState/initialState';
 import type { LiveRoomInfo } from '../../48/services/interface';
 
 interface LiveInfoProps {
