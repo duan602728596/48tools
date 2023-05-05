@@ -11,8 +11,7 @@ import {
 } from '@reduxjs/toolkit';
 import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import IDBRedux, { douyinLiveObjectStoreName } from '../../../utils/IDB/IDBRedux';
-import type { WebWorkerChildItem } from '../../../commonTypes';
-import type { DouyinLiveItem } from '../types';
+import type { WebWorkerChildItem, LiveItem } from '../../../commonTypes';
 
 // 录制时的webworker
 export const douyinLiveWorkerListAdapter: EntityAdapter<WebWorkerChildItem> = createEntityAdapter({
@@ -22,14 +21,14 @@ export const douyinLiveWorkerListSelectors: EntitySelectors<WebWorkerChildItem, 
   = douyinLiveWorkerListAdapter.getSelectors();
 
 export interface DouyinLiveInitialState extends EntityState<WebWorkerChildItem> {
-  douyinLiveList: Array<DouyinLiveItem>;
+  douyinLiveList: Array<LiveItem>;
 }
 
 type SliceReducers = {
   setAddDownloadWorker: CaseReducer<DouyinLiveInitialState, PayloadAction<WebWorkerChildItem>>;
   setRemoveDownloadWorker: CaseReducer<DouyinLiveInitialState, PayloadAction<string>>;
-  setDouyinLiveFromDB: CaseReducer<DouyinLiveInitialState, PayloadAction<{ result: Array<DouyinLiveItem> }>>;
-  setDouyinAddFromDB: CaseReducer<DouyinLiveInitialState, PayloadAction<{ data: DouyinLiveItem }>>;
+  setDouyinLiveFromDB: CaseReducer<DouyinLiveInitialState, PayloadAction<{ result: Array<LiveItem> }>>;
+  setDouyinAddFromDB: CaseReducer<DouyinLiveInitialState, PayloadAction<{ data: LiveItem }>>;
   setDouyinDeleteFromDB: CaseReducer<DouyinLiveInitialState, PayloadAction<{ query: string }>>;
 };
 
@@ -44,14 +43,14 @@ const { actions, reducer }: Slice<DouyinLiveInitialState, SliceReducers, typeof 
     setRemoveDownloadWorker: douyinLiveWorkerListAdapter.removeOne, // 删除下载
 
     // 从数据库里查
-    setDouyinLiveFromDB(state: DouyinLiveInitialState, action: PayloadAction<{ result: Array<DouyinLiveItem> }>): void {
+    setDouyinLiveFromDB(state: DouyinLiveInitialState, action: PayloadAction<{ result: Array<LiveItem> }>): void {
       state.douyinLiveList = action.payload.result;
     },
 
     // 添加
-    setDouyinAddFromDB(state: DouyinLiveInitialState, action: PayloadAction<{ data: DouyinLiveItem }>): void {
+    setDouyinAddFromDB(state: DouyinLiveInitialState, action: PayloadAction<{ data: LiveItem }>): void {
       const index: number = state.douyinLiveList.findIndex(
-        (o: DouyinLiveItem): boolean => o.id === action.payload.data.id);
+        (o: LiveItem): boolean => o.id === action.payload.data.id);
 
       if (index < 0) {
         state.douyinLiveList = state.douyinLiveList.concat([action.payload.data]);
@@ -60,10 +59,10 @@ const { actions, reducer }: Slice<DouyinLiveInitialState, SliceReducers, typeof 
 
     // 删除
     setDouyinDeleteFromDB(state: DouyinLiveInitialState, action: PayloadAction<{ query: string }>): void {
-      const index: number = state.douyinLiveList.findIndex((o: DouyinLiveItem): boolean => o.id === action.payload.query);
+      const index: number = state.douyinLiveList.findIndex((o: LiveItem): boolean => o.id === action.payload.query);
 
       if (index >= 0) {
-        const nextDouyinLiveList: Array<DouyinLiveItem> = [...state.douyinLiveList];
+        const nextDouyinLiveList: Array<LiveItem> = [...state.douyinLiveList];
 
         nextDouyinLiveList.splice(index, 1);
         state.douyinLiveList = nextDouyinLiveList;
@@ -81,19 +80,19 @@ export const {
 }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 
 // 获取数据
-export const IDBCursorRoomVoiceInfo: CursorDispatchFunc = IDBRedux.cursorAction({
+export const IDBCursorDouyinLiveRoomInfo: CursorDispatchFunc = IDBRedux.cursorAction({
   objectStoreName: douyinLiveObjectStoreName,
   successAction: setDouyinLiveFromDB
 });
 
 // 保存数据
-export const IDBSaveRoomVoiceInfo: DataDispatchFunc = IDBRedux.putAction({
+export const IDBSaveDouyinLiveRoomInfo: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: douyinLiveObjectStoreName,
   successAction: setDouyinAddFromDB
 });
 
 // 删除数据
-export const IDBDeleteRoomVoiceInfo: QueryDispatchFunc = IDBRedux.deleteAction({
+export const IDBDeleteDouyinLiveRoomInfo: QueryDispatchFunc = IDBRedux.deleteAction({
   objectStoreName: douyinLiveObjectStoreName,
   successAction: setDouyinDeleteFromDB
 });

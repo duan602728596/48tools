@@ -80,19 +80,19 @@ export const {
 }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 
 // 获取数据
-export const IDBCursorKuaishouRoomInfo: CursorDispatchFunc = IDBRedux.cursorAction({
+export const IDBCursorKuaishouLiveRoomInfo: CursorDispatchFunc = IDBRedux.cursorAction({
   objectStoreName: kuaishouLiveObjectStoreName,
   successAction: setKuaishouLiveFromDB
 });
 
 // 保存数据
-export const IDBSaveKuaishouRoomInfo: DataDispatchFunc = IDBRedux.putAction({
+export const IDBSaveKuaishouLiveRoomInfo: DataDispatchFunc = IDBRedux.putAction({
   objectStoreName: kuaishouLiveObjectStoreName,
   successAction: setKuaishouAddFromDB
 });
 
 // 删除数据
-export const IDBDeleteKuaishouRoomInfo: QueryDispatchFunc = IDBRedux.deleteAction({
+export const IDBDeleteKuaishouLiveRoomInfo: QueryDispatchFunc = IDBRedux.deleteAction({
   objectStoreName: kuaishouLiveObjectStoreName,
   successAction: setKuaishouDeleteFromDB
 });

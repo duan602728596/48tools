@@ -20,9 +20,9 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import {
-  IDBSaveRoomVoiceInfo,
-  IDBCursorRoomVoiceInfo,
-  IDBDeleteRoomVoiceInfo,
+  IDBCursorDouyinLiveRoomInfo,
+  IDBSaveDouyinLiveRoomInfo,
+  IDBDeleteDouyinLiveRoomInfo,
   setAddDownloadWorker,
   setRemoveDownloadWorker,
   douyinLiveWorkerListSelectors,
@@ -33,8 +33,7 @@ import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import { requestLiveEnter, requestTtwidCookie } from '../services/douyin';
 import { douyinCookie } from '../Douyin/function/DouyinCookieStore';
-import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
-import type { DouyinLiveItem } from '../types';
+import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveEnter } from '../services/interface';
 
 /* redux selector */
@@ -48,7 +47,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   douyinLiveWorkerList: ({ douyinLive }: RState): Array<WebWorkerChildItem> => douyinLiveWorkerListSelectors.selectAll(douyinLive),
 
   // 数据库保存的数据
-  douyinLiveList: ({ douyinLive }: RState): Array<DouyinLiveItem> => douyinLive.douyinLiveList
+  douyinLiveList: ({ douyinLive }: RState): Array<LiveItem> => douyinLive.douyinLiveList
 });
 
 /* 抖音直播抓取 */
@@ -62,7 +61,7 @@ function DouyinLive(props: {}): ReactElement {
   // 选择并开始录制
   async function handleStartRecordSelect(
     value: string,
-    options: BaseOptionType & { type: 'flv' | 'm3u8'; item: DouyinLiveItem }
+    options: BaseOptionType & { type: 'flv' | 'm3u8'; item: LiveItem }
   ): Promise<void> {
     const time: string = getFileTime();
 
@@ -107,7 +106,7 @@ function DouyinLive(props: {}): ReactElement {
   }
 
   // 停止
-  function handleStopClick(record: DouyinLiveItem, event?: MouseEvent): void {
+  function handleStopClick(record: LiveItem, event?: MouseEvent): void {
     const index: number = douyinLiveWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) {
@@ -116,14 +115,14 @@ function DouyinLive(props: {}): ReactElement {
   }
 
   // 删除
-  function handleDeleteRoomIdClick(record: DouyinLiveItem, event: MouseEvent): void {
-    dispatch(IDBDeleteRoomVoiceInfo({
+  function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
+    dispatch(IDBDeleteDouyinLiveRoomInfo({
       query: record.id
     }));
   }
 
   // 录制直播
-  async function handleRecordClick(record: DouyinLiveItem, event: MouseEvent): Promise<void> {
+  async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
     try {
       await requestTtwidCookie(); // 获取ttwid的cookie
       const res: LiveEnter | string = await requestLiveEnter(douyinCookie.toString(), record.roomId);
@@ -163,14 +162,14 @@ function DouyinLive(props: {}): ReactElement {
     }
   }
 
-  const columns: ColumnsType<DouyinLiveItem> = [
+  const columns: ColumnsType<LiveItem> = [
     { title: '说明', dataIndex: 'description' },
     { title: '房间ID', dataIndex: 'roomId' },
     {
       title: '操作',
       key: 'handle',
       width: 175,
-      render: (value: undefined, record: DouyinLiveItem, index: number): ReactElement => {
+      render: (value: undefined, record: LiveItem, index: number): ReactElement => {
         const idx: number = douyinLiveWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
         return (
@@ -202,7 +201,7 @@ function DouyinLive(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(IDBCursorRoomVoiceInfo({
+    dispatch(IDBCursorDouyinLiveRoomInfo({
       query: { indexName: dbConfig.objectStore[6].data[1] }
     }));
   }, []);
@@ -210,7 +209,7 @@ function DouyinLive(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <AddLiveRoomForm modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveRoomVoiceInfo } />
+        <AddLiveRoomForm modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveDouyinLiveRoomInfo } />
       </Header>
       <Table size="middle"
         columns={ columns }

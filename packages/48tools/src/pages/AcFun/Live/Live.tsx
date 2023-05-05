@@ -35,8 +35,8 @@ import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
 import AntdConfig from '../../../components/basic/AntdConfig/AntdConfig';
 import ThemeProvider from '../../../components/basic/Theme/ThemeProvider';
-import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
-import type { LiveRepresentation, LiveVideoPlayRes, LiveItem } from '../types';
+import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
+import type { LiveRepresentation, LiveVideoPlayRes } from '../types';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';
 
 let divElement: HTMLDivElement | null = null;

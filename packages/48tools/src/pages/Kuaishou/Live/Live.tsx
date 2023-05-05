@@ -11,9 +11,9 @@ import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import {
   kuaishouLiveWorkerListSelectors,
-  IDBSaveKuaishouRoomInfo,
-  IDBCursorKuaishouRoomInfo,
-  IDBDeleteKuaishouRoomInfo,
+  IDBSaveKuaishouLiveRoomInfo,
+  IDBCursorKuaishouLiveRoomInfo,
+  IDBDeleteKuaishouLiveRoomInfo,
   setAddDownloadWorker,
   setRemoveDownloadWorker,
   type KuaishouLiveInitialState
@@ -105,7 +105,7 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
-    dispatch(IDBDeleteKuaishouRoomInfo({
+    dispatch(IDBDeleteKuaishouLiveRoomInfo({
       query: record.id
     }));
   }
@@ -149,7 +149,7 @@ function Live(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(IDBCursorKuaishouRoomInfo({
+    dispatch(IDBCursorKuaishouLiveRoomInfo({
       query: { indexName: dbConfig.objectStore[7].data[1] }
     }));
   }, []);
@@ -159,7 +159,7 @@ function Live(props: {}): ReactElement {
       <Header>
         <AddLiveRoomForm modalTitle="添加快手直播间信息"
           customRoomIdRule={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
-          IDBSaveDataFunc={ IDBSaveKuaishouRoomInfo }
+          IDBSaveDataFunc={ IDBSaveKuaishouLiveRoomInfo }
         />
       </Header>
       <Table size="middle"

@@ -166,10 +166,3 @@ export interface GetVideoUrlOnionContext {
   setVideoQuery: D<S<VideoQuery | undefined>>;
   setUserTitle: D<S<string>>;
 }
-
-/* 直播 */
-export interface DouyinLiveItem {
-  id: string;
-  description: string;
-  roomId: string;
-}

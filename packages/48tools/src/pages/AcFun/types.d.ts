@@ -40,10 +40,3 @@ export interface LiveVideoPlayRes {
     };
   }>;
 }
-
-// 直播间信息
-export interface LiveItem {
-  id: string;
-  description: string;
-  roomId: string;
-}

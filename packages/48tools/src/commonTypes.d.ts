@@ -1,16 +1,16 @@
-// webworker进程
+/* webworker进程 */
 export interface WebWorkerChildItem {
   id: string;
   worker: Worker;
 }
 
-// worker进程发出的数据
+/* worker进程发出的数据 */
 export type MessageEventData = {
   type: 'close' | 'error';
   error?: Error;
 };
 
-// 微博账号数据库内的数据
+/* 微博账号数据库内的数据 */
 export interface WeiboAccount {
   id: string;
   username: string;
@@ -18,7 +18,7 @@ export interface WeiboAccount {
   lastLoginTime: string; // 最后登陆时间
 }
 
-// 直播的type
+/* 直播 */
 export interface LiveItem {
   id: string;
   description: string;
