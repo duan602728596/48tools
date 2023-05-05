@@ -10,6 +10,7 @@ import acfunDownloadReducers from '../pages/AcFun/reducers/download';
 import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyinDownload';
 import douyinLiveReducers from '../pages/Toutiao/reducers/douyinLive';
+import kuaishouLiveReducers from '../pages/Kuaishou/reducers/kuaishouLive';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';
@@ -30,6 +31,7 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   acfunLiveReducers,
   douyinDownloadReducers,
   douyinLiveReducers,
+  kuaishouLiveReducers,
   videoEditConcatReducers,
   videoEditVideoCutReducers,
   FFmpegProcessReducer,
@@ -58,6 +60,7 @@ export const ignoreOptions: any = {
     'acfunLive.liveWorkers',
     'douyinLive.entities',
     'douyinDownload.downloadProgress',
+    'kuaishouLive.entities',
     'concat.concatWorker',
     'videoCut.cutChildList',
     'FFmpegProcess.entities'
@@ -88,6 +91,8 @@ export const ignoreOptions: any = {
     'acfunLive/setDeleteLiveWorker',
     'douyinLive/setAddDownloadWorker',
     'douyinLive/setRemoveDownloadWorker',
+    'kuaishouLive/setAddDownloadWorker',
+    'kuaishouLive/setRemoveDownloadWorker',
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete',

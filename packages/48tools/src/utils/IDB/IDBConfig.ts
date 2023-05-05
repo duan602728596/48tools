@@ -13,7 +13,7 @@ export interface IDBConfig {
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 9,
+  version: 10,
   objectStore: [
     // 0：b站直播间信息
     {
@@ -60,6 +60,13 @@ const dbConfig: IDBConfig = {
     // 6：抖音直播间信息
     {
       name: 'douyin_live',
+      key: 'id',
+      data: ['description', 'roomId']
+    },
+
+    // 7：快手直播间信息
+    {
+      name: 'kuaishou_live',
       key: 'id',
       data: ['description', 'roomId']
     }

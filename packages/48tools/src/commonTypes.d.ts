@@ -17,3 +17,10 @@ export interface WeiboAccount {
   cookie: string;
   lastLoginTime: string; // 最后登陆时间
 }
+
+// 直播的type
+export interface LiveItem {
+  id: string;
+  description: string;
+  roomId: string;
+}

@@ -22,6 +22,7 @@ import IconRecordSvgComponent from './images/record.component.svg';
 import IconBilibiliLogoSvgComponent from './images/bilibililogo.component.svg';
 import IconAcFunLogoSvgComponent from './images/acfunlogo.component.svg';
 import IconDouyinSvgComponent from './images/douyin.component.svg';
+import IconKuaishouSvgComponent from './images/kuaishou.component.svg';
 import IconCutSvgComponent from './images/cut.component.svg';
 import IconConcatSvgComponent from './images/concat.component.svg';
 import IconPowerShellSvgComponent from './images/powershell.component.svg';
@@ -42,7 +43,9 @@ const IconBilibiliLogo: ReactElement
   IconAcFunLogo: ReactElement
     = <Icon className={ classNames('relative', style.iconAcFun) } component={ IconAcFunLogoSvgComponent } />,
   IconDouyinLogo: ReactElement
-    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />;
+    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />,
+  IconKuaishouLogo: ReactElement
+    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconKuaishouSvgComponent } />;
 
 /* 导航配置 */
 const navLinkConfig: Array<Array<NativeItem>> = [
@@ -126,6 +129,16 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   ],
   [
     {
+      name: '快手视频下载',
+      url: '/Kuaishou/VideoDownload',
+      icon: IconKuaishouLogo
+    },
+    {
+      name: '快手直播抓取',
+      url: '/Kuaishou/Live',
+      icon: IconKuaishouLogo
+    },
+    {
       name: '微博超话签到',
       url: '/WeiboSuper',
       icon: <IconWeiboOutlined />
@@ -134,7 +147,9 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
       icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconCutSvgComponent } />
-    },
+    }
+  ],
+  [
     {
       name: '视频合并',
       url: '/VideoEdit/Concat',
