@@ -197,7 +197,7 @@ function nativeRender(): Array<ReactNode> {
       <nav key={ `nav-${ i }` } className="grid grid-cols-4 gap-[16px] w-[755px]">
         { groupElement }
       </nav>,
-      <Divider key={ `driver-${ i }` } />
+      <Divider key={ `driver-${ i }` } className="my-[16px]" />
     );
   }
 
@@ -241,7 +241,7 @@ function Index(props: {}): ReactElement {
           <ButtonLink linkProps={{ to: '/Credits' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
         </Space>
       </div>
-      <Divider />
+      <Divider className="my-[16px]" />
       <div className={ classNames('flex', commonStyle.text) }>
         <div>
           {/* 二维码 */}
