@@ -138,13 +138,18 @@ function LocalMessage(props: {}): ReactElement {
 
               if (response) {
                 const status: number = response.status();
+                const headers: Record<string, string> = await response.allHeaders();
+                const contentType: string | undefined = headers['content-type'];
 
-                if (status === 200) {
-                  await fsP.writeFile(resFile, await response.body(), { encoding: null });
-                } else if (status === 206) {
+                if (
+                  contentType === 'application/octet-stream'
+                  || (contentType && /video\//.test(contentType))
+                  || status === 206) {
                   const res: Response = await fetch(url);
 
                   await fsP.writeFile(resFile, Buffer.from(await res.arrayBuffer()), { encoding: null });
+                } else if (status === 200) {
+                  await fsP.writeFile(resFile, await response.body(), { encoding: null });
                 }
               }
             }
