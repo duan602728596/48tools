@@ -28,10 +28,11 @@ interface AddLiveRoomFormProps {
   modalTitle: string;
   tips?: string;
   IDBSaveDataFunc: DataDispatchFunc;
+  customRoomIdRule?: Array<Rule>;
 }
 
 function AddLiveRoomForm(props: AddLiveRoomFormProps): ReactElement {
-  const { dataTestId, modalTitle, tips, IDBSaveDataFunc }: AddLiveRoomFormProps = props;
+  const { dataTestId, modalTitle, tips, IDBSaveDataFunc, customRoomIdRule }: AddLiveRoomFormProps = props;
   const dispatch: Dispatch = useDispatch();
   const [form]: [FormInstance] = Form.useForm();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
@@ -91,7 +92,7 @@ function AddLiveRoomForm(props: AddLiveRoomFormProps): ReactElement {
           </Form.Item>
           <Form.Item name="roomId"
             label="直播间ID"
-            rules={ roomIdRule }
+            rules={ customRoomIdRule ?? roomIdRule }
           >
             <Input />
           </Form.Item>
@@ -106,7 +107,8 @@ AddLiveRoomForm.propTypes = {
   dataTestId: PropTypes.string,
   modalTitle: PropTypes.string.isRequired,
   tips: PropTypes.string,
-  IDBSaveDataFunc: PropTypes.func.isRequired
+  IDBSaveDataFunc: PropTypes.func.isRequired,
+  customRoomIdRule: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default AddLiveRoomForm;
