@@ -19,11 +19,11 @@ import {
   type KuaishouLiveInitialState
 } from '../reducers/kuaishouLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import getLiveInfo, { type LiveInfo } from './function/getLiveInfo';
+import getLiveInfo from './function/getLiveInfo';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';
-import type { PlayUrlItem } from '../types';
+import type { LiveInfo, PlayUrlItem } from '../types';
 
 /* redux selector */
 type RSelector = Pick<KuaishouLiveInitialState, 'kuaishouLiveList'> & {

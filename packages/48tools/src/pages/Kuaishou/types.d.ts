@@ -1,3 +1,8 @@
+export interface LiveInfo {
+  title: string;
+  list: Array<PlayUrlItem>;
+}
+
 /* 快手直播 */
 export interface PlayUrlItem {
   url: string;

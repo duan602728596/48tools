@@ -1,5 +1,5 @@
 import { requestLiveHtml } from '../../services/live';
-import type { KuaishouLiveInitialState, PlayUrlItem } from '../../types';
+import type { LiveInfo, KuaishouLiveInitialState } from '../../types';
 
 /**
  * 解析initialState
@@ -24,11 +24,6 @@ function parseHtml(html: string): KuaishouLiveInitialState | undefined {
   }
 
   return initialState;
-}
-
-export interface LiveInfo {
-  title: string;
-  list: Array<PlayUrlItem>;
 }
 
 /* 获取直播间的相关信息 */

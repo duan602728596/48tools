@@ -129,11 +129,6 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   ],
   [
     {
-      name: '快手视频下载',
-      url: '/Kuaishou/VideoDownload',
-      icon: IconKuaishouLogo
-    },
-    {
       name: '快手直播抓取',
       url: '/Kuaishou/Live',
       icon: IconKuaishouLogo
@@ -147,14 +142,14 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
       icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconCutSvgComponent } />
-    }
-  ],
-  [
+    },
     {
       name: '视频合并',
       url: '/VideoEdit/Concat',
       icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconConcatSvgComponent } />
-    },
+    }
+  ],
+  [
     {
       name: '执行FFmpeg命令',
       url: '/VideoEdit/FFmpegProcess',

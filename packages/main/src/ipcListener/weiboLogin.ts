@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain, nativeTheme, type Session, type Cookie, type IpcMainEvent } from 'electron';
+import { pcUserAgent } from '../utils';
 
 export const type: string = 'weibo-login';
 
@@ -20,8 +21,7 @@ function login(win: BrowserWindow): void {
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
   weiboLoginWin.loadURL(weiboUrl, {
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36'
-      + ' (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36 Edg/89.0.774.45',
+    userAgent: pcUserAgent,
     httpReferrer: 'https://weibo.com/'
   });
 
