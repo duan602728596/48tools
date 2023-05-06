@@ -86,6 +86,8 @@ export default function(info: object): Record<string, any> {
       'array-move',
       'classnames',
       'cookie',
+      'dayjs',
+      'dayjs/locale/zh-cn',
       'filenamify/browser',
       'hls.js',
       'mpegts.js',
