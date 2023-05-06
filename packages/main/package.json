@@ -18,6 +18,6 @@
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-terser": "^2.1.0",
-    "typescript": "*"
+    "typescript": "<5"
   }
 }
