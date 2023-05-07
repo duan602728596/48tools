@@ -15,7 +15,7 @@ import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { LiveInfo, LiveData } from '../services/interface';
-import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpeg/FFmpegDownload.worker';
 
 export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;

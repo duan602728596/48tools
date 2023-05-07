@@ -12,11 +12,11 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadBilibiliVideoWorker from './function/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
 import type { MessageEventData } from './function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
-import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
 import type {
   MessageEventData as FFmpegMessageEventData,
   ProgressMessageEventData
-} from '../../../utils/worker/FFmpegDownload.worker';
+} from '../../../utils/worker/FFmpeg/FFmpegDownload.worker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AddForm, { bilibiliVideoTypesMap } from './AddForm/AddForm';

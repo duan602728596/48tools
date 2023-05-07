@@ -40,7 +40,7 @@ import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getRecordVideoDownloadWorker from './RecordVideoDownload.worker/getRecordVideoDownloadWorker';
-import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
 import {
   setRecordList,
@@ -64,7 +64,7 @@ import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { pick } from '../../../../utils/lodash';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
-import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
+import type { MessageEventData } from '../../../../utils/worker/FFmpeg/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 import type { LiveData, LiveInfo, LiveRoomInfo, SearchResult, SearchMemberIndex } from '../../services/interface';
 

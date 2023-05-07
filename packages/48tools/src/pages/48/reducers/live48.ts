@@ -1,7 +1,7 @@
 import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { InLiveWebWorkerItemNoplayStreamPath, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
-import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpeg/FFmpegDownload.worker';
 
 export interface Live48InitialState {
   inLiveList: Array<InLiveWebWorkerItemNoplayStreamPath>;

@@ -4,7 +4,7 @@ import { store } from '../../../../store/store';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { setAddLiveBilibiliChildList, setDeleteLiveBilibiliChildList } from '../../reducers/live';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../../services/live';
-import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { BilibiliLiveInitialState } from '../../reducers/live';
 import type { RoomInit, RoomPlayUrl } from '../../services/interface';

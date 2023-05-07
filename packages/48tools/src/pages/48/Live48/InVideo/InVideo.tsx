@@ -19,7 +19,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import style from './inVideo.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
 import {
   setInVideoQuery,
@@ -34,7 +34,7 @@ import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
-import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker';
+import type { MessageEventData } from '../../../../utils/worker/FFmpeg/FFmpegDownload.worker';
 import type { InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../../types';
 
 /**

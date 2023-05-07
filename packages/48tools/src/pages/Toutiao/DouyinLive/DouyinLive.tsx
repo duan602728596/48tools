@@ -30,7 +30,7 @@ import {
 } from '../reducers/douyinLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import getFFmpegDownloadWorker from '../../../utils/worker/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
 import { requestLiveEnter, requestTtwidCookie } from '../services/douyin';
 import { douyinCookie } from '../Douyin/function/DouyinCookieStore';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';

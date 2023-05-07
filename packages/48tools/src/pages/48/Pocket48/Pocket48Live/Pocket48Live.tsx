@@ -18,7 +18,7 @@ import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getFFmpegDownloadWorker from '../../../../utils/worker/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
 import getDownloadAndTranscodingWorker from '../function/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
