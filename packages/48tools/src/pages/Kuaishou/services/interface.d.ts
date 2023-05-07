@@ -20,5 +20,6 @@ export interface ShortVideoDownloadResponse {
     captcha?: {
       url: string;
     };
+    url?: string;
   };
 }

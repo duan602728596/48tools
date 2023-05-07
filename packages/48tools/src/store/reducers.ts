@@ -11,6 +11,7 @@ import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyinDownload';
 import douyinLiveReducers from '../pages/Toutiao/reducers/douyinLive';
 import kuaishouLiveReducers from '../pages/Kuaishou/reducers/kuaishouLive';
+import KuaishouVideoDownloadReducers from '../pages/Kuaishou/reducers/kuaishouVideoDownload';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
 import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';
@@ -32,6 +33,7 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   douyinDownloadReducers,
   douyinLiveReducers,
   kuaishouLiveReducers,
+  KuaishouVideoDownloadReducers,
   videoEditConcatReducers,
   videoEditVideoCutReducers,
   FFmpegProcessReducer,
@@ -61,6 +63,7 @@ export const ignoreOptions: any = {
     'douyinLive.entities',
     'douyinDownload.downloadProgress',
     'kuaishouLive.entities',
+    'kuaishouVideoDownload.downloadProgress',
     'concat.concatWorker',
     'videoCut.cutChildList',
     'FFmpegProcess.entities'

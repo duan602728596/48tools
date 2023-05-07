@@ -5,8 +5,8 @@ import { isDevelopment, isTest, wwwPath, initialState as ils, packageJson } from
 import { ipc, removeIpc } from './ipc';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
-import { toutiaoRequestInit } from './toutiaoRequest/toutiaoRequest';
-import weiboResourceRequestInit from './weiboResourceRequest/weiboResourceRequest';
+import { toutiaoRequestInit } from './webRequest/toutiaoRequest';
+import weiboResourceRequestInit from './webRequest/weiboResourceRequest';
 import store from './store';
 import logProtocol from './logProtocol/logProtocol';
 import { commandLineOptions } from './commend';

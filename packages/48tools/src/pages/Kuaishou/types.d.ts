@@ -10,6 +10,7 @@ export interface PlayUrlItem {
   name: '高清' | '超清' | '蓝光 4M' | '蓝光 8M';
 }
 
+/* 快手视频地址 */
 export interface KuaishouLiveInitialState {
   liveroom: {
     liveStream: {
@@ -21,4 +22,10 @@ export interface KuaishouLiveInitialState {
       }>;
     };
   };
+}
+
+export interface DownloadItem {
+  qid: string;
+  url: string;
+  title: string;
 }

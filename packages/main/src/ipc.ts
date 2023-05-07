@@ -6,7 +6,8 @@ import themeChange, { type as themeChangeType } from './ipcListener/themeChange'
 import weiboLogin, { type as weiboLoginType } from './ipcListener/weiboLogin';
 import nodeMediaServer, { type as nodeMediaServerType } from './nodeMediaServer/nodeMediaServer';
 import proxyServer, { type as proxyServerType } from './proxyServer/proxyServer';
-import toutiaoRequest, { type as toutiaoRequestType } from './toutiaoRequest/toutiaoRequest';
+import toutiaoRequest, { type as toutiaoRequestType } from './webRequest/toutiaoRequest';
+import { kuaishouCaptchaCookie, type as kuaishouCaptchaCookieType } from './ipcListener/kuaishouCaptcha';
 
 // 移除所有监听的通信
 const removeListenerChannel: Array<string> = [
@@ -17,7 +18,8 @@ const removeListenerChannel: Array<string> = [
   weiboLoginType,
   nodeMediaServerType,
   proxyServerType,
-  toutiaoRequestType
+  toutiaoRequestType,
+  kuaishouCaptchaCookieType
 ];
 
 export function removeIpc(): void {
@@ -28,12 +30,13 @@ export function removeIpc(): void {
 
 /* ipc通信 */
 export function ipc(win: BrowserWindow): void {
-  openDevTools(win);    // 打开开发者工具
-  openPlayerHtml();     // 打开播放器
-  openPlayerDevTools(); // 打开播放器开发者工具
-  themeChange();        // 主题更换
-  weiboLogin(win);      // 微博登录
-  nodeMediaServer();    // 启动node-media-server
-  proxyServer();        // 启动代理服务
-  toutiaoRequest();     // 头条请求拦截
+  openDevTools(win);          // 打开开发者工具
+  openPlayerHtml();           // 打开播放器
+  openPlayerDevTools();       // 打开播放器开发者工具
+  themeChange();              // 主题更换
+  weiboLogin(win);            // 微博登录
+  nodeMediaServer();          // 启动node-media-server
+  proxyServer();              // 启动代理服务
+  toutiaoRequest();           // 头条请求拦截
+  kuaishouCaptchaCookie(win); // 快手cookie
 }

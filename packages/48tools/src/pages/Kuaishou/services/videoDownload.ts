@@ -1,5 +1,5 @@
 import got, { Response as GotResponse } from 'got';
-import { pcUserAgent } from '../../../utils/utils';
+import { pcUserAgent, rStr } from '../../../utils/utils';
 import type { ShortVideoDownloadResponse } from './interface';
 
 /**
@@ -11,7 +11,7 @@ export async function requestShortVideo(id: string, cookie?: string): Promise<Sh
     headers: {
       'User-Agent': pcUserAgent,
       Host: 'www.kuaishou.com',
-      Cookie: cookie
+      Cookie: cookie ?? `did=web_${ rStr(31) }`
     },
     json: {
       operationName: 'visionVideoDetail',
@@ -19,6 +19,7 @@ export async function requestShortVideo(id: string, cookie?: string): Promise<Sh
 query visionVideoDetail($photoId: String, $type: String, $page: String, $webPageArea: String) {
     visionVideoDetail(photoId: $photoId, type: $type, page: $page, webPageArea: $webPageArea) {
         photo {
+            caption
             manifest {
                 adaptationSet {
                     representation {
@@ -32,8 +33,8 @@ query visionVideoDetail($photoId: String, $type: String, $page: String, $webPage
       variables: {
         photoId: id,
         type: '',
-        page: '',
-        webPageArea: ''
+        page: 'detail',
+        webPageArea: 'brilliantxxcarefully'
       }
     }
   });

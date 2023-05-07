@@ -8,9 +8,7 @@ let weiboLoginWin: BrowserWindow | null = null;
 
 /* 微博登陆 */
 function login(win: BrowserWindow): void {
-  if (weiboLoginWin !== null) {
-    return;
-  }
+  if (weiboLoginWin !== null) return;
 
   weiboLoginWin = new BrowserWindow({
     width: 1250,
