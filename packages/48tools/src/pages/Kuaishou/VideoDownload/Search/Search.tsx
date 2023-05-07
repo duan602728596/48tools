@@ -41,6 +41,8 @@ function Search(props: {}): ReactElement {
           title: res.data.visionVideoDetail.photo.caption,
           url: res.data.visionVideoDetail.photo.manifest.adaptationSet[0].representation[0].url
         }));
+      } else {
+        messageApi.warning('没有获取到视频地址！');
       }
 
       setUrlLoading((): boolean => false);
