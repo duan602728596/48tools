@@ -37,11 +37,11 @@ function kuaishouWebsite(win: BrowserWindow, videoId: string): void {
       const winSes: Session = win.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({ url: kuaishouUrl });
 
+      win.webContents.send('kuaishou-cookie-response', cookies, videoId);
       await Promise.all([
         ses.clearStorageData({ storages: ['cookies'] }),
         winSes.clearStorageData({ storages: ['cookies'] })
       ]);
-      win.webContents.send('kuaishou-cookie-response', cookies, videoId);
     }
   });
 
