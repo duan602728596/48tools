@@ -4,11 +4,13 @@ export interface DashVideoItem {
   backup_url: Array<string>;
   baseUrl: string;
   base_url: string;
+  id: number;
 }
 
 export interface DashSupportFormats {
   display_desc: string;
   new_description: string;
+  quality: number;
 }
 
 export interface DashVideoInfo {

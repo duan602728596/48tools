@@ -16,7 +16,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './addForm.sass';
 import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo, parseVideoUrlDASH } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/download';
-import type { VideoData, DashVideoInfo, DashSupportFormats } from '../../services/interface';
+import type { VideoData, DashVideoInfo, DashSupportFormats, DashVideoItem } from '../../services/interface';
 
 /* 视频分类 */
 const bilibiliVideoTypes: Array<{ label: string; value: string }> = [
@@ -58,13 +58,15 @@ function AddForm(props: {}): ReactElement {
   const [form]: [FormInstance] = Form.useForm();
 
   // 选择DASH video并准备下载
-  function handleDownloadDashVideoClick(index: number, event: MouseEvent): void {
+  function handleDownloadDashVideoClick(item: DashSupportFormats, event: MouseEvent): void {
     if (!dash) return;
+    const videoItem: DashVideoItem = dash.dash.video.find((o: DashVideoItem): boolean => o.id === item.quality)
+      ?? dash.dash.video[0];
 
-    const videoUrl: string = dash.dash.video[index].backupUrl?.[0]
-      ?? dash.dash.video[index].backup_url?.[0]
-      ?? dash.dash.video[index].baseUrl
-      ?? dash.dash.video[index].base_url;
+    const videoUrl: string = videoItem.backupUrl?.[0]
+      ?? videoItem.backup_url?.[0]
+      ?? videoItem.baseUrl
+      ?? videoItem.base_url;
     const audioUrl: string = dash.dash.audio[0].backupUrl?.[0]
       ?? dash.dash.video[0].backup_url?.[0]
       ?? dash.dash.video[0].baseUrl
@@ -202,7 +204,7 @@ function AddForm(props: {}): ReactElement {
           className="mb-[6px]"
           size="small"
           block={ true }
-          onClick={ (event: MouseEvent): void => handleDownloadDashVideoClick(index, event) }
+          onClick={ (event: MouseEvent): void => handleDownloadDashVideoClick(item, event) }
         >
           { item.new_description }
         </Button>
