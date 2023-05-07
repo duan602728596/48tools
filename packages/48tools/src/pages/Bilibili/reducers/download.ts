@@ -11,7 +11,7 @@ import {
 } from '@reduxjs/toolkit';
 import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';
-import type { MessageEventData } from '../Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
+import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 
 // 下载列表

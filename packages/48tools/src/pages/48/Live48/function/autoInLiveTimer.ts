@@ -1,6 +1,6 @@
 import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
-import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { store } from '../../../../store/store';
 import { setAddWorkerInLiveList, setStopInLiveList } from '../../reducers/live48';
 import { parseLiveUrl } from './parseLive48Website';

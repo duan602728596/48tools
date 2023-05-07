@@ -10,13 +10,13 @@ import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getDownloadBilibiliVideoWorker from './function/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
-import type { MessageEventData } from './function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
-import getFFmpegDownloadWorker from '../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
+import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
+import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import type {
   MessageEventData as FFmpegMessageEventData,
   ProgressMessageEventData
-} from '../../../utils/worker/FFmpeg/FFmpegDownload.worker';
+} from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AddForm, { bilibiliVideoTypesMap } from './AddForm/AddForm';
@@ -159,7 +159,7 @@ function Download(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const worker: Worker = getDownloadBilibiliVideoWorker();
+      const worker: Worker = getDownloadWorker();
 
       worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
         const { type }: MessageEventData = messageEvent.data;

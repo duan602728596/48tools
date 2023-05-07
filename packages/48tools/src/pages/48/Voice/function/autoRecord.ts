@@ -5,7 +5,7 @@ import type { MessageInstance } from 'antd/es/message/interface';
 import type { NotificationInstance } from 'antd/es/notification/interface';
 import { store } from '../../../../store/store';
 import QChatSocket from '../../sdk/QChatSocket';
-import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import {
   setAddDownloadWorker,
   setRemoveDownloadWorker,

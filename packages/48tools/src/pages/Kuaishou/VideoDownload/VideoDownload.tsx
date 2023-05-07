@@ -20,8 +20,8 @@ import {
 } from '../reducers/kuaishouVideoDownload';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import { kuaishouCookie } from './function/kuaishouCookie';
-import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
-import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
+import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
+import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 import type { DownloadItem } from '../types';
 
 /* redux selector */
@@ -64,7 +64,7 @@ function VideoDownload(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const worker: Worker = getDownloadBilibiliVideoWorker();
+      const worker: Worker = getDownloadWorker();
 
       worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
         const { type }: MessageEventData = messageEvent.data;

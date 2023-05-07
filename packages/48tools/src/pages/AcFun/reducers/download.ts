@@ -2,7 +2,7 @@ import { createSlice, type Slice, type PayloadAction, type CaseReducer, type Cas
 import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem } from '../types';
-import type { MessageEventData } from '../../../utils/worker/FFmpeg/FFmpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
 export interface AcFunDownloadInitialState {
   downloadList: Array<DownloadItem>;

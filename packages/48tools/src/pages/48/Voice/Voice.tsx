@@ -36,7 +36,7 @@ import {
 } from '../reducers/roomVoice';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import getFFmpegDownloadWorker from '../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { startAutoRecord, stopAutoRecord } from './function/autoRecord';
 import type { ServerSearchResult, ServerApiItem, ServerJumpResult, VoiceOperate } from '../services/interface';
 import type { RoomVoiceItem } from '../types';

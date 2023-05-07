@@ -4,7 +4,7 @@ import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';

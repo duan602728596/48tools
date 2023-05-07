@@ -18,7 +18,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import { Onion } from '@bbkkbkk/q';
 import style from './live.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getFFmpegDownloadWorker from '../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import AcFunLogin from '../../../functionalComponents/AcFunLogin/AcFunLogin';

@@ -11,7 +11,7 @@ import {
 } from '@reduxjs/toolkit';
 import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';
-import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
+import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 
 // 下载列表
 export const kuaishouDownloadListAdapter: EntityAdapter<DownloadItem> = createEntityAdapter({

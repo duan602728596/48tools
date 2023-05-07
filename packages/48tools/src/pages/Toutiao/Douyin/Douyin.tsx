@@ -23,8 +23,8 @@ import * as dayjs from 'dayjs';
 import style from './douyin.sass';
 import commonStyle from '../../../common.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getDownloadBilibiliVideoWorker from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/getDownloadBilibiliVideoWorker';
-import type { MessageEventData } from '../../Bilibili/Download/function/downloadBilibiliVideo.worker/downloadBilibiliVideo.worker';
+import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
+import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 import Header from '../../../components/Header/Header';
 import VideoOrUserParse from './VideoOrUserParse/VideoOrUserParse';
 import { douyinCookie } from './function/DouyinCookieStore';
@@ -83,7 +83,7 @@ function Douyin(props: {}): ReactElement {
   // 下载单个
   function downloadItem(item: DownloadItem, filePath: string): Promise<void> {
     return new Promise(async (resolve: Function, reject: Function): Promise<void> => {
-      const worker: Worker = getDownloadBilibiliVideoWorker();
+      const worker: Worker = getDownloadWorker();
 
       worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
         const { type }: MessageEventData = messageEvent.data;

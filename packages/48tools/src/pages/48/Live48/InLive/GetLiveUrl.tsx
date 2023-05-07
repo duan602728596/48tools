@@ -16,7 +16,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import style from './getLiveUrl.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { parseInLive, parseLiveUrl } from '../function/parseLive48Website';
 import autoInLiveTimer from '../function/autoInLiveTimer';
 import { setAddInLiveList, setStopInLiveList } from '../../reducers/live48';

@@ -21,7 +21,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import getLiveInfo from './function/getLiveInfo';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
-import getFFmpegDownloadWorker from '../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';
 import type { LiveInfo, PlayUrlItem } from '../types';
 

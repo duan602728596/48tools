@@ -8,7 +8,7 @@ import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './download.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getFFmpegDownloadWorker from '../../../utils/worker/FFmpeg/getFFmpegDownloadWorker';
+import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AcFunLogin from '../../../functionalComponents/AcFunLogin/AcFunLogin';
 import AddForm, { acfunVideoTypesMap } from './AddForm';
@@ -23,7 +23,7 @@ import { getFFmpeg } from '../../../utils/utils';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem, Representation } from '../types';
-import type { MessageEventData } from '../../../utils/worker/FFmpeg/FFmpegDownload.worker';
+import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
 /* redux selector */
 type RState = { acfunDownload: AcFunDownloadInitialState };
