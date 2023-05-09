@@ -25,7 +25,7 @@ type SliceReducers = {
   setDeleteLiveItemFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ query: string }>>;
 };
 
-export type SliceSelector = Pick<LiveSliceInitialState, 'liveList'> & {
+export type LiveSliceSelector = Pick<LiveSliceInitialState, 'liveList'> & {
   workerList: Array<WebWorkerChildItem>;
 };
 

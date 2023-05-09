@@ -10,38 +10,29 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import {
-  kuaishouLiveWorkerListSelectors,
-  IDBSaveKuaishouLiveRoomInfo,
-  IDBCursorKuaishouLiveRoomInfo,
-  IDBDeleteKuaishouLiveRoomInfo,
-  setAddDownloadWorker,
-  setRemoveDownloadWorker,
-  type KuaishouLiveInitialState
+  IDBCursorLiveList,
+  IDBSaveLiveItem,
+  IDBDeleteLiveItem,
+  setAddWorkerItem,
+  setRemoveWorkerItem,
+  selectorObject
 } from '../reducers/kuaishouLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import getLiveInfo from './function/getLiveInfo';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
+import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';
 import type { LiveInfo, PlayUrlItem } from '../types';
 
 /* redux selector */
-type RSelector = Pick<KuaishouLiveInitialState, 'kuaishouLiveList'> & {
-  kuaishouLiveWorkerList: Array<WebWorkerChildItem>;
-};
-type RState = { kuaishouLive: KuaishouLiveInitialState };
+type RState = { kuaishouLive: LiveSliceInitialState };
 
-const selector: Selector<RState, RSelector> = createStructuredSelector({
-  // 正在下载
-  kuaishouLiveWorkerList: ({ kuaishouLive }: RState): Array<WebWorkerChildItem> => kuaishouLiveWorkerListSelectors.selectAll(kuaishouLive),
-
-  // 数据库保存的数据
-  kuaishouLiveList: ({ kuaishouLive }: RState): Array<LiveItem> => kuaishouLive.kuaishouLiveList
-});
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorObject });
 
 /* 快手直播 */
 function Live(props: {}): ReactElement {
-  const { kuaishouLiveWorkerList, kuaishouLiveList }: RSelector = useSelector(selector);
+  const { workerList: kuaishouLiveWorkerList, liveList: kuaishouLiveList }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
@@ -73,7 +64,7 @@ function Live(props: {}): ReactElement {
           }
 
           worker.terminate();
-          dispatch(setRemoveDownloadWorker(record.id));
+          dispatch(setRemoveWorkerItem(record.id));
         }
       }, false);
 
@@ -84,7 +75,7 @@ function Live(props: {}): ReactElement {
         ffmpeg: getFFmpeg()
       });
 
-      dispatch(setAddDownloadWorker({
+      dispatch(setAddWorkerItem({
         id: record.id,
         worker
       }));
@@ -105,7 +96,7 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
-    dispatch(IDBDeleteKuaishouLiveRoomInfo({
+    dispatch(IDBDeleteLiveItem({
       query: record.id
     }));
   }
@@ -149,7 +140,7 @@ function Live(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(IDBCursorKuaishouLiveRoomInfo({
+    dispatch(IDBCursorLiveList({
       query: { indexName: dbConfig.objectStore[7].data[1] }
     }));
   }, []);
@@ -159,7 +150,7 @@ function Live(props: {}): ReactElement {
       <Header>
         <AddLiveRoomForm modalTitle="添加快手直播间信息"
           customRoomIdRule={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
-          IDBSaveDataFunc={ IDBSaveKuaishouLiveRoomInfo }
+          IDBSaveDataFunc={ IDBSaveLiveItem }
         />
       </Header>
       <Table size="middle"

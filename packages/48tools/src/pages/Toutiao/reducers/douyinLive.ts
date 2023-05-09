@@ -1,4 +1,4 @@
-import { LiveSlice, type LiveSliceInitialState, type SliceSelector } from '../../../store/slice/LiveSlice';
+import { LiveSlice } from '../../../store/slice/LiveSlice';
 import { douyinLiveObjectStoreName } from '../../../utils/IDB/IDBRedux';
 
 const sliceName: 'douyinLive' = 'douyinLive';
@@ -18,7 +18,5 @@ export const {
   ignoredPaths,
   ignoredActions
 }: LiveSlice<typeof sliceName> = liveSlice;
-
-export type { LiveSliceInitialState, SliceSelector };
 
 export default { [sliceName]: liveSlice.slice.reducer };

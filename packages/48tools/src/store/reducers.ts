@@ -13,7 +13,10 @@ import douyinLiveReducers, {
   ignoredPaths as douyinLiveIgnoredPaths,
   ignoredActions as douyinLiveIgnoredActions
 } from '../pages/Toutiao/reducers/douyinLive';
-import kuaishouLiveReducers from '../pages/Kuaishou/reducers/kuaishouLive';
+import kuaishouLiveReducers, {
+  ignoredPaths as kuaishouLiveIgnoredPaths,
+  ignoredActions as kuaishouLiveIgnoredActions
+} from '../pages/Kuaishou/reducers/kuaishouLive';
 import KuaishouVideoDownloadReducers from '../pages/Kuaishou/reducers/kuaishouVideoDownload';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
 import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
@@ -65,7 +68,7 @@ export const ignoreOptions: any = {
     'acfunLive.liveWorkers',
     ...douyinLiveIgnoredPaths,
     'douyinDownload.downloadProgress',
-    'kuaishouLive.entities',
+    ...kuaishouLiveIgnoredPaths,
     'kuaishouVideoDownload.downloadProgress',
     'concat.concatWorker',
     'videoCut.cutChildList',
@@ -96,8 +99,7 @@ export const ignoreOptions: any = {
     'acfunLive/setAddLiveWorker',
     'acfunLive/setDeleteLiveWorker',
     ...douyinLiveIgnoredActions,
-    'kuaishouLive/setAddDownloadWorker',
-    'kuaishouLive/setRemoveDownloadWorker',
+    ...kuaishouLiveIgnoredActions,
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete',

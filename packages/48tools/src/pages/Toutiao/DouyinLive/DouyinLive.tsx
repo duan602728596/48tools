@@ -25,26 +25,25 @@ import {
   IDBDeleteLiveItem,
   setAddWorkerItem,
   setRemoveWorkerItem,
-  selectorObject,
-  type LiveSliceInitialState,
-  type SliceSelector
+  selectorObject
 } from '../reducers/douyinLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { requestLiveEnter, requestTtwidCookie } from '../services/douyin';
 import { douyinCookie } from '../Douyin/function/DouyinCookieStore';
+import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveEnter } from '../services/interface';
 
 /* redux selector */
 type RState = { douyinLive: LiveSliceInitialState };
 
-const selector: Selector<RState, SliceSelector> = createStructuredSelector({ ...selectorObject });
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorObject });
 
 /* 抖音直播抓取 */
 function DouyinLive(props: {}): ReactElement {
-  const { workerList: douyinLiveWorkerList, liveList: douyinLiveList }: SliceSelector = useSelector(selector);
+  const { workerList: douyinLiveWorkerList, liveList: douyinLiveList }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false); // 弹出层状态
   const [liveOptions, setLiveOptions]: [Array<BaseOptionType>, D<S<BaseOptionType[]>>] = useState([]); // 直播的地址
