@@ -28,7 +28,7 @@ import {
   setAddDownloadWorker,
   setDeleteDownloadWorker,
   type BilibiliDownloadInitialState
-} from '../reducers/download';
+} from '../reducers/bilibiliDownload';
 import { requestDownloadFileByStream } from '../../48/services/pocket48';
 import { getFFmpeg } from '../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../utils/proxyServer/proxyServer';

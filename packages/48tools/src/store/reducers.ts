@@ -4,10 +4,10 @@ import l48Live48Reducers from '../pages/48/reducers/live48';
 import roomMessageReducers from '../pages/48/reducers/roomMessage';
 import roomVoiceReducers from '../pages/48/reducers/roomVoice';
 import pocket48LoginReducers from '../functionalComponents/Pocket48Login/reducers/pocket48Login';
-import bilibiliDownloadReducers from '../pages/Bilibili/reducers/download';
-import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
-import acfunDownloadReducers from '../pages/AcFun/reducers/download';
-import acfunLiveReducers from '../pages/AcFun/reducers/live';
+import bilibiliDownloadReducers from '../pages/Bilibili/reducers/bilibiliDownload';
+import bilibiliLiveReducers from '../pages/Bilibili/reducers/bilibiliLive';
+import acfunDownloadReducers from '../pages/AcFun/reducers/acfunDownload';
+import acfunLiveReducers from '../pages/AcFun/reducers/acfunLive';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyinDownload';
 import douyinLiveReducers, {
   ignoredPaths as douyinLiveIgnoredPaths,

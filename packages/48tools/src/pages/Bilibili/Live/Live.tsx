@@ -23,7 +23,7 @@ import {
   setDeleteLiveBilibiliChildList,
   setAutoRecordTimer,
   type BilibiliLiveInitialState
-} from '../reducers/live';
+} from '../reducers/bilibiliLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';

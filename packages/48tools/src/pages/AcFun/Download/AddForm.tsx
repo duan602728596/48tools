@@ -15,7 +15,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
 import { parseAcFunUrl } from './function/parseAcFunUrl';
-import { setAddDownloadList } from '../reducers/download';
+import { setAddDownloadList } from '../reducers/acfunDownload';
 import type { Representation } from '../types';
 
 /* 视频分类 */

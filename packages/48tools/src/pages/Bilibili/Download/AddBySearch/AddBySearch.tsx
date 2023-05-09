@@ -18,7 +18,7 @@ import * as classNames from 'classnames';
 import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
 import { parseVideoList, parseVideoUrlV2 } from '../function/parseBilibiliUrl';
-import { setAddDownloadList } from '../../reducers/download';
+import { setAddDownloadList } from '../../reducers/bilibiliDownload';
 import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
 
 interface PageQuery {

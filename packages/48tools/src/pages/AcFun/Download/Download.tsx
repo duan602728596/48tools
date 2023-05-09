@@ -18,7 +18,7 @@ import {
   setDeleteDownloadWorker,
   setDownloadProgress,
   type AcFunDownloadInitialState
-} from '../reducers/download';
+} from '../reducers/acfunDownload';
 import { getFFmpeg } from '../../../utils/utils';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import type { WebWorkerChildItem } from '../../../commonTypes';

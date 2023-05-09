@@ -29,7 +29,7 @@ import {
   setAddLiveWorker,
   setDeleteLiveWorker,
   type AcFunLiveInitialState
-} from '../reducers/live';
+} from '../reducers/acfunLive';
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
