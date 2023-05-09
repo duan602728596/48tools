@@ -7,7 +7,10 @@ import pocket48LoginReducers from '../functionalComponents/Pocket48Login/reducer
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/bilibiliDownload';
 import bilibiliLiveReducers from '../pages/Bilibili/reducers/bilibiliLive';
 import acfunDownloadReducers from '../pages/AcFun/reducers/acfunDownload';
-import acfunLiveReducers from '../pages/AcFun/reducers/acfunLive';
+import acfunLiveReducers, {
+  ignoredPaths as acfunLiveIgnoredPaths,
+  ignoredActions as acfunLiveIgnoredActions
+} from '../pages/AcFun/reducers/acfunLive';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyinDownload';
 import douyinLiveReducers, {
   ignoredPaths as douyinLiveIgnoredPaths,
@@ -65,7 +68,7 @@ export const ignoreOptions: any = {
     'bilibiliDownload.downloadProgress',
     'acfunDownload.ffmpegDownloadWorkers',
     'acfunDownload.progress',
-    'acfunLive.liveWorkers',
+    ...acfunLiveIgnoredPaths,
     ...douyinLiveIgnoredPaths,
     'douyinDownload.downloadProgress',
     ...kuaishouLiveIgnoredPaths,
@@ -96,8 +99,7 @@ export const ignoreOptions: any = {
     'bilibiliDownload/setDeleteDownloadWorker',
     'acfunDownload/setAddDownloadWorker',
     'acfunDownload/setDeleteDownloadWorker',
-    'acfunLive/setAddLiveWorker',
-    'acfunLive/setDeleteLiveWorker',
+    ...acfunLiveIgnoredActions,
     ...douyinLiveIgnoredActions,
     ...kuaishouLiveIgnoredActions,
     'concat/setConcatWorker',

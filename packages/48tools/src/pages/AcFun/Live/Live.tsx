@@ -23,18 +23,19 @@ import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import AcFunLogin from '../../../functionalComponents/AcFunLogin/AcFunLogin';
 import {
-  IDBSaveAcFunLiveList,
-  IDBCursorAcFunLiveList,
-  IDBDeleteAcFunLiveList,
-  setAddLiveWorker,
-  setDeleteLiveWorker,
-  type AcFunLiveInitialState
+  IDBCursorLiveList,
+  IDBSaveLiveItem,
+  IDBDeleteLiveItem,
+  setAddWorkerItem,
+  setRemoveWorkerItem,
+  selectorObject
 } from '../reducers/acfunLive';
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
 import AntdConfig from '../../../components/basic/AntdConfig/AntdConfig';
 import ThemeProvider from '../../../components/basic/Theme/ThemeProvider';
+import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveRepresentation, LiveVideoPlayRes } from '../types';
 import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';
@@ -43,19 +44,13 @@ let divElement: HTMLDivElement | null = null;
 let divRoot: Root | null = null;
 
 /* redux selector */
-type RState = { acfunLive: AcFunLiveInitialState };
+type RState = { acfunLive: LiveSliceInitialState };
 
-const selector: Selector<RState, AcFunLiveInitialState> = createStructuredSelector({
-  // 配置的acfun直播间信息
-  acfunLiveList: ({ acfunLive }: RState): Array<LiveItem> => acfunLive.acfunLiveList,
-
-  // 直播下载
-  liveWorkers: ({ acfunLive }: RState): Array<WebWorkerChildItem> => acfunLive.liveWorkers
-});
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorObject });
 
 /* A站直播抓取 */
 function Live(props: {}): ReactElement {
-  const { acfunLiveList, liveWorkers }: AcFunLiveInitialState = useSelector(selector);
+  const { liveList: acfunLiveList, workerList: liveWorkers }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
@@ -84,7 +79,7 @@ function Live(props: {}): ReactElement {
           }
 
           worker.terminate();
-          dispatch(setDeleteLiveWorker(record));
+          dispatch(setRemoveWorkerItem(record.id));
         }
       }, false);
 
@@ -97,7 +92,7 @@ function Live(props: {}): ReactElement {
         ua: true
       });
 
-      dispatch(setAddLiveWorker({
+      dispatch(setAddWorkerItem({
         id: record.id,
         worker
       }));
@@ -234,7 +229,7 @@ function Live(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
-    dispatch(IDBDeleteAcFunLiveList({
+    dispatch(IDBDeleteLiveItem({
       query: record.id
     }));
   }
@@ -278,7 +273,7 @@ function Live(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(IDBCursorAcFunLiveList({
+    dispatch(IDBCursorLiveList({
       query: { indexName: dbConfig.objectStore[1].data[1] }
     }));
   }, []);
@@ -290,7 +285,7 @@ function Live(props: {}): ReactElement {
           <AcFunLogin />
           <AddLiveRoomForm dataTestId="acfun-add-live-id-btn"
             modalTitle="添加A站直播间信息"
-            IDBSaveDataFunc={ IDBSaveAcFunLiveList }
+            IDBSaveDataFunc={ IDBSaveLiveItem }
           />
         </Button.Group>
       </Header>
