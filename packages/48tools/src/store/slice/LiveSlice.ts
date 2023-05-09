@@ -81,6 +81,28 @@ export class LiveSlice<SliceName extends string> {
     this.IDBInit();
   }
 
+  // 数据库的创建
+  IDBInit(): void {
+    const {
+      setLiveListFromDB,
+      setAddLiveItemFromDB,
+      setDeleteLiveItemFromDB
+    }: CaseReducerActions<SliceReducers, SliceName> = this.slice.actions;
+
+    this.IDBCursorLiveList = IDBRedux.cursorAction({
+      objectStoreName: this.objectStoreName,
+      successAction: setLiveListFromDB
+    });
+    this.IDBSaveLiveItem = IDBRedux.putAction({
+      objectStoreName: this.objectStoreName,
+      successAction: setAddLiveItemFromDB
+    });
+    this.IDBDeleteLiveItem = IDBRedux.deleteAction({
+      objectStoreName: this.objectStoreName,
+      successAction: setDeleteLiveItemFromDB
+    });
+  }
+
   get selectorObject(): { workerList: WorkerListSelector<SliceName>; liveList: LiveListSelector<SliceName> } {
     return {
       workerList: this.workerListSelector,
@@ -116,28 +138,6 @@ export class LiveSlice<SliceName extends string> {
         state.liveList = nextLiveList;
       }
     };
-
-  // 数据库的创建
-  IDBInit(): void {
-    const {
-      setLiveListFromDB,
-      setAddLiveItemFromDB,
-      setDeleteLiveItemFromDB
-    }: CaseReducerActions<SliceReducers, SliceName> = this.slice.actions;
-
-    this.IDBCursorLiveList = IDBRedux.cursorAction({
-      objectStoreName: this.objectStoreName,
-      successAction: setLiveListFromDB
-    });
-    this.IDBSaveLiveItem = IDBRedux.putAction({
-      objectStoreName: this.objectStoreName,
-      successAction: setAddLiveItemFromDB
-    });
-    this.IDBDeleteLiveItem = IDBRedux.deleteAction({
-      objectStoreName: this.objectStoreName,
-      successAction: setDeleteLiveItemFromDB
-    });
-  }
 
   // worker list Selector
   workerListSelector: WorkerListSelector<SliceName>
