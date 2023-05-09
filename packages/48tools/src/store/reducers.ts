@@ -9,7 +9,10 @@ import bilibiliLiveReducers from '../pages/Bilibili/reducers/live';
 import acfunDownloadReducers from '../pages/AcFun/reducers/download';
 import acfunLiveReducers from '../pages/AcFun/reducers/live';
 import douyinDownloadReducers from '../pages/Toutiao/reducers/douyinDownload';
-import douyinLiveReducers from '../pages/Toutiao/reducers/douyinLive';
+import douyinLiveReducers, {
+  ignoredPaths as douyinLiveIgnoredPaths,
+  ignoredActions as douyinLiveIgnoredActions
+} from '../pages/Toutiao/reducers/douyinLive';
 import kuaishouLiveReducers from '../pages/Kuaishou/reducers/kuaishouLive';
 import KuaishouVideoDownloadReducers from '../pages/Kuaishou/reducers/kuaishouVideoDownload';
 import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
@@ -60,7 +63,7 @@ export const ignoreOptions: any = {
     'acfunDownload.ffmpegDownloadWorkers',
     'acfunDownload.progress',
     'acfunLive.liveWorkers',
-    'douyinLive.entities',
+    ...douyinLiveIgnoredPaths,
     'douyinDownload.downloadProgress',
     'kuaishouLive.entities',
     'kuaishouVideoDownload.downloadProgress',
@@ -92,8 +95,7 @@ export const ignoreOptions: any = {
     'acfunDownload/setDeleteDownloadWorker',
     'acfunLive/setAddLiveWorker',
     'acfunLive/setDeleteLiveWorker',
-    'douyinLive/setAddDownloadWorker',
-    'douyinLive/setRemoveDownloadWorker',
+    ...douyinLiveIgnoredActions,
     'kuaishouLive/setAddDownloadWorker',
     'kuaishouLive/setRemoveDownloadWorker',
     'concat/setConcatWorker',

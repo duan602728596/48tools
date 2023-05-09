@@ -17,7 +17,7 @@ export interface LiveSliceInitialState extends EntityState<WebWorkerChildItem> {
   liveList: Array<LiveItem>;
 }
 
-export type SliceReducers = {
+type SliceReducers = {
   setAddWorkerItem: CaseReducer<LiveSliceInitialState, PayloadAction<WebWorkerChildItem>>;
   setRemoveWorkerItem: CaseReducer<LiveSliceInitialState, PayloadAction<string>>;
   setLiveListFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ result: Array<LiveItem> }>>;
@@ -25,35 +25,44 @@ export type SliceReducers = {
   setDeleteLiveItemFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ query: string }>>;
 };
 
+export type SliceSelector = Pick<LiveSliceInitialState, 'liveList'> & {
+  workerList: Array<WebWorkerChildItem>;
+};
+
+type WorkerListSelector<SliceName extends string> = (this: LiveSlice<SliceName>, initialState: any) => Array<WebWorkerChildItem>;
+type LiveListSelector<SliceName extends string> = (this: LiveSlice<SliceName>, initialState: any) => Array<LiveItem>
+
 /* 创建一个通用的redux slice，支持直播的房间的添加删除在数据库中，以及worker的添加和删除 */
 export class LiveSlice<SliceName extends string> {
   public sliceName: SliceName;
   public objectStoreName: string;
-  public stateKey: string;
 
   public adapter: EntityAdapter<WebWorkerChildItem>;
   public selectors: EntitySelectors<WebWorkerChildItem, EntityState<WebWorkerChildItem>>;
   public initialState: LiveSliceInitialState;
+  public ignoredPaths: Array<string>;
+  public ignoredActions: Array<string>;
 
   public setAddWorkerItem: SliceReducers['setAddWorkerItem'];
   public setRemoveWorkerItem: SliceReducers['setRemoveWorkerItem'];
 
   public IDBCursorLiveList: CursorDispatchFunc;
-  public IDBSaveLiveList: DataDispatchFunc;
-  public IDBDeleteLiveList: QueryDispatchFunc;
+  public IDBSaveLiveItem: DataDispatchFunc;
+  public IDBDeleteLiveItem: QueryDispatchFunc;
 
   public slice: Slice<LiveSliceInitialState, SliceReducers, SliceName>;
 
-  constructor(sliceName: SliceName, objectStoreName: string, stateKey: string) {
+  constructor(sliceName: SliceName, objectStoreName: string) {
     this.sliceName = sliceName;
     this.objectStoreName = objectStoreName;
-    this.stateKey = stateKey;
 
     this.adapter = createEntityAdapter({
       selectId: (item: WebWorkerChildItem): string => item.id
     });
     this.selectors = this.adapter.getSelectors();
     this.initialState = this.adapter.getInitialState({ liveList: [] });
+    this.ignoredPaths = [`${ this.sliceName }.entities`];
+    this.ignoredActions = [`${ this.sliceName }/setAddWorkerItem`, `${ this.sliceName }/setRemoveWorkerItem`];
 
     this.setAddWorkerItem = this.adapter.addOne;
     this.setRemoveWorkerItem = this.adapter.removeOne;
@@ -72,7 +81,7 @@ export class LiveSlice<SliceName extends string> {
     this.IDBInit();
   }
 
-  get selectorObject(): { workerList: typeof this.workerListSelector; liveList: typeof this.liveListSelector } {
+  get selectorObject(): { workerList: WorkerListSelector<SliceName>; liveList: LiveListSelector<SliceName> } {
     return {
       workerList: this.workerListSelector,
       liveList: this.liveListSelector
@@ -120,21 +129,21 @@ export class LiveSlice<SliceName extends string> {
       objectStoreName: this.objectStoreName,
       successAction: setLiveListFromDB
     });
-    this.IDBSaveLiveList = IDBRedux.putAction({
+    this.IDBSaveLiveItem = IDBRedux.putAction({
       objectStoreName: this.objectStoreName,
       successAction: setAddLiveItemFromDB
     });
-    this.IDBDeleteLiveList = IDBRedux.deleteAction({
+    this.IDBDeleteLiveItem = IDBRedux.deleteAction({
       objectStoreName: this.objectStoreName,
       successAction: setDeleteLiveItemFromDB
     });
   }
 
   // worker list Selector
-  workerListSelector: (this: LiveSlice<SliceName>, initialState: any) => Array<WebWorkerChildItem>
-    = (initialState: any): Array<WebWorkerChildItem> => this.selectors.selectAll(initialState[this.stateKey]);
+  workerListSelector: WorkerListSelector<SliceName>
+    = (initialState: any): Array<WebWorkerChildItem> => this.selectors.selectAll(initialState[this.sliceName]);
 
   // live list Selector
-  liveListSelector: (this: LiveSlice<SliceName>, initialState: any) => Array<LiveItem>
-    = (initialState: any): Array<LiveItem> => initialState[this.stateKey].liveList;
+  liveListSelector: LiveListSelector<SliceName>
+    = (initialState: any): Array<LiveItem> => initialState[this.sliceName].liveList;
 }

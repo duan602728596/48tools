@@ -20,13 +20,14 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import {
-  IDBCursorDouyinLiveRoomInfo,
-  IDBSaveDouyinLiveRoomInfo,
-  IDBDeleteDouyinLiveRoomInfo,
-  setAddDownloadWorker,
-  setRemoveDownloadWorker,
-  douyinLiveWorkerListSelectors,
-  type DouyinLiveInitialState
+  IDBCursorLiveList,
+  IDBSaveLiveItem,
+  IDBDeleteLiveItem,
+  setAddWorkerItem,
+  setRemoveWorkerItem,
+  selectorObject,
+  type LiveSliceInitialState,
+  type SliceSelector
 } from '../reducers/douyinLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
@@ -37,22 +38,13 @@ import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../co
 import type { LiveEnter } from '../services/interface';
 
 /* redux selector */
-type RSelector = Pick<DouyinLiveInitialState, 'douyinLiveList'> & {
-  douyinLiveWorkerList: Array<WebWorkerChildItem>;
-};
-type RState = { douyinLive: DouyinLiveInitialState };
+type RState = { douyinLive: LiveSliceInitialState };
 
-const selector: Selector<RState, RSelector> = createStructuredSelector({
-  // 正在下载
-  douyinLiveWorkerList: ({ douyinLive }: RState): Array<WebWorkerChildItem> => douyinLiveWorkerListSelectors.selectAll(douyinLive),
-
-  // 数据库保存的数据
-  douyinLiveList: ({ douyinLive }: RState): Array<LiveItem> => douyinLive.douyinLiveList
-});
+const selector: Selector<RState, SliceSelector> = createStructuredSelector({ ...selectorObject });
 
 /* 抖音直播抓取 */
 function DouyinLive(props: {}): ReactElement {
-  const { douyinLiveWorkerList, douyinLiveList }: RSelector = useSelector(selector);
+  const { workerList: douyinLiveWorkerList, liveList: douyinLiveList }: SliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false); // 弹出层状态
   const [liveOptions, setLiveOptions]: [Array<BaseOptionType>, D<S<BaseOptionType[]>>] = useState([]); // 直播的地址
@@ -83,7 +75,7 @@ function DouyinLive(props: {}): ReactElement {
           }
 
           worker.terminate();
-          dispatch(setRemoveDownloadWorker(options.item.id));
+          dispatch(setRemoveWorkerItem(options.item.id));
         }
       }, false);
 
@@ -94,7 +86,7 @@ function DouyinLive(props: {}): ReactElement {
         ffmpeg: getFFmpeg()
       });
 
-      dispatch(setAddDownloadWorker({
+      dispatch(setAddWorkerItem({
         id: options.item.id,
         worker
       }));
@@ -116,7 +108,7 @@ function DouyinLive(props: {}): ReactElement {
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
-    dispatch(IDBDeleteDouyinLiveRoomInfo({
+    dispatch(IDBDeleteLiveItem({
       query: record.id
     }));
   }
@@ -201,7 +193,7 @@ function DouyinLive(props: {}): ReactElement {
   ];
 
   useEffect(function(): void {
-    dispatch(IDBCursorDouyinLiveRoomInfo({
+    dispatch(IDBCursorLiveList({
       query: { indexName: dbConfig.objectStore[6].data[1] }
     }));
   }, []);
@@ -209,7 +201,7 @@ function DouyinLive(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <AddLiveRoomForm modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveDouyinLiveRoomInfo } />
+        <AddLiveRoomForm modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveLiveItem } />
       </Header>
       <Table size="middle"
         columns={ columns }
