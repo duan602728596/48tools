@@ -28,7 +28,7 @@ import {
   IDBDeleteLiveItem,
   setAddWorkerItem,
   setRemoveWorkerItem,
-  selectorObject
+  selectorsObject
 } from '../reducers/acfunLive';
 import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
@@ -46,7 +46,7 @@ let divRoot: Root | null = null;
 /* redux selector */
 type RState = { acfunLive: LiveSliceInitialState };
 
-const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorObject });
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
 
 /* A站直播抓取 */
 function Live(props: {}): ReactElement {

@@ -15,7 +15,7 @@ import {
   IDBDeleteLiveItem,
   setAddWorkerItem,
   setRemoveWorkerItem,
-  selectorObject
+  selectorsObject
 } from '../reducers/kuaishouLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import getLiveInfo from './function/getLiveInfo';
@@ -28,7 +28,7 @@ import type { LiveInfo, PlayUrlItem } from '../types';
 /* redux selector */
 type RState = { kuaishouLive: LiveSliceInitialState };
 
-const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorObject });
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
 
 /* 快手直播 */
 function Live(props: {}): ReactElement {

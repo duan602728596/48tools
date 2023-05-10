@@ -83,6 +83,7 @@ export default function(info: object): Record<string, any> {
       '@indexeddb-tools/indexeddb',
       '@indexeddb-tools/indexeddb-redux',
       '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js',
+      'antd',
       'array-move',
       'classnames',
       'cookie',

@@ -25,7 +25,7 @@ import {
   IDBDeleteLiveItem,
   setAddWorkerItem,
   setRemoveWorkerItem,
-  selectorObject
+  selectorsObject
 } from '../reducers/douyinLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
@@ -39,7 +39,7 @@ import type { LiveEnter } from '../services/interface';
 /* redux selector */
 type RState = { douyinLive: LiveSliceInitialState };
 
-const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorObject });
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
 
 /* 抖音直播抓取 */
 function DouyinLive(props: {}): ReactElement {

@@ -25,12 +25,14 @@ type SliceReducers = {
   setDeleteLiveItemFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ query: string }>>;
 };
 
+type SliceSelectors<SliceName extends string> = {
+  workerList: (this: LiveSlice<SliceName>, state: LiveSliceInitialState) => Array<WebWorkerChildItem>;
+  liveList: (this: LiveSlice<SliceName>, state: LiveSliceInitialState) => Array<LiveItem>;
+};
+
 export type LiveSliceSelector = Pick<LiveSliceInitialState, 'liveList'> & {
   workerList: Array<WebWorkerChildItem>;
 };
-
-type WorkerListSelector<SliceName extends string> = (this: LiveSlice<SliceName>, initialState: any) => Array<WebWorkerChildItem>;
-type LiveListSelector<SliceName extends string> = (this: LiveSlice<SliceName>, initialState: any) => Array<LiveItem>
 
 /* 创建一个通用的redux slice，支持直播的房间的添加删除在数据库中，以及worker的添加和删除 */
 export class LiveSlice<SliceName extends string> {
@@ -50,7 +52,7 @@ export class LiveSlice<SliceName extends string> {
   public IDBSaveLiveItem: DataDispatchFunc;
   public IDBDeleteLiveItem: QueryDispatchFunc;
 
-  public slice: Slice<LiveSliceInitialState, SliceReducers, SliceName>;
+  public slice: Slice<LiveSliceInitialState, SliceReducers, SliceName, SliceName, SliceSelectors<SliceName>>;
 
   constructor(sliceName: SliceName, objectStoreName: string) {
     this.sliceName = sliceName;
@@ -76,6 +78,13 @@ export class LiveSlice<SliceName extends string> {
         setLiveListFromDB: this.setLiveListFromDB,
         setAddLiveItemFromDB: this.setAddLiveItemFromDB,
         setDeleteLiveItemFromDB: this.setDeleteLiveItemFromDB
+      },
+      selectors: {
+        // worker list Selector
+        workerList: (state: LiveSliceInitialState): Array<WebWorkerChildItem> => this.selectors.selectAll(state),
+
+        // live list Selector
+        liveList: (state: LiveSliceInitialState): Array<LiveItem> => state.liveList
       }
     });
     this.IDBInit();
@@ -101,13 +110,6 @@ export class LiveSlice<SliceName extends string> {
       objectStoreName: this.objectStoreName,
       successAction: setDeleteLiveItemFromDB
     });
-  }
-
-  get selectorObject(): { workerList: WorkerListSelector<SliceName>; liveList: LiveListSelector<SliceName> } {
-    return {
-      workerList: this.workerListSelector,
-      liveList: this.liveListSelector
-    };
   }
 
   // 从数据库内查数据
@@ -138,12 +140,4 @@ export class LiveSlice<SliceName extends string> {
         state.liveList = nextLiveList;
       }
     };
-
-  // worker list Selector
-  workerListSelector: WorkerListSelector<SliceName>
-    = (initialState: any): Array<WebWorkerChildItem> => this.selectors.selectAll(initialState[this.sliceName]);
-
-  // live list Selector
-  liveListSelector: LiveListSelector<SliceName>
-    = (initialState: any): Array<LiveItem> => initialState[this.sliceName].liveList;
 }

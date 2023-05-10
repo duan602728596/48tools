@@ -9,9 +9,9 @@ export const {
     actions: {
       setAddWorkerItem,
       setRemoveWorkerItem
-    }
+    },
+    selectors: selectorsObject
   },
-  selectorObject,
   IDBCursorLiveList,
   IDBSaveLiveItem,
   IDBDeleteLiveItem,
