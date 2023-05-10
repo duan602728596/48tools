@@ -29,6 +29,7 @@ class QChatSocket {
   public pocket48Account: string;
   public pocket48Token: string;
   public pocket48ServerId: string;
+  public nim?: NIMSDK;
   public qChat?: QChatSDK;
   public queues: Array<Queue> = [];
   public serverInfo: ServerInfo;
@@ -47,18 +48,19 @@ class QChatSocket {
   // 初始化
   async init(): Promise<void> {
     // 获取地址
-    const nim: NIMSDK = new NIMSDK({
+    this.nim = new NIMSDK({
       appkey: atob(appKey),
       account: this.pocket48Account,
       token: this.pocket48Token
     });
 
-    await nim.connect();
+    await this.nim.connect();
+
     this.qChat = new QChatSDK({
       appkey: atob(appKey),
       account: this.pocket48Account,
       token: this.pocket48Token,
-      linkAddresses: await nim.plugin.getQChatAddress({ ipType: 2 })
+      linkAddresses: await this.nim.plugin.getQChatAddress({ ipType: 2 })
     });
 
     this.qChat.on('logined', this.handleLogined);
@@ -120,8 +122,11 @@ class QChatSocket {
   // 断开连接
   async disconnect(): Promise<void> {
     if (this.queues.length === 0) {
-      await this.qChat!.logout();
+      await this.qChat?.logout?.();
+      await this.qChat?.destroy?.();
+      await this.nim?.destroy?.();
       this.qChat = undefined;
+      this.nim = undefined;
     }
   }
 }
