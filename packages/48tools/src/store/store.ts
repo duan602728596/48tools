@@ -8,7 +8,7 @@ import {
   type SerializableStateInvariantMiddlewareOptions,
   type Middleware
 } from '@reduxjs/toolkit';
-import type { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import type { GetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
 import { reducersMapObject, ignoreOptions, apiMiddlewares } from './reducers';
 
 interface ThunkOptions<E = any> {
@@ -31,7 +31,7 @@ function createStore(initialState: any = {}): void {
   store = configureStore({
     reducer,
     preloadedState: initialState,
-    middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): ReadonlyArray<Middleware> {
+    middleware(getDefaultMiddleware: GetDefaultMiddleware): ReadonlyArray<Middleware> {
       return getDefaultMiddleware<GetDefaultMiddlewareOptions>({
         immutableCheck: ignoreOptions,
         serializableCheck: ignoreOptions
