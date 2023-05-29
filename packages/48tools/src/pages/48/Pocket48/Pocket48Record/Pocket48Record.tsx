@@ -507,15 +507,16 @@ function Pocket48Record(props: {}): ReactElement {
                   <Form.Item name="groupId" noStyle={ true }>
                     <Select className="w-[130px]">
                       <Select.Option value="all">全部</Select.Option>
-                      <Select.Option value={ 19 }>明星殿堂</Select.Option>
-                      <Select.Option value={ 17 }>THE9</Select.Option>
-                      <Select.Option value={ 18 }>硬糖少女303</Select.Option>
-                      <Select.Option value={ 20 }>丝芭影视</Select.Option>
                       <Select.Option value={ 10 }>SNH48</Select.Option>
                       <Select.Option value={ 11 }>BEJ48</Select.Option>
                       <Select.Option value={ 12 }>GNZ48</Select.Option>
                       <Select.Option value={ 14 }>CKG48</Select.Option>
+                      <Select.Option value={ 21 }>CGT48</Select.Option>
                       <Select.Option value={ 15 }>IDFT</Select.Option>
+                      <Select.Option value={ 19 }>明星殿堂</Select.Option>
+                      <Select.Option value={ 17 }>THE9</Select.Option>
+                      <Select.Option value={ 18 }>硬糖少女303</Select.Option>
+                      <Select.Option value={ 20 }>丝芭影视</Select.Option>
                       <Select.Option value={ 16 }>海外练习生</Select.Option>
                     </Select>
                   </Form.Item>

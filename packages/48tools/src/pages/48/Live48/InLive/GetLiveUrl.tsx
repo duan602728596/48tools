@@ -165,6 +165,7 @@ function GetLiveUrl(props: {}): ReactElement {
               <Select.Option value="bej48">BEJ48</Select.Option>
               <Select.Option value="gnz48">GNZ48</Select.Option>
               <Select.Option value="ckg48">CKG48</Select.Option>
+              <Select.Option value="cgt48">CGT48</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item name="live" noStyle={ true }>

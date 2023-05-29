@@ -33,7 +33,7 @@ export function callback(): void {
     await testIdClick(app, '48-in-video-link');
 
     // 选择团队
-    await selectItemClick(app, 'bilibili-download-live-type', liveType);
+    await selectItemClick(app, '48-in-video-group-type', liveType);
 
     // 加载数据
     const loadDataBtn: Locator = await app.win.locator('.ant-space-item button');

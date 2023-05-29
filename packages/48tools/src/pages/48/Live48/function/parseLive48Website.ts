@@ -2,7 +2,7 @@ import { requestFetchHtml, requestLiveOne } from '../../services/live48';
 import type { InVideoQuery, InVideoItem } from '../../types';
 import type { LiveOne } from '../../services/interface';
 
-export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48'];
+export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48', 'cgt48'];
 
 /**
  * 解析网站直播地址

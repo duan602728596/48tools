@@ -40,6 +40,7 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
  *   BEJ48：11
  *   GNZ48：12
  *   CKG48：14
+ *   CGT48：21
  *   IDFT：15
  *   海外练习生：16
  * @param { string | number } next: 录播id分页
