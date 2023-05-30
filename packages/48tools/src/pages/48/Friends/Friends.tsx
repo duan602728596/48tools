@@ -45,7 +45,7 @@ function Friends(props: {}): ReactElement {
   const location: Location = useLocation();
   const fromPathname: string = location?.state?.from ?? '/';
   const [addLoading, setAddLoading]: [boolean, D<S<boolean>>] = useState(false);
-  const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined) as any;
+  const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
   const roomId: RoomIdFormat = useMemo(function(): RoomIdFormat {
     return groupToMap(reqRoomId.data);
   }, [reqRoomId.data]);
@@ -82,7 +82,7 @@ function Friends(props: {}): ReactElement {
   return (
     <Fragment>
       <Header to={ fromPathname }>
-        <Button onClick={ (event: MouseEvent): void => reqRoomId.refetch() }>刷新</Button>
+        <Button onClick={ (event: MouseEvent): unknown => reqRoomId.refetch() }>刷新</Button>
       </Header>
       {
         loading && (

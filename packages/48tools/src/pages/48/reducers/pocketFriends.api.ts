@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/typedef */
-import { createApi } from '@reduxjs/toolkit/query/react';
-import type { ApiUseQueryCore } from '@48tools-types/redux-toolkit';
+import { createApi, type Api, type QueryDefinition, type ApiModules } from '@reduxjs/toolkit/query/react';
+import type { EndpointBuilder } from '@reduxjs/toolkit/src/query/endpointDefinitions';
+import type { UseQueryHookResult } from '@reduxjs/toolkit/src/query/react/buildHooks';
 import { requestRoomId } from '../services/jsdelivrCDN';
 import type { RoomIdObj, RoomItem } from '../services/interface';
 
@@ -9,14 +9,28 @@ const TAG_TYPES: Record<string, string> = {
   ROOMID: `${ apiReducerPathName }/roomId`
 };
 
-const pocketFriendsApi = createApi({
+type BaseQueryReturn = { data: undefined };
+type BaseQuery = () => BaseQueryReturn;
+type EndpointDefinitions = {
+  reqRoomId: QueryDefinition<undefined, BaseQuery, string, Array<RoomItem>, typeof apiReducerPathName>;
+};
+type PocketFriendsApi = Api<
+  BaseQuery,
+  EndpointDefinitions,
+  typeof apiReducerPathName,
+  string,
+  keyof ApiModules<BaseQuery, EndpointDefinitions, typeof apiReducerPathName, string>
+>;
+
+// @ts-ignore
+const pocketFriendsApi: PocketFriendsApi = createApi({
   reducerPath: apiReducerPathName,
-  baseQuery() {
+  baseQuery(): BaseQueryReturn {
     return { data: undefined };
   },
   keepUnusedDataFor: 10 * 60_000,
   tagTypes: Object.values(TAG_TYPES),
-  endpoints(builder) {
+  endpoints(builder: EndpointBuilder<BaseQuery, string, typeof apiReducerPathName>): EndpointDefinitions {
     return {
       reqRoomId: builder.query({
         async queryFn(): Promise<{ data: Array<RoomItem> }> {
@@ -30,7 +44,7 @@ const pocketFriendsApi = createApi({
   }
 });
 
-export type ReqRoomId = ApiUseQueryCore<Array<RoomItem>>;
-export const { useReqRoomIdQuery } = pocketFriendsApi;
+export type ReqRoomId = UseQueryHookResult<EndpointDefinitions['reqRoomId']>;
+export const { useReqRoomIdQuery }: PocketFriendsApi = pocketFriendsApi;
 
 export default pocketFriendsApi;
