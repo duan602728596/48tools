@@ -5,10 +5,11 @@ import {
   type Reducer,
   type Store,
   type ImmutableStateInvariantMiddlewareOptions,
-  type SerializableStateInvariantMiddlewareOptions,
-  type Middleware
+  type SerializableStateInvariantMiddlewareOptions
 } from '@reduxjs/toolkit';
 import type { GetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import type { Middlewares } from '@reduxjs/toolkit/src/configureStore';
+import type { Tuple } from '@reduxjs/toolkit/src/utils';
 import { reducersMapObject, ignoreOptions, apiMiddlewares } from './reducers';
 
 interface ThunkOptions<E = any> {
@@ -31,7 +32,7 @@ function createStore(initialState: any = {}): void {
   store = configureStore({
     reducer,
     preloadedState: initialState,
-    middleware(getDefaultMiddleware: GetDefaultMiddleware): ReadonlyArray<Middleware> {
+    middleware(getDefaultMiddleware: GetDefaultMiddleware): Tuple<Middlewares<any>> {
       return getDefaultMiddleware<GetDefaultMiddlewareOptions>({
         immutableCheck: ignoreOptions,
         serializableCheck: ignoreOptions

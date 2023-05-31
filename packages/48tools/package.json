@@ -17,7 +17,7 @@
     "@bbkkbkk/q": "^1.1.1",
     "@indexeddb-tools/indexeddb": "^1.0.0",
     "@indexeddb-tools/indexeddb-redux": "^1.0.0",
-    "@reduxjs/toolkit": "^2.0.0-alpha.5",
+    "@reduxjs/toolkit": "^2.0.0-beta.0",
     "@yxim/nim-web-sdk": "^8.9.106",
     "antd": "^5.1.7",
     "array-move": "^4.0.0",
