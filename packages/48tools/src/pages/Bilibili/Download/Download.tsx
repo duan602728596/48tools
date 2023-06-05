@@ -1,8 +1,19 @@
 import * as path from 'node:path';
 import type { ParsedPath } from 'node:path';
 import * as url from 'node:url';
+import * as fs from 'node:fs';
+import * as fsP from 'node:fs/promises';
 import type { SaveDialogReturnValue } from 'electron';
-import { Fragment, useMemo, type ReactElement, type ReactNode, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  useMemo,
+  type ReactElement,
+  type ReactNode,
+  type MouseEvent,
+  type Dispatch as D,
+  type SetStateAction as S
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -10,6 +21,7 @@ import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
+import * as dayjs from 'dayjs';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
@@ -34,6 +46,7 @@ import { requestDownloadFileByStream } from '../../48/services/pocket48';
 import { getFFmpeg } from '../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
+import { fileTimeFormat } from '../../../utils/utils';
 import type { DownloadItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 
@@ -59,6 +72,8 @@ function Download(props: {}): ReactElement {
   const { downloadList, downloadProgress, downloadWorkerList }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+  const [downloadSelectedRowKeys, setDownloadSelectedRowKeys]: [Array<string>, D<S<Array<string>>>] = useState([]); // 选中状态
+  const [downloadSelectedLoading, setDownloadSelectedLoading]: [boolean, D<S<boolean>>] = useState(false); // 下载loading
 
   // 下载封面
   async function handleDownloadPicClick(item: DownloadItem, event: MouseEvent): Promise<void> {
@@ -91,6 +106,126 @@ function Download(props: {}): ReactElement {
     }
   }
 
+  // dash worker
+  function createDashWorker(item: DownloadItem, filePath: string): void {
+    const proxyPort: number = getProxyServerPort().port;
+    const worker: Worker = getFFmpegDownloadWorker();
+    let isStop: boolean = false;
+
+    worker.addEventListener('message', function(messageEvent: MessageEvent<FFmpegMessageEventData>): void {
+      if (messageEvent.data.type === 'progress') {
+        const messageEventData: ProgressMessageEventData = messageEvent.data;
+
+        !isStop && requestIdleCallback((): void => {
+          !isStop && dispatch(setDownloadProgress({
+            type: 'progress',
+            qid: item.qid,
+            data: messageEventData.data
+          }));
+        });
+      } else if (messageEvent.data.type === 'error' || messageEvent.data.type === 'close') {
+        isStop = true;
+
+        if (messageEvent.data.type === 'error') {
+          messageApi.error('bilibili视频下载失败！');
+        }
+
+        messageApi.success('下载完成！');
+        worker.terminate();
+        dispatch(setDeleteDownloadWorker(item));
+      }
+    });
+
+    worker.postMessage({
+      type: 'start',
+      ffmpeg: getFFmpeg(),
+      playStreamPath: [
+        `http://localhost:${ proxyPort }/proxy/bilibili-video?url=${ encodeURIComponent(item.dash!.video) }`,
+        `http://localhost:${ proxyPort }/proxy/bilibili-video?url=${ encodeURIComponent(item.dash!.audio) }`
+      ],
+      filePath,
+      qid: item.qid,
+      concat: true
+    });
+
+    dispatch(setAddDownloadWorker({
+      id: item.qid,
+      worker
+    }));
+  }
+
+  // create worker
+  function createWorker(item: DownloadItem, filePath: string): void {
+    const worker: Worker = getDownloadWorker();
+
+    worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
+      const { type }: MessageEventData = messageEvent.data;
+
+      requestIdleCallback((): void => {
+        dispatch(setDownloadProgress(messageEvent.data));
+
+        if (type === 'success') {
+          messageApi.success('下载完成！');
+          worker.terminate();
+        }
+      });
+    });
+
+    worker.postMessage({
+      type: 'start',
+      filePath,
+      durl: item.durl,
+      qid: item.qid
+    });
+  }
+
+  // 下载选中
+  async function handleDownloadSelectedClick(event: MouseEvent): Promise<void> {
+    const selectedDownloadList: Array<DownloadItem> = downloadList.filter(
+      (o: DownloadItem): boolean => downloadSelectedRowKeys.includes(o.qid));
+
+    try {
+      if (selectedDownloadList.length) {
+        const defaultDir: string = `[bilibili]下载合集_${ dayjs().format(fileTimeFormat) }`;
+        const result: SaveDialogReturnValue = await showSaveDialog({
+          properties: ['createDirectory'],
+          defaultPath: defaultDir
+        });
+
+        if (result.canceled || !result.filePath) return;
+
+        setDownloadSelectedLoading(true);
+
+        if (!fs.existsSync(result.filePath)) {
+          await fsP.mkdir(result.filePath);
+        }
+
+        for (let i: number = 0, j: number = selectedDownloadList.length; i < j; i++) {
+          const item: DownloadItem = selectedDownloadList[i];
+
+          if (item.dash) {
+            createDashWorker(item, path.join(result.filePath, `${ item.type }${ item.id }_${ item.page }${
+              item.title ? `_${ filenamify(item.title) }` : ''
+            }_DASH_${ Math.random() }.mp4`));
+          } else {
+            const urlResult: url.URL = new url.URL(item.durl);
+            const parseResult: ParsedPath = path.parse(urlResult.pathname);
+
+            createWorker(item, path.join(result.filePath, `${ item.type }${ item.id }_${ item.page }${
+              item.title ? `_${ filenamify(item.title) }` : ''
+            }${ parseResult.ext }`));
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      messageApi.error('下载失败！');
+    }
+
+    setDownloadSelectedLoading(false);
+    setDownloadSelectedRowKeys([]);
+  }
+
   // dash下载
   async function handleDashDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
@@ -102,50 +237,7 @@ function Download(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const proxyPort: number = getProxyServerPort().port;
-      const worker: Worker = getFFmpegDownloadWorker();
-      let isStop: boolean = false;
-
-      worker.addEventListener('message', function(messageEvent: MessageEvent<FFmpegMessageEventData>): void {
-        if (messageEvent.data.type === 'progress') {
-          const messageEventData: ProgressMessageEventData = messageEvent.data;
-
-          !isStop && requestIdleCallback((): void => {
-            !isStop && dispatch(setDownloadProgress({
-              type: 'progress',
-              qid: item.qid,
-              data: messageEventData.data
-            }));
-          });
-        } else if (messageEvent.data.type === 'error' || messageEvent.data.type === 'close') {
-          isStop = true;
-
-          if (messageEvent.data.type === 'error') {
-            messageApi.error('bilibili视频下载失败！');
-          }
-
-          messageApi.success('下载完成！');
-          worker.terminate();
-          dispatch(setDeleteDownloadWorker(item));
-        }
-      });
-
-      worker.postMessage({
-        type: 'start',
-        ffmpeg: getFFmpeg(),
-        playStreamPath: [
-          `http://localhost:${ proxyPort }/proxy/bilibili-video?url=${ encodeURIComponent(item.dash!.video) }`,
-          `http://localhost:${ proxyPort }/proxy/bilibili-video?url=${ encodeURIComponent(item.dash!.audio) }`
-        ],
-        filePath: result.filePath,
-        qid: item.qid,
-        concat: true
-      });
-
-      dispatch(setAddDownloadWorker({
-        id: item.qid,
-        worker
-      }));
+      createDashWorker(item, result.filePath);
     } catch (err) {
       console.error(err);
     }
@@ -164,27 +256,7 @@ function Download(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const worker: Worker = getDownloadWorker();
-
-      worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
-        const { type }: MessageEventData = messageEvent.data;
-
-        requestIdleCallback((): void => {
-          dispatch(setDownloadProgress(messageEvent.data));
-
-          if (type === 'success') {
-            messageApi.success('下载完成！');
-            worker.terminate();
-          }
-        });
-      });
-
-      worker.postMessage({
-        type: 'start',
-        filePath: result.filePath,
-        durl: item.durl,
-        qid: item.qid
-      });
+      createWorker(item, result.filePath);
     } catch (err) {
       console.error(err);
       messageApi.error('视频下载失败！');
@@ -218,7 +290,20 @@ function Download(props: {}): ReactElement {
       }
     },
     {
-      title: '操作',
+      title: (
+        <Fragment>
+          操作
+          <Button className="ml-[6px]"
+            type="primary"
+            ghost={ true }
+            disabled={ downloadSelectedRowKeys.length <= 0 }
+            loading={ downloadSelectedLoading }
+            onClick={ handleDownloadSelectedClick }
+          >
+            下载选中
+          </Button>
+        </Fragment>
+      ),
       key: 'action',
       width: 220,
       render: (value: undefined, record: DownloadItem, index: number): ReactElement => {
@@ -279,8 +364,18 @@ function Download(props: {}): ReactElement {
         dataSource={ downloadList }
         bordered={ true }
         rowKey="qid"
+        rowSelection={{
+          type: 'checkbox',
+          selectedRowKeys: downloadSelectedRowKeys,
+          onChange(selectedRowKeys: Array<string>): void {
+            setDownloadSelectedRowKeys(selectedRowKeys);
+          }
+        }}
         pagination={{
-          showQuickJumper: true
+          showQuickJumper: true,
+          onChange(): void {
+            setDownloadSelectedRowKeys([]);
+          }
         }}
       />
       { messageContextHolder }

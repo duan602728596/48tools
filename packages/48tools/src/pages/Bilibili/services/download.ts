@@ -129,8 +129,6 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
   const apiUrl: string = `https://api.bilibili.com/x/space/wbi/arc/search?${ ps }`;
   const res: Response = await fetch(apiUrl);
 
-  console.log(res);
-
   return res.json();
 }
 
