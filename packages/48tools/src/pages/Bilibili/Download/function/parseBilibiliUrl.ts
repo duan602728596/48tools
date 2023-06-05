@@ -209,6 +209,8 @@ export async function parseBangumiVideo(type: string, id: string, proxy: string 
   const html: string = await requestBilibiliHtml(videoUrl, proxy);
   let parseHtmlResult: ParseHtmlResult = parseHtmlNext(html, type, id);
 
+  console.log(parseHtmlResult);
+
   if (!parseHtmlResult.initialState) {
     parseHtmlResult = parseHtml(html);
   }
