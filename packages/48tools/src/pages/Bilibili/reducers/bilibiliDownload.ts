@@ -30,6 +30,7 @@ export interface BilibiliDownloadInitialState extends BilibiliDownloadEntityStat
 
 type SliceReducers = {
   setAddDownloadList: CaseReducer<BilibiliDownloadInitialState, PayloadAction<DownloadItem>>;
+  setAddMoreDownloadLists: CaseReducer<BilibiliDownloadInitialState, PayloadAction<Array<DownloadItem>>>;
   setDeleteDownloadList: CaseReducer<BilibiliDownloadInitialState, PayloadAction<string>>;
   setDownloadProgress: CaseReducer<BilibiliDownloadInitialState, PayloadAction<MessageEventData>>;
   setAddDownloadWorker: CaseReducer<BilibiliDownloadInitialState, PayloadAction<WebWorkerChildItem>>;
@@ -45,6 +46,7 @@ const { actions, reducer }: Slice<BilibiliDownloadInitialState, SliceReducers, t
   }),
   reducers: {
     setAddDownloadList: bilibiliDownloadListAdapter.addOne,       // 添加下载
+    setAddMoreDownloadLists: bilibiliDownloadListAdapter.addMany, // 添加多个下载
     setDeleteDownloadList: bilibiliDownloadListAdapter.removeOne, // 删除下载
 
     // 设置下载进度
@@ -87,6 +89,7 @@ const { actions, reducer }: Slice<BilibiliDownloadInitialState, SliceReducers, t
 
 export const {
   setAddDownloadList,
+  setAddMoreDownloadLists,
   setDeleteDownloadList,
   setDownloadProgress,
   setAddDownloadWorker,

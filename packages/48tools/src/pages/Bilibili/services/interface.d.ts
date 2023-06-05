@@ -1,3 +1,13 @@
+/* ========== 加密 ========== */
+export interface NavInterface {
+  data: {
+    wbi_img: {
+      img_url: string;
+      sub_url: string;
+    };
+  };
+}
+
 /* ========== Download ========== */
 export interface DashVideoItem {
   backupUrl: Array<string>;

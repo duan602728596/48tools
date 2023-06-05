@@ -9,6 +9,7 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
@@ -94,7 +95,9 @@ function Download(props: {}): ReactElement {
   async function handleDashDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }_DASH.mp4`
+        defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${
+          item.title ? `_${ filenamify(item.title) }` : ''
+        }_DASH.mp4`
       });
 
       if (result.canceled || !result.filePath) return;
@@ -154,7 +157,9 @@ function Download(props: {}): ReactElement {
       const urlResult: url.URL = new url.URL(item.durl);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${ parseResult.ext }`
+        defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${
+          item.title ? `_${ filenamify(item.title) }` : ''
+        }${ parseResult.ext }`
       });
 
       if (result.canceled || !result.filePath) return;

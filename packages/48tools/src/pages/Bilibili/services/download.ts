@@ -1,7 +1,8 @@
 import got, { type Response as GotResponse, Agents as GotAgents } from 'got';
 import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
 import { getBilibiliCookie, pcUserAgent } from '../../../utils/utils';
-import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData } from './interface';
+import { sign } from '../Download/function/wbiSign';
+import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData, NavInterface } from './interface';
 
 function gotAgent(proxy: string | undefined): GotAgents | undefined {
   if (!proxy) return;
@@ -119,14 +120,16 @@ export async function requestAudioInfo(auid: string, proxy: string | undefined):
  * @param { number } page: 分页
  */
 export async function requestSpaceArcSearch(mid: string, page: number): Promise<SpaceArcSearch> {
-  const searchParams: URLSearchParams = new URLSearchParams({
+  const ps: string = await sign({
     mid,
-    ps: '30',
     pn: String(page),
+    ps: '30',
     order: 'pubdate'
-  });
-  const apiUrl: string = `https://api.bilibili.com/x/space/arc/search?${ searchParams.toString() }`;
+  }, undefined);
+  const apiUrl: string = `https://api.bilibili.com/x/space/wbi/arc/search?${ ps }`;
   const res: Response = await fetch(apiUrl);
+
+  console.log(res);
 
   return res.json();
 }
@@ -140,6 +143,18 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
 export async function requestWebInterfaceView(id: string, type: string, proxy: string | undefined): Promise<WebInterfaceViewData> {
   const apiUrl: string = `https://api.bilibili.com/x/web-interface/view?${ type === 'av' ? 'a' : 'bv' }id=${ id }`;
   const res: GotResponse<WebInterfaceViewData> = await got.get(apiUrl, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    },
+    agent: gotAgent(proxy)
+  });
+
+  return res.body;
+}
+
+export async function requestInterfaceNav(proxy: string | undefined): Promise<NavInterface> {
+  const res: GotResponse<NavInterface> = await got.get('https://api.bilibili.com/x/web-interface/nav', {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()

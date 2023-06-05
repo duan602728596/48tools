@@ -111,14 +111,17 @@ async function parseVideoUrlCore(
   page: number = 1,
   proxy: string | undefined,
   isDash: boolean
-): Promise<{ videoInfo: VideoInfo; pic: string } | undefined> {
+): Promise<{ videoInfo: VideoInfo; pic: string; title: string } | undefined> {
   const res: WebInterfaceViewData = await requestWebInterfaceView(id, type, proxy);
 
   if (res?.data?.pages) {
     const { cid }: WebInterfaceViewDataPageItem = res.data.pages[page - 1]; // cid
-    const videoInfoRes: VideoInfo = await requestVideoInfo({ type, id, cid, proxy, isDash });
+    const [videoInfoRes, viewRes]: [VideoInfo, WebInterfaceViewData] = await Promise.all([
+      requestVideoInfo({ type, id, cid, proxy, isDash }),
+      requestWebInterfaceView(id, type, proxy)
+    ]);
 
-    return { videoInfo: videoInfoRes, pic: res.data.pic };
+    return { videoInfo: videoInfoRes, pic: res.data.pic, title: viewRes.data.pages[page - 1].part };
   }
 }
 
@@ -134,15 +137,16 @@ export async function parseVideoUrlV2(
   id: string,
   page: number = 1,
   proxy: string | undefined
-): Promise<{ flvUrl: string; pic: string } | undefined> {
-  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(
+): Promise<{ flvUrl: string; pic: string; title: string } | undefined> {
+  const videoResult: { videoInfo: VideoInfo; pic: string; title: string } | undefined = await parseVideoUrlCore(
     type, id, page, proxy, false);
-  let result: { flvUrl: string; pic: string } | undefined = undefined;
+  let result: { flvUrl: string; pic: string; title: string } | undefined = undefined;
 
   if (videoResult?.videoInfo?.data?.durl?.length) {
     result = {
       flvUrl: videoResult.videoInfo.data.durl[0].url,
-      pic: videoResult.pic
+      pic: videoResult.pic,
+      title: videoResult.title
     };
   }
 
@@ -161,15 +165,16 @@ export async function parseVideoUrlDASH(
   id: string,
   page: number = 1,
   proxy: string | undefined
-): Promise<{ videoData: VideoData; pic: string } | undefined> {
-  const videoResult: { videoInfo: VideoInfo; pic: string } | undefined = await parseVideoUrlCore(
+): Promise<{ videoData: VideoData; pic: string; title: string } | undefined> {
+  const videoResult: { videoInfo: VideoInfo; pic: string; title: string } | undefined = await parseVideoUrlCore(
     type, id, page, proxy, true);
-  let result: { videoData: VideoData; pic: string } | undefined = undefined;
+  let result: { videoData: VideoData; pic: string; title: string } | undefined = undefined;
 
   if (videoResult?.videoInfo?.data?.dash) {
     result = {
       videoData: videoResult.videoInfo.data,
-      pic: videoResult.pic
+      pic: videoResult.pic,
+      title: videoResult.title
     };
   }
 

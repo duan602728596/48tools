@@ -12,6 +12,7 @@ export interface DownloadItem {
     video: string;
     audio: string;
   };
+  title?: string;
 }
 
 // b站页面上的视频信息

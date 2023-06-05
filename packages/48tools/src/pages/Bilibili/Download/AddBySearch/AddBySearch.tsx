@@ -18,8 +18,9 @@ import * as classNames from 'classnames';
 import style from './addBySearch.sass';
 import { requestSpaceArcSearch } from '../../services/download';
 import { parseVideoList, parseVideoUrlV2 } from '../function/parseBilibiliUrl';
-import { setAddDownloadList } from '../../reducers/bilibiliDownload';
+import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
 import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
+import type { DownloadItem as BilibiliDownloadItem } from '../../types';
 
 interface PageQuery {
   id: string | undefined;
@@ -47,7 +48,42 @@ function AddBySearch(props: {}): ReactElement {
   const [bvVideoList, setBvVideoList]: [DownloadItem[], D<S<DownloadItem[]>>] = useState([]); // 单个视频的part
   const [total, setTotal]: [number, D<S<number>>] = useState(0);                              // 视频总数
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);                    // 加载动画
+  const [downloadAllLoading, setDownloadAllLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [secondLoading, setSecondLoading]: [boolean, D<S<boolean>>] = useState(false);        // 单个视频搜索的part
+
+  // 添加多个下载
+  async function handleAddMoreDownloadQueuesClick(event: MouseEvent): Promise<void> {
+    const addItems: Array<BilibiliDownloadItem> = [];
+
+    setDownloadAllLoading(true);
+
+    for (const item of bvVideoList) {
+      try {
+        const bvId: string = item.bvid.replace(/^bv/i, '');
+        const result: { flvUrl: string; pic: string } | void = await parseVideoUrlV2('bv', bvId, item.index, undefined);
+
+        if (result) {
+          addItems.push({
+            qid: randomUUID(),
+            durl: result.flvUrl,
+            pic: result.pic,
+            type: 'bv',
+            id: bvId,
+            page: item.index,
+            title: item.part
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    setDownloadAllLoading(false);
+
+    if (addItems.length > 0) {
+      dispatch(setAddMoreDownloadLists(addItems));
+    }
+  }
 
   // 添加到下载列表
   async function handleAddDownloadQueueClick(o: DownloadItem, event: MouseEvent): Promise<void> {
@@ -62,7 +98,8 @@ function AddBySearch(props: {}): ReactElement {
           pic: result.pic,
           type: 'bv',
           id: bvId,
-          page: o.index
+          page: o.index,
+          title: o.part
         }));
         messageApi.success('添加到下载队列！');
       } else {
@@ -82,8 +119,12 @@ function AddBySearch(props: {}): ReactElement {
     try {
       const res: SpaceArcSearch = await requestSpaceArcSearch(pageQuery.id, pageQuery.current);
 
-      setDataSource(res.data.list.vlist ?? res.data.list.vList);
-      setTotal(res.data.page.count);
+      if (res.code === 0) {
+        setDataSource(res.data.list.vlist ?? res.data.list.vList);
+        setTotal(res.data.page.count);
+      } else {
+        messageApi.error(res.message);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -224,7 +265,22 @@ function AddBySearch(props: {}): ReactElement {
                   <div className="text-center">
                     <Spin size="large" tip="解析中..." />
                   </div>
-                ) : videoListDownloadRender()
+                ) : (
+                  <Fragment>
+                    {
+                      bvVideoList.length > 1 && (
+                        <Button className={ classNames('block mb-[6px] text-left', style.downloadBtn) }
+                          block={ true }
+                          loading={ downloadAllLoading }
+                          onClick={ handleAddMoreDownloadQueuesClick }
+                        >
+                          下载全部
+                        </Button>
+                      )
+                    }
+                    { videoListDownloadRender() }
+                  </Fragment>
+                )
               }
             </div>
           </div>

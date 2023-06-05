@@ -46,6 +46,7 @@ interface dashInfo {
   dash: DashVideoInfo;
   supportFormats: Array<DashSupportFormats>;
   pic: string;
+  title: string;
 }
 
 /* 添加下载信息 */
@@ -60,6 +61,7 @@ function AddForm(props: {}): ReactElement {
   // 选择DASH video并准备下载
   function handleDownloadDashVideoClick(item: DashSupportFormats, event: MouseEvent): void {
     if (!dash) return;
+
     const videoItem: DashVideoItem = dash.dash.video.find((o: DashVideoItem): boolean => o.id === item.quality)
       ?? dash.dash.video[0];
 
@@ -80,7 +82,8 @@ function AddForm(props: {}): ReactElement {
       type: formValue.type,
       id: formValue.id,
       page: formValue.page ?? 1,
-      dash: { video: videoUrl, audio: audioUrl }
+      dash: { video: videoUrl, audio: audioUrl },
+      title: dash.title
     }));
     setVisible(false);
   }
@@ -106,14 +109,15 @@ function AddForm(props: {}): ReactElement {
     try {
       const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
         ? formValue.proxy : undefined;
-      const res: { videoData: VideoData; pic: string } | undefined = await parseVideoUrlDASH(
+      const res: { videoData: VideoData; pic: string; title: string } | undefined = await parseVideoUrlDASH(
         formValue.type, formValue.id, formValue.page, proxy);
 
       if (res && res?.videoData?.dash) {
         setDash({
           dash: res.videoData.dash,
           supportFormats: res.videoData.support_formats,
-          pic: res.pic
+          pic: res.pic,
+          title: res.title
         });
       } else {
         messageApi.warning('没有获取到媒体地址！');
@@ -141,7 +145,7 @@ function AddForm(props: {}): ReactElement {
     try {
       const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
         ? formValue.proxy : undefined;
-      let result: string | { flvUrl: string; pic: string } | void;
+      let result: string | { flvUrl: string; pic: string; title?: string } | void;
 
       if (formValue.type === 'au') {
         // 下载音频
@@ -161,7 +165,8 @@ function AddForm(props: {}): ReactElement {
           pic: typeof result === 'object' ? result.pic : undefined,
           type: formValue.type,
           id: formValue.id,
-          page: formValue.page ?? 1
+          page: formValue.page ?? 1,
+          title: typeof result === 'object' ? result.title : undefined
         }));
         setVisible(false);
       } else {
