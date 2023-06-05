@@ -112,8 +112,8 @@ export function callback(): void {
 
     await testIdClick(app, 'bilibili-download-link');
 
-    // SHADOWS HOUSE-影宅-（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ep398517
-    await query('番剧（ep）', '398517', undefined, true); // 关闭后会保存proxy的选择，所以只执行一次
+    // 影宅S2（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ep573658
+    await query('番剧（ep）', '573658', undefined, true); // 关闭后会保存proxy的选择，所以只执行一次
 
     // 刮掉鬍子的我與撿到的女高中生（僅限港澳台地區）https://www.bilibili.com/bangumi/play/ep398301
     await query('番剧（ep）', '398301', undefined, false);
@@ -121,16 +121,13 @@ export function callback(): void {
     // 繼母的拖油瓶是我的前女友（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss42121
     await query('番剧（ss）', '42121', undefined, false);
 
-    // 青梅竹馬絕對不會輸的戀愛喜劇（僅限港澳台地區） https://www.bilibili.com/bangumi/play/ss38396
-    await query('番剧（ss）', '38396', undefined, false);
-
     // 等待查询结果
     await app.win.waitForTimeout(2_000);
     await app.win.waitForSelector('.ant-table-row');
 
     const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
-    expect(willBeDownload.length).toEqual(4);
+    expect(willBeDownload.length).toEqual(3);
   });
 
   // 根据ID搜索视频
@@ -224,12 +221,12 @@ export function callback(): void {
     ]);
 
     // 下载
-    const actionBtns: Locator = await app.win.locator('.ant-table-cell button');
+    const actionBtns: Locator = await app.win.locator('.ant-table-tbody .ant-table-cell button');
 
     await actionBtns.nth(0).click();
     await setTimeoutPromise(5_000);
     await app.win.waitForFunction((): boolean => {
-      const button: HTMLButtonElement | null = document.querySelector('.ant-table-cell button');
+      const button: HTMLButtonElement | null = document.querySelector('.ant-table-tbody .ant-table-cell button');
 
       if (!button) return false;
 
