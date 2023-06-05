@@ -13,7 +13,9 @@ import IDBRedux from '../../utils/IDB/IDBRedux';
 import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
 import type { WebWorkerChildItem, LiveItem } from '../../commonTypes';
 
-export interface LiveSliceInitialState extends EntityState<WebWorkerChildItem> {
+type LiveSliceEntityState = EntityState<WebWorkerChildItem, string>;
+
+export interface LiveSliceInitialState extends LiveSliceEntityState {
   liveList: Array<LiveItem>;
 }
 
@@ -39,8 +41,8 @@ export class LiveSlice<SliceName extends string> {
   public sliceName: SliceName;
   public objectStoreName: string;
 
-  public adapter: EntityAdapter<WebWorkerChildItem>;
-  public selectors: EntitySelectors<WebWorkerChildItem, EntityState<WebWorkerChildItem>>;
+  public adapter: EntityAdapter<WebWorkerChildItem, string>;
+  public selectors: EntitySelectors<WebWorkerChildItem, LiveSliceEntityState, string>;
   public initialState: LiveSliceInitialState;
   public ignoredPaths: Array<string>;
   public ignoredActions: Array<string>;

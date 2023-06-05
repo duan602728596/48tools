@@ -14,13 +14,15 @@ import IDBRedux, { ffmpegTemplateObjectStore } from '../../../utils/IDB/IDBRedux
 import type { ProcessItem, dbTemplateItem } from '../types';
 
 // 下载列表
-export const ffmpegProcessListAdapter: EntityAdapter<ProcessItem> = createEntityAdapter({
+type FFmpegProcessEntityState = EntityState<ProcessItem, string>;
+
+export const ffmpegProcessListAdapter: EntityAdapter<ProcessItem, string> = createEntityAdapter({
   selectId: (item: ProcessItem): string => item.id
 });
-export const ffmpegProcessListSelectors: EntitySelectors<ProcessItem, EntityState<ProcessItem>>
+export const ffmpegProcessListSelectors: EntitySelectors<ProcessItem, FFmpegProcessEntityState, string>
   = ffmpegProcessListAdapter.getSelectors();
 
-export interface FFmpegProcessInitialState extends EntityState<ProcessItem> {
+export interface FFmpegProcessInitialState extends FFmpegProcessEntityState {
   dbTemplateList: Array<dbTemplateItem>;
 }
 

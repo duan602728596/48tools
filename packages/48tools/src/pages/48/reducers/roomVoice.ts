@@ -15,13 +15,15 @@ import type { RoomVoiceItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 
 // 录制时的webworker
-export const roomVoiceWorkerListAdapter: EntityAdapter<WebWorkerChildItem> = createEntityAdapter({
+type RoomVoiceEntityState = EntityState<WebWorkerChildItem, string>;
+
+export const roomVoiceWorkerListAdapter: EntityAdapter<WebWorkerChildItem, string> = createEntityAdapter({
   selectId: (item: WebWorkerChildItem): string => item.id
 });
-export const roomVoiceListSelectors: EntitySelectors<WebWorkerChildItem, EntityState<WebWorkerChildItem>>
+export const roomVoiceListSelectors: EntitySelectors<WebWorkerChildItem, RoomVoiceEntityState, string>
   = roomVoiceWorkerListAdapter.getSelectors();
 
-export interface RoomVoiceInitialState extends EntityState<WebWorkerChildItem> {
+export interface RoomVoiceInitialState extends RoomVoiceEntityState {
   roomVoice: Array<RoomVoiceItem>;
   isAutoRecord: boolean;
 }

@@ -4,12 +4,12 @@ import {
   combineReducers,
   type Reducer,
   type Store,
-  type DeepPartial,
   type ImmutableStateInvariantMiddlewareOptions,
-  type SerializableStateInvariantMiddlewareOptions,
-  type Middleware
+  type SerializableStateInvariantMiddlewareOptions
 } from '@reduxjs/toolkit';
-import type { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import type { GetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
+import type { Middlewares } from '@reduxjs/toolkit/src/configureStore';
+import type { Tuple } from '@reduxjs/toolkit/src/utils';
 import { reducersMapObject, apiMiddlewares } from './reducers';
 
 interface ThunkOptions<E = any> {
@@ -28,17 +28,17 @@ const reducer: Reducer = combineReducers(reducersMapObject);
 /* store */
 export let store: Store;
 
-function createStore(initialState: DeepPartial<any> = {}): void {
+function createStore(initialState: any = {}): void {
   store = configureStore({
     reducer,
     preloadedState: initialState,
-    middleware(getDefaultMiddleware: CurriedGetDefaultMiddleware): ReadonlyArray<Middleware> {
+    middleware(getDefaultMiddleware: GetDefaultMiddleware): Tuple<Middlewares<any>> {
       return getDefaultMiddleware<GetDefaultMiddlewareOptions>().concat(apiMiddlewares);
     }
   });
 }
 
-export function storeFactory(initialState: DeepPartial<any> = {}): Store {
+export function storeFactory(initialState: any = {}): Store {
   if (!store) {
     createStore(initialState);
   }

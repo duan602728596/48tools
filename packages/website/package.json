@@ -18,7 +18,7 @@
     "graphql": "^16.6.0"
   },
   "optionalDependencies": {
-    "@reduxjs/toolkit": "^1.9.2",
+    "@reduxjs/toolkit": "^2.0.0-beta.0",
     "antd-mobile": "^5.28.0",
     "antd-mobile-icons": "^0.3.0",
     "classnames": "^2.3.2",

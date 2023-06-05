@@ -15,13 +15,15 @@ import type { MessageEventData } from '../../../utils/worker/download.worker/dow
 import type { WebWorkerChildItem } from '../../../commonTypes';
 
 // 下载列表
-export const bilibiliDownloadListAdapter: EntityAdapter<DownloadItem> = createEntityAdapter({
+type BilibiliDownloadEntityState = EntityState<DownloadItem, string>;
+
+export const bilibiliDownloadListAdapter: EntityAdapter<DownloadItem, string> = createEntityAdapter({
   selectId: (item: DownloadItem): string => item.qid
 });
-export const bilibiliDownloadListSelectors: EntitySelectors<DownloadItem, EntityState<DownloadItem>>
+export const bilibiliDownloadListSelectors: EntitySelectors<DownloadItem, BilibiliDownloadEntityState, string>
   = bilibiliDownloadListAdapter.getSelectors();
 
-export interface BilibiliDownloadInitialState extends EntityState<DownloadItem> {
+export interface BilibiliDownloadInitialState extends BilibiliDownloadEntityState {
   downloadProgress: { [key: string]: ProgressSet };
   downloadWorkerList: Array<WebWorkerChildItem>;
 }

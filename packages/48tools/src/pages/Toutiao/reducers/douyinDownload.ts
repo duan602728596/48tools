@@ -14,13 +14,15 @@ import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 
 // 下载列表
-export const douyinDownloadListAdapter: EntityAdapter<DownloadItem> = createEntityAdapter({
+type DouyinDownloadEntityState = EntityState<DownloadItem, string>;
+
+export const douyinDownloadListAdapter: EntityAdapter<DownloadItem, string> = createEntityAdapter({
   selectId: (item: DownloadItem): string => item.qid
 });
-export const douyinDownloadListSelectors: EntitySelectors<DownloadItem, EntityState<DownloadItem>>
+export const douyinDownloadListSelectors: EntitySelectors<DownloadItem, DouyinDownloadEntityState, string>
   = douyinDownloadListAdapter.getSelectors();
 
-export interface DouyinDownloadInitialState extends EntityState<DownloadItem> {
+export interface DouyinDownloadInitialState extends DouyinDownloadEntityState {
   downloadProgress: Record<string, ProgressSet>;
 }
 

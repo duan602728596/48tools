@@ -14,13 +14,15 @@ import type { DownloadItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 
 // 下载列表
-export const kuaishouDownloadListAdapter: EntityAdapter<DownloadItem> = createEntityAdapter({
+type KuaishouDownloadEntityState = EntityState<DownloadItem, string>;
+
+export const kuaishouDownloadListAdapter: EntityAdapter<DownloadItem, string> = createEntityAdapter({
   selectId: (item: DownloadItem): string => item.qid
 });
-export const kuaishouDownloadListSelectors: EntitySelectors<DownloadItem, EntityState<DownloadItem>>
+export const kuaishouDownloadListSelectors: EntitySelectors<DownloadItem, KuaishouDownloadEntityState, string>
   = kuaishouDownloadListAdapter.getSelectors();
 
-export interface KuaishouVideoDownloadInitialState extends EntityState<DownloadItem> {
+export interface KuaishouVideoDownloadInitialState extends KuaishouDownloadEntityState {
   downloadProgress: Record<string, ProgressSet>;
 }
 
