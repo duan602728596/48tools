@@ -1,6 +1,5 @@
 import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
-import { test, expect } from '@playwright/test';
-import type { ElementHandle } from 'playwright';
+import { test, expect, type ElementHandle } from '@playwright/test';
 import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle } from '../../utils/testUtils.js';
 import testIdClick from '../../actions/testIdClick.js';

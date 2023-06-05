@@ -1,4 +1,4 @@
-import type { JSHandle } from 'playwright';
+import type { JSHandle } from '@playwright/test';
 import type Electron from 'electron';
 import type { IpcMainInvokeEvent, SaveDialogOptions, SaveDialogReturnValue } from 'electron';
 import * as config from '../utils/config.js';

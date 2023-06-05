@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import type { Locator, ElementHandle } from 'playwright';
+import { test, expect, type Locator, type ElementHandle } from '@playwright/test';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import { testTitle } from '../../utils/testUtils.js';

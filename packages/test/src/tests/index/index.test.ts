@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import type { ElementHandle } from 'playwright';
+import { test, expect, type ElementHandle } from '@playwright/test';
 import type { ElementHandleForTag } from 'playwright-core/types/structs';
 import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle } from '../../utils/testUtils.js';

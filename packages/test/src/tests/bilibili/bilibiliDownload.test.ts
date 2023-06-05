@@ -1,7 +1,6 @@
 import path from 'node:path';
 import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
-import { test, expect } from '@playwright/test';
-import type { Locator, ElementHandle, JSHandle } from 'playwright';
+import { test, expect, type Locator, type ElementHandle, type JSHandle } from '@playwright/test';
 import fse from 'fs-extra';
 import { isFileExists } from '@sweet-milktea/utils';
 import * as config from '../../utils/config.js';
