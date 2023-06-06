@@ -2,7 +2,7 @@ import got, { type Response as GotResponse } from 'got';
 import { pcUserAgent } from '../../../utils/utils';
 import { awemePostQuery, awemeDetailQuery } from '../Douyin/function/signUtils';
 import { douyinCookie } from '../Douyin/function/DouyinCookieStore';
-import { msToken } from '../Douyin/function/signUtils';
+import { msToken, douyinUserAgent } from '../Douyin/function/signUtils';
 import Signer from '../sdk/Signer';
 import type {
   AwemePostResponse,
@@ -83,7 +83,7 @@ export async function requestAwemePost(cookie: string, videoQuery: VideoQuery): 
       headers: {
         Referer: `https://www.douyin.com/user/${ videoQuery.secUserId }`,
         Host: 'www.douyin.com',
-        'User-Agent': pcUserAgent,
+        'User-Agent': douyinUserAgent,
         Cookie: cookie
       },
       followRedirect: false
@@ -107,7 +107,7 @@ export async function requestAwemeDetail(cookie: string, id: string, signature: 
       headers: {
         Referer: `https://www.douyin.com/video/${ id }`,
         Host: 'www.douyin.com',
-        'User-Agent': pcUserAgent,
+        'User-Agent': douyinUserAgent,
         Cookie: cookie
       },
       followRedirect: false
