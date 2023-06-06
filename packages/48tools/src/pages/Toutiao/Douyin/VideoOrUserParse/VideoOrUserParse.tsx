@@ -343,14 +343,14 @@ function VideoOrUserParse(props: {}): ReactElement {
             { userDataSelectOptionsRender(record) }
           </Select>
           {
-            ('images' in record) && record?.images?.length && (
+            ('images' in record) && record?.images?.length ? (
               <Button className="ml-[4px]"
                 size="small"
                 onClick={ (event: MouseEvent): void => handleUserListDownloadImageAllClick(record, event) }
               >
                 全部下载
               </Button>
-            )
+            ) : null
           }
         </Fragment>
       )
