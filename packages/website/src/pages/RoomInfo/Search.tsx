@@ -12,8 +12,7 @@ import type { FormInstance } from 'rc-field-form';
 import { ExclamationShieldFill as IconExclamationShieldFill } from 'antd-mobile-icons';
 import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';
-import { useReqRoomIdListQuery } from './reducers/roomInfo.query';
-import type { QuerySubState } from '../../store/queryTypes';
+import { useReqRoomIdListQuery, type ReqRoomList } from './reducers/roomInfo.query';
 import type { RoomId } from '../../../src-api/services/interface';
 
 interface FormQuery {
@@ -23,7 +22,7 @@ interface FormQuery {
 /* 搜索信息 */
 function Search(props: {}): ReactElement {
   const [form]: [FormInstance] = Form.useForm();
-  const { data: roomIdList = [], isLoading }: QuerySubState<Array<RoomId>> = useReqRoomIdListQuery();
+  const { data: roomIdList = [], isLoading }: ReqRoomList = useReqRoomIdListQuery();
   const [query, setQuery]: [FormQuery, D<S<FormQuery>>] = useState({ query: undefined }); // 查询条件
 
   // 渲染数据

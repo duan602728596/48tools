@@ -1,4 +1,4 @@
-import { createSlice, type Slice, type SliceCaseReducers, type PayloadAction, type CaseReducerActions } from '@reduxjs/toolkit';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { RoomId } from '../../../../src-api/services/interface';
 import type { RecordLiveInfo } from '../types';
 
@@ -9,9 +9,16 @@ export interface RecordInitialState {
   inDownloading: boolean;
 }
 
-type CaseReducers = SliceCaseReducers<RecordInitialState>;
+type SliceReducers = {
+  setRoomId: CaseReducer<RecordInitialState, PayloadAction<RoomId>>;
+  setLiveList: CaseReducer<RecordInitialState, PayloadAction<Pick<RecordInitialState, 'next' | 'liveList'>>>;
+  setLiveInfoItemCheckedChange: CaseReducer<RecordInitialState, PayloadAction<{ liveId: string; value: boolean }>>;
+  setLiveListCheckedClean: CaseReducer<RecordInitialState, PayloadAction>;
+  setInDownloading: CaseReducer<RecordInitialState, PayloadAction<boolean>>;
+};
 
-const { actions, reducer }: Slice = createSlice<RecordInitialState, CaseReducers, 'record'>({
+const sliceName: 'record' = 'record';
+const { actions, reducer }: Slice<RecordInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: 'record',
   initialState: {
     next: undefined,     // 搜索的next
@@ -62,5 +69,5 @@ export const {
   setLiveInfoItemCheckedChange,
   setLiveListCheckedClean,
   setInDownloading
-}: Record<string, Function> = actions;
+}: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 export default { record: reducer };

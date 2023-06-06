@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';
-import { useReqRoomIdListQuery } from '../RoomInfo/reducers/roomInfo.query';
+import { useReqRoomIdListQuery, type ReqRoomList } from '../RoomInfo/reducers/roomInfo.query';
 import {
   setRoomId,
   setLiveList,
@@ -27,7 +27,6 @@ import {
 import GraphQLRequest, { isGraphQLData, type GraphQLResponse } from '../../utils/GraphQLRequest';
 import download from '../../utils/download';
 import { exportMaxLength } from '../../../src-api/utils';
-import type { QuerySubState } from '../../store/queryTypes';
 import type { RoomId, LiveInfo, LiveRoomInfoContent } from '../../../src-api/services/interface';
 import type { RecordLiveInfo } from './types';
 
@@ -59,7 +58,7 @@ function Download(props: {}): ReactElement {
   const { next, liveList, roomId, inDownloading }: RecordInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [form]: [FormInstance] = Form.useForm();
-  const { data: roomIdList = [] }: QuerySubState<Array<RoomId>> = useReqRoomIdListQuery();
+  const { data: roomIdList = [] }: ReqRoomList = useReqRoomIdListQuery();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
 
   // 加载数据
