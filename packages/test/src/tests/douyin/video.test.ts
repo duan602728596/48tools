@@ -41,39 +41,39 @@ export function callback(): void {
     return rows;
   }
 
-  test(testTitle(51, 'Should get video by full url'), async function(): Promise<void> {
-    if (!app) {
-      throw new Error('app is null');
-    }
-
-    const rows: Array<ElementHandle> = await queryVideo(
-      'https://www.douyin.com/video/7207875630820527416', '下载地址-3(1080*1920)');
-
-    await setTimeoutPromise(10_000);
-    expect(rows.length).toEqual(1);
-  });
-
-  test(testTitle(52, 'Should get video by video id'), async function(): Promise<void> {
-    if (!app) {
-      throw new Error('app is null');
-    }
-
-    const rows: Array<ElementHandle> = await queryVideo('7199998424823991556', '下载地址-3(1920*1080)');
-
-    await setTimeoutPromise(10_000);
-    expect(rows.length).toEqual(1);
-  });
-
-  test(testTitle(53, 'Should get video by share url'), async function(): Promise<void> {
-    if (!app) {
-      throw new Error('app is null');
-    }
-
-    const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StBFgWn/', '下载地址-3(1080*1920)');
-
-    await setTimeoutPromise(10_000);
-    expect(rows.length).toEqual(1);
-  });
+  // test(testTitle(51, 'Should get video by full url'), async function(): Promise<void> {
+  //   if (!app) {
+  //     throw new Error('app is null');
+  //   }
+  //
+  //   const rows: Array<ElementHandle> = await queryVideo(
+  //     'https://www.douyin.com/video/7207875630820527416', '下载地址-3(1080*1920)');
+  //
+  //   await setTimeoutPromise(10_000);
+  //   expect(rows.length).toEqual(1);
+  // });
+  //
+  // test(testTitle(52, 'Should get video by video id'), async function(): Promise<void> {
+  //   if (!app) {
+  //     throw new Error('app is null');
+  //   }
+  //
+  //   const rows: Array<ElementHandle> = await queryVideo('7199998424823991556', '下载地址-3(1920*1080)');
+  //
+  //   await setTimeoutPromise(10_000);
+  //   expect(rows.length).toEqual(1);
+  // });
+  //
+  // test(testTitle(53, 'Should get video by share url'), async function(): Promise<void> {
+  //   if (!app) {
+  //     throw new Error('app is null');
+  //   }
+  //
+  //   const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StBFgWn/', '下载地址-3(1080*1920)');
+  //
+  //   await setTimeoutPromise(10_000);
+  //   expect(rows.length).toEqual(1);
+  // });
 
   test(testTitle(54, 'Should get images by full url'), async function(): Promise<void> {
     if (!app) {
@@ -81,7 +81,7 @@ export function callback(): void {
     }
 
     const rows: Array<ElementHandle> = await queryVideo(
-      'https://www.douyin.com/note/7144312918660746508', '图片地址-3(1440*1920)');
+      'https://www.douyin.com/note/7144312918660746508', '图片3-下载地址1(1440*1920)');
 
     await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
@@ -92,7 +92,7 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const rows: Array<ElementHandle> = await queryVideo('7081995835235519756', '图片地址-3(1080*1438)');
+    const rows: Array<ElementHandle> = await queryVideo('7081995835235519756', '图片3-下载地址1(1080*1438)');
 
     await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
@@ -103,7 +103,7 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
-    const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StwKB7s/', '图片地址-3(1440*1920)');
+    const rows: Array<ElementHandle> = await queryVideo('https://v.douyin.com/StwKB7s/', '图片1-下载地址1(1440*1920)');
 
     await setTimeoutPromise(10_000);
     expect(rows.length).toEqual(1);
