@@ -1,5 +1,5 @@
 import type { ReducersMapObject, Middleware } from '@reduxjs/toolkit';
-import roomInfoQueryApi from '../pages/RoomInfo/reducers/roomInfo.query';
+import roomInfoQueryApi from '../pages/RoomInfo/reducers/roomInfo.api';
 import recordReducers from '../pages/Record/reducers/record';
 
 /* reducers */

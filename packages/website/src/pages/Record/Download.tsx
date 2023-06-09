@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';
-import { useReqRoomIdListQuery, type ReqRoomList } from '../RoomInfo/reducers/roomInfo.query';
+import { useReqRoomIdListQuery, type ReqRoomList } from '../RoomInfo/reducers/roomInfo.api';
 import {
   setRoomId,
   setLiveList,

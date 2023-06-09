@@ -12,7 +12,7 @@ import type { FormInstance } from 'rc-field-form';
 import { ExclamationShieldFill as IconExclamationShieldFill } from 'antd-mobile-icons';
 import classNames from 'classnames';
 import mainStyle from '../../components/Main/main.module.sass';
-import { useReqRoomIdListQuery, type ReqRoomList } from './reducers/roomInfo.query';
+import { useReqRoomIdListQuery, type ReqRoomList } from './reducers/roomInfo.api';
 import type { RoomId } from '../../../src-api/services/interface';
 
 interface FormQuery {

@@ -22,7 +22,6 @@ type PocketFriendsApi = Api<
   keyof ApiModules<BaseQuery, EndpointDefinitions, typeof apiReducerPathName, string>
 >;
 
-// @ts-ignore
 const pocketFriendsApi: PocketFriendsApi = createApi({
   reducerPath: apiReducerPathName,
   baseQuery(): BaseQueryReturn {
@@ -42,7 +41,7 @@ const pocketFriendsApi: PocketFriendsApi = createApi({
       })
     };
   }
-});
+}) as PocketFriendsApi;
 
 export type ReqRoomId = UseQueryHookResult<EndpointDefinitions['reqRoomId']>;
 export const { useReqRoomIdQuery }: PocketFriendsApi = pocketFriendsApi;

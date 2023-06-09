@@ -26,7 +26,6 @@ type RoomInfoQueryApi = Api<
   keyof ApiModules<BaseQuery, EndpointDefinitions, typeof apiReducerPathName, string>
 >;
 
-// @ts-ignore
 const api: RoomInfoQueryApi = createApi({
   reducerPath: apiReducerPathName,
   baseQuery(): BaseQueryReturn {
@@ -60,7 +59,7 @@ const api: RoomInfoQueryApi = createApi({
       })
     };
   }
-});
+}) as RoomInfoQueryApi;
 
 export type ReqRoomList = UseQueryHookResult<EndpointDefinitions['reqRoomIdList']>;
 export const { useReqRoomIdListQuery }: RoomInfoQueryApi = api;
