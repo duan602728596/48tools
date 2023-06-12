@@ -12,4 +12,5 @@ export const ffmpegTemplateObjectStore: string = dbConfig.objectStore[4].name;
 export const pocket48RoomVoiceObjectStoreName: string = dbConfig.objectStore[5].name;
 export const douyinLiveObjectStoreName: string = dbConfig.objectStore[6].name;
 export const kuaishouLiveObjectStoreName: string = dbConfig.objectStore[7].name;
+export const pocket48UserInfoObjectStoreName: string = dbConfig.objectStore[8].name;
 export default IDBRedux;

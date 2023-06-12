@@ -3,6 +3,7 @@ import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
 import roomMessageReducers from '../pages/48/reducers/roomMessage';
 import roomVoiceReducers from '../pages/48/reducers/roomVoice';
+import qingchunshikeReducers from '../pages/48/reducers/qingchunshike';
 import pocket48LoginReducers from '../functionalComponents/Pocket48Login/reducers/pocket48Login';
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/bilibiliDownload';
 import bilibiliLiveReducers from '../pages/Bilibili/reducers/bilibiliLive';
@@ -34,6 +35,7 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   l48Live48Reducers,
   roomMessageReducers,
   roomVoiceReducers,
+  qingchunshikeReducers,
   pocket48LoginReducers,
   bilibiliDownloadReducers,
   bilibiliLiveReducers,

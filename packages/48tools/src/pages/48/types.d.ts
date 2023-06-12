@@ -486,3 +486,13 @@ export interface TeamVoiceMessage {
     };
   };
 }
+
+/* ========== 青春时刻 ========== */
+export interface QingchunshikeUserItem {
+  id: string;
+  userId: string;
+  serverId: string;
+  channelId: string;
+  liveId: string;
+  description: string;
+}
