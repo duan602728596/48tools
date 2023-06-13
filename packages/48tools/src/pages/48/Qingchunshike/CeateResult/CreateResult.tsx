@@ -75,7 +75,7 @@ function CreateResult(props: {}): ReactElement {
 
     if (!userItem) return;
 
-    const filename: string = `${ userItem.description }_${ userItem.id }_${ userItem.serverId }_${ userItem.channelId }_${ userItem.liveRoomId }_${
+    const filename: string = `${ userItem.description }_${ userItem.serverId }_${ userItem.channelId }_${ userItem.liveRoomId }_${
       dayjs().format(fileTimeFormat)
     }.txt`;
     const result: SaveDialogReturnValue = await showSaveDialog({
@@ -89,7 +89,6 @@ function CreateResult(props: {}): ReactElement {
     try {
       const calculateResult: CalculateResult = await calculate(userItem, formValue.startTime.valueOf(), formValue.endTime.valueOf(), userInfo.accid, userInfo.pwd);
       const text: string = `################################################################
-        id: ${ userItem.id }
   serverId: ${ userItem.serverId }
  channelId: ${ userItem.channelId }
 liveRoomId: ${ userItem.liveRoomId }
