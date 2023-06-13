@@ -1,4 +1,5 @@
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
+import type { QChatMessage } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/QChatMsgServiceInterface';
 import type { FieldData } from 'rc-field-form/es/interface';
 import type { WebWorkerChildItem } from '../../commonTypes';
 import type { MsgType } from './services/interface';
@@ -495,4 +496,25 @@ export interface QingchunshikeUserItem {
   channelId: string;
   liveRoomId: string;
   description: string;
+}
+
+export interface GiftText {
+  type: 'custom';
+  attach: {
+    messageType: 'GIFT_TEXT';
+    giftInfo: {
+      acceptUserId: number;
+      acceptUserName: string;
+      userName: string;
+      giftName: string;
+      giftNum: number;
+      picPath: string;
+      tpNum: number;
+    };
+  };
+}
+
+export interface GiftResult {
+  tpNum: number;
+  giftNum: number;
 }

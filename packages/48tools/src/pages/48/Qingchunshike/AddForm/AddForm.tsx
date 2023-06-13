@@ -45,7 +45,7 @@ function AddForm(props: {}): ReactElement {
   return (
     <Fragment>
       <Card title="添加一个统计信息" extra={ <Button type="primary" onClick={ handleAddClick }>添加</Button> }>
-        <Alert className="mb-[16px]" type="warning" message="请确保serverId、channel和liveRoomId正确" />
+        <Alert className="mb-[16px]" type="warning" message="请确保serverId、channel和liveRoomId正确。" />
         <Form form={ form }>
           <Form.Item className={ style.formItem } label="userId" name="userId" rules={ idRule }>
             <Input />

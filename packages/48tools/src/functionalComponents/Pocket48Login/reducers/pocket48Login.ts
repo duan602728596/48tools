@@ -10,8 +10,18 @@ type SliceReducers = {
   setClearInfo: CaseReducer<Pocket48LoginInitialState, PayloadAction>;
 }
 
+type SliceSelectors = {
+  userInfo: (state: Pocket48LoginInitialState) => UserInfo | null;
+};
+
 const sliceName: 'pocket48Login' = 'pocket48Login';
-const { actions, reducer }: Slice<Pocket48LoginInitialState, SliceReducers, typeof sliceName> = createSlice({
+const { actions, reducer, selectors: selectorsObject }: Slice<
+  Pocket48LoginInitialState,
+  SliceReducers,
+  typeof sliceName,
+  typeof sliceName,
+  SliceSelectors
+> = createSlice({
   name: sliceName,
   initialState(): Pocket48LoginInitialState {
     const userInfoStr: string | null = sessionStorage.getItem('POCKET48_USER_INFO');
@@ -28,8 +38,12 @@ const { actions, reducer }: Slice<Pocket48LoginInitialState, SliceReducers, type
       sessionStorage.removeItem('POCKET48_USER_INFO');
       state.userInfo = null;
     }
+  },
+  selectors: {
+    userInfo: (state: Pocket48LoginInitialState): UserInfo | null => state.userInfo
   }
 });
 
 export const { setUserInfo, setClearInfo }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export { selectorsObject };
 export default { [sliceName]: reducer };
