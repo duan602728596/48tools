@@ -75,7 +75,7 @@ const dbConfig: IDBConfig = {
     {
       name: '48_user_info',
       key: 'id',
-      data: ['userId', 'serverId', 'channelId', 'liveId', 'description']
+      data: ['userId', 'serverId', 'channelId', 'liveRoomId', 'description']
     }
   ]
 };

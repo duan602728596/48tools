@@ -493,6 +493,6 @@ export interface QingchunshikeUserItem {
   userId: string;
   serverId: string;
   channelId: string;
-  liveId: string;
+  liveRoomId: string;
   description: string;
 }
