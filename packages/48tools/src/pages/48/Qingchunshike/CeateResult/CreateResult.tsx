@@ -88,7 +88,7 @@ function CreateResult(props: {}): ReactElement {
 
     try {
       const calculateResult: CalculateResult = await calculate(userItem, formValue.startTime.valueOf(), formValue.endTime.valueOf(), userInfo.accid, userInfo.pwd);
-      const text: string = `#################################################################
+      const text: string = `################################################################
         id: ${ userItem.id }
   serverId: ${ userItem.serverId }
  channelId: ${ userItem.channelId }
@@ -96,7 +96,8 @@ liveRoomId: ${ userItem.liveRoomId }
 ################################################################
 ${ userItem.description }
 ${ formValue.startTime.format('YYYY-MM-DD HH:mm:ss') } - ${ formValue.endTime.format('YYYY-MM-DD HH:mm:ss') }
-数据统计可能不准确，仅供参考
+
+【数据统计可能不准确，仅供参考。】
 ################################################################
 总分数：${ (calculateResult.qchatCalculateResult.all + calculateResult.nimCalculateResult.all).toFixed(1) }
 ################################################################
@@ -156,7 +157,7 @@ ${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): 
         <Alert className="mb-[16px]" type="warning" message={
           <Fragment>
             <div>数据统计可能不准确，仅供参考。开始时间和结束时间请选择青春时刻期间。最长时间不超过6个月。</div>
-            <div>直播弹幕的历史由于只能保存5900条数据，如果当天不统计就会丢失！请注意！</div>
+            <div>直播弹幕的历史由于只能保存5900条数据，如果当天不统计就可能会丢失！请注意！</div>
           </Fragment>
         } />
         <Form form={ form }>

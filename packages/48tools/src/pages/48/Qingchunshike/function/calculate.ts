@@ -1,3 +1,4 @@
+import * as dayjs from 'dayjs';
 import type { Dispatch } from '@reduxjs/toolkit';
 import type { QChatMessage } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/QChatMsgServiceInterface';
 import type { NIMChatroomMessage } from '@yxim/nim-web-sdk/dist/SDK/NIM_Web_Chatroom/NIMChatroomMessageInterface';
@@ -80,8 +81,13 @@ async function qchatCalculate(user: QingchunshikeUserItem, st: number, et: numbe
       const nextData: Array<QChatMessage> = filterQChat(historyMessage);
 
       allHistoryMessage.push(...nextData);
-      dispatch(setLog(`QChat -> 抓取page: ${ pageNum++ } endTime: ${ endTime } endTime - st: ${ endTime - st }`));
+      dispatch(setLog(`QChat -> 抓取page: ${ pageNum++ } endTime: ${
+        dayjs(endTime).format('YYYY-MM-DD HH:mm:ss')
+      } endTime - st: ${ endTime - st }`));
     } else {
+      dispatch(setLog(`QChat -> 抓取结束: ${ pageNum++ } endTime: ${
+        dayjs(endTime).format('YYYY-MM-DD HH:mm:ss')
+      } endTime - st: ${ endTime - st }`));
       break;
     }
   }
@@ -115,14 +121,16 @@ async function liveCalculate(user: QingchunshikeUserItem, st: number, et: number
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const historyMessage: Array<NIMChatroomMessage> = await nim.getHistoryMessage(et);
+    const historyMessage: Array<NIMChatroomMessage> = await nim.getHistoryMessage(liveEndTime);
 
     if (historyMessage?.length) {
       liveEndTime = historyMessage.at(-1)!.time;
       const { nextData, isBreak }: { nextData: Array<GiftText['attach']>; isBreak: boolean } = filterLive(historyMessage, st);
 
       allLiveHistoryMessage.push(...nextData);
-      dispatch(setLog(`NIM -> 抓取page: ${ livePageNum++ } endTime: ${ liveEndTime } endTime - st: ${ liveEndTime - st }`));
+      dispatch(setLog(`NIM -> 抓取结束: ${ livePageNum++ } endTime: ${
+        dayjs(liveEndTime).format('YYYY-MM-DD HH:mm:ss')
+      } endTime - st: ${ liveEndTime - st }`));
 
       if (isBreak) break;
     } else {

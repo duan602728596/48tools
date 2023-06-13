@@ -19,16 +19,15 @@ class NIM {
     return new Promise((resolve: Function): void => {
       this.chatroom = NIMSDK.Chatroom.getInstance({
         appKey: atob(appKey),
+        account: this.account,
+        token: this.pwd,
+        db: false,
+        dbLog: false,
         chatroomId: this.roomId,
         chatroomAddresses: ['chatweblink01.netease.im:443'],
         onconnect(event: any): void {
           resolve();
-        },
-        isAnonymous: true,
-        chatroomNick: String(Math.random()),
-        chatroomAvatar: '',
-        db: false,
-        dbLog: false
+        }
       });
     });
   }
@@ -46,6 +45,7 @@ class NIM {
         timetag: timeTag,
         // @ts-ignore
         done(err: Error, data: { msgs: Array<NIMChatroomMessage> }): void {
+          console.log(data);
           resolve(data.msgs ?? []);
         }
       });
