@@ -48,3 +48,9 @@ export function storeFactory(initialState: any = {}): Store {
 
   return store;
 }
+
+/* 异步注入store */
+export function replaceReducers(dynamicReducers: Array<Record<string, Reducer>> ): void {
+  Object.assign(reducersMapObject, ...dynamicReducers);
+  store.replaceReducer(combineReducers(reducersMapObject));
+}

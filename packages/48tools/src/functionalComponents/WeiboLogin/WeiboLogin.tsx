@@ -3,6 +3,8 @@ import { Button, Modal } from 'antd';
 import { WeiboCircleOutlined as IconWeiboCircleOutlined } from '@ant-design/icons';
 import OpenWeiboWindow from './Login/OpenWeiboWindow';
 import LoginTable from './LoginTable';
+import dynamicReducers from '../../store/dynamicReducers';
+import weiboLoginReducers from './reducers/weiboLogin';
 
 /* 微博扫码登陆 */
 function WeiboLogin(props: {}): ReactElement {
@@ -40,4 +42,4 @@ function WeiboLogin(props: {}): ReactElement {
   );
 }
 
-export default WeiboLogin;
+export default dynamicReducers([weiboLoginReducers])(WeiboLogin);

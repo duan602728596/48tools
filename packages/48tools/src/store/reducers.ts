@@ -1,9 +1,7 @@
 import type { ReducersMapObject, Middleware } from '@reduxjs/toolkit';
 import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
-import roomMessageReducers from '../pages/48/reducers/roomMessage';
 import roomVoiceReducers from '../pages/48/reducers/roomVoice';
-import qingchunshikeReducers from '../pages/48/reducers/qingchunshike';
 import pocket48LoginReducers from '../functionalComponents/Pocket48Login/reducers/pocket48Login';
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/bilibiliDownload';
 import bilibiliLiveReducers from '../pages/Bilibili/reducers/bilibiliLive';
@@ -22,20 +20,13 @@ import kuaishouLiveReducers, {
   ignoredActions as kuaishouLiveIgnoredActions
 } from '../pages/Kuaishou/reducers/kuaishouLive';
 import KuaishouVideoDownloadReducers from '../pages/Kuaishou/reducers/kuaishouVideoDownload';
-import videoEditConcatReducers from '../pages/VideoEdit/reducers/concat';
-import videoEditVideoCutReducers from '../pages/VideoEdit/reducers/videoCut';
-import FFmpegProcessReducer from '../pages/VideoEdit/reducers/FFmpegProcess';
-import weiboLoginReducers from '../functionalComponents/WeiboLogin/reducers/weiboLogin';
-import weiboSuperReducers from '../pages/WeiboSuper/reducers/weiboSuper';
 import pocketFriendsApi from '../pages/48/reducers/pocketFriends.api';
 
 /* reducers */
 export const reducersMapObject: ReducersMapObject = Object.assign({},
   l48Pocket48Reducers,
   l48Live48Reducers,
-  roomMessageReducers,
   roomVoiceReducers,
-  qingchunshikeReducers,
   pocket48LoginReducers,
   bilibiliDownloadReducers,
   bilibiliLiveReducers,
@@ -45,11 +36,6 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   douyinLiveReducers,
   kuaishouLiveReducers,
   KuaishouVideoDownloadReducers,
-  videoEditConcatReducers,
-  videoEditVideoCutReducers,
-  FFmpegProcessReducer,
-  weiboLoginReducers,
-  weiboSuperReducers,
   { [pocketFriendsApi.reducerPath]: pocketFriendsApi.reducer }
 );
 

@@ -17,11 +17,12 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import style from './index.sass';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
-import WeiboLogin from '../../functionalComponents/WeiboLogin/WeiboLogin';
+import WeiboLoginDynamic from '../../functionalComponents/WeiboLogin/loader';
 import { IDBCursorAccountList } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import dbConfig from '../../utils/IDB/IDBConfig';
 import weiboCheckIn from './function/weiboCheckIn';
-import { setCheckIn, type WeiboSuperInitialState } from './reducers/weiboSuper';
+import dynamicReducers from '../../store/dynamicReducers';
+import weiboSuperReducers, { setCheckIn, defaultQuantityValue, type WeiboSuperInitialState } from './reducers/weiboSuper';
 import type { WeiboLoginInitialState } from '../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../commonTypes';
 import type { WeiboCheckinResult, Quantity } from './types';
@@ -35,16 +36,16 @@ type RState = {
 
 const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 微博已登陆账号
-  accountList: ({ weiboLogin }: RState): Array<WeiboAccount> => weiboLogin.accountList,
+  accountList: ({ weiboLogin }: RState): Array<WeiboAccount> => weiboLogin?.accountList ?? [],
 
   // 登陆列表
-  weiboCheckinList: ({ weiboSuper }: RState): Array<WeiboCheckinResult> => weiboSuper.weiboCheckinList,
+  weiboCheckinList: ({ weiboSuper }: RState): Array<WeiboCheckinResult> => weiboSuper?.weiboCheckinList ?? [],
 
   // 签到状态
-  checkIn: ({ weiboSuper }: RState): boolean => weiboSuper.checkIn,
+  checkIn: ({ weiboSuper }: RState): boolean => weiboSuper?.checkIn,
 
   // 已签到
-  quantity: ({ weiboSuper }: RState): Quantity => weiboSuper.quantity
+  quantity: ({ weiboSuper }: RState): Quantity => weiboSuper?.quantity ?? defaultQuantityValue
 });
 
 /* 微博超话签到 */
@@ -128,7 +129,7 @@ function Index(props: {}): ReactElement {
                 </Button>
               )
             }
-            <WeiboLogin />
+            <WeiboLoginDynamic />
           </Space>
         </Header>
         <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />
@@ -139,4 +140,4 @@ function Index(props: {}): ReactElement {
   );
 }
 
-export default Index;
+export default dynamicReducers([weiboSuperReducers])(Index);

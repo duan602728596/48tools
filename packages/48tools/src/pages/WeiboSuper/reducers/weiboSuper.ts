@@ -51,16 +51,18 @@ export const reqTopicCheckin: AsyncThunk<ReqTopicCheckinReturn, ReqTopicCheckinP
     };
   });
 
+export const defaultQuantityValue: Quantity = {
+  checkedInLen: 0,
+  total: 0
+};
+
 const sliceName: 'weiboSuper' = 'weiboSuper';
 const { actions, reducer }: Slice<WeiboSuperInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: 'weiboSuper',
   initialState: {
     weiboCheckinList: [], // 超话签到结果
     checkIn: false,       // 是否在签到中，用来打断签到的
-    quantity: {
-      checkedInLen: 0,    // 已签到数
-      total: 0            // 签到总数
-    }
+    quantity: defaultQuantityValue
   },
   reducers: {
     // 设置签到状态

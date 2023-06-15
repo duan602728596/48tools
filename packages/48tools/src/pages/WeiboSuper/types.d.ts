@@ -15,6 +15,6 @@ export interface WeiboCheckinResult extends Pick<SuperItem, 'title' | 'pic' | 'c
 }
 
 export interface Quantity {
-  checkedInLen: number;
-  total: number;
+  checkedInLen: number; // 已签到数
+  total: number;        // 签到总数
 }
