@@ -8,7 +8,9 @@ import { Card, Alert, Form, DatePicker, Select, Button, Space, message, type For
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
+import * as classNames from 'classnames';
 import style from './createResult.sass';
+import commonStyle from '../../../../common.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import {
   IDBCursorQingchunshikeUserList,
@@ -140,7 +142,7 @@ ${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): 
   // 渲染log
   function logRender(): Array<ReactElement> {
     return log.map((item: string, index: number): ReactElement => {
-      return <p key={ index } className="my-0 text-[12px]">{ item }</p>;
+      return <p key={ index } className={ classNames('my-0 text-[12px]', style.text) }>{ item }</p>;
     });
   }
 
