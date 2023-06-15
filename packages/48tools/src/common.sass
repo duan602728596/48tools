@@ -5,6 +5,8 @@ $daybreak-blue: #1677ff              // 蓝色
 $daybreak-blue-hover: #69b1ff        // 蓝色 hover
 $daybreak-blue-dark: #1668dc         // 暗黑模式蓝色
 $daybreak-blue-dark-hover: #15417e   // 暗黑模式蓝色 hover
+$cyan: #13c2c2                       // 青色
+$cyan-dark: #13a8a8                  // 暗黑模式青色
 
 // 红色提示文字
 .tips
@@ -19,6 +21,9 @@ $daybreak-blue-dark-hover: #15417e   // 暗黑模式蓝色 hover
   &:hover
     color: $daybreak-blue-hover
 
+.primaryText
+  color: $cyan
+
 @media (prefers-color-scheme: dark)
   .text
     color: $text-dark
@@ -31,6 +36,9 @@ $daybreak-blue-dark-hover: #15417e   // 暗黑模式蓝色 hover
 
     &:hover
       color: $daybreak-blue-dark-hover
+
+  .primaryText
+    color: $cyan-dark
 
 // 修复rc-virtual-list组件的暗黑模式下滚动条颜色
 @media (prefers-color-scheme: dark)

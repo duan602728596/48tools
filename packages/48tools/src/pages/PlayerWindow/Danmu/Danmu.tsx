@@ -21,13 +21,22 @@ import commonStyle from '../../../common.sass';
 import NimChatroomSocket from '../sdk/NimChatroomSocket';
 import { source } from '../../../utils/snh48';
 import type { LiveRoomInfo } from '../../48/services/interface';
-import type { LiveRoomMessage, LiveRoomTextMessage, LiveRoomTextCustom } from './messageType';
+import type {
+  LiveRoomMessage,
+  LiveRoomTextMessage,
+  LiveRoomGiftInfoCustom,
+  LiveRoomTextCustom
+} from './messageType';
 
 const VirtualItemClassName: string = 'Virtual-Item-2';
 
+function isLiveRoomTextCustom(item: LiveRoomMessage, custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom): custom is LiveRoomTextCustom {
+  return item.type === 'text' || custom.messageType === 'BARRAGE_MEMBER';
+}
+
 /* 显示单条弹幕 */
 interface DanmuItemProps {
-  item: LiveRoomTextMessage;
+  item: LiveRoomMessage;
   index: number;
 }
 
@@ -48,21 +57,36 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
     }, []);
 
     try {
-      const custom: LiveRoomTextCustom = JSON.parse(item.custom);
+      const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
+      const isMember: boolean = custom.messageType === 'BARRAGE_MEMBER';
 
-      return (
-        <div ref={ ref }
-          className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName) }
-          style={{ height }}
-          data-index={ index }
-        >
-          <div ref={ divRef }>
-            <Avatar size="small" src={ source(custom.user.avatar) } />
-            <span className="ml-[3px]">{ custom.user.nickName }：</span>
-            { item.text }
+      if (isLiveRoomTextCustom(item, custom)) {
+        return (
+          <div ref={ ref }
+            className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName, isMember ? commonStyle.primaryText : undefined) }
+            style={{ height }}
+            data-index={ index }
+          >
+            <div ref={ divRef }>
+              <Avatar size="small" src={ source(custom.user.avatar) } />
+              <span className="ml-[3px]">{ custom.user.nickName }：</span>
+              { isMember ? custom.text : (item as LiveRoomTextMessage).text }
+            </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        return (
+          <div ref={ ref }
+            className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName) }
+            style={{ height }}
+            data-index={ index }
+          >
+            <div ref={ divRef }>
+              { custom.user.nickName } 送给 { custom.giftInfo.acceptUser.userName } { custom.giftInfo.giftNum }个{ custom.giftInfo.giftName }。
+            </div>
+          </div>
+        );
+      }
     } catch (err) {
       console.error(err, props);
 
@@ -77,7 +101,7 @@ interface DanmuProps {
 
 function Danmu(props: DanmuProps): ReactElement {
   const { info }: DanmuProps = props;
-  const [danmuData, setDanmuData]: [Array<LiveRoomTextMessage>, D<S<Array<LiveRoomTextMessage>>>] = useState([]);
+  const [danmuData, setDanmuData]: [Array<LiveRoomMessage>, D<S<Array<LiveRoomMessage>>>] = useState([]);
   const [danmuListHeight, setDanmuListHeight]: [number, D<S<number>>] = useState(0);
   const nimRef: MutableRefObject<NimChatroomSocket | null> = useRef(null);
   const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
@@ -86,16 +110,23 @@ function Danmu(props: DanmuProps): ReactElement {
 
   // 获取到新信息
   function handleNewMessage(t: NimChatroomSocket, event: Array<LiveRoomMessage>): void {
-    const filterMessage: Array<LiveRoomTextMessage> = [];
+    const filterMessage: Array<LiveRoomMessage> = [];
 
     for (const item of event) {
       if (item.type === 'text') {
         item.vid = randomUUID();
         filterMessage.unshift(item);
+      } else if (item.type === 'custom') {
+        const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
+
+        if (custom.messageType === 'BARRAGE_MEMBER' || 'giftInfo' in custom) {
+          item.vid = randomUUID();
+          filterMessage.unshift(item);
+        }
       }
     }
 
-    setDanmuData((prevState: LiveRoomTextMessage[]): LiveRoomTextMessage[] => filterMessage.concat(prevState));
+    setDanmuData((prevState: LiveRoomMessage[]): LiveRoomMessage[] => filterMessage.concat(prevState));
   }
 
   // 开启弹幕功能

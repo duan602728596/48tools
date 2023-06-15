@@ -51,7 +51,7 @@ export interface LiveRoomTextCustom {
   inTop: boolean;
   liveBubbleAndroidUrl: string;
   roomId: `${ number }`;
-  messageType: 'BARRAGE_NORMAL' | string;
+  messageType: 'BARRAGE_NORMAL' | 'BARRAGE_MEMBER' | string;
   liveBubbleIosUrl: string;
   bubbleId: string;
   text: string;
@@ -97,4 +97,14 @@ export interface LiveRoomServerGiftInfoMessage extends LiveRoomBasicEvent {
   type: 'custom';
 }
 
-export type LiveRoomMessage = LiveRoomTextMessage | LiveRoomServerGiftInfoMessage;
+export interface LiveRoomMemberBarrage extends LiveRoomBasicEvent {
+  content: `{${ string }}`;
+  from: string;
+  fromClientType: string;
+  fromNick: string;
+  text: string;
+  type: 'custom';
+}
+
+export type LiveRoomUserMessage = LiveRoomTextMessage | LiveRoomMemberBarrage;
+export type LiveRoomMessage = LiveRoomUserMessage | LiveRoomServerGiftInfoMessage;

@@ -45,7 +45,6 @@ class NIM {
         timetag: timeTag,
         // @ts-ignore
         done(err: Error, data: { msgs: Array<NIMChatroomMessage> }): void {
-          console.log(data);
           resolve(data.msgs ?? []);
         }
       });
