@@ -25,3 +25,7 @@ www
 build
 dist
 packages/test/ffmpeg
+
+docker/*.zip
+docker/48tools-**/*
+docker/48tools/**/*
