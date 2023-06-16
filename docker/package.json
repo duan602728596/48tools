@@ -2,9 +2,6 @@
   "name": "@48tools/docker-install",
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "docker-install": "node install.mjs"
-  },
   "dependencies": {
     "@sweet-milktea/utils": "^4.0.0",
     "cross-zip": "^4.0.0",

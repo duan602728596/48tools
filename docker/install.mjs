@@ -1,6 +1,7 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
 import { promisify } from 'node:util';
+import process from 'node:process';
 import got from 'got';
 import zip from 'cross-zip';
 import { metaHelper } from '@sweet-milktea/utils';
@@ -34,7 +35,7 @@ async function downloadZip(version) {
 }
 
 async function install() {
-  const version = await getVersion();
+  const version = process.env.VERSION || await getVersion();
 
   console.log('正在下载文件......');
 
