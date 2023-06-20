@@ -7,7 +7,6 @@ import {
   Fragment,
   useState,
   useEffect,
-  useMemo,
   type ReactElement,
   type ReactNode,
   type Dispatch as D,
@@ -32,7 +31,6 @@ import {
   type FormInstance
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { Store as FormStore } from 'antd/es/form/interface';
 import type { BaseOptionType } from 'rc-select/es/Select';
 import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
@@ -59,7 +57,6 @@ import {
 } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { engineUserAgent } from '../../../../utils/snh48';
-import SearchForm from './SearchForm';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { pick } from '../../../../utils/lodash';
@@ -121,19 +118,9 @@ function Pocket48Record(props: {}): ReactElement {
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
-  const [query, setQuery]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
   const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
   const [userIdSearchLoading, setUserIdSearchLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
-  const recordListQueryResult: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
-    if (query && !/^\s*$/.test(query)) {
-      const regexp: RegExp = new RegExp(query, 'i');
-
-      return recordList.filter((o: LiveInfo): boolean => regexp.test(o.userInfo.nickname));
-    } else {
-      return recordList;
-    }
-  }, [query, recordList]);
 
   // 输入xox名字搜索
   function handleByContentSearch(value: string): void {
@@ -169,11 +156,6 @@ function Pocket48Record(props: {}): ReactElement {
   // 表单的onFieldsChange事件
   function handleFormFieldsChange(changedFields: RecordFieldData[], allFields: RecordFieldData[]): void {
     dispatch(setRecordFields(allFields));
-  }
-
-  // 搜索
-  function onSubmit(value: FormStore): void {
-    setQuery(value.q);
   }
 
   // 停止
@@ -497,52 +479,49 @@ function Pocket48Record(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Space>
-          <SearchForm onSubmit={ onSubmit } />
-          {/* 队伍和当前人的搜索 */}
-          <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
-            <Space size={ 0 }>
-              <div className="relative inline-block mr-[8px] align-super">
-                <Space.Compact>
-                  <Form.Item name="groupId" noStyle={ true }>
-                    <Select className="w-[130px]">
-                      <Select.Option value="all">全部</Select.Option>
-                      <Select.Option value={ 10 }>SNH48</Select.Option>
-                      <Select.Option value={ 11 }>BEJ48</Select.Option>
-                      <Select.Option value={ 12 }>GNZ48</Select.Option>
-                      <Select.Option value={ 14 }>CKG48</Select.Option>
-                      <Select.Option value={ 21 }>CGT48</Select.Option>
-                      <Select.Option value={ 15 }>IDFT</Select.Option>
-                      <Select.Option value={ 19 }>明星殿堂</Select.Option>
-                      <Select.Option value={ 17 }>THE9</Select.Option>
-                      <Select.Option value={ 18 }>硬糖少女303</Select.Option>
-                      <Select.Option value={ 20 }>丝芭影视</Select.Option>
-                      <Select.Option value={ 16 }>海外练习生</Select.Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item name="userId" noStyle={ true }>
-                    <AutoComplete className="w-[250px]"
-                      placeholder="输入成员姓名查询或输入成员ID"
-                      onSearch={ handleByContentSearch }
-                      options={ userIdSearchResult }
-                    />
-                  </Form.Item>
-                </Space.Compact>
-                <div className="absolute z-10 top-[4px] right-[6px] pointer-events-none">
-                  { userIdSearchLoading && <Spin size="small" indicator={ <IconLoadingOutlined spin={ true } /> } /> }
-                </div>
+        {/* 队伍和当前人的搜索 */}
+        <Form className="inline-block" form={ form } fields={ recordFields } onFieldsChange={ handleFormFieldsChange }>
+          <Space size={ 0 }>
+            <div className="relative inline-block mr-[8px] align-super">
+              <Space.Compact>
+                <Form.Item name="groupId" noStyle={ true }>
+                  <Select className="w-[130px]">
+                    <Select.Option value="all">全部</Select.Option>
+                    <Select.Option value={ 10 }>SNH48</Select.Option>
+                    <Select.Option value={ 11 }>BEJ48</Select.Option>
+                    <Select.Option value={ 12 }>GNZ48</Select.Option>
+                    <Select.Option value={ 14 }>CKG48</Select.Option>
+                    <Select.Option value={ 21 }>CGT48</Select.Option>
+                    <Select.Option value={ 15 }>IDFT</Select.Option>
+                    <Select.Option value={ 19 }>明星殿堂</Select.Option>
+                    <Select.Option value={ 17 }>THE9</Select.Option>
+                    <Select.Option value={ 18 }>硬糖少女303</Select.Option>
+                    <Select.Option value={ 20 }>丝芭影视</Select.Option>
+                    <Select.Option value={ 16 }>海外练习生</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item name="userId" noStyle={ true }>
+                  <AutoComplete className="w-[250px]"
+                    placeholder="输入成员姓名查询或输入成员ID"
+                    onSearch={ handleByContentSearch }
+                    options={ userIdSearchResult }
+                  />
+                </Form.Item>
+              </Space.Compact>
+              <div className="absolute z-10 top-[4px] right-[6px] pointer-events-none">
+                { userIdSearchLoading && <Spin size="small" indicator={ <IconLoadingOutlined spin={ true } /> } /> }
               </div>
-              <Button.Group>
-                <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
-                <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
-              </Button.Group>
-            </Space>
-          </Form>
-        </Space>
+            </div>
+            <Button.Group>
+              <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
+              <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+            </Button.Group>
+          </Space>
+        </Form>
       </Header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ recordListQueryResult }
+        dataSource={ recordList }
         bordered={ true }
         loading={ loading }
         rowKey="liveId"
