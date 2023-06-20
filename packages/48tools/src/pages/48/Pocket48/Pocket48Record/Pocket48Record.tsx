@@ -501,8 +501,8 @@ function Pocket48Record(props: {}): ReactElement {
                   </Select>
                 </Form.Item>
                 <Form.Item name="userId" noStyle={ true }>
-                  <AutoComplete className="w-[250px]"
-                    placeholder="输入成员姓名查询或输入成员ID"
+                  <AutoComplete className="w-[200px]"
+                    placeholder="支持姓名、ID、拼音"
                     onSearch={ handleByContentSearch }
                     options={ userIdSearchResult }
                   />
