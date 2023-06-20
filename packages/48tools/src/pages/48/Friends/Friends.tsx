@@ -13,32 +13,9 @@ import { Button, Spin, Empty, Divider } from 'antd';
 import * as classNames from 'classnames';
 import commonStyle from '../../../common.sass';
 import Header from '../../../components/Header/Header';
-import { useReqRoomIdQuery, type ReqRoomId } from '../reducers/pocketFriends.api';
+import { useReqRoomIdQuery, type ReqRoomId, type RoomIdFormatItem } from '../reducers/pocketFriends.api';
 import Group from './Group';
 import type { RoomItem } from '../services/interface';
-
-type RoomIdFormat = Array<{ title: string; data: Array<RoomItem> }>;
-
-function groupToMap(array: Array<RoomItem> = []): RoomIdFormat {
-  const obj: Record<string, Array<RoomItem>> = {};
-  const result: RoomIdFormat = [];
-
-  for (const item of array) {
-    const title: string = item.team ?? '';
-
-    obj[title] ??= [];
-    obj[title].push(item);
-  }
-
-  for (const key in obj) {
-    result.push({
-      title: key,
-      data: obj[key]
-    });
-  }
-
-  return result;
-}
 
 /* 关注friends */
 function Friends(props: {}): ReactElement {
@@ -46,9 +23,7 @@ function Friends(props: {}): ReactElement {
   const fromPathname: string = location?.state?.from ?? '/';
   const [addLoading, setAddLoading]: [boolean, D<S<boolean>>] = useState(false);
   const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
-  const roomId: RoomIdFormat = useMemo(function(): RoomIdFormat {
-    return groupToMap(reqRoomId.data);
-  }, [reqRoomId.data]);
+  const roomId: Array<RoomIdFormatItem> = reqRoomId.data ?? [];
   const loading: boolean = useMemo(function(): boolean {
     return reqRoomId.isLoading || reqRoomId.isFetching;
   }, [reqRoomId.isLoading, reqRoomId.isFetching]);
