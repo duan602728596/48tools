@@ -65,13 +65,6 @@ export interface SearchMemberIndex {
   suggest: Array<unknown>;
 }
 
-export interface SearchResult extends Pocket48ResponseBase {
-  content: {
-    pagePra: string;
-    memberIndexTemplates: null | Array<SearchMemberIndex>;
-  };
-}
-
 // server search
 export interface ServerApiItem {
   showButton: boolean;
@@ -215,7 +208,13 @@ export interface RoomItem {
   roomId?: string;
   account?: string;
   serverId?: number;
+  channelId?: number;
   team?: string;
+  teamId?: number;
+  groupName?: string;
+  periodName?: string;
+  pinyin?: string;
+  liveRoomId?: string;
 }
 
 export interface RoomIdObj {

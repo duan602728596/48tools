@@ -6,7 +6,6 @@ import type {
   LiveInfo,
   LiveData,
   LiveRoomInfo,
-  SearchResult,
   ServerSearchResult,
   ServerJumpResult,
   HomeMessageResult,
@@ -101,22 +100,6 @@ export async function requestLiveList(
   if (firstData && res?.body?.content?.liveList) {
     res.body.content.liveList.unshift(firstData);
   }
-
-  return res.body;
-}
-
-/* 搜索 */
-export async function requestSearch(content: string): Promise<SearchResult> {
-  const res: GotResponse<SearchResult> = await got('https://pocketapi.48.cn/search/api/search/v1/query', {
-    method: 'POST',
-    headers: createHeaders(),
-    responseType: 'json',
-    json: {
-      content,
-      limit: 100,
-      pagePra: ''
-    }
-  });
 
   return res.body;
 }

@@ -51,7 +51,6 @@ import {
 import {
   requestLiveList,
   requestLiveRoomInfo,
-  requestSearch,
   requestDownloadFileByStream,
   requestDownloadFile
 } from '../../services/pocket48';
@@ -61,9 +60,10 @@ import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { pick } from '../../../../utils/lodash';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
+import { useReqRoomIdQuery, type ReqRoomId } from '../../reducers/pocketFriends.api';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
-import type { LiveData, LiveInfo, LiveRoomInfo, SearchResult, SearchMemberIndex } from '../../services/interface';
+import type { LiveData, LiveInfo, LiveRoomInfo, RoomItem } from '../../services/interface';
 
 /**
  * 格式化m3u8文件内视频的地址
@@ -121,6 +121,8 @@ function Pocket48Record(props: {}): ReactElement {
   const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
   const [userIdSearchLoading, setUserIdSearchLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
+  const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
+  const roomId: Array<RoomItem> = reqRoomId.data ?? [];
 
   // 输入xox名字搜索
   function handleByContentSearch(value: string): void {
@@ -129,7 +131,7 @@ function Pocket48Record(props: {}): ReactElement {
       searchTimer = null;
     }
 
-    if (!(value && /[\u4E00-\u9FFF]+/.test(value))) {
+    if (!value) {
       setUserIdSearchLoading(false);
       setUserIdSearchResult([]);
 
@@ -137,20 +139,51 @@ function Pocket48Record(props: {}): ReactElement {
     }
 
     setUserIdSearchLoading(true);
-    searchTimer = setTimeout(async (): Promise<void> => {
-      const res: SearchResult = await requestSearch(value);
+    searchTimer = setTimeout((): void => {
+      const result: Array<BaseOptionType> = [];
 
-      if (res.content?.memberIndexTemplates?.length) {
-        setUserIdSearchResult(
-          res.content.memberIndexTemplates.map((o: SearchMemberIndex): BaseOptionType => ({
-            label: `${ o.nickname }（${ o.memberId }）`,
-            value: `${ o.memberId }`
-          }))
-        );
+      if (/^[\u4E00-\u9FFF]+$/i.test(value)) {
+        // 搜索中文
+        const regexp: RegExp = new RegExp(value, 'i');
+
+        for (const item of roomId) {
+          if (regexp.test(item.ownerName)) {
+            result.push({
+              label: `${ item.ownerName }（${ item.id }）`,
+              value: `${ item.id }`
+            });
+          }
+        }
+      } else if (/^\d+$/i.test(value)) {
+        // 搜索ID
+        const regexp: RegExp = new RegExp(value, 'i');
+
+        for (const item of roomId) {
+          if (regexp.test(`${ item.id }`)) {
+            result.push({
+              label: `${ item.ownerName }（${ item.id }）`,
+              value: `${ item.id }`
+            });
+          }
+        }
+      } else if (/^[a-zA-Z\s]+$/i.test(value)) {
+        // 搜索英文
+        // 搜索ID
+        const regexp: RegExp = new RegExp(value.replaceAll(' ', ''), 'i');
+
+        for (const item of roomId) {
+          if (item.pinyin && regexp.test(`${ item.pinyin.replaceAll(' ', '') }`)) {
+            result.push({
+              label: `${ item.ownerName }（${ item.id }）`,
+              value: `${ item.id }`
+            });
+          }
+        }
       }
 
+      setUserIdSearchResult(result);
       setUserIdSearchLoading(false);
-    }, 1_000);
+    }, 500);
   }
 
   // 表单的onFieldsChange事件
@@ -501,8 +534,8 @@ function Pocket48Record(props: {}): ReactElement {
                   </Select>
                 </Form.Item>
                 <Form.Item name="userId" noStyle={ true }>
-                  <AutoComplete className="w-[200px]"
-                    placeholder="支持姓名、ID、拼音"
+                  <AutoComplete className="w-[250px]"
+                    placeholder="搜索支持姓名、ID、拼音"
                     onSearch={ handleByContentSearch }
                     options={ userIdSearchResult }
                   />
