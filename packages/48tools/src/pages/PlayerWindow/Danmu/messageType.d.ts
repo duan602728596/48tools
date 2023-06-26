@@ -22,6 +22,7 @@ export interface LiveRoomGiftInfoCustom {
     giftNum: number;
     zipPath: string;
     sourceId: string;
+    tpNum: string;
     acceptUser: {
       userId: number;
       userAvatar: string;

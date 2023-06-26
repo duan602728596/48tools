@@ -75,6 +75,8 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
           </div>
         );
       } else {
+        const tpNum: number = Number(custom.giftInfo.tpNum);
+
         return (
           <div ref={ ref }
             className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName) }
@@ -82,7 +84,11 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
             data-index={ index }
           >
             <div ref={ divRef }>
-              { custom.user.nickName } 送给 { custom.giftInfo.acceptUser.userName } { custom.giftInfo.giftNum }个{ custom.giftInfo.giftName }。
+              { custom.user.nickName }
+              &nbsp;送给&nbsp;
+              { custom.giftInfo.acceptUser.userName }&nbsp;
+              { custom.giftInfo.giftNum }个
+              { custom.giftInfo.giftName }{ tpNum > 0 ? `(${ tpNum })` : null }。
             </div>
           </div>
         );
