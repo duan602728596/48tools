@@ -509,7 +509,7 @@ export interface GiftText {
       giftName: string;
       giftNum: number;
       picPath: string;
-      tpNum: number;
+      tpNum: number | string | '0';
     };
   };
 }

@@ -19,7 +19,11 @@ function filterLive(data: Array<NIMChatroomMessage>, st: number): { nextData: Ar
     } else if (item.type === 'custom' && item.custom) {
       const customJson: GiftText['attach'] = JSON.parse(item.custom);
 
-      if ('giftInfo' in customJson && /^\d+(.\d+)?分$/.test(customJson.giftInfo.giftName)) {
+      if (
+        'giftInfo' in customJson
+        && (/^\d+(.\d+)?分$/.test(customJson.giftInfo.giftName)
+          || Number(customJson.giftInfo.tpNum) > 0)
+      ) {
         nextData.push(customJson);
       }
     }
@@ -35,7 +39,8 @@ function filterQChat(data: Array<QChatMessage>): Array<QChatMessage> {
     if (
       item.type === 'custom'
       && item?.attach?.messageType === 'GIFT_TEXT'
-      && /^\d+(.\d+)?分$/.test(item.attach.giftInfo.giftName)
+      && (/^\d+(.\d+)?分$/.test(item.attach.giftInfo.giftName)
+        || Number(item.attach.giftInfo.tpNum) > 0)
     ) {
       nextData.push(item);
     }
@@ -53,9 +58,9 @@ async function qchatCalculate(user: QingchunshikeUserItem, st: number, et: numbe
 
   // 获取数据
   const allHistoryMessage: Array<QChatMessage> = [];
-  let endTime: number = et;       // 结束时间
+  let endTime: number = et; // 结束时间
   let excludeMsgId: string | undefined = undefined; // 排除ID
-  let pageNum: number = 0;        // 日志
+  let pageNum: number = 0;  // 日志
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
@@ -128,7 +133,7 @@ async function liveCalculate(user: QingchunshikeUserItem, st: number, et: number
       const { nextData, isBreak }: { nextData: Array<GiftText['attach']>; isBreak: boolean } = filterLive(historyMessage, st);
 
       allLiveHistoryMessage.push(...nextData);
-      dispatch(setLog(`NIM -> 抓取结束: ${ livePageNum++ } endTime: ${
+      dispatch(setLog(`NIM -> 抓取page: ${ livePageNum++ } endTime: ${
         dayjs(liveEndTime).format('YYYY-MM-DD HH:mm:ss')
       } endTime - st: ${ liveEndTime - st }`));
 
