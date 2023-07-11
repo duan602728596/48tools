@@ -2,7 +2,6 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "moduleResolution": "node",
-    "locale": "zh-CN",
     "target": "ES2022",
     "newLine": "LF",
     "resolveJsonModule": true,
