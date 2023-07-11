@@ -1,13 +1,12 @@
 import util from 'node:util';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import glob from 'glob';
+import { glob } from 'glob';
 import fse from 'fs-extra/esm';
 import zip from 'cross-zip';
 import { build, unpacked, isMacOS } from './utils.mjs';
 import lernaJson from '../lerna.json' assert { type: 'json' };
 
-const globPromise = util.promisify(glob);
 const zipPromise = util.promisify(zip.zip);
 
 const { version } = lernaJson;
@@ -25,7 +24,7 @@ const renameDir = {
  */
 async function lprojDeleteFilesAndWriteVersion(unpackedDir) {
   // 删除多语言文件
-  const files = await globPromise(path.join(unpackedDir, '48tools.app/Contents/Resources/*.lproj'));
+  const files = await glob(path.join(unpackedDir, '48tools.app/Contents/Resources/*.lproj'));
   const deleteTasks = [];
 
   files.forEach((o) => !/zh_CN/i.test(o) && deleteTasks.push(fse.remove(o)));
@@ -41,7 +40,7 @@ async function lprojDeleteFilesAndWriteVersion(unpackedDir) {
  */
 async function pakDeleteFilesAndWriteVersion(unpackedDir) {
   // 删除多语言文件
-  const files = await globPromise(path.join(unpackedDir, 'locales/*.pak'));
+  const files = await glob(path.join(unpackedDir, 'locales/*.pak'));
   const deleteTasks = [];
 
   files.forEach((o) => !/zh-CN/i.test(o) && deleteTasks.push(fse.remove(o)));
