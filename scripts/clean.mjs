@@ -4,7 +4,7 @@ import path from 'node:path';
 import { glob } from 'glob';
 import fse from 'fs-extra/esm';
 import zip from 'cross-zip';
-import { build, unpacked, isMacOS } from './utils.mjs';
+import { build, unpacked, isMacOS, isWindows } from './utils.mjs';
 import lernaJson from '../lerna.json' assert { type: 'json' };
 
 const zipPromise = util.promisify(zip.zip);
@@ -40,7 +40,9 @@ async function lprojDeleteFilesAndWriteVersion(unpackedDir) {
  */
 async function pakDeleteFilesAndWriteVersion(unpackedDir) {
   // 删除多语言文件
-  const files = await glob(path.join(unpackedDir, 'locales/*.pak'));
+  const files = await glob(path.join(unpackedDir, 'locales/*.pak'), {
+    windowsPathsNoEscape: isWindows ? true : undefined
+  });
   const deleteTasks = [];
 
   files.forEach((o) => !/zh-CN/i.test(o) && deleteTasks.push(fse.remove(o)));
