@@ -27,7 +27,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "yarn@3.3.1",
+  "packageManager": "yarn@3.6.1",
   "dependencies": {
     "@vercel/ncc": "^0.36.1",
     "cross-zip": "^4.0.0",
