@@ -1,10 +1,15 @@
-import { requestDouyinUser, requestDouyinVideo } from '../../../services/douyin';
+import {
+  requestDouyinUser,
+  requestDouyinVideo,
+  requestTtwidCookie,
+  requestAwemePostReturnType,
+  requestAwemeDetailReturnType,
+  type DouyinHtmlResponseType
+} from '@48tools-api/toutiao/douyin';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
 import parser, { DouyinUrlType, type ParseResult } from '../parser';
-import { requestTtwidCookie, requestAwemePostReturnType, requestAwemeDetailReturnType } from '../../../services/douyin';
-import { douyinCookie } from '../DouyinCookieStore';
+import { douyinCookie } from '../../../../../utils/toutiao/DouyinCookieStore';
 import type { GetVideoUrlOnionContext } from '../../../types';
-import type { DouyinHtmlResponseType } from '../../../services/interface';
 
 /**
  * 获取抖音的数据

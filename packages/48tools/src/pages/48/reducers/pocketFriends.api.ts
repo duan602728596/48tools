@@ -1,8 +1,7 @@
 import { createApi, type Api, type QueryDefinition, type ApiModules } from '@reduxjs/toolkit/query/react';
 import type { EndpointBuilder } from '@reduxjs/toolkit/src/query/endpointDefinitions';
 import type { UseQueryHookResult } from '@reduxjs/toolkit/src/query/react/buildHooks';
-import { requestRoomId } from '../services/jsdelivrCDN';
-import type { RoomIdObj, RoomItem } from '../services/interface';
+import { requestRoomId, type RoomIdObj, type RoomItem } from '@48tools-api/48/jsdelivrCDN';
 
 /* redux */
 const apiReducerPathName: 'pocketFriendsApi' = 'pocketFriendsApi';

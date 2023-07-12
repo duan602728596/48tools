@@ -15,6 +15,7 @@ import { Button, Popconfirm, Table, message, Modal, Select } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { BaseOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import { requestLiveEnter, requestTtwidCookie, type LiveEnter } from '@48tools-api/toutiao/douyin';
 import style from './douyinLive.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
@@ -30,11 +31,9 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
-import { requestLiveEnter, requestTtwidCookie } from '../services/douyin';
-import { douyinCookie } from '../Douyin/function/DouyinCookieStore';
+import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
-import type { LiveEnter } from '../services/interface';
 
 /* redux selector */
 type RState = { douyinLive: LiveSliceInitialState };

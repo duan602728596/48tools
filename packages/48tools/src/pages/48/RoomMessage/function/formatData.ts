@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
+import type { CustomMessageV2 } from '@48tools-api/48';
 import { source, mp4Source } from '../../../../utils/snh48';
 import { rStr } from '../../../../utils/utils';
-import type { CustomMessageV2 } from '../../services/interface';
 import type { FormatCustomMessage, VIDEOMessageV2, AUDIOMessageV2, IMAGEMessageV2, UserV2, SendDataItem } from '../../types';
 
 /* 将数据格式化 */

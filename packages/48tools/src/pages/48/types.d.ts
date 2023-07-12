@@ -1,8 +1,7 @@
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
-import type { QChatMessage } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/QChatMsgServiceInterface';
 import type { FieldData } from 'rc-field-form/es/interface';
+import type { MsgType } from '@48tools-api/48';
 import type { WebWorkerChildItem } from '../../commonTypes';
-import type { MsgType } from './services/interface';
 
 export interface InLiveFormValue {
   type?: string;

@@ -1,14 +1,13 @@
 import { useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
 import * as classNames from 'classnames';
+import { requestLiveRoomInfo, type LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../common.sass';
 import LiveInfo from './LiveInfo/LiveInfo';
 import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
 import Danmu from './Danmu/Danmu';
 import RecordDanmu from './Danmu/RecordDanmu';
-import { requestLiveRoomInfo } from '../48/services/pocket48';
 import type { PlayerInfo } from '../../components/basic/initialState/initialState';
-import type { LiveRoomInfo } from '../48/services/interface';
 
 const playerInfo: PlayerInfo = globalThis.__INITIAL_STATE__.playerInfo;
 const inRecord: boolean = playerInfo.playerType === 'record';

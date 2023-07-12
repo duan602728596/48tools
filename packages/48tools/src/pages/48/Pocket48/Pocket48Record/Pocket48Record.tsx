@@ -36,6 +36,16 @@ import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/an
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
+import {
+  requestLiveList,
+  requestLiveRoomInfo,
+  requestDownloadFileByStream,
+  requestDownloadFile,
+  type LiveData,
+  type LiveInfo,
+  type LiveRoomInfo
+} from '@48tools-api/48';
+import type { RoomItem } from '@48tools-api/48/jsdelivrCDN';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getRecordVideoDownloadWorker from './RecordVideoDownload.worker/getRecordVideoDownloadWorker';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
@@ -48,12 +58,6 @@ import {
   setDownloadProgress,
   type Pocket48InitialState
 } from '../../reducers/pocket48';
-import {
-  requestLiveList,
-  requestLiveRoomInfo,
-  requestDownloadFileByStream,
-  requestDownloadFile
-} from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { engineUserAgent } from '../../../../utils/snh48';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
@@ -63,7 +67,6 @@ import { ProgressNative, type ProgressSet } from '../../../../components/Progres
 import { useReqRoomIdQuery, type ReqRoomId } from '../../reducers/pocketFriends.api';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
-import type { LiveData, LiveInfo, LiveRoomInfo, RoomItem } from '../../services/interface';
 
 /**
  * 格式化m3u8文件内视频的地址

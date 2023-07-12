@@ -16,17 +16,23 @@ import type { BaseOptionType } from 'rc-select/es/Select';
 import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import {
+  requestAwemePost,
+  requestDouyinUser,
+  requestTtwidCookie,
+  type AwemePostResponse,
+  type AwemeItem,
+  type DouyinHtmlResponseType
+} from '@48tools-api/toutiao/douyin';
 import style from './videoOrUserParse.sass';
 import douyinStyle from '../douyin.sass';
 import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
 import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMiddleware';
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
 import { setAddDownloadList, setAddDownloadListAll } from '../../reducers/douyinDownload';
-import { douyinCookie } from '../function/DouyinCookieStore';
-import { requestAwemePost, requestDouyinUser, requestTtwidCookie } from '../../services/douyin';
+import { douyinCookie } from '../../../../utils/toutiao/DouyinCookieStore';
 import * as toutiaosdk from '../../sdk/toutiaosdk';
 import type { DownloadUrlItem, DownloadItem, UserDataItem, VideoQuery } from '../../types';
-import type { AwemePostResponse, AwemeItem, DouyinHtmlResponseType, AwemeItemRate } from '../../services/interface';
 
 /* select渲染 */
 function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactElement> {

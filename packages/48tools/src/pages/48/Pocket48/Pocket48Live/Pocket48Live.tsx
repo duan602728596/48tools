@@ -17,13 +17,13 @@ import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/an
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
+import { requestLiveRoomInfo, type LiveInfo, type LiveRoomInfo } from '@48tools-api/48';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import getDownloadAndTranscodingWorker from '../function/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
-import { requestLiveRoomInfo } from '../../services/pocket48';
 import {
   reqLiveList,
   setAddLiveChildList,
@@ -43,7 +43,6 @@ import autoGrab from '../function/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
-import type { LiveInfo, LiveRoomInfo } from '../../services/interface';
 
 /* redux selector */
 type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList' | 'autoGrabTimer'>;

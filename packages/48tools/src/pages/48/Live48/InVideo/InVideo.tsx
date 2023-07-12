@@ -17,6 +17,7 @@ import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
+import { requestDownloadFile } from '@48tools-api/48';
 import style from './inVideo.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
@@ -30,7 +31,6 @@ import {
   type Live48InitialState
 } from '../../reducers/live48';
 import { parseInVideoUrl, parseVideoItem } from '../function/parseLive48Website';
-import { requestDownloadFile } from '../../services/pocket48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';

@@ -1,6 +1,6 @@
 import type { Dispatch as D, SetStateAction as S } from 'react';
 import type { MessageInstance } from 'antd/es/message/interface';
-import type { AwemeItem, AwemePostResponse, AwemeDetailResponse } from './services/interface';
+import type { AwemeItem, AwemePostResponse, AwemeDetailResponse } from '@48tools-api/toutiao/douyin';
 import type { ParseResult } from './Douyin/function/parser';
 
 type NoProtocolUrl = `//${ string }`;

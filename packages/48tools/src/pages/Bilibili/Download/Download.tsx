@@ -22,6 +22,7 @@ import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import * as dayjs from 'dayjs';
+import { requestDownloadFileByStream } from '@48tools-api/48';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
@@ -42,7 +43,6 @@ import {
   setDeleteDownloadWorker,
   type BilibiliDownloadInitialState
 } from '../reducers/bilibiliDownload';
-import { requestDownloadFileByStream } from '../../48/services/pocket48';
 import { getFFmpeg } from '../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';

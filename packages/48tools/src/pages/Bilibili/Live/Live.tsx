@@ -8,6 +8,7 @@ import { Button, Table, message, Popconfirm, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import { requestRoomInitData, requestRoomPlayerUrl, type RoomInit, type RoomPlayUrl } from '@48tools-api/bilibili/live';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
@@ -25,12 +26,10 @@ import {
   type BilibiliLiveInitialState
 } from '../reducers/bilibiliLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import { requestRoomInitData, requestRoomPlayerUrl } from '../services/live';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { LiveItem } from '../types';
-import type { RoomInit, RoomPlayUrl } from '../services/interface';
 
 /* redux selector */
 type RState = { bilibiliLive: BilibiliLiveInitialState };

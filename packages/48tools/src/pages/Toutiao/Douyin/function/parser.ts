@@ -1,6 +1,5 @@
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
-import { requestDouyinUrl } from '../../services/douyin';
-import type { DouyinHtmlResponseType } from '../../services/interface';
+import { requestDouyinUrl, type DouyinHtmlResponseType } from '@48tools-api/toutiao/douyin';
 
 const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接
 const iesdouyinRegexp: RegExp = /www.iesdouyin.com/i; // 抖音分享长链接

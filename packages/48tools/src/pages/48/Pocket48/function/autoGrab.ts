@@ -4,14 +4,13 @@ import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
+import { requestLiveList, requestLiveRoomInfo, type LiveData, type LiveInfo, type UserInfo, type LiveRoomInfo } from '@48tools-api/48';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
-import { requestLiveList, requestLiveRoomInfo } from '../../services/pocket48';
 import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
 import type { MessageEventData, WebWorkerChildItem } from '../../../../commonTypes';
-import type { LiveData, LiveInfo, UserInfo, LiveRoomInfo } from '../../services/interface';
 
 /**
  * 自动抓取

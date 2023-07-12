@@ -15,12 +15,12 @@ import {
 import { Spin, Empty } from 'antd';
 import * as classNames from 'classnames';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
+import { requestDanmuFile } from '@48tools-api/48/danmu';
+import type { LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../../common.sass';
-import { requestDanmuFile } from '../services/danmu';
 import formatDanmu from '../function/formatDanmu';
 import { danmuStore } from '../function/DanmuStore';
 import { VIDEO_ID } from '../Video/RecordVideo';
-import type { LiveRoomInfo } from '../../48/services/interface';
 import type { DanmuItem } from '../types';
 
 const VirtualItemClassName: string = 'Virtual-Item-3';

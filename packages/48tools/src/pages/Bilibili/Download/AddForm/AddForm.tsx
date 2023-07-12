@@ -13,10 +13,10 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, type FormInstance } from 'antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import type { VideoData, DashVideoInfo, DashSupportFormats, DashVideoItem } from '@48tools-api/bilibili/download';
 import style from './addForm.sass';
 import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo, parseVideoUrlDASH } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
-import type { VideoData, DashVideoInfo, DashSupportFormats, DashVideoItem } from '../../services/interface';
 
 /* 视频分类 */
 const bilibiliVideoTypes: Array<{ label: string; value: string }> = [

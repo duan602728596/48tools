@@ -17,10 +17,10 @@ import * as PropTypes from 'prop-types';
 import { Avatar, Switch } from 'antd';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
+import type { LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../../common.sass';
 import NimChatroomSocket from '../sdk/NimChatroomSocket';
 import { source } from '../../../utils/snh48';
-import type { LiveRoomInfo } from '../../48/services/interface';
 import type {
   LiveRoomMessage,
   LiveRoomTextMessage,

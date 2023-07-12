@@ -15,11 +15,10 @@ import { Button, Modal, Input, Form, Table, Spin, message, type FormInstance } f
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { ColumnsType } from 'antd/es/table';
 import * as classNames from 'classnames';
+import { requestSpaceArcSearch, type SpaceArcSearchVListItem, type SpaceArcSearch } from '@48tools-api//bilibili/download';
 import style from './addBySearch.sass';
-import { requestSpaceArcSearch } from '../../services/download';
 import { parseVideoList, parseVideoUrlV2 } from '../function/parseBilibiliUrl';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
-import type { SpaceArcSearchVListItem, SpaceArcSearch } from '../../services/interface';
 import type { DownloadItem as BilibiliDownloadItem } from '../../types';
 
 interface PageQuery {

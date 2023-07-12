@@ -1,7 +1,7 @@
 import type { Browser } from 'playwright-core';
 import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { LabeledValue } from '@48tools-types/antd';
-import type { ServerApiItem, CustomMessageV2 } from '../services/interface';
+import type { ServerApiItem, CustomMessageV2 } from '@48tools-api/48';
 import type { QueryRecord, FormatCustomMessage } from '../types';
 
 export interface RoomMessageInitialState {

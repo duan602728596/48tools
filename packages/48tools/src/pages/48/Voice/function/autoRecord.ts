@@ -3,6 +3,7 @@ import type { Store } from '@reduxjs/toolkit';
 import type { QChatMessage } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/QChatMsgServiceInterface';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { NotificationInstance } from 'antd/es/notification/interface';
+import { requestVoiceOperate, type VoiceOperate } from '@48tools-api/48';
 import { store } from '../../../../store/store';
 import QChatSocket from '../../sdk/QChatSocket';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
@@ -13,11 +14,9 @@ import {
   roomVoiceListSelectors
 } from '../../reducers/roomVoice';
 import { getFFmpeg, getFileTime, rStr } from '../../../../utils/utils';
-import { requestVoiceOperate } from '../../services/pocket48';
 import type { RoomVoiceItem, TeamVoiceMessage } from '../../types';
 import type { UserInfo } from '../../../../functionalComponents/Pocket48Login/types';
 import type { MessageEventData, WebWorkerChildItem } from '../../../../commonTypes';
-import type { VoiceOperate } from '../../services/interface';
 
 let QChatSocketList: Array<QChatSocket> = [];
 

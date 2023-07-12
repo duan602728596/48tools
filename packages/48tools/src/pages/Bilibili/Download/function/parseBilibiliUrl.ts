@@ -3,18 +3,15 @@ import {
   requestVideoInfo,
   requestAudioInfo,
   requestBangumiVideoInfo,
-  requestWebInterfaceView
-} from '../../services/download';
+  requestWebInterfaceView,
+  type VideoInfo,
+  type VideoData,
+  type AudioInfo,
+  type BangumiVideoInfo,
+  type WebInterfaceViewData,
+  type WebInterfaceViewDataPageItem
+} from '@48tools-api/bilibili/download';
 import type { InitialState, EpisodesItem, NextDataMediaInfo, NextData } from '../../types';
-import type {
-  VideoInfo,
-  VideoData,
-  AudioInfo,
-  BangumiVideoInfo,
-  WebInterfaceViewData,
-  WebInterfaceViewDataPageItem
-} from '../../services/interface';
-
 interface ParseHtmlResult {
   initialState?: InitialState;
   h1Title: string;

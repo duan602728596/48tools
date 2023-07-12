@@ -4,14 +4,13 @@ import type { ReactElement, MouseEvent } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { Button } from 'antd';
 import { CloseCircleFilled as IconCloseCircleFilled } from '@ant-design/icons';
+import { requestDouyinVideo, requestDouyinUser, type DouyinHtmlResponseType } from '@48tools-api/toutiao/douyin';
 import AntdConfig from '../../../../../components/basic/AntdConfig/AntdConfig';
 import ThemeProvider from '../../../../../components/basic/Theme/ThemeProvider';
 import * as toutiaosdk from '../../../sdk/toutiaosdk';
-import { douyinCookie } from '../DouyinCookieStore';
+import { douyinCookie } from '../../../../../utils/toutiao/DouyinCookieStore';
 import { DouyinUrlType } from '../parser';
-import { requestDouyinVideo, requestDouyinUser } from '../../../services/douyin';
 import type { GetVideoUrlOnionContext, VerifyData } from '../../../types';
-import type { DouyinHtmlResponseType } from '../../../services/interface';
 
 let closeBtnElement: HTMLElement | null = null;
 let closeBtnRoot: Root | null = null;

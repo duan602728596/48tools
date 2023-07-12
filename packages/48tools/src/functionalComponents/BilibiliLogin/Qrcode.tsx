@@ -6,10 +6,9 @@ import { message, Button, Alert } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { toCanvas } from 'qrcode/lib/browser';
 import * as dayjs from 'dayjs';
+import { requestLoginUrl, requestLoginInfo, type LoginUrl, type LoginInfo } from '@48tools-api/bilibili/login';
 import style from './qrcode.sass';
-import { requestLoginUrl, requestLoginInfo } from './services/bilibiliLogin';
 import { warningNativeMessage } from '../../utils/remote/nativeMessage';
-import type { LoginUrl, LoginInfo } from './services/interface';
 
 const toCanvasPromise: (e: HTMLCanvasElement, u: string) => Promise<void> = promisify(toCanvas);
 

@@ -9,12 +9,11 @@ import { message, Button, Image } from 'antd';
 import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { CloudDownloadOutlined as IconCloudDownloadOutlined } from '@ant-design/icons';
+import { requestDownloadFileByStream, type LiveInfo } from '@48tools-api/48';
 import style from './downloadImages.sass';
 import { showOpenDialog, showSaveDialog } from '../../../../../utils/remote/dialog';
 import ImagePreview from './ImagePreview';
 import { source } from '../../../../../utils/snh48';
-import { requestDownloadFileByStream } from '../../../services/pocket48';
-import type { LiveInfo } from '../../../services/interface';
 
 interface DownloadImagesProps {
   liveInfo: LiveInfo;

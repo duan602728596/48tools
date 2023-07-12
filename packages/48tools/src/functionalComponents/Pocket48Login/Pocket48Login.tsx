@@ -19,20 +19,24 @@ import type { ModalFunc } from 'antd/es/modal/confirm';
 import type { UseMessageReturnType, UseModalReturnType, LabeledValue } from '@48tools-types/antd';
 import type { Tab } from 'rc-tabs/es/interface';
 import type { ItemType, MenuInfo } from 'rc-menu/es/interface';
-import commonStyle from '../../common.sass';
-import style from './pocket48Login.sass';
 import {
   requestMobileCodeLogin,
   requestImUserInfo,
   requestUserInfoReload,
-  requestUserInfoSwitch
-} from './services/pocket48Login';
+  requestUserInfoSwitch,
+  type LoginUserInfo,
+  type IMUserInfo,
+  type UserInfoReloadOrSwitch,
+  type UserItem
+} from '@48tools-api/48/login';
+import commonStyle from '../../common.sass';
+import style from './pocket48Login.sass';
+
 import { pick, omit } from '../../utils/lodash';
 import { setUserInfo, setClearInfo } from './reducers/pocket48Login';
 import { source } from '../../utils/snh48';
 import LoginForm from './LoginForm/LoginForm';
 import TokenForm from './TokenForm/TokenForm';
-import type { LoginUserInfo, IMUserInfo, UserInfoReloadOrSwitch, UserItem } from './services/interface';
 import type { Pocket48LoginInitialState } from './reducers/pocket48Login';
 import type { UserInfo } from './types';
 

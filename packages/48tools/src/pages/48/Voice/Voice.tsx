@@ -19,11 +19,19 @@ import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType, UseNotificationReturnType } from '@48tools-types/antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
+import {
+  requestServerJump,
+  requestServerSearch,
+  requestVoiceOperate,
+  type ServerSearchResult,
+  type ServerApiItem,
+  type ServerJumpResult,
+  type VoiceOperate
+} from '@48tools-api/48';
 import { showSaveDialog, showOpenDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import Pocket48Login from '../../../functionalComponents/Pocket48Login/Pocket48Login';
 import FixSelect from '../components/FixSelect/FixSelect';
-import { requestServerJump, requestServerSearch, requestVoiceOperate } from '../services/pocket48';
 import {
   IDBCursorRoomVoiceInfo,
   IDBSaveRoomVoiceInfo,
@@ -38,7 +46,6 @@ import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { startAutoRecord, stopAutoRecord } from './function/autoRecord';
-import type { ServerSearchResult, ServerApiItem, ServerJumpResult, VoiceOperate } from '../services/interface';
 import type { RoomVoiceItem } from '../types';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 

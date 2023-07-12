@@ -8,9 +8,8 @@ import {
   type AsyncThunk,
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
-import { requestTopicCheckin } from '../services/weiboSuper';
+import { requestTopicCheckin, type CheckinResult } from '@48tools-api/weibo/super';
 import type { WeiboCheckinResult, Quantity } from '../types';
-import type { CheckinResult } from '../services/interface';
 
 export interface WeiboSuperInitialState {
   weiboCheckinList: Array<WeiboCheckinResult>;

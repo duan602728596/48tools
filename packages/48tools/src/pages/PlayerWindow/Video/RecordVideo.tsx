@@ -1,12 +1,11 @@
 import { useEffect, useRef, useSyncExternalStore, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import * as PropTypes from 'prop-types';
 import Hls, { type Events, type ManifestParsedData } from 'hls.js';
+import { requestDownloadFile, type LiveRoomInfo } from '@48tools-api/48';
 import { source, engineUserAgent } from '../../../utils/snh48';
-import { requestDownloadFile } from '../../48/services/pocket48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
 import { danmuStore } from '../function/DanmuStore';
 import type { PlayerInfo } from '../../../components/basic/initialState/initialState';
-import type { LiveRoomInfo } from '../../48/services/interface';
 import type { DanmuItem } from '../types';
 
 interface RecordVideoProps {

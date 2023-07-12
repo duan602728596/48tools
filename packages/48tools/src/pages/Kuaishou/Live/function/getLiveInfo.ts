@@ -1,4 +1,4 @@
-import { requestLiveHtml } from '../../services/live';
+import { requestLiveHtml } from '@48tools-api/kuaishou';
 import type { LiveInfo, KuaishouLiveInitialState } from '../../types';
 
 /**

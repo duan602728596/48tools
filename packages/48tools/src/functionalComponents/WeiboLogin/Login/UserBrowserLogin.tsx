@@ -6,11 +6,10 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
+import { requestUid, requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
 import { getBrowser, getExecutablePath } from '../../../utils/utils';
-import { requestUid, requestUserInfo } from '../services/weiboLogin';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import { errorNativeMessage } from '../../../utils/remote/nativeMessage';
-import type { UserInfo } from '../services/interface';
 
 let browser: Browser | null = null;
 

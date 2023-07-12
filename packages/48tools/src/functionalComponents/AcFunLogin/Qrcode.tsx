@@ -13,9 +13,15 @@ import * as PropTypes from 'prop-types';
 import { Button, Empty, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
-import { requestPcDirectQr, requestPcDirectScanResult, requestPcDirectAcceptResult } from './services/acfunLogin';
+import {
+  requestPcDirectQr,
+  requestPcDirectScanResult,
+  requestPcDirectAcceptResult,
+  type PcDirectQr,
+  type ScanResult,
+  type AcceptResult
+} from '@48tools-api/acfun/login';
 import { warningNativeMessage } from '../../utils/remote/nativeMessage';
-import type { PcDirectQr, ScanResult, AcceptResult } from './services/interface';
 
 export const ACFUN_COOKIE_KEY: string = 'ACFUN_COOKIE';
 let scanResultRequest: CancelableRequest<GotResponse<ScanResult>> | null = null,

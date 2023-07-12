@@ -20,6 +20,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
 import * as classNames from 'classnames';
 import * as dayjs from 'dayjs';
+import { requestGetVideoRedirectUrl } from '@48tools-api/toutiao/douyin';
 import style from './douyin.sass';
 import commonStyle from '../../../common.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
@@ -27,14 +28,13 @@ import getDownloadWorker from '../../../utils/worker/download.worker/getDownload
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 import Header from '../../../components/Header/Header';
 import VideoOrUserParse from './VideoOrUserParse/VideoOrUserParse';
-import { douyinCookie } from './function/DouyinCookieStore';
+import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
 import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,
   setDownloadProgress,
   type DouyinDownloadInitialState
 } from '../reducers/douyinDownload';
-import { requestGetVideoRedirectUrl } from '../services/douyin';
 import { fileTimeFormat } from '../../../utils/utils';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';

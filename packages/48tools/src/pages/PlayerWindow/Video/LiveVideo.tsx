@@ -2,10 +2,10 @@ import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
 import * as PropTypes from 'prop-types';
 import mpegts from 'mpegts.js';
+import type { LiveRoomInfo } from '@48tools-api/48';
 import { getFFmpeg } from '../../../utils/utils';
 import { source } from '../../../utils/snh48';
 import type { PlayerInfo } from '../../../components/basic/initialState/initialState';
-import type { LiveRoomInfo } from '../../48/services/interface';
 
 function handleChildProcessStdoutOrStderr(data: Buffer): void {
   // console.log(data.toString());

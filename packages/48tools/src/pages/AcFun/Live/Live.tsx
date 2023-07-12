@@ -16,6 +16,15 @@ import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { Onion } from '@bbkkbkk/q';
+import {
+  requestAcFunLiveHtml,
+  requestRestAppVisitorLogin,
+  requestWebTokenGet,
+  requestPlayUrl,
+  type AppVisitorLogin,
+  type WebToken,
+  type LiveWebStartPlay
+} from '@48tools-api/acfun';
 import style from './live.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
@@ -30,7 +39,6 @@ import {
   setRemoveWorkerItem,
   selectorsObject
 } from '../reducers/acfunLive';
-import { requestAcFunLiveHtml, requestRestAppVisitorLogin, requestWebTokenGet, requestPlayUrl } from '../services/live';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
 import AntdConfig from '../../../components/basic/AntdConfig/AntdConfig';
@@ -38,7 +46,6 @@ import ThemeProvider from '../../../components/basic/Theme/ThemeProvider';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveRepresentation, LiveVideoPlayRes } from '../types';
-import type { AppVisitorLogin, WebToken, LiveWebStartPlay } from '../services/interface';
 
 let divElement: HTMLDivElement | null = null;
 let divRoot: Root | null = null;

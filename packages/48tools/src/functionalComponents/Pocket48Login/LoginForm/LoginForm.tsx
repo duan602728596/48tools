@@ -1,10 +1,9 @@
 import { Fragment, useSyncExternalStore, type ReactElement, type MouseEvent } from 'react';
 import { Button, Form, Input, message, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import { requestSMS, type SMSResult } from '@48tools-api/48/login';
 import style from './loginForm.sass';
-import { requestSMS } from '../services/pocket48Login';
 import { smsStore } from '../function/SMSStore';
-import type { SMSResult } from '../services/interface';
 
 /* 验证码登录 */
 function LoginForm(props: { form: FormInstance }): ReactElement {

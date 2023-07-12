@@ -5,7 +5,8 @@
     "jsx": "react-jsxdev",
     "importHelpers": true,
     "paths": {
-      "@48tools-types/*": ["./src/types/*"]
+      "@48tools-types/*": ["./src/types/*"],
+      "@48tools-api/*": ["./src/services/*"]
     }
   },
   "exclude": [

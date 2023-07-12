@@ -9,12 +9,11 @@ import {
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
 import type { QueryDispatchFunc, DataDispatchFunc } from '@indexeddb-tools/indexeddb-redux';
+import { requestLiveList, type LiveInfo, type LiveData } from '@48tools-api/48';
 import IDBRedux, { optionsObjectStoreName } from '../../../utils/IDB/IDBRedux';
-import { requestLiveList } from '../services/pocket48';
 import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
-import type { LiveInfo, LiveData } from '../services/interface';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
 export interface Pocket48InitialState {

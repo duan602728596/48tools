@@ -11,11 +11,11 @@ import {
 import { useLocation, type Location } from 'react-router-dom';
 import { Button, Spin, Empty, Divider } from 'antd';
 import * as classNames from 'classnames';
+import type { RoomItem } from '@48tools-api/48/jsdelivrCDN';
 import commonStyle from '../../../common.sass';
 import Header from '../../../components/Header/Header';
 import { useReqRoomIdQuery, type ReqRoomId } from '../reducers/pocketFriends.api';
 import Group from './Group';
-import type { RoomItem } from '../services/interface';
 
 /* 格式化数据 */
 const order: Array<string> = [

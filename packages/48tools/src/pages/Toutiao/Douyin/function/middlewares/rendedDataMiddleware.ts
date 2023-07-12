@@ -1,5 +1,6 @@
+import type { AwemeItem, AwemeItemRate, BitRateItem } from '@48tools-api/toutiao/douyin';
 import { DouyinUrlType } from '../parser';
-import { staticUrl } from '../signUtils';
+import { staticUrl } from '../../../../../utils/toutiao/signUtils';
 import type {
   ScriptRendedData,
   CVersionObj,
@@ -15,7 +16,6 @@ import type {
   ImageInfo,
   NoProtocolUrl
 } from '../../../types';
-import type { AwemeItem, AwemeItemRate, BitRateItem } from '../../../services/interface';
 
 /* 有api时的渲染 */
 function userApiRender(ctx: GetVideoUrlOnionContext): void {

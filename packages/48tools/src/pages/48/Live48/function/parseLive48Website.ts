@@ -1,6 +1,5 @@
-import { requestFetchHtml, requestLiveOne } from '../../services/live48';
+import { requestFetchHtml, requestLiveOne, type LiveOne } from '@48tools-api/48';
 import type { InVideoQuery, InVideoItem } from '../../types';
-import type { LiveOne } from '../../services/interface';
 
 export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48', 'cgt48'];
 

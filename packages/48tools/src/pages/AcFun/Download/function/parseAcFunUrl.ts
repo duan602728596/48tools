@@ -1,4 +1,4 @@
-import { requestAcFunHtml } from '../../services/download';
+import { requestAcFunHtml } from '@48tools-api/acfun';
 import type { KsPlayJson, PageInfo, Representation } from '../../types';
 
 /**

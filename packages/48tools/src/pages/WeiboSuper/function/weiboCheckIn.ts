@@ -1,9 +1,8 @@
 import type { Store, Dispatch } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
+import { requestTopicContent, type TopicResponse } from '@48tools-api/weibo/super';
 import { store } from '../../../store/store';
-import { requestTopicContent } from '../services/weiboSuper';
 import { setCheckIn, reqTopicCheckin } from '../reducers/weiboSuper';
-import type { TopicResponse } from '../services/interface';
 import type { SuperItem, WeiboCheckinResult, Quantity } from '../types';
 
 function sleep(time: number): Promise<void> {

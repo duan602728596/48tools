@@ -20,6 +20,16 @@ import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { LabeledValue, UseMessageReturnType } from '@48tools-types/antd';
 import Icon, { Html5Filled as IconHtml5Filled } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
+import {
+  requestServerSearch,
+  requestServerJump,
+  requestHomeownerMessage,
+  type ServerSearchResult,
+  type ServerApiItem,
+  type ServerJumpResult,
+  type HomeMessageResult,
+  type CustomMessageV2
+} from '@48tools-api/48';
 import FixSelect from '../../components/FixSelect/FixSelect';
 import Header from '../../../../components/Header/Header';
 import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
@@ -30,7 +40,6 @@ import {
   setHomeMessage,
   type RoomMessageInitialState
 } from '../../reducers/roomMessage';
-import { requestServerSearch, requestServerJump, requestHomeownerMessage } from '../../services/pocket48';
 import { formatDataArray, formatSendData } from '../function/formatData';
 import createHtml from '../function/createHtml';
 import MessageDisplay from '../MessageDisplay/MessageDisplay';
@@ -38,13 +47,6 @@ import LocalMessage from '../LocalMessage/LocalMessage';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import { fileTimeFormat } from '../../../../utils/utils';
 import IconJSONSvgComponent from '../../images/JSON.component.svg';
-import type {
-  ServerSearchResult,
-  ServerApiItem,
-  ServerJumpResult,
-  HomeMessageResult,
-  CustomMessageV2
-} from '../../services/interface';
 import type { QueryRecord, FormatCustomMessage, SendDataItem } from '../../types';
 
 const IconJSONFile: ReactElement = <Icon component={ IconJSONSvgComponent } />;

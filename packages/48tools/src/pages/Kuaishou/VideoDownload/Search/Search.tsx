@@ -15,11 +15,10 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Input, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
+import { requestShortVideo, type ShortVideoDownloadResponse } from '@48tools-api/kuaishou';
 import style from './search.sass';
-import { requestShortVideo } from '../../services/videoDownload';
 import { kuaishouCookie } from '../function/kuaishouCookie';
 import { setAddVideoDownloadList } from '../../reducers/kuaishouVideoDownload';
-import type { ShortVideoDownloadResponse } from '../../services/interface';
 
 const kuaishouShortVideoUrlMatch: MatchFunction = match('/short-video/:videoId');
 
