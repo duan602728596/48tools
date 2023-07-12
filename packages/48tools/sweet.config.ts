@@ -115,6 +115,11 @@ export default function(info: object): Record<string, any> {
       { template: path.join(__dirname, 'src/player.pug'), minify: htmlWebpackPluginMinify }
     ],
     externals: nodeExternals(externalsName),
+    resolve: {
+      alias: {
+        '@48tools-api': path.join(__dirname, 'src/services')
+      }
+    },
     javascript: {
       ecmascript: true,
       plugins,
