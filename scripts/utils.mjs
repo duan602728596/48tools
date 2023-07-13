@@ -7,7 +7,8 @@ export const { __dirname } = metaHelper(import.meta.url);
 
 // 定义文件位置
 export const cwd = path.join(__dirname, '../');      // 网站目录
-export const appDir = path.join(cwd, 'www');         // 中间代码
+export const appDir = path.join(cwd, 'app');         // build用的目录
+export const wwwDir = path.join(cwd, 'www');         // 中间代码
 export const staticsDir = path.join(cwd, 'statics'); // 静态资源目录
 export const build = path.join(cwd, 'build');        // 最终生成的可执行文件
 

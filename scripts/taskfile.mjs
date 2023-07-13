@@ -6,18 +6,15 @@ import ncc from '@vercel/ncc';
 import fse from 'fs-extra/esm';
 import { rimraf } from 'rimraf';
 import { requireJson } from '@sweet-milktea/utils';
-import { cwd } from './utils.mjs';
+import { appDir } from './utils.mjs';
 import packageJson from '../app/package.json' assert { type: 'json' };
-import dependenciesOtherFilesJson from '../app/dependenciesOtherFiles.json' assert { type: 'json' };
 
 const require = createRequire(import.meta.url);
 
 const argv = process.argv.slice(2);
 
 /* 文件路径 */
-const appDir = path.join(cwd, 'app'), // app文件夹位置
-  appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node_modules
-const { dependenciesOtherFiles } = dependenciesOtherFilesJson;
+const appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node_modules
 
 /**
  * ncc文件编译
@@ -72,22 +69,6 @@ async function createFilesByDependenciesName(dependenciesName) {
     license,
     author: depPackageJson.author
   });
-
-  // 处理其他文件
-  if (dependenciesName in dependenciesOtherFiles) {
-    const tasks = dependenciesOtherFiles[dependenciesName];
-
-    for (const task of tasks) {
-      if (task.type === 'build') {
-        await nccBuild(
-          path.join(dependenciesNodeModulesDir, task.input),
-          path.join(dependenciesDir, task.output)
-        );
-      } else if (task.type === 'write') {
-        await fse.outputFile(path.join(dependenciesDir, task.output), task.content);
-      }
-    }
-  }
 }
 
 async function taskFile() {

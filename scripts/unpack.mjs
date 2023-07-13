@@ -2,7 +2,7 @@ import path from 'node:path';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
-import { cwd, appDir, staticsDir, build, output, unpacked, isMacOS } from './utils.mjs';
+import { cwd, appDir, wwwDir, staticsDir, build, output, unpacked, isMacOS } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -71,7 +71,7 @@ function config(outputDir, target) {
       version: electronDownloadVersion
     },
     directories: {
-      app: appDir,
+      app: wwwDir,
       output: outputDir
     },
     // 解压node-media-server服务线程使用的文件
@@ -116,7 +116,7 @@ function copy(unpackedDir, isMac) {
 async function unpack() {
   // 删除中间代码文件夹和编译后的文件夹
   await Promise.all([
-    rimraf(appDir),
+    rimraf(wwwDir),
     rimraf(build)
   ]);
 
@@ -124,16 +124,16 @@ async function unpack() {
   const packages = path.join(cwd, 'packages');
 
   await taskfile();
-  await fse.copy(path.join(packages, 'app'), appDir, {
+  await fse.copy(appDir, wwwDir, {
     filter(src, dest) {
       return !src.includes('dependenciesOtherFiles');
     }
   });
   await Promise.all([
-    fse.copy(path.join(packages, 'main/lib'), path.join(appDir, 'bin/lib')),
-    fse.copy(path.join(packages, '48tools/dist'), path.join(appDir, 'dist'))
+    fse.copy(path.join(packages, 'main/lib'), path.join(wwwDir, 'bin/lib')),
+    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'dist'))
   ]);
-  // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], appDir);
+  // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 
   // 编译mac
   isMacOS && await builder.build({
