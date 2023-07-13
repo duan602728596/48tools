@@ -1,7 +1,6 @@
 import process from 'node:process';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { promises as fsP } from 'node:fs';
 import ncc from '@vercel/ncc';
 import fse from 'fs-extra/esm';
 import { rimraf } from 'rimraf';
@@ -31,22 +30,6 @@ async function nccBuild(input, output) {
 }
 
 /**
- * 获取许可证文件
- * @param { string } nodeModulesDir: 模块位置
- * @param { string } depDir: 编译的目标
- */
-async function getLICENSE(nodeModulesDir, depDir) {
-  const files = await fsP.readdir(nodeModulesDir);
-  const license = files.find((o) => /license/i.test(o));
-
-  if (license) {
-    await fse.copy(path.join(nodeModulesDir, license), path.join(depDir, license));
-
-    return license;
-  }
-}
-
-/**
  * 根据依赖名称生成文件
  * @param { string } dependenciesName: 依赖名称
  */
@@ -59,14 +42,13 @@ async function createFilesByDependenciesName(dependenciesName) {
   await nccBuild(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.js')); // 编译文件
 
   // 拷贝许可证
-  const license = await getLICENSE(dependenciesNodeModulesDir, dependenciesDir);
   const depPackageJson = await requireJson(path.join(dependenciesNodeModulesDir, 'package.json'));
 
   await fse.writeJSON(path.join(dependenciesDir, 'package.json'), {
     name: dependenciesName,
     version: depPackageJson.version,
     main: 'index.js',
-    license,
+    license: depPackageJson.license,
     author: depPackageJson.author
   });
 }

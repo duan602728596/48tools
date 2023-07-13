@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fsP from 'node:fs/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
@@ -124,11 +125,11 @@ async function unpack() {
   const packages = path.join(cwd, 'packages');
 
   await taskfile();
-  await fse.copy(appDir, wwwDir, {
-    filter(src, dest) {
-      return !src.includes('dependenciesOtherFiles');
-    }
-  });
+  await fse.copy(appDir, wwwDir);
+  await fsP.writeFile(
+    path.join(wwwDir, 'package.json'),
+    JSON.stringify(await fse.readJSON(path.join(appDir, 'package.json'))),
+    { encoding: 'utf8' }); // 压缩package.json
   await Promise.all([
     fse.copy(path.join(packages, 'main/lib'), path.join(wwwDir, 'bin/lib')),
     fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'dist'))
