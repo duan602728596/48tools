@@ -7,15 +7,15 @@ import fse from 'fs-extra/esm';
 import { rimraf } from 'rimraf';
 import { requireJson } from '@sweet-milktea/utils';
 import { cwd } from './utils.mjs';
-import packageJson from '../packages/app/package.json' assert { type: 'json' };
-import dependenciesOtherFilesJson from '../packages/app/dependenciesOtherFiles.json' assert { type: 'json' };
+import packageJson from '../app/package.json' assert { type: 'json' };
+import dependenciesOtherFilesJson from '../app/dependenciesOtherFiles.json' assert { type: 'json' };
 
 const require = createRequire(import.meta.url);
 
 const argv = process.argv.slice(2);
 
 /* 文件路径 */
-const appDir = path.join(cwd, 'packages/app'),        // app文件夹位置
+const appDir = path.join(cwd, 'app'), // app文件夹位置
   appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node_modules
 const { dependenciesOtherFiles } = dependenciesOtherFilesJson;
 
