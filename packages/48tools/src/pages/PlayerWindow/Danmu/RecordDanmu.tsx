@@ -168,7 +168,7 @@ function RecordDanmu(props: DanmuProps): ReactElement {
       {
         loading && (
           <div className="text-center">
-            <Spin />
+            <Spin className="mb-[16px]" />
             <p>正在加载弹幕</p>
           </div>
         )

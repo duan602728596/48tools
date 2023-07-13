@@ -40,7 +40,11 @@ function InLive(props: {}): ReactElement {
   }
 
   const columns: ColumnsType<InLiveWebWorkerItemNoplayStreamPath> = [
-    { title: '团体', dataIndex: 'type' },
+    {
+      title: '团体',
+      dataIndex: 'type',
+      render: (value: string): string => value.toUpperCase()
+    },
     { title: '直播ID', dataIndex: 'live' },
     {
       title: '画质',
