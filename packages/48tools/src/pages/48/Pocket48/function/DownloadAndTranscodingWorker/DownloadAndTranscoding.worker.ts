@@ -26,7 +26,7 @@ function download(workerData: WorkerEventData): void {
   }
 
   command = FluentFFmpeg(playStreamPath)
-    .inputOptions(['-re', '-accurate_seek'])
+    .inputOptions(['-rw_timeout', `${ (1_000 ** 2) * 60 * 5 }`, '-re', '-accurate_seek'])
     .videoCodec('copy')
     .audioCodec('copy')
     .fps(30)

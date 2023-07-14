@@ -129,6 +129,7 @@ function download(workerData: WorkerEventData): void {
     ffmpegArgs.unshift('-protocol_whitelist', 'file,http,https,tcp,tls');
   }
 
+  ffmpegArgs = ['-rw_timeout', `${ (1_000 ** 2) * 60 * 5 }`, ...ffmpegArgs];
   child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
