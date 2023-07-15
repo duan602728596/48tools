@@ -41,6 +41,7 @@ function download(workerData: WorkerEventData, isRetryDownload?: boolean): void 
     const parseResult: ParsedPath = parse(filePath);
 
     filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
+    console.log(`口袋48直播录制1：重试第${ retryIndex }次。 ${ filePath2 }`);
   }
 
   const ffmpegArgs: Array<string> = [
