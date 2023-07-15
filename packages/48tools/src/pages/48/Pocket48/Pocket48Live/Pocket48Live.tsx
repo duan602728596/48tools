@@ -19,7 +19,7 @@ import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
 import { requestLiveRoomInfo, type LiveInfo, type LiveRoomInfo } from '@48tools-api/48';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
+import getPocket48LiveDownloadWorker from '../function/Pocket48LiveDownload.worker/getPocket48LiveDownloadWorker';
 import getDownloadAndTranscodingWorker from '../function/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
@@ -181,7 +181,7 @@ function Pocket48Live(props: {}): ReactElement {
       if (result.canceled || !result.filePath) return;
 
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFmpegDownloadWorker();
+      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getPocket48LiveDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event1.data;
@@ -200,7 +200,8 @@ function Pocket48Live(props: {}): ReactElement {
         type: 'start',
         playStreamPath: resInfo.content.playStreamPath,
         filePath: result.filePath,
-        ffmpeg: getFFmpeg()
+        ffmpeg: getFFmpeg(),
+        liveId: record.liveId
       });
 
       dispatch(setAddLiveChildList({

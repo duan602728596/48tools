@@ -97,7 +97,8 @@ export async function requestLiveList(
     method: 'POST',
     headers: createHeaders(),
     responseType: 'json',
-    json: body
+    json: body,
+    timeout: 10 * 60 * 1_000
   });
 
   if (firstData && res?.body?.content?.liveList) {

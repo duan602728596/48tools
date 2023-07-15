@@ -5,7 +5,7 @@ import type { MessageInstance } from 'antd/es/message/interface';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import { requestLiveList, requestLiveRoomInfo, type LiveData, type LiveInfo, type UserInfo, type LiveRoomInfo } from '@48tools-api/48';
-import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
+import getPocket48LiveDownloadWorker from './Pocket48LiveDownload.worker/getPocket48LiveDownloadWorker';
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
@@ -60,7 +60,7 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
 
       const filePath: string = path.join(dir, filename);
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
-      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getFFmpegDownloadWorker();
+      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getPocket48LiveDownloadWorker();
 
       worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
         const { type, error }: MessageEventData = event.data;
@@ -79,7 +79,8 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
         type: 'start',
         playStreamPath: resInfo.content.playStreamPath,
         filePath,
-        ffmpeg: getFFmpeg()
+        ffmpeg: getFFmpeg(),
+        liveId: item.liveId
       });
 
       dispatch(setAddLiveChildList({
