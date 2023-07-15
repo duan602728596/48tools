@@ -1,3 +1,4 @@
+import { rStr } from './utils';
 import type { UserInfoString, UserInfo } from '../functionalComponents/Pocket48Login/types';
 
 // app端口袋48ua
@@ -6,19 +7,6 @@ export const appUserAgent: string = 'PocketFans201807/6.0.16 (iPhone; iOS 13.5.1
 
 function $token(): string {
   return Reflect.get(globalThis, '__x6c2adf8__').call();
-}
-
-function rStr(len: number): string {
-  const str: string = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890';
-  let result: string = '';
-
-  for (let i: number = 0; i < len; i++) {
-    const rIndex: number = Math.floor(Math.random() * str.length);
-
-    result += str[rIndex];
-  }
-
-  return result;
 }
 
 /* 创建请求头 */

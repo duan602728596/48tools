@@ -1,8 +1,5 @@
-import { parse, ParsedPath } from 'node:path';
 import * as FluentFFmpeg from 'fluent-ffmpeg';
 import type { FfmpegCommand } from 'fluent-ffmpeg';
-import type { LiveRoomInfo } from '@48tools-api/48';
-import liveStatus from '../liveStatus';
 
 export type WorkerEventData = {
   type: 'start' | 'stop'; // 执行的方法
@@ -14,29 +11,6 @@ export type WorkerEventData = {
 
 let command: FfmpegCommand;
 let isKilled: boolean = false; // 手动结束
-let retryIndex: number = 0;    // 重试次数
-
-function endCallback(workerData: WorkerEventData): void {
-  if (isKilled) {
-    postMessage({ type: 'close' });
-  } else {
-    liveStatus(workerData.liveId).then((r: LiveRoomInfo | null): void => {
-      if (r) {
-        retryIndex++;
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        download({
-          type: 'start',
-          playStreamPath: r.content.playStreamPath,
-          filePath: workerData.filePath,
-          ffmpeg: workerData.ffmpeg,
-          liveId: workerData.liveId
-        }, true);
-      } else {
-        postMessage({ type: 'close' });
-      }
-    });
-  }
-}
 
 /**
  * 转码并下载
@@ -46,16 +20,8 @@ function endCallback(workerData: WorkerEventData): void {
  *       修复方式为每次录制都重新编码，不过最后的视频会有错误，错误信息
  *       [DTS discontinuity in stream 0: packet 3 with DTS 135001, packet 4 with DTS 144000]
  */
-function download(workerData: WorkerEventData, isRetryDownload?: boolean): void {
+function download(workerData: WorkerEventData): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
-  let filePath2: string = filePath;
-
-  if (isRetryDownload) {
-    const parseResult: ParsedPath = parse(filePath);
-
-    filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
-    console.log(`口袋48直播录制2：重试第${ retryIndex }次。${ filePath2 }`);
-  }
 
   if (ffmpeg && ffmpeg !== '') {
     FluentFFmpeg.setFfmpegPath(ffmpeg);
@@ -66,13 +32,13 @@ function download(workerData: WorkerEventData, isRetryDownload?: boolean): void 
     .videoCodec('copy')
     .audioCodec('copy')
     .fps(30)
-    .output(filePath2)
+    .output(filePath)
     .on('end', function(): void {
-      endCallback(workerData);
+      postMessage({ type: 'close' });
     })
     .on('error', function(err: Error, stdout: string, stderr: string): void {
       if (err.message.includes('ffmpeg exited')) {
-        endCallback(workerData);
+        postMessage({ type: 'close' });
       } else {
         postMessage({ type: 'error', error: err });
       }
