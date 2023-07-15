@@ -23,6 +23,7 @@ export interface LiveInfo {
   title: string;
   userInfo: UserInfo;
   inMicrophoneConnection: boolean;
+  status: number;
 }
 
 // 返回的直播数据

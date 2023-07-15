@@ -1,10 +1,11 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { parse, type ParsedPath } from 'node:path';
-import liveStatus from '../liveStatus';
 import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
+import type { LiveRoomInfo } from '@48tools-api/48';
 import { _ffmpegLogProtocol } from '../../../../../utils/logProtocol/logActions';
+import liveStatus from '../liveStatus';
 
-const _stdout: Array<string> = [];
+let _stdout: Array<string> = [];
 
 /**
  * ffmpeg下载线程
@@ -41,7 +42,7 @@ function download(workerData: WorkerEventData, isRetryDownload?: boolean): void 
     const parseResult: ParsedPath = parse(filePath);
 
     filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
-    console.log(`口袋48直播录制1：重试第${ retryIndex }次。 ${ filePath2 }`);
+    console.log(`口袋48直播录制1：重试第${ retryIndex }次。${ filePath2 }`);
   }
 
   const ffmpegArgs: Array<string> = [
@@ -74,14 +75,21 @@ function download(workerData: WorkerEventData, isRetryDownload?: boolean): void 
       cmd: ffmpegArgs,
       stdout: _stdout.join('\n')
     });
+    _stdout = [];
 
     if (isKilled) {
       postMessage({ type: 'close' });
     } else {
-      liveStatus(liveId).then((r: boolean): void => {
+      liveStatus(liveId).then((r: LiveRoomInfo | null): void => {
         if (r) {
           retryIndex++;
-          download(workerData, true);
+          download({
+            type: 'start',
+            playStreamPath: r.content.playStreamPath,
+            filePath: workerData.filePath,
+            ffmpeg: workerData.ffmpeg,
+            liveId: workerData.liveId
+          }, true);
         } else {
           postMessage({ type: 'close' });
         }

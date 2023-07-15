@@ -256,7 +256,8 @@ export async function requestLiveOne(liveId: string): Promise<LiveOne> {
     method: 'POST',
     headers: createHeaders(),
     responseType: 'json',
-    json: { liveId }
+    json: { liveId },
+    timeout: 10 * 60 * 1_000
   });
 
   return res.body;

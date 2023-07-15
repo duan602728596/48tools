@@ -1,6 +1,7 @@
 import { parse, ParsedPath } from 'node:path';
 import * as FluentFFmpeg from 'fluent-ffmpeg';
 import type { FfmpegCommand } from 'fluent-ffmpeg';
+import type { LiveRoomInfo } from '@48tools-api/48';
 import liveStatus from '../liveStatus';
 
 export type WorkerEventData = {
@@ -19,11 +20,17 @@ function endCallback(workerData: WorkerEventData): void {
   if (isKilled) {
     postMessage({ type: 'close' });
   } else {
-    liveStatus(workerData.liveId).then((r: boolean): void => {
+    liveStatus(workerData.liveId).then((r: LiveRoomInfo | null): void => {
       if (r) {
         retryIndex++;
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        download(workerData, true);
+        download({
+          type: 'start',
+          playStreamPath: r.content.playStreamPath,
+          filePath: workerData.filePath,
+          ffmpeg: workerData.ffmpeg,
+          liveId: workerData.liveId
+        }, true);
       } else {
         postMessage({ type: 'close' });
       }
