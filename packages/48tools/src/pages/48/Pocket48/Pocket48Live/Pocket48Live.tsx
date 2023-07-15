@@ -110,8 +110,11 @@ function Pocket48Live(props: {}): ReactElement {
         mask: false,
         maskClosable: false,
         centered: true,
-        okText: '录制（修复连麦用）',
-        cancelText: '录制',
+        okText: '录制(*.ts)',
+        cancelText: '录制(*.flv)',
+        okButtonProps: {
+          type: 'default'
+        },
         onOk(): void {
           ctx.transcoding = true;
           next();
@@ -290,18 +293,15 @@ function Pocket48Live(props: {}): ReactElement {
                     >
                       <Button type="primary" danger={ true }>停止</Button>
                     </Popconfirm>
-                  ) : (
-                    <Button onClick={ (event: MouseEvent): Promise<void> =>
-                      handleGetVideoClick(record, false, event) }>
-                      录制
+                  ) : [
+                    <Button key="r-flv" onClick={ (event: MouseEvent): Promise<void> => handleGetVideoClick(record, false, event) }>
+                      录制(*.flv)
+                    </Button>,
+                    <Button key="r-ts" onClick={ (event: MouseEvent): Promise<void> => handleGetVideoClick(record, true, event) }>
+                      录制(*.ts)
                     </Button>
-                  )
+                  ]
                 }
-                <Button disabled={ inRecording }
-                  onClick={ (event: MouseEvent): Promise<void> => handleGetVideoClick(record, true, event) }
-                >
-                  录制（修复连麦用）
-                </Button>
               </Button.Group>
             </div>
             <Button.Group size="small">
