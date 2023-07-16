@@ -65,7 +65,7 @@ function LiveOptions(props: {}): ReactElement {
           label="间隔时间（分）"
           rules={ [
             { required: true, message: '请填写间隔时间' },
-            { type: 'number', min: 1, message: '间隔时间必须大于1分钟' }
+            { type: 'number', min: 0.5, message: '间隔时间必须大于0.5分钟' }
           ] }
         >
           <InputNumber />
