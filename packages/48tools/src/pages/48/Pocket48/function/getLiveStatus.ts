@@ -10,7 +10,9 @@ async function getLiveStatus(roomId: string, liveId: string): Promise<boolean> {
   const history: Array<NIMChatroomMessage> = await nim.getHistoryMessage();
   const result: boolean = history.some((o: NIMChatroomMessage): boolean => {
     if (o.type === 'custom' && typeof o.custom === 'string') {
-      const customJson: any = JSON.parse(o.custom.replace(/\d+/, (v: string): string => `"${ v }"`));
+      const customJson: any = JSON.parse(
+        o.custom.replace(/\d+/, (v: string): string => `"${ v }"`)
+          .replace(/"{2}/g, '"'));
 
       return customJson.type === 'CLOSELIVE' && customJson.sourceId === liveId;
     } else {
