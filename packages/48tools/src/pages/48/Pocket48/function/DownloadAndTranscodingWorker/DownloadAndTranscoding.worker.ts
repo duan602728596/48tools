@@ -1,6 +1,5 @@
 import * as FluentFFmpeg from 'fluent-ffmpeg';
 import type { FfmpegCommand } from 'fluent-ffmpeg';
-import type { LiveStatusEventData } from '../isLiveClose';
 
 export type WorkerEventData = {
   type: 'start' | 'stop'; // 执行的方法
@@ -59,7 +58,7 @@ function stop(): void {
   command.kill('SIGTERM');
 }
 
-addEventListener('message', function(event: MessageEvent<WorkerEventData | LiveStatusEventData>): void {
+addEventListener('message', function(event: MessageEvent<WorkerEventData>): void {
   switch (event.data.type) {
     case 'start':
       download(event.data);

@@ -1,7 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
 import { _ffmpegLogProtocol } from '../../../../../utils/logProtocol/logActions';
-import type { LiveStatusEventData } from '../isLiveClose';
+import { isMacOS } from '../utils';
 
 let _stdout: Array<string> = [];
 
@@ -31,6 +31,10 @@ export type MessageEventData = ErrorMessageEventData | CloseMessageEventData;
 let child: ChildProcessWithoutNullStreams;
 let isKilled: boolean = false; // 手动结束
 
+function formatCommend(t: string): string {
+  return isMacOS ? `"${ t }"` : t;
+}
+
 /* 下载 */
 function download(workerData: WorkerEventData): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
@@ -38,13 +42,13 @@ function download(workerData: WorkerEventData): void {
     '-rw_timeout',
     `${ (1_000 ** 2) * 60 * 5 }`,
     '-i',
-    playStreamPath,
+    formatCommend(playStreamPath),
     '-c',
     'copy',
-    filePath
+    formatCommend(filePath)
   ];
 
-  child = spawn(ffmpeg, ffmpegArgs);
+  child = spawn(formatCommend(ffmpeg), ffmpegArgs, { shell: isMacOS });
 
   child.stdout.on('data', function(data: Buffer): void {
     // console.log(data.toString());
@@ -79,7 +83,7 @@ function stop(): void {
   child?.kill?.('SIGTERM');
 }
 
-addEventListener('message', function(event: MessageEvent<WorkerEventData | LiveStatusEventData>): void {
+addEventListener('message', function(event: MessageEvent<WorkerEventData>): void {
   switch (event.data.type) {
     case 'start':
       download(event.data);
