@@ -41,7 +41,6 @@ import {
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from '../function/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
-import getLiveStatus from '../function/getLiveStatus';
 import type { WebWorkerChildItem, MessageEventData, LiveStatusEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 
@@ -194,16 +193,6 @@ function Pocket48Live(props: {}): ReactElement {
 
           worker.terminate();
           dispatch(setDeleteLiveChildList(record));
-        } else if (event1.data.type === 'live_status') {
-          const rid: string = event1.data.rid;
-
-          getLiveStatus(event1.data.roomId, event1.data.liveId).then((r: boolean): void => {
-            worker.postMessage({
-              type: 'live_status',
-              rid,
-              result: r
-            });
-          });
         }
       }, false);
 

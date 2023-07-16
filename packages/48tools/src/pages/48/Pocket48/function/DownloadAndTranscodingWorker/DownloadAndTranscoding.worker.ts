@@ -1,7 +1,6 @@
-import { parse, type ParsedPath } from 'node:path';
 import * as FluentFFmpeg from 'fluent-ffmpeg';
 import type { FfmpegCommand } from 'fluent-ffmpeg';
-import { isLiveClose, type LiveStatusEventData } from '../isLiveClose';
+import type { LiveStatusEventData } from '../isLiveClose';
 
 export type WorkerEventData = {
   type: 'start' | 'stop'; // 执行的方法
@@ -14,22 +13,9 @@ export type WorkerEventData = {
 
 let command: FfmpegCommand;
 let isKilled: boolean = false; // 手动结束
-let retryIndex: number = 0;    // 重试次数
 
 function closeCallback(workerData: WorkerEventData): void {
-  if (isKilled) {
-    postMessage({ type: 'close' });
-  } else {
-    isLiveClose(workerData).then((r: boolean): void => {
-      if (r) {
-        postMessage({ type: 'close' });
-      } else {
-        retryIndex++;
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        download(workerData, true);
-      }
-    });
-  }
+  postMessage({ type: 'close' });
 }
 
 /**
@@ -40,15 +26,8 @@ function closeCallback(workerData: WorkerEventData): void {
  *       修复方式为每次录制都重新编码，不过最后的视频会有错误，错误信息
  *       [DTS discontinuity in stream 0: packet 3 with DTS 135001, packet 4 with DTS 144000]
  */
-function download(workerData: WorkerEventData, isRetryDownload?: boolean): void {
+function download(workerData: WorkerEventData): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
-  let filePath2: string = filePath;
-
-  if (isRetryDownload) {
-    const parseResult: ParsedPath = parse(filePath);
-
-    filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
-  }
 
   if (ffmpeg && ffmpeg !== '') {
     FluentFFmpeg.setFfmpegPath(ffmpeg);
@@ -59,7 +38,7 @@ function download(workerData: WorkerEventData, isRetryDownload?: boolean): void 
     .videoCodec('copy')
     .audioCodec('copy')
     .fps(30)
-    .output(filePath2)
+    .output(filePath)
     .on('end', function(): void {
       closeCallback(workerData);
     })

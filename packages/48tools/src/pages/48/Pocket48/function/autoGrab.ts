@@ -10,7 +10,6 @@ import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getD
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
 import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
-import getLiveStatus from './getLiveStatus';
 import type { MessageEventData, LiveStatusEventData, WebWorkerChildItem } from '../../../../commonTypes';
 
 /**
@@ -73,16 +72,6 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
 
           worker.terminate();
           dispatch(setDeleteLiveChildList(item));
-        } else if (event.data.type === 'live_status') {
-          const rid: string = event.data.rid;
-
-          getLiveStatus(event.data.roomId, event.data.liveId).then((r: boolean): void => {
-            worker.postMessage({
-              type: 'live_status',
-              rid,
-              result: r
-            });
-          });
         }
       }, false);
 

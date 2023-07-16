@@ -1,8 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
-import { parse, type ParsedPath } from 'node:path';
 import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
 import { _ffmpegLogProtocol } from '../../../../../utils/logProtocol/logActions';
-import { isLiveClose, type LiveStatusEventData } from '../isLiveClose';
+import type { LiveStatusEventData } from '../isLiveClose';
 
 let _stdout: Array<string> = [];
 
@@ -31,19 +30,10 @@ export type MessageEventData = ErrorMessageEventData | CloseMessageEventData;
 
 let child: ChildProcessWithoutNullStreams;
 let isKilled: boolean = false; // 手动结束
-let retryIndex: number = 0;    // 重试次数
 
 /* 下载 */
-function download(workerData: WorkerEventData, isRetryDownload?: boolean): void {
+function download(workerData: WorkerEventData): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
-  let filePath2: string = filePath;
-
-  if (isRetryDownload) {
-    const parseResult: ParsedPath = parse(filePath);
-
-    filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
-  }
-
   const ffmpegArgs: Array<string> = [
     '-rw_timeout',
     `${ (1_000 ** 2) * 60 * 5 }`,
@@ -51,7 +41,7 @@ function download(workerData: WorkerEventData, isRetryDownload?: boolean): void 
     playStreamPath,
     '-c',
     'copy',
-    filePath2
+    filePath
   ];
 
   child = spawn(ffmpeg, ffmpegArgs);
@@ -75,19 +65,7 @@ function download(workerData: WorkerEventData, isRetryDownload?: boolean): void 
       stdout: _stdout.join('\n')
     });
     _stdout = [];
-
-    if (isKilled) {
-      postMessage({ type: 'close' });
-    } else {
-      isLiveClose(workerData).then((r: boolean): void => {
-        if (r) {
-          postMessage({ type: 'close' });
-        } else {
-          retryIndex++;
-          download(workerData, true);
-        }
-      });
-    }
+    postMessage({ type: 'close' });
   });
 
   child.on('error', function(err: Error): void {
