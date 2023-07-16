@@ -25,7 +25,8 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
     method: 'POST',
     headers: createHeaders(),
     responseType: 'json',
-    json: { liveId: id }
+    json: { liveId: id },
+    timeout: 10 * 60 * 1_000
   });
 
   return res.body;

@@ -1,9 +1,22 @@
-import { rStr } from './utils';
 import type { UserInfoString, UserInfo } from '../functionalComponents/Pocket48Login/types';
 
 // app端口袋48ua
 export const engineUserAgent: string = 'SNH48 ENGINE';
 export const appUserAgent: string = 'PocketFans201807/6.0.16 (iPhone; iOS 13.5.1; Scale/2.00)';
+
+/* 随机字符串 */
+function rStr(len: number): string {
+  const str: string = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890';
+  let result: string = '';
+
+  for (let i: number = 0; i < len; i++) {
+    const rIndex: number = Math.floor(Math.random() * str.length);
+
+    result += str[rIndex];
+  }
+
+  return result;
+}
 
 function $token(): string {
   return Reflect.get(globalThis, '__x6c2adf8__').call();

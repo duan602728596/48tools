@@ -1,4 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
+import { parse, type ParsedPath } from 'node:path';
+import { setTimeout } from 'node:timers';
+import { requestLiveRoomInfo, type LiveRoomInfo } from '@48tools-api/48';
 import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
 import { _ffmpegLogProtocol } from '../../../../../utils/logProtocol/logActions';
 import { isMacOS } from '../utils';
@@ -30,14 +33,23 @@ export type MessageEventData = ErrorMessageEventData | CloseMessageEventData;
 
 let child: ChildProcessWithoutNullStreams;
 let isKilled: boolean = false; // 手动结束
+let retryIndex: number = 0;
 
 function formatCommend(t: string): string {
   return isMacOS ? `"${ t }"` : t;
 }
 
 /* 下载 */
-function download(workerData: WorkerEventData): void {
+function download(workerData: WorkerEventData, isRetry?: boolean): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
+  let filePath2: string = filePath;
+
+  if (isRetry) {
+    const parseResult: ParsedPath = parse(filePath);
+
+    filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
+  }
+
   const ffmpegArgs: Array<string> = [
     '-rw_timeout',
     `${ (1_000 ** 2) * 60 * 5 }`,
@@ -45,7 +57,7 @@ function download(workerData: WorkerEventData): void {
     formatCommend(playStreamPath),
     '-c',
     'copy',
-    formatCommend(filePath)
+    formatCommend(filePath2)
   ];
 
   child = spawn(formatCommend(ffmpeg), ffmpegArgs, { shell: isMacOS });
@@ -69,7 +81,29 @@ function download(workerData: WorkerEventData): void {
       stdout: _stdout.join('\n')
     });
     _stdout = [];
-    postMessage({ type: 'close' });
+
+    if (isKilled) {
+      postMessage({ type: 'close' });
+    } else {
+      retryIndex++;
+      // 10秒后重试
+      setTimeout((): void => {
+        requestLiveRoomInfo(workerData.liveId).then((res: LiveRoomInfo): void => {
+          if (res.success && res.content.playStreamPath !== workerData.playStreamPath) {
+            download({
+              type: 'start',
+              playStreamPath: res.content.playStreamPath,
+              filePath: workerData.filePath,
+              ffmpeg: workerData.ffmpeg,
+              liveId: workerData.liveId,
+              roomId: workerData.roomId
+            }, true);
+          } else {
+            postMessage({ type: 'close' });
+          }
+        });
+      }, 10_000);
+    }
   });
 
   child.on('error', function(err: Error): void {
