@@ -41,7 +41,8 @@ import {
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from '../function/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
-import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
+import getLiveStatus from '../function/getLiveStatus';
+import type { WebWorkerChildItem, MessageEventData, LiveStatusEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions } from '../../types';
 
 /* redux selector */
@@ -183,8 +184,8 @@ function Pocket48Live(props: {}): ReactElement {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
       const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getPocket48LiveDownloadWorker();
 
-      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
-        const { type, error }: MessageEventData = event1.data;
+      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData | LiveStatusEventData>): void {
+        const { type }: MessageEventData | LiveStatusEventData = event1.data;
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
@@ -193,6 +194,16 @@ function Pocket48Live(props: {}): ReactElement {
 
           worker.terminate();
           dispatch(setDeleteLiveChildList(record));
+        } else if (event1.data.type === 'live_status') {
+          const rid: string = event1.data.rid;
+
+          getLiveStatus(event1.data.roomId, event1.data.liveId).then((r: boolean): void => {
+            worker.postMessage({
+              type: 'live_status',
+              rid,
+              result: r
+            });
+          });
         }
       }, false);
 
@@ -201,7 +212,8 @@ function Pocket48Live(props: {}): ReactElement {
         playStreamPath: resInfo.content.playStreamPath,
         filePath: result.filePath,
         ffmpeg: getFFmpeg(),
-        liveId: record.liveId
+        liveId: record.liveId,
+        roomId: resInfo.content.roomId
       });
 
       dispatch(setAddLiveChildList({

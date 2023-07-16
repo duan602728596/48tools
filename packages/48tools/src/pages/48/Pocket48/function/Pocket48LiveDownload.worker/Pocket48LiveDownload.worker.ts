@@ -1,7 +1,8 @@
-import { spawn, exec, type ChildProcessWithoutNullStreams, type ChildProcess } from 'node:child_process';
+import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
+import { parse, type ParsedPath } from 'node:path';
 import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
 import { _ffmpegLogProtocol } from '../../../../../utils/logProtocol/logActions';
-import { isMacOS } from '../utils';
+import { isLiveClose, type LiveStatusEventData } from '../isLiveClose';
 
 let _stdout: Array<string> = [];
 
@@ -14,6 +15,7 @@ export type WorkerEventData = {
   filePath: string;       // 文件保存地址
   ffmpeg: string;         // ffmpeg地址
   liveId: string;         // 播放ID
+  roomId: string;         // 直播房间地址
 };
 
 export interface ErrorMessageEventData {
@@ -27,12 +29,21 @@ export interface CloseMessageEventData {
 
 export type MessageEventData = ErrorMessageEventData | CloseMessageEventData;
 
-let child: ChildProcessWithoutNullStreams, childMacOS: ChildProcess;
+let child: ChildProcessWithoutNullStreams;
 let isKilled: boolean = false; // 手动结束
+let retryIndex: number = 0;    // 重试次数
 
 /* 下载 */
-function download(workerData: WorkerEventData): void {
+function download(workerData: WorkerEventData, isRetryDownload?: boolean): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
+  let filePath2: string = filePath;
+
+  if (isRetryDownload) {
+    const parseResult: ParsedPath = parse(filePath);
+
+    filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
+  }
+
   const ffmpegArgs: Array<string> = [
     '-rw_timeout',
     `${ (1_000 ** 2) * 60 * 5 }`,
@@ -40,13 +51,10 @@ function download(workerData: WorkerEventData): void {
     playStreamPath,
     '-c',
     'copy',
-    filePath
+    filePath2
   ];
 
-  child = spawn(ffmpeg, ffmpegArgs, {
-    // @ts-ignore
-    maxBuffer: (1024 ** 2) * 100
-  });
+  child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
     // console.log(data.toString());
@@ -67,7 +75,19 @@ function download(workerData: WorkerEventData): void {
       stdout: _stdout.join('\n')
     });
     _stdout = [];
-    postMessage({ type: 'close' });
+
+    if (isKilled) {
+      postMessage({ type: 'close' });
+    } else {
+      isLiveClose(workerData).then((r: boolean): void => {
+        if (r) {
+          postMessage({ type: 'close' });
+        } else {
+          retryIndex++;
+          download(workerData, true);
+        }
+      });
+    }
   });
 
   child.on('error', function(err: Error): void {
@@ -75,53 +95,16 @@ function download(workerData: WorkerEventData): void {
   });
 }
 
-function execDownload(workerData: WorkerEventData): void {
-  const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
-  const ffmpegArgs: Array<string> = [
-    ffmpeg,
-    '-rw_timeout',
-    `${ (1_000 ** 2) * 60 * 5 }`,
-    '-i',
-    `"${ playStreamPath }"`,
-    '-c',
-    'copy',
-    `"${ filePath }"`
-  ];
-
-  childMacOS = exec(ffmpegArgs.join(' '), {
-    maxBuffer: (1024 ** 2) * 100
-  }, function(err: Error | null, stdout: string, stderr: string): void {
-    if (err && !err.toString().includes('Exiting normally')) {
-      console.error(err);
-      postMessage({ type: 'error', error: err });
-    } else {
-      _stdout.push(stdout, stderr);
-      _ffmpegLogProtocol.post<_UtilObject>('util', {
-        ffmpeg,
-        input: playStreamPath,
-        output: filePath,
-        cmd: ffmpegArgs,
-        stdout: _stdout.join('\n')
-      });
-      _stdout = [];
-      postMessage({ type: 'close' });
-    }
-  });
-}
-
 /* 停止下载 */
 function stop(): void {
   isKilled = true;
   child?.kill?.('SIGTERM');
-  childMacOS?.kill?.('SIGTERM');
 }
 
-addEventListener('message', function(event: MessageEvent<WorkerEventData>): void {
-  const { type }: WorkerEventData = event.data;
-
-  switch (type) {
+addEventListener('message', function(event: MessageEvent<WorkerEventData | LiveStatusEventData>): void {
+  switch (event.data.type) {
     case 'start':
-      isMacOS ? execDownload(event.data) : download(event.data);
+      download(event.data);
       break;
 
     case 'stop':

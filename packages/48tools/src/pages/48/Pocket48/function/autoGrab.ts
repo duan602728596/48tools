@@ -10,7 +10,8 @@ import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getD
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
 import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
-import type { MessageEventData, WebWorkerChildItem } from '../../../../commonTypes';
+import getLiveStatus from './getLiveStatus';
+import type { MessageEventData, LiveStatusEventData, WebWorkerChildItem } from '../../../../commonTypes';
 
 /**
  * 自动抓取
@@ -62,8 +63,8 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
       const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getPocket48LiveDownloadWorker();
 
-      worker.addEventListener('message', function(event: MessageEvent<MessageEventData>) {
-        const { type, error }: MessageEventData = event.data;
+      worker.addEventListener('message', function(event: MessageEvent<MessageEventData | LiveStatusEventData>): void {
+        const { type }: MessageEventData | LiveStatusEventData = event.data;
 
         if (type === 'close' || type === 'error') {
           if (type === 'error') {
@@ -72,6 +73,16 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
 
           worker.terminate();
           dispatch(setDeleteLiveChildList(item));
+        } else if (event.data.type === 'live_status') {
+          const rid: string = event.data.rid;
+
+          getLiveStatus(event.data.roomId, event.data.liveId).then((r: boolean): void => {
+            worker.postMessage({
+              type: 'live_status',
+              rid,
+              result: r
+            });
+          });
         }
       }, false);
 
@@ -80,7 +91,8 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
         playStreamPath: resInfo.content.playStreamPath,
         filePath,
         ffmpeg: getFFmpeg(),
-        liveId: item.liveId
+        liveId: item.liveId,
+        roomId: resInfo.content.roomId
       });
 
       dispatch(setAddLiveChildList({

@@ -1,5 +1,7 @@
+import { parse, type ParsedPath } from 'node:path';
 import * as FluentFFmpeg from 'fluent-ffmpeg';
 import type { FfmpegCommand } from 'fluent-ffmpeg';
+import { isLiveClose, type LiveStatusEventData } from '../isLiveClose';
 
 export type WorkerEventData = {
   type: 'start' | 'stop'; // 执行的方法
@@ -7,10 +9,28 @@ export type WorkerEventData = {
   filePath: string;       // 文件保存地址
   ffmpeg: string;         // ffmpeg地址
   liveId: string;         // 播放ID
+  roomId: string;         // 直播房间地址
 };
 
 let command: FfmpegCommand;
 let isKilled: boolean = false; // 手动结束
+let retryIndex: number = 0;    // 重试次数
+
+function closeCallback(workerData: WorkerEventData): void {
+  if (isKilled) {
+    postMessage({ type: 'close' });
+  } else {
+    isLiveClose(workerData).then((r: boolean): void => {
+      if (r) {
+        postMessage({ type: 'close' });
+      } else {
+        retryIndex++;
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        download(workerData, true);
+      }
+    });
+  }
+}
 
 /**
  * 转码并下载
@@ -20,8 +40,15 @@ let isKilled: boolean = false; // 手动结束
  *       修复方式为每次录制都重新编码，不过最后的视频会有错误，错误信息
  *       [DTS discontinuity in stream 0: packet 3 with DTS 135001, packet 4 with DTS 144000]
  */
-function download(workerData: WorkerEventData): void {
+function download(workerData: WorkerEventData, isRetryDownload?: boolean): void {
   const { ffmpeg, playStreamPath, filePath }: WorkerEventData = workerData;
+  let filePath2: string = filePath;
+
+  if (isRetryDownload) {
+    const parseResult: ParsedPath = parse(filePath);
+
+    filePath2 = `${ parseResult.dir }/${ parseResult.name }(${ retryIndex })${ parseResult.ext }`;
+  }
 
   if (ffmpeg && ffmpeg !== '') {
     FluentFFmpeg.setFfmpegPath(ffmpeg);
@@ -32,13 +59,13 @@ function download(workerData: WorkerEventData): void {
     .videoCodec('copy')
     .audioCodec('copy')
     .fps(30)
-    .output(filePath)
+    .output(filePath2)
     .on('end', function(): void {
-      postMessage({ type: 'close' });
+      closeCallback(workerData);
     })
     .on('error', function(err: Error, stdout: string, stderr: string): void {
       if (err.message.includes('ffmpeg exited')) {
-        postMessage({ type: 'close' });
+        closeCallback(workerData);
       } else {
         postMessage({ type: 'error', error: err });
       }
@@ -53,10 +80,8 @@ function stop(): void {
   command.kill('SIGTERM');
 }
 
-addEventListener('message', function(event: MessageEvent<WorkerEventData>): void {
-  const { type }: WorkerEventData = event.data;
-
-  switch (type) {
+addEventListener('message', function(event: MessageEvent<WorkerEventData | LiveStatusEventData>): void {
+  switch (event.data.type) {
     case 'start':
       download(event.data);
       break;

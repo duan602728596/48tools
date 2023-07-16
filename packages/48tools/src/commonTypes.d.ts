@@ -8,6 +8,13 @@ export interface WebWorkerChildItem {
 export type MessageEventData = {
   type: 'close' | 'error';
   error?: Error;
+}
+
+export type LiveStatusEventData = {
+  type: 'live_status';
+  liveId: string;
+  roomId: string;
+  rid: string;
 };
 
 /* 微博账号数据库内的数据 */
