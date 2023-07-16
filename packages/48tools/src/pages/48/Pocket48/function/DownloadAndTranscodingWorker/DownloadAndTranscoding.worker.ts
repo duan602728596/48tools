@@ -22,7 +22,7 @@ function closeCallback(workerData: WorkerEventData): void {
     postMessage({ type: 'close' });
   } else {
     retryIndex++;
-    // 10秒后重试
+    // 60秒后重试
     setTimeout((): void => {
       requestLiveRoomInfo(workerData.liveId).then((res: LiveRoomInfo): void => {
         if (res.success && res.content.playStreamPath !== workerData.playStreamPath) {
@@ -39,7 +39,7 @@ function closeCallback(workerData: WorkerEventData): void {
           postMessage({ type: 'close' });
         }
       });
-    }, 10_000);
+    }, 60_000);
   }
 }
 
