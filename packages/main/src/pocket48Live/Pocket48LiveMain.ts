@@ -53,8 +53,8 @@ export class Pocket48LiveMain {
     this.win = win;
     this.worker = new Worker(
       isDevelopment
-        ? path.join(__dirname, 'LiveDownload.worker.js')
-        : path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib/pocket48Live/LiveDownload.worker.js'),
+        ? path.join(__dirname, 'liveDownload.worker.js')
+        : path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib/pocket48Live/liveDownload.worker.js'),
       {
         workerData: {
           playStreamPath: this.playStreamPath,

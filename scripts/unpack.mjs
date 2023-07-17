@@ -81,7 +81,7 @@ function config(outputDir, target) {
       'bin/lib/asarNodeRequire.js',
       'bin/lib/nodeMediaServer/server.worker.js',
       'bin/lib/proxyServer/httpProxyServer.worker.js',
-      'bin/lib/pocket48Live/LiveDownload.worker.js'
+      'bin/lib/pocket48Live/liveDownload.worker.js'
     ]
   };
 
