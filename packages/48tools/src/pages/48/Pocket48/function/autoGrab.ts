@@ -1,5 +1,6 @@
 import * as path from 'node:path';
 import { promises as fsP } from 'node:fs';
+import { randomUUID } from 'node:crypto';
 import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
 import * as dayjs from 'dayjs';
@@ -10,16 +11,86 @@ import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getD
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
 import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
+import Pocket48LiveRender from '../function/Pocket48LiveRender';
 import type { MessageEventData, LiveStatusEventData, WebWorkerChildItem } from '../../../../commonTypes';
+
+interface DownloadArgs {
+  messageApi: MessageInstance;
+  transcoding: boolean | undefined;
+  item: LiveInfo;
+  resInfo: LiveRoomInfo;
+  filePath: string;
+}
+
+function downloadBackup(args: Pick<DownloadArgs, 'item' | 'resInfo' | 'filePath'>): void {
+  const { dispatch }: Store = store;
+  const { item, resInfo, filePath }: Pick<DownloadArgs, 'item' | 'resInfo' | 'filePath'> = args;
+  const worker: Pocket48LiveRender = new Pocket48LiveRender({
+    id: randomUUID(),
+    liveId: item.liveId,
+    roomId: resInfo.content.roomId,
+    playStreamPath: resInfo.content.playStreamPath,
+    filePath,
+    ffmpeg: getFFmpeg(),
+    onClose(id: string): void {
+      dispatch(setDeleteLiveChildList(item));
+    }
+  });
+
+  dispatch(setAddLiveChildList({
+    id: item.liveId,
+    worker
+  }));
+}
+
+function download(args: DownloadArgs): void {
+  const { dispatch }: Store = store;
+  const { messageApi, transcoding, item, resInfo, filePath }: DownloadArgs = args;
+  const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getPocket48LiveDownloadWorker();
+
+  worker.addEventListener('message', function(event: MessageEvent<MessageEventData | LiveStatusEventData>): void {
+    const { type }: MessageEventData | LiveStatusEventData = event.data;
+
+    if (type === 'close' || type === 'error') {
+      if (type === 'error') {
+        messageApi.error(`视频：${ item.title } 下载失败！`);
+      }
+
+      worker.terminate();
+      dispatch(setDeleteLiveChildList(item));
+    }
+  }, false);
+
+  worker.postMessage({
+    type: 'start',
+    playStreamPath: resInfo.content.playStreamPath,
+    filePath,
+    ffmpeg: getFFmpeg(),
+    liveId: item.liveId,
+    roomId: resInfo.content.roomId
+  });
+
+  dispatch(setAddLiveChildList({
+    id: item.liveId,
+    worker
+  }));
+}
 
 /**
  * 自动抓取
  * @param { MessageInstance } messageApi
  * @param { string } dir: 保存录像的目录
  * @param { Array<string> } usersArr: 监听的小偶像
- * @param { boolean } transcoding: 自动转码
+ * @param { boolean | undefined } transcoding: 自动转码
+ * @param { boolean | undefined } backup: 备用下载
  */
-async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: string[], transcoding: boolean): Promise<void> {
+async function autoGrab(
+  messageApi: MessageInstance,
+  dir: string,
+  usersArr: string[],
+  transcoding: boolean | undefined,
+  backup: boolean | undefined
+): Promise<void> {
   const { dispatch, getState }: Store = store;
   const res: LiveData = await requestLiveList('0', true);
   const liveList: Array<LiveInfo> = res.content.liveList; // 自动刷新获取直播列表
@@ -60,34 +131,12 @@ async function autoGrab(messageApi: MessageInstance, dir: string, usersArr: stri
 
       const filePath: string = path.join(dir, filename);
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(item.liveId);
-      const worker: Worker = transcoding ? getDownloadAndTranscodingWorker() : getPocket48LiveDownloadWorker();
 
-      worker.addEventListener('message', function(event: MessageEvent<MessageEventData | LiveStatusEventData>): void {
-        const { type }: MessageEventData | LiveStatusEventData = event.data;
-
-        if (type === 'close' || type === 'error') {
-          if (type === 'error') {
-            messageApi.error(`视频：${ item.title } 下载失败！`);
-          }
-
-          worker.terminate();
-          dispatch(setDeleteLiveChildList(item));
-        }
-      }, false);
-
-      worker.postMessage({
-        type: 'start',
-        playStreamPath: resInfo.content.playStreamPath,
-        filePath,
-        ffmpeg: getFFmpeg(),
-        liveId: item.liveId,
-        roomId: resInfo.content.roomId
-      });
-
-      dispatch(setAddLiveChildList({
-        id: item.liveId,
-        worker
-      }));
+      if (backup) {
+        downloadBackup({ item, resInfo, filePath });
+      } else {
+        download({ messageApi, transcoding, item, resInfo, filePath });
+      }
     }
   }
 }

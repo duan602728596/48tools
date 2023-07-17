@@ -14,7 +14,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, message, Table, Tag, Popconfirm, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
+import type { UseModalReturnType, UseMessageReturnType, ModuleFuncReturn } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
@@ -82,7 +82,7 @@ function Pocket48Live(props: {}): ReactElement {
   // 开始自动抓取
   async function handleStartAutoGrabClick(event: MouseEvent): Promise<void> {
     type LiveOptionsResult = { name: string; value: Pocket48LiveAutoGrabOptions };
-    type OnionContext = { result: LiveOptionsResult; transcoding?: boolean };
+    type OnionContext = { result: LiveOptionsResult; transcoding?: boolean; backup?: boolean };
 
     // 获取配置
     const result: { query: string; result?: LiveOptionsResult }
@@ -109,37 +109,58 @@ function Pocket48Live(props: {}): ReactElement {
 
     // 判断是否需要转码
     onion.use(function(ctx: OnionContext, next: Function): void {
-      modalApi.confirm({
-        content: '选择要录制的视频方法。',
+      function handleFlvVideoClick(e: MouseEvent): void {
+        ctx.transcoding = false;
+        next();
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        m.destroy();
+      }
+
+      function handleTsVideoClick(e: MouseEvent): void {
+        ctx.transcoding = true;
+        next();
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        m.destroy();
+      }
+
+      function handleFlvVideoBackupClick(e: MouseEvent): void {
+        ctx.backup = true;
+        next();
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        m.destroy();
+      }
+
+      const m: ModuleFuncReturn = modalApi.confirm({
+        title: '选择要录制的视频方法',
+        content: (
+          <Button.Group className="mb-[16px]">
+            <Button onClick={ handleFlvVideoClick }>录制(*.flv)</Button>
+            <Button onClick={ handleTsVideoClick }>录制(*.ts)</Button>
+            <Button onClick={ handleFlvVideoBackupClick }>备用录制(*.flv)</Button>
+          </Button.Group>
+        ),
         closable: false,
         keyboard: false,
         mask: false,
         maskClosable: false,
         centered: true,
-        okText: '录制(*.ts)',
-        cancelText: '录制(*.flv)',
-        okButtonProps: {
-          type: 'default'
-        },
-        onOk(): void {
-          ctx.transcoding = true;
-          next();
-        },
-        onCancel(): void {
-          ctx.transcoding = false;
-          next();
-        }
+        footer: (
+          <div className="text-right">
+            <Button onClick={ (e: MouseEvent): void => m.destroy() }>关闭</Button>
+          </div>
+        )
       });
     });
 
     // 自动抓取
     onion.use(function(ctx: OnionContext, next: Function): void {
-      const { result: r, transcoding = false }: OnionContext = ctx;
+      const { result: r, transcoding = false, backup = false }: OnionContext = ctx;
+      const args: [string, string[], boolean, boolean] = [r.value.dir, usersArr, transcoding, backup];
 
       messageApi.info('开始自动抓取。');
-      autoGrab(messageApi, r.value.dir, usersArr, transcoding);
+      autoGrab(messageApi, ...args);
       dispatch(setAutoGrab(
-        window.setInterval(autoGrab, r.value.time * 60_000, messageApi, r.value.dir, usersArr, transcoding)
+        window.setInterval(autoGrab, r.value.time * 60_000, ...args)
       ));
       next();
     });
