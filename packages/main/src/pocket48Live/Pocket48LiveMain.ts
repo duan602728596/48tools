@@ -73,8 +73,6 @@ export class Pocket48LiveMain {
       log: message.type === 'close' ? message.log : null
     }));
     pocket48LiveMap.delete(this.id);
-
-    console.log(pocket48LiveMap.size);
   };
 
   kill(): void {
