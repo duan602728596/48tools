@@ -11,6 +11,9 @@ export const isTest: boolean = process.env.TEST === 'true';
 /* 文件夹路径 */
 export const wwwPath: string = path.join(__dirname, '../..');
 
+/* worker.js文件路径 */
+export const workerProductionBasePath: string = path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib');
+
 /* 生成initialState */
 export function initialState(value: any): string {
   return encodeURIComponent(JSON.stringify(value));

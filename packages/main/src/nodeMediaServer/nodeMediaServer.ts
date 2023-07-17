@@ -1,8 +1,7 @@
 import * as path from 'node:path';
-import * as process from 'node:process';
 import { Worker } from 'node:worker_threads';
 import { ipcMain, type IpcMainEvent } from 'electron';
-import { isDevelopment } from '../utils';
+import { isDevelopment, workerProductionBasePath } from '../utils';
 
 export const type: string = 'node-media-server';
 let nodeMediaServerWorker: Worker | null = null; // node-media-server服务线程
@@ -30,7 +29,7 @@ function nodeMediaServer(): void {
     nodeMediaServerWorker = new Worker(
       isDevelopment
         ? path.join(__dirname, 'server.worker.js')
-        : path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib/nodeMediaServer/server.worker.js'),
+        : path.join(workerProductionBasePath, 'nodeMediaServer/server.worker.js'),
       {
         workerData: {
           ...arg,

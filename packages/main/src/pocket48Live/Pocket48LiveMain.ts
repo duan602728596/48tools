@@ -1,8 +1,7 @@
 import { Worker } from 'node:worker_threads';
-import * as process from 'node:process';
 import * as path from 'node:path';
 import type { BrowserWindow } from 'electron';
-import { isDevelopment } from '../utils';
+import { isDevelopment, workerProductionBasePath } from '../utils';
 
 /* 缓存子线程 */
 export const pocket48LiveMap: Map<string, Pocket48LiveMain> = new Map();
@@ -54,7 +53,7 @@ export class Pocket48LiveMain {
     this.worker = new Worker(
       isDevelopment
         ? path.join(__dirname, 'liveDownload.worker.js')
-        : path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib/pocket48Live/liveDownload.worker.js'),
+        : path.join(workerProductionBasePath, 'pocket48Live/liveDownload.worker.js'),
       {
         workerData: {
           playStreamPath: this.playStreamPath,

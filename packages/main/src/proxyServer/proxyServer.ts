@@ -1,8 +1,7 @@
 import * as path from 'node:path';
-import * as process from 'node:process';
 import { Worker } from 'node:worker_threads';
 import { ipcMain, type IpcMainEvent } from 'electron';
-import { isDevelopment } from '../utils';
+import { isDevelopment, workerProductionBasePath } from '../utils';
 
 export const type: string = 'proxy-server';
 let proxyServerWorker: Worker | null = null; // proxy-server服务线程
@@ -27,7 +26,7 @@ function proxyServer(): void {
     proxyServerWorker = new Worker(
       isDevelopment
         ? path.join(__dirname, 'httpProxyServer.worker.js')
-        : path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib/proxyServer/httpProxyServer.worker.js'),
+        : path.join(workerProductionBasePath, 'proxyServer/httpProxyServer.worker.js'),
       {
         workerData: arg
       }
