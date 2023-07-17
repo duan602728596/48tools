@@ -14,6 +14,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, message, Table, Tag, Popconfirm, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { MessageInstance } from 'antd/es/message/interface';
 import type { UseModalReturnType, UseMessageReturnType, ModuleFuncReturn } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
@@ -155,10 +156,10 @@ function Pocket48Live(props: {}): ReactElement {
     // 自动抓取
     onion.use(function(ctx: OnionContext, next: Function): void {
       const { result: r, transcoding = false, backup = false }: OnionContext = ctx;
-      const args: [string, string[], boolean, boolean] = [r.value.dir, usersArr, transcoding, backup];
+      const args: [MessageInstance, string, string[], boolean, boolean] = [messageApi, r.value.dir, usersArr, transcoding, backup];
 
       messageApi.info('开始自动抓取。');
-      autoGrab(messageApi, ...args);
+      autoGrab(...args);
       dispatch(setAutoGrab(
         window.setInterval(autoGrab, r.value.time * 60_000, ...args)
       ));
