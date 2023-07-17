@@ -80,7 +80,8 @@ function config(outputDir, target) {
       'node_modules/asar-node',
       'bin/lib/asarNodeRequire.js',
       'bin/lib/nodeMediaServer/server.worker.js',
-      'bin/lib/proxyServer/httpProxyServer.worker.js'
+      'bin/lib/proxyServer/httpProxyServer.worker.js',
+      'bin/lib/pocket48Live/LiveDownload.worker.js'
     ]
   };
 

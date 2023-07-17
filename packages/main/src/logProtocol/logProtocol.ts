@@ -8,7 +8,8 @@ const template: Record<string, Record<string, (t: string, fn: string, d: string)
     playurl: playUrlLogTemplate
   },
   ffmpeg: {
-    util: utilLogTemplate
+    util: utilLogTemplate,
+    mainThread: utilLogTemplate
   }
 };
 

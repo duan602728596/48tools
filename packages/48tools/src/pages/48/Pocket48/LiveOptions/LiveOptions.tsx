@@ -87,7 +87,7 @@ function LiveOptions(props: {}): ReactElement {
           <Button onClick={ handleChangeDirClick }>选择目录</Button>
         </Form.Item>
         <Button.Group>
-          <ButtonLink linkProps={{ to: '/48/Pocket48Live' }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>
+          <ButtonLink linkProps={{ to: '/48/Pocket48LiveMain' }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>
           <Button type="primary" htmlType="submit">保存</Button>
         </Button.Group>
       </Form>

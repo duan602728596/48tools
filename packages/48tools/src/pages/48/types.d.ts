@@ -2,6 +2,7 @@ import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/Clo
 import type { FieldData } from 'rc-field-form/es/interface';
 import type { MsgType } from '@48tools-api/48';
 import type { WebWorkerChildItem } from '../../commonTypes';
+import type Pocket48LiveRender from './Pocket48/function/Pocket48LiveRender';
 
 export interface InLiveFormValue {
   type?: string;
@@ -55,6 +56,12 @@ export interface RecordFieldData extends FieldData {
   touched?: boolean;
   validating?: boolean;
   errors?: string[];
+}
+
+
+export interface Pocket48LiveWorker {
+  id: string;
+  worker: Worker | Pocket48LiveRender;
 }
 
 // 录播的webworker下载

@@ -4,6 +4,7 @@ import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
 import { isDevelopment, isTest, wwwPath, initialState as ils, packageJson } from './utils';
 import { ipc, removeIpc } from './ipc';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle';
+import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
 import { toutiaoRequestInit } from './webRequest/toutiaoRequest';
 import weiboResourceRequestInit from './webRequest/weiboResourceRequest';
@@ -67,6 +68,7 @@ function createWindow(): void {
 
   try {
     ipcRemoteHandle(win);
+    pocket48LiveRemoteHandle(win);
   } catch {}
 
   win.on('closed', async function(): Promise<void> {

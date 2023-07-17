@@ -12,13 +12,12 @@ import type { QueryDispatchFunc, DataDispatchFunc } from '@indexeddb-tools/index
 import { requestLiveList, type LiveInfo, type LiveData } from '@48tools-api/48';
 import IDBRedux, { optionsObjectStoreName } from '../../../utils/IDB/IDBRedux';
 import { ProgressSet } from '../../../components/ProgressNative/index';
-import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../types';
-import type { WebWorkerChildItem } from '../../../commonTypes';
+import type { RecordFieldData, RecordVideoDownloadWebWorkerItem, Pocket48LiveWorker } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
 export interface Pocket48InitialState {
   liveList: Array<LiveInfo>;
-  liveChildList: Array<WebWorkerChildItem>;
+  liveChildList: Array<Pocket48LiveWorker>;
   autoGrabTimer: number | null;
   recordList: Array<LiveInfo>;
   recordNext: string;
@@ -29,7 +28,7 @@ export interface Pocket48InitialState {
 
 type SliceReducers = {
   setLiveList: CaseReducer<Pocket48InitialState, PayloadAction<Array<LiveInfo>>>;
-  setAddLiveChildList: CaseReducer<Pocket48InitialState, PayloadAction<WebWorkerChildItem>>;
+  setAddLiveChildList: CaseReducer<Pocket48InitialState, PayloadAction<Pocket48LiveWorker>>;
   setDeleteLiveChildList: CaseReducer<Pocket48InitialState, PayloadAction<LiveInfo>>;
   setAutoGrab: CaseReducer<Pocket48InitialState, PayloadAction<number | null>>;
   setRecordList: CaseReducer<Pocket48InitialState, PayloadAction<{ next: string; data: Array<LiveInfo> }>>;
@@ -71,13 +70,13 @@ const { actions, reducer }: Slice<Pocket48InitialState, SliceReducers, typeof sl
     },
 
     // 添加直播下载
-    setAddLiveChildList(state: Pocket48InitialState, action: PayloadAction<WebWorkerChildItem>): void {
+    setAddLiveChildList(state: Pocket48InitialState, action: PayloadAction<Pocket48LiveWorker>): void {
       state.liveChildList = state.liveChildList.concat([action.payload]);
     },
 
     // 删除直播下载
     setDeleteLiveChildList(state: Pocket48InitialState, action: PayloadAction<LiveInfo>): void {
-      const index: number = state.liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === action.payload.liveId);
+      const index: number = state.liveChildList.findIndex((o: Pocket48LiveWorker): boolean => o.id === action.payload.liveId);
 
       if (index >= 0) {
         state.liveChildList.splice(index, 1);

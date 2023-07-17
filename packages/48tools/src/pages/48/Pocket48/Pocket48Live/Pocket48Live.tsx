@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { ipcRenderer, clipboard, type SaveDialogReturnValue } from 'electron';
 import {
   Fragment,
@@ -21,6 +22,7 @@ import { requestLiveRoomInfo, type LiveInfo, type LiveRoomInfo } from '@48tools-
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getPocket48LiveDownloadWorker from '../function/Pocket48LiveDownload.worker/getPocket48LiveDownloadWorker';
 import getDownloadAndTranscodingWorker from '../function/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
+import Pocket48LiveRender from '../function/Pocket48LiveRender';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
@@ -42,7 +44,11 @@ import downloadImages from './downloadImages/downloadImages';
 import autoGrab from '../function/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
 import type { WebWorkerChildItem, MessageEventData, LiveStatusEventData } from '../../../../commonTypes';
-import type { Pocket48LiveAutoGrabOptions } from '../../types';
+import type { Pocket48LiveAutoGrabOptions, Pocket48LiveWorker } from '../../types';
+
+function isWorker(w: Pocket48LiveWorker['worker']): w is Worker {
+  return w instanceof Worker;
+}
 
 /* redux selector */
 type RSelector = Pick<Pocket48InitialState, 'liveList' | 'liveChildList' | 'autoGrabTimer'>;
@@ -53,7 +59,7 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   liveList: ({ pocket48 }: RState): Array<LiveInfo> => pocket48.liveList,
 
   // 直播下载
-  liveChildList: ({ pocket48 }: RState): Array<WebWorkerChildItem> => pocket48.liveChildList,
+  liveChildList: ({ pocket48 }: RState): Array<Pocket48LiveWorker> => pocket48.liveChildList,
 
   // 自动抓取的定时器
   autoGrabTimer: ({ pocket48 }: RState): number | null => pocket48.autoGrabTimer
@@ -156,12 +162,55 @@ function Pocket48Live(props: {}): ReactElement {
     downloadImages(modalApi, record, record.coverPath, resInfo.content?.carousels?.carousels);
   }
 
+  /**
+   * 备用方案录制
+   * @param { LiveInfo } record: 直播信息
+   * @param { MouseEvent<HTMLButtonElement> } event
+   */
+  async function handleGetVideoBackupClick(record: LiveInfo, event: MouseEvent): Promise<void> {
+    try {
+      const result: SaveDialogReturnValue = await showSaveDialog({
+        defaultPath: `[口袋48直播(备用录制)]${ record.userInfo.nickname }_${ filenamify(record.title) }`
+          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.flv`
+      });
+
+      if (result.canceled || !result.filePath) return;
+
+      const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+      const pocket48LiveRender: Pocket48LiveRender = new Pocket48LiveRender({
+        id: randomUUID(),
+        liveId: record.liveId,
+        roomId: resInfo.content.roomId,
+        playStreamPath: resInfo.content.playStreamPath,
+        filePath: result.filePath,
+        ffmpeg: getFFmpeg(),
+        onClose(id: string): void {
+          dispatch(setDeleteLiveChildList(record));
+        }
+      });
+
+      dispatch(setAddLiveChildList({
+        id: record.liveId,
+        worker: pocket48LiveRender
+      }));
+    } catch (err) {
+      console.error(err);
+      messageApi.error('直播录制失败！');
+    }
+  }
+
   // 停止
   function handleStopClick(record: LiveInfo, event?: MouseEvent): void {
-    const index: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
+    const index: number = liveChildList.findIndex((o: Pocket48LiveWorker): boolean => o.id === record.liveId);
 
     if (index >= 0) {
-      liveChildList[index].worker.postMessage({ type: 'stop' });
+      const w: Pocket48LiveWorker['worker'] = liveChildList[index].worker;
+
+      if (isWorker(w)) {
+        w.postMessage({ type: 'stop' });
+      } else {
+        w.kill();
+      }
     }
   }
 
@@ -279,7 +328,7 @@ function Pocket48Live(props: {}): ReactElement {
     {
       title: '操作',
       key: 'action',
-      width: 245,
+      width: 325,
       render: (value: undefined, record: LiveInfo, index: number): ReactElement => {
         const idx: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.liveId);
         const inRecording: boolean = idx >= 0;
@@ -301,6 +350,9 @@ function Pocket48Live(props: {}): ReactElement {
                     </Button>,
                     <Button key="r-ts" onClick={ (event: MouseEvent): Promise<void> => handleGetVideoClick(record, true, event) }>
                       录制(*.ts)
+                    </Button>,
+                    <Button key="r-flv-2" onClick={ (event: MouseEvent): Promise<void> => handleGetVideoBackupClick(record, event) }>
+                      备用录制(*.flv)
                     </Button>
                   ]
                 }
