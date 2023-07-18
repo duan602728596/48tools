@@ -14,7 +14,10 @@ export function msToken(length: number = 128): string {
 }
 
 /* ua必须对应Params */
-export const douyinUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57';
+const browserVersion: number = new Date().getFullYear() - 1_500; // 由于总是检测版本，所以直接往高写
+
+export const douyinUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+  + `Chrome/${ browserVersion }.0.0.0 Safari/537.36 Edg/${ browserVersion }.0.1774.57`;
 const systemInfoParams: Record<string, string> = {
   device_platform: 'webapp',
   aid: '6383',
@@ -28,10 +31,10 @@ const systemInfoParams: Record<string, string> = {
   browser_language: 'zh-CN',
   browser_platform: 'Win32',
   browser_name: 'Edge',
-  browser_version: '113.0.1774.57',
+  browser_version: `${ browserVersion }.0.1774.57`,
   browser_online: 'true',
   engine_name: 'Blink',
-  engine_version: '113.0.0.0',
+  engine_version: `${ browserVersion }.0.0.0`,
   os_name: 'Windows',
   os_version: '10',
   cpu_core_num: '4',
