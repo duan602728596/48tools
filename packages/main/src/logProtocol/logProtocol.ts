@@ -1,4 +1,4 @@
-import { protocol, type Protocol, type ProtocolRequest, type ProtocolResponse } from 'electron';
+import { protocol, type Protocol } from 'electron';
 import { playUrlLogTemplate } from './logTemplate/bilibiliLive';
 import { utilLogTemplate } from './logTemplate/ffmpeg';
 
@@ -23,17 +23,15 @@ protocol.registerSchemesAsPrivileged([{
 }]);
 
 /* log协议的处理 */
-function registerStringProtocolCallback(request: ProtocolRequest, callback: (response: ProtocolResponse) => void): void {
+async function protocolHandleCallback(request: Request): Promise<Response> {
   // 解析params
   const urlResult: URL = new URL(request.url);
   const type: string | null = urlResult.searchParams.get('type'); // 类型
   const fn: string | null = urlResult.searchParams.get('fn');     // 执行的方法
-  const data: string | undefined = request?.uploadData?.[0]?.bytes.toString();
+  const data: string | undefined = await request.text();          // 数据
 
   if (!(type && fn && data)) {
-    callback({ statusCode: 404 });
-
-    return;
+    return new Response(undefined, { status: 404 });
   }
 
   // 生成日志
@@ -44,18 +42,23 @@ function registerStringProtocolCallback(request: ProtocolRequest, callback: (res
   }
 
   if (resData) {
-    callback({ statusCode: 200, data: resData, mimeType: 'text/plain; charset=utf8' });
+    return new Response(resData, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf8'
+      }
+    });
   } else {
-    callback({ statusCode: 204 });
+    return new Response(undefined, { status: 404 });
   }
 }
 
 /* 创建协议，拦截日志 */
 function logProtocol(): void {
-  const { isProtocolRegistered, registerStringProtocol }: Protocol = protocol;
+  const { handle, isProtocolHandled }: Protocol = protocol;
 
-  if (!isProtocolRegistered('log')) {
-    registerStringProtocol('log', registerStringProtocolCallback);
+  if (!isProtocolHandled('log')) {
+    handle('log', protocolHandleCallback);
   }
 }
 
