@@ -47,7 +47,7 @@ child.on('error', function(err: Error): void {
 });
 
 /* 接收关闭信息，结束下载 */
-parentPort?.once?.('message', (value: { type: 'kill' }): void => {
+parentPort?.once?.('message', function(value: { type: 'kill' }): void {
   if (value.type === 'kill') {
     child.kill('SIGTERM');
   }
