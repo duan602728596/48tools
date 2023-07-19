@@ -14,7 +14,8 @@ export function msToken(length: number = 128): string {
 }
 
 /* ua必须对应Params */
-const browserVersion: number = new Date().getFullYear() - 1_500; // 由于总是检测版本，所以直接往高写
+const date: Date = new Date();
+const browserVersion: number = date.getFullYear() - 1_700 + date.getMonth(); // 由于总是检测版本，所以直接往高写
 
 export const douyinUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
   + `Chrome/${ browserVersion }.0.0.0 Safari/537.36 Edg/${ browserVersion }.0.1774.57`;
