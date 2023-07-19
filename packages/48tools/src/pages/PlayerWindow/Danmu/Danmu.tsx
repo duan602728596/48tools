@@ -15,6 +15,7 @@ import {
 } from 'react';
 import * as PropTypes from 'prop-types';
 import { Avatar, Switch } from 'antd';
+import { GiftTwoTone as IconGiftTwoTone } from '@ant-design/icons';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
 import type { LiveRoomInfo } from '@48tools-api/48';
@@ -84,6 +85,7 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
             data-index={ index }
           >
             <div ref={ divRef }>
+              <IconGiftTwoTone className="mr-[3px] text-[22px] align-[-5px]" />
               { custom.user.nickName }
               &nbsp;送给&nbsp;
               { custom.giftInfo.acceptUser.userName }&nbsp;
