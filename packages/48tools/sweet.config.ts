@@ -81,8 +81,12 @@ export default function(info: object): Record<string, any> {
   const config: { [key: string]: any } = {
     frame: 'react',
     dll: [
+      '@ant-design/icons',
+      '@bbkkbkk/q',
       '@indexeddb-tools/indexeddb',
       '@indexeddb-tools/indexeddb-redux',
+      '@reduxjs/toolkit',
+      '@reduxjs/toolkit/query/react',
       '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js',
       'antd',
       'array-move',
@@ -96,16 +100,15 @@ export default function(info: object): Record<string, any> {
       'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK',
       'nim-web-sdk-ng/dist/NIM_BROWSER_SDK',
       'path-to-regexp',
+      'prop-types',
       'qrcode/lib/browser',
       'react',
       'react-dom/client',
       'react-dom/server.browser',
-      'prop-types',
-      '@reduxjs/toolkit',
-      '@reduxjs/toolkit/query/react',
       'react-redux',
-      'reselect',
-      'react-router-dom'
+      'react-router-dom',
+      'react-sortable-hoc',
+      'reselect'
     ],
     entry: {
       index: [path.join(__dirname, 'src/index.tsx')],
