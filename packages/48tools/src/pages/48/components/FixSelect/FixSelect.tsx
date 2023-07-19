@@ -13,7 +13,7 @@ class FixSelect extends Component<SelectProps, FixSelectState> {
     open: false
   };
 
-  componentDidUpdate(prevProps: Readonly<SelectProps>, prevState: Readonly<{}>, snapshot?: any): void {
+  componentDidUpdate(prevProps: Readonly<SelectProps>, prevState: Readonly<FixSelectState>): void {
     // TODO: fix搜索源更新后下拉数据不更新的bug
     if (prevProps.options !== this.props.options) {
       this.setState({ open: false }, (): void => {
