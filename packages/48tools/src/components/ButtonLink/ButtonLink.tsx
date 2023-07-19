@@ -6,7 +6,7 @@ import { pick } from '../../utils/lodash';
 
 interface ButtonLinkProps extends PropsWithChildren {
   linkProps: LinkProps;
-  buttonProps?: ButtonProps & Record<string, unknown>;
+  buttonProps?: Omit<ButtonProps, 'href'> & Record<string, unknown>;
 }
 
 /**
