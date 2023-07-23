@@ -1,4 +1,4 @@
-import { useState, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
+import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
 import { Tour, type TourStepProps } from 'antd';
 
 const NOW_USER_TOUR_VERSION_KEY: 'USER_TOUR_VERSION' = 'USER_TOUR_VERSION';
@@ -12,12 +12,25 @@ function NewUserTour(): ReactElement | null {
   const steps: Array<TourStepProps> = [
     {
       title: '配置FFmpeg路径',
-      description: '因为软件的功能涉及到视频转码。所以在使用软件之前，请先下载FFmpeg。',
+      description: (
+        <Fragment>
+          因为软件的功能涉及到视频转码。所以在使用软件之前，请先
+          <b>下载FFmpeg</b>。然后配置
+          <b>FFmpeg可执行文件的路径</b>。
+        </Fragment>
+      ),
       target: (): HTMLElement => document.getElementById('ffmpeg-options')!
     },
     {
       title: '配置无头浏览器路径',
-      description: '微博超话签到的登录和口袋房间消息的资源本地化需要使用无头浏览器的功能。所以在使用这些功能之前，请先配置无头浏览器的地址。',
+      description: (
+        <Fragment>
+          <b>“微博超话签到“的登录</b>和
+          <b>”口袋房间消息“的资源本地化</b>
+          需要使用无头浏览器的功能。所以在使用这些功能之前，请先配置
+          <b>无头浏览器的文件路径</b>。
+        </Fragment>
+      ),
       target: (): HTMLElement => document.getElementById('executable-path')!
     }
   ];
@@ -34,10 +47,8 @@ function NewUserTour(): ReactElement | null {
   }
 
   return displayUserTourVersion ? (
-    <Tour type="primary"
-      open={ tourOpen }
+    <Tour open={ tourOpen }
       steps={ steps }
-      mask={ false }
       onChange={ handleCurrentChange }
       onFinished={ handleFinishTourClick }
       onClose={ handleFinishTourClick }
