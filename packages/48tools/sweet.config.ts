@@ -72,6 +72,7 @@ const externalsName: Array<string> = nodeModules([
 ]);
 
 export default function(info: object): Record<string, any> {
+  const entryDir: string = path.join(__dirname, 'src/entry');
   const plugins: Array<any> = [
     '@babel/plugin-syntax-import-assertions',
     !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }],
@@ -111,12 +112,12 @@ export default function(info: object): Record<string, any> {
       'reselect'
     ],
     entry: {
-      index: [path.join(__dirname, 'src/index.tsx')],
-      player: [path.join(__dirname, 'src/player.tsx')]
+      index: [path.join(entryDir, 'index/index.tsx')],
+      player: [path.join(entryDir, 'player/player.tsx')]
     },
     html: [
-      { template: path.join(__dirname, 'src/index.pug'), minify: htmlWebpackPluginMinify },
-      { template: path.join(__dirname, 'src/player.pug'), minify: htmlWebpackPluginMinify }
+      { template: path.join(entryDir, 'index/index.pug'), minify: htmlWebpackPluginMinify },
+      { template: path.join(entryDir, 'player/player.pug'), minify: htmlWebpackPluginMinify }
     ],
     externals: nodeExternals(externalsName),
     resolve: {

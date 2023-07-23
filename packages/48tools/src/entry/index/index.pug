@@ -1,5 +1,5 @@
-- var imports = require('./imports');
-- var packageJson = require('../package.json');
+- var imports = require('../../imports');
+- var packageJson = require('../../../package.json');
 
 doctype html
 html
@@ -8,14 +8,14 @@ html
     meta(name='renderer' content='webkit')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     title= `48tools - ${ packageJson.version }`
-    include ./components/basic/Theme/stylesheet.pug
+    include ../../components/basic/Theme/stylesheet
 
   body.theme
     div.app#app
-      include ./components/basic/loading/loading.pug
+      include ../../components/basic/loading/loading
 
-    include ./components/basic/wasm/wasm.pug
-    include ./components/basic/initialState/initialState.pug
+    include ../../components/basic/wasm/wasm
+    include ../../components/basic/initialState/initialState
 
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)
