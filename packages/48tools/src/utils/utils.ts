@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as net from 'node:net';
 import type { Server as NetServer } from 'node:net';
+import * as os from 'node:os';
 import { chromium, firefox, webkit, type BrowserType } from 'playwright-core';
 import * as dayjs from 'dayjs';
 import { BILIBILI_COOKIE_KEY, type BilibiliCookie } from '../functionalComponents/BilibiliLogin/Qrcode';
@@ -141,3 +142,23 @@ export function getExecutablePath(): string | null {
 // pc端ua
 export const pcUserAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
   + '(KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.52';
+
+const isWin: boolean = os.platform() === 'win32';
+const isMac: boolean = os.platform() === 'darwin';
+const isLinux: boolean = os.platform() === 'linux';
+
+export const ffmpegInstallHtmlPage: string = ((): string => {
+  if (isWin) {
+    return 'https://www.gyan.dev/ffmpeg/builds/';
+  }
+
+  if (isMac) {
+    return 'https://evermeet.cx/ffmpeg/';
+  }
+
+  if (isLinux) {
+    return 'https://johnvansickle.com/ffmpeg/';
+  }
+
+  return 'https://www.ffmpeg.org/download.html';
+})();

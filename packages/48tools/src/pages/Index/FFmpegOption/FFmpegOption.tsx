@@ -7,6 +7,7 @@ import Icon, { DownloadOutlined as IconDownloadOutlined, SwapLeftOutlined as Ico
 import * as classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
+import { ffmpegInstallHtmlPage } from '../../../utils/utils';
 import IconFFmpegSvgComponent from '../images/ffmpeg.component.svg';
 
 const IconFFmpeg: ReactElement = <Icon className={ style.ffmpegIcon } component={ IconFFmpegSvgComponent } />;
@@ -19,7 +20,7 @@ function FFmpegOption(props: {}): ReactElement {
 
   // 下载ffmpeg
   function handleOpenIssuesClick(event: MouseEvent): void {
-    shell.openExternal('https://ffmpeg.org/download.html');
+    shell.openExternal(ffmpegInstallHtmlPage);
   }
 
   // 打开配置弹出层

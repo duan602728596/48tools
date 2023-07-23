@@ -232,13 +232,13 @@ function Index(props: {}): ReactElement {
           <Space>
             <FFmpegOption />
             <ExecutablePath />
-            <Button icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
+            <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
             { theme.ChangeThemeElement }
             <Tooltip title="开发者工具">
               <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
             </Tooltip>
             <Tooltip title="问题反馈">
-              <Button type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
+              <Button id="issues" type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
             </Tooltip>
             <ButtonLink linkProps={{ to: '/Credits' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
           </Space>
