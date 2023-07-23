@@ -145,7 +145,6 @@ export const pcUserAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15
 
 const isWin: boolean = os.platform() === 'win32';
 const isMac: boolean = os.platform() === 'darwin';
-const isLinux: boolean = os.platform() === 'linux';
 
 export const ffmpegInstallHtmlPage: string = ((): string => {
   if (isWin) {
@@ -154,10 +153,6 @@ export const ffmpegInstallHtmlPage: string = ((): string => {
 
   if (isMac) {
     return 'https://evermeet.cx/ffmpeg/';
-  }
-
-  if (isLinux) {
-    return 'https://johnvansickle.com/ffmpeg/';
   }
 
   return 'https://www.ffmpeg.org/download.html';
