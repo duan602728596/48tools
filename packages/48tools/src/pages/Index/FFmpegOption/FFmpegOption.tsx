@@ -74,6 +74,7 @@ function FFmpegOption(props: {}): ReactElement {
   return (
     <Fragment>
       <Button type="primary"
+        id="ffmpeg-options"
         danger={ true }
         icon={ IconFFmpeg }
         onClick={ handleOpenFFmpegOptionClick }
@@ -88,6 +89,7 @@ function FFmpegOption(props: {}): ReactElement {
         open={ visible }
         width={ 600 }
         centered={ true }
+        maskClosable={ false }
         afterClose={ handleResetFFmpegOptionClick }
         onOk={ handleSetFFmpegClick }
         onCancel={ handleCloseFFmpegOptionModalClick }

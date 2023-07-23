@@ -1,5 +1,5 @@
 import { ipcRenderer, shell } from 'electron';
-import { useContext, type ReactElement, type ReactNode, type MouseEvent } from 'react';
+import { Fragment, useContext, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
   ToolTwoTone as IconToolTwoTone,
@@ -14,6 +14,7 @@ import commonStyle from '../../common.sass';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';
+import NewUserTour from './NewUserTour/NewUserTour';
 import ThemeContext, { type Theme } from '../../components/basic/Theme/ThemeContext';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
@@ -224,41 +225,44 @@ function Index(props: {}): ReactElement {
   const theme: Theme = useContext(ThemeContext);
 
   return (
-    <div className="p-[16px]">
-      { nativeRender() }
-      <div>
-        <Space>
-          <FFmpegOption />
-          <ExecutablePath />
-          <Button icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
-          { theme.ChangeThemeElement }
-          <Tooltip title="开发者工具">
-            <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
-          </Tooltip>
-          <Tooltip title="问题反馈">
-            <Button type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
-          </Tooltip>
-          <ButtonLink linkProps={{ to: '/Credits' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
-        </Space>
-      </div>
-      <Divider className="my-[16px]" />
-      <div className={ classNames('flex', commonStyle.text) }>
+    <Fragment>
+      <div className="p-[16px]">
+        { nativeRender() }
         <div>
-          {/* 二维码 */}
-          <p>欢迎打赏：</p>
-          <Space size={ 8 }>
-            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
-            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
+          <Space>
+            <FFmpegOption />
+            <ExecutablePath />
+            <Button icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
+            { theme.ChangeThemeElement }
+            <Tooltip title="开发者工具">
+              <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+            </Tooltip>
+            <Tooltip title="问题反馈">
+              <Button type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
+            </Tooltip>
+            <ButtonLink linkProps={{ to: '/Credits' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
           </Space>
         </div>
-        <div className="ml-[32px]">
-          <p>软件最新版本下载地址：</p>
-          <Button type="link" onClick={ handleOpenDownloadUrlClick }>
-            https://github.com/duan602728596/48tools/releases
-          </Button>
+        <Divider className="my-[16px]" />
+        <div className={ classNames('flex', commonStyle.text) }>
+          <div>
+            {/* 二维码 */}
+            <p>欢迎打赏：</p>
+            <Space size={ 8 }>
+              <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
+              <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
+            </Space>
+          </div>
+          <div className="ml-[32px]">
+            <p>软件最新版本下载地址：</p>
+            <Button type="link" onClick={ handleOpenDownloadUrlClick }>
+              https://github.com/duan602728596/48tools/releases
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+      <NewUserTour />
+    </Fragment>
   );
 }
 
