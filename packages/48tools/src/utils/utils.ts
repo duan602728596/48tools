@@ -146,14 +146,10 @@ export const pcUserAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15
 const isWin: boolean = os.platform() === 'win32';
 const isMac: boolean = os.platform() === 'darwin';
 
-export const ffmpegInstallHtmlPage: string = ((): string => {
-  if (isWin) {
-    return 'https://www.gyan.dev/ffmpeg/builds/';
-  }
+export const ffmpegInstallHtmlPage: string = (({ isWin: _isWin, isMac: _isMac }: { isWin: boolean; isMac: boolean }): string => {
+  if (_isWin) return 'https://www.gyan.dev/ffmpeg/builds/';
 
-  if (isMac) {
-    return 'https://evermeet.cx/ffmpeg/';
-  }
+  if (_isMac) return 'https://evermeet.cx/ffmpeg/';
 
   return 'https://www.ffmpeg.org/download.html';
-})();
+})({ isWin, isMac });
