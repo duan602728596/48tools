@@ -104,6 +104,7 @@ export default function(info: object): Record<string, any> {
       'prop-types',
       'qrcode/lib/browser',
       'react',
+      'react/jsx-dev-runtime',
       'react-dom/client',
       'react-dom/server.browser',
       'react-redux',
