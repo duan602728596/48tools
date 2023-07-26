@@ -261,7 +261,7 @@ function Index(props: {}): ReactElement {
           </div>
         </div>
       </div>
-      <NewUserTour />
+      { globalThis.__INITIAL_STATE__.isTest ? null : <NewUserTour /> }
     </Fragment>
   );
 }

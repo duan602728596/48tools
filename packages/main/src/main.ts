@@ -55,7 +55,8 @@ function createWindow(): void {
       query: {
         initialState: ils({
           theme: themeSource ?? 'system',
-          commandLineOptions
+          commandLineOptions,
+          isTest
         })
       }
     }

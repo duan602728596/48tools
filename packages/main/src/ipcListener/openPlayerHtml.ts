@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState';
-import { isDevelopment, wwwPath, initialState as ils } from '../utils';
+import { isDevelopment, isTest, wwwPath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import store from '../store';
 import { commandLineOptions } from '../commend';
@@ -61,7 +61,8 @@ function open(title: string, query: string): void {
       rtmpPort: player.rtmpPort ? Number(player.rtmpPort) : undefined,
       httpPort: player.httpPort ? Number(player.httpPort) : undefined,
       proxyPort: player.proxyPort ? Number(player.proxyPort) : undefined
-    }
+    },
+    isTest
   }));
 
   win.loadFile(

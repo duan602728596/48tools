@@ -18,6 +18,7 @@ export interface InitialState {
   theme: 'light' | 'dark' | 'system';
   commandLineOptions: CommandLineOptions;
   playerInfo: PlayerInfo;
+  isTest: boolean;
 }
 
 declare global {
