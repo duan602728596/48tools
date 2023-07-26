@@ -32,7 +32,7 @@ export function callback(): void {
     // 测试导航的正常显示
     const navs: Array<ElementHandleForTag<'nav'>> = await app.win.$$('nav');
 
-    expect(navs.length).toEqual(4);
+    expect(navs.length).toEqual(5);
 
     // 测试二维码图片的正常显示
     const images: Array<ElementHandle> = await app!.win.$$('.ant-image');
