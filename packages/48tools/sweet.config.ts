@@ -49,6 +49,14 @@ function nodeModules(node: Array<string>): Array<string> {
   return node.concat(node.map((o: string): string => `node:${ o }`));
 }
 
+/**
+ * 创建路径
+ * @param { string } p: 路径
+ */
+function srcPath(p: string): string {
+  return path.join(__dirname, 'src', p);
+}
+
 const externalsName: Array<string> = nodeModules([
   'child_process',
   'crypto',
@@ -72,7 +80,6 @@ const externalsName: Array<string> = nodeModules([
 ]);
 
 export default function(info: object): Record<string, any> {
-  const entryDir: string = path.join(__dirname, 'src/entry');
   const plugins: Array<any> = [
     '@babel/plugin-syntax-import-assertions',
     !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }],
@@ -113,17 +120,17 @@ export default function(info: object): Record<string, any> {
       'reselect'
     ],
     entry: {
-      index: [path.join(entryDir, 'index/index.tsx')],
-      player: [path.join(entryDir, 'player/player.tsx')]
+      index: [srcPath('index.tsx')],
+      player: [srcPath('player.tsx')]
     },
     html: [
-      { template: path.join(entryDir, 'index/index.pug'), minify: htmlWebpackPluginMinify },
-      { template: path.join(entryDir, 'player/player.pug'), minify: htmlWebpackPluginMinify }
+      { template: srcPath('index.pug'), minify: htmlWebpackPluginMinify },
+      { template: srcPath('player.pug'), minify: htmlWebpackPluginMinify }
     ],
     externals: nodeExternals(externalsName),
     resolve: {
       alias: {
-        '@48tools-api': path.join(__dirname, 'src/services')
+        '@48tools-api': srcPath('services')
       }
     },
     javascript: {
@@ -159,7 +166,7 @@ export default function(info: object): Record<string, any> {
     plugins: [
       new CopyPlugin({
         patterns: [{
-          from: path.join(__dirname, 'src/pages/48/sdk/1'),
+          from: srcPath('pages/48/sdk/1'),
           to: path.join(__dirname, 'dist')
         }]
       }),
