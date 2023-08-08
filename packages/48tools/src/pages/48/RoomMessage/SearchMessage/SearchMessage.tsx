@@ -2,6 +2,7 @@ import { setTimeout, clearTimeout } from 'node:timers';
 import * as fs from 'node:fs';
 import { promises as fsP } from 'node:fs';
 import * as path from 'node:path';
+import type { ParsedPath } from 'node:path';
 import type { SaveDialogReturnValue } from 'electron';
 import {
   Fragment,
@@ -18,17 +19,19 @@ import { createStructuredSelector, Selector } from 'reselect';
 import { Button, message, Modal, Pagination, Space } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { LabeledValue, UseMessageReturnType } from '@48tools-types/antd';
-import Icon, { Html5Filled as IconHtml5Filled } from '@ant-design/icons';
+import Icon, { Html5Filled as IconHtml5Filled, FileImageOutlined as IconFileImageOutlined } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
 import {
   requestServerSearch,
   requestServerJump,
   requestHomeownerMessage,
+  requestRoomInfo,
   type ServerSearchResult,
   type ServerApiItem,
   type ServerJumpResult,
   type HomeMessageResult,
-  type CustomMessageV2
+  type CustomMessageV2,
+  type RoomInfo, requestDownloadFileByStream
 } from '@48tools-api/48';
 import FixSelect from '../../components/FixSelect/FixSelect';
 import Header from '../../../../components/Header/Header';
@@ -46,6 +49,7 @@ import MessageDisplay from '../MessageDisplay/MessageDisplay';
 import LocalMessage from '../LocalMessage/LocalMessage';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import { fileTimeFormat } from '../../../../utils/utils';
+import { source } from '../../../../utils/snh48';
 import IconJSONSvgComponent from '../../images/JSON.component.svg';
 import type { QueryRecord, FormatCustomMessage, SendDataItem } from '../../types';
 
@@ -254,6 +258,48 @@ function SearchMessage(props: {}): ReactElement {
     setHomeMessageLoading(false);
   }
 
+  // 下载房间背景图片
+  async function handleDownloadRoomBackgroundImageClick(event: MouseEvent): Promise<void> {
+    let channelId: string | number | undefined;
+
+    if ('channelId' in query) {
+      channelId = query.channelId;
+    } else if (searchSelectValue?.value) {
+      const jumpRes: ServerJumpResult | undefined = await requestServerJump(Number(searchSelectValue.value));
+
+      jumpRes?.content?.channelId && (channelId = jumpRes.content.channelId);
+    }
+
+    if (!channelId) {
+      messageApi.warning('请先选择一个成员的口袋房间。');
+
+      return;
+    }
+
+    try {
+      const res: RoomInfo | undefined = await requestRoomInfo(channelId);
+
+      if (!(res?.content?.userChatConfig?.bgImg)) {
+        messageApi.error('没有获取到口袋房间背景图片！请先登录。');
+
+        return;
+      }
+
+      const bgUrl: string = res.content.userChatConfig.bgImg;
+      const bgUrlParseResult: ParsedPath = path.parse(bgUrl);
+      const result: SaveDialogReturnValue = await showSaveDialog({
+        defaultPath: `${ bgUrlParseResult.name }${ bgUrlParseResult.ext }`
+      });
+
+      if (result.canceled || !result.filePath) return;
+
+      await requestDownloadFileByStream(source(bgUrl), result.filePath);
+      messageApi.success('背景图片下载完成！');
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   // 选择一个房间
   function handleOwnerSelect(value: string, option: LabeledValue): void {
     dispatch(setSearchSelectValue({
@@ -356,6 +402,15 @@ function SearchMessage(props: {}): ReactElement {
               </div>
             )
           }
+          <div>
+            <Button className="mr-[8px]"
+              icon={ <IconFileImageOutlined /> }
+              block={ true }
+              onClick={ handleDownloadRoomBackgroundImageClick }
+            >
+              口袋房间背景图片下载
+            </Button>
+          </div>
         </Space>
       </Modal>
       { messageContextHolder }

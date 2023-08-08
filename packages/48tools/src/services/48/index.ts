@@ -11,7 +11,8 @@ import type {
   HomeMessageResult,
   VoiceOperate,
   FriendShipAdd,
-  LiveOne
+  LiveOne,
+  RoomInfo
 } from './interface';
 
 export type * from './interface';
@@ -259,6 +260,24 @@ export async function requestLiveOne(liveId: string): Promise<LiveOne> {
     responseType: 'json',
     json: { liveId },
     timeout: 10 * 60 * 1_000
+  });
+
+  return res.body;
+}
+
+/**
+ * 获取roomInfo
+ * @param { string } channelId
+ */
+export async function requestRoomInfo(channelId: string | number): Promise<RoomInfo | undefined> {
+  const token: string | undefined = getPocket48Token();
+
+  if (!token) return;
+
+  const res: GotResponse<RoomInfo> = await got.post('https://pocketapi.48.cn/im/api/v1/im/team/room/info', {
+    headers: createHeaders(token),
+    responseType: 'json',
+    json: { channelId: `${ channelId }` }
   });
 
   return res.body;

@@ -195,3 +195,15 @@ export interface LiveOne extends Pocket48ResponseBase {
     endTime: string;
   };
 }
+
+// RoomInfo
+export interface RoomInfo extends Pocket48ResponseBase {
+  content: {
+    channelInfo: {
+      bgImg: string;
+    };
+    userChatConfig: {
+      bgImg: string;
+    };
+  };
+}
