@@ -17,7 +17,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import {
-  requestAwemePost,
+  requestAwemePostV2,
   requestDouyinUser,
   requestTtwidCookie,
   type AwemePostResponse,
@@ -157,7 +157,7 @@ function VideoOrUserParse(props: {}): ReactElement {
 
     // 请求数据并变更状态
     const response: Function = async (cookie: string): Promise<boolean> => {
-      const res: AwemePostResponse | string = await requestAwemePost(cookie, videoQuery);
+      const res: AwemePostResponse | string = await requestAwemePostV2(cookie, videoQuery);
 
       if (typeof res === 'object') {
         const awemeList: Array<AwemeItem> = (res?.aweme_list ?? []).filter((o: AwemeItem): boolean => ('video' in o));

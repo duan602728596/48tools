@@ -1,8 +1,8 @@
 import got, { type Response as GotResponse } from 'got';
 import { pcUserAgent } from '../../../utils/utils';
-import { awemePostQuery, awemeDetailQuery } from '../../../utils/toutiao/signUtils';
+import { awemePostQueryV2, awemeDetailQueryV2 } from '../../../utils/toutiao/signUtils';
 import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
-import { msToken, douyinUserAgent } from '../../../utils/toutiao/signUtils';
+import { msToken } from '../../../utils/toutiao/signUtils';
 import Signer from '../../../utils/toutiao/Signer';
 import type {
   AwemePostResponse,
@@ -75,17 +75,17 @@ export async function requestGetVideoRedirectUrl(uri: string): Promise<string> {
 /**
  * 请求user的视频列表
  * @param { string } cookie: string
- * @param { VideoQuery } videoQuery: user id
+ * @param { string } secUserId: user id
  */
-export async function requestAwemePost(cookie: string, videoQuery: VideoQuery): Promise<AwemePostResponse | string> {
-  const query: string = awemePostQuery(videoQuery.secUserId, videoQuery.maxCursor);
+export async function requestAwemePostV2(cookie: string, videoQuery: VideoQuery): Promise<AwemePostResponse | string> {
+  const query: string = awemePostQueryV2(videoQuery.secUserId, videoQuery.maxCursor);
   const res: GotResponse<AwemePostResponse | string> = await got.get(
     `https://www.douyin.com/aweme/v1/web/aweme/post/?${ query }`, {
       responseType: 'json',
       headers: {
         Referer: `https://www.douyin.com/user/${ videoQuery.secUserId }`,
         Host: 'www.douyin.com',
-        'User-Agent': douyinUserAgent,
+        'User-Agent': '',
         Cookie: cookie
       },
       followRedirect: false
@@ -95,21 +95,21 @@ export async function requestAwemePost(cookie: string, videoQuery: VideoQuery): 
 }
 
 export async function requestAwemePostReturnType(cookie: string, videoQuery: VideoQuery): Promise<DouyinUserApiType> {
-  const res: AwemePostResponse | string = await requestAwemePost(cookie, videoQuery);
+  const res: AwemePostResponse | string = await requestAwemePostV2(cookie, videoQuery);
 
   return { type: 'userApi', data: typeof res === 'object' ? res : undefined };
 }
 
 /* 请求视频的detail */
-export async function requestAwemeDetail(cookie: string, id: string, signature: string): Promise<AwemeDetailResponse | string> {
-  const query: string = awemeDetailQuery(id, signature);
+export async function requestAwemeDetailV2(cookie: string, id: string, signature: string): Promise<AwemeDetailResponse | string> {
+  const query: string = awemeDetailQueryV2(id);
   const res: GotResponse<AwemeDetailResponse | string> = await got.get(
     `https://www.douyin.com/aweme/v1/web/aweme/detail/?${ query }`, {
       responseType: 'json',
       headers: {
         Referer: `https://www.douyin.com/video/${ id }`,
         Host: 'www.douyin.com',
-        'User-Agent': douyinUserAgent,
+        'User-Agent': '',
         Cookie: cookie
       },
       followRedirect: false
@@ -119,7 +119,7 @@ export async function requestAwemeDetail(cookie: string, id: string, signature: 
 }
 
 export async function requestAwemeDetailReturnType(cookie: string, id: string, signature: string): Promise<DouyinDetailApiType> {
-  const res: AwemeDetailResponse | string = await requestAwemeDetail(cookie, id, signature);
+  const res: AwemeDetailResponse | string = await requestAwemeDetailV2(cookie, id, signature);
 
   return { type: 'detailApi', data: typeof res === 'object' ? res : undefined };
 }
