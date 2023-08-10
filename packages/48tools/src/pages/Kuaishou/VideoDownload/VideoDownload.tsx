@@ -3,12 +3,10 @@ import { Fragment, MouseEvent, type ReactElement, type ReactNode } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message } from 'antd';
+import { Button, Table, message, Alert } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
-import * as classNames from 'classnames';
-import commonStyle from '../../../common.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import Search from './Search/Search';
@@ -143,11 +141,11 @@ function VideoDownload(props: {}): ReactElement {
         <Search />
         <Button type="primary" danger={ true } onClick={ handleClearKuaishouCookie }>清除快手Cookie的缓存</Button>
       </Header>
-      <p className={ classNames('mb-[4px] text-[12px]', commonStyle.text) }>
-        第一次下载时或获取快手Cookie失败时，需要进入快手首页进行一些操作后，关闭窗口。然后才能正常下载。
-        <br />
-        如果窗口内出现没有视频的情况，请点击首页，进行滑动验证码的操作，然后关闭窗口。
-      </p>
+      <Alert className="mb-[8px]" type="warning" message={ [
+        '第一次下载时或获取快手Cookie失败时，需要进入快手首页进行一些操作后，关闭窗口。然后才能正常下载。',
+        <br key="br" />,
+        '如果窗口内出现没有视频的情况，请点击首页，进行滑动验证码的操作，然后关闭窗口。'
+      ] } />
       <Table size="middle"
         columns={ columns }
         dataSource={ downloadList }
