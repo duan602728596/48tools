@@ -5,6 +5,7 @@ import {
   type SaveDialogOptions,
   type SaveDialogReturnValue
 } from 'electron';
+import { IpcRemoteHandleChannel } from '@48tools/main/src/channelEnum';
 
 /**
  * 显示打开的文件选择框
@@ -12,7 +13,7 @@ import {
  * @return { Promise<OpenDialogReturnValue> }
  */
 export function showOpenDialog(options: OpenDialogOptions): Promise<OpenDialogReturnValue> {
-  return ipcRenderer.invoke('show-open-dialog', options);
+  return ipcRenderer.invoke(IpcRemoteHandleChannel.ShowOpenDialog, options);
 }
 
 /**
@@ -21,5 +22,5 @@ export function showOpenDialog(options: OpenDialogOptions): Promise<OpenDialogRe
  * @return { Promise<SaveDialogReturnValue> }
  */
 export function showSaveDialog(options: SaveDialogOptions): Promise<SaveDialogReturnValue> {
-  return ipcRenderer.invoke('show-save-dialog', options);
+  return ipcRenderer.invoke(IpcRemoteHandleChannel.ShowSaveDialog, options);
 }

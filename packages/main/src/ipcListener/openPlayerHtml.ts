@@ -5,8 +5,7 @@ import { isDevelopment, isTest, wwwPath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import store from '../store';
 import { commandLineOptions } from '../commend';
-
-export const type: string = 'player.html';
+import { WinIpcChannel } from '../channelEnum';
 
 /* 记录id和窗口的关系 */
 export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
@@ -42,11 +41,6 @@ function open(title: string, query: string): void {
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
 
-  // 切换主题
-  function handleThemeEvent(value: ThemeValue): void {
-    win && win.webContents.send('themeSource', value);
-  }
-
   // initialState
   const initialStateSearchParams: URLSearchParams = new URLSearchParams();
   const player: Record<string, string> = Object.fromEntries(searchParams);
@@ -74,6 +68,11 @@ function open(title: string, query: string): void {
     }
   );
 
+  // 切换主题
+  function handleThemeEvent(value: ThemeValue): void {
+    win && win.webContents.send(WinIpcChannel.ThemeSource, value);
+  }
+
   win.on('closed', function(): void {
     themeEvent.off('themeSource', handleThemeEvent);
     playerWindowMaps.delete(id);
@@ -85,7 +84,7 @@ function open(title: string, query: string): void {
 }
 
 function openPlayerHtml(): void {
-  ipcMain.on(type, function(event: IpcMainEvent, title: string, query: string): void {
+  ipcMain.on(WinIpcChannel.PlayerHtml, function(event: IpcMainEvent, title: string, query: string): void {
     open(title, query);
   });
 }

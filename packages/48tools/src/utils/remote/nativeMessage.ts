@@ -1,4 +1,5 @@
 import { ipcRenderer, type MessageBoxOptions } from 'electron';
+import { IpcRemoteHandleChannel } from '@48tools/main/src/channelEnum';
 
 /**
  * 显示native的message提示
@@ -12,7 +13,7 @@ export function nativeMessage(optionsOrMessageText: MessageBoxOptions | string):
     messageOptions.type = 'info';
   }
 
-  return ipcRenderer.invoke('native-message', messageOptions);
+  return ipcRenderer.invoke(IpcRemoteHandleChannel.NativeMessage, messageOptions);
 }
 
 export function errorNativeMessage(messageText: string): Promise<void> {

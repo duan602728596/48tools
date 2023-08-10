@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode, MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
+import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import type { LiveRoomInfo } from '@48tools-api/48';
 import { source } from '../../../utils/snh48';
 import type { PlayerInfo } from '../../../components/basic/initialState/initialState';
@@ -18,7 +19,7 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
 
   // 打开开发者工具
   function handleOpenDeveloperToolsClick(event: MouseEvent): void {
-    ipcRenderer.send('player-developer-tools', playerInfo.id);
+    ipcRenderer.send(WinIpcChannel.PlayerDeveloperTools, playerInfo.id);
   }
 
   // 渲染小偶像信息

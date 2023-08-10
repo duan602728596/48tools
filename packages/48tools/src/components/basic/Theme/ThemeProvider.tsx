@@ -13,6 +13,7 @@ import * as PropTypes from 'prop-types';
 import { Button, Tooltip, Modal, Radio } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
+import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import ThemeContext from './ThemeContext';
 
 localStorage.setItem('THEME_VALUE', globalThis?.__INITIAL_STATE__?.theme ?? 'system');
@@ -66,7 +67,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   function handleThemeChange(event: RadioChangeEvent): void {
     const value: ThemeValue = event.target.value;
 
-    ipcRenderer.send('nativeTheme:change', value, true);
+    ipcRenderer.send(WinIpcChannel.NativeThemeChange, value, true);
     setTheme(value);
   }
 
@@ -104,7 +105,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
 
   useEffect(function(): void {
     if (isChildrenWindow) {
-      ipcRenderer.on('themeSource', function(event: IpcRendererEvent, value: ThemeValue): void {
+      ipcRenderer.on(WinIpcChannel.ThemeSource, function(event: IpcRendererEvent, value: ThemeValue): void {
         setTheme(value);
       });
     }

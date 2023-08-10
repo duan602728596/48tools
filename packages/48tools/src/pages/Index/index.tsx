@@ -9,6 +9,7 @@ import Icon, {
   FileSyncOutlined as IconFileSyncOutlined
 } from '@ant-design/icons';
 import * as classNames from 'classnames';
+import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import style from './index.sass';
 import commonStyle from '../../common.sass';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
@@ -212,7 +213,7 @@ function handleOpenIssuesClick(event: MouseEvent): void {
 
 // 打开开发者工具
 function handleOpenDeveloperToolsClick(event: MouseEvent): void {
-  ipcRenderer.send('developer-tools');
+  ipcRenderer.send(WinIpcChannel.DeveloperTools);
 }
 
 // 打开软件下载地址

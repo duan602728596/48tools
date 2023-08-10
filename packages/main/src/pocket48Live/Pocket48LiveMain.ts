@@ -2,6 +2,7 @@ import { Worker } from 'node:worker_threads';
 import * as path from 'node:path';
 import type { BrowserWindow } from 'electron';
 import { isDevelopment, workerProductionBasePath } from '../utils';
+import { Pocket48LiveRemoteHandleChannel } from '../channelEnum';
 
 /* 缓存子线程 */
 export const pocket48LiveMap: Map<string, Pocket48LiveMain> = new Map();
@@ -68,7 +69,7 @@ export class Pocket48LiveMain {
 
   handleWorkerMessage: (message: CloseMessage | ErrorMessage) => void = (message: CloseMessage | ErrorMessage): void => {
     this.worker.terminate();
-    this.win.webContents.send(`pocket48-live-close___${ this.id }`, JSON.stringify({
+    this.win.webContents.send(`${ Pocket48LiveRemoteHandleChannel.Pocket48LiveClose }${ this.id }`, JSON.stringify({
       id: this.id,
       log: message.type === 'close' ? message.log : null
     }));

@@ -1,7 +1,6 @@
 import { BrowserWindow, ipcMain, nativeTheme, type Session, type Cookie, type IpcMainEvent } from 'electron';
 import { pcUserAgent } from '../utils';
-
-export const type: string = 'weibo-login';
+import { WeiboLoginChannel } from '../channelEnum';
 
 const weiboUrl: string = 'https://weibo.com/';
 let weiboLoginWin: BrowserWindow | null = null;
@@ -30,7 +29,7 @@ function login(win: BrowserWindow): void {
       const winSes: Session = win.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({ url: weiboUrl });
 
-      win.webContents.send('weibo-login-cookie', cookies);
+      win.webContents.send(WeiboLoginChannel.WeiboLoginCookie, cookies);
       await Promise.all([
         ses.clearStorageData({ storages: ['cookies'] }),
         winSes.clearStorageData({ storages: ['cookies'] })
@@ -44,7 +43,7 @@ function login(win: BrowserWindow): void {
 }
 
 function weiboLogin(win: BrowserWindow): void {
-  ipcMain.on(type, function(event: IpcMainEvent): void {
+  ipcMain.on(WeiboLoginChannel.WeiboLogin, function(event: IpcMainEvent): void {
     login(win);
   });
 }

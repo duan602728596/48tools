@@ -2,8 +2,8 @@ import * as path from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { ipcMain, type IpcMainEvent } from 'electron';
 import { isDevelopment, workerProductionBasePath } from '../utils';
+import { ProxyServerChannel } from '../channelEnum';
 
-export const type: string = 'proxy-server';
 let proxyServerWorker: Worker | null = null; // proxy-server服务线程
 
 export interface ProxyServerArg {
@@ -20,7 +20,7 @@ export async function proxyServerClose(): Promise<void> {
 
 /* 新线程启动代理服务 */
 function proxyServer(): void {
-  ipcMain.on(type, async function(event: IpcMainEvent, arg: ProxyServerArg): Promise<void> {
+  ipcMain.on(ProxyServerChannel.ProxyServer, async function(event: IpcMainEvent, arg: ProxyServerArg): Promise<void> {
     await proxyServerClose();
 
     proxyServerWorker = new Worker(

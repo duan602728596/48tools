@@ -2,8 +2,8 @@ import * as path from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { ipcMain, type IpcMainEvent } from 'electron';
 import { isDevelopment, workerProductionBasePath } from '../utils';
+import { NodeMediaServerChannel } from '../channelEnum';
 
-export const type: string = 'node-media-server';
 let nodeMediaServerWorker: Worker | null = null; // node-media-server服务线程
 
 export interface NodeMediaServerArg {
@@ -22,7 +22,7 @@ export async function nodeMediaServerClose(): Promise<void> {
 
 /* 新线程启动node-media-server服务 */
 function nodeMediaServer(): void {
-  ipcMain.on(type, async function(event: IpcMainEvent, arg: NodeMediaServerArg): Promise<void> {
+  ipcMain.on(NodeMediaServerChannel.NodeMediaServer, async function(event: IpcMainEvent, arg: NodeMediaServerArg): Promise<void> {
     await nodeMediaServerClose(); // electron在开发者工具刷新时，已存在的node-media-server会有问题，所以需要重新创建服务
 
     // 对多线程的处理，参考https://github.com/electron/electron/issues/22446

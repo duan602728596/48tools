@@ -1,5 +1,6 @@
 import { ipcRenderer, type IpcRendererEvent, type Cookie } from 'electron';
 import { requestDouyinVideo, requestDouyinUser, type DouyinHtmlResponseType } from '@48tools-api/toutiao/douyin';
+import { DouyinCookieChannel } from '@48tools/main/src/channelEnum';
 import { douyinCookie } from '../../../../../utils/toutiao/DouyinCookieStore';
 import { DouyinUrlType } from '../parser';
 import type { GetVideoUrlOnionContext } from '../../../types';
@@ -7,7 +8,7 @@ import type { GetVideoUrlOnionContext } from '../../../types';
 /* 在新窗口弹出验证码并获取cookie */
 export function verifyCookieInNewWindow(): Promise<string | undefined> {
   return new Promise((resolve: Function, reject: Function): void => {
-    ipcRenderer.once('douyin-cookie-response', function(event: IpcRendererEvent, cookie: Array<Cookie>): void {
+    ipcRenderer.once(DouyinCookieChannel.DouyinCookieResponse, function(event: IpcRendererEvent, cookie: Array<Cookie>): void {
       if (cookie?.length) {
         resolve(cookie.filter((o: Cookie): boolean => o.name !== '')
           .map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; '));
@@ -16,7 +17,7 @@ export function verifyCookieInNewWindow(): Promise<string | undefined> {
       }
     });
 
-    ipcRenderer.send('douyin-cookie');
+    ipcRenderer.send(DouyinCookieChannel.DouyinCookie);
   });
 }
 

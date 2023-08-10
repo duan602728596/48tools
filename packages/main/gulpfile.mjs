@@ -3,7 +3,10 @@ import terser from 'gulp-terser';
 
 /* 代码压缩 */
 function minifyCode() {
-  return gulp.src('.lib.mid/**/*.{js,cjs,mjs}')
+  return gulp.src([
+    '.lib.mid/**/*.{js,cjs,mjs}',
+    '!.lib.mid/**/channelEnum.{js,cjs,mjs}'
+  ])
     .pipe(terser({
       ecma: 2020,
       module: true

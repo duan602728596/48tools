@@ -1,7 +1,6 @@
 import { BrowserWindow, type Session, type Cookie, ipcMain, type IpcMainEvent } from 'electron';
 import { pcUserAgent } from '../utils';
-
-export const type: string = 'douyin-cookie';
+import { DouyinCookieChannel } from '../channelEnum';
 
 const douyinUrl: string = 'https://www.douyin.com/user/MS4wLjABAAAA6-qJnU8aVPJ4chZQFIyuVHSB3_K3w1rH_L_IuLjaswk';
 let douyinWin: BrowserWindow | null = null;
@@ -29,7 +28,7 @@ function douyinCookie(win: BrowserWindow): void {
       const winSes: Session = win.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({});
 
-      win.webContents.send('douyin-cookie-response', cookies);
+      win.webContents.send(DouyinCookieChannel.DouyinCookieResponse, cookies);
       await Promise.all([
         ses.clearStorageData({ storages: ['cookies'] }),
         winSes.clearStorageData({ storages: ['cookies'] })
@@ -43,7 +42,7 @@ function douyinCookie(win: BrowserWindow): void {
 }
 
 export function douyinCaptchaCookie(win: BrowserWindow): void {
-  ipcMain.on(type, function(event: IpcMainEvent): void {
+  ipcMain.on(DouyinCookieChannel.DouyinCookie, function(event: IpcMainEvent): void {
     douyinCookie(win);
   });
 }

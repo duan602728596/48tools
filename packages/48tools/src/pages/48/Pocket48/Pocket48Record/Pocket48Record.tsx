@@ -36,6 +36,7 @@ import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/an
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
+import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import {
   requestLiveList,
   requestLiveRoomInfo,
@@ -238,7 +239,7 @@ function Pocket48Record(props: {}): ReactElement {
       ])
     ));
 
-    ipcRenderer.send('player.html', record.title, searchParams.toString());
+    ipcRenderer.send(WinIpcChannel.PlayerHtml, record.title, searchParams.toString());
   }
 
   // 下载图片

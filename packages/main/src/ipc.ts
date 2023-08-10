@@ -1,25 +1,33 @@
 import { ipcMain, type BrowserWindow } from 'electron';
-import openDevTools, { type as openDevToolsType } from './ipcListener/openDevTools';
-import openPlayerHtml, { type as openPlayerHtmlType } from './ipcListener/openPlayerHtml';
-import openPlayerDevTools, { type as openPlayerDevToolsType } from './ipcListener/openPlayerDevTools';
-import themeChange, { type as themeChangeType } from './ipcListener/themeChange';
-import weiboLogin, { type as weiboLoginType } from './ipcListener/weiboLogin';
-import nodeMediaServer, { type as nodeMediaServerType } from './nodeMediaServer/nodeMediaServer';
-import proxyServer, { type as proxyServerType } from './proxyServer/proxyServer';
-import { kuaishouCaptchaCookie, type as kuaishouCaptchaCookieType } from './ipcListener/kuaishouCaptcha';
-import { douyinCaptchaCookie, type as douyinCaptchaCookieType } from './ipcListener/douyinCookie';
+import openDevTools from './ipcListener/openDevTools';
+import openPlayerHtml from './ipcListener/openPlayerHtml';
+import openPlayerDevTools from './ipcListener/openPlayerDevTools';
+import themeChange from './ipcListener/themeChange';
+import weiboLogin from './ipcListener/weiboLogin';
+import nodeMediaServer from './nodeMediaServer/nodeMediaServer';
+import proxyServer from './proxyServer/proxyServer';
+import { kuaishouCaptchaCookie } from './ipcListener/kuaishouCaptcha';
+import { douyinCaptchaCookie } from './ipcListener/douyinCookie';
+import {
+  DouyinCookieChannel,
+  KuaishouCookieChannel,
+  WinIpcChannel,
+  WeiboLoginChannel,
+  NodeMediaServerChannel,
+  ProxyServerChannel
+} from './channelEnum';
 
 // 移除所有监听的通信
-const removeListenerChannel: Array<string> = [
-  openDevToolsType,
-  openPlayerHtmlType,
-  openPlayerDevToolsType,
-  themeChangeType,
-  weiboLoginType,
-  nodeMediaServerType,
-  proxyServerType,
-  kuaishouCaptchaCookieType,
-  douyinCaptchaCookieType
+const removeListenerChannel: Array<string | DouyinCookieChannel> = [
+  DouyinCookieChannel.DouyinCookie,
+  KuaishouCookieChannel.KuaishouCookie,
+  WinIpcChannel.DeveloperTools,
+  WinIpcChannel.PlayerDeveloperTools,
+  WinIpcChannel.PlayerHtml,
+  WinIpcChannel.NativeThemeChange,
+  WeiboLoginChannel.WeiboLogin,
+  NodeMediaServerChannel.NodeMediaServer,
+  ProxyServerChannel.ProxyServer
 ];
 
 export function removeIpc(): void {

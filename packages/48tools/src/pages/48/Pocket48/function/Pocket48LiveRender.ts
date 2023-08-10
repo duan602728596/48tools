@@ -1,4 +1,5 @@
 import { ipcRenderer, type IpcRendererEvent } from 'electron';
+import { Pocket48LiveRemoteHandleChannel } from '@48tools/main/src/channelEnum';
 import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
 import { _ffmpegLogProtocol } from '../../../../utils/logProtocol/logActions';
 
@@ -30,8 +31,8 @@ class Pocket48LiveRender {
     this.ffmpeg = args.ffmpeg;
     this.onClose = args.onClose;
 
-    ipcRenderer.once(`pocket48-live-close___${ this.id }`, this.handleIpcMessage);
-    ipcRenderer.invoke('pocket48-live-start', JSON.stringify({
+    ipcRenderer.once(`${ Pocket48LiveRemoteHandleChannel.Pocket48LiveClose }${ this.id }`, this.handleIpcMessage);
+    ipcRenderer.invoke(Pocket48LiveRemoteHandleChannel.Pocket48LiveStart, JSON.stringify({
       id: this.id,
       liveId: this.liveId,
       roomId: this.roomId,
@@ -58,7 +59,7 @@ class Pocket48LiveRender {
   };
 
   kill(): void {
-    ipcRenderer.invoke('pocket48-live-kill', this.id);
+    ipcRenderer.invoke(Pocket48LiveRemoteHandleChannel.Pocket48LiveKill, this.id);
   }
 }
 

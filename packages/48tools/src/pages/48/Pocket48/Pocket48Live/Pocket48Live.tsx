@@ -20,6 +20,7 @@ import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
 import { requestLiveRoomInfo, type LiveInfo, type LiveRoomInfo } from '@48tools-api/48';
+import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getPocket48LiveDownloadWorker from '../function/Pocket48LiveDownload.worker/getPocket48LiveDownloadWorker';
 import getDownloadAndTranscodingWorker from '../function/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
@@ -304,7 +305,7 @@ function Pocket48Live(props: {}): ReactElement {
       ])
     ));
 
-    ipcRenderer.send('player.html', record.title, searchParams.toString());
+    ipcRenderer.send(WinIpcChannel.PlayerHtml, record.title, searchParams.toString());
   }
 
   // 点击刷新直播列表

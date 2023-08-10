@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron';
+import { ProxyServerChannel } from '@48tools/main/src/channelEnum';
 import { detectPort } from '../utils';
 
 let start: boolean = false;
@@ -23,7 +24,7 @@ export async function proxyServerInit(): Promise<void> {
   netMediaServerPort.port = await detectPort(netMediaServerPort.port);
 
   // 等待渲染线程启动后，发送消息到主线程，启动proxy-server服务
-  ipcRenderer.send('proxy-server', {
+  ipcRenderer.send(ProxyServerChannel.ProxyServer, {
     port: netMediaServerPort.port
   });
   start = true;

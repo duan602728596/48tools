@@ -16,6 +16,7 @@ import { Input, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
 import { requestShortVideo, type ShortVideoDownloadResponse } from '@48tools-api/kuaishou';
+import { KuaishouCookieChannel } from '@48tools/main/src/channelEnum';
 import style from './search.sass';
 import { kuaishouCookie } from '../function/kuaishouCookie';
 import { setAddVideoDownloadList } from '../../reducers/kuaishouVideoDownload';
@@ -82,7 +83,7 @@ function Search(props: {}): ReactElement {
 
     // 出现验证码
     if (res.data.captcha || res.data.url) {
-      ipcRenderer.send('kuaishou-cookie', videoId);
+      ipcRenderer.send(KuaishouCookieChannel.KuaishouCookie, videoId);
     } else {
       addUrlToVideoDownload(res);
     }
@@ -108,10 +109,10 @@ function Search(props: {}): ReactElement {
     }, []);
 
   useEffect(function(): () => void {
-    ipcRenderer.on('kuaishou-cookie-response', handleKuaishouCookieResponse);
+    ipcRenderer.on(KuaishouCookieChannel.KuaiShouCookieResponse, handleKuaishouCookieResponse);
 
     return function(): void {
-      ipcRenderer.off('kuaishou-cookie-response', handleKuaishouCookieResponse);
+      ipcRenderer.off(KuaishouCookieChannel.KuaiShouCookieResponse, handleKuaishouCookieResponse);
     };
   }, []);
 

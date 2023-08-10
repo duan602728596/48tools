@@ -7,8 +7,7 @@ import {
   type Cookie
 } from 'electron';
 import { pcUserAgent } from '../utils';
-
-export const type: string = 'kuaishou-cookie';
+import { KuaishouCookieChannel } from '../channelEnum';
 
 const kuaishouUrl: string = 'https://www.kuaishou.com';
 let kuaishouWin: BrowserWindow | null = null;
@@ -37,7 +36,7 @@ function kuaishouWebsite(win: BrowserWindow, videoId: string): void {
       const winSes: Session = win.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({ url: kuaishouUrl });
 
-      win.webContents.send('kuaishou-cookie-response', cookies, videoId);
+      win.webContents.send(KuaishouCookieChannel.KuaiShouCookieResponse, cookies, videoId);
       await Promise.all([
         ses.clearStorageData({ storages: ['cookies'] }),
         winSes.clearStorageData({ storages: ['cookies'] })
@@ -51,7 +50,7 @@ function kuaishouWebsite(win: BrowserWindow, videoId: string): void {
 }
 
 export function kuaishouCaptchaCookie(win: BrowserWindow): void {
-  ipcMain.on(type, function(event: IpcMainEvent, videoId: string): void {
+  ipcMain.on(KuaishouCookieChannel.KuaishouCookie, function(event: IpcMainEvent, videoId: string): void {
     kuaishouWebsite(win, videoId);
   });
 }

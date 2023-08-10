@@ -7,6 +7,7 @@ import { Button, Alert, Space, message, Divider } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
+import { WeiboLoginChannel } from '@48tools/main/src/channelEnum';
 import { IDBSaveAccount } from '../reducers/weiboLogin';
 import UserBrowserLogin from './UserBrowserLogin';
 
@@ -47,14 +48,14 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
 
   // 登陆
   function handleLoginWeiboClick(event: MouseEvent): void {
-    ipcRenderer.send('weibo-login');
+    ipcRenderer.send(WeiboLoginChannel.WeiboLogin);
   }
 
   useEffect(function(): () => void {
-    ipcRenderer.on('weibo-login-cookie', handleWeiboLoginCookieListener);
+    ipcRenderer.on(WeiboLoginChannel.WeiboLoginCookie, handleWeiboLoginCookieListener);
 
     return function(): void {
-      ipcRenderer.removeListener('weibo-login-cookie', handleWeiboLoginCookieListener);
+      ipcRenderer.removeListener(WeiboLoginChannel.WeiboLoginCookie, handleWeiboLoginCookieListener);
     };
   }, []);
 
