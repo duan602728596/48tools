@@ -14,7 +14,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message } from 'antd';
+import { Button, Table, message, Alert } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
@@ -268,9 +268,11 @@ function Douyin(props: {}): ReactElement {
         <VideoOrUserParse />
         <Button type="primary" danger={ true } onClick={ handleClearDouyinCookie }>清除抖音Cookie的缓存</Button>
       </Header>
-      <p className={ classNames('mb-[4px] text-[12px]', commonStyle.text) }>
-        输入视频ID或视频地址下载单个视频，输入用户ID或用户主页地址可解析用户的所有视频并选择下载。支持短链接。
-      </p>
+      <Alert className="mb-[8px]" type="warning" message={ [
+        '输入视频ID或视频地址下载单个视频，输入用户ID或用户主页地址可解析用户的所有视频并选择下载。支持短链接。',
+        <br key="br" />,
+        '由于抖音风控的原因，用户视频下载可能需要验证一次或两次验证码。验证后仍然解析失败，请先登录后下载。'
+      ] } />
       <Table size="middle"
         columns={ columns }
         dataSource={ downloadList }
