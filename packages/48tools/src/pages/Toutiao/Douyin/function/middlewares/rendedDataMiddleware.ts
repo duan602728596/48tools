@@ -1,6 +1,13 @@
-import type { AwemeItem, AwemeItemRate, BitRateItem } from '@48tools-api/toutiao/douyin';
+import {
+  requestAwemePostReturnType,
+  type AwemeItem,
+  type AwemeItemRate,
+  type BitRateItem,
+  type DouyinUserApiType
+} from '@48tools-api/toutiao/douyin';
 import { DouyinUrlType } from '../parser';
 import { staticUrl } from '../../../../../utils/toutiao/signUtils';
+import { douyinCookie } from '../../../../../utils/toutiao/DouyinCookieStore';
 import type {
   ScriptRendedData,
   CVersionObj,
@@ -87,7 +94,7 @@ function detailApiRender(ctx: GetVideoUrlOnionContext): void {
 }
 
 /* 解析RENDER_DATA */
-function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): void {
+async function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
   if (ctx.dataType === 'userApi' && ctx.data) {
     return userApiRender(ctx);
   }
@@ -193,6 +200,7 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       return;
     }
 
+    // 判断是否有视频数据，现在可能已经无视频数据了，需要从api里加载
     const userData: Array<UserDataItem> | undefined = userItem2?.post?.data;
 
     if (userData) {
@@ -205,7 +213,19 @@ function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): voi
       ctx.setUserTitle(userItem2.user.user.nickname);
       ctx.setUserModalVisible(true);
     } else {
-      ctx.messageApi.warning('用户不存在或解析失败！');
+      const douyinResponse: DouyinUserApiType = await requestAwemePostReturnType(douyinCookie.toString(), {
+        secUserId: ctx.parseResult.id,
+        maxCursor: new Date().getTime(),
+        hasMore: 1
+      });
+
+      if (douyinResponse.data) {
+        ctx.data = douyinResponse.data;
+        ctx.dataType = douyinResponse.type;
+        userApiRender(ctx);
+      } else {
+        ctx.messageApi.warning('用户不存在或解析失败！');
+      }
     }
   } else {
     ctx.messageApi.warning('无法解析该地址！');

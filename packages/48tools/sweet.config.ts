@@ -136,7 +136,7 @@ export default function(info: object): Record<string, any> {
     javascript: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules|toutiaosdk-(acrawler|captcha)\.js|Signer\.js/i
+      exclude: /node_modules|toutiaosdk-acrawler\.js|Signer\.js/i
     },
     typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
@@ -152,7 +152,7 @@ export default function(info: object): Record<string, any> {
     },
     rules: [
       {
-        test: /toutiaosdk-(acrawler|captcha)\.js/,
+        test: /toutiaosdk-acrawler\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]'

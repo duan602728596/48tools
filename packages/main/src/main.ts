@@ -6,7 +6,6 @@ import { ipc, removeIpc } from './ipc';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle';
 import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
-import { toutiaoRequestInit } from './webRequest/toutiaoRequest';
 import weiboResourceRequestInit from './webRequest/weiboResourceRequest';
 import store from './store';
 import logProtocol from './logProtocol/logProtocol';
@@ -78,7 +77,6 @@ function createWindow(): void {
     win = null;
   });
 
-  toutiaoRequestInit();
   weiboResourceRequestInit();
 }
 

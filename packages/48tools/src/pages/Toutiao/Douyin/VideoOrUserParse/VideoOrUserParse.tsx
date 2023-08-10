@@ -27,7 +27,7 @@ import {
 import style from './videoOrUserParse.sass';
 import douyinStyle from '../douyin.sass';
 import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
-import verifyMiddleware, { verifyCookie } from '../function/middlewares/verifyMiddleware';
+import verifyMiddleware, { verifyCookieInNewWindow } from '../function/middlewares/verifyMiddleware';
 import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
 import { setAddDownloadList, setAddDownloadListAll } from '../../reducers/douyinDownload';
 import { douyinCookie } from '../../../../utils/toutiao/DouyinCookieStore';
@@ -193,7 +193,7 @@ function VideoOrUserParse(props: {}): ReactElement {
           const douyinVideo: DouyinHtmlResponseType = await requestDouyinUser((u: string) => `${ u }${ sxrId }`, douyinCookie.toString());
 
           if (douyinVideo.type === 'html' && douyinVideo.html && douyinVideo.html.includes('验证码中间页')) {
-            const verifyCookieValue: string | undefined = await verifyCookie(douyinVideo.html, douyinCookie.toString());
+            const verifyCookieValue: string | undefined = await verifyCookieInNewWindow();
 
             verifyCookieValue && douyinCookie.set(verifyCookieValue);
             await response(douyinCookie.toString());

@@ -11,15 +11,3 @@ export async function acrawler(functionName: string, args: any[]): Promise<any> 
 
   return bytedAcrawler[functionName](...args);
 }
-
-/* 滑动验证码相关 */
-let TTGCaptcha: any;
-
-export async function captcha(functionName: string, args: any[]): Promise<any> {
-  if (!TTGCaptcha) {
-    await loadScript(require('./toutiaosdk-captcha.js'), 'captcha');
-    TTGCaptcha = globalThis.TTGCaptcha;
-  }
-
-  return TTGCaptcha[functionName](...args);
-}
