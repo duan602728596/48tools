@@ -19,7 +19,7 @@ export function awemePostQueryV2(secUserId: string, maxCursor: number): string {
     aid: '6383',
     sec_user_id: secUserId,
     max_cursor: `${ maxCursor }`,
-    count: '30',
+    count: '18',
     cookie_enabled: 'true',
     platform: 'PC'
   });

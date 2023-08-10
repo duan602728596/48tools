@@ -1,12 +1,45 @@
 import { parse, serialize } from 'cookie';
 import { rStr } from '../utils';
 
+interface CookieItem {
+  key: string;
+  value: string;
+}
+
 /* 抖音cookie的相关存储 */
 class DouyinCookieStore {
+  static localStorageItemName: string = 'DOUYIN_COOKIE';
+
   #cookieMap: Map<string, string> = new Map();
 
   constructor() {
-    this.#setDefaultCookie();
+    this.#cookieMapInit();
+  }
+
+  // 将cookie保存到localStorage
+  #cookieMapSave(): void {
+    const cookieArray: Array<CookieItem> = [];
+
+    this.#cookieMap.forEach((v: string, k: string): void => {
+      cookieArray.push({ key: k, value: v });
+    });
+
+    localStorage.setItem(DouyinCookieStore.localStorageItemName, JSON.stringify(cookieArray));
+  }
+
+  // 从localStorage读取cookie
+  #cookieMapInit(): void {
+    const cookieStr: string | null = localStorage.getItem(DouyinCookieStore.localStorageItemName);
+
+    if (cookieStr) {
+      const cookieArray: Array<CookieItem> = JSON.parse(cookieStr);
+
+      cookieArray.forEach((v: CookieItem): void => {
+        this.#cookieMap.set(v.key, v.value);
+      });
+    } else {
+      this.#setDefaultCookie();
+    }
   }
 
   #setDefaultCookie(): void {
@@ -23,11 +56,13 @@ class DouyinCookieStore {
     Object.keys(cookies).forEach((key: string): void => {
       this.#cookieMap.set(key, cookies[key]);
     });
+    this.#cookieMapSave();
   }
 
   // 添加cookie
   setKV(key: string, value: string): void {
     this.#cookieMap.set(key, value);
+    this.#cookieMapSave();
   }
 
   // 转换成cookie字符串
