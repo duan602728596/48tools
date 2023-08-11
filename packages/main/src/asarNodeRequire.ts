@@ -4,7 +4,7 @@ import 'asar-node';
 
 /* 判断是开发环境还是生产环境 */
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
-const asarDir: string = path.join(__dirname, '../../../app.asar');
+const asarDir: string = path.join(__dirname, '../../app.asar');
 const asarDirNodeModules: string = path.join(asarDir, 'node_modules');
 
 /**

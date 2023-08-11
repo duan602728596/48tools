@@ -7,7 +7,7 @@
     "name": "段昊辰",
     "email": "duanhaochen@126.com"
   },
-  "main": "bin/lib/main.js",
+  "main": "boot/main.js",
   "dependencies": {
     "asar-node": "^3.1.1",
     "command-line-args": "^5.2.1",

@@ -1,9 +1,8 @@
-import * as path from 'node:path';
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState';
-import { isDevelopment, isTest, wwwPath, initialState as ils } from '../utils';
+import { isTest, titleBarIcon, createHtmlFilePath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
-import store from '../store';
+import { getStore } from '../store';
 import { commandLineOptions } from '../commend';
 import { WinIpcChannel } from '../channelEnum';
 
@@ -37,7 +36,7 @@ function open(title: string, query: string): void {
       contextIsolation: false
     },
     title,
-    icon: isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png'),
+    icon: titleBarIcon,
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
 
@@ -46,7 +45,7 @@ function open(title: string, query: string): void {
   const player: Record<string, string> = Object.fromEntries(searchParams);
 
   initialStateSearchParams.set('initialState', ils({
-    theme: store.get('theme') ?? 'system',
+    theme: getStore().get('theme') ?? 'system',
     commandLineOptions,
     playerInfo: <PlayerInfo>{
       ...player,
@@ -59,10 +58,7 @@ function open(title: string, query: string): void {
     isTest
   }));
 
-  win.loadFile(
-    isDevelopment
-      ? path.join(wwwPath, '48tools/dist/player.html')
-      : path.join(wwwPath, 'dist/player.html'),
+  win.loadFile(createHtmlFilePath('player'),
     {
       search: initialStateSearchParams.toString()
     }

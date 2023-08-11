@@ -78,10 +78,10 @@ function config(outputDir, target) {
     // 解压node-media-server服务线程使用的文件
     asarUnpack: [
       'node_modules/asar-node',
-      'bin/lib/asarNodeRequire.js',
-      'bin/lib/nodeMediaServer/server.worker.js',
-      'bin/lib/proxyServer/httpProxyServer.worker.js',
-      'bin/lib/pocket48Live/liveDownload.worker.js'
+      'boot/asarNodeRequire.js',
+      'boot/nodeMediaServer/server.worker.js',
+      'boot/proxyServer/httpProxyServer.worker.js',
+      'boot/pocket48Live/liveDownload.worker.js'
     ]
   };
 
@@ -114,6 +114,13 @@ function copy(unpackedDir, isMac) {
   return queue;
 }
 
+/* 压缩package.json */
+async function uglifyPackageJson() {
+  const json = await fse.readJSON(path.join(appDir, 'package.json'));
+
+  await fsP.writeFile(path.join(wwwDir, 'package.json'), JSON.stringify(json), { encoding: 'utf8' });
+}
+
 /* 打包脚本 */
 async function unpack() {
   // 删除中间代码文件夹和编译后的文件夹
@@ -127,13 +134,10 @@ async function unpack() {
 
   await taskfile();
   await fse.copy(appDir, wwwDir);
-  await fsP.writeFile(
-    path.join(wwwDir, 'package.json'),
-    JSON.stringify(await fse.readJSON(path.join(appDir, 'package.json'))),
-    { encoding: 'utf8' }); // 压缩package.json
   await Promise.all([
-    fse.copy(path.join(packages, 'main/lib'), path.join(wwwDir, 'bin/lib')),
-    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'dist'))
+    uglifyPackageJson(),
+    fse.copy(path.join(packages, 'main/lib'), path.join(wwwDir, 'boot')),
+    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'view'))
   ]);
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 

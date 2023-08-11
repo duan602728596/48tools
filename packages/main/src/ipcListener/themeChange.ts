@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
 import { ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
-import store from '../store';
+import { getStore } from '../store';
 import { WinIpcChannel } from '../channelEnum';
 
 export type ThemeValue = 'light' | 'dark' | 'system';
@@ -16,7 +16,7 @@ function themeChange(): void {
    * @param { boolean } themeSourceEvent: 是否触发子窗口的变化
    */
   ipcMain.on(WinIpcChannel.NativeThemeChange, function(event: IpcMainEvent, value: ThemeValue, themeSourceEvent: boolean): void {
-    store.set('theme', value);
+    getStore().set('theme', value);
     nativeTheme.themeSource = value;
 
     if (themeSourceEvent) {

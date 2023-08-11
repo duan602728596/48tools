@@ -1,6 +1,5 @@
 import * as process from 'node:process';
 import * as path from 'node:path';
-import * as fs from 'node:fs';
 
 /* 判断是开发环境还是生产环境 */
 export const isDevelopment: boolean = process.env.NODE_ENV === 'development';
@@ -9,10 +8,23 @@ export const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 export const isTest: boolean = process.env.TEST === 'true';
 
 /* 文件夹路径 */
-export const wwwPath: string = path.join(__dirname, '../..');
+export const wwwPath: string = path.join(__dirname, '..');
 
 /* worker.js文件路径 */
-export const workerProductionBasePath: string = path.join(process.resourcesPath, 'app.asar.unpacked/bin/lib');
+export const workerProductionBasePath: string = path.join(process.resourcesPath, 'app.asar.unpacked/boot');
+
+/* 图标文件 */
+export const titleBarIcon: string | undefined = isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png');
+
+/**
+ * html路径
+ * @param { string } htmlName: 文件名
+ */
+export function createHtmlFilePath(htmlName: string): string {
+  return isDevelopment
+    ? path.join(wwwPath, `../48tools/dist/${ htmlName }.html`)
+    : path.join(wwwPath, `view/${ htmlName }.html`);
+}
 
 /* 生成initialState */
 export function initialState(value: any): string {
@@ -20,17 +32,7 @@ export function initialState(value: any): string {
 }
 
 /* 获取package.json文件的位置 */
-const packageJsonPath: Array<string> = [
-  path.join(__dirname, '../package.json'),
-  path.join(__dirname, '../../package.json')
-];
-let packageJsonPathIndex: number = isDevelopment ? 0 : 1;
-
-if (!fs.existsSync(packageJsonPath[packageJsonPathIndex])) {
-  packageJsonPathIndex = packageJsonPathIndex === 1 ? 0 : 1;
-}
-
-export const packageJson: any = require(packageJsonPath[packageJsonPathIndex]);
+export const packageJson: any = require(path.join(wwwPath, 'package.json'));
 
 /* User-Agent */
 export const pcUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
