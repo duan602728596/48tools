@@ -245,21 +245,20 @@ function Index(props: {}): ReactElement {
           </Space>
         </div>
         <Divider className="my-[16px]" />
-        <div className={ classNames('flex', commonStyle.text) }>
-          <div>
-            {/* 二维码 */}
-            <p>欢迎打赏：</p>
-            <Space size={ 8 }>
-              <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
-              <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
-            </Space>
-          </div>
-          <div className="ml-[32px]">
-            <p>软件最新版本下载地址：</p>
+        <div className={ commonStyle.text }>
+          <p>
+            本软件为免费软件，
+            <b>使用及传播均不收取任何费用</b>
+            。为了避免您的财产损失，请在
             <Button type="link" onClick={ handleOpenDownloadUrlClick }>
               https://github.com/duan602728596/48tools/releases
             </Button>
-          </div>
+            下载软件的最新版本。如果你想要赞助作者，请扫码打赏。
+          </p>
+          <Space size={ 8 }>
+            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
+            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
+          </Space>
         </div>
       </div>
       { globalThis.__INITIAL_STATE__.isTest ? null : <NewUserTour /> }
