@@ -32,7 +32,7 @@
   "dependencies": {
     "@vercel/ncc": "^0.36.1",
     "cross-zip": "^4.0.0",
-    "electron": "^25.2.0",
+    "electron": "^26.0.0",
     "electron-builder": "^24.5.2",
     "fs-extra": "^11.1.1",
     "glob": "^10.3.3",
