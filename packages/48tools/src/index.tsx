@@ -8,6 +8,7 @@ import { storeFactory } from './store/store';
 import AntdConfig from './components/basic/AntdConfig/AntdConfig';
 import ThemeProvider from './components/basic/Theme/ThemeProvider';
 import Routers from './router/Routers';
+import MDXProvider from './components/basic/MdxProvider/MDXProvider';
 import IDBInit from './utils/IDB/IDBInit';
 import './entry/main.tailwindcss.css';
 import './components/basic/Accessibility/Accessibility';
@@ -22,9 +23,11 @@ root.render(
   <Provider store={ storeFactory() }>
     <ThemeProvider>
       <AntdConfig>
-        <HashRouter>
-          <Routers />
-        </HashRouter>
+        <MDXProvider>
+          <HashRouter>
+            <Routers />
+          </HashRouter>
+        </MDXProvider>
       </AntdConfig>
     </ThemeProvider>
   </Provider>

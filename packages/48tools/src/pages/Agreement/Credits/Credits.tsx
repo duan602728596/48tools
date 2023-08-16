@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import Header from '../../components/Header/Header';
+import Header from '../../../components/Header/Header';
 import License from './License';
 import Software from './Software/Software';
 
@@ -7,7 +7,7 @@ import Software from './Software/Software';
 function Credits(props: {}): ReactElement {
   return (
     <div className="p-[16px]">
-      <Header to="/" />
+      <Header to="/Agreement/Agreement" />
       <License />
       <Software />
     </div>

@@ -17,6 +17,7 @@
     "@bbkkbkk/q": "^1.1.1",
     "@indexeddb-tools/indexeddb": "^1.0.0",
     "@indexeddb-tools/indexeddb-redux": "^1.0.0",
+    "@mdx-js/react": "^2.3.0",
     "@reduxjs/toolkit": "^2.0.0-beta.0",
     "@yxim/nim-web-sdk": "^8.9.113",
     "antd": "^5.6.4",
@@ -40,6 +41,7 @@
     "string-argv": "^0.3.2"
   },
   "devDependencies": {
+    "@mdx-js/loader": "^2.3.0",
     "@sweet-milktea/milktea": "^4.1.0",
     "@sweet-milktea/milktea-cli": "^4.1.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",

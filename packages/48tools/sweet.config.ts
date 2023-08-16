@@ -93,6 +93,7 @@ export default function(info: object): Record<string, any> {
       '@bbkkbkk/q',
       '@indexeddb-tools/indexeddb',
       '@indexeddb-tools/indexeddb-redux',
+      '@mdx-js/react',
       '@reduxjs/toolkit',
       '@reduxjs/toolkit/query/react',
       '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js',
@@ -161,6 +162,15 @@ export default function(info: object): Record<string, any> {
       {
         test: /\.tailwindcss\.css$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+      },
+      {
+        test: /\.mdx$/,
+        use: [{
+          loader: '@mdx-js/loader',
+          options: {
+            providerImportSource: '@mdx-js/react'
+          }
+        }]
       }
     ],
     plugins: [
