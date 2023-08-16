@@ -8,6 +8,7 @@
     { "name": "electron-builder", "href": "https://www.electron.build" },
     { "name": "got", "href": "https://github.com/sindresorhus/got" },
     { "name": "hls.js", "href": "https://github.com/video-dev/hls.js" },
+    { "name": "mdxjs", "href": "https://mdxjs.com" },
     { "name": "mpegts.js", "href": "https://github.com/xqq/mpegts.js" },
     { "name": "node-media-server", "href": "https://github.com/illuspas/Node-Media-Server" },
     { "name": "playwright", "href": "https://playwright.dev" },
