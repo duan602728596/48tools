@@ -31,8 +31,13 @@ import type {
 
 const VirtualItemClassName: string = 'Virtual-Item-2';
 
+/**
+ * 判断是否要显示文字
+ * @param { LiveRoomMessage } item: 消息
+ * @param { LiveRoomTextCustom | LiveRoomGiftInfoCustom } custom: 自定义消息
+ */
 function isLiveRoomTextCustom(item: LiveRoomMessage, custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom): custom is LiveRoomTextCustom {
-  return item.type === 'text' || custom.messageType === 'BARRAGE_MEMBER';
+  return item.type === 'text' || custom.messageType === 'BARRAGE_MEMBER' || custom.messageType === 'BARRAGE_NORMAL';
 }
 
 /* 显示单条弹幕 */
@@ -59,6 +64,7 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
 
     try {
       const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
+      const isBarrage: boolean = custom.messageType === 'BARRAGE_NORMAL' || custom.messageType === 'BARRAGE_MEMBER';
       const isMember: boolean = custom.messageType === 'BARRAGE_MEMBER';
 
       if (isLiveRoomTextCustom(item, custom)) {
@@ -71,7 +77,7 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
             <div ref={ divRef }>
               <Avatar size="small" src={ source(custom.user.avatar) } />
               <span className="ml-[3px]">{ custom.user.nickName }：</span>
-              { isMember ? custom.text : (item as LiveRoomTextMessage).text }
+              { (isMember || isBarrage) ? custom.text : (item as LiveRoomTextMessage).text }
             </div>
           </div>
         );
@@ -127,7 +133,7 @@ function Danmu(props: DanmuProps): ReactElement {
       } else if (item.type === 'custom') {
         const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
 
-        if (custom.messageType === 'BARRAGE_MEMBER' || 'giftInfo' in custom) {
+        if (custom.messageType === 'BARRAGE_MEMBER' || custom.messageType === 'BARRAGE_NORMAL' || 'giftInfo' in custom) {
           item.vid = randomUUID();
           filterMessage.unshift(item);
         }
