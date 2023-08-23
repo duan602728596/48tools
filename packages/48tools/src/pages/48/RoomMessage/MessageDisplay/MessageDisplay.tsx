@@ -36,7 +36,7 @@ export const typeCNName: Record<string, string> = {
   FLIPCARD_AUDIO: '语音翻牌',
   FLIPCARD_VIDEO: '视频翻牌'
 };
-const timerMap: Map<string, NodeJS.Timer> = new Map(); // 记录定时器，在没有焦点时需要清除定时器
+const timerMap: Map<string, NodeJS.Timeout> = new Map(); // 记录定时器，在没有焦点时需要清除定时器
 const VirtualItemClassName: string = 'Virtual-Item-1';
 
 // 打开网站
@@ -53,7 +53,7 @@ function handleLinkFocus(event: FocusEvent<HTMLAnchorElement>): void {
   }
 
   if (document.body.classList.contains(accessibilityClassName)) {
-    const timer: NodeJS.Timer = setTimeout((): void => {
+    const timer: NodeJS.Timeout = setTimeout((): void => {
       event.target.dispatchEvent(new Event('mouseover', { bubbles: true }));
     }, 1_000);
 

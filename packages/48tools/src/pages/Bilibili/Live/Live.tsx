@@ -42,7 +42,7 @@ const selector: Selector<RState, BilibiliLiveInitialState> = createStructuredSel
   liveChildList: ({ bilibiliLive }: RState): Array<WebWorkerChildItem> => bilibiliLive.liveChildList,
 
   // 自动录制直播
-  autoRecordTimer: ({ bilibiliLive }: RState): NodeJS.Timer | null => bilibiliLive.autoRecordTimer
+  autoRecordTimer: ({ bilibiliLive }: RState): NodeJS.Timeout | null => bilibiliLive.autoRecordTimer
 });
 
 /* 直播抓取 */

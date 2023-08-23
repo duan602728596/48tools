@@ -30,7 +30,7 @@ export type MessageEventData = ErrorMessageEventData | CloseMessageEventData | P
 
 let child: ChildProcessWithoutNullStreams;
 let processItem: Pick<ProcessItem, 'id' | 'args'>;
-let killTimer: NodeJS.Timer | null;
+let killTimer: NodeJS.Timeout | null;
 
 /* 执行命令 */
 function runProcess(data: WorkerEventData): void {

@@ -7,7 +7,7 @@ import type { LiveItem } from '../types';
 export interface BilibiliLiveInitialState {
   bilibiliLiveList: Array<LiveItem>;
   liveChildList: Array<WebWorkerChildItem>;
-  autoRecordTimer: NodeJS.Timer | null;
+  autoRecordTimer: NodeJS.Timeout | null;
 }
 
 type SliceReducers = {
@@ -17,7 +17,7 @@ type SliceReducers = {
   setBilibiliLiveListDeleteRoom: CaseReducer<BilibiliLiveInitialState, PayloadAction<{ query: string }>>;
   setAddLiveBilibiliChildList: CaseReducer<BilibiliLiveInitialState, PayloadAction<WebWorkerChildItem>>;
   setDeleteLiveBilibiliChildList: CaseReducer<BilibiliLiveInitialState, PayloadAction<LiveItem>>;
-  setAutoRecordTimer: CaseReducer<BilibiliLiveInitialState, PayloadAction<NodeJS.Timer | null>>;
+  setAutoRecordTimer: CaseReducer<BilibiliLiveInitialState, PayloadAction<NodeJS.Timeout | null>>;
 };
 
 const sliceName: 'bilibiliLive' = 'bilibiliLive';
@@ -79,7 +79,7 @@ const { actions, reducer }: Slice<BilibiliLiveInitialState, SliceReducers, typeo
     },
 
     // 设置自动直播
-    setAutoRecordTimer(state: BilibiliLiveInitialState, action: PayloadAction<NodeJS.Timer | null>): void {
+    setAutoRecordTimer(state: BilibiliLiveInitialState, action: PayloadAction<NodeJS.Timeout | null>): void {
       state.autoRecordTimer = action.payload;
     }
   }
