@@ -110,7 +110,8 @@ function Douyin(props: {}): ReactElement {
         filePath,
         durl: uri,
         qid: item.qid,
-        headers: {}
+        headers: {},
+        resStatus302: true
       });
     });
   }
