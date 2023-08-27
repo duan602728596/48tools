@@ -9,14 +9,14 @@ import Kuaishou from '../pages/Kuaishou/index';
 import VideoEditDynamic from '../pages/VideoEdit/loader';
 import WeiboSuperDynamic from '../pages/WeiboSuper/loader';
 import Agreement from '../pages/Agreement/index';
-import { needToReadPowerLoader } from '../pages/Agreement/function/helper';
+import { needToReadPower } from '../pages/Agreement/function/helper';
 
 function Routers(props: {}): ReactElement | null {
   const routes: ReactElement | null = useRoutes([
     {
       path: '/',
       Component(): ReactElement {
-        if (needToReadPowerLoader()) {
+        if (needToReadPower()) {
           return <Navigate to="/Agreement/Power?read=1" />;
         }
 
