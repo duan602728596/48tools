@@ -1,7 +1,23 @@
-import { Fragment, useSyncExternalStore, type ReactElement, type MouseEvent } from 'react';
-import { Button, Form, Input, message, type FormInstance } from 'antd';
+import {
+  Fragment,
+  useState,
+  useSyncExternalStore,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent
+} from 'react';
+import { Button, Form, Input, message, Select, type FormInstance } from 'antd';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { requestSMS, type SMSResult } from '@48tools-api/48/login';
+import * as classNames from 'classnames';
+import {
+  requestSMS,
+  type SMSResult,
+  type ForeignVerificationMessage,
+  type ForeignVerificationAnswerItem
+} from '@48tools-api/48/login';
+import commonStyle from '../../../common.sass';
 import style from './loginForm.sass';
 import { smsStore } from '../function/SMSStore';
 
@@ -10,26 +26,47 @@ function LoginForm(props: { form: FormInstance }): ReactElement {
   const form: FormInstance = props.form;
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const smsTime: number = useSyncExternalStore(smsStore.subscribe, smsStore.getSnapshot);
+  const [foreignVerificationQuestion, setForeignVerificationQuestion]: [string | null, D<S<string | null>>] = useState(null);
+  const [foreignVerificationOptions, setForeignVerificationOptions]: [
+    Array<DefaultOptionType> | null,
+    D<S<Array<DefaultOptionType> | null>>
+  ] = useState(null);
 
   // 发送验证码
   async function handleSendSMSCodeClick(event: MouseEvent): Promise<void> {
-    let value: { area: string; mobile: string };
+    let value: { area: string; mobile: string; answer?: string };
 
     try {
-      value = await form.validateFields(['area', 'mobile']);
+      value = await form.validateFields(['area', 'mobile', 'answer']);
     } catch {
       return;
     }
 
-    smsStore.start();
-
     try {
-      const res: SMSResult = await requestSMS(value.mobile, value.area);
+      const res: SMSResult = await requestSMS({
+        mobile: value.mobile,
+        area: value.area,
+        answer: value.answer
+      });
 
-      if (!res.success) {
-        messageApi.error('验证码发送失败！');
+      if (res.status === 2001) {
+        const answer: ForeignVerificationMessage = JSON.parse(res.message);
 
-        return;
+        setForeignVerificationQuestion(answer.question);
+        setForeignVerificationOptions(
+          answer.answer.map((o: ForeignVerificationAnswerItem): DefaultOptionType => ({
+            value: o.option.toString(),
+            label: o.value
+          }))
+        );
+      } else {
+        smsStore.start();
+        setForeignVerificationQuestion(null);
+        setForeignVerificationOptions(null);
+
+        if (!res.success) {
+          messageApi.error('验证码发送失败！');
+        }
       }
     } catch (err) {
       console.error(err);
@@ -66,6 +103,17 @@ function LoginForm(props: { form: FormInstance }): ReactElement {
             </Button>
           </div>
         </Form.Item>
+        {
+          foreignVerificationOptions && foreignVerificationQuestion ? (
+            <Form.Item className={ style.formItem } label="问题验证" required={ true }>
+              <p className="m-0 leading-[32px]">{ foreignVerificationQuestion }</p>
+              <p className={ classNames('mb-[6px] leading-[32px]', commonStyle.tips) }>选择答案后请重新发送验证码！</p>
+              <Form.Item name="answer" required={ true } noStyle={ true }>
+                <Select options={ foreignVerificationOptions } />
+              </Form.Item>
+            </Form.Item>
+          ) : null
+        }
       </Form>
       { messageContextHolder }
     </Fragment>

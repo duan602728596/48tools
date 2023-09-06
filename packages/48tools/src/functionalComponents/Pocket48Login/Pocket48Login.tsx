@@ -368,7 +368,7 @@ function Pocket48Login(props: {}): ReactElement {
         onOk={ tabsKey === 'tokenForm' ? handleSaveTokenClick : handleLoginClick }
         onCancel={ (event: MouseEvent): void => setOpen(false) }
       >
-        <div className="h-[200px]">
+        <div className="h-[300px]">
           <Tabs type="card" activeKey={ tabsKey } items={ tabsItem } onChange={ (key: string): void => setTabsKey(key) } />
         </div>
       </Modal>

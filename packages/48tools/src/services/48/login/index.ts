@@ -4,17 +4,28 @@ import type { SMSResult, LoginUserInfo, IMUserInfo, UserInfoReloadOrSwitch } fro
 
 export type * from './interface';
 
+interface RequestSMSArguments {
+  mobile: string;
+  area?: string;
+  answer?: string;
+}
+
 /**
  * 发送验证码
  * @param { string } mobile: 手机号
  * @param { string } area: 区号
+ * @param { string } answer: 国外手机号可能会有的验证
  */
-export async function requestSMS(mobile: string, area: string = '86'): Promise<SMSResult> {
+export async function requestSMS({ mobile, area = '86', answer }: RequestSMSArguments): Promise<SMSResult> {
+  const object: Record<string, string> = { mobile, area };
+
+  if (answer) object.answer = answer;
+
   const res: GotResponse<SMSResult> = await got('https://pocketapi.48.cn/user/api/v1/sms/send2', {
     method: 'POST',
     headers: createHeaders(),
     responseType: 'json',
-    json: { mobile, area }
+    json: object
   });
 
   return res.body;
