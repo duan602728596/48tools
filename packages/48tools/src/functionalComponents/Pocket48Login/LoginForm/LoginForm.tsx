@@ -108,7 +108,7 @@ function LoginForm(props: { form: FormInstance }): ReactElement {
             <Form.Item className={ style.formItem } label="问题验证" required={ true }>
               <p className="m-0 leading-[32px]">{ foreignVerificationQuestion }</p>
               <p className={ classNames('mb-[6px] leading-[32px]', commonStyle.tips) }>选择答案后请重新发送验证码！</p>
-              <Form.Item name="answer" required={ true } noStyle={ true }>
+              <Form.Item name="answer" rules={ [{ required: true, message: '请选择答案', whitespace: false }] } noStyle={ true }>
                 <Select options={ foreignVerificationOptions } />
               </Form.Item>
             </Form.Item>
