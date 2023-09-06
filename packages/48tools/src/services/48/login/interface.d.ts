@@ -1,5 +1,16 @@
 import { Pocket48ResponseBase } from '../interface';
 
+// 国外手机号可能会有的验证
+export interface ForeignVerificationAnswerItem {
+  option: number;
+  value: string;
+}
+
+export interface ForeignVerificationMessage {
+  question: string;
+  answer: Array<ForeignVerificationAnswerItem>;
+}
+
 export interface SMSResult extends Pocket48ResponseBase {
   content: null;
 }
