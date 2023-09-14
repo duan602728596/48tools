@@ -1,6 +1,6 @@
 import got, { type Response as GotResponse, Agents as GotAgents } from 'got';
 import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
-import { getBilibiliCookie, pcUserAgent } from '../../../utils/utils';
+import { getBilibiliCookie, pcUserAgent, pcUserAgent2 } from '../../../utils/utils';
 import { sign } from '../../../utils/bilibili/wbiSign';
 import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData, NavInterface } from './interface';
 
@@ -129,9 +129,15 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
     order: 'pubdate'
   }, undefined);
   const apiUrl: string = `https://api.bilibili.com/x/space/wbi/arc/search?${ ps }`;
-  const res: Response = await fetch(apiUrl);
+  const res: GotResponse<SpaceArcSearch> = await got.get(apiUrl, {
+    responseType: 'json',
+    headers: {
+      Host: 'api.bilibili.com',
+      'User-Agent': pcUserAgent2
+    }
+  });
 
-  return res.json();
+  return res.body;
 }
 
 /**
