@@ -17,6 +17,7 @@ type LiveSliceEntityState = EntityState<WebWorkerChildItem, string>;
 
 export interface LiveSliceInitialState extends LiveSliceEntityState {
   liveList: Array<LiveItem>;
+  autoRecordTimer: NodeJS.Timeout | null;
 }
 
 type SliceReducers = {
@@ -25,6 +26,7 @@ type SliceReducers = {
   setLiveListFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ result: Array<LiveItem> }>>;
   setAddLiveItemFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ data: LiveItem }>>;
   setDeleteLiveItemFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ query: string }>>;
+  setAutoRecordTimer: CaseReducer<LiveSliceInitialState, PayloadAction<NodeJS.Timeout | null>>;
 };
 
 type SliceSelectors<SliceName extends string> = {
@@ -32,9 +34,10 @@ type SliceSelectors<SliceName extends string> = {
   liveList: (this: LiveSlice<SliceName>, state: LiveSliceInitialState) => Array<LiveItem>;
 };
 
-export type LiveSliceSelector = Pick<LiveSliceInitialState, 'liveList'> & {
+export type LiveSliceSelector = Pick<LiveSliceInitialState, 'liveList' | 'autoRecordTimer'> & {
   workerList: Array<WebWorkerChildItem>;
 };
+export type LiveSliceSelectorNoAutoRecordTimer = Omit<LiveSliceSelector, 'autoRecordTimer'>;
 
 /* 创建一个通用的redux slice，支持直播的房间的添加删除在数据库中，以及worker的添加和删除 */
 export class LiveSlice<SliceName extends string> {
@@ -64,7 +67,10 @@ export class LiveSlice<SliceName extends string> {
       selectId: (item: WebWorkerChildItem): string => item.id
     });
     this.selectors = this.adapter.getSelectors();
-    this.initialState = this.adapter.getInitialState({ liveList: [] });
+    this.initialState = this.adapter.getInitialState({
+      liveList: [],
+      autoRecordTimer: null
+    });
     this.ignoredPaths = [`${ this.sliceName }.entities`];
     this.ignoredActions = [`${ this.sliceName }/setAddWorkerItem`, `${ this.sliceName }/setRemoveWorkerItem`];
 
@@ -79,14 +85,18 @@ export class LiveSlice<SliceName extends string> {
         setRemoveWorkerItem: this.setRemoveWorkerItem,
         setLiveListFromDB: this.setLiveListFromDB,
         setAddLiveItemFromDB: this.setAddLiveItemFromDB,
-        setDeleteLiveItemFromDB: this.setDeleteLiveItemFromDB
+        setDeleteLiveItemFromDB: this.setDeleteLiveItemFromDB,
+        setAutoRecordTimer: this.setAutoRecordTimer
       },
       selectors: {
         // worker list Selector
         workerList: (state: LiveSliceInitialState): Array<WebWorkerChildItem> => this.selectors.selectAll(state),
 
         // live list Selector
-        liveList: (state: LiveSliceInitialState): Array<LiveItem> => state.liveList
+        liveList: (state: LiveSliceInitialState): Array<LiveItem> => state.liveList,
+
+        // auto record timer Selector
+        autoRecordTimer: (state: LiveSliceInitialState): NodeJS.Timeout | null => state.autoRecordTimer
       }
     });
     this.IDBInit();
@@ -141,5 +151,10 @@ export class LiveSlice<SliceName extends string> {
         nextLiveList.splice(index, 1);
         state.liveList = nextLiveList;
       }
+    };
+
+  setAutoRecordTimer: SliceReducers['setAutoRecordTimer']
+    = (state: LiveSliceInitialState, action: PayloadAction<NodeJS.Timeout | null>): void => {
+      state.autoRecordTimer = action.payload;
     };
 }

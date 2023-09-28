@@ -21,18 +21,18 @@ import dbConfig from '../../../utils/IDB/IDBConfig';
 import getLiveInfo from './function/getLiveInfo';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
-import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
+import type { LiveSliceInitialState, LiveSliceSelectorNoAutoRecordTimer } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';
 import type { LiveInfo, PlayUrlItem } from '../types';
 
 /* redux selector */
 type RState = { kuaishouLive: LiveSliceInitialState };
 
-const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
+const selector: Selector<RState, LiveSliceSelectorNoAutoRecordTimer> = createStructuredSelector({ ...selectorsObject });
 
 /* 快手直播 */
 function Live(props: {}): ReactElement {
-  const { workerList: kuaishouLiveWorkerList, liveList: kuaishouLiveList }: LiveSliceSelector = useSelector(selector);
+  const { workerList: kuaishouLiveWorkerList, liveList: kuaishouLiveList }: LiveSliceSelectorNoAutoRecordTimer = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 

@@ -43,7 +43,7 @@ import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
 import AntdConfig from '../../../components/basic/AntdConfig/AntdConfig';
 import ThemeProvider from '../../../components/basic/Theme/ThemeProvider';
-import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
+import type { LiveSliceInitialState, LiveSliceSelectorNoAutoRecordTimer } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveRepresentation, LiveVideoPlayRes } from '../types';
 
@@ -53,11 +53,11 @@ let divRoot: Root | null = null;
 /* redux selector */
 type RState = { acfunLive: LiveSliceInitialState };
 
-const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
+const selector: Selector<RState, LiveSliceSelectorNoAutoRecordTimer> = createStructuredSelector({ ...selectorsObject });
 
 /* A站直播抓取 */
 function Live(props: {}): ReactElement {
-  const { liveList: acfunLiveList, workerList: liveWorkers }: LiveSliceSelector = useSelector(selector);
+  const { liveList: acfunLiveList, workerList: liveWorkers }: LiveSliceSelectorNoAutoRecordTimer = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
