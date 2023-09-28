@@ -25,6 +25,7 @@ type SliceReducers = {
   setRemoveWorkerItem: CaseReducer<LiveSliceInitialState, PayloadAction<string>>;
   setLiveListFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ result: Array<LiveItem> }>>;
   setAddLiveItemFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ data: LiveItem }>>;
+  setLiveItemAutoRecordDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ data: LiveItem }>>;
   setDeleteLiveItemFromDB: CaseReducer<LiveSliceInitialState, PayloadAction<{ query: string }>>;
   setAutoRecordTimer: CaseReducer<LiveSliceInitialState, PayloadAction<NodeJS.Timeout | null>>;
 };
@@ -32,6 +33,7 @@ type SliceReducers = {
 type SliceSelectors<SliceName extends string> = {
   workerList: (this: LiveSlice<SliceName>, state: LiveSliceInitialState) => Array<WebWorkerChildItem>;
   liveList: (this: LiveSlice<SliceName>, state: LiveSliceInitialState) => Array<LiveItem>;
+  autoRecordTimer: (this: LiveSlice<SliceName>, state: LiveSliceInitialState) => NodeJS.Timeout | null;
 };
 
 export type LiveSliceSelector = Pick<LiveSliceInitialState, 'liveList' | 'autoRecordTimer'> & {
@@ -55,6 +57,7 @@ export class LiveSlice<SliceName extends string> {
 
   public IDBCursorLiveList: CursorDispatchFunc;
   public IDBSaveLiveItem: DataDispatchFunc;
+  public IDBSaveAutoRecordLiveItem: DataDispatchFunc;
   public IDBDeleteLiveItem: QueryDispatchFunc;
 
   public slice: Slice<LiveSliceInitialState, SliceReducers, SliceName, SliceName, SliceSelectors<SliceName>>;
@@ -71,8 +74,15 @@ export class LiveSlice<SliceName extends string> {
       liveList: [],
       autoRecordTimer: null
     });
-    this.ignoredPaths = [`${ this.sliceName }.entities`];
-    this.ignoredActions = [`${ this.sliceName }/setAddWorkerItem`, `${ this.sliceName }/setRemoveWorkerItem`];
+    this.ignoredPaths = [
+      `${ this.sliceName }.entities`,
+      `${ this.sliceName }.autoRecordTimer`
+    ];
+    this.ignoredActions = [
+      `${ this.sliceName }/setAddWorkerItem`,
+      `${ this.sliceName }/setRemoveWorkerItem`,
+      `${ this.sliceName }/setAutoRecordTimer`
+    ];
 
     this.setAddWorkerItem = this.adapter.addOne;
     this.setRemoveWorkerItem = this.adapter.removeOne;
@@ -85,6 +95,7 @@ export class LiveSlice<SliceName extends string> {
         setRemoveWorkerItem: this.setRemoveWorkerItem,
         setLiveListFromDB: this.setLiveListFromDB,
         setAddLiveItemFromDB: this.setAddLiveItemFromDB,
+        setLiveItemAutoRecordDB: this.setLiveItemAutoRecordDB,
         setDeleteLiveItemFromDB: this.setDeleteLiveItemFromDB,
         setAutoRecordTimer: this.setAutoRecordTimer
       },
@@ -107,6 +118,7 @@ export class LiveSlice<SliceName extends string> {
     const {
       setLiveListFromDB,
       setAddLiveItemFromDB,
+      setLiveItemAutoRecordDB,
       setDeleteLiveItemFromDB
     }: CaseReducerActions<SliceReducers, SliceName> = this.slice.actions;
 
@@ -117,6 +129,10 @@ export class LiveSlice<SliceName extends string> {
     this.IDBSaveLiveItem = IDBRedux.putAction({
       objectStoreName: this.objectStoreName,
       successAction: setAddLiveItemFromDB
+    });
+    this.IDBSaveAutoRecordLiveItem = IDBRedux.putAction({
+      objectStoreName: this.objectStoreName,
+      successAction: setLiveItemAutoRecordDB
     });
     this.IDBDeleteLiveItem = IDBRedux.deleteAction({
       objectStoreName: this.objectStoreName,
@@ -140,6 +156,19 @@ export class LiveSlice<SliceName extends string> {
       }
     };
 
+  // 更新数据
+  setLiveItemAutoRecordDB: SliceReducers['setLiveItemAutoRecordDB']
+    = (state: LiveSliceInitialState, action: PayloadAction<{ data: LiveItem }>): void => {
+      const index: number = state.liveList.findIndex((o: LiveItem): boolean => o.id === action.payload.data.id);
+
+      if (index >= 0) {
+        const nextLiveList: Array<LiveItem> = [...state.liveList];
+
+        nextLiveList[index].autoRecord = action.payload.data.autoRecord;
+        state.liveList = nextLiveList;
+      }
+    };
+
   // 删除数据
   setDeleteLiveItemFromDB: SliceReducers['setDeleteLiveItemFromDB']
     = (state: LiveSliceInitialState, action: PayloadAction<{ query: string }>): void => {
@@ -153,8 +182,13 @@ export class LiveSlice<SliceName extends string> {
       }
     };
 
+  // 设置自动直播
   setAutoRecordTimer: SliceReducers['setAutoRecordTimer']
     = (state: LiveSliceInitialState, action: PayloadAction<NodeJS.Timeout | null>): void => {
       state.autoRecordTimer = action.payload;
     };
+
+  get _workerList(): Array<WebWorkerChildItem> {
+    return this.selectors.selectAll(this.initialState);
+  }
 }

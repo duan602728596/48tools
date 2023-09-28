@@ -16,37 +16,29 @@ import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AutoRecordingSavePath from './AutoRecordingSavePath/AutoRecordingSavePath';
 import {
-  IDBSaveBilibiliLiveList,
-  IDBCursorBilibiliLiveList,
-  IDBDeleteBilibiliLiveList,
-  IDBUpdateBilibiliLiveList,
-  setAddLiveBilibiliChildList,
-  setDeleteLiveBilibiliChildList,
+  IDBCursorLiveList,
+  IDBSaveLiveItem,
+  IDBSaveAutoRecordLiveItem,
+  IDBDeleteLiveItem,
+  setAddWorkerItem,
+  setRemoveWorkerItem,
   setAutoRecordTimer,
-  type BilibiliLiveInitialState
+  selectorsObject
 } from '../reducers/bilibiliLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
+import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 
 /* redux selector */
-type RState = { bilibiliLive: BilibiliLiveInitialState };
+type RState = { bilibiliLive: LiveSliceInitialState };
 
-const selector: Selector<RState, BilibiliLiveInitialState> = createStructuredSelector({
-  // 直播间列表
-  bilibiliLiveList: ({ bilibiliLive }: RState): Array<LiveItem> => bilibiliLive.bilibiliLiveList,
-
-  // 直播下载
-  liveChildList: ({ bilibiliLive }: RState): Array<WebWorkerChildItem> => bilibiliLive.liveChildList,
-
-  // 自动录制直播
-  autoRecordTimer: ({ bilibiliLive }: RState): NodeJS.Timeout | null => bilibiliLive.autoRecordTimer
-});
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
 
 /* 直播抓取 */
 function Live(props: {}): ReactElement {
-  const { bilibiliLiveList, liveChildList, autoRecordTimer }: BilibiliLiveInitialState = useSelector(selector);
+  const { liveList, workerList, autoRecordTimer }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
@@ -62,6 +54,7 @@ function Live(props: {}): ReactElement {
 
     if (bilibiliAutoRecordSavePath) {
       dispatch(setAutoRecordTimer(setInterval(bilibiliAutoRecord, 60_000)));
+      bilibiliAutoRecord();
     } else {
       messageApi.warning('请先配置视频自动保存的目录！');
     }
@@ -69,17 +62,17 @@ function Live(props: {}): ReactElement {
 
   // 修改自动录制的checkbox
   function handleAutoRecordCheck(record: LiveItem, event: CheckboxChangeEvent): void {
-    dispatch(IDBUpdateBilibiliLiveList({
+    dispatch(IDBSaveAutoRecordLiveItem({
       data: { ...record, autoRecord: event.target.checked }
     }));
   }
 
   // 停止
   function handleStopClick(record: LiveItem, event?: MouseEvent): void {
-    const index: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
+    const index: number = workerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) {
-      liveChildList[index].worker.postMessage({ type: 'stop' });
+      workerList[index].worker.postMessage({ type: 'stop' });
     }
   }
 
@@ -114,7 +107,7 @@ function Live(props: {}): ReactElement {
           }
 
           worker.terminate();
-          dispatch(setDeleteLiveBilibiliChildList(record));
+          dispatch(setRemoveWorkerItem(record.id));
         }
       }, false);
 
@@ -123,13 +116,10 @@ function Live(props: {}): ReactElement {
         playStreamPath: resPlayUrl.data.durl[0].url,
         filePath: result.filePath,
         ffmpeg: getFFmpeg(),
-        ua: true,
-        ffmpegHeaders: `Referer: https://live.bilibili.com/${ record.roomId }\r
-Host: live.bilibili.com\r
-Origin: https://live.bilibili.com\r\n`
+        ua: true
       });
 
-      dispatch(setAddLiveBilibiliChildList({
+      dispatch(setAddWorkerItem({
         id: record.id,
         worker
       }));
@@ -141,7 +131,7 @@ Origin: https://live.bilibili.com\r\n`
 
   // 删除
   function handleDeleteRoomIdClick(record: LiveItem, event: MouseEvent): void {
-    dispatch(IDBDeleteBilibiliLiveList({
+    dispatch(IDBDeleteLiveItem({
       query: record.id
     }));
   }
@@ -165,7 +155,7 @@ Origin: https://live.bilibili.com\r\n`
       key: 'handle',
       width: 175,
       render: (value: undefined, record: LiveItem, index: number): ReactElement => {
-        const idx: number = liveChildList.findIndex((o: WebWorkerChildItem) => o.id === record.id);
+        const idx: number = workerList.findIndex((o: WebWorkerChildItem) => o.id === record.id);
 
         return (
           <Button.Group>
@@ -196,7 +186,7 @@ Origin: https://live.bilibili.com\r\n`
   ];
 
   useEffect(function(): void {
-    dispatch(IDBCursorBilibiliLiveList({
+    dispatch(IDBCursorLiveList({
       query: { indexName: dbConfig.objectStore[0].data[1] }
     }));
   }, []);
@@ -209,7 +199,7 @@ Origin: https://live.bilibili.com\r\n`
           <AddLiveRoomForm dataTestId="bilibili-add-live-id-btn"
             modalTitle="添加B站直播间信息"
             tips="直播间ID支持配置短ID。"
-            IDBSaveDataFunc={ IDBSaveBilibiliLiveList }
+            IDBSaveDataFunc={ IDBSaveLiveItem }
           />
           <AutoRecordingSavePath />
           {
@@ -221,7 +211,7 @@ Origin: https://live.bilibili.com\r\n`
       </Header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ bilibiliLiveList }
+        dataSource={ liveList }
         bordered={ true }
         rowKey={ dbConfig.objectStore[0].key }
         pagination={{

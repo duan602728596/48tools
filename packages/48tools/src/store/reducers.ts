@@ -4,7 +4,10 @@ import l48Live48Reducers from '../pages/48/reducers/live48';
 import roomVoiceReducers from '../pages/48/reducers/roomVoice';
 import pocket48LoginReducers from '../functionalComponents/Pocket48Login/reducers/pocket48Login';
 import bilibiliDownloadReducers from '../pages/Bilibili/reducers/bilibiliDownload';
-import bilibiliLiveReducers from '../pages/Bilibili/reducers/bilibiliLive';
+import bilibiliLiveReducers, {
+  ignoredPaths as bilibiliLiveIgnoredPaths,
+  ignoredActions as bilibiliLiveIgnoredActions
+} from '../pages/Bilibili/reducers/bilibiliLive';
 import acfunDownloadReducers from '../pages/AcFun/reducers/acfunDownload';
 import acfunLiveReducers, {
   ignoredPaths as acfunLiveIgnoredPaths,
@@ -50,8 +53,7 @@ export const ignoreOptions: any = {
     'live48.inLiveList',
     'live48.videoListChild',
     'live48.progress',
-    'bilibiliLive.liveChildList',
-    'bilibiliLive.autoRecordTimer',
+    ...bilibiliLiveIgnoredPaths,
     'bilibiliDownload.downloadWorkerList',
     'bilibiliDownload.downloadProgress',
     'acfunDownload.ffmpegDownloadWorkers',
@@ -80,9 +82,7 @@ export const ignoreOptions: any = {
     'roomMessage/setLocalMessageBrowser',
     'roomVoice/setAddDownloadWorker',
     'roomVoice/setRemoveDownloadWorker',
-    'bilibiliLive/setAddLiveBilibiliChildList',
-    'bilibiliLive/setDeleteLiveBilibiliChildList',
-    'bilibiliLive/setAutoRecordTimer',
+    ...bilibiliLiveIgnoredActions,
     'bilibiliDownload/setAddDownloadWorker',
     'bilibiliDownload/setDeleteDownloadWorker',
     'acfunDownload/setAddDownloadWorker',

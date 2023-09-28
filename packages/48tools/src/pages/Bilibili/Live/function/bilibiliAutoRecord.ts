@@ -3,21 +3,21 @@ import type { Store } from '@reduxjs/toolkit';
 import { requestRoomInitData, requestRoomPlayerUrl, type RoomInit, type RoomPlayUrl } from '@48tools-api/bilibili/live';
 import { store } from '../../../../store/store';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
-import { setAddLiveBilibiliChildList, setDeleteLiveBilibiliChildList } from '../../reducers/bilibiliLive';
+import { liveSlice, setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/bilibiliLive';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
-import type { BilibiliLiveInitialState } from '../../reducers/bilibiliLive';
+import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 
 /* 自动录制直播 */
 async function bilibiliAutoRecord(): Promise<void> {
   const { dispatch, getState }: Store = store;
-  const { bilibiliLiveList, liveChildList }: BilibiliLiveInitialState = getState().bilibiliLive;
+  const { liveList }: LiveSliceInitialState = getState().bilibiliLive;
   const bilibiliAutoRecordSavePath: string = localStorage.getItem('BILIBILI_AUTO_RECORD_SAVE_PATH')!;
 
-  for (const record of bilibiliLiveList) {
+  for (const record of liveList) {
     if (!record.autoRecord) continue;
 
-    const index: number = liveChildList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
+    const index: number = liveSlice._workerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) continue;
 
@@ -39,7 +39,7 @@ async function bilibiliAutoRecord(): Promise<void> {
             }
 
             worker.terminate();
-            dispatch(setDeleteLiveBilibiliChildList(record));
+            dispatch(setRemoveWorkerItem(record.id));
           }
         }, false);
 
@@ -48,13 +48,10 @@ async function bilibiliAutoRecord(): Promise<void> {
           playStreamPath: resPlayUrl.data.durl[0].url,
           filePath: path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ time }.flv`),
           ffmpeg: getFFmpeg(),
-          ua: true,
-          ffmpegHeaders: `Referer: https://live.bilibili.com/${ record.roomId }\r
-Host: live.bilibili.com\r
-Origin: https://live.bilibili.com\r`
+          ua: true
         });
 
-        dispatch(setAddLiveBilibiliChildList({
+        dispatch(setAddWorkerItem({
           id: record.id,
           worker
         }));
