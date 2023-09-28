@@ -1,15 +1,23 @@
 import type { OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
-import { Button, Modal, Form, Alert, Input, message, Space, type FormInstance } from 'antd';
-import type { Store } from 'antd/es/form/interface';
+import { Button, Modal, Form, Input, message, Space, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { showOpenDialog } from '../../../../utils/remote/dialog';
+import { showOpenDialog } from '../../utils/remote/dialog';
+
+interface FormValue {
+  autoRecordSavePath: string | undefined | null;
+}
+
+interface AutoRecordingSavePathProps {
+  localStorageItemKey: string;
+}
 
 /* 配置自动保存的路径 */
-function AutoRecordingSavePath(props: {}): ReactElement {
+function AutoRecordingSavePath(props: AutoRecordingSavePathProps): ReactElement {
+  const { localStorageItemKey }: AutoRecordingSavePathProps = props;
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false); // 弹出层
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [form]: [FormInstance] = Form.useForm();
+  const [form]: [FormInstance<FormValue>] = Form.useForm();
 
   // 取消
   function handleCloseAutoRecordSavePathModalClick(event: MouseEvent): void {
@@ -19,14 +27,14 @@ function AutoRecordingSavePath(props: {}): ReactElement {
   // 打开配置弹出层
   function handleOpenAutoRecordSavePathClick(event: MouseEvent): void {
     form.setFieldsValue({
-      bilibiliAutoRecordSavePath: localStorage.getItem('BILIBILI_AUTO_RECORD_SAVE_PATH')
+      autoRecordSavePath: localStorage.getItem(localStorageItemKey)
     });
     setOpen(true);
   }
 
   // 确认
   async function handleAutoRecordSavePathClick(event: MouseEvent): Promise<void> {
-    let formValue: Store;
+    let formValue: FormValue;
 
     try {
       formValue = await form.validateFields();
@@ -34,10 +42,10 @@ function AutoRecordingSavePath(props: {}): ReactElement {
       return console.error(err);
     }
 
-    if (formValue.bilibiliAutoRecordSavePath && !/^\s*$/.test(formValue.bilibiliAutoRecordSavePath)) {
-      localStorage.setItem('BILIBILI_AUTO_RECORD_SAVE_PATH', formValue.bilibiliAutoRecordSavePath);
+    if (formValue.autoRecordSavePath && !/^\s*$/.test(formValue.autoRecordSavePath)) {
+      localStorage.setItem(localStorageItemKey, formValue.autoRecordSavePath);
     } else {
-      localStorage.removeItem('BILIBILI_AUTO_RECORD_SAVE_PATH');
+      localStorage.removeItem(localStorageItemKey);
     }
 
     messageApi.success('配置成功！');
@@ -51,7 +59,7 @@ function AutoRecordingSavePath(props: {}): ReactElement {
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 
     form.setFieldsValue({
-      bilibiliAutoRecordSavePath: result.filePaths[0]
+      autoRecordSavePath: result.filePaths[0]
     });
   }
 
@@ -69,7 +77,7 @@ function AutoRecordingSavePath(props: {}): ReactElement {
         <Form form={ form }>
           <Form.Item label="视频储存目录">
             <Space>
-              <Form.Item name="bilibiliAutoRecordSavePath" noStyle={ true }>
+              <Form.Item name="autoRecordSavePath" noStyle={ true }>
                 <Input className="w-[300px]" />
               </Form.Item>
               <Button className="ml-[6px]" onClick={ handleSelectExecutablePathClick }>选择文件夹</Button>

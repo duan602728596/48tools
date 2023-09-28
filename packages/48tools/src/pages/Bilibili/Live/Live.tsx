@@ -14,7 +14,7 @@ import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
-import AutoRecordingSavePath from './AutoRecordingSavePath/AutoRecordingSavePath';
+import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
 import {
   IDBCursorLiveList,
   IDBSaveLiveItem,
@@ -201,7 +201,7 @@ function Live(props: {}): ReactElement {
             tips="直播间ID支持配置短ID。"
             IDBSaveDataFunc={ IDBSaveLiveItem }
           />
-          <AutoRecordingSavePath />
+          <AutoRecordingSavePath localStorageItemKey="BILIBILI_AUTO_RECORD_SAVE_PATH" />
           {
             autoRecordTimer === null
               ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
