@@ -28,8 +28,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
-import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
-import type { LiveItem } from '../types';
+import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 
 /* redux selector */
 type RState = { bilibiliLive: BilibiliLiveInitialState };

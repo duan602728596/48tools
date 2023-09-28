@@ -30,4 +30,5 @@ export interface LiveItem {
   id: string;
   description: string;
   roomId: string;
+  autoRecord?: boolean;
 }
