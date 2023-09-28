@@ -5,6 +5,7 @@ import { store } from '../../../../store/store';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { liveSlice, setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/bilibiliLive';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
+import { ffmpegHeaders, localStorageKey } from './helper';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 
@@ -12,7 +13,7 @@ import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 async function bilibiliAutoRecord(): Promise<void> {
   const { dispatch, getState }: Store = store;
   const { liveList }: LiveSliceInitialState = getState().bilibiliLive;
-  const bilibiliAutoRecordSavePath: string = localStorage.getItem('BILIBILI_AUTO_RECORD_SAVE_PATH')!;
+  const bilibiliAutoRecordSavePath: string = localStorage.getItem(localStorageKey)!;
 
   for (const record of liveList) {
     if (!record.autoRecord) continue;
@@ -48,7 +49,8 @@ async function bilibiliAutoRecord(): Promise<void> {
           playStreamPath: resPlayUrl.data.durl[0].url,
           filePath: path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
           ffmpeg: getFFmpeg(),
-          ua: true
+          ua: true,
+          ffmpegHeaders: ffmpegHeaders()
         });
 
         dispatch(setAddWorkerItem({

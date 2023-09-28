@@ -28,6 +28,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
+import { ffmpegHeaders, localStorageKey } from './function/helper';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 
@@ -50,7 +51,7 @@ function Live(props: {}): ReactElement {
 
   // 自动录制
   function handleAutoRecordStartClick(event: MouseEvent): void {
-    const bilibiliAutoRecordSavePath: string | null = localStorage.getItem('BILIBILI_AUTO_RECORD_SAVE_PATH');
+    const bilibiliAutoRecordSavePath: string | null = localStorage.getItem(localStorageKey);
 
     if (bilibiliAutoRecordSavePath) {
       dispatch(setAutoRecordTimer(setInterval(bilibiliAutoRecord, 60_000)));
@@ -116,7 +117,8 @@ function Live(props: {}): ReactElement {
         playStreamPath: resPlayUrl.data.durl[0].url,
         filePath: result.filePath,
         ffmpeg: getFFmpeg(),
-        ua: true
+        ua: true,
+        ffmpegHeaders: ffmpegHeaders()
       });
 
       dispatch(setAddWorkerItem({
@@ -201,7 +203,7 @@ function Live(props: {}): ReactElement {
             tips="直播间ID支持配置短ID。"
             IDBSaveDataFunc={ IDBSaveLiveItem }
           />
-          <AutoRecordingSavePath localStorageItemKey="BILIBILI_AUTO_RECORD_SAVE_PATH" />
+          <AutoRecordingSavePath localStorageItemKey={ localStorageKey } />
           {
             autoRecordTimer === null
               ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
