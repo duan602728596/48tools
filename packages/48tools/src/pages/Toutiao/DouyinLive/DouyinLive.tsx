@@ -1,3 +1,4 @@
+import { setInterval, clearInterval } from 'node:timers';
 import type { SaveDialogReturnValue } from 'electron';
 import {
   Fragment,
@@ -11,9 +12,10 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Popconfirm, Table, message, Modal, Select } from 'antd';
+import { Button, Popconfirm, Table, message, Modal, Select, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { BaseOptionType } from 'rc-select/es/Select';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { requestLiveEnter, requestTtwidCookie, type LiveEnter } from '@48tools-api/toutiao/douyin';
 import style from './douyinLive.sass';
@@ -23,30 +25,52 @@ import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm
 import {
   IDBCursorLiveList,
   IDBSaveLiveItem,
+  IDBSaveAutoRecordLiveItem,
   IDBDeleteLiveItem,
   setAddWorkerItem,
   setRemoveWorkerItem,
+  setAutoRecordTimer,
   selectorsObject
 } from '../reducers/douyinLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
-import type { LiveSliceInitialState, LiveSliceSelectorNoAutoRecordTimer } from '../../../store/slice/LiveSlice';
+import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
+import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
+import douyinLiveAutoRecord from './function/douyinLiveAutoRecord';
 
 /* redux selector */
 type RState = { douyinLive: LiveSliceInitialState };
 
-const selector: Selector<RState, LiveSliceSelectorNoAutoRecordTimer> = createStructuredSelector({ ...selectorsObject });
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
 
 /* 抖音直播抓取 */
 function DouyinLive(props: {}): ReactElement {
-  const { workerList: douyinLiveWorkerList, liveList: douyinLiveList }: LiveSliceSelectorNoAutoRecordTimer = useSelector(selector);
+  const { workerList: douyinLiveWorkerList, liveList: douyinLiveList, autoRecordTimer }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false); // 弹出层状态
   const [liveOptions, setLiveOptions]: [Array<BaseOptionType>, D<S<BaseOptionType[]>>] = useState([]); // 直播的地址
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+
+  // 停止自动录制
+  function handleAutoRecordStopClick(event: MouseEvent): void {
+    clearInterval(autoRecordTimer!);
+    dispatch(setAutoRecordTimer(null));
+  }
+
+  // 自动录制
+  function handleAutoRecordStartClick(event: MouseEvent): void {
+    const bilibiliAutoRecordSavePath: string | null = localStorage.getItem('DOUYIN_LIVE_AUTO_RECORD_SAVE_PATH');
+
+    if (bilibiliAutoRecordSavePath) {
+      dispatch(setAutoRecordTimer(setInterval(douyinLiveAutoRecord, 60_000)));
+      douyinLiveAutoRecord();
+    } else {
+      messageApi.warning('请先配置视频自动保存的目录！');
+    }
+  }
 
   // 选择并开始录制
   async function handleStartRecordSelect(
@@ -93,6 +117,13 @@ function DouyinLive(props: {}): ReactElement {
       console.error(err);
       messageApi.error('录制失败！');
     }
+  }
+
+  // 修改自动录制的checkbox
+  function handleAutoRecordCheck(record: LiveItem, event: CheckboxChangeEvent): void {
+    dispatch(IDBSaveAutoRecordLiveItem({
+      data: { ...record, autoRecord: event.target.checked }
+    }));
   }
 
   // 停止
@@ -156,6 +187,17 @@ function DouyinLive(props: {}): ReactElement {
     { title: '说明', dataIndex: 'description' },
     { title: '房间ID', dataIndex: 'roomId' },
     {
+      title: '自动录制',
+      dataIndex: 'autoRecord',
+      width: 100,
+      render: (value: boolean, record: LiveItem, index: number): ReactElement => (
+        <Checkbox checked={ value }
+          disabled={ autoRecordTimer !== null }
+          onChange={ (event: CheckboxChangeEvent): void => handleAutoRecordCheck(record, event) }
+        />
+      )
+    },
+    {
       title: '操作',
       key: 'handle',
       width: 175,
@@ -179,7 +221,7 @@ function DouyinLive(props: {}): ReactElement {
             }
             <Button type="primary"
               danger={ true }
-              disabled={ idx >= 0 }
+              disabled={ idx >= 0 || autoRecordTimer !== null }
               onClick={ (event: MouseEvent): void => handleDeleteRoomIdClick(record, event) }
             >
               删除
@@ -199,7 +241,15 @@ function DouyinLive(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <AddLiveRoomForm modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveLiveItem } />
+        <Button.Group>
+          <AutoRecordingSavePath localStorageItemKey="DOUYIN_LIVE_AUTO_RECORD_SAVE_PATH" />
+          <AddLiveRoomForm modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveLiveItem } />
+          {
+            autoRecordTimer === null
+              ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
+              : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
+          }
+        </Button.Group>
       </Header>
       <Table size="middle"
         columns={ columns }

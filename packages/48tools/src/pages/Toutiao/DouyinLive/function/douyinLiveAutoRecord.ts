@@ -1,18 +1,21 @@
 import * as path from 'node:path';
 import type { Store } from '@reduxjs/toolkit';
-import { requestRoomInitData, requestRoomPlayerUrl, type RoomInit, type RoomPlayUrl } from '@48tools-api/bilibili/live';
+import { requestLiveEnter, requestTtwidCookie, type LiveEnter } from '@48tools-api/toutiao/douyin';
 import { store } from '../../../../store/store';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
-import { liveSlice, setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/bilibiliLive';
+import { liveSlice, setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/douyinLive';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
+import { douyinCookie } from '../../../../utils/toutiao/DouyinCookieStore';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 
 /* 自动录制直播 */
-async function bilibiliAutoRecord(): Promise<void> {
+async function douyinLiveAutoRecord(): Promise<void> {
   const { dispatch, getState }: Store = store;
-  const { liveList }: LiveSliceInitialState = getState().bilibiliLive;
-  const bilibiliAutoRecordSavePath: string = localStorage.getItem('BILIBILI_AUTO_RECORD_SAVE_PATH')!;
+  const { liveList }: LiveSliceInitialState = getState().douyinLive;
+  const bilibiliAutoRecordSavePath: string = localStorage.getItem('DOUYIN_LIVE_AUTO_RECORD_SAVE_PATH')!;
+
+  await requestTtwidCookie(); // 获取ttwid的cookie
 
   for (const record of liveList) {
     if (!record.autoRecord) continue;
@@ -24,10 +27,9 @@ async function bilibiliAutoRecord(): Promise<void> {
     const time: string = getFileTime();
 
     try {
-      const resInit: RoomInit = await requestRoomInitData(record.roomId);
+      const resInit: LiveEnter | string = await requestLiveEnter(douyinCookie.toString(), record.roomId);
 
-      if (resInit.data.live_status === 1) {
-        const resPlayUrl: RoomPlayUrl = await requestRoomPlayerUrl(`${ resInit.data.room_id }`);
+      if (typeof resInit === 'object' && resInit?.data?.data?.length && resInit.data.data[0]?.stream_url) {
         const worker: Worker = getFFmpegDownloadWorker();
 
         worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>) {
@@ -45,7 +47,7 @@ async function bilibiliAutoRecord(): Promise<void> {
 
         worker.postMessage({
           type: 'start',
-          playStreamPath: resPlayUrl.data.durl[0].url,
+          playStreamPath: resInit.data.data[0].stream_url.flv_pull_url.FULL_HD1,
           filePath: path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
           ffmpeg: getFFmpeg(),
           ua: true
@@ -62,4 +64,4 @@ async function bilibiliAutoRecord(): Promise<void> {
   }
 }
 
-export default bilibiliAutoRecord;
+export default douyinLiveAutoRecord;

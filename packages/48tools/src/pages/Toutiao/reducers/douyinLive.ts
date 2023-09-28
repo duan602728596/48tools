@@ -8,12 +8,14 @@ export const {
   slice: {
     actions: {
       setAddWorkerItem,
-      setRemoveWorkerItem
+      setRemoveWorkerItem,
+      setAutoRecordTimer
     },
     selectors: selectorsObject
   },
   IDBCursorLiveList,
   IDBSaveLiveItem,
+  IDBSaveAutoRecordLiveItem,
   IDBDeleteLiveItem,
   ignoredPaths,
   ignoredActions

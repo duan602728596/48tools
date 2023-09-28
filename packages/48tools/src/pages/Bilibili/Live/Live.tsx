@@ -174,7 +174,7 @@ function Live(props: {}): ReactElement {
             }
             <Button type="primary"
               danger={ true }
-              disabled={ idx >= 0 }
+              disabled={ idx >= 0 || autoRecordTimer !== null }
               onClick={ (event: MouseEvent): void => handleDeleteRoomIdClick(record, event) }
             >
               删除
