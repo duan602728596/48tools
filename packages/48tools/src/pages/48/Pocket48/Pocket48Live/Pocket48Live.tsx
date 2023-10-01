@@ -45,6 +45,7 @@ import {
 import downloadImages from './downloadImages/downloadImages';
 import autoGrab from '../function/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
+import LiveType from '../../components/LiveType/LiveType';
 import type { WebWorkerChildItem, MessageEventData, LiveStatusEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions, Pocket48LiveWorker } from '../../types';
 
@@ -329,18 +330,7 @@ function Pocket48Live(props: {}): ReactElement {
       title: '类型',
       dataIndex: 'liveType',
       width: 115,
-      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => {
-        return (
-          <Fragment>
-            {
-              record.liveMode === 1
-                ? <Tag color="blue">录屏</Tag>
-                : (value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>)
-            }
-            { record.inMicrophoneConnection && <Tag className="m-0" color="cyan">连麦</Tag> }
-          </Fragment>
-        );
-      }
+      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => <LiveType liveInfo={ record } />
     },
     {
       title: '时间',

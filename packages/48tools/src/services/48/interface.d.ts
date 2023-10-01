@@ -18,8 +18,8 @@ export interface LiveInfo {
   ctime: string;
   liveId: string;
   roomId: string;
-  liveType: 1 | 2; // 1：直播，2：电台
-  liveMode: 0 | 1; // 0：正常，1：录屏
+  liveType: 1 | 2 | 5; // 1：直播，2：电台，5：游戏
+  liveMode: 0 | 1;     // 0：正常，1：录屏
   title: string;
   userInfo: UserInfo;
   inMicrophoneConnection: boolean;

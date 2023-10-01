@@ -66,6 +66,7 @@ import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServ
 import { pick } from '../../../../utils/lodash';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
 import { useReqRoomIdQuery, type ReqRoomId } from '../../reducers/pocketFriends.api';
+import LiveType from '../../components/LiveType/LiveType';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 
@@ -416,9 +417,7 @@ function Pocket48Record(props: {}): ReactElement {
     {
       title: '类型',
       dataIndex: 'liveType',
-      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => record.liveMode === 1
-        ? <Tag color="blue">录屏</Tag>
-        : (value === 2 ? <Tag color="volcano">电台</Tag> : <Tag color="purple">视频</Tag>)
+      render: (value: 1 | 2, record: LiveInfo, index: number): ReactElement => <LiveType liveInfo={ record } />
     },
     {
       title: '时间',
