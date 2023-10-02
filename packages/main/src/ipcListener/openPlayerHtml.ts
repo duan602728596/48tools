@@ -1,5 +1,6 @@
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState';
+import type { Pocket48LiveType, Pocket48LiveMode } from '@48tools/48tools/src/services/48/enum';
 import { isTest, titleBarIcon, createHtmlFilePath, initialState as ils } from '../utils';
 import { themeEvent, type ThemeValue } from './themeChange';
 import { getStore } from '../store';
@@ -49,8 +50,8 @@ function open(title: string, query: string): void {
     commandLineOptions,
     playerInfo: <PlayerInfo>{
       ...player,
-      liveType: Number(player.liveType),
-      liveMode: Number(player.liveMode),
+      liveType: Number(player.liveType) as Pocket48LiveType,
+      liveMode: Number(player.liveMode) as Pocket48LiveMode,
       rtmpPort: player.rtmpPort ? Number(player.rtmpPort) : undefined,
       httpPort: player.httpPort ? Number(player.httpPort) : undefined,
       proxyPort: player.proxyPort ? Number(player.proxyPort) : undefined

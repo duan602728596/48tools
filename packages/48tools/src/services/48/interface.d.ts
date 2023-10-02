@@ -1,3 +1,5 @@
+import type { Pocket48LiveType, Pocket48LiveMode } from './enum';
+
 export interface Pocket48ResponseBase {
   message: string;
   status: number;
@@ -18,8 +20,8 @@ export interface LiveInfo {
   ctime: string;
   liveId: string;
   roomId: string;
-  liveType: 1 | 2 | 5; // 1：直播，2：电台，5：游戏
-  liveMode: 0 | 1;     // 0：正常，1：录屏
+  liveType: Pocket48LiveType; // 1：直播，2：电台，5：游戏
+  liveMode: Pocket48LiveMode; // 0：正常，1：录屏
   title: string;
   userInfo: UserInfo;
   inMicrophoneConnection: boolean;

@@ -1,4 +1,5 @@
 import type { CommandLineOptions } from '@48tools/main/src/commend';
+import type { Pocket48LiveType, Pocket48LiveMode } from '@48tools-api/48/enum';
 
 // 播放器窗口初始化参数
 export interface PlayerInfo {
@@ -6,8 +7,8 @@ export interface PlayerInfo {
   title: string;
   liveId: string;
   id: string;
-  liveType: number;
-  liveMode: number;
+  liveType: Pocket48LiveType;
+  liveMode: Pocket48LiveMode;
   rtmpPort: number;
   httpPort: number;
   proxyPort: number;

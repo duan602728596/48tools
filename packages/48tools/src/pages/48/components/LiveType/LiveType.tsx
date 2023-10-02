@@ -1,13 +1,14 @@
 import { Fragment, type ReactElement } from 'react';
 import { Tag } from 'antd';
+import { Pocket48LiveType, Pocket48LiveMode } from '@48tools-api/48/enum';
 import type { LiveInfo } from '@48tools-api/48';
 
-export function liveTypeRender(liveType: LiveInfo['liveType'] | number): ReactElement {
+export function liveTypeRender(liveType: Pocket48LiveType): ReactElement {
   switch (liveType) {
-    case 5:
+    case Pocket48LiveType.Game:
       return <Tag color="magenta">游戏</Tag>;
 
-    case 2:
+    case Pocket48LiveType.Radio:
       return <Tag color="volcano">电台</Tag>;
 
     default:
@@ -24,7 +25,7 @@ function LiveType(props: LiveTypeProps): ReactElement {
   const { liveInfo }: LiveTypeProps = props;
   const { liveType, liveMode, inMicrophoneConnection }: LiveInfo = liveInfo;
 
-  if (liveMode === 1) {
+  if (liveMode === Pocket48LiveMode.Record) {
     return <Tag color="blue">录屏</Tag>;
   }
 
