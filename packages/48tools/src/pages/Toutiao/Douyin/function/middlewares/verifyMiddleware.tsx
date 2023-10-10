@@ -1,8 +1,6 @@
 import { ipcRenderer, type IpcRendererEvent, type Cookie } from 'electron';
-import { requestDouyinVideo, requestDouyinUser, type DouyinHtmlResponseType } from '@48tools-api/toutiao/douyin';
 import { DouyinCookieChannel } from '@48tools/main/src/channelEnum';
 import { douyinCookie } from '../../../../../utils/toutiao/DouyinCookieStore';
-import { DouyinUrlType } from '../parser';
 import type { GetVideoUrlOnionContext } from '../../../types';
 
 /* 在新窗口弹出验证码并获取cookie */
@@ -40,22 +38,6 @@ async function verifyMiddleware(ctx: GetVideoUrlOnionContext, next: Function): P
     }
 
     douyinCookie.set(verifyCookieValue);
-
-    // 获取数据
-    let res: DouyinHtmlResponseType | undefined;
-
-    if (ctx.parseResult.type === DouyinUrlType.Video) {
-      res = await requestDouyinVideo((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCookie.toString());
-    }
-
-    if (ctx.parseResult.type === DouyinUrlType.User) {
-      res = await requestDouyinUser((u: string) => `${ u }${ ctx.parseResult.id }`, douyinCookie.toString());
-    }
-
-    if (res && res.type === 'html') {
-      ctx.html = res.html;
-    }
-
     next();
   } catch (err) {
     console.error(err);

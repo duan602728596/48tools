@@ -1,28 +1,16 @@
 import {
   requestAwemePostReturnType,
+  requestAwemeDetailReturnType,
   type AwemeItem,
   type AwemeItemRate,
   type BitRateItem,
-  type DouyinUserApiType
+  type DouyinUserApiType,
+  type DouyinDetailApiType
 } from '@48tools-api/toutiao/douyin';
 import { DouyinUrlType } from '../parser';
-import { staticUrl } from '../../../../../utils/toutiao/signUtils';
 import { douyinCookie } from '../../../../../utils/toutiao/DouyinCookieStore';
-import type {
-  ScriptRendedData,
-  CVersionObj,
-  C0Obj,
-  AwemeDetail,
-  DownloadUrlItem,
-  UserScriptRendedData,
-  UserItem1,
-  UserItem2,
-  UserDataItem,
-  GetVideoUrlOnionContext,
-  HtmlBitRateItem,
-  ImageInfo,
-  NoProtocolUrl
-} from '../../../types';
+import * as toutiaosdk from '../../../sdk/toutiaosdk';
+import type { DownloadUrlItem, GetVideoUrlOnionContext } from '../../../types';
 
 /* 有api时的渲染 */
 function userApiRender(ctx: GetVideoUrlOnionContext): void {
@@ -95,142 +83,38 @@ function detailApiRender(ctx: GetVideoUrlOnionContext): void {
 
 /* 解析RENDER_DATA */
 async function rendedDataMiddleware(ctx: GetVideoUrlOnionContext, next: Function): Promise<void> {
-  if (ctx.dataType === 'userApi' && ctx.data) {
-    return userApiRender(ctx);
-  }
+  if (ctx.dataType === 'userApi' || ctx.parseResult.type === DouyinUrlType.User) {
+    if (ctx.data) return userApiRender(ctx);
 
-  if (ctx.dataType === 'detailApi' && ctx.data) {
-    return detailApiRender(ctx);
-  }
+    const res: DouyinUserApiType = await requestAwemePostReturnType(douyinCookie.toString(), {
+      secUserId: ctx.parseResult.id,
+      maxCursor: new Date().getTime(),
+      hasMore: 1
+    });
 
-  if (!ctx.html) {
-    ctx.messageApi.error('找不到相关信息！');
-    ctx.setUrlLoading(false);
+    if (res.data) {
+      ctx.data = res.data;
+      ctx.dataType = res.type;
 
-    return;
-  }
-
-  const parseDocument: Document = new DOMParser().parseFromString(ctx.html, 'text/html');
-  const rendedData: HTMLElement | null = parseDocument.getElementById('RENDER_DATA');
-
-  if (!rendedData) {
-    ctx.messageApi.error('找不到相关信息！');
-    ctx.setUrlLoading(false);
-
-    return;
-  }
-
-  const data: string = decodeURIComponent(rendedData.innerText);
-  const json: ScriptRendedData | UserScriptRendedData = JSON.parse(data);
-
-  if (ctx.parseResult.type === DouyinUrlType.Video) {
-    // 处理视频
-    const cVersion: CVersionObj | undefined = Object.values(json).find(
-      (o: C0Obj | CVersionObj): o is CVersionObj => typeof o === 'object' && ('aweme' in o));
-
-    if (!cVersion) {
-      ctx.messageApi.error('视频相关信息解析失败！');
-      ctx.setUrlLoading(false);
-
-      return;
+      return userApiRender(ctx);
     }
-
-    const awemeDetail: AwemeDetail | undefined = cVersion?.aweme?.detail;
-
-    if (awemeDetail) {
-      const urls: DownloadUrlItem[] = [];
-
-      if (awemeDetail.video.playApi) {
-        urls.push({ label: '无水印', value: staticUrl(awemeDetail.video.playApi) });
-      }
-
-      const bitRateList: Array<HtmlBitRateItem> = awemeDetail.video.bitRateList ?? [];
-      const images: Array<ImageInfo> = awemeDetail?.images ?? [];
-
-      for (let i: number = 0, u: number = 1; i < bitRateList.length; i++) {
-        const bitRate: HtmlBitRateItem = bitRateList[i];
-
-        for (let k: number = 0; k < bitRate.playAddr.length; k++, u++) {
-          const addr: { src: NoProtocolUrl } = bitRate.playAddr[k];
-
-          urls.push({
-            label: `下载地址-${ u }(${ bitRate.width }*${ bitRate.height })`,
-            value: staticUrl(addr.src),
-            width: bitRate.width,
-            height: bitRate.height
-          });
-        }
-      }
-
-      for (let i: number = 0; i < images.length; i++) {
-        const image: ImageInfo = images[i];
-
-        for (let k: number = 0; k < image.urlList.length; k++) {
-          const addr: string = image.urlList[k];
-
-          urls.push({
-            label: `图片${ i + 1 }-下载地址${ k + 1 }${ image.width }*${ image.height })`,
-            value: addr,
-            width: image.width,
-            height: image.height,
-            isImage: true,
-            isFirstImage: i === 0
-          });
-        }
-      }
-
-      ctx.setDownloadUrl(urls);
-      ctx.setTitle(awemeDetail.desc);
-      ctx.setVisible(true);
-    } else {
-      ctx.messageApi.warning('视频不存在或解析失败！');
-    }
-  } else if (ctx.parseResult.type === DouyinUrlType.User) {
-    // 处理用户
-    const userItemArray: Array<UserItem1 | UserItem2 | string> = Object.values(json);
-    const userItem1: UserItem1 | undefined = userItemArray.find(
-      (o: UserItem1 | UserItem2 | string): o is UserItem1 => typeof o === 'object' && ('odin' in o));
-    const userItem2: UserItem2 | undefined = userItemArray.find(
-      (o: UserItem1 | UserItem2 | string): o is UserItem2 => typeof o === 'object' && ('post' in o));
-
-    if (!(userItem1 && userItem2)) {
-      ctx.messageApi.error('用户视频列表相关信息解析失败！');
-      ctx.setUrlLoading(false);
-
-      return;
-    }
-
-    // 判断是否有视频数据，现在可能已经无视频数据了，需要从api里加载
-    const userData: Array<UserDataItem> | undefined = userItem2?.post?.data;
-
-    if (userData) {
-      ctx.setUserVideoList(userItem2.post.data);
-      ctx.setVideoQuery({
-        secUserId: userItem2.uid,
-        maxCursor: userItem2.post.maxCursor,
-        hasMore: userItem2.post.hasMore
-      });
-      ctx.setUserTitle(userItem2.user.user.nickname);
-      ctx.setUserModalVisible(true);
-    } else {
-      const douyinResponse: DouyinUserApiType = await requestAwemePostReturnType(douyinCookie.toString(), {
-        secUserId: ctx.parseResult.id,
-        maxCursor: new Date().getTime(),
-        hasMore: 1
-      });
-
-      if (douyinResponse.data) {
-        ctx.data = douyinResponse.data;
-        ctx.dataType = douyinResponse.type;
-        userApiRender(ctx);
-      } else {
-        ctx.messageApi.warning('用户不存在或解析失败！');
-      }
-    }
-  } else {
-    ctx.messageApi.warning('无法解析该地址！');
   }
 
+  if (ctx.dataType === 'detailApi' || ctx.parseResult.type === DouyinUrlType.Video) {
+    if (ctx.data) return detailApiRender(ctx);
+
+    const signature: string = await toutiaosdk.acrawler('sign', ['', douyinCookie.toString()]);
+    const res: DouyinDetailApiType = await requestAwemeDetailReturnType(douyinCookie.toString(), ctx.parseResult.id, signature);
+
+    if (res.data) {
+      ctx.data = res.data;
+      ctx.dataType = res.type;
+
+      return detailApiRender(ctx);
+    }
+  }
+
+  ctx.messageApi.error('找不到相关信息！');
   ctx.setUrlLoading(false);
 }
 
