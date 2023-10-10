@@ -81,7 +81,9 @@ function DouyinLive(props: {}): ReactElement {
 
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[抖音直播]${ options.item.roomId }_${ time }.${ options.type === 'm3u8' ? 'ts' : 'flv' }`
+        defaultPath: `[抖音直播]${ options.item.roomId }_${ options.item.description }_${ time }.${
+          options.type === 'm3u8' ? 'ts' : 'flv'
+        }`
       });
 
       if (result.canceled || !result.filePath) return;
