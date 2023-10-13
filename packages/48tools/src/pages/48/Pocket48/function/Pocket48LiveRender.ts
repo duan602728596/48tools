@@ -1,6 +1,6 @@
 import { ipcRenderer, type IpcRendererEvent } from 'electron';
 import { Pocket48LiveRemoteHandleChannel } from '@48tools/main/src/channelEnum';
-import type { _UtilObject } from '@48tools/main/src/logProtocol/logTemplate/ffmpeg';
+import type { _UtilObject } from '../../../../../../main/src/logProtocol/logTemplate/ffmpeg.mjs';
 import { _ffmpegLogProtocol } from '../../../../utils/logProtocol/logActions';
 
 export interface Pocket48LiveArgs {

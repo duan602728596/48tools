@@ -1,5 +1,5 @@
 import { ipcMain, type BrowserWindow, type IpcMainEvent } from 'electron';
-import { WinIpcChannel } from '../channelEnum';
+import { WinIpcChannel } from '../channelEnum.js';
 
 /* 打开开发者工具 */
 function openDevTools(win: BrowserWindow): void {

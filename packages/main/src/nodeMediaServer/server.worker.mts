@@ -1,7 +1,7 @@
 import { workerData } from 'node:worker_threads';
 import type * as NodeMediaServerType from 'node-media-server';
-import asarNodeRequire from '../asarNodeRequire';
-import type { NodeMediaServerArg } from './nodeMediaServer';
+import asarNodeRequire from '../asarNodeRequire.mjs';
+import type { NodeMediaServerArg } from './nodeMediaServer.mjs';
 
 const NodeMediaServer: typeof NodeMediaServerType = asarNodeRequire('node-media-server');
 

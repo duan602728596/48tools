@@ -10,7 +10,7 @@ import {
   type MessageBoxOptions,
   type MessageBoxReturnValue
 } from 'electron';
-import { IpcRemoteHandleChannel } from '../channelEnum';
+import { IpcRemoteHandleChannel } from '../channelEnum.js';
 
 /* Remote方法的迁移 */
 function ipcRemoteHandle(win: BrowserWindow): void {

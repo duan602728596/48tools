@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
-import { getStore } from '../store';
-import { WinIpcChannel } from '../channelEnum';
+import { getStore } from '../store.mjs';
+import { WinIpcChannel } from '../channelEnum.js';
 
 export type ThemeValue = 'light' | 'dark' | 'system';
 

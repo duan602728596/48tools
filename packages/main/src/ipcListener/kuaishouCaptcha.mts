@@ -6,8 +6,8 @@ import {
   type IpcMainEvent,
   type Cookie
 } from 'electron';
-import { pcUserAgent } from '../utils';
-import { KuaishouCookieChannel } from '../channelEnum';
+import { pcUserAgent } from '../utils.mjs';
+import { KuaishouCookieChannel } from '../channelEnum.js';
 
 const kuaishouUrl: string = 'https://www.kuaishou.com';
 let kuaishouWin: BrowserWindow | null = null;

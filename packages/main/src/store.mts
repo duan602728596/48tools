@@ -1,5 +1,5 @@
-import * as ElectronStore from 'electron-store';
-import type { ThemeValue } from './ipcListener/themeChange';
+import ElectronStore from 'electron-store';
+import type { ThemeValue } from './ipcListener/themeChange.mjs';
 
 /* 本地存储 */
 interface StoreRecord {

@@ -40,11 +40,12 @@ module.exports = {
     }
   },
   globals: {
-    NodeJS: 'readonly'
+    NodeJS: 'readonly',
+    NodeRequire: 'readonly'
   },
   overrides: [
     {
-      files: ['*.ts', '*.tsx', '.mts', '.cts'],
+      files: ['*.ts', '*.tsx', '*.mts', '*.cts'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
         project: 'tsconfig.json',

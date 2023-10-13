@@ -1,5 +1,5 @@
 import got, { type Response as GotResponse } from 'got';
-import type { _PlayUrlObject } from '@48tools/main/src/logProtocol/logTemplate/bilibiliLive';
+import type { _PlayUrlObject } from '../../../../../main/src/logProtocol/logTemplate/bilibiliLive.mjs';
 import { getBilibiliCookie } from '../../../utils/utils';
 import { _bilibiliLiveLogProtocol } from '../../../utils/logProtocol/logActions';
 import type { RoomInit, RoomPlayUrl } from './interface';

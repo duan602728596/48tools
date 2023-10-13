@@ -1,10 +1,17 @@
 import * as path from 'node:path';
 import * as process from 'node:process';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import 'asar-node';
+
+/* 模块帮助 */
+export const require: NodeRequire = createRequire(import.meta.url);
+const filename: string = fileURLToPath(import.meta.url);
+const dirname: string = path.dirname(filename);
 
 /* 判断是开发环境还是生产环境 */
 const isDevelopment: boolean = process.env.NODE_ENV === 'development';
-const asarDir: string = path.join(__dirname, '../../app.asar');
+const asarDir: string = path.join(dirname, '../../app.asar');
 const asarDirNodeModules: string = path.join(asarDir, 'node_modules');
 
 /**

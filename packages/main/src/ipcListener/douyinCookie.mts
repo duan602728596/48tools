@@ -1,6 +1,6 @@
 import { BrowserWindow, type Session, type Cookie, ipcMain, type IpcMainEvent } from 'electron';
-import { pcUserAgent } from '../utils';
-import { DouyinCookieChannel } from '../channelEnum';
+import { pcUserAgent } from '../utils.mjs';
+import { DouyinCookieChannel } from '../channelEnum.js';
 
 const douyinUrl: string = 'https://www.douyin.com/user/MS4wLjABAAAA6-qJnU8aVPJ4chZQFIyuVHSB3_K3w1rH_L_IuLjaswk';
 let douyinWin: BrowserWindow | null = null;

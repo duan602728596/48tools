@@ -1,6 +1,6 @@
 import { protocol, type Protocol } from 'electron';
-import { playUrlLogTemplate } from './logTemplate/bilibiliLive';
-import { utilLogTemplate } from './logTemplate/ffmpeg';
+import { playUrlLogTemplate } from './logTemplate/bilibiliLive.mjs';
+import { utilLogTemplate } from './logTemplate/ffmpeg.mjs';
 
 /* template方法 */
 const template: Record<string, Record<string, (t: string, fn: string, d: string) => string>> = {

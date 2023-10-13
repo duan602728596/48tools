@@ -1,5 +1,5 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
-import type { _UtilObject } from '../../../../../main/src/logProtocol/logTemplate/ffmpeg';
+import type { _UtilObject } from '../../../../../main/src/logProtocol/logTemplate/ffmpeg.mjs';
 import { _ffmpegLogProtocol } from '../../logProtocol/logActions';
 
 const _stdout: Array<string> = [];

@@ -1,6 +1,6 @@
 import { ipcMain, type IpcMainInvokeEvent, type BrowserWindow } from 'electron';
-import { Pocket48LiveMain, pocket48LiveMap, type Pocket48LiveArgs } from '../pocket48Live/Pocket48LiveMain';
-import { Pocket48LiveRemoteHandleChannel } from '../channelEnum';
+import { Pocket48LiveMain, pocket48LiveMap, type Pocket48LiveArgs } from '../pocket48Live/Pocket48LiveMain.mjs';
+import { Pocket48LiveRemoteHandleChannel } from '../channelEnum.js';
 
 /* 开启子线程 */
 function pocket48LiveRemoteHandle(win: BrowserWindow): void {

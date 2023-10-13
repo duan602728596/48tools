@@ -1,13 +1,13 @@
 import { ipcMain, type BrowserWindow } from 'electron';
-import openDevTools from './ipcListener/openDevTools';
-import openPlayerHtml from './ipcListener/openPlayerHtml';
-import openPlayerDevTools from './ipcListener/openPlayerDevTools';
-import themeChange from './ipcListener/themeChange';
-import weiboLogin from './ipcListener/weiboLogin';
-import nodeMediaServer from './nodeMediaServer/nodeMediaServer';
-import proxyServer from './proxyServer/proxyServer';
-import { kuaishouCaptchaCookie } from './ipcListener/kuaishouCaptcha';
-import { douyinCaptchaCookie } from './ipcListener/douyinCookie';
+import openDevTools from './ipcListener/openDevTools.mjs';
+import openPlayerHtml from './ipcListener/openPlayerHtml.mjs';
+import openPlayerDevTools from './ipcListener/openPlayerDevTools.mjs';
+import themeChange from './ipcListener/themeChange.mjs';
+import weiboLogin from './ipcListener/weiboLogin.mjs';
+import nodeMediaServer from './nodeMediaServer/nodeMediaServer.mjs';
+import proxyServer from './proxyServer/proxyServer.mjs';
+import { kuaishouCaptchaCookie } from './ipcListener/kuaishouCaptcha.mjs';
+import { douyinCaptchaCookie } from './ipcListener/douyinCookie.mjs';
 import {
   DouyinCookieChannel,
   KuaishouCookieChannel,
@@ -15,7 +15,7 @@ import {
   WeiboLoginChannel,
   NodeMediaServerChannel,
   ProxyServerChannel
-} from './channelEnum';
+} from './channelEnum.js';
 
 // 移除所有监听的通信
 const removeListenerChannel: Array<string | DouyinCookieChannel> = [

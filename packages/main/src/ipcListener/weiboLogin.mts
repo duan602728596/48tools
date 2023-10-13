@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain, nativeTheme, type Session, type Cookie, type IpcMainEvent } from 'electron';
-import { pcUserAgent } from '../utils';
-import { WeiboLoginChannel } from '../channelEnum';
+import { pcUserAgent } from '../utils.mjs';
+import { WeiboLoginChannel } from '../channelEnum.js';
 
 const weiboUrl: string = 'https://weibo.com/';
 let weiboLoginWin: BrowserWindow | null = null;

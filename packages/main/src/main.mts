@@ -1,15 +1,15 @@
 import * as process from 'node:process';
 import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
-import { isDevelopment, isTest, wwwPath, titleBarIcon, createHtmlFilePath, initialState as ils, packageJson } from './utils';
-import { ipc, removeIpc } from './ipc';
-import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle';
-import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle';
-import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer';
-import weiboResourceRequestInit from './webRequest/weiboResourceRequest';
-import { storeInit, getStore } from './store';
-import logProtocol from './logProtocol/logProtocol';
-import { commandLineOptions } from './commend';
-import type { ThemeValue } from './ipcListener/themeChange';
+import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, initialState as ils, packageJson } from './utils.mjs';
+import { ipc, removeIpc } from './ipc.mjs';
+import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle.mjs';
+import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle.mjs';
+import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer.mjs';
+import weiboResourceRequestInit from './webRequest/weiboResourceRequest.mjs';
+import { storeInit, getStore } from './store.mjs';
+import logProtocol from './logProtocol/logProtocol.mjs';
+import { commandLineOptions } from './commend.mjs';
+import type { ThemeValue } from './ipcListener/themeChange.mjs';
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
 

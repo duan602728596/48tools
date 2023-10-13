@@ -1,4 +1,4 @@
-import type { CommandLineOptions } from '@48tools/main/src/commend';
+import type { CommandLineOptions } from '../../../../../main/src/commend.mjs';
 import type { Pocket48LiveType, Pocket48LiveMode } from '@48tools-api/48/enum';
 
 // 播放器窗口初始化参数

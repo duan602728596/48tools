@@ -1,6 +1,6 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { workerData, parentPort } from 'node:worker_threads';
-import type { Pocket48LiveArgs } from './Pocket48LiveMain';
+import type { Pocket48LiveArgs } from './Pocket48LiveMain.mjs';
 
 /**
  * 在软件主进场开启子线程下载视频

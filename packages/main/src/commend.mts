@@ -1,7 +1,8 @@
 import * as process from 'process';
-import * as commandLineArgs from 'command-line-args';
+// @ts-ignore
+import commandLineArgs from 'command-line-args';
 import type { OptionDefinition, CommandLineOptions as _CommandLineOptions } from 'command-line-args';
-import { isDevelopment, isTest } from './utils';
+import { isDevelopment, isTest } from './utils.mjs';
 
 /* 解析命令行 */
 const optionDefinitions: Array<OptionDefinition> = [

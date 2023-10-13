@@ -1,9 +1,10 @@
 import * as path from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { ipcMain, type IpcMainEvent } from 'electron';
-import { isDevelopment, workerProductionBasePath } from '../utils';
-import { ProxyServerChannel } from '../channelEnum';
+import { isDevelopment, workerProductionBasePath, metaHelper, type MetaHelperResult } from '../utils.mjs';
+import { ProxyServerChannel } from '../channelEnum.js';
 
+const { __dirname }: MetaHelperResult = metaHelper(import.meta.url);
 let proxyServerWorker: Worker | null = null; // proxy-server服务线程
 
 export interface ProxyServerArg {
@@ -25,8 +26,8 @@ function proxyServer(): void {
 
     proxyServerWorker = new Worker(
       isDevelopment
-        ? path.join(__dirname, 'httpProxyServer.worker.js')
-        : path.join(workerProductionBasePath, 'proxyServer/httpProxyServer.worker.js'),
+        ? path.join(__dirname, 'httpProxyServer.worker.mjs')
+        : path.join(workerProductionBasePath, 'proxyServer/httpProxyServer.worker.mjs'),
       {
         workerData: arg
       }

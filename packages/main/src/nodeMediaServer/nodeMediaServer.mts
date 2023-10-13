@@ -1,9 +1,10 @@
 import * as path from 'node:path';
 import { Worker } from 'node:worker_threads';
 import { ipcMain, type IpcMainEvent } from 'electron';
-import { isDevelopment, workerProductionBasePath } from '../utils';
-import { NodeMediaServerChannel } from '../channelEnum';
+import { isDevelopment, workerProductionBasePath, metaHelper, type MetaHelperResult } from '../utils.mjs';
+import { NodeMediaServerChannel } from '../channelEnum.js';
 
+const { __dirname }: MetaHelperResult = metaHelper(import.meta.url);
 let nodeMediaServerWorker: Worker | null = null; // node-media-server服务线程
 
 export interface NodeMediaServerArg {
@@ -28,8 +29,8 @@ function nodeMediaServer(): void {
     // 对多线程的处理，参考https://github.com/electron/electron/issues/22446
     nodeMediaServerWorker = new Worker(
       isDevelopment
-        ? path.join(__dirname, 'server.worker.js')
-        : path.join(workerProductionBasePath, 'nodeMediaServer/server.worker.js'),
+        ? path.join(__dirname, 'server.worker.mjs')
+        : path.join(workerProductionBasePath, 'nodeMediaServer/server.worker.mjs'),
       {
         workerData: {
           ...arg,

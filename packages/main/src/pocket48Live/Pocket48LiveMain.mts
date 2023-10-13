@@ -1,8 +1,10 @@
 import { Worker } from 'node:worker_threads';
 import * as path from 'node:path';
 import type { BrowserWindow } from 'electron';
-import { isDevelopment, workerProductionBasePath } from '../utils';
-import { Pocket48LiveRemoteHandleChannel } from '../channelEnum';
+import { isDevelopment, workerProductionBasePath, metaHelper, type MetaHelperResult } from '../utils.mjs';
+import { Pocket48LiveRemoteHandleChannel } from '../channelEnum.js';
+
+const { __dirname }: MetaHelperResult = metaHelper(import.meta.url);
 
 /* 缓存子线程 */
 export const pocket48LiveMap: Map<string, Pocket48LiveMain> = new Map();
@@ -53,8 +55,8 @@ export class Pocket48LiveMain {
     this.win = win;
     this.worker = new Worker(
       isDevelopment
-        ? path.join(__dirname, 'liveDownload.worker.js')
-        : path.join(workerProductionBasePath, 'pocket48Live/liveDownload.worker.js'),
+        ? path.join(__dirname, 'liveDownload.worker.mjs')
+        : path.join(workerProductionBasePath, 'pocket48Live/liveDownload.worker.mjs'),
       {
         workerData: {
           playStreamPath: this.playStreamPath,
