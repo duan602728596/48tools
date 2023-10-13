@@ -75,14 +75,7 @@ function config(outputDir, target) {
       app: wwwDir,
       output: outputDir
     },
-    // 解压node-media-server服务线程使用的文件
-    asarUnpack: [
-      'node_modules/asar-node',
-      'boot/asarNodeRequire.js',
-      'boot/nodeMediaServer/server.worker.js',
-      'boot/proxyServer/httpProxyServer.worker.js',
-      'boot/pocket48Live/liveDownload.worker.js'
-    ]
+    asar: false
   };
 
   // 重写编译目标

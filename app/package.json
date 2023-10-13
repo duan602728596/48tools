@@ -7,9 +7,8 @@
     "name": "段昊辰",
     "email": "duanhaochen@126.com"
   },
-  "main": "boot/main.js",
+  "main": "boot/main.mjs",
   "dependencies": {
-    "asar-node": "^3.1.1",
     "command-line-args": "^5.2.1",
     "electron-store": "^8.1.0",
     "fluent-ffmpeg": "^2.1.2",

@@ -20,7 +20,6 @@ export function metaHelper(metaUrl: string): MetaHelperResult {
 
 const { __dirname }: MetaHelperResult = metaHelper(import.meta.url);
 
-
 /* 判断是开发环境还是生产环境 */
 export const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 
@@ -30,8 +29,12 @@ export const isTest: boolean = process.env.TEST === 'true';
 /* 文件夹路径 */
 export const wwwPath: string = path.join(__dirname, '..');
 
-/* worker.js文件路径 */
-export const workerProductionBasePath: string = path.join(process.resourcesPath, 'app.asar.unpacked/boot');
+/**
+ * worker.js文件路径
+ * 有asar文件：app.asar.unpacked
+ * 无asar文件：app
+ */
+export const workerProductionBasePath: string = path.join(process.resourcesPath, 'app/boot');
 
 /* 图标文件 */
 export const titleBarIcon: string | undefined = isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png');

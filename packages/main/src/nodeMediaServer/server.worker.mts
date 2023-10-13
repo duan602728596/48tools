@@ -1,9 +1,6 @@
 import { workerData } from 'node:worker_threads';
-import type * as NodeMediaServerType from 'node-media-server';
-import asarNodeRequire from '../asarNodeRequire.mjs';
+import NodeMediaServer from 'node-media-server';
 import type { NodeMediaServerArg } from './nodeMediaServer.mjs';
-
-const NodeMediaServer: typeof NodeMediaServerType = asarNodeRequire('node-media-server');
 
 interface WorkerData extends NodeMediaServerArg {
   isDevelopment: boolean;
@@ -13,7 +10,7 @@ interface WorkerData extends NodeMediaServerArg {
 const { ffmpeg, rtmpPort, httpPort }: WorkerData = workerData;
 
 // node-media-server
-const server: NodeMediaServerType = new NodeMediaServer({
+const server: NodeMediaServer = new NodeMediaServer({
   logType: 1,
   rtmp: {
     port: rtmpPort,
