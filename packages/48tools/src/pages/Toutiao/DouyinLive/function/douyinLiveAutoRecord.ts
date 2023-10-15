@@ -13,7 +13,7 @@ import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 async function douyinLiveAutoRecord(): Promise<void> {
   const { dispatch, getState }: Store = store;
   const { liveList }: LiveSliceInitialState = getState().douyinLive;
-  const bilibiliAutoRecordSavePath: string = localStorage.getItem('DOUYIN_LIVE_AUTO_RECORD_SAVE_PATH')!;
+  const douyinAutoRecordSavePath: string = localStorage.getItem('DOUYIN_LIVE_AUTO_RECORD_SAVE_PATH')!;
 
   await requestTtwidCookie(); // 获取ttwid的cookie
 
@@ -48,7 +48,7 @@ async function douyinLiveAutoRecord(): Promise<void> {
         worker.postMessage({
           type: 'start',
           playStreamPath: resInit.data.data[0].stream_url.flv_pull_url.FULL_HD1,
-          filePath: path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
+          filePath: path.join(douyinAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
           ffmpeg: getFFmpeg(),
           ua: true
         });
