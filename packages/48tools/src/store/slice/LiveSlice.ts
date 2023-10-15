@@ -48,7 +48,6 @@ export class LiveSlice<SliceName extends string> {
 
   public adapter: EntityAdapter<WebWorkerChildItem, string>;
   public selectors: EntitySelectors<WebWorkerChildItem, LiveSliceEntityState, string>;
-  public initialState: LiveSliceInitialState;
   public ignoredPaths: Array<string>;
   public ignoredActions: Array<string>;
 
@@ -70,10 +69,6 @@ export class LiveSlice<SliceName extends string> {
       selectId: (item: WebWorkerChildItem): string => item.id
     });
     this.selectors = this.adapter.getSelectors();
-    this.initialState = this.adapter.getInitialState({
-      liveList: [],
-      autoRecordTimer: null
-    });
     this.ignoredPaths = [
       `${ this.sliceName }.entities`,
       `${ this.sliceName }.autoRecordTimer`
@@ -89,7 +84,10 @@ export class LiveSlice<SliceName extends string> {
 
     this.slice = createSlice({
       name: this.sliceName,
-      initialState: this.initialState,
+      initialState: this.adapter.getInitialState({
+        liveList: [],
+        autoRecordTimer: null
+      }) as LiveSliceInitialState,
       reducers: {
         setAddWorkerItem: this.setAddWorkerItem,
         setRemoveWorkerItem: this.setRemoveWorkerItem,
@@ -188,7 +186,7 @@ export class LiveSlice<SliceName extends string> {
       state.autoRecordTimer = action.payload;
     };
 
-  get _workerList(): Array<WebWorkerChildItem> {
-    return this.selectors.selectAll(this.initialState);
+  getWorkerList(state: LiveSliceInitialState): Array<WebWorkerChildItem> {
+    return this.selectors.selectAll(state);
   }
 }

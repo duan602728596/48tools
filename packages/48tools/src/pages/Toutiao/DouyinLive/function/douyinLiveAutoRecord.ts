@@ -20,7 +20,8 @@ async function douyinLiveAutoRecord(): Promise<void> {
   for (const record of liveList) {
     if (!record.autoRecord) continue;
 
-    const index: number = liveSlice._workerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
+    const index: number = liveSlice.getWorkerList(getState().douyinLive)
+      .findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) continue;
 
