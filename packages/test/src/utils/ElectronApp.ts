@@ -21,7 +21,7 @@ class ElectronApp {
   async init(options?: InitOptions): Promise<void> {
     this.mediaDir && await fse.ensureDir(this.mediaDir);
     this.electronApp = await electron.launch({
-      args: [path.join(__dirname, '../../../main/lib/main.js')],
+      args: [path.join(__dirname, '../../../main/lib/main.mjs')],
       env: {
         NODE_ENV: 'development',
         TEST: 'true'
