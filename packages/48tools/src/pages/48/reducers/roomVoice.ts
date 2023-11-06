@@ -25,7 +25,7 @@ export const roomVoiceListSelectors: EntitySelectors<WebWorkerChildItem, RoomVoi
 
 export interface RoomVoiceInitialState extends RoomVoiceEntityState {
   roomVoice: Array<RoomVoiceItem>;
-  isAutoRecord: boolean;
+  autoRecordTimer: number | null;
 }
 
 type SliceReducers = {
@@ -35,15 +35,15 @@ type SliceReducers = {
   setAddRoomVoice: CaseReducer<RoomVoiceInitialState, PayloadAction<{ data: RoomVoiceItem }>>;
   setUpdateRoomVoice: CaseReducer<RoomVoiceInitialState, PayloadAction<{ data: RoomVoiceItem }>>;
   setDeleteRoomVoiceFromDB: CaseReducer<RoomVoiceInitialState, PayloadAction<{ query: string }>>;
-  setAutoRecord: CaseReducer<RoomVoiceInitialState, PayloadAction<boolean>>;
+  setAutoRecord: CaseReducer<RoomVoiceInitialState, PayloadAction<number | null>>;
 };
 
 const sliceName: 'roomVoice' = 'roomVoice';
 const { actions, reducer }: Slice<RoomVoiceInitialState, SliceReducers, typeof sliceName> = createSlice({
   name: sliceName,
   initialState: roomVoiceWorkerListAdapter.getInitialState({
-    roomVoice: [],      // 从数据库中查找的记录serverId和channel的列表
-    isAutoRecord: false // 自动抓取
+    roomVoice: [],        // 从数据库中查找的记录serverId和channel的列表
+    autoRecordTimer: null // 自动抓取
   }),
   reducers: {
     setAddDownloadWorker: roomVoiceWorkerListAdapter.addOne,       // 添加下载
@@ -88,9 +88,17 @@ const { actions, reducer }: Slice<RoomVoiceInitialState, SliceReducers, typeof s
       }
     },
 
-    // 自动抓取
-    setAutoRecord(state: RoomVoiceInitialState, action: PayloadAction<boolean>): void {
-      state.isAutoRecord = action.payload;
+    // 自动抓取定时器
+    setAutoRecord(state: RoomVoiceInitialState, action: PayloadAction<number | null>): void {
+      if (typeof action.payload === 'number') {
+        state.autoRecordTimer = action.payload;
+      } else {
+        if (typeof state.autoRecordTimer === 'number') {
+          window.clearInterval(state.autoRecordTimer);
+        }
+
+        state.autoRecordTimer = null;
+      }
     }
   }
 });

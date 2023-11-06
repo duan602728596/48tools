@@ -90,7 +90,7 @@ const { actions, reducer }: Slice<Pocket48InitialState, SliceReducers, typeof sl
         state.autoGrabTimer = action.payload;
       } else {
         if (typeof state.autoGrabTimer === 'number') {
-          clearInterval(state.autoGrabTimer);
+          window.clearInterval(state.autoGrabTimer);
         }
 
         state.autoGrabTimer = null;

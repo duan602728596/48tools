@@ -14,10 +14,11 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Popconfirm, Table, notification, Checkbox } from 'antd';
+import { Button, message, Popconfirm, Table, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import type { UseMessageReturnType, UseNotificationReturnType } from '@48tools-types/antd';
+import type { MessageInstance } from 'antd/es/message/interface';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import {
   requestServerJump,
@@ -39,6 +40,7 @@ import {
   IDBDeleteRoomVoiceInfo,
   setAddDownloadWorker,
   setRemoveDownloadWorker,
+  setAutoRecord,
   roomVoiceListSelectors,
   type RoomVoiceInitialState
 } from '../reducers/roomVoice';
@@ -52,7 +54,7 @@ import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes'
 let serverSearchTimer: NodeJS.Timeout | null = null; // 搜索
 
 /* redux selector */
-type RSelector = Pick<RoomVoiceInitialState, 'roomVoice' | 'isAutoRecord'> & {
+type RSelector = Pick<RoomVoiceInitialState, 'roomVoice' | 'autoRecordTimer'> & {
   roomVoiceWorkerList: Array<WebWorkerChildItem>;
 };
 type RState = { roomVoice: RoomVoiceInitialState };
@@ -65,15 +67,14 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   roomVoice: ({ roomVoice }: RState): Array<RoomVoiceItem> => roomVoice.roomVoice,
 
   // 自动录制
-  isAutoRecord: ({ roomVoice }: RState): boolean => roomVoice.isAutoRecord
+  autoRecordTimer: ({ roomVoice }: RState): number | null => roomVoice.autoRecordTimer
 });
 
 /* 口袋房间电台 */
 function Voice(props: {}): ReactElement {
-  const { roomVoice, roomVoiceWorkerList, isAutoRecord }: RSelector = useSelector(selector);
+  const { roomVoice, roomVoiceWorkerList, autoRecordTimer }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [notificationApi, notificationContextHolder]: UseNotificationReturnType = notification.useNotification();
   const [searchLoading, setSearchLoading]: [boolean, D<S<boolean>>] = useState(false); // 搜索的loading状态
   const [searchResult, setSearchResult]: [Array<ServerApiItem>, D<S<ServerApiItem[]>>] = useState([]); // 搜索结果
   const [searchValue, setSearchValue]: [DefaultOptionType | undefined, D<S<DefaultOptionType | undefined>>]
@@ -90,7 +91,12 @@ function Voice(props: {}): ReactElement {
 
     if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 
-    startAutoRecord(messageApi, notificationApi, result.filePaths[0]);
+    const args: [MessageInstance, string] = [messageApi, result.filePaths[0]];
+
+    messageApi.info('开始自动抓取。');
+    (await startAutoRecord(...args)) && dispatch(setAutoRecord(
+      window.setInterval(startAutoRecord, 3 * 60_000, ...args)
+    ));
   }
 
   // 删除serverId和channelId
@@ -246,7 +252,7 @@ function Voice(props: {}): ReactElement {
       width: '15%',
       render: (value: boolean, record: RoomVoiceItem, index: number): ReactElement => (
         <Checkbox checked={ value }
-          disabled={ isAutoRecord }
+          disabled={ typeof autoRecordTimer === 'number' }
           onChange={ (event: CheckboxChangeEvent): void => handleAutoRecordCheck(record, event) }
         />
       )
@@ -305,7 +311,7 @@ function Voice(props: {}): ReactElement {
         <Button.Group className="mx-[8px]">
           <Button onClick={ handleSaveClick }>保存</Button>
           {
-            isAutoRecord
+            typeof autoRecordTimer === 'number'
               ? <Button type="primary" danger={ true } onClick={ handleStopAutoRecordClick }>停止录制</Button>
               : <Button type="primary" onClick={ handleStartAutoRecordClick }>自动录制</Button>
           }
@@ -322,7 +328,6 @@ function Voice(props: {}): ReactElement {
         }}
       />
       { messageContextHolder }
-      { notificationContextHolder }
     </Fragment>
   );
 }
