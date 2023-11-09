@@ -20,6 +20,7 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
+import * as classNames from 'classnames';
 import {
   requestServerJump,
   requestServerSearch,
@@ -30,6 +31,7 @@ import {
   type VoiceOperate
 } from '@48tools-api/48';
 import { showSaveDialog, showOpenDialog } from '../../../utils/remote/dialog';
+import commonStyle from '../../../common.sass';
 import Header from '../../../components/Header/Header';
 import Pocket48Login from '../../../functionalComponents/Pocket48Login/Pocket48Login';
 import FixSelect from '../components/FixSelect/FixSelect';
@@ -56,6 +58,7 @@ let serverSearchTimer: NodeJS.Timeout | null = null; // 搜索
 /* redux selector */
 type RSelector = Pick<RoomVoiceInitialState, 'roomVoice' | 'autoRecordTimer'> & {
   roomVoiceWorkerList: Array<WebWorkerChildItem>;
+  roomVoiceAutoRecordLength: number;
 };
 type RState = { roomVoice: RoomVoiceInitialState };
 
@@ -66,13 +69,20 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 数据库保存的数据
   roomVoice: ({ roomVoice }: RState): Array<RoomVoiceItem> => roomVoice.roomVoice,
 
+  // 允许自动录制的人数
+  roomVoiceAutoRecordLength: ({ roomVoice }: RState): number => {
+    const list: Array<RoomVoiceItem> = roomVoice.roomVoice.filter((o: RoomVoiceItem): boolean => !!o.autoRecord);
+
+    return list.length;
+  },
+
   // 自动录制
   autoRecordTimer: ({ roomVoice }: RState): number | null => roomVoice.autoRecordTimer
 });
 
 /* 口袋房间电台 */
 function Voice(props: {}): ReactElement {
-  const { roomVoice, roomVoiceWorkerList, autoRecordTimer }: RSelector = useSelector(selector);
+  const { roomVoice, roomVoiceWorkerList, roomVoiceAutoRecordLength, autoRecordTimer }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [searchLoading, setSearchLoading]: [boolean, D<S<boolean>>] = useState(false); // 搜索的loading状态
@@ -252,7 +262,7 @@ function Voice(props: {}): ReactElement {
       width: '15%',
       render: (value: boolean, record: RoomVoiceItem, index: number): ReactElement => (
         <Checkbox checked={ value }
-          disabled={ typeof autoRecordTimer === 'number' }
+          disabled={ typeof autoRecordTimer === 'number' || (!record.autoRecord && roomVoiceAutoRecordLength >= 5) }
           onChange={ (event: CheckboxChangeEvent): void => handleAutoRecordCheck(record, event) }
         />
       )
@@ -318,6 +328,9 @@ function Voice(props: {}): ReactElement {
         </Button.Group>
         <Pocket48Login />
       </Header>
+      <p className={ classNames('text-[12px]', commonStyle.tips) }>
+        为了避免对服务器造成压力，自动录制最多支持选择5位成员。
+      </p>
       <Table size="middle"
         columns={ columns }
         dataSource={ roomVoice }

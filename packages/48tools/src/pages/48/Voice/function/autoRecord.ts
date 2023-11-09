@@ -71,7 +71,8 @@ async function record(messageApi: MessageInstance, voiceItem: RoomVoiceItem, sav
  */
 export async function startAutoRecord(messageApi: MessageInstance, saveDir: string): Promise<boolean> {
   const roomVoice: Array<RoomVoiceItem> = store.getState().roomVoice.roomVoice
-    .filter((o: RoomVoiceItem): boolean => !!o.autoRecord);
+    .filter((o: RoomVoiceItem): boolean => !!o.autoRecord)
+    .slice(0, 5);
   const userInfo: UserInfo | null = store.getState().pocket48Login.userInfo;
 
   if (!userInfo) {
