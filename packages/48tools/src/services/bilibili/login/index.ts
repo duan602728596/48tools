@@ -5,9 +5,10 @@ export type * from './interface';
 
 // 获取登陆二维码地址
 export async function requestLoginUrl(): Promise<LoginUrl> {
-  const res: GotResponse<LoginUrl> = await got.get('https://passport.bilibili.com/qrcode/getLoginUrl', {
-    responseType: 'json'
-  });
+  const res: GotResponse<LoginUrl> = await got.get(
+    'https://passport.bilibili.com/x/passport-login/web/qrcode/generate?source=main-fe-header', {
+      responseType: 'json'
+    });
 
   return res.body;
 }
@@ -18,13 +19,17 @@ export async function requestLoginUrl(): Promise<LoginUrl> {
  */
 export async function requestLoginInfo(oauthKey: string): Promise<[LoginInfo, Array<string>]> {
   const query: string = new URLSearchParams({
-    oauthKey,
-    gourl: 'https%3A%2F%2Fwww.bilibili.com%2F'
+    qrcode_key: oauthKey,
+    source: 'main-fe-header'
   }).toString();
-  const res: GotResponse<string> = await got(`https://passport.bilibili.com/qrcode/getLoginInfo?${ query }`, {
-    method: 'POST',
-    responseType: 'text'
-  });
+  const res: GotResponse<LoginInfo> = await got(
+    `https://passport.bilibili.com/x/passport-login/web/qrcode/poll?${ query }`, {
+      method: 'GET',
+      responseType: 'json',
+      headers: {
+        Referer: 'https://www.bilibili.com/'
+      }
+    });
 
-  return [JSON.parse(res.body), res.headers['set-cookie']!];
+  return [res.body, res.headers['set-cookie']!];
 }

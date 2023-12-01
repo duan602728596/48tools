@@ -45,7 +45,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   async function getLoginInfo(): Promise<void> {
     const [res, cookieArr]: [LoginInfo, Array<string>] = await requestLoginInfo(oauthKey!);
 
-    if (res.status) {
+    if (res.data.code === 0) {
       const time: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const cookie: string = cookieArr.map((o: string): string => o.split(/;\s*/)[0]).join('; ');
 
@@ -70,7 +70,7 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     const loginUrlRes: LoginUrl = await requestLoginUrl();
 
     await toCanvasPromise(canvasRef.current, loginUrlRes.data.url);
-    oauthKey = loginUrlRes.data.oauthKey;
+    oauthKey = loginUrlRes.data.qrcode_key;
     loginInfoTimer = setTimeout(getLoginInfo, 1_000);
     resetCreateQrcodeTimer = setTimeout(createQrcode, 120_000);
   }

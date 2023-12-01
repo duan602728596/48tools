@@ -1,15 +1,17 @@
 export interface LoginUrl {
   code: number;
-  status: boolean;
-  ts: number;
+  message: string;
   data: {
     url: string;
-    oauthKey: string;
+    qrcode_key: string;
   };
 }
 
 export interface LoginInfo {
-  status: boolean;
-  data: 0 | -4 | -2 | -5; // -4 监听中 -2 过期
+  code: number;
   message: string;
+  data: {
+    code: 86101 | 86038 | 0; // 86101: 未扫码，86038：失效
+    message: string;
+  };
 }
