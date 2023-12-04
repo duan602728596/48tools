@@ -18,7 +18,7 @@
     "@indexeddb-tools/indexeddb": "^1.0.0",
     "@indexeddb-tools/indexeddb-redux": "^1.0.0",
     "@mdx-js/react": "^2.3.0",
-    "@reduxjs/toolkit": "^2.0.0-beta.0",
+    "@reduxjs/toolkit": "^2.0.0",
     "@yxim/nim-web-sdk": "^8.9.113",
     "antd": "^5.6.4",
     "array-move": "^4.0.0",
@@ -34,10 +34,10 @@
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.1.1",
+    "react-redux": "^9.0.0",
     "react-router-dom": "^6.14.1",
     "react-sortable-hoc": "^2.0.0",
-    "reselect": "^4.1.8",
+    "reselect": "^5.0.1",
     "string-argv": "^0.3.2"
   },
   "devDependencies": {
