@@ -13,7 +13,17 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, type FormInstance } from 'antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import type { VideoData, DashVideoInfo, DashSupportFormats, DashVideoItem } from '@48tools-api/bilibili/download';
+import {
+  requestPugvSeason,
+  requestPugvPlayurl,
+  type VideoData,
+  type DashVideoInfo,
+  type DashSupportFormats,
+  type DashVideoItem,
+  type PugvSeason,
+  type PugvSeasonEpisodesItem,
+  type PugvSeasonPlayUrl
+} from '@48tools-api/bilibili/download';
 import style from './addForm.sass';
 import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo, parseVideoUrlDASH } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
@@ -24,7 +34,8 @@ const bilibiliVideoTypes: Array<{ label: string; value: string }> = [
   { value: 'av', label: '视频（av）' },
   { value: 'au', label: '音频（au）' },
   { value: 'ep', label: '番剧（ep）' },
-  { value: 'ss', label: '番剧（ss）' }
+  { value: 'ss', label: '番剧（ss）' },
+  { value: 'pugv_ep', label: '课程（ep）' }
 ];
 
 type TypesResult = { [key: string]: string };
@@ -70,9 +81,9 @@ function AddForm(props: {}): ReactElement {
       ?? videoItem.baseUrl
       ?? videoItem.base_url;
     const audioUrl: string = dash.dash.audio[0].backupUrl?.[0]
-      ?? dash.dash.video[0].backup_url?.[0]
-      ?? dash.dash.video[0].baseUrl
-      ?? dash.dash.video[0].base_url;
+      ?? dash.dash.audio[0].backup_url?.[0]
+      ?? dash.dash.audio[0].baseUrl
+      ?? dash.dash.audio[0].base_url;
     const formValue: FormStore = form.getFieldsValue();
 
     dispatch(setAddDownloadList({
@@ -88,6 +99,33 @@ function AddForm(props: {}): ReactElement {
     setVisible(false);
   }
 
+  // 课程的处理
+  // 测试：https://www.bilibili.com/cheese/play/ep205797?csource=private_space_tougao_null
+  async function getPugvData(formValue: FormStore, proxy: string | undefined): Promise<void> {
+    const resPugvSeason: PugvSeason = await requestPugvSeason(formValue.id, proxy);
+    const resItem: PugvSeasonEpisodesItem | undefined = resPugvSeason.data.episodes.find(
+      (o: PugvSeasonEpisodesItem) => `${ o.id }` === formValue.id);
+
+    if (resItem) {
+      const resPlayUrl: PugvSeasonPlayUrl = await requestPugvPlayurl(formValue.id, resItem.aid, resItem.cid, proxy);
+
+      if (resPlayUrl?.data?.dash) {
+        setDash({
+          dash: resPlayUrl.data.dash,
+          supportFormats: resPlayUrl.data.support_formats,
+          pic: resItem.cover,
+          title: `${ resPugvSeason.data.title }_${ resItem.title }`
+        });
+      } else {
+        messageApi.warning('没有获取到媒体地址！');
+      }
+    } else {
+      messageApi.warning('没有获取到媒体地址！');
+    }
+
+    setLoading(false);
+  }
+
   // 选择DASH video
   async function handleDASHVideoClick(event: MouseEvent): Promise<void> {
     let formValue: FormStore;
@@ -98,7 +136,7 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    if (!(formValue.type === 'bv' || formValue.type === 'av')) {
+    if (!['bv', 'av', 'pugv_ep'].includes(formValue.type)) {
       messageApi.warning('不支持的视频类型！');
 
       return;
@@ -109,6 +147,12 @@ function AddForm(props: {}): ReactElement {
     try {
       const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
         ? formValue.proxy : undefined;
+
+      // 课程的处理
+      if (formValue.type === 'pugv_ep') {
+        return await getPugvData(formValue, proxy);
+      }
+
       const res: { videoData: VideoData; pic: string; title: string } | undefined = await parseVideoUrlDASH(
         formValue.type, formValue.id, formValue.page, proxy);
 
@@ -145,6 +189,12 @@ function AddForm(props: {}): ReactElement {
     try {
       const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
         ? formValue.proxy : undefined;
+
+      // 课程的处理
+      if (formValue.type === 'pugv_ep') {
+        return await getPugvData(formValue, proxy);
+      }
+
       let result: string | { flvUrl: string; pic: string; title?: string } | void;
 
       if (formValue.type === 'au') {

@@ -2,7 +2,16 @@ import got, { type Response as GotResponse, Agents as GotAgents } from 'got';
 import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
 import { getBilibiliCookie, pcUserAgent, pcUserAgent2 } from '../../../utils/utils';
 import { sign } from '../../../utils/bilibili/wbiSign';
-import type { VideoInfo, AudioInfo, BangumiVideoInfo, SpaceArcSearch, WebInterfaceViewData, NavInterface } from './interface';
+import type {
+  VideoInfo,
+  AudioInfo,
+  BangumiVideoInfo,
+  SpaceArcSearch,
+  WebInterfaceViewData,
+  NavInterface,
+  PugvSeason,
+  PugvSeasonPlayUrl
+} from './interface';
 
 export type * from './interface';
 
@@ -166,6 +175,40 @@ export async function requestInterfaceNav(proxy: string | undefined): Promise<Na
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
+    },
+    agent: gotAgent(proxy)
+  });
+
+  return res.body;
+}
+
+/* 获取课程基本信息 */
+export async function requestPugvSeason(epId: string, proxy: string | undefined): Promise<PugvSeason> {
+  const res: GotResponse<PugvSeason> = await got.get(`https://api.bilibili.com/pugv/view/web/season?ep_id=${ epId }`, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    },
+    agent: gotAgent(proxy)
+  });
+
+  return res.body;
+}
+
+/* 获取视频地址 */
+export async function requestPugvPlayurl(epId: string, aid: number, cid: number, proxy: string | undefined): Promise<PugvSeasonPlayUrl> {
+  const qs: URLSearchParams = new URLSearchParams({
+    avid: String(aid),
+    cid: String(cid),
+    ep_id: epId,
+    fnval: '16'
+  });
+
+  const res: GotResponse<PugvSeasonPlayUrl> = await got.get(`https://api.bilibili.com/pugv/player/web/playurl?${ qs.toString() }`, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie(),
+      Referer: 'https://www.bilibili.com/'
     },
     agent: gotAgent(proxy)
   });

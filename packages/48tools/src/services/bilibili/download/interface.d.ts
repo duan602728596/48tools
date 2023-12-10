@@ -132,3 +132,28 @@ export interface WebInterfaceViewData {
     pages: Array<WebInterfaceViewDataPageItem>;
   };
 }
+
+// 课程信息
+export interface PugvSeasonEpisodesItem {
+  aid: number;
+  cid: number;
+  id: number;
+  title: string;
+  cover: string;
+}
+
+export interface PugvSeason {
+  code: number;
+  data: {
+    episodes: Array<PugvSeasonEpisodesItem>;
+    title: string;
+  };
+}
+
+export interface PugvSeasonPlayUrl {
+  code: number;
+  data: {
+    dash: DashVideoInfo;
+    support_formats: Array<DashSupportFormats>;
+  };
+}
