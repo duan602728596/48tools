@@ -133,7 +133,9 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
     responseType: 'json',
     headers: {
       Host: 'api.bilibili.com',
-      'User-Agent': pcUserAgent2
+      'User-Agent': pcUserAgent2,
+      Referer: `https://space.bilibili.com/${ mid }`,
+      Cookie: getBilibiliCookie()
     }
   });
 

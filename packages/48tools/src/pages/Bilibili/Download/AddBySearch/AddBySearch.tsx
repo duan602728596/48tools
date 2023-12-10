@@ -16,6 +16,7 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { ColumnsType } from 'antd/es/table';
 import * as classNames from 'classnames';
 import { requestSpaceArcSearch, type SpaceArcSearchVListItem, type SpaceArcSearch } from '@48tools-api//bilibili/download';
+import commonStyle from '../../../../common.sass';
 import style from './addBySearch.sass';
 import { parseVideoList, parseVideoUrlV2 } from '../function/parseBilibiliUrl';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
@@ -223,8 +224,11 @@ function AddBySearch(props: {}): ReactElement {
       >
         个人主页批量下载
       </Button>
-      <Modal title="个人主页批量下载"
-        open={ visible }
+      <Modal open={ visible }
+        title={ [
+          '个人主页批量下载',
+          <span key="tips" className={ classNames('font-normal', commonStyle.tips) }>（搜索和下载需要先登录）</span>
+        ] }
         width={ 800 }
         centered={ true }
         destroyOnClose={ true }
