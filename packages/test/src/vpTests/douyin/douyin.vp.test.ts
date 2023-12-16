@@ -27,7 +27,10 @@ export function callback(): void {
     }
 
     await testIdClick(app, 'douyin-download-link');
-    await app.win.waitForSelector('div header+p');
+    await Promise.all([
+      app.win.waitForSelector('div header'),
+      app.win.waitForSelector('.ant-alert')
+    ]);
     await expect(app.win).toHaveScreenshot(vpImage('douyin', 'douyin', isDark));
   }
 
