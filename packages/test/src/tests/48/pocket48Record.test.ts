@@ -53,6 +53,9 @@ export function callback(): void {
     ]);
 
     await app.win.click('#userId');
+
+    /*
+    //! keyboard.type无法触发接口查询
     await app.win.keyboard.type('刘倩倩');
     await app.win.waitForTimeout(5_000);
 
@@ -60,6 +63,8 @@ export function callback(): void {
 
     await selectItem.click();
     await app.win.waitForTimeout(1_000);
+    */
+    await app.win.keyboard.type('327568');
 
     const antBtn: Locator = await app.win.locator('.ant-btn');
 
