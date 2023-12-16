@@ -54,7 +54,9 @@ export interface NextData {
         queries: [{
           state: {
             data: {
-              mediaInfo: NextDataMediaInfo;
+              seasonInfo: {
+                mediaInfo: NextDataMediaInfo;
+              };
             };
           };
         }];

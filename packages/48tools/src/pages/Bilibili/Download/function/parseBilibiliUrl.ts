@@ -12,6 +12,7 @@ import {
   type WebInterfaceViewDataPageItem
 } from '@48tools-api/bilibili/download';
 import type { InitialState, EpisodesItem, NextDataMediaInfo, NextData } from '../../types';
+
 interface ParseHtmlResult {
   initialState?: InitialState;
   h1Title: string;
@@ -62,7 +63,7 @@ function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult 
     const scriptStr: string = nextData.innerHTML;
     const nextDataJson: NextData = JSON.parse(scriptStr);
     const mediaInfo: NextDataMediaInfo | undefined = nextDataJson?.props?.pageProps?.dehydratedState?.queries
-      ?.[0]?.state?.data?.mediaInfo;
+      ?.[0]?.state?.data?.seasonInfo?.mediaInfo;
 
     if (mediaInfo) {
       const epInfo: EpisodesItem = type === 'ss'
