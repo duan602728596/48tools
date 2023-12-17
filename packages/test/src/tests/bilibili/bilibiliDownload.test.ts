@@ -7,7 +7,7 @@ import * as config from '../../utils/config.js';
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
-import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
+import { setFFmpegPath, setBilibiliCookie, mockShowSaveDialog } from '../../actions/utilActions.js';
 import { testTitle, testLog } from '../../utils/testUtils.js';
 import { testConfig } from '../../testConfig.js';
 
@@ -43,8 +43,8 @@ export function callback(): void {
 
     // 选择视频类型并输入查询
     await selectItemClick(app, 'bilibili-download-form-type', selectItemTitle);
-    await app.win.type('#id', id);
-    page && await app.win.type('#page', page);
+    await app.win.locator('#id').fill(id);
+    page && await app.win.locator('#page').fill(page);
 
     // 港澳台
     if (proxy) {
@@ -182,6 +182,13 @@ export function callback(): void {
       throw new Error('app is null');
     }
 
+    if (!testConfig.bilibili.cookie) {
+      testLog(43, 'Do not run test because no bilibili cookie');
+      test.skip();
+    } else {
+      await setBilibiliCookie(app);
+    }
+
     await testIdClick(app, 'bilibili-download-link');
 
     // 犬山玉姬Official https://space.bilibili.com/12362451/
@@ -253,7 +260,7 @@ export function callback(): void {
 
       // 选择视频类型并输入查询
       await selectItemClick(app, 'bilibili-download-form-type', '视频（BV）');
-      await app.win.type('#id', '1rp4y1e745');
+      await app.win.locator('#id').fill('1rp4y1e745');
       await app.win.locator('.ant-modal-footer button.ant-btn-default').nth(1).click();
       await app.win.waitForFunction((): boolean =>
         document.querySelectorAll('[data-test-id="bilibili-DASH-video"] button.ant-btn').length > 0);
