@@ -16,7 +16,6 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import {
   requestPugvSeason,
   requestPugvPlayurl,
-  type VideoData,
   type DashVideoInfo,
   type DashSupportFormats,
   type DashVideoItem,
