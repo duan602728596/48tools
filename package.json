@@ -22,6 +22,7 @@
     "install:cn": "ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 yarn install",
     "install:ci": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 yarn install",
     "set-version": "node scripts/setVersion.mjs",
+    "check-token": "node scripts/checkToken.mjs",
     "cz1": "NODE_OPTIONS=\"--max-old-space-size=409600\" git cz",
     "postinstall": "husky install && node scripts/fixTypesError.mjs"
   },
@@ -70,7 +71,8 @@
     "@types/react-dom": "^18"
   },
   "lint-staged": {
-    "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "eslint"
+    "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "eslint",
+    "packages/test/src/testConfig.ts": "npm run check-token"
   },
   "config": {
     "commitizen": {
