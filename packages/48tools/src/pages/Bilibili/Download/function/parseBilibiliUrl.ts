@@ -95,6 +95,12 @@ function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult 
   };
 }
 
+interface ParseVideoUrlCoreObjectResult {
+  videoInfo: VideoInfo;
+  pic: string;
+  title: string;
+}
+
 /**
  * 解析的通用方法
  * @param { string } type: 视频类型
@@ -109,7 +115,7 @@ async function parseVideoUrlCore(
   page: number = 1,
   proxy: string | undefined,
   isDash: boolean
-): Promise<{ videoInfo: VideoInfo; pic: string; title: string } | undefined> {
+): Promise<ParseVideoUrlCoreObjectResult | undefined> {
   const res: WebInterfaceViewData = await requestWebInterfaceView(id, type, proxy);
 
   if (res?.data?.pages) {
@@ -121,6 +127,12 @@ async function parseVideoUrlCore(
 
     return { videoInfo: videoInfoRes, pic: res.data.pic, title: viewRes.data.pages[page - 1].part };
   }
+}
+
+export interface ParseVideoUrlV2ObjectResult {
+  flvUrl: string;
+  pic: string;
+  title: string;
 }
 
 /**
@@ -135,8 +147,8 @@ export async function parseVideoUrlV2(
   id: string,
   page: number = 1,
   proxy: string | undefined
-): Promise<{ flvUrl: string; pic: string; title: string } | undefined> {
-  const videoResult: { videoInfo: VideoInfo; pic: string; title: string } | undefined = await parseVideoUrlCore(
+): Promise<ParseVideoUrlV2ObjectResult | undefined> {
+  const videoResult: ParseVideoUrlCoreObjectResult | undefined = await parseVideoUrlCore(
     type, id, page, proxy, false);
   let result: { flvUrl: string; pic: string; title: string } | undefined = undefined;
 
@@ -151,6 +163,12 @@ export async function parseVideoUrlV2(
   return result;
 }
 
+export interface ParseVideoUrlDASHObjectResult {
+  videoData: VideoData;
+  pic: string;
+  title: string;
+}
+
 /**
  * 解析视频url。testID：1rp4y1e745
  * @param { string } type: 视频类型
@@ -163,9 +181,8 @@ export async function parseVideoUrlDASH(
   id: string,
   page: number = 1,
   proxy: string | undefined
-): Promise<{ videoData: VideoData; pic: string; title: string } | undefined> {
-  const videoResult: { videoInfo: VideoInfo; pic: string; title: string } | undefined = await parseVideoUrlCore(
-    type, id, page, proxy, true);
+): Promise<ParseVideoUrlDASHObjectResult | undefined> {
+  const videoResult: ParseVideoUrlCoreObjectResult | undefined = await parseVideoUrlCore(type, id, page, proxy, true);
   let result: { videoData: VideoData; pic: string; title: string } | undefined = undefined;
 
   if (videoResult?.videoInfo?.data?.dash) {
@@ -179,11 +196,16 @@ export async function parseVideoUrlDASH(
   return result;
 }
 
+export interface ParseVideoListArrayItemResult {
+  cid: number;
+  part: string;
+}
+
 /**
  * 解析视频列表地址
  * @param { string } bvid
  */
-export async function parseVideoList(bvid: string): Promise<Array<{ cid: number; part: string }> | void> {
+export async function parseVideoList(bvid: string): Promise<Array<ParseVideoListArrayItemResult> | void> {
   const videoUrl: string = `https://www.bilibili.com/video/${ bvid }`;
   const html: string = await requestBilibiliHtml(videoUrl, undefined);
   const { initialState }: ParseHtmlResult = parseHtml(html);

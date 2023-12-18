@@ -18,7 +18,12 @@ import * as classNames from 'classnames';
 import { requestSpaceArcSearch, type SpaceArcSearchVListItem, type SpaceArcSearch } from '@48tools-api//bilibili/download';
 import commonStyle from '../../../../common.sass';
 import style from './addBySearch.sass';
-import { parseVideoList, parseVideoUrlV2 } from '../function/parseBilibiliUrl';
+import {
+  parseVideoList,
+  parseVideoUrlV2,
+  type ParseVideoListArrayItemResult,
+  type ParseVideoUrlV2ObjectResult
+} from '../function/parseBilibiliUrl';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
 import type { DownloadItem as BilibiliDownloadItem } from '../../types';
 
@@ -60,7 +65,7 @@ function AddBySearch(props: {}): ReactElement {
     for (const item of bvVideoList) {
       try {
         const bvId: string = item.bvid.replace(/^bv/i, '');
-        const result: { flvUrl: string; pic: string } | void = await parseVideoUrlV2('bv', bvId, item.index, undefined);
+        const result: ParseVideoUrlV2ObjectResult | void = await parseVideoUrlV2('bv', bvId, item.index, undefined);
 
         if (result) {
           addItems.push({
@@ -89,7 +94,7 @@ function AddBySearch(props: {}): ReactElement {
   async function handleAddDownloadQueueClick(o: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       const bvId: string = o.bvid.replace(/^bv/i, '');
-      const result: { flvUrl: string; pic: string } | void = await parseVideoUrlV2('bv', bvId, o.index, undefined);
+      const result: ParseVideoUrlV2ObjectResult | void = await parseVideoUrlV2('bv', bvId, o.index, undefined);
 
       if (result) {
         dispatch(setAddDownloadList({
@@ -137,10 +142,10 @@ function AddBySearch(props: {}): ReactElement {
     setSecondLoading(true);
 
     try {
-      const videoList: Array<{ cid: number; part: string }> | void = await parseVideoList(record.bvid);
+      const videoList: Array<ParseVideoListArrayItemResult> | void = await parseVideoList(record.bvid);
 
       setBvVideoList(
-        (videoList ?? []).map((o: { cid: number; part: string }, i: number): DownloadItem =>
+        (videoList ?? []).map((o: ParseVideoListArrayItemResult, i: number): DownloadItem =>
           Object.assign(o, {
             bvid: record.bvid,
             index: i + 1

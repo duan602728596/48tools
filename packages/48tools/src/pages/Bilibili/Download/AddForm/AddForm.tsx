@@ -25,7 +25,14 @@ import {
   type PugvSeasonPlayUrl
 } from '@48tools-api/bilibili/download';
 import style from './addForm.sass';
-import { parseVideoUrlV2, parseAudioUrl, parseBangumiVideo, parseVideoUrlDASH } from '../function/parseBilibiliUrl';
+import {
+  parseVideoUrlV2,
+  parseAudioUrl,
+  parseBangumiVideo,
+  parseVideoUrlDASH,
+  type ParseVideoUrlV2ObjectResult,
+  type ParseVideoUrlDASHObjectResult
+} from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
 
 /* 视频分类 */
@@ -153,7 +160,7 @@ function AddForm(props: {}): ReactElement {
         return await getPugvData(formValue, proxy);
       }
 
-      const res: { videoData: VideoData; pic: string; title: string } | undefined = await parseVideoUrlDASH(
+      const res: ParseVideoUrlDASHObjectResult | undefined = await parseVideoUrlDASH(
         formValue.type, formValue.id, formValue.page, proxy);
 
       if (res && res?.videoData?.dash) {
@@ -195,7 +202,7 @@ function AddForm(props: {}): ReactElement {
         return await getPugvData(formValue, proxy);
       }
 
-      let result: string | { flvUrl: string; pic: string; title?: string } | void;
+      let result: string | ParseVideoUrlV2ObjectResult | void;
 
       if (formValue.type === 'au') {
         // 下载音频
