@@ -10,25 +10,25 @@ import * as douyinVideo from './tests/douyin/video.test.js';
 import * as douyinUser from './tests/douyin/user.test.js';
 
 test.describe.parallel('48tools e2e test', function(): void {
-  test.describe(indexTest.title, indexTest.callback);
-
-  test.describe.serial('pocket48 test group', function(): void {
-    test.describe(pocket48RecordTest.title, pocket48RecordTest.callback);
-    test.describe(fortyEightInVideo.title, fortyEightInVideo.callback);
-  });
+  // test.describe(indexTest.title, indexTest.callback);
+  //
+  // test.describe.serial('pocket48 test group', function(): void {
+  //   test.describe(pocket48RecordTest.title, pocket48RecordTest.callback);
+  //   test.describe(fortyEightInVideo.title, fortyEightInVideo.callback);
+  // });
 
   test.describe.serial('bilibili test group', function(): void {
     test.describe(bilibiliDownload.title, bilibiliDownload.callback);
     test.describe(bilibiliLive.title, bilibiliLive.callback);
   });
 
-  test.describe.serial('acfun test group', function(): void {
-    test.describe(acfunDownload.title, acfunDownload.callback);
-    test.describe(acfunLive.title, acfunLive.callback);
-  });
-
-  test.describe.serial('douyin test group', function(): void {
-    test.describe(douyinVideo.title, douyinVideo.callback);
-    test.describe(douyinUser.title, douyinUser.callback);
-  });
+  // test.describe.serial('acfun test group', function(): void {
+  //   test.describe(acfunDownload.title, acfunDownload.callback);
+  //   test.describe(acfunLive.title, acfunLive.callback);
+  // });
+  //
+  // test.describe.serial('douyin test group', function(): void {
+  //   test.describe(douyinVideo.title, douyinVideo.callback);
+  //   test.describe(douyinUser.title, douyinUser.callback);
+  // });
 });

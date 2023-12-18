@@ -68,6 +68,30 @@ export function callback(): void {
     await app.win.waitForTimeout(2_000);
   }
 
+  // 分辨率选择查询
+  async function queryDASH(selectItemTitle: string, id: string, page?: string): Promise<void> {
+    if (!app) {
+      throw new Error('app is null');
+    }
+
+    await testIdClick(app, 'bilibili-download-add-btn');
+    await Promise.all([
+      app.win.waitForSelector('#type'),
+      app.win.waitForSelector('#id'),
+      app.win.waitForSelector('#page'),
+      app.win.waitForSelector('#proxy')
+    ]);
+
+    // 选择视频类型并输入查询
+    await selectItemClick(app, 'bilibili-download-form-type', selectItemTitle);
+    await app.win.locator('#id').fill(id);
+    page && await app.win.locator('#page').fill(page);
+    await app.win.locator('.ant-modal-footer button.ant-btn-default').nth(1).click();
+    await app.win.waitForFunction((): boolean =>
+      document.querySelectorAll('[data-test-id="bilibili-DASH-video"] button.ant-btn').length > 0);
+    await app.win.waitForTimeout(2_000);
+  }
+
   // BV查询
   test(testTitle(41, 'Should get bilibili video'), async function(): Promise<void> {
     if (!app) {
@@ -91,13 +115,17 @@ export function callback(): void {
     // 吹响吧！上低音号 https://www.bilibili.com/bangumi/play/ss1547
     await query('番剧（ss）', '1547');
 
+    // 宋浩：专升本高等数学考前串讲冲刺课 https://www.bilibili.com/cheese/play/ep205797?csource=private_space_tougao_null
+    await queryDASH('课程（ep）', '205797');
+    await app.win.locator('[data-test-id="bilibili-DASH-video"] button.ant-btn').nth(0).click();
+
     // 等待查询结果
     await app.win.waitForTimeout(2_000);
     await app.win.waitForSelector('.ant-table-row');
 
     const willBeDownload: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
-    expect(willBeDownload.length).toEqual(5);
+    expect(willBeDownload.length).toEqual(6);
   });
 
   test(testTitle(42, 'Should get bilibili video with proxy'), async function(): Promise<void> {
@@ -250,20 +278,7 @@ export function callback(): void {
       }
 
       await testIdClick(app, 'bilibili-download-link');
-      await testIdClick(app, 'bilibili-download-add-btn');
-      await Promise.all([
-        app.win.waitForSelector('#type'),
-        app.win.waitForSelector('#id'),
-        app.win.waitForSelector('#page'),
-        app.win.waitForSelector('#proxy')
-      ]);
-
-      // 选择视频类型并输入查询
-      await selectItemClick(app, 'bilibili-download-form-type', '视频（BV）');
-      await app.win.locator('#id').fill('1rp4y1e745');
-      await app.win.locator('.ant-modal-footer button.ant-btn-default').nth(1).click();
-      await app.win.waitForFunction((): boolean =>
-        document.querySelectorAll('[data-test-id="bilibili-DASH-video"] button.ant-btn').length > 0);
+      await queryDASH('视频（BV）', '1rp4y1e745');
 
       const count: JSHandle<{ length: number }> = await app.win.waitForFunction((): { length: number } => ({
         length: document.querySelectorAll('[data-test-id="bilibili-DASH-video"] button.ant-btn').length
