@@ -36,21 +36,26 @@ type RState = {
 
 const selector: Selector<RState, RSelector> = createStructuredSelector({
   // 微博已登陆账号
-  accountList: ({ weiboLogin }: RState): Array<WeiboAccount> => weiboLogin?.accountList ?? [],
+  accountList: ({ weiboLogin }: RState): Array<WeiboAccount> => weiboLogin?.accountList,
 
   // 登陆列表
-  weiboCheckinList: ({ weiboSuper }: RState): Array<WeiboCheckinResult> => weiboSuper?.weiboCheckinList ?? [],
+  weiboCheckinList: ({ weiboSuper }: RState): Array<WeiboCheckinResult> => weiboSuper?.weiboCheckinList,
 
   // 签到状态
   checkIn: ({ weiboSuper }: RState): boolean => weiboSuper?.checkIn,
 
   // 已签到
-  quantity: ({ weiboSuper }: RState): Quantity => weiboSuper?.quantity ?? defaultQuantityValue
+  quantity: ({ weiboSuper }: RState): Quantity => weiboSuper?.quantity
 });
 
 /* 微博超话签到 */
 function Index(props: {}): ReactElement {
-  const { accountList, weiboCheckinList, checkIn, quantity }: RSelector = useSelector(selector);
+  const {
+    accountList = [],
+    weiboCheckinList = [],
+    checkIn = false,
+    quantity = defaultQuantityValue
+  }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [accountValue, setAccountValue]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
