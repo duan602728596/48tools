@@ -81,7 +81,7 @@ const externalsName: Array<string> = nodeModules([
 
 export default function(info: object): Record<string, any> {
   const plugins: Array<any> = [
-    '@babel/plugin-syntax-import-assertions',
+    ['@babel/plugin-syntax-import-attributes', { deprecatedAssertSyntax: true }],
     !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }],
     ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: true }]
   ].filter(Boolean);
