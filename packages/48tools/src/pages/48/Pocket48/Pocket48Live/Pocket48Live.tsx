@@ -4,6 +4,7 @@ import {
   Fragment,
   useState,
   useEffect,
+  useMemo,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
@@ -12,7 +13,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Table, Tag, Popconfirm, Modal } from 'antd';
+import { Button, message, Table, Popconfirm, Modal, Input } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { UseModalReturnType, UseMessageReturnType, ModuleFuncReturn } from '@48tools-types/antd';
@@ -75,6 +76,16 @@ function Pocket48Live(props: {}): ReactElement {
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
+  const [searchValue, setSearchValue]: [string, D<S<string>>] = useState(''); // 搜索值
+
+  // 搜索结果
+  const filterSearchResultLiveList: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
+    if (/^\s*$/.test(searchValue)) {
+      return liveList;
+    } else {
+      return liveList.filter((o: LiveInfo): boolean => o.userInfo.nickname.includes(searchValue));
+    }
+  }, [liveList, searchValue]);
 
   // 停止自动抓取
   function handleStopAutoGrabClick(event: MouseEvent): void {
@@ -395,6 +406,10 @@ function Pocket48Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
+        <Input.Search className="w-[200px] mr-[6px]"
+          placeholder="输入成员名字搜索"
+          onSearch={ (value: string): void => setSearchValue(value) }
+        />
         <Button.Group>
           <Button type="primary" onClick={ handleRefreshLiveListClick }>刷新列表</Button>
           {
@@ -407,7 +422,7 @@ function Pocket48Live(props: {}): ReactElement {
       </Header>
       <Table size="middle"
         columns={ columns }
-        dataSource={ liveList }
+        dataSource={ filterSearchResultLiveList }
         bordered={ true }
         loading={ loading }
         rowKey="liveId"
