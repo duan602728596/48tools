@@ -15,6 +15,7 @@ import { Form, Select, message, Button, type FormInstance } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
+import * as classNames from 'classnames';
 import {
   requestOpenLiveList,
   requestLiveOne,
@@ -127,13 +128,25 @@ function GetLiveUrl(props: {}): ReactElement {
 
       if (res.content.liveList) {
         dispatch(setOpenLiveListOptions(
-          res.content.liveList.map((o: OpenLiveInfo): DefaultOptionType => ({
-            label: [
-              `${ o.title }-${ o.subTitle }</b>`,
-              <span key="tips" className={ commonStyle.tips }>{ o.status === 1 ? '（未开始）' : '' }</span>
-            ],
-            value: o.liveId
-          }))
+          res.content.liveList.map((o: OpenLiveInfo): DefaultOptionType => {
+            const title: string = `${ o.title }-${ o.subTitle }`;
+
+            return {
+              label: (
+                <div title={ title }>
+                  {
+                    o.status === 1 ? (
+                      <span className={ classNames('mr-[4px]', commonStyle.tips) }>
+                        { o.status === 1 ? '[未开始]' : '' }
+                      </span>
+                    ) : null
+                  }
+                  { title }
+                </div>
+              ),
+              value: o.liveId
+            };
+          })
         ));
       }
     } catch (err) {
