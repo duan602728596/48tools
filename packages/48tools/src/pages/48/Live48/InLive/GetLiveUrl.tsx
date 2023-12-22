@@ -11,9 +11,10 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Form, Select, message, Button, type FormInstance } from 'antd';
+import { Form, Select, message, Button, Space, Tooltip, type FormInstance } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import { ReloadOutlined as IconReloadOutlined } from '@ant-design/icons';
 import filenamify from 'filenamify/browser';
 import * as classNames from 'classnames';
 import {
@@ -30,6 +31,7 @@ import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { setOpenLiveListOptions, setAddInLiveList, setStopInLiveList, type Live48InitialState } from '../../reducers/live48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
 import type { MessageEventData } from '../../../../commonTypes';
 import type { InLiveFormValue, InLiveWebWorkerItemNoplayStreamPath } from '../../types';
 
@@ -165,13 +167,18 @@ function GetLiveUrl(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Form form={ form } initialValues={{ quality: 'chao' }} onFinish={ handleStartInLiveSubmit }>
-        <Form.Item name="live" noStyle={ true }>
-          <Select className={ style.liveSelect } loading={ loading } placeholder="选择公演" options={ OpenLiveListOptions } />
-        </Form.Item>
-        <Button.Group className="ml-[8px]">
+      <Form form={ form } onFinish={ handleStartInLiveSubmit }>
+        <Space size={ 0 }>
+          <Form.Item name="live" noStyle={ true }>
+            <Select className={ style.liveSelect } loading={ loading } placeholder="选择公演" options={ OpenLiveListOptions } />
+          </Form.Item>
+          <Tooltip title="刷新公演直播列表">
+            <Button className={ style.reloadButton } icon={ <IconReloadOutlined /> } onClick={ getLiveList } />
+          </Tooltip>
+        </Space>
+        <Button.Group className="mx-[8px]">
           <Button type="primary" htmlType="submit">开始直播录制</Button>
-          <Button onClick={ getLiveList }>刷新直播公演列表</Button>
+          <Pocket48Login />
         </Button.Group>
       </Form>
       { messageContextHolder }
