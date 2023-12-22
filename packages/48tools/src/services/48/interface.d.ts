@@ -157,7 +157,7 @@ export interface VoiceOperate extends Pocket48ResponseBase {
   };
 }
 
-interface LiveOnePlayStreams {
+export interface LiveOnePlayStreams {
   streamName: '标清' | '高清' | '超清';
   streamPath?: string;
   streamType: 1 | 2 | 3;
@@ -207,5 +207,21 @@ export interface RoomInfo extends Pocket48ResponseBase {
     userChatConfig: {
       bgImg: string;
     };
+  };
+}
+
+// 公演直播
+export interface OpenLiveInfo {
+  liveId: string;
+  title: string;
+  subTitle: string;
+  status: 1 | 2; // 2: 直播中 1: 未开始
+  stime: string;
+}
+
+export interface OpenLiveList extends Pocket48ResponseBase {
+  content: {
+    next: string;
+    liveList: Array<OpenLiveInfo>;
   };
 }

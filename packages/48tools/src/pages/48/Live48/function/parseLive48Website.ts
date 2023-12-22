@@ -4,28 +4,6 @@ import type { InVideoQuery, InVideoItem } from '../../types';
 export const LIVE_TYPE: Array<string> = ['snh48', 'bej48', 'gnz48', 'shy48', 'ckg48', 'cgt48'];
 
 /**
- * 解析网站直播地址
- * @param { string } type: 团体
- */
-export async function parseInLive(type: string): Promise<Array<{ label: string; value: string }>> {
-  const indexUrl: string = `https://live.48.cn/Index/main/club/${ LIVE_TYPE.indexOf(type) + 1 }`;
-  const html: string = await requestFetchHtml(indexUrl);
-  const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
-  const watchContent: NodeListOf<HTMLDivElement> = parseDocument.querySelectorAll<HTMLDivElement>('.watchcontent');
-  const result: Array<{ label: string; value: string }> = [];
-
-  for (const item of watchContent) {
-    const vText: HTMLDivElement = item.querySelector<HTMLDivElement>('.v-text')!;
-    const title: string = vText.querySelector('h2')!.innerHTML;
-    const sid: string = vText.querySelector('a')!.getAttribute('sid')!;
-
-    result.push({ label: title, value: sid });
-  }
-
-  return result;
-}
-
-/**
  * 获取直播地址
  * @param { string } id: 直播id
  * @param { string } quality: 直播画质

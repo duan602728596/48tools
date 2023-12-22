@@ -1,9 +1,11 @@
 import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { InLiveWebWorkerItemNoplayStreamPath, InVideoQuery, InVideoItem, InVideoWebWorkerItem } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
 export interface Live48InitialState {
+  OpenLiveListOptions: Array<DefaultOptionType>;
   inLiveList: Array<InLiveWebWorkerItemNoplayStreamPath>;
   inVideoQuery?: InVideoQuery;
   inVideoList: Array<InVideoItem>;
@@ -12,6 +14,7 @@ export interface Live48InitialState {
 }
 
 type SliceReducers = {
+  setOpenLiveListOptions: CaseReducer<Live48InitialState, PayloadAction<Array<DefaultOptionType>>>;
   setAddInLiveList: CaseReducer<Live48InitialState, PayloadAction<InLiveWebWorkerItemNoplayStreamPath>>;
   setAddWorkerInLiveList: CaseReducer<Live48InitialState, PayloadAction<{ id: string; worker: Worker }>>;
   setStopInLiveList: CaseReducer<Live48InitialState, PayloadAction<string>>;
@@ -27,6 +30,7 @@ const sliceName: 'live48' = 'live48';
 const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof sliceName> = createSlice({
   name: sliceName,
   initialState: {
+    OpenLiveListOptions: [],
     inLiveList: [],          // 当前抓取的直播列表
     inVideoQuery: undefined, // 录播分页的查询条件
     inVideoList: [],         // 当前的查找到的数据
@@ -34,6 +38,11 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
     progress: {} // 下载进度
   },
   reducers: {
+    // 设置当前公演的列表
+    setOpenLiveListOptions(state: Live48InitialState, action: PayloadAction<Array<DefaultOptionType>>): void {
+      state.OpenLiveListOptions = action.payload;
+    },
+
     // 添加当前抓取的直播列表
     setAddInLiveList(state: Live48InitialState, action: PayloadAction<InLiveWebWorkerItemNoplayStreamPath>): void {
       state.inLiveList = state.inLiveList.concat([action.payload]);
@@ -44,8 +53,6 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
       const index: number = state.inLiveList.findIndex((o: InLiveWebWorkerItemNoplayStreamPath): boolean => o.id === action.payload.id);
 
       if (index >= 0) {
-        clearInterval(state.inLiveList[index].timer!);
-        state.inLiveList[index].timer = undefined;
         state.inLiveList[index].worker = action.payload.worker;
         state.inLiveList = [...state.inLiveList];
       }
@@ -124,6 +131,7 @@ const { actions, reducer }: Slice<Live48InitialState, SliceReducers, typeof slic
 });
 
 export const {
+  setOpenLiveListOptions,
   setAddInLiveList,
   setAddWorkerInLiveList,
   setStopInLiveList,

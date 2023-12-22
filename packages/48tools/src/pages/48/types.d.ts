@@ -1,13 +1,11 @@
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
 import type { FieldData } from 'rc-field-form/es/interface';
-import type { MsgType } from '@48tools-api/48';
+import type { MsgType, LiveOnePlayStreams } from '@48tools-api/48';
 import type { WebWorkerChildItem } from '../../commonTypes';
 import type Pocket48LiveRender from './Pocket48/function/Pocket48LiveRender';
 
 export interface InLiveFormValue {
-  type?: string;
   live?: string;
-  quality: string;
 }
 
 /* ========== live48 ========== */
@@ -16,14 +14,16 @@ export interface InLiveWebWorkerItem {
   id: string;
   type: string;
   live: string;
-  quality: string;
+  quality: LiveOnePlayStreams['streamName'];
   playStreamPath: string;
   status?: number;
-  timer?: NodeJS.Timeout; // 定时器，监听直播是否开始
   worker?: Worker;
 }
 
-export type InLiveWebWorkerItemNoplayStreamPath = Omit<InLiveWebWorkerItem, 'playStreamPath'>;
+export type InLiveWebWorkerItemNoplayStreamPath = Pick<
+  InLiveWebWorkerItem,
+  'id' | 'live' | 'quality' | 'worker' | 'status'
+>;
 
 /* ========== pocket48 ========== */
 // 直播自动录制配置

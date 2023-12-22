@@ -30,8 +30,6 @@ function InLive(props: {}): ReactElement {
 
   // 停止
   function handleStopClick(item: InLiveWebWorkerItemNoplayStreamPath, event?: MouseEvent): void {
-    item.timer && clearInterval(item.timer);
-
     if (item.worker) {
       item.worker.postMessage({ type: 'stop' });
     } else {
@@ -40,30 +38,10 @@ function InLive(props: {}): ReactElement {
   }
 
   const columns: ColumnsType<InLiveWebWorkerItemNoplayStreamPath> = [
-    {
-      title: '团体',
-      dataIndex: 'type',
-      render: (value: string): string => value.toUpperCase()
-    },
     { title: '直播ID', dataIndex: 'live' },
     {
       title: '画质',
-      dataIndex: 'quality',
-      render: (value: string, record: InLiveWebWorkerItemNoplayStreamPath, index: number): string => {
-        switch (value) {
-          case 'chao':
-            return '超清';
-
-          case 'gao':
-            return '高清';
-
-          case 'liuchang':
-            return '流畅';
-
-          default:
-            return value;
-        }
-      }
+      dataIndex: 'quality'
     },
     {
       title: '状态',
