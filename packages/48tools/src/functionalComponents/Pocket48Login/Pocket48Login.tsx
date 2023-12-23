@@ -355,7 +355,7 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <div className="inline-block">{ loginButtonRender() }</div>
+      { loginButtonRender() }
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }

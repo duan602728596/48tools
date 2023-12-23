@@ -1,4 +1,5 @@
 .liveSelect
+  z-index: 1
   width: 400px !important
 
   \:global(.ant-select-selector)
@@ -6,5 +7,9 @@
     border-top-right-radius: 0
 
 .reloadButton
+  margin-inline-start: -1px
   border-top-left-radius: 0
   border-bottom-left-radius: 0
+
+  &:hover
+    z-index: 2

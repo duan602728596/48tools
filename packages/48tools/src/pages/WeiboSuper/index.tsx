@@ -127,14 +127,16 @@ function Index(props: {}): ReactElement {
             >
               { accountSelectRender() }
             </Select>
-            {
-              checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (
-                <Button type="primary" disabled={ accountValue === undefined } onClick={ handleWeiboCheckinStartClick }>
-                  超话签到
-                </Button>
-              )
-            }
-            <WeiboLoginDynamic />
+            <Button.Group>
+              {
+                checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (
+                  <Button type="primary" disabled={ accountValue === undefined } onClick={ handleWeiboCheckinStartClick }>
+                    超话签到
+                  </Button>
+                )
+              }
+              <WeiboLoginDynamic />
+            </Button.Group>
           </Space>
         </Header>
         <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />

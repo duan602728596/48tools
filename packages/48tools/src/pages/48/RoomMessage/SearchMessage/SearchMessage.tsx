@@ -343,16 +343,17 @@ function SearchMessage(props: {}): ReactElement {
           onSearch={ handleServerSearch }
           onSelect={ handleOwnerSelect }
         />
-        <Button className="mx-[8px]"
-          disabled={ searchSelectValue === undefined || homeMessageLoading }
-          onClick={ handleGetHomeownerMessageClick }
-        >
-          加载数据
-        </Button>
-        <Button className="mr-[8px]" onClick={ (event: MouseEvent): void => setExportMessageModalOpen(true) }>
-          导出当前数据
-        </Button>
-        <Pocket48Login />
+        <Button.Group className="ml-[8px]">
+          <Button disabled={ searchSelectValue === undefined || homeMessageLoading }
+            onClick={ handleGetHomeownerMessageClick }
+          >
+            加载数据
+          </Button>
+          <Button type="primary" onClick={ (event: MouseEvent): void => setExportMessageModalOpen(true) }>
+            导出当前数据
+          </Button>
+          <Pocket48Login />
+        </Button.Group>
       </Header>
       <div className="flex-grow overflow-hidden">
         <MessageDisplay data={ homeMessageSlice } loading={ homeMessageLoading } />
