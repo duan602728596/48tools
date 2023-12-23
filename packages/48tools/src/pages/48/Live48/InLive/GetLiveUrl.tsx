@@ -60,8 +60,8 @@ function GetLiveUrl(props: {}): ReactElement {
       return;
     }
 
-    const reqLiveOne: LiveOne = await requestLiveOne(value.live);
-    const playStream: Array<LiveOnePlayStreams> = reqLiveOne?.content?.playStreams ?? [];
+    const resLiveOne: LiveOne = await requestLiveOne(value.live);
+    const playStream: Array<LiveOnePlayStreams> = resLiveOne?.content?.playStreams ?? [];
 
     if (!playStream.length) {
       messageApi.warning('当前直播未开始！');
@@ -73,7 +73,7 @@ function GetLiveUrl(props: {}): ReactElement {
       .filter((o: LiveOnePlayStreams): boolean => !!o.streamPath)
       .at(-1);
 
-    if (!playStreamItem) {
+    if (!(playStreamItem?.streamPath)) {
       messageApi.warning('当前直播未开始！');
 
       return;
@@ -82,7 +82,7 @@ function GetLiveUrl(props: {}): ReactElement {
     // 开始录制
     const time: string = getFileTime();
     const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `[48公演直播]${ filenamify(reqLiveOne.content.title) }_${ value.live }_${ time }.flv`
+      defaultPath: `[48公演直播]${ filenamify(resLiveOne.content.title) }_${ value.live }_${ time }.flv`
     });
 
     if (result.canceled || !result.filePath) return;
@@ -105,7 +105,7 @@ function GetLiveUrl(props: {}): ReactElement {
 
     worker.postMessage({
       type: 'start',
-      playStreamPath: playStreamItem!.streamPath,
+      playStreamPath: playStreamItem.streamPath,
       filePath: result.filePath,
       ffmpeg: getFFmpeg()
     });
@@ -116,7 +116,7 @@ function GetLiveUrl(props: {}): ReactElement {
         Pick<InLiveWebWorkerItemNoplayStreamPath, 'live' | 'quality'>
       >({ id, worker }, {
         live: value.live,
-        quality: playStreamItem!.streamName
+        quality: playStreamItem.streamName
       })
     ));
   }

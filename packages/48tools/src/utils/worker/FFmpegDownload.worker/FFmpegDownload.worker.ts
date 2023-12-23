@@ -57,7 +57,7 @@ function timeToSecond(time: string): number {
  */
 function ffmpegProgressParse(qid: string, str: string): void {
   // 输入
-  if (/^\s*Input/i.test(str)) {
+  if (/^\s*Input/i.test(str) && duration === null) {
     const durationStr: RegExpMatchArray | null = str.match(/Duration:\s*\d+:\d+:\d+(\.\d+)?/ig);
 
     if (durationStr) {
@@ -79,7 +79,7 @@ function ffmpegProgressParse(qid: string, str: string): void {
 
       postMessage({
         type: 'progress',
-        data: Math.floor(time / duration * 100),
+        data: Number((time / duration * 100).toFixed(2)),
         qid
       });
     }

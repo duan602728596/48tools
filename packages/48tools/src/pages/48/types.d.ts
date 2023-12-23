@@ -34,20 +34,10 @@ export interface Pocket48LiveAutoGrabOptions {
 }
 
 /* ========== inVideo ========== */
-export interface InVideoQuery {
-  page?: number;     // 当前页数
-  total?: number;    // 数据总数
-  liveType?: string;
-}
-
 export interface InVideoItem {
   title: string;
   id: string;
   description: string;
-  liveType: string;
-}
-
-export interface InVideoWebWorkerItem extends WebWorkerChildItem {
   liveType: string;
 }
 
