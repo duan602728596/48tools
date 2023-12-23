@@ -35,14 +35,14 @@ export function callback(): void {
     await selectItemClick(app, '48-in-video-group-type', liveType);
 
     // 加载数据
-    const loadDataBtn: Locator = await app.win.locator('.ant-space-item button');
+    const loadDataBtn: Locator = await app.win.locator('.ant-btn-group button.ant-btn-primary');
 
     await loadDataBtn.click();
     await app.win.waitForSelector('.ant-table-row');
 
     const images: Array<ElementHandle> = await app.win.$$('.ant-table-row');
 
-    expect(images.length).toEqual(15);
+    expect(images.length).toEqual(20);
   }
 
   test(testTitle(21, 'Should get SNH48 public performance video data'), async function(): Promise<void> {
@@ -59,5 +59,9 @@ export function callback(): void {
 
   test(testTitle(24, 'Should get CKG48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('CKG48');
+  });
+
+  test(testTitle(25, 'Should get CGT48 public performance video data'), async function(): Promise<void> {
+    await getTeamsVideoData('CGT48');
   });
 }
