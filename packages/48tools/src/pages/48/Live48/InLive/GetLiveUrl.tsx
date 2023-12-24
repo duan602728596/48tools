@@ -31,7 +31,6 @@ import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { setOpenLiveListOptions, setAddInLiveList, setStopInLiveList, type Live48InitialState } from '../../reducers/live48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
-import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
 import type { MessageEventData } from '../../../../commonTypes';
 import type { InLiveFormValue, InLiveWebWorkerItemNoplayStreamPath } from '../../types';
 
@@ -150,6 +149,8 @@ function GetLiveUrl(props: {}): ReactElement {
             };
           })
         ));
+      } else {
+        messageApi.error('获取公演直播列表失败！需要登录账号！');
       }
     } catch (err) {
       console.error(err);
@@ -176,10 +177,7 @@ function GetLiveUrl(props: {}): ReactElement {
             <Button className={ style.reloadButton } icon={ <IconReloadOutlined /> } onClick={ getLiveList } />
           </Tooltip>
         </Space>
-        <Button.Group className="mx-[8px]">
-          <Button type="primary" htmlType="submit">开始直播录制</Button>
-          <Pocket48Login />
-        </Button.Group>
+        <Button className="ml-[8px]" type="primary" htmlType="submit">开始直播录制</Button>
       </Form>
       { messageContextHolder }
     </Fragment>

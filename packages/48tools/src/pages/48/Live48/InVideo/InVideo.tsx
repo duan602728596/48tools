@@ -44,7 +44,6 @@ import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
 import { formatTsUrl, getTeamId } from '../function/utils';
-import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
 import type { WebWorkerChildItem } from '../../../../commonTypes';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
@@ -234,7 +233,7 @@ function InVideo(props: {}): ReactElement {
           nextPage: Number(res.content.next)
         }));
       } else {
-        messageApi.error('录播加载失败！');
+        messageApi.error('录播加载失败！需要登录账号！');
       }
     } catch (err) {
       console.error(err);
@@ -320,7 +319,6 @@ function InVideo(props: {}): ReactElement {
             <Button disabled={ inVideoQueryLiveType === undefined } onClick={ handleGetNextPageVideoListClick }>
               加载下一页
             </Button>
-            <Pocket48Login />
           </Button.Group>
         </Space>
       </Header>

@@ -245,10 +245,8 @@ export async function requestOpenLiveList(args: {
   next?: string;
   record?: boolean;
 } = {}): Promise<OpenLiveList> {
-  const token: string | undefined = getPocket48Token();
-
   const res: GotResponse<OpenLiveList> = await got.post('https://pocketapi.48.cn/live/api/v1/live/getOpenLiveList', {
-    headers: createHeaders(token),
+    headers: createHeaders(),
     responseType: 'json',
     json: {
       debug: false,
@@ -266,10 +264,9 @@ export async function requestOpenLiveList(args: {
  * @param { string } liveId
  */
 export async function requestLiveOne(liveId: string): Promise<LiveOne> {
-  const token: string | undefined = getPocket48Token();
   const res: GotResponse<LiveOne> = await got('https://pocketapi.48.cn/live/api/v1/live/getOpenLiveOne', {
     method: 'POST',
-    headers: createHeaders(token),
+    headers: createHeaders(),
     responseType: 'json',
     json: { liveId },
     timeout: 10 * 60 * 1_000
