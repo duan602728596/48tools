@@ -7,8 +7,7 @@ on:
 
 jobs:
   build:
-    # https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners
-    runs-on: macos-12-xlarge
+    runs-on: macos-12
     strategy:
       matrix:
         node-version: [18.x]
