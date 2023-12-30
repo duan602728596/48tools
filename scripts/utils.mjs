@@ -16,6 +16,8 @@ export const build = path.join(cwd, 'build');        // 最终生成的可执行
 export const output = {
   mac: path.join(build, 'mac'),            // mac
   macArm64: path.join(build, 'mac-arm64'), // mac-arm64
+  _mac: path.join(build, '_mac'),
+  _macArm64: path.join(build, '_mac-arm64'),
   win: path.join(build, 'win'),            // win64
   win32: path.join(build, 'win32'),        // win32
   linux: path.join(build, 'linux')         // linux
@@ -24,6 +26,8 @@ export const output = {
 export const unpacked = {
   mac: path.join(output.mac, 'mac'),
   macArm64: path.join(output.macArm64, 'mac-arm64'),
+  _mac: path.join(output._mac, 'mac'),
+  _macArm64: path.join(output._macArm64, 'mac-arm64'),
   win: path.join(output.win, 'win-unpacked'),
   win32: path.join(output.win32, 'win-ia32-unpacked'),
   linux: path.join(output.linux, 'linux-unpacked')
@@ -32,6 +36,7 @@ export const unpacked = {
 // 系统环境
 export const isMacOS = process.platform === 'darwin';
 export const isWindows = process.platform === 'win32';
+export const isOld = process.env.OLD === '1';
 
 /**
  * 执行命令

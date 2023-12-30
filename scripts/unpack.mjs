@@ -3,7 +3,8 @@ import fsP from 'node:fs/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
-import { cwd, appDir, wwwDir, staticsDir, build, output, unpacked, isMacOS } from './utils.mjs';
+import { makeUniversalApp } from '@electron/universal';
+import { cwd, appDir, wwwDir, staticsDir, build, output, unpacked, isMacOS, isOld } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -135,16 +136,40 @@ async function unpack() {
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 
   // 编译mac
-  isMacOS && await builder.build({
-    targets: builder.Platform.MAC.createTarget(),
-    config: config(output.mac)
-  });
+  if (isMacOS) {
+    if (isOld) {
+      // 编译mac
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output.mac)
+      });
 
-  // 编译mac-arm64
-  isMacOS && await builder.build({
-    targets: builder.Platform.MAC.createTarget(),
-    config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
-  });
+      // 编译mac-arm64
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+      });
+    } else {
+      // 编译mac
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output._mac)
+      });
+
+      // 编译mac-arm64
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output._macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+      });
+
+      // 合并mac和mac-arm64
+      await makeUniversalApp({
+        x64AppPath: path.join(unpacked._mac, '48tools.app'),
+        arm64AppPath: path.join(unpacked._macArm64, '48tools.app'),
+        outAppPath: path.join(unpacked.mac, '48tools.app')
+      });
+    }
+  }
 
   // 编译win64
   await builder.build({
@@ -167,7 +192,7 @@ async function unpack() {
   // 拷贝许可文件
   await Promise.all([
     ...isMacOS ? copy(unpacked.mac, true) : [],
-    ...isMacOS ? copy(unpacked.macArm64, true) : [],
+    ...(isMacOS && isOld) ? copy(unpacked.macArm64, true) : [],
     ...copy(unpacked.win),
     ...copy(unpacked.win32),
     ...copy(unpacked.linux)
