@@ -19,11 +19,10 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   // 监听是否登陆
   const handleWeiboLoginCookieListener: (event: IpcRendererEvent, cookies: Array<Cookie>) => Promise<void>
     = useCallback(async function(event: IpcRendererEvent, cookies: Array<Cookie>): Promise<void> {
-      const alfIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'ALF'),
-        ssoLoginIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SSOLoginState'),
+      const ssoLoginIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SSOLoginState'),
         subIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SUB');
 
-      if (alfIndex >= 0 && ssoLoginIndex >= 0 && subIndex >= 0) {
+      if (ssoLoginIndex >= 0 && subIndex >= 0) {
         const cookieStr: string = `SUB=${ cookies[subIndex].value }`;
         const uid: string | undefined = await requestUid(cookieStr);
 
