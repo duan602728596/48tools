@@ -11,13 +11,13 @@
   "dependencies": {
     "@playwright/test": "next",
     "@sweet-milktea/utils": "^4.0.0",
-    "cookie": "^0.5.0",
-    "fs-extra": "^11.1.1",
-    "got": "^13.0.0"
+    "cookie": "^0.6.0",
+    "fs-extra": "^11.2.0",
+    "got": "^14.0.0"
   },
   "devDependencies": {
     "cross-zip": "^4.0.0",
-    "jsdom": "^22.1.0",
+    "jsdom": "^23.0.1",
     "rimraf": "*"
   },
   "resolutions": {
