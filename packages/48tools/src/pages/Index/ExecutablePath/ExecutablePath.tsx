@@ -3,8 +3,7 @@ import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStat
 import { Button, Modal, Form, Alert, Input, message, type FormInstance, type ModalProps, type ButtonProps } from 'antd';
 import type { Store } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { ChromeFilled as IconChromeFilled, QuestionCircleTwoTone as IconQuestionCircleTwoTone } from '@ant-design/icons';
-import * as classNames from 'classnames';
+import { ChromeFilled as IconChromeFilled } from '@ant-design/icons';
 import style from './executablePath.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 
@@ -88,7 +87,7 @@ function ExecutablePath(props: ExecutablePathProps): ReactElement {
         onCancel={ handleCloseExecutablePathModalClick }
         { ...modalProps }
       >
-        <Form className="h-[445px]" form={ form }>
+        <Form className="h-[255px]" form={ form }>
           <Form.Item name="executablePath" label="浏览器可执行文件">
             <Input />
           </Form.Item>
@@ -100,12 +99,7 @@ function ExecutablePath(props: ExecutablePathProps): ReactElement {
           </div>
           <Alert type="info" message={
             <Fragment>
-              <h4>
-                <IconQuestionCircleTwoTone className={ classNames('mr-[6px] text-[22px]', style.iconQuestion) } />
-                无头浏览器配置的是什么？
-              </h4>
               <p>
-                需要通过无头浏览器调用电脑已安装的浏览器，用来登陆微博的账号，并获取Cookie。
                 配置无头浏览器的可执行文件，需要选择
                 <i className={ style.iText }>Chrome浏览器</i>或者
                 <i className={ style.iText }>Edge浏览器</i>的
@@ -115,14 +109,6 @@ function ExecutablePath(props: ExecutablePathProps): ReactElement {
                 例如：Windows系统选择
                 <i className={ style.iText }>"Chrome.exe"</i>文件，MacOS系统需要选择
                 <i className={ style.iText }>"Google Chrome.app/Contents/MacOS/Google Chrome"</i>文件。
-              </p>
-              <h4>
-                <IconQuestionCircleTwoTone className={ classNames('mr-[6px] text-[22px]', style.iconQuestion) } />
-                为什么要配置无头浏览器的可执行文件地址？
-              </h4>
-              <p>
-                微博PC的登陆，Cookie的有效时间只有一天。 所以使用无头浏览器启动微博的移动端登陆页，先在移动端登陆一遍，
-                然后跳转到微博的PC首页获取Cookie，这样获取到的Cookie有效时间就会很长。
               </p>
             </Fragment>
           } />
