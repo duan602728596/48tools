@@ -58,6 +58,6 @@
     "fluent-ffmpeg": "^2.1.2",
     "got": "^11.8.6",
     "hpagent": "^1.2.0",
-    "playwright-core": "^1.40.1"
+    "playwright-core": "^1.41.1"
   }
 }

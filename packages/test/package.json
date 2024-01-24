@@ -9,7 +9,7 @@
     "download": "rimraf ./ffmpeg && node ffmpegDownload.mjs"
   },
   "dependencies": {
-    "@playwright/test": "next",
+    "@playwright/test": "^1.41.1",
     "@sweet-milktea/utils": "^4.0.0",
     "cookie": "^0.6.0",
     "fs-extra": "^11.2.0",
@@ -19,9 +19,5 @@
     "cross-zip": "^4.0.0",
     "jsdom": "^23.0.1",
     "rimraf": "*"
-  },
-  "resolutions": {
-    "@playwright/test/playwright": "next",
-    "@playwright/test/playwright-core": "next"
   }
 }

@@ -15,6 +15,6 @@
     "got": "^11.8.6",
     "hpagent": "^1.2.0",
     "node-media-server": "^2.6.2",
-    "playwright-core": "^1.40.1"
+    "playwright-core": "^1.41.1"
   }
 }
