@@ -366,6 +366,23 @@ export interface ZHONGQIU_ACTIVITY_LANTERN_FANSMessageV2 extends CustomMessageV2
   };
 }
 
+// 红包
+export interface RED_PACKETMessageV2 extends CustomMessageV2 {
+  type: 'custom';
+  attach: {
+    messageType: 'RED_PACKET_2024';
+    creatorName: string;
+    packedId: string;
+    starId: number;
+    starName: string | '';
+    coverUrl: string;
+    coverHeight: number;
+    coverWidth: number;
+    sendType: number;
+    resourceType: number;
+  };
+}
+
 // 未格式化的原始数据，有些数据不想处理了
 export interface RawData extends CustomMessageV2 {
   type: 'raw';
@@ -397,6 +414,7 @@ export type FormatCustomMessage =
   | VOTEMessageV2
   | CLOSE_ROOM_CHATMessageV2
   | ZHONGQIU_ACTIVITY_LANTERN_FANSMessageV2
+  | RED_PACKETMessageV2
   | RawData;
 
 /* 保存的数据 */

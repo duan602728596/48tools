@@ -66,7 +66,10 @@ export function formatDataArray(data: Array<CustomMessageV2>): Array<FormatCusto
   data.forEach((o: CustomMessageV2): void => {
     const newItem: FormatCustomMessage = FormatData(o);
 
-    if (newItem.user.roleId === 3 && !(newItem.type === 'custom' && newItem.attach.messageType === 'PRESENT_TEXT')) {
+    if (
+      newItem.user.roleId === 3
+      && !(newItem.type === 'custom' && ['PRESENT_TEXT', 'RED_PACKET_2024'].includes(newItem.attach.messageType))
+    ) {
       newData.push(newItem);
     }
   });

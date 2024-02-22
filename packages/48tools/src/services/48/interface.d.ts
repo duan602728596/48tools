@@ -124,7 +124,8 @@ export type MsgType = 'TEXT'
   | 'PRESENT_TEXT'
   | 'VOTE'
   | 'CLOSE_ROOM_CHAT'
-  | 'ZHONGQIU_ACTIVITY_LANTERN_FANS';
+  | 'ZHONGQIU_ACTIVITY_LANTERN_FANS'
+  | 'RED_PACKET_2024';
 
 // roleId = 3为xox
 export interface CustomMessageV2 {
