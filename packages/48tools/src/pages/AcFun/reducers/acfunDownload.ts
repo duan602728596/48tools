@@ -12,6 +12,7 @@ export interface AcFunDownloadInitialState {
 
 type SliceReducers = {
   setAddDownloadList: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
+  setAddDownloadAllList: CaseReducer<AcFunDownloadInitialState, PayloadAction<Array<DownloadItem>>>;
   setDeleteDownloadList: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
   setAddDownloadWorker: CaseReducer<AcFunDownloadInitialState, PayloadAction<WebWorkerChildItem>>;
   setDeleteDownloadWorker: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
@@ -30,6 +31,11 @@ const { actions, reducer }: Slice<AcFunDownloadInitialState, SliceReducers, type
     // 添加一个下载
     setAddDownloadList(state: AcFunDownloadInitialState, action: PayloadAction<DownloadItem>): void {
       state.downloadList = state.downloadList.concat([action.payload]);
+    },
+
+    // 添加多个下载
+    setAddDownloadAllList(state: AcFunDownloadInitialState, action: PayloadAction<Array<DownloadItem>>): void {
+      state.downloadList = state.downloadList.concat(action.payload);
     },
 
     // 删除一个下载
@@ -80,6 +86,7 @@ const { actions, reducer }: Slice<AcFunDownloadInitialState, SliceReducers, type
 
 export const {
   setAddDownloadList,
+  setAddDownloadAllList,
   setDeleteDownloadList,
   setAddDownloadWorker,
   setDeleteDownloadWorker,

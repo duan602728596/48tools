@@ -1,5 +1,5 @@
 import { requestAcFunHtml } from '@48tools-api/acfun';
-import type { KsPlayJson, PageInfo, Representation } from '../../types';
+import type { KsPlayJson, PageInfo, Representation, VideoInfo } from '../../types';
 
 /**
  * 解析window.pageInfo
@@ -28,22 +28,29 @@ function getWindowPageInfo(html: string): PageInfo | undefined {
   return pageInfo;
 }
 
+export interface ParseAcFunUrlResult {
+  representation: Array<Representation> | undefined;
+  videoList: Array<VideoInfo> | undefined;
+}
+
 /**
  * 解析acfun视频地址
  * https://www.acfun.cn/v/ac21923704 高清视频测试
  * @param { string } type: 视频类型
  * @param { string } id: 视频id
  */
-export async function parseAcFunUrl(type: string, id: string): Promise<Array<Representation> | undefined> {
+export async function parseAcFunUrl(type: string, id: string): Promise<ParseAcFunUrlResult> {
   const uri: string = `https://www.acfun.cn/${ type === 'aa' ? 'bangumi' : 'v' }/${ type }${ id }`;
   const res: string = await requestAcFunHtml(uri);
   const pageInfo: PageInfo | undefined = getWindowPageInfo(res);
+  const result: ParseAcFunUrlResult = { representation: undefined, videoList: undefined };
 
   if (pageInfo) {
     const ksPlayJson: KsPlayJson = JSON.parse(pageInfo.currentVideoInfo.ksPlayJson);
 
-    return ksPlayJson?.adaptationSet?.[0]?.representation;
+    result.representation = ksPlayJson?.adaptationSet?.[0]?.representation;
+    result.videoList = pageInfo.videoList;
   }
 
-  return undefined;
+  return result;
 }

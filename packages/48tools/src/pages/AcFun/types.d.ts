@@ -18,6 +18,11 @@ export interface VideoInfo {
   id: string;
 }
 
+export interface VideoInfoWithKey extends VideoInfo {
+  key: string;
+  pageIndex: number;
+}
+
 export interface PageInfo {
   currentVideoInfo: {
     ksPlayJson: string;

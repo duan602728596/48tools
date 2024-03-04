@@ -10,13 +10,14 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Form, Select, Input, Alert, message, type FormInstance } from 'antd';
+import { Button, Modal, Form, Select, Input, Alert, message, Transfer, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
-import { parseAcFunUrl } from './function/parseAcFunUrl';
-import { setAddDownloadList } from '../reducers/acfunDownload';
-import type { Representation } from '../types';
+import { parseAcFunUrl, type ParseAcFunUrlResult } from './function/parseAcFunUrl';
+import { setAddDownloadList, setAddDownloadAllList } from '../reducers/acfunDownload';
+import VideoListSelect from './VideoListSelect';
+import type { Representation, VideoInfo, VideoInfoWithKey, DownloadItem } from '../types';
 
 /* 视频分类 */
 const acfunVideoTypes: Array<{ label: string; value: string }> = [
@@ -45,7 +46,56 @@ function AddForm(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [refreshVideoListLoading, setRefreshVideoListLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [videoList, setVideoList]: [Array<VideoInfoWithKey>, D<S<Array<VideoInfoWithKey>>>] = useState([]); // 视频列表
   const [form]: [FormInstance] = Form.useForm();
+
+  // 视频列表刷新
+  async function handleRefreshVideoListClick(event: MouseEvent): Promise<void> {
+    let formValue: FormStore;
+
+    try {
+      formValue = await form.validateFields();
+    } catch (err) {
+      return console.error(err);
+    }
+
+    setRefreshVideoListLoading(true);
+
+    try {
+      const { videoList: list }: ParseAcFunUrlResult = await parseAcFunUrl(formValue.type, formValue.id);
+
+      if (list) {
+        setVideoList(list.map((o: VideoInfo, i: number): VideoInfoWithKey => ({ ...o, key: o.id, pageIndex: i + 1 })));
+      } else {
+        messageApi.warning('没有获取到视频列表！');
+      }
+    } catch (err) {
+      messageApi.error('视频列表获取失败！');
+      console.error(err);
+    }
+
+    setRefreshVideoListLoading(false);
+  }
+
+  // 确定添加多个视频
+  async function handleAddDownloadVideoListClick(event: MouseEvent): Promise<void> {
+    let formValue: FormStore;
+
+    try {
+      formValue = await form.validateFields();
+    } catch (err) {
+      return console.error(err);
+    }
+
+    if (!(formValue?.videoList?.length)) {
+      messageApi.warning('没有选择视频。');
+
+      return;
+    }
+
+    const [id]: [string] = formValue.id.split('_');
+  }
 
   // 确定添加视频
   async function handleAddDownloadQueueClick(event: MouseEvent): Promise<void> {
@@ -60,7 +110,7 @@ function AddForm(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const representation: Array<Representation> | undefined = await parseAcFunUrl(formValue.type, formValue.id);
+      const { representation }: ParseAcFunUrlResult = await parseAcFunUrl(formValue.type, formValue.id);
 
       if (representation) {
         dispatch(setAddDownloadList({
@@ -101,15 +151,21 @@ function AddForm(props: {}): ReactElement {
       <Button type="primary" data-test-id="acfun-download-add-btn" onClick={ handleOpenAddModalClick }>添加下载队列</Button>
       <Modal open={ visible }
         title="添加下载任务"
-        width={ 480 }
+        width={ 880 }
         centered={ true }
         maskClosable={ false }
         confirmLoading={ loading }
         afterClose={ handleAddModalClose }
-        onOk={ handleAddDownloadQueueClick }
+        footer={
+          <Fragment>
+            <Button onClick={ handleCloseAddModalClick }>取消</Button>
+            <Button onClick={ handleAddDownloadVideoListClick }>确定选择视频列表</Button>
+            <Button type="primary" onClick={ handleAddDownloadQueueClick }>确定</Button>
+          </Fragment>
+        }
         onCancel={ handleCloseAddModalClick }
       >
-        <Form className="h-[155px]"
+        <Form className="h-[455px]"
           form={ form }
           initialValues={{ type: 'ac' }}
           labelCol={{ span: 4 }}
@@ -120,6 +176,12 @@ function AddForm(props: {}): ReactElement {
           </Form.Item>
           <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
             <Input />
+          </Form.Item>
+          <Form.Item label="批量选择">
+            <Button className="mb-[8px]" loading={ refreshVideoListLoading } onClick={ handleRefreshVideoListClick }>视频列表刷新</Button>
+            <Form.Item name="videoList" noStyle={ true }>
+              <VideoListSelect dataSource={ videoList } />
+            </Form.Item>
           </Form.Item>
           <Alert type="info" message="ID为ac后面的字符，包括页码等。" />
         </Form>
