@@ -13,10 +13,16 @@ export interface KsPlayJson {
   }>;
 }
 
+export interface VideoInfo {
+  fileName: string;
+  id: string;
+}
+
 export interface PageInfo {
   currentVideoInfo: {
     ksPlayJson: string;
   };
+  videoList: Array<VideoInfo>;
 }
 
 export interface DownloadItem {
