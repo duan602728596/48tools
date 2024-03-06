@@ -6,6 +6,7 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import style from './download.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
@@ -17,10 +18,13 @@ import {
   setAddDownloadWorker,
   setDeleteDownloadWorker,
   setDownloadProgress,
+  setRepresentation,
   type AcFunDownloadInitialState
 } from '../reducers/acfunDownload';
 import { getFFmpeg } from '../../../utils/utils';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
+import { parseAcFunUrl, type ParseAcFunUrlResult } from './function/parseAcFunUrl';
+import { pick } from '../../../utils/lodash';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem, Representation } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
@@ -44,6 +48,26 @@ function Download(props: {}): ReactElement {
   const { downloadList, ffmpegDownloadWorkers, progress }: AcFunDownloadInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+
+  // 下拉
+  async function handleLoadDataDropdownVisibleChange(record: DownloadItem, open: boolean): Promise<void> {
+    try {
+      const { representation }: ParseAcFunUrlResult = await parseAcFunUrl(record.type, record.id);
+
+      if (representation) {
+        dispatch(setRepresentation({
+          qid: record.qid,
+          representation: representation.map((o: Representation): Representation => pick(o, ['m3u8Slice', 'url', 'qualityLabel']))
+        }));
+      } else {
+        messageApi.warning('没有获取到媒体地址！');
+      }
+
+    } catch (err) {
+      console.error(err);
+      messageApi.error('地址解析失败！');
+    }
+  }
 
   // 停止
   function handleStopClick(record: DownloadItem, event?: MouseEvent): void {
@@ -158,9 +182,22 @@ function Download(props: {}): ReactElement {
               ) : (
                 <Select className={ style.downloadSelect }
                   placeholder="下载"
+                  notFoundContent={
+                    record.representation ? undefined : (
+                      <div className="text-center py-[8px]">
+                        <IconLoadingOutlined className="mr-[6px]" />
+                        地址加载中...
+                      </div>
+                    )
+                  }
                   onSelect={ (val: string): Promise<void> => handleDownloadAcFunVideoClick(record, val) }
+                  onDropdownVisibleChange={
+                    record.representation
+                      ? undefined
+                      : (open: boolean): Promise<void> => handleLoadDataDropdownVisibleChange(record, open)
+                  }
                 >
-                  { handleDownloadQualitySelectOptionRender(record.representation) }
+                  { record.representation ? handleDownloadQualitySelectOptionRender(record.representation) : null }
                 </Select>
               )
             }

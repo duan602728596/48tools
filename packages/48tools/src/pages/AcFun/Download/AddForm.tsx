@@ -94,7 +94,19 @@ function AddForm(props: {}): ReactElement {
       return;
     }
 
-    const [id]: [string] = formValue.id.split('_');
+    const [basicId]: [string] = formValue.id.split('_');
+
+    dispatch(setAddDownloadAllList(
+      formValue.videoList.map((o: VideoInfoWithKey): DownloadItem => {
+        return {
+          qid: randomUUID(),
+          type: formValue.type,
+          id: `${ basicId }_${ o.pageIndex }`,
+          representation: undefined
+        };
+      })
+    ));
+    setVisible(false);
   }
 
   // 确定添加视频

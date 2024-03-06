@@ -1,7 +1,7 @@
 import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import { ProgressSet } from '../../../components/ProgressNative/index';
 import type { WebWorkerChildItem } from '../../../commonTypes';
-import type { DownloadItem } from '../types';
+import type { DownloadItem, Representation } from '../types';
 import type { MessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
 export interface AcFunDownloadInitialState {
@@ -13,6 +13,7 @@ export interface AcFunDownloadInitialState {
 type SliceReducers = {
   setAddDownloadList: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
   setAddDownloadAllList: CaseReducer<AcFunDownloadInitialState, PayloadAction<Array<DownloadItem>>>;
+  setRepresentation: CaseReducer<AcFunDownloadInitialState, PayloadAction<{ qid: string; representation: Array<Representation> }>>;
   setDeleteDownloadList: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
   setAddDownloadWorker: CaseReducer<AcFunDownloadInitialState, PayloadAction<WebWorkerChildItem>>;
   setDeleteDownloadWorker: CaseReducer<AcFunDownloadInitialState, PayloadAction<DownloadItem>>;
@@ -36,6 +37,15 @@ const { actions, reducer }: Slice<AcFunDownloadInitialState, SliceReducers, type
     // 添加多个下载
     setAddDownloadAllList(state: AcFunDownloadInitialState, action: PayloadAction<Array<DownloadItem>>): void {
       state.downloadList = state.downloadList.concat(action.payload);
+    },
+
+    // 设置representation
+    setRepresentation(state: AcFunDownloadInitialState, action: PayloadAction<{ qid: string; representation: Array<Representation> }>): void {
+      const item: DownloadItem | undefined = state.downloadList.find((o: DownloadItem): boolean => o.qid === action.payload.qid);
+
+      if (item) {
+        item.representation = action.payload.representation;
+      }
     },
 
     // 删除一个下载
@@ -87,6 +97,7 @@ const { actions, reducer }: Slice<AcFunDownloadInitialState, SliceReducers, type
 export const {
   setAddDownloadList,
   setAddDownloadAllList,
+  setRepresentation,
   setDeleteDownloadList,
   setAddDownloadWorker,
   setDeleteDownloadWorker,
