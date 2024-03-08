@@ -1,4 +1,5 @@
-import got, { type Response as GotResponse, type Delays } from 'got';
+import got, { type Response as GotResponse } from 'got';
+import type { Delays } from 'got/dist/source/core/utils/timed-out';
 import type { BilibiliLiveListResponse, AcfunLiveListResponse } from './interface.js';
 
 const gotOptionsTimeout: Delays = {
