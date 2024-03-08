@@ -41,7 +41,7 @@ export const titleBarIcon: string | undefined = isDevelopment ? undefined : path
 
 /**
  * html路径
- * @param { string } htmlName: 文件名
+ * @param { string } htmlName - 文件名
  */
 export function createHtmlFilePath(htmlName: string): string {
   return isDevelopment

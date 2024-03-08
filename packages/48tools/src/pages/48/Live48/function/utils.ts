@@ -2,8 +2,8 @@ import { getProxyServerPort } from '../../../../utils/proxyServer/proxyServer';
 
 /**
  * 格式化m3u8文件内视频的地址
- * @param { string } data: m3u8文件内容
- * @param { string } m3u8Url: m3u8文件的路径
+ * @param { string } data - m3u8文件内容
+ * @param { string } m3u8Url - m3u8文件的路径
  */
 export function formatTsUrl(data: string, m3u8Url: string): [string, Array<string>] {
   const port: number = getProxyServerPort().port;

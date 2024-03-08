@@ -132,9 +132,9 @@ DownloadImages.propTypes = {
 /**
  * 弹出层打开图片下载
  * @param { Omit<ModalStaticFunctions, 'warn'> } modalApi
- * @param { LiveInfo } liveInfo: 直播信息
- * @param { string } coverPath: 封面
- * @param { Array<string> } carousels?: 电台轮播图
+ * @param { LiveInfo } liveInfo - 直播信息
+ * @param { string } coverPath - 封面
+ * @param { Array<string> } [carousels] - 电台轮播图
  */
 function downloadImages(
   modalApi: Omit<ModalStaticFunctions, 'warn'>,

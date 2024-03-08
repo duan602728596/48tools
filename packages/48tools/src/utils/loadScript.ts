@@ -1,7 +1,7 @@
 /**
  * 异步加载script脚本
- * @param { string } src: 脚本地址
- * @param { string } id: 脚本唯一id
+ * @param { string } src - 脚本地址
+ * @param { string } id - 脚本唯一id
  */
 function loadScript(src: string, id: string): Promise<void> | void {
   const scriptId: string = `__loadScript__${ id }`;

@@ -23,7 +23,7 @@ export async function requestTopicContent(cookie: string, page: number = 1): Pro
 /**
  * 签到
  * @param { string } cookie
- * @param { string } topicId: 超话id
+ * @param { string } topicId - 超话id
  */
 export async function requestTopicCheckin(cookie: string, topicId: string): Promise<CheckinResult> {
   const uri: string = `https://weibo.com/p/aj/general/button?api=http://i.huati.weibo.com/aj/super/checkin&id=${ topicId }`;

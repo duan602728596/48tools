@@ -23,8 +23,8 @@ const electronDownloadVersion = packageJson.dependencies.electron.replace(/^\^/,
 
 /**
  * 编译配置
- * @param { string } outputDir: 输出文件夹
- * @param { [string, object] | undefined } target: 重写编译目标
+ * @param { string } outputDir - 输出文件夹
+ * @param { [string, object] | undefined } target - 重写编译目标
  */
 function config(outputDir, target) {
   const cfg = {
@@ -89,8 +89,8 @@ function config(outputDir, target) {
 
 /**
  * 拷贝文件
- * @param { string } unpackedDir: 拷贝目录
- * @param { boolean } isMac: 是否为mac系统
+ * @param { string } unpackedDir - 拷贝目录
+ * @param { boolean } isMac - 是否为mac系统
  */
 function copy(unpackedDir, isMac) {
   const queue = [

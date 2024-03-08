@@ -7,7 +7,7 @@ export type * from './interface';
 
 /**
  * 获取acfun直播的html和cookie
- * @param { string } roomId: 直播间id
+ * @param { string } roomId - 直播间id
  */
 export function requestAcFunLiveHtml(roomId: string): Promise<string> {
   return new Promise((resolve: Function, reject: Function): void => {
@@ -23,7 +23,7 @@ export function requestAcFunLiveHtml(roomId: string): Promise<string> {
 
 /**
  * 未登陆时，获取acfun的token和userId
- * @param { string } didCookie: cookie中的_did值
+ * @param { string } didCookie - cookie中的_did值
  */
 export async function requestRestAppVisitorLogin(didCookie: string): Promise<AppVisitorLogin> {
   const res: GotResponse<string> = await got('https://id.app.acfun.cn/rest/app/visitor/login', {
@@ -58,11 +58,11 @@ export async function requestWebTokenGet(): Promise<WebToken> {
 
 /**
  * 获取地址
- * @param { string } didCookie: cookie里did的值
- * @param { string } st: 前面获取的token
- * @param { number } userId: 用户id，未登陆时为临时获取的id
- * @param { boolean } isVisitor: 是否为未登陆状态
- * @param { string } authorId: 直播间id
+ * @param { string } didCookie - cookie里did的值
+ * @param { string } st - 前面获取的token
+ * @param { number } userId - 用户id，未登陆时为临时获取的id
+ * @param { boolean } isVisitor - 是否为未登陆状态
+ * @param { string } authorId - 直播间id
  */
 export async function requestPlayUrl(
   didCookie: string,

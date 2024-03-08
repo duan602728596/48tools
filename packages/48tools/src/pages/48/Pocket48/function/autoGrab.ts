@@ -79,10 +79,10 @@ function download(args: DownloadArgs): void {
 /**
  * 自动抓取
  * @param { MessageInstance } messageApi
- * @param { string } dir: 保存录像的目录
- * @param { Array<string> } usersArr: 监听的小偶像
- * @param { boolean | undefined } transcoding: 自动转码
- * @param { boolean | undefined } backup: 备用下载
+ * @param { string } dir - 保存录像的目录
+ * @param { Array<string> } usersArr - 监听的小偶像
+ * @param { boolean | undefined } transcoding - 自动转码
+ * @param { boolean | undefined } backup - 备用下载
  */
 async function autoGrab(
   messageApi: MessageInstance,

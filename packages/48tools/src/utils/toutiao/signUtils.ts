@@ -5,7 +5,7 @@ const CHARACTERS: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 
 /**
  * msToken的生成
- * @param { number } length: 107或者128
+ * @param { number } [length = 128] - 107或者128
  */
 export function msToken(length: number = 128): string {
   const bytes: Buffer = randomBytes(length);

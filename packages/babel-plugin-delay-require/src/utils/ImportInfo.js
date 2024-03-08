@@ -10,8 +10,8 @@ class ImportInfo {
 
   /**
    * @param { string } prefixVariableName
-   * @param { string } moduleName: 模块名
-   * @param { boolean } exportDefault: 是否导出了default
+   * @param { string } moduleName - 模块名
+   * @param { boolean } exportDefault - 是否导出了default
    */
   constructor({ prefixVariableName, moduleName, exportDefault }) {
     this.prefixVariableName = prefixVariableName;

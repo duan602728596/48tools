@@ -56,8 +56,8 @@ function getUrlQuery(uri: string): string {
 
 /**
  * 下载文件
- * @param { string } fileUrl: 文件url地址
- * @param { string } filename: 文件本地地址
+ * @param { string } fileUrl - 文件url地址
+ * @param { string } filename - 文件本地地址
  */
 async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
   downloadFileReq = got.stream(fileUrl, {
@@ -72,8 +72,8 @@ async function requestDownloadFileByStream(fileUrl: string, filename: string): P
 
 /**
  * 解析m3u8文件并生成合并清单
- * @param { string } cacheDir: 文件夹
- * @param { string } playStreamPath: m3u8文件
+ * @param { string } cacheDir - 文件夹
+ * @param { string } playStreamPath - m3u8文件
  */
 async function parseM3u8File(cacheDir: string, playStreamPath: string): Promise<Array<string>> {
   const data: string = await fsP.readFile(playStreamPath, { encoding: 'utf8' });
@@ -84,8 +84,8 @@ async function parseM3u8File(cacheDir: string, playStreamPath: string): Promise<
 
 /**
  * 生成txt文件
- * @param { string } concatTxt: txt文件
- * @param { Array<string> } urls: ts合集
+ * @param { string } concatTxt - txt文件
+ * @param { Array<string> } urls - ts合集
  */
 async function createTxtFile(concatTxt: string, urls: Array<string>): Promise<void> {
   const s: BigIntStats | null = await stat(concatTxt);
@@ -99,9 +99,9 @@ async function createTxtFile(concatTxt: string, urls: Array<string>): Promise<vo
 
 /**
  * 下载视频
- * @param { string } cacheDir: 文件夹
- * @param { Array<string> } urls: ts合集
- * @param { string } qid: 唯一ID
+ * @param { string } cacheDir - 文件夹
+ * @param { Array<string> } urls - ts合集
+ * @param { string } [qid] - 唯一ID
  */
 async function downloadTsVideos(cacheDir: string, urls: Array<string>, qid?: string): Promise<void> {
   const allFiles: number = urls.length + 1;

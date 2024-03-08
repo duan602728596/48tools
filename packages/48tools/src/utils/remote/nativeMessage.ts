@@ -3,7 +3,7 @@ import { IpcRemoteHandleChannel } from '@48tools/main/src/channelEnum';
 
 /**
  * 显示native的message提示
- * @param { MessageBoxOptions | string } optionsOrMessageText: 配置
+ * @param { MessageBoxOptions | string } optionsOrMessageText - 配置
  */
 export function nativeMessage(optionsOrMessageText: MessageBoxOptions | string): Promise<void> {
   const messageOptions: MessageBoxOptions = typeof optionsOrMessageText === 'string'

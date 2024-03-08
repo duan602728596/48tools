@@ -12,9 +12,9 @@ interface RequestSMSArguments {
 
 /**
  * 发送验证码
- * @param { string } mobile: 手机号
- * @param { string } area: 区号
- * @param { string } answer: 国外手机号可能会有的验证
+ * @param { string } mobile - 手机号
+ * @param { string } area - 区号
+ * @param { string } answer - 国外手机号可能会有的验证
  */
 export async function requestSMS({ mobile, area = '86', answer }: RequestSMSArguments): Promise<SMSResult> {
   const object: Record<string, string> = { mobile, area };
@@ -33,8 +33,8 @@ export async function requestSMS({ mobile, area = '86', answer }: RequestSMSArgu
 
 /**
  * 验证码登录
- * @param { string } mobile: 手机号
- * @param { string } code: 短信验证码
+ * @param { string } mobile - 手机号
+ * @param { string } code - 短信验证码
  */
 export async function requestMobileCodeLogin(mobile: string, code: string): Promise<LoginUserInfo> {
   const res: GotResponse<LoginUserInfo> = await got('https://pocketapi.48.cn/user/api/v1/login/app/mobile/code', {

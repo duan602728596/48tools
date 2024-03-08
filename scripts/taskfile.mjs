@@ -17,8 +17,8 @@ const appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node
 
 /**
  * ncc文件编译
- * @param { string } input: 文件路径
- * @param { string } output: 输出目录
+ * @param { string } input - 文件路径
+ * @param { string } output - 输出目录
  */
 async function nccBuild(input, output) {
   const { code } = await ncc(input, {
@@ -31,7 +31,7 @@ async function nccBuild(input, output) {
 
 /**
  * 根据依赖名称生成文件
- * @param { string } dependenciesName: 依赖名称
+ * @param { string } dependenciesName - 依赖名称
  */
 async function createFilesByDependenciesName(dependenciesName) {
   const dependenciesDir = path.join(appNodeModules, dependenciesName); // 模块的输出目录

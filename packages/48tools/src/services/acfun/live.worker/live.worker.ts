@@ -7,7 +7,7 @@ type MessageEventData = {
 
 /**
  * 获取acfun直播的html和cookie
- * @param { string } roomId: 直播间id
+ * @param { string } roomId - 直播间id
  * @param { string | undefined } acfunCookie
  */
 export async function requestAcFunLiveHtml(roomId: string, acfunCookie: string | undefined): Promise<void> {

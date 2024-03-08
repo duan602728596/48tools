@@ -2,7 +2,7 @@ type InputNumberValue = string | number | undefined;
 
 /**
  * 判断是否为数字，并返回数字或空
- * @param { InputNumberValue } v: 数字
+ * @param { InputNumberValue } v - 数字
  */
 function isNumber(v: InputNumberValue): number | undefined {
   return typeof v === 'number' ? v : undefined;
@@ -10,9 +10,9 @@ function isNumber(v: InputNumberValue): number | undefined {
 
 /**
  * 根据时分秒获取完整时间
- * @param { InputNumberValue } h: 时
- * @param { InputNumberValue } m: 分
- * @param { InputNumberValue } s: 秒
+ * @param { InputNumberValue } h - 时
+ * @param { InputNumberValue } m - 分
+ * @param { InputNumberValue } s - 秒
  */
 export function getFullTime(h: InputNumberValue, m: InputNumberValue, s: InputNumberValue): string | undefined {
   const hour: number | undefined = isNumber(h),

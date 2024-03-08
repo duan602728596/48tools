@@ -21,10 +21,10 @@ export type MessageEventData = {
 
 /**
  * 下载文件
- * @param { string } fileUrl: 文件url地址
- * @param { string } filename: 文件本地地址
- * @param { Headers | undefined } headers: 文件本地地址
- * @param { (e: ProgressEventData) => void } onProgress: 进度条
+ * @param { string } fileUrl - 文件url地址
+ * @param { string } filename - 文件本地地址
+ * @param { Headers | undefined } headers - 文件本地地址
+ * @param { (e: ProgressEventData) => void } onProgress - 进度条
  */
 async function requestDownloadFileByStream(
   fileUrl: string,
@@ -72,11 +72,11 @@ async function requestDownloadFile302MovedTemporarily(
 
 /**
  * 下载视频或者音频
- * @param { string } qid: qid
- * @param { string } durl: 文件的网络地址
- * @param { string } filePath: 保存位置
- * @param { boolean } resStatus302: 请求类型
- * @param { Headers } headers: 重新定义headers
+ * @param { string } qid - qid
+ * @param { string } durl - 文件的网络地址
+ * @param { string } filePath - 保存位置
+ * @param { boolean } [resStatus302] - 请求类型
+ * @param { Headers } headers - 重新定义headers
  */
 function download(qid: string, durl: string, filePath: string, resStatus302?: boolean, headers?: Headers): void {
   if (resStatus302) {

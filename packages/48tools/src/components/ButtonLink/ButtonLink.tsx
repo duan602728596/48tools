@@ -11,9 +11,9 @@ interface ButtonLinkProps extends PropsWithChildren {
 
 /**
  * 使用antd的button实现react-router的<Link />组件
- * @param { LinkProps } props.linkProps: <Link />的props
- * @param { ButtonProps & Record<string, unknown> } props.buttonProps: <Button />的props
- * @param { ReactNode } props.children: <Button />组件的子元素
+ * @param { LinkProps } props.linkProps - <Link />的props
+ * @param { ButtonProps & Record<string, unknown> } [props.buttonProps = {}] - <Button />的props
+ * @param { ReactNode } [props.children] - <Button />组件的子元素
  */
 function ButtonLink(props: ButtonLinkProps): ReactElement {
   const { linkProps, buttonProps = {}, children }: ButtonLinkProps = props;

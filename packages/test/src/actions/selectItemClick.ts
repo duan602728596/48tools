@@ -4,8 +4,8 @@ import ElectronApp from '../utils/ElectronApp.js';
 /**
  * 点击select的item
  * @param { ElectronApp } app
- * @param { string | Locator } selectId: 点击的select
- * @param { string | number } title: item的标题或index
+ * @param { string | Locator } selectId - 点击的select
+ * @param { string | number } title - item的标题或index
  */
 async function selectItemClick(app: ElectronApp, selectId: string | Locator, title: string | number): Promise<void> {
   let select: Locator;

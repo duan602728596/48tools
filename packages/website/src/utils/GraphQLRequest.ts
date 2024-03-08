@@ -23,7 +23,7 @@ export function isGraphQLData<T>(data: GraphQLResponse<T>): data is GraphQLData<
 
 /**
  * GraphQL请求
- * @param { string } query: 查询字符串
+ * @param { string } query - 查询字符串
  */
 async function GraphQLRequest<T = unknown>(query: string): Promise<GraphQLResponse<T>> {
   const res: Response = await fetch(GraphQLUrl, {

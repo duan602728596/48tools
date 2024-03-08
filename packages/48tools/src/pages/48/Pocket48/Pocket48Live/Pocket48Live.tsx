@@ -199,7 +199,7 @@ function Pocket48Live(props: {}): ReactElement {
 
   /**
    * 备用方案录制
-   * @param { LiveInfo } record: 直播信息
+   * @param { LiveInfo } record - 直播信息
    * @param { MouseEvent<HTMLButtonElement> } event
    */
   async function handleGetVideoBackupClick(record: LiveInfo, event: MouseEvent): Promise<void> {
@@ -251,8 +251,8 @@ function Pocket48Live(props: {}): ReactElement {
 
   /**
    * 录制
-   * @param { LiveInfo } record: 直播信息
-   * @param { boolean } transcoding: 为true时，每次都会重新编码，而不是采用视频开始时的编码，可以修复连麦问题
+   * @param { LiveInfo } record - 直播信息
+   * @param { boolean } transcoding - 为true时，每次都会重新编码，而不是采用视频开始时的编码，可以修复连麦问题
    * @param { MouseEvent<HTMLButtonElement> } event
    */
   async function handleGetVideoClick(record: LiveInfo, transcoding: boolean, event: MouseEvent): Promise<void> {

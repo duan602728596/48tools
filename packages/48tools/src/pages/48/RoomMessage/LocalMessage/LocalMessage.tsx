@@ -20,8 +20,8 @@ import { setLocalMessageBrowser, type RoomMessageInitialState } from '../../redu
 
 /**
  * 根据url返回文件名和文件夹完整路径
- * @param { URL } urlResult: url解析结果
- * @param { string } htmlStaticDir: 静态资源路径
+ * @param { URL } urlResult - url解析结果
+ * @param { string } htmlStaticDir - 静态资源路径
  */
 function getResFile(urlResult: URL, htmlStaticDir: string): [string, string] {
   const resFilename: string = filenamify(urlResult.pathname.replace(/\//g, '__')); // 文件
@@ -32,9 +32,9 @@ function getResFile(urlResult: URL, htmlStaticDir: string): [string, string] {
 
 /**
  * 将src本地化
- * @param { string } htmlStaticDir: 完整的静态资源路径
- * @param { string } relativeStaticDir: 相对的静态资源路径
- * @param { NodeListOf<T extends HTMLImageElement | HTMLVideoElement | HTMLAudioElement> } doms: dom节点
+ * @param { string } htmlStaticDir - 完整的静态资源路径
+ * @param { string } relativeStaticDir - 相对的静态资源路径
+ * @param { NodeListOf<T extends HTMLImageElement | HTMLVideoElement | HTMLAudioElement> } doms - dom节点
  */
 function replaceSrc<T extends HTMLImageElement | HTMLVideoElement | HTMLAudioElement>(
   htmlStaticDir: string,

@@ -12,8 +12,8 @@ export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
 
 /**
  * 打开播放器页面
- * @param { string } title: 窗口标题
- * @param { string } query: 字符串查询参数
+ * @param { string } title - 窗口标题
+ * @param { string } query - 字符串查询参数
  */
 function open(title: string, query: string): void {
   const searchParams: URLSearchParams = new URLSearchParams(query);

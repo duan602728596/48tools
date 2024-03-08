@@ -52,8 +52,8 @@ function timeToSecond(time: string): number {
 
 /**
  * 解析进度条
- * @param { string } qid: 唯一ID
- * @param { string } str: 进度条数据
+ * @param { string } qid - 唯一ID
+ * @param { string } str - 进度条数据
  */
 function ffmpegProgressParse(qid: string, str: string): void {
   // 输入

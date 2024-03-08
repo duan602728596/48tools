@@ -5,7 +5,7 @@ export type * from './interface';
 
 /**
  * 获取账号信息
- * @param { string } id: 用户id
+ * @param { string } id - 用户id
  * @param { string } cookie
  */
 export async function requestUserInfo(id: string, cookie: string): Promise<UserInfo> {

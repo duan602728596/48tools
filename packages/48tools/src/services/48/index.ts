@@ -20,7 +20,7 @@ export type * from './interface';
 
 /**
  * 获取单个直播间的信息
- * @param { string } id: 直播间id
+ * @param { string } id - 直播间id
  */
 export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
   const res: GotResponse<LiveRoomInfo> = await got('https://pocketapi.48.cn/live/api/v1/live/getLiveOne', {
@@ -48,10 +48,10 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
  *   CGT48：21
  *   IDFT：15
  *   海外练习生：16
- * @param { string | number } next: 录播id分页
- * @param { boolean } inLive: 是否在直播中
- * @param { number | 'all' } groupId: 组
- * @param { string | number | undefined } userId: 用户id
+ * @param { string | number } next - 录播id分页
+ * @param { boolean } inLive - 是否在直播中
+ * @param { number | 'all' } groupId - 组
+ * @param { string | number | undefined } userId - 用户id
  */
 export async function requestLiveList(
   next: string,
@@ -148,9 +148,9 @@ export async function requestServerJump(id: number): Promise<ServerJumpResult | 
 
 /**
  * 请求口袋房间的信息
- * @param { number } channelId: 频道ID
- * @param { number } serverId: 服务的ID
- * @param { number } nextTime: 查询的位置
+ * @param { number } channelId - 频道ID
+ * @param { number } serverId - 服务的ID
+ * @param { number } [nextTime = 0] - 查询的位置
  */
 export async function requestHomeownerMessage(
   channelId: number,
@@ -199,8 +199,8 @@ export async function requestVoiceOperate(serverId: number, channelId: number): 
 
 /**
  * 下载文件
- * @param { string } fileUrl: 文件url地址
- * @param { string } filename: 文件本地地址
+ * @param { string } fileUrl - 文件url地址
+ * @param { string } filename - 文件本地地址
  */
 export async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
   await pipeline(got.stream(fileUrl), fs.createWriteStream(filename));
@@ -208,8 +208,8 @@ export async function requestDownloadFileByStream(fileUrl: string, filename: str
 
 /**
  * 下载文件
- * @param { string } fileUrl: 文件url地址
- * @param { GotHeaders } headers: headers
+ * @param { string } fileUrl - 文件url地址
+ * @param { GotHeaders } [headers] - headers
  */
 export async function requestDownloadFile(fileUrl: string, headers?: GotHeaders): Promise<string> {
   const res: GotResponse<string> = await got(fileUrl, {

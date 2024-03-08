@@ -67,7 +67,7 @@ async function record(messageApi: MessageInstance, voiceItem: RoomVoiceItem, sav
 /**
  * 自动录制
  * @param { MessageInstance } messageApi
- * @param { string } saveDir: 自动保存的目录
+ * @param { string } saveDir - 自动保存的目录
  */
 export async function startAutoRecord(messageApi: MessageInstance, saveDir: string): Promise<boolean> {
   const roomVoice: Array<RoomVoiceItem> = store.getState().roomVoice.roomVoice

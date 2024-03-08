@@ -8,7 +8,7 @@ const newVersion = process.argv[2];
 
 /**
  * 修改单个json文件的version
- * @param { string } filePath: 文件路径
+ * @param { string } filePath - 文件路径
  */
 async function changePackageJsonVersion(filePath) {
   const packageJson = await fse.readJSON(filePath, { encoding: 'utf8' });

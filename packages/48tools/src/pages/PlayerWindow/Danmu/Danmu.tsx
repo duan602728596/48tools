@@ -33,8 +33,8 @@ const VirtualItemClassName: string = 'Virtual-Item-2';
 
 /**
  * 判断是否要显示文字
- * @param { LiveRoomMessage } item: 消息
- * @param { LiveRoomTextCustom | LiveRoomGiftInfoCustom } custom: 自定义消息
+ * @param { LiveRoomMessage } item - 消息
+ * @param { LiveRoomTextCustom | LiveRoomGiftInfoCustom } custom - 自定义消息
  */
 function isLiveRoomTextCustom(item: LiveRoomMessage, custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom): custom is LiveRoomTextCustom {
   return item.type === 'text' || custom.messageType === 'BARRAGE_MEMBER' || custom.messageType === 'BARRAGE_NORMAL';

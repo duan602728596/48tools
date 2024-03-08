@@ -20,7 +20,7 @@ const renameDir = {
 
 /**
  * 删除mac的多语言文件并写入版本号
- * @param { string } unpackedDir: 目录
+ * @param { string } unpackedDir - 目录
  */
 async function lprojDeleteFilesAndWriteVersion(unpackedDir) {
   // 删除多语言文件
@@ -36,7 +36,7 @@ async function lprojDeleteFilesAndWriteVersion(unpackedDir) {
 
 /**
  * 删除多语言文件并写入版本号
- * @param { string } unpackedDir: 目录
+ * @param { string } unpackedDir - 目录
  */
 async function pakDeleteFilesAndWriteVersion(unpackedDir) {
   // 删除多语言文件

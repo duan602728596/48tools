@@ -26,9 +26,9 @@ export interface ParseResult {
 
 /**
  * URL解析地址
- * @param { URL } urlParse: 地址的解析
- * @param { string } url: 抖音url地址
- * @param { string | undefined } cookie: 请求时使用的cookie
+ * @param { URL } urlParse - 地址的解析
+ * @param { string } url - 抖音url地址
+ * @param { string | undefined } cookie - 请求时使用的cookie
  */
 async function douyinUrlParse(urlParse: URL, url: string, cookie: string | undefined): Promise<ParseResult | undefined> {
   let type: DouyinUrlType | undefined;
@@ -89,7 +89,7 @@ async function douyinUrlParse(urlParse: URL, url: string, cookie: string | undef
 
 /**
  * 非URL解析ID
- * @param { string } url: 抖音url地址
+ * @param { string } url - 抖音url地址
  */
 function noUrlParse(url: string): ParseResult {
   return {
@@ -100,8 +100,8 @@ function noUrlParse(url: string): ParseResult {
 
 /**
  * 将抖音地址解析成不同的类型
- * @param { string } url: 抖音url地址
- * @param { string | undefined } cookie: cookie
+ * @param { string } url - 抖音url地址
+ * @param { string | undefined } cookie - cookie
  */
 async function parser(url: string, cookie: string | undefined): Promise<ParseResult | undefined> {
   let urlParse: URL | undefined = undefined; // url的解析结果

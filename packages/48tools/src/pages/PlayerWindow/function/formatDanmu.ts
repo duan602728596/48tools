@@ -6,7 +6,7 @@ const timeRegex: RegExp = /(\d+):(\d+):(\d+)\.(\d+)/;
 /**
  * 格式化弹幕时间
  * [00:05:43.453]转换成秒
- * @param { string } time: 弹幕时间
+ * @param { string } time - 弹幕时间
  * @return { number } 返回的是秒
  */
 function formatCurrentTime(time: string): number {
@@ -20,7 +20,7 @@ function formatCurrentTime(time: string): number {
 
 /**
  * 定义一个函数，将毫秒数转换为字符串形式的时间
- * @param { number } timeMS: 毫秒数
+ * @param { number } timeMS - 毫秒数
  */
 function formatTime(timeMS: number): string {
   // 计算小时，分钟，秒和毫秒
@@ -36,7 +36,7 @@ function formatTime(timeMS: number): string {
 /**
  * 解析弹幕
  * 弹幕格式为 [00:05:43.453]昵称\t弹幕内容
- * @param { string } str: 弹幕原始文本
+ * @param { string } str - 弹幕原始文本
  */
 function formatDanmu(str: string): Array<DanmuItem> {
   const result: Array<DanmuItem> = [];

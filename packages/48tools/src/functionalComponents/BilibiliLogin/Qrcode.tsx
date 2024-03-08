@@ -24,7 +24,7 @@ export interface BilibiliCookie {
 
 /**
  * 二维码扫描、刷新等
- * @param { Function } props.onCancel: 关闭弹出层的方法
+ * @param { Function } props.onCancel - 关闭弹出层的方法
  */
 function Qrcode(props: { onCancel: Function }): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();

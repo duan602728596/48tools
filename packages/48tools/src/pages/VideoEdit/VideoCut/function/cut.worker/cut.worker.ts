@@ -18,8 +18,8 @@ type Time = [number, number, number];
 
 /**
  * 计算时间差
- * @param { Time } startTime: 开始时间
- * @param { Time } endTime  : 结束时间
+ * @param { Time } startTime - 开始时间
+ * @param { Time } endTime - 结束时间
  * @return { Time }
  */
 export function computingTime(startTime: Time, endTime: Time): Time {

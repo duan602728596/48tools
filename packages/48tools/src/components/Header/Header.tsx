@@ -10,8 +10,8 @@ interface HeaderProps extends PropsWithChildren {
 
 /**
  * 通用头部样式
- * @param { string } props.to: 返回的跳转地址
- * @param { ReactNode } props.children: 网站右侧组件
+ * @param { string } props.to - 返回的跳转地址
+ * @param { ReactNode } props.children - 网站右侧组件
  */
 function Header(props: HeaderProps): ReactElement {
   const { to = '/', children, className }: HeaderProps = props;

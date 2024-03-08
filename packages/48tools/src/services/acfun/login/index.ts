@@ -34,7 +34,7 @@ export function requestPcDirectScanResult(qrLoginToken: string, qrLoginSignature
 /**
  * 阻塞监听是否登陆并返回cookie
  * @param { string } qrLoginToken
- * @param { string } qrLoginSignature: 是否扫码时返回的qrLoginSignature
+ * @param { string } qrLoginSignature - 是否扫码时返回的qrLoginSignature
  */
 export function requestPcDirectAcceptResult(qrLoginToken: string, qrLoginSignature: string): CancelableRequest<GotResponse<AcceptResult>> {
   const query: string = new URLSearchParams({

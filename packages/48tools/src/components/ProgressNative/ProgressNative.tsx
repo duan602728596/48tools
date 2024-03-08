@@ -8,7 +8,7 @@ interface ProgressNativeProps {
 
 /**
  * 进度条
- * @param { ProgressSet } props.progressSet: 进度条设置
+ * @param { ProgressSet } props.progressSet - 进度条设置
  */
 function ProgressNative(props: ProgressNativeProps): ReactElement {
   const { progressSet }: ProgressNativeProps = props;

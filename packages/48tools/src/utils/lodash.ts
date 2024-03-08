@@ -4,8 +4,8 @@ interface Obj {
 
 /**
  * omit函数的实现
- * @param { Obj } obj: object
- * @param { string[] } delKeys: 从object中删除的keys
+ * @param { Obj } obj - object
+ * @param { string[] } delKeys - 从object中删除的keys
  */
 export function omit<T = Obj>(obj: Obj, delKeys: string[]): T {
   return Object.entries(obj).reduce(function(result: T, [key, value]: [string, any]): T {
@@ -19,8 +19,8 @@ export function omit<T = Obj>(obj: Obj, delKeys: string[]): T {
 
 /**
  * pick函数的实现
- * @param { Obj } obj: object
- * @param { string[] } useKeys: object保留的keys
+ * @param { Obj } obj - object
+ * @param { string[] } useKeys - object保留的keys
  */
 export function pick<T = Obj>(obj: Obj, useKeys: string[]): T {
   return Object.entries(obj).reduce(function(result: T, [key, value]: [string, any]): T {

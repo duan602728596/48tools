@@ -1,7 +1,7 @@
 /**
  * 文件下载
- * @param { Blob } blob: 文件地址
- * @param { string } downloadName: 文件名
+ * @param { Blob } blob - 文件地址
+ * @param { string } downloadName - 文件名
  */
 function download(blob: Blob, downloadName: string): void {
   let link: HTMLAnchorElement | undefined = document.createElement('a');

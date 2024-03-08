@@ -40,9 +40,9 @@ export const isOld = process.env.OLD === '1';
 
 /**
  * 执行命令
- * @param { string } cmd: 命令
- * @param { Array<string> } args: 参数
- * @param { string } cwdPath: 文件夹
+ * @param { string } cmd - 命令
+ * @param { Array<string> } args - 参数
+ * @param { string } cwdPath - 文件夹
  */
 export function command(cmd, args, cwdPath) {
   return new Promise((resolve, reject) => {

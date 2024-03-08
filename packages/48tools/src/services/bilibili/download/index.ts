@@ -92,7 +92,7 @@ export async function requestVideoInfo({ type, id, cid, proxy, isDash }: {
  * 请求番剧信息
  * @param { number } aid
  * @param { number } cid
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string | undefined } proxy - 是否使用代理
  */
 export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: string | undefined): Promise<BangumiVideoInfo> {
   const apiUrl: string = `https://api.bilibili.com/x/player/playurl?avid=${ aid }&cid=${ cid }&qn=112`;
@@ -109,8 +109,8 @@ export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: s
 
 /**
  * 请求音频信息
- * @param { string } auid: 音频id
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string } auid - 音频id
+ * @param { string | undefined } proxy - 是否使用代理
  */
 export async function requestAudioInfo(auid: string, proxy: string | undefined): Promise<AudioInfo> {
   const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`;
@@ -127,8 +127,8 @@ export async function requestAudioInfo(auid: string, proxy: string | undefined):
 
 /**
  * 请求账户的列表
- * @param { string } mid: 账户id
- * @param { number } page: 分页
+ * @param { string } mid - 账户id
+ * @param { number } page - 分页
  */
 export async function requestSpaceArcSearch(mid: string, page: number): Promise<SpaceArcSearch> {
   const ps: string = await sign({
@@ -153,9 +153,9 @@ export async function requestSpaceArcSearch(mid: string, page: number): Promise<
 
 /**
  * 根据https://api.bilibili.com/x/web-interface/view?bvid=1V341177FV接口查询视频信息
- * @param { string } id: av或bv的id
+ * @param { string } id - av或bv的id
  * @param { 'av' | 'bv' } type
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string | undefined } proxy - 是否使用代理
  */
 export async function requestWebInterfaceView(id: string, type: string, proxy: string | undefined): Promise<WebInterfaceViewData> {
   const apiUrl: string = `https://api.bilibili.com/x/web-interface/view?${ type === 'av' ? 'a' : 'bv' }id=${ id }`;

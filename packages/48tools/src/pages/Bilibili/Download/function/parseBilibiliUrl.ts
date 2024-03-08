@@ -51,8 +51,8 @@ function parseHtml(html: string): ParseHtmlResult {
 /**
  * 解析nextjs的__NEXT_DATA__
  * @param { string } html
- * @param { 'ss' | 'ep' } type: 类型为ss时，取第一个
- * @param { string } id: ss id或ep id，需要根据这个来查具体信息
+ * @param { 'ss' | 'ep' } type - 类型为ss时，取第一个
+ * @param { string } id - ss id或ep id，需要根据这个来查具体信息
  */
 function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult {
   const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
@@ -103,10 +103,10 @@ interface ParseVideoUrlCoreObjectResult {
 
 /**
  * 解析的通用方法
- * @param { string } type: 视频类型
- * @param { string } id: 视频id
- * @param { number } page: 分页
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string } type - 视频类型
+ * @param { string } id - 视频id
+ * @param { number } [page = 1] - 分页
+ * @param { string | undefined } proxy - 是否使用代理
  * @param { boolean } isDash
  */
 async function parseVideoUrlCore(
@@ -137,10 +137,10 @@ export interface ParseVideoUrlV2ObjectResult {
 
 /**
  * 解析视频url。testID：1rp4y1e745
- * @param { string } type: 视频类型
- * @param { string } id: 视频id
- * @param { number } page: 分页
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string } type - 视频类型
+ * @param { string } id - 视频id
+ * @param { number } [page = 1] - 分页
+ * @param { string | undefined } proxy - 是否使用代理
  */
 export async function parseVideoUrlV2(
   type: string,
@@ -171,10 +171,10 @@ export interface ParseVideoUrlDASHObjectResult {
 
 /**
  * 解析视频url。testID：1rp4y1e745
- * @param { string } type: 视频类型
- * @param { string } id: 视频id
- * @param { number } page: 分页
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string } type - 视频类型
+ * @param { string } id - 视频id
+ * @param { number } [page = 1] - 分页
+ * @param { string | undefined } proxy - 是否使用代理
  */
 export async function parseVideoUrlDASH(
   type: string,
@@ -220,9 +220,9 @@ export async function parseVideoList(bvid: string): Promise<Array<ParseVideoList
 /**
  * 解析番剧的接口
  * 参考：https://github.com/Henryhaohao/Bilibili_video_download/blob/master/bilibili_video_download_bangumi.py
- * @param { string } type: 番剧类型
- * @param { string } id: 番剧id
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string } type - 番剧类型
+ * @param { string } id - 番剧id
+ * @param { string | undefined } proxy - 是否使用代理
  */
 export async function parseBangumiVideo(type: string, id: string, proxy: string | undefined): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/bangumi/play/${ type }${ id }`;
@@ -251,8 +251,8 @@ export async function parseBangumiVideo(type: string, id: string, proxy: string 
 
 /**
  * 解析音频地址
- * @param { string } id: 音频id
- * @param { string | undefined } proxy: 是否使用代理
+ * @param { string } id - 音频id
+ * @param { string | undefined } proxy - 是否使用代理
  */
 export async function parseAudioUrl(id: string, proxy: string | undefined): Promise<string | void> {
   const res: AudioInfo = await requestAudioInfo(id, proxy);

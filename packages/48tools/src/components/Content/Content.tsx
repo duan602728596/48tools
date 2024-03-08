@@ -8,8 +8,8 @@ interface ContentProps extends Required<PropsWithChildren> {
 
 /**
  * 通用的布局组件
- * @param { string | undefined } props.className: 类
- * @param { ReactNode } props.children: 子元素
+ * @param { string | undefined } props.className - 类
+ * @param { ReactNode } props.children - 子元素
  */
 function Content(props: ContentProps): ReactElement {
   const { className, children }: ContentProps = props;

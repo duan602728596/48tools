@@ -2,8 +2,8 @@ const ImportInfo = require('./utils/ImportInfo.js');
 
 /**
  * 修改绑定和引用
- * @param { import('@babel/core').NodePath<import('@babel/types').ImportDeclaration> } path: import节点路径
- * @param { ImportInfo } importInfo: 导入信息
+ * @param { import('@babel/core').NodePath<import('@babel/types').ImportDeclaration> } path - import节点路径
+ * @param { ImportInfo } importInfo - 导入信息
  */
 function variableRename(path, importInfo) {
   const exportDefault = importInfo.exportDefault ? '.default' : '';

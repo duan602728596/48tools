@@ -47,7 +47,7 @@ async function checkIn(
 /**
  * 微博签到
  * @param { MessageInstance } messageApi
- * @param { string } cookie: 账号cookie
+ * @param { string } cookie - 账号cookie
  */
 async function weiboCheckIn(messageApi: MessageInstance, cookie: string): Promise<void> {
   const { getState, dispatch }: Store = store;

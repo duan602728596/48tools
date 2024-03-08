@@ -20,7 +20,7 @@ type RequestDouyinHtmlReturn = (urlCb: string | ((url?: string) => string), cook
 
 /**
  * 获取抖音网页的html
- * @param { string } url: 抖音地址
+ * @param { string } url - 抖音地址
  */
 function requestDouyinHtml(url?: string): RequestDouyinHtmlReturn {
   async function _requestDouyinHtml(urlCb: string | ((url?: string) => string), cookie: string = ''): Promise<DouyinHtmlResponseType> {
@@ -74,8 +74,8 @@ export async function requestGetVideoRedirectUrl(uri: string): Promise<string> {
 
 /**
  * 请求user的视频列表
- * @param { string } cookie: string
- * @param { string } secUserId: user id
+ * @param { string } cookie - string
+ * @param { VideoQuery } videoQuery
  */
 export async function requestAwemePostV2(cookie: string, videoQuery: VideoQuery): Promise<AwemePostResponse | string> {
   const query: string = awemePostQueryV2(videoQuery.secUserId, videoQuery.maxCursor);

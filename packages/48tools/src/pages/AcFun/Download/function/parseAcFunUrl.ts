@@ -36,8 +36,8 @@ export interface ParseAcFunUrlResult {
 /**
  * 解析acfun视频地址
  * https://www.acfun.cn/v/ac21923704 高清视频测试
- * @param { string } type: 视频类型
- * @param { string } id: 视频id
+ * @param { string } type - 视频类型
+ * @param { string } id - 视频id
  */
 export async function parseAcFunUrl(type: string, id: string): Promise<ParseAcFunUrlResult> {
   const uri: string = `https://www.acfun.cn/${ type === 'aa' ? 'bangumi' : 'v' }/${ type }${ id }`;
