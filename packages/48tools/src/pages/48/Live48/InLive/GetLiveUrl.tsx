@@ -148,13 +148,7 @@ function GetLiveUrl(props: {}): ReactElement {
             return {
               label: (
                 <div title={ title }>
-                  {
-                    o.status === 1 ? (
-                      <span className={ classNames('mr-[4px]', commonStyle.tips) }>
-                        { o.status === 1 ? '[未开始]' : '' }
-                      </span>
-                    ) : null
-                  }
+                  { o.status === 1 ? <span className={ classNames('mr-[4px]', commonStyle.tips) }>[未开始]</span> : null }
                   { title }
                 </div>
               ),
