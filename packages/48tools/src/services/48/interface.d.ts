@@ -1,4 +1,4 @@
-import type { Pocket48LiveType, Pocket48LiveMode } from './enum';
+import type { Pocket48LiveType, Pocket48LiveMode, PlayStreamName } from './enum';
 
 export interface Pocket48ResponseBase {
   message: string;
@@ -159,7 +159,7 @@ export interface VoiceOperate extends Pocket48ResponseBase {
 }
 
 export interface LiveOnePlayStreams {
-  streamName: '标清' | '高清' | '超清';
+  streamName: PlayStreamName;
   streamPath?: string;
   streamType: 1 | 2 | 3;
   vipShow: boolean;

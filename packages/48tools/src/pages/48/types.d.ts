@@ -1,11 +1,13 @@
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
 import type { FieldData } from 'rc-field-form/es/interface';
 import type { MsgType, LiveOnePlayStreams } from '@48tools-api/48';
+import type { PlayStreamName } from '@48tools-api/48/enum';
 import type { WebWorkerChildItem } from '../../commonTypes';
 import type Pocket48LiveRender from './Pocket48/function/Pocket48LiveRender';
 
 export interface InLiveFormValue {
   live?: string;
+  streamName: PlayStreamName;
 }
 
 /* ========== live48 ========== */

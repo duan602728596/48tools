@@ -16,3 +16,9 @@ export const enum Pocket48LiveMode {
   Normal = 0,
   Record = 1
 }
+
+export const enum PlayStreamName {
+  SD = '标清',
+  HD = '高清',
+  FHD = '超清'
+}

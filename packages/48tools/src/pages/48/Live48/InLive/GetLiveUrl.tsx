@@ -11,7 +11,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Form, Select, message, Button, Space, Tooltip, type FormInstance } from 'antd';
+import { Form, Select, message, Button, Space, Tooltip, Radio, type FormInstance } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { ReloadOutlined as IconReloadOutlined } from '@ant-design/icons';
@@ -25,6 +25,7 @@ import {
   type LiveOne,
   type LiveOnePlayStreams
 } from '@48tools-api/48';
+import { PlayStreamName } from '@48tools-api/48/enum';
 import commonStyle from '../../../../common.sass';
 import style from './getLiveUrl.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
@@ -68,20 +69,32 @@ function GetLiveUrl(props: {}): ReactElement {
       return;
     }
 
-    const playStreamItem: LiveOnePlayStreams | undefined = playStream
-      .filter((o: LiveOnePlayStreams): boolean => !!o.streamPath)
-      .at(-1);
+    const playStreamItem: LiveOnePlayStreams | undefined = playStream.find((o: LiveOnePlayStreams): boolean => o.streamName === value.streamName);
 
-    if (!(playStreamItem?.streamPath)) {
-      messageApi.warning('当前直播未开始！');
+    if (!playStreamItem) {
+      messageApi.error('未找到流信息！');
 
       return;
+    }
+
+    if (playStreamItem.vipShow) {
+      if (!playStreamItem.streamPath) {
+        messageApi.warning('当前直播分辨率需要VIP！');
+
+        return;
+      }
+    } else {
+      if (!playStreamItem.streamPath) {
+        messageApi.warning('当前直播未开始！');
+
+        return;
+      }
     }
 
     // 开始录制
     const time: string = getFileTime();
     const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `[48公演直播]${ filenamify(resLiveOne.content.title) }_${ value.live }_${ time }.flv`
+      defaultPath: `[48公演直播]${ filenamify(resLiveOne.content.title) }_${ value.live }_${ value.streamName }_${ time }.flv`
     });
 
     if (result.canceled || !result.filePath) return;
@@ -168,8 +181,20 @@ function GetLiveUrl(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Form form={ form } onFinish={ handleStartInLiveSubmit }>
+      <Form form={ form } initialValues={{ streamName: PlayStreamName.HD }} onFinish={ handleStartInLiveSubmit }>
         <Space size={ 0 }>
+          <Form.Item name="streamName" noStyle={ true }>
+            <Radio.Group className="mr-[6px]"
+              optionType="button"
+              options={ [
+                PlayStreamName.SD,
+                PlayStreamName.HD,
+                {
+                  label: <span className={ commonStyle.tips }>{ PlayStreamName.FHD }（VIP）</span>,
+                  value: PlayStreamName.FHD
+                }
+              ] } />
+          </Form.Item>
           <Form.Item name="live" noStyle={ true }>
             <Select className={ style.liveSelect } loading={ loading } placeholder="选择公演" options={ OpenLiveListOptions } />
           </Form.Item>

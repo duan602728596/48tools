@@ -7,6 +7,7 @@ import type { ColumnsType } from 'antd/es/table';
 import Header from '../../../../components/Header/Header';
 import GetLiveUrl from './GetLiveUrl';
 import { setDeleteInLiveList, setStopInLiveList, type Live48InitialState } from '../../reducers/live48';
+import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
 import type { InLiveWebWorkerItemNoplayStreamPath } from '../../types';
 
 /* redux selector */
@@ -76,7 +77,12 @@ function InLive(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <GetLiveUrl />
+        <div className="mb-[8px] text-right">
+          <Pocket48Login />
+        </div>
+        <div>
+          <GetLiveUrl />
+        </div>
       </Header>
       <Table size="middle"
         columns={ columns }
