@@ -14,7 +14,7 @@ import type { ThemeValue } from './ipcListener/themeChange.mjs';
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'; // 关闭警告
 
 /* BrowserWindow窗口对象 */
-let win: BrowserWindow | null = null;
+let processWindow: BrowserWindow | null = null;
 
 /* 初始化 */
 function createWindow(): void {
@@ -29,7 +29,7 @@ function createWindow(): void {
 
   logProtocol();
 
-  win = new BrowserWindow({
+  processWindow = new BrowserWindow({
     width: 1000,
     height: 800,
     webPreferences: {
@@ -44,10 +44,10 @@ function createWindow(): void {
   });
 
   if (isDevelopment && !isTest) {
-    win.webContents.openDevTools();
+    processWindow.webContents.openDevTools();
   }
 
-  win.loadFile(createHtmlFilePath('index'),
+  processWindow.loadFile(createHtmlFilePath('index'),
     {
       query: {
         initialState: ils({
@@ -62,17 +62,17 @@ function createWindow(): void {
   // 去掉顶层菜单
   Menu.setApplicationMenu(null);
 
-  ipc(win);
+  ipc(processWindow);
 
   try {
-    ipcRemoteHandle(win);
-    pocket48LiveRemoteHandle(win);
+    ipcRemoteHandle(processWindow);
+    pocket48LiveRemoteHandle(processWindow);
   } catch {}
 
-  win.on('closed', async function(): Promise<void> {
+  processWindow.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();
     removeIpc();
-    win = null;
+    processWindow = null;
   });
 
   weiboResourceRequestInit();
@@ -90,7 +90,7 @@ app.on('window-all-closed', function(): void {
 });
 
 app.on('activate', function(): void {
-  if (win === null) {
+  if (processWindow === null) {
     createWindow();
   }
 });
