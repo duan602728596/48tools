@@ -1,3 +1,4 @@
+import { Pocket48Login } from '../functionalComponents/Pocket48Login/enum';
 import type { UserInfoString, UserInfo } from '../functionalComponents/Pocket48Login/types';
 
 // app端口袋48ua
@@ -75,7 +76,7 @@ export function mp4Source(pathname: string): string {
 
 /* 获取登录的token */
 export function getPocket48Token(): string | undefined {
-  const userInfoStr: string | null = sessionStorage.getItem('POCKET48_USER_INFO');
+  const userInfoStr: string | null = localStorage.getItem(Pocket48Login.StorageKey);
 
   if (userInfoStr !== null) {
     const userInfo: UserInfo = JSON.parse(userInfoStr as UserInfoString);
