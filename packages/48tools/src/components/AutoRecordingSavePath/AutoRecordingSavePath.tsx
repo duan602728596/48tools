@@ -1,7 +1,7 @@
 import type { OpenDialogReturnValue } from 'electron';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
-import { Button, Modal, Form, Input, message, Space, type FormInstance } from 'antd';
-import type { UseMessageReturnType } from '@48tools-types/antd';
+import { Button, Modal, Form, Input, Space, App, type FormInstance } from 'antd';
+import type { useAppProps } from 'antd/es/app/context';
 import { showOpenDialog } from '../../utils/remote/dialog';
 
 interface FormValue {
@@ -16,7 +16,7 @@ interface AutoRecordingSavePathProps {
 function AutoRecordingSavePath(props: AutoRecordingSavePathProps): ReactElement {
   const { localStorageItemKey }: AutoRecordingSavePathProps = props;
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false); // 弹出层
-  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+  const { message: messageApi }: useAppProps = App.useApp();
   const [form]: [FormInstance<FormValue>] = Form.useForm();
 
   // 取消
@@ -85,7 +85,6 @@ function AutoRecordingSavePath(props: AutoRecordingSavePathProps): ReactElement 
           </Form.Item>
         </Form>
       </Modal>
-      { messageContextHolder }
     </Fragment>
   );
 }

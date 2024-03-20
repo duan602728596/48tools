@@ -10,8 +10,8 @@ import {
   type MouseEvent
 } from 'react';
 import * as PropTypes from 'prop-types';
-import { Button, Empty, message } from 'antd';
-import type { UseMessageReturnType } from '@48tools-types/antd';
+import { Button, Empty, App } from 'antd';
+import type { useAppProps } from 'antd/es/app/context';
 import * as dayjs from 'dayjs';
 import {
   requestPcDirectQr,
@@ -52,7 +52,7 @@ function clearData(): void {
 
 /* 生成A站二维码 */
 function Qrcode(props: { onCancel: Function }): ReactElement {
-  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+  const { message: messageApi }: useAppProps = App.useApp();
   const [imageData, setImageData]: [string | undefined, D<S<string | undefined>>] = useState(undefined); // 二维码
   const acFunCookie: AcFunCookie | null = useMemo(function(): AcFunCookie | null {
     const info: string | null = localStorage.getItem(ACFUN_COOKIE_KEY);
@@ -125,19 +125,16 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
   }, []);
 
   return (
-    <Fragment>
-      <div className="h-[300px]">
-        <div className="mt-0 mb-[24px] mx-auto w-[196px] h-[196px]">
-          { imageData ? <img className="block w-full h-full" src={ imageData } /> : <Empty description={ false } /> }
-        </div>
-        <div className="text-center">
-          <Button type="text" danger={ true } onClick={ handleClearAcFunCookieClick }>清除Cookie</Button>
-          <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
-          <p className="mt-[8px]">上次登陆时间：{ acFunCookie?.time ?? '无' }</p>
-        </div>
+    <div className="h-[300px]">
+      <div className="mt-0 mb-[24px] mx-auto w-[196px] h-[196px]">
+        { imageData ? <img className="block w-full h-full" src={ imageData } alt="二维码" /> : <Empty description={ false } /> }
       </div>
-      { messageContextHolder }
-    </Fragment>
+      <div className="text-center">
+        <Button type="text" danger={ true } onClick={ handleClearAcFunCookieClick }>清除Cookie</Button>
+        <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
+        <p className="mt-[8px]">上次登陆时间：{ acFunCookie?.time ?? '无' }</p>
+      </div>
+    </div>
   );
 }
 

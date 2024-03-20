@@ -1,6 +1,6 @@
 import { useContext, type ReactElement, type PropsWithChildren } from 'react';
 import * as PropTypes from 'prop-types';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App } from 'antd';
 import darkDerivative from 'antd/es/theme/themes/dark/index';
 import zhCN from 'antd/locale/zh_CN';
 import { cyan } from '@ant-design/colors';
@@ -19,7 +19,9 @@ function AntdConfig(props: Required<PropsWithChildren>): ReactElement {
         algorithm: isDark ? darkDerivative : undefined
       }}
     >
-      { props.children }
+      <App component={ false }>
+        { props.children }
+      </App>
     </ConfigProvider>
   );
 }

@@ -2,8 +2,8 @@ import { promisify } from 'node:util';
 import { setTimeout, clearTimeout } from 'timers';
 import { Fragment, useMemo, useEffect, useRef, type ReactElement, type RefObject, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
-import { message, Button, Alert } from 'antd';
-import type { UseMessageReturnType } from '@48tools-types/antd';
+import { Button, Alert, App } from 'antd';
+import type { useAppProps } from 'antd/es/app/context';
 import { toCanvas } from 'qrcode/lib/browser';
 import * as dayjs from 'dayjs';
 import { requestLoginUrl, requestLoginInfo, type LoginUrl, type LoginInfo } from '@48tools-api/bilibili/login';
@@ -27,7 +27,7 @@ export interface BilibiliCookie {
  * @param { Function } props.onCancel - 关闭弹出层的方法
  */
 function Qrcode(props: { onCancel: Function }): ReactElement {
-  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+  const { message: messageApi }: useAppProps = App.useApp();
   const canvasRef: RefObject<HTMLCanvasElement> = useRef(null);
   const bilibiliCookie: BilibiliCookie | null = useMemo(function(): BilibiliCookie | null {
     const info: string | null = localStorage.getItem(BILIBILI_COOKIE_KEY);
@@ -105,7 +105,6 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
         <Button className="ml-[16px]" type="text" onClick={ handleResetCreateQrcodeClick }>刷新二维码</Button>
         <p className="mt-[8px]">上次登陆时间：{ bilibiliCookie?.time ?? '无' }</p>
       </div>
-      { messageContextHolder }
     </Fragment>
   );
 }

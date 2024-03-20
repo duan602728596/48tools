@@ -1,10 +1,10 @@
 import { ipcRenderer, type Cookie, type IpcRendererEvent } from 'electron';
-import { Fragment, useEffect, useCallback, type ReactElement, type MouseEvent } from 'react';
+import { useEffect, useCallback, type ReactElement, type MouseEvent } from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Alert, Space, message } from 'antd';
-import type { UseMessageReturnType } from '@48tools-types/antd';
+import { Button, Alert, Space, App } from 'antd';
+import type { useAppProps } from 'antd/es/app/context';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
 import { WeiboLoginChannel } from '@48tools/main/src/channelEnum';
@@ -13,7 +13,7 @@ import { IDBSaveAccount } from '../reducers/weiboLogin';
 /* 打开微博窗口 */
 function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   const dispatch: Dispatch = useDispatch();
-  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+  const { message: messageApi }: useAppProps = App.useApp();
 
   // 监听是否登陆
   const handleWeiboLoginCookieListener: (event: IpcRendererEvent, cookies: Array<Cookie>) => Promise<void>
@@ -59,15 +59,12 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   }, []);
 
   return (
-    <Fragment>
-      <div className="mb-[16px]">
-        <Space size={ 8 }>
-          <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。" />
-          <Button type="primary" onClick={ handleLoginWeiboClick }>微博登陆</Button>
-        </Space>
-      </div>
-      { messageContextHolder }
-    </Fragment>
+    <div className="mb-[16px]">
+      <Space size={ 8 }>
+        <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。" />
+        <Button type="primary" onClick={ handleLoginWeiboClick }>微博登陆</Button>
+      </Space>
+    </div>
   );
 }
 

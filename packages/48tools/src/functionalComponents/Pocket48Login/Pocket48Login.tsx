@@ -14,9 +14,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { useLocation, useNavigate, type Location, type NavigateFunction } from 'react-router-dom';
-import { Button, Modal, Form, message, Avatar, Tabs, Dropdown, Select, type FormInstance } from 'antd';
+import { Button, Form, Modal, Avatar, Tabs, Dropdown, Select, App, type FormInstance } from 'antd';
 import type { ModalFunc } from 'antd/es/modal/confirm';
-import type { UseMessageReturnType, UseModalReturnType, LabeledValue } from '@48tools-types/antd';
+import type { useAppProps } from 'antd/es/app/context';
+import type { LabeledValue } from '@48tools-types/antd';
 import type { Tab } from 'rc-tabs/es/interface';
 import type { ItemType, MenuInfo } from 'rc-menu/es/interface';
 import {
@@ -31,7 +32,6 @@ import {
 } from '@48tools-api/48/login';
 import commonStyle from '../../common.sass';
 import style from './pocket48Login.sass';
-
 import { pick, omit } from '../../utils/lodash';
 import { setUserInfo, setClearInfo } from './reducers/pocket48Login';
 import { source } from '../../utils/snh48';
@@ -86,8 +86,7 @@ function Pocket48Login(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const location: Location = useLocation(),
     navigate: NavigateFunction = useNavigate();
-  const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
+  const { message: messageApi, modal: modalApi }: useAppProps = App.useApp();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false);
   const [tabsKey, setTabsKey]: [string, D<S<string>>] = useState('loginForm');
   const userInfoSelectValueRef: MutableRefObject<string | null> = useRef(null);
@@ -372,8 +371,6 @@ function Pocket48Login(props: {}): ReactElement {
           <Tabs type="card" activeKey={ tabsKey } items={ tabsItem } onChange={ (key: string): void => setTabsKey(key) } />
         </div>
       </Modal>
-      { messageContextHolder }
-      { modalContextHolder }
     </Fragment>
   );
 }
