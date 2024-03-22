@@ -329,11 +329,12 @@ function Pocket48Login(props: {}): ReactElement {
     return createElement(
       userInfo ? Dropdown.Button : Button,
       {
-        onClick: (event: MouseEvent): void => setOpen(true),
+        className: style.inlineBlock,
         menu: userInfo ? {
           items: menuItems,
           onClick: handleMenuClick
-        } : undefined
+        } : undefined,
+        onClick: (event: MouseEvent): void => setOpen(true)
       },
       [icon, nickname]
     );
