@@ -12,6 +12,7 @@ import type {
   VoiceOperate,
   FriendShipAdd,
   LiveOne,
+  LiveStream,
   RoomInfo,
   OpenLiveList
 } from './interface';
@@ -262,13 +263,31 @@ export async function requestOpenLiveList(args: {
 /**
  * 获取直播地址（app）
  * @param { string } liveId
+ * @param { string } [token]
  */
-export async function requestLiveOne(liveId: string): Promise<LiveOne> {
+export async function requestLiveOne(liveId: string, token?: string): Promise<LiveOne> {
   const res: GotResponse<LiveOne> = await got('https://pocketapi.48.cn/live/api/v1/live/getOpenLiveOne', {
     method: 'POST',
-    headers: createHeaders(),
+    headers: createHeaders(token),
     responseType: 'json',
     json: { liveId },
+    timeout: 10 * 60 * 1_000
+  });
+
+  return res.body;
+}
+
+/**
+ * 获取直播流
+ * @param { string } liveId
+ * @param { string } [token]
+ */
+export async function requestLiveStream(liveId: string, token?: string): Promise<LiveStream> {
+  const res: GotResponse<LiveStream> = await got('https://pocketapi.48.cn/live/api/v1/live/getlivestream', {
+    method: 'POST',
+    headers: createHeaders(token),
+    responseType: 'json',
+    json: { liveId, streamType: 3 },
     timeout: 10 * 60 * 1_000
   });
 

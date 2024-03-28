@@ -20,9 +20,11 @@ import * as classNames from 'classnames';
 import {
   requestOpenLiveList,
   requestLiveOne,
+  requestLiveStream,
   type OpenLiveList,
   type OpenLiveInfo,
   type LiveOne,
+  type LiveStream,
   type LiveOnePlayStreams
 } from '@48tools-api/48';
 import { PlayStreamName } from '@48tools-api/48/enum';
@@ -32,6 +34,7 @@ import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { setOpenLiveListOptions, setAddInLiveList, setStopInLiveList, type Live48InitialState } from '../../reducers/live48';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getPocket48Token } from '../../../../utils/snh48';
 import type { MessageEventData } from '../../../../commonTypes';
 import type { InLiveFormValue, InLiveWebWorkerItemNoplayStreamPath } from '../../types';
 
@@ -60,7 +63,8 @@ function GetLiveUrl(props: {}): ReactElement {
       return;
     }
 
-    const resLiveOne: LiveOne = await requestLiveOne(value.live);
+    const token: string | undefined = getPocket48Token();
+    const resLiveOne: LiveOne = await requestLiveOne(value.live, token);
     const playStream: Array<LiveOnePlayStreams> = resLiveOne?.content?.playStreams ?? [];
 
     if (!playStream.length) {
@@ -77,17 +81,26 @@ function GetLiveUrl(props: {}): ReactElement {
       return;
     }
 
+    let streamPath: string;
+
     if (playStreamItem.vipShow) {
-      if (!playStreamItem.streamPath) {
-        messageApi.warning('当前直播分辨率需要VIP！');
+      const resStreamPath: LiveStream = await requestLiveStream(value.live, token);
+
+      if (!resStreamPath.content) {
+        // rtmp://cyflv.48.cn/chaoqing/9999?wsSecret=af170e44259cb3b0bc3e63fbb2bb2b84&wsTime=66055829&keeptime=60
+        messageApi.warning(resStreamPath.message ?? '当前直播分辨率需要VIP！');
 
         return;
+      } else {
+        streamPath = resStreamPath.content;
       }
     } else {
       if (!playStreamItem.streamPath) {
         messageApi.warning('当前直播未开始！');
 
         return;
+      } else {
+        streamPath = playStreamItem.streamPath;
       }
     }
 
@@ -117,7 +130,7 @@ function GetLiveUrl(props: {}): ReactElement {
 
     worker.postMessage({
       type: 'start',
-      playStreamPath: playStreamItem.streamPath,
+      playStreamPath: streamPath,
       filePath: result.filePath,
       ffmpeg: getFFmpeg()
     });
@@ -180,6 +193,7 @@ function GetLiveUrl(props: {}): ReactElement {
           <Form.Item name="streamName" noStyle={ true }>
             <Radio.Group className="mr-[6px]"
               optionType="button"
+              buttonStyle="solid"
               options={ [
                 PlayStreamName.SD,
                 PlayStreamName.HD,

@@ -199,6 +199,10 @@ export interface LiveOne extends Pocket48ResponseBase {
   };
 }
 
+export interface LiveStream extends Pocket48ResponseBase {
+  content: string;
+}
+
 // RoomInfo
 export interface RoomInfo extends Pocket48ResponseBase {
   content: {
