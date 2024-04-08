@@ -7,6 +7,7 @@ import AcFun from '../pages/AcFun/index';
 import Toutiao from '../pages/Toutiao/index';
 import Kuaishou from '../pages/Kuaishou/index';
 import VideoEditDynamic from '../pages/VideoEdit/loader';
+import WeiboLive from '../pages/Weibo/WeiboLive/WeiboLive';
 import WeiboSuperDynamic from '../pages/Weibo/WeiboSuper/loader';
 import Agreement from '../pages/Agreement/index';
 import { needToReadPower } from '../pages/Agreement/function/helper';
@@ -29,6 +30,7 @@ function Routers(props: {}): ReactElement | null {
     { path: 'Toutiao/*', element: <Toutiao /> },
     { path: 'Kuaishou/*', element: <Kuaishou /> },
     { path: 'VideoEdit/*', element: <VideoEditDynamic /> },
+    { path: 'WeiboLive', element: <WeiboLive /> },
     { path: 'WeiboSuper', element: <WeiboSuperDynamic /> },
     { path: 'Agreement/*', element: <Agreement /> }
   ]);

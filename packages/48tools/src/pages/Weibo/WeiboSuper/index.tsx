@@ -25,7 +25,7 @@ import dynamicReducers from '../../../store/dynamicReducers';
 import weiboSuperReducers, { setCheckIn, defaultQuantityValue, type WeiboSuperInitialState } from '../reducers/weiboSuper';
 import type { WeiboLoginInitialState } from '../../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../../commonTypes';
-import type { WeiboCheckinResult, Quantity } from './types';
+import type { WeiboCheckinResult, Quantity } from '../types';
 
 /* redux selector */
 type RSelector = WeiboLoginInitialState & WeiboSuperInitialState;

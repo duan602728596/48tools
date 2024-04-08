@@ -3,7 +3,7 @@ import type { MessageInstance } from 'antd/es/message/interface';
 import { requestTopicContent, type TopicResponse } from '@48tools-api/weibo/super';
 import { store } from '../../../../store/store';
 import { setCheckIn, reqTopicCheckin } from '../../reducers/weiboSuper';
-import type { SuperItem, WeiboCheckinResult, Quantity } from '../types';
+import type { SuperItem, WeiboCheckinResult, Quantity } from '../../types';
 
 function sleep(time: number): Promise<void> {
   return new Promise((resolve: Function, reject: Function) => {

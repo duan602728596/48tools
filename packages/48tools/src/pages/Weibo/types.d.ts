@@ -18,3 +18,13 @@ export interface Quantity {
   checkedInLen: number; // 已签到数
   total: number;        // 签到总数
 }
+
+/* 直播 */
+export interface LiveItem {
+  qid: string;
+  liveId: string;
+  url: string;
+  worker: Worker;
+  title: string;
+  status: 0 | 1; // 0：未开始 1：录制中
+}

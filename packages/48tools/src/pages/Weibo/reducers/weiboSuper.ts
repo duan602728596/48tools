@@ -9,7 +9,7 @@ import {
   type ActionReducerMapBuilder
 } from '@reduxjs/toolkit';
 import { requestTopicCheckin, type CheckinResult } from '@48tools-api/weibo/super';
-import type { WeiboCheckinResult, Quantity } from '../WeiboSuper/types';
+import type { WeiboCheckinResult, Quantity } from '../types';
 
 export interface WeiboSuperInitialState {
   weiboCheckinList: Array<WeiboCheckinResult>;
