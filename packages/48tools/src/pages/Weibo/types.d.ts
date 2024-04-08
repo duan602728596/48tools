@@ -26,5 +26,5 @@ export interface LiveItem {
   url: string;
   worker: Worker;
   title: string;
-  status: 0 | 1; // 0：未开始 1：录制中
+  status: 0 | 1; // 0：已停止 1：录制中
 }

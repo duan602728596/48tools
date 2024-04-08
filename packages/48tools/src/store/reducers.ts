@@ -98,8 +98,7 @@ export const ignoreOptions: any = {
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete',
-    'weiboLive/setAddLiveOne',
-    'weiboLive/setUpdateLiveOne',
+    'weiboLive/setLiveOne',
     'weiboLive/setRemoveLiveOne',
     'FFmpegProcess/setAddProcess',
     'FFmpegProcess/setUpdateProcess'

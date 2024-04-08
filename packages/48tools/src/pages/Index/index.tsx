@@ -141,17 +141,22 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       icon: IconKuaishouLogo
     },
     {
+      name: '微博直播录制',
+      url: '/WeiboLive',
+      icon: <IconWeiboOutlined />
+    },
+    {
       name: '微博超话签到',
       url: '/WeiboSuper',
       icon: <IconWeiboOutlined />
-    },
+    }
+  ],
+  [
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
       icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconCutSvgComponent } />
-    }
-  ],
-  [
+    },
     {
       name: '视频合并',
       url: '/VideoEdit/Concat',

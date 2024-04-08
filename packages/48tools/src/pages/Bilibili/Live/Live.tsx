@@ -99,7 +99,7 @@ function Live(props: {}): ReactElement {
       const resPlayUrl: RoomPlayUrl = await requestRoomPlayerUrl(`${ resInit.data.room_id }`);
       const worker: Worker = getFFmpegDownloadWorker();
 
-      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>) {
+      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
         const { type, error }: MessageEventData = event1.data;
 
         if (type === 'close' || type === 'error') {

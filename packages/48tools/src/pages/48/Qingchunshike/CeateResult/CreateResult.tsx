@@ -10,7 +10,6 @@ import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import * as classNames from 'classnames';
 import style from './createResult.sass';
-import commonStyle from '../../../../common.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import {
   IDBCursorQingchunshikeUserList,

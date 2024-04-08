@@ -2,10 +2,13 @@ import {
   createSlice,
   createEntityAdapter,
   type Slice,
+  type PayloadAction,
+  type CaseReducer,
   type CaseReducerActions,
   type EntityAdapter,
   type EntityState,
-  type EntitySelectors
+  type EntitySelectors,
+  type Update
 } from '@reduxjs/toolkit';
 import type { LiveItem } from '../types';
 
@@ -19,20 +22,37 @@ export const weiboLiveSelectors: EntitySelectors<LiveItem, WeiboLiveEntityState,
 
 export type WeiboLiveInitialState = WeiboLiveEntityState;
 
-type SliceReducers = {};
+type SliceReducers = {
+  setLiveOne: CaseReducer<WeiboLiveInitialState, PayloadAction<LiveItem>>;
+  setRemoveLiveOne: CaseReducer<WeiboLiveInitialState, PayloadAction<string>>;
+};
+
+type SliceSelectors = {
+  liveList: (state: WeiboLiveInitialState) => Array<LiveItem>;
+};
 
 const sliceName: 'weiboLive' = 'weiboLive';
-const { actions, reducer }: Slice<WeiboLiveInitialState, SliceReducers, typeof sliceName> = createSlice({
+const { actions, selectors: selectorsObject, reducer }: Slice<
+  WeiboLiveInitialState,
+  SliceReducers,
+  typeof sliceName,
+  typeof sliceName,
+  SliceSelectors
+> = createSlice({
   name: sliceName,
   initialState: weiboLiveAdapter.getInitialState(),
   reducers: {
-    setAddLiveOne: weiboLiveAdapter.addOne,
-    setUpdateOne: weiboLiveAdapter.updateOne,
+    setLiveOne: weiboLiveAdapter.setOne,
     setRemoveLiveOne: weiboLiveAdapter.removeOne
+  },
+  selectors: {
+    liveList: (state: WeiboLiveInitialState): Array<LiveItem> => weiboLiveSelectors.selectAll(state)
   }
 });
 
 export const {
-
+  setLiveOne,
+  setRemoveLiveOne
 }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export { selectorsObject };
 export default { [sliceName]: reducer };
