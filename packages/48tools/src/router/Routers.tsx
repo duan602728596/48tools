@@ -7,7 +7,7 @@ import AcFun from '../pages/AcFun/index';
 import Toutiao from '../pages/Toutiao/index';
 import Kuaishou from '../pages/Kuaishou/index';
 import VideoEditDynamic from '../pages/VideoEdit/loader';
-import WeiboSuperDynamic from '../pages/WeiboSuper/loader';
+import WeiboSuperDynamic from '../pages/Weibo/WeiboSuper/loader';
 import Agreement from '../pages/Agreement/index';
 import { needToReadPower } from '../pages/Agreement/function/helper';
 
