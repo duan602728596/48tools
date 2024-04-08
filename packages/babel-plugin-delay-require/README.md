@@ -20,7 +20,7 @@ async function requestAPI() {
 let __ELECTRON__DELAY_REQUIRE__got;
 
 async function requestAPI() {
-  __ELECTRON__DELAY_REQUIRE__got ??= global.require('got');
+  __ELECTRON__DELAY_REQUIRE__got ??= globalThis.require('got');
   const res = await __ELECTRON__DELAY_REQUIRE__got.default.get(uri);
   
   return res.body;
