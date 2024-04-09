@@ -15,3 +15,6 @@ export const bilibiliDir: string = path.join(testDir, 'bilibili');
 
 // acfun的文件夹
 export const acfunDir: string = path.join(testDir, 'acfun');
+
+// 微博的文件夹
+export const weiboDir: string = path.join(testDir, 'weibo');

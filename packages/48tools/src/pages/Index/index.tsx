@@ -143,7 +143,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '微博直播录制',
       url: '/WeiboLive',
-      icon: <IconWeiboOutlined />
+      icon: <IconWeiboOutlined />,
+      testId: 'weibo-live-link'
     },
     {
       name: '微博超话签到',

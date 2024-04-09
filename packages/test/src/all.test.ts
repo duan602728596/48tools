@@ -8,6 +8,7 @@ import * as acfunDownload from './tests/acfun/acfunDownload.test.js';
 import * as acfunLive from './tests/acfun/acfunLive.test.js';
 import * as douyinVideo from './tests/douyin/video.test.js';
 import * as douyinUser from './tests/douyin/user.test.js';
+import * as weiboLive from './tests/weibo/weiboLive.test.js';
 
 test.describe.parallel('48tools e2e test', function(): void {
   test.describe(indexTest.title, indexTest.callback);
@@ -31,4 +32,6 @@ test.describe.parallel('48tools e2e test', function(): void {
     test.describe(douyinVideo.title, douyinVideo.callback);
     test.describe(douyinUser.title, douyinUser.callback);
   });
+
+  test.describe(weiboLive.title, weiboLive.callback);
 });
