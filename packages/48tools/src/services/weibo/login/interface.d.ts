@@ -7,6 +7,7 @@ export interface UserInfo {
       screen_name: string;
       location: string;
       description: string;
+      avatar_hd: string;
     };
   };
 }

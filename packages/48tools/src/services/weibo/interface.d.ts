@@ -16,3 +16,20 @@ export interface PcLiveJson {
     replay_origin_url: string;
   };
 }
+
+export interface VisitedSchemaItem {
+  text: string;
+  scheme_text?: string;
+  scheme?: string;
+}
+
+export interface VisitedList {
+  code: number;
+  msg: string;
+  data: {
+    next_cursor: string;
+    data: Array<VisitedSchemaItem | []>;
+  };
+  errno?: number;
+  errmsg?: string;
+}
