@@ -33,7 +33,7 @@ globalThis.requestIdleCallback?.(() => __ELECTRON__DELAY_REQUIRE__got ??= global
 
 | Name         | Type                    | Description                     |
 |--------------|-------------------------|---------------------------------|
-| moduleNames  | Array<string>           | 用于延迟加载的模块数组                     |
+| moduleNames  | Array&lt;string&gt;     | 用于延迟加载的模块数组                     |
 | variableName | string &#124; undefined | 模块的变量名称的开头，用来标识是延迟加载的模块         |
 | idle         | boolean                 | 使用requestIdleCallback在空闲时间加载模块  |
 
