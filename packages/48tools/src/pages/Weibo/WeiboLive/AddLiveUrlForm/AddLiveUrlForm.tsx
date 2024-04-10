@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import * as PropTypes from 'prop-types';
 import { Form, Input, Button, Space, App, type FormInstance } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
@@ -88,5 +89,9 @@ function AddLiveUrlForm(props: AddLiveUrlFormProps): ReactElement {
     </Form>
   );
 }
+
+AddLiveUrlForm.propTypes = {
+  onGetLiveInfoCallback: PropTypes.func.isRequired
+};
 
 export default AddLiveUrlForm;
