@@ -7,8 +7,7 @@ import {
   type CaseReducerActions,
   type EntityAdapter,
   type EntityState,
-  type EntitySelectors,
-  type Update
+  type EntitySelectors
 } from '@reduxjs/toolkit';
 import type { LiveItem } from '../types';
 
