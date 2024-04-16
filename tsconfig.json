@@ -2,7 +2,7 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "moduleResolution": "node",
-    "target": "ES2022",
+    "target": "ESNext",
     "newLine": "LF",
     "resolveJsonModule": true,
     "strictNullChecks": true,

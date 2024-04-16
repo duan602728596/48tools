@@ -48,20 +48,15 @@ interface RoomIdFormatItem {
 }
 
 function groupToMap(array: Array<RoomItem> = []): Array<RoomIdFormatItem> {
-  const obj: Record<string, Array<RoomItem>> = {};
+  const obj: Record<string, Array<RoomItem> | undefined> = Object.groupBy(array, (item: RoomItem): string => item.team ?? '');
   const result: Array<RoomIdFormatItem> = [];
 
-  for (const item of array) {
-    const title: string = item.team ?? '';
-
-    obj[title] ??= [];
-    obj[title].push(item);
-  }
-
   for (const key in obj) {
-    result.push({
+    const v: Array<RoomItem> | undefined = obj[key];
+
+    v?.length && result.push({
       title: key,
-      data: obj[key]
+      data: v
     });
   }
 
