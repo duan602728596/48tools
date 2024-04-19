@@ -20,29 +20,33 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
     = useCallback(async function(event: IpcRendererEvent, cookies: Array<Cookie>): Promise<void> {
       const subIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SUB');
 
-      if (subIndex >= 0) {
-        const cookieStr: string = cookies.map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; ');
-        const uid: string | undefined = await requestUid(cookieStr);
-
-        if (uid) {
-          const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
-
-          await dispatch(IDBSaveAccount({
-            data: {
-              id: uid,
-              username: resUserInfo.data.user.screen_name ?? uid,
-              cookie: cookieStr,
-              lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
-            }
-          }));
-          messageApi.success('登陆成功！');
-          props?.onCancel?.();
-        } else {
-          messageApi.error('账号的uid获取失败！');
-        }
-      } else {
+      if (subIndex < 0) {
         messageApi.error('Cookie获取失败！');
+
+        return;
       }
+
+      const cookieStr: string = cookies.map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; ');
+      const uid: string | undefined = await requestUid(cookieStr);
+
+      if (!uid) {
+        messageApi.error('账号的uid获取失败！');
+
+        return;
+      }
+
+      const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
+
+      await dispatch(IDBSaveAccount({
+        data: {
+          id: uid,
+          username: resUserInfo.data.user.screen_name ?? uid,
+          cookie: cookieStr,
+          lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+        }
+      }));
+      messageApi.success('登陆成功！');
+      props?.onCancel?.();
     }, []);
 
   // 登陆
