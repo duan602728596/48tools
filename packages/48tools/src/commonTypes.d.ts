@@ -23,6 +23,7 @@ export interface WeiboAccount {
   username: string;
   cookie: string;
   lastLoginTime: string; // 最后登陆时间
+  s: string | undefined;
 }
 
 /* 直播 */

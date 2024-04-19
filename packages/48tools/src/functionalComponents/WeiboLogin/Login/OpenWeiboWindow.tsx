@@ -1,19 +1,33 @@
 import { ipcRenderer, type Cookie, type IpcRendererEvent } from 'electron';
-import { useEffect, useCallback, type ReactElement, type MouseEvent } from 'react';
+import { useState, useEffect, useCallback, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import * as PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Alert, Space, App } from 'antd';
+import { Button, Alert, Space, App, Modal, Form, Input, type FormInstance } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
 import { WeiboLoginChannel } from '@48tools/main/src/channelEnum';
-import { IDBSaveAccount } from '../reducers/weiboLogin';
+import type { PromiseWithResolvers } from '@48tools-types/ECMAScript';
+import { IDBSaveAccount, type WeiboLoginInitialState } from '../reducers/weiboLogin';
+import { weiboLoginSelector } from '../reducers/selectors';
+import type { WeiboAccount } from '../../../commonTypes';
+
+let waitInputSPromise: PromiseWithResolvers<string | undefined> | undefined = undefined;
 
 /* 打开微博窗口 */
 function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
+  const { accountList }: WeiboLoginInitialState = useSelector(weiboLoginSelector);
   const dispatch: Dispatch = useDispatch();
+  const [inputSOpen, setInputSOpen]: [boolean, D<S<boolean>>] = useState(false);
   const { message: messageApi }: useAppProps = App.useApp();
+  const [form]: [FormInstance] = Form.useForm();
+
+  // 输入s
+  function handleInputSOkClick(event: MouseEvent): void {
+    waitInputSPromise!.resolve(form.getFieldValue('s'));
+    setInputSOpen(false);
+  }
 
   // 监听是否登陆
   const handleWeiboLoginCookieListener: (event: IpcRendererEvent, cookies: Array<Cookie>) => Promise<void>
@@ -37,12 +51,29 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
 
       const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
 
+      // 等待输入s
+      const oldWeiboAccount: WeiboAccount | undefined = accountList.find((o: WeiboAccount): boolean => o.id === uid);
+
+      if (oldWeiboAccount?.s && !/^\s*$/.test(oldWeiboAccount.s)) {
+        form.setFieldValue('s', oldWeiboAccount.s);
+      }
+
+      waitInputSPromise = Promise.withResolvers<string | undefined>();
+      setInputSOpen(true);
+
+      const sValue: string | undefined = await waitInputSPromise.promise;
+
+      waitInputSPromise = undefined;
+      form.resetFields();
+
+      // 保存账号
       await dispatch(IDBSaveAccount({
         data: {
           id: uid,
           username: resUserInfo.data.user.screen_name ?? uid,
           cookie: cookieStr,
-          lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+          lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+          s: sValue
         }
       }));
       messageApi.success('登陆成功！');
@@ -68,6 +99,21 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
         <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。" />
         <Button type="primary" onClick={ handleLoginWeiboClick }>微博登陆</Button>
       </Space>
+      <Modal open={ inputSOpen }
+        width={ 430 }
+        centered={ true }
+        closable={ false }
+        mask={ false }
+        maskClosable={ false }
+        destroyOnClose={ true }
+        footer={ <Button type="primary" onClick={ handleInputSOkClick }>下一步</Button> }
+      >
+        <Form form={ form }>
+          <Form.Item name="s" label='输入抓包得来的"s"参数（可跳过）'>
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

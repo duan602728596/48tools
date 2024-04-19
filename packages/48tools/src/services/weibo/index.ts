@@ -21,14 +21,15 @@ export async function requestPcLiveJson(liveId: string): Promise<PcLiveJson> {
 /**
  * 获取访问列表
  * @param { string } gsid - cookie
+ * @param { string } s - 抓包获得的
  */
-export async function requestVisitedList(gsid: string): Promise<VisitedList> {
+export async function requestVisitedList(gsid: string, s: string): Promise<VisitedList> {
   const params: URLSearchParams = new URLSearchParams();
 
   params.set('c', 'iphone');
   params.set('from', '10E4093010');
   params.set('gsid', gsid);
-  params.set('s', '24f77d28');
+  params.set('s', s);
 
   const res: GotResponse<VisitedList> = await got.get(`https://api.weibo.cn/2/!/wbox/2pi6c3qvdd/getvisitedlist?${ params.toString() }`, {
     responseType: 'json'

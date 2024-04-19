@@ -2,28 +2,20 @@ import { shell } from 'electron';
 import { Fragment, useState, useEffect, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { createStructuredSelector, type Selector } from 'reselect';
-import { Table, Button, Drawer, App, List, Empty, Avatar, Alert } from 'antd';
+import { Table, Button, Drawer, App, List, Avatar, Alert } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import { parse } from 'cookie';
 import { requestVisitedList, type VisitedList, type VisitedSchemaItem } from '@48tools-api/weibo';
 import { requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
 import { IDBCursorAccountList, IDBDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';
+import { weiboLoginSelector } from './reducers/selectors';
 import dbConfig from '../../utils/IDB/IDBConfig';
 import type { WeiboAccount } from '../../commonTypes';
 
-/* redux selector */
-type RState = { weiboLogin: WeiboLoginInitialState };
-
-const selector: Selector<RState, WeiboLoginInitialState> = createStructuredSelector({
-  // 微博已登陆账号
-  accountList: ({ weiboLogin }: RState): Array<WeiboAccount> => weiboLogin.accountList
-});
-
 /* 已登陆列表 */
 function LoginTable(props: {}): ReactElement {
-  const { accountList }: WeiboLoginInitialState = useSelector(selector);
+  const { accountList }: WeiboLoginInitialState = useSelector(weiboLoginSelector);
   const dispatch: Dispatch = useDispatch();
   const { message: messageApi }: useAppProps = App.useApp();
   const [isDrawerVisible, setIsDrawerVisible]: [boolean, D<S<boolean>>] = useState(false); // 是否显示抽屉
@@ -39,6 +31,12 @@ function LoginTable(props: {}): ReactElement {
 
   // 访客
   async function handleVisitorWeiboAccountClick(record: WeiboAccount, event: MouseEvent): Promise<void> {
+    if (!record.s) {
+      messageApi.warning('s参数为空！');
+
+      return;
+    }
+
     const cookie: Record<string, string> = parse(record.cookie);
     const subCookie: string | undefined = cookie.SUB;
 
@@ -48,7 +46,7 @@ function LoginTable(props: {}): ReactElement {
       return;
     }
 
-    const res: VisitedList = await requestVisitedList(subCookie);
+    const res: VisitedList = await requestVisitedList(subCookie, record.s);
 
     if (res.errno || res.errmsg) {
       messageApi.error(res.errmsg ?? '访客列表获取失败！');
@@ -105,13 +103,14 @@ function LoginTable(props: {}): ReactElement {
     { title: 'ID', dataIndex: 'id', width: 150 },
     { title: '昵称', dataIndex: 'username' },
     { title: '上次登陆时间', dataIndex: 'lastLoginTime', width: 180 },
+    { title: '抓包"s"参数', dataIndex: 's', width: 100 },
     {
       title: '操作',
       key: 'handle',
       width: 130,
       render: (value: void, record: WeiboAccount, index: number): ReactElement => (
         <Button.Group size="small">
-          <Button onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }>访客</Button>
+          <Button disabled={ !record.s } onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }>访客</Button>
           <Button type="primary"
             danger={ true }
             onClick={ (event: MouseEvent): void => handleDeleteWeiboAccountClick(record, event) }
