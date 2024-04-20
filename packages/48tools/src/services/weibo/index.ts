@@ -22,12 +22,14 @@ export async function requestPcLiveJson(liveId: string): Promise<PcLiveJson> {
  * 获取访问列表
  * @param { string } gsid - cookie
  * @param { string } s - 抓包获得的
+ * @param { string } from - 抓包获得的
+ * @param { string } c - 设备类型
  */
-export async function requestVisitedList(gsid: string, s: string): Promise<VisitedList> {
+export async function requestVisitedList(gsid: string, s: string, from: string, c: string): Promise<VisitedList> {
   const params: URLSearchParams = new URLSearchParams();
 
-  params.set('c', 'iphone');
-  params.set('from', '10E4093010');
+  params.set('c', c);
+  params.set('from', from);
   params.set('gsid', gsid);
   params.set('s', s);
 

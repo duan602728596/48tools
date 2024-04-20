@@ -13,7 +13,7 @@ export interface IDBConfig {
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 13,
+  version: 15,
   objectStore: [
     // 0：b站直播间信息
     {
@@ -40,7 +40,7 @@ const dbConfig: IDBConfig = {
     {
       name: 'weibo_login_list',
       key: 'id',
-      data: ['username', 'cookie', 'lastLoginTime', 's']
+      data: ['username', 'cookie', 'lastLoginTime', 's', 'from', 'c']
     },
 
     // 4：ffmpeg命令模板

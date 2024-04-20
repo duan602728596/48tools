@@ -24,6 +24,8 @@ export interface WeiboAccount {
   cookie: string;
   lastLoginTime: string; // 最后登陆时间
   s: string | undefined;
+  from: string | undefined;
+  c: string | undefined;
 }
 
 /* 直播 */

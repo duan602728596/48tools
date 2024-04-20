@@ -6,8 +6,10 @@ import { Table, Button, Drawer, App, List, Avatar, Alert } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import { parse } from 'cookie';
+import * as classNames from 'classnames';
 import { requestVisitedList, type VisitedList, type VisitedSchemaItem } from '@48tools-api/weibo';
 import { requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
+import commonStyle from '../../common.sass';
 import { IDBCursorAccountList, IDBDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';
 import { weiboLoginSelector } from './reducers/selectors';
 import dbConfig from '../../utils/IDB/IDBConfig';
@@ -31,8 +33,8 @@ function LoginTable(props: {}): ReactElement {
 
   // 访客
   async function handleVisitorWeiboAccountClick(record: WeiboAccount, event: MouseEvent): Promise<void> {
-    if (!record.s) {
-      messageApi.warning('s参数为空！');
+    if (!(record.s && record.from && record.c)) {
+      messageApi.warning('App相关参数为空！');
 
       return;
     }
@@ -46,7 +48,7 @@ function LoginTable(props: {}): ReactElement {
       return;
     }
 
-    const res: VisitedList = await requestVisitedList(subCookie, record.s);
+    const res: VisitedList = await requestVisitedList(subCookie, record.s, record.from, record.c);
 
     if (res.errno || res.errmsg) {
       messageApi.error(res.errmsg ?? '访客列表获取失败！');
@@ -103,14 +105,40 @@ function LoginTable(props: {}): ReactElement {
     { title: 'ID', dataIndex: 'id', width: 150 },
     { title: '昵称', dataIndex: 'username' },
     { title: '上次登陆时间', dataIndex: 'lastLoginTime', width: 180 },
-    { title: '抓包"s"参数', dataIndex: 's', width: 100 },
+    {
+      title: '抓包参数',
+      key: 'app',
+      width: 120,
+      render: (value: void, record: WeiboAccount, index: number): ReactElement => (
+        <table className={ classNames('text-[12px]', commonStyle.text) }>
+          <tbody>
+            <tr>
+              <th className="text-right">s:</th>
+              <td>{record.s ?? 'None'}</td>
+            </tr>
+            <tr>
+              <th className="text-right">from:</th>
+              <td>{record.from ?? 'None'}</td>
+            </tr>
+            <tr>
+              <th className="text-right">c:</th>
+              <td>{record.c ?? 'None'}</td>
+            </tr>
+          </tbody>
+        </table>
+      )
+    },
     {
       title: '操作',
       key: 'handle',
       width: 130,
       render: (value: void, record: WeiboAccount, index: number): ReactElement => (
         <Button.Group size="small">
-          <Button disabled={ !record.s } onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }>访客</Button>
+          <Button disabled={ !(record.s && record.from) }
+            onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }
+          >
+            访客
+          </Button>
           <Button type="primary"
             danger={ true }
             onClick={ (event: MouseEvent): void => handleDeleteWeiboAccountClick(record, event) }
