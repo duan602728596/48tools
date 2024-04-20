@@ -16,6 +16,14 @@ import type { WeiboAccount } from '../../../commonTypes';
 type AppCaptureValue = Partial<Pick<WeiboAccount, 's' | 'from' | 'c'>>;
 let waitInputSPromise: PromiseWithResolvers<AppCaptureValue | undefined> | undefined = undefined;
 
+function checkAndSetFormValue(form: FormInstance, oldWeiboAccount: WeiboAccount | undefined, keys: Array<string>): void {
+  for (const key of keys) {
+    if (oldWeiboAccount?.[key] && !/^\s*$/.test(oldWeiboAccount[key])) {
+      form.setFieldValue(key, oldWeiboAccount[key]);
+    }
+  }
+}
+
 /* 打开微博窗口 */
 function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   const { accountList }: WeiboLoginInitialState = useSelector(weiboLoginSelector);
@@ -55,18 +63,7 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
       // 等待输入s
       const oldWeiboAccount: WeiboAccount | undefined = accountList.find((o: WeiboAccount): boolean => o.id === uid);
 
-      if (oldWeiboAccount?.s && !/^\s*$/.test(oldWeiboAccount.s)) {
-        form.setFieldValue('s', oldWeiboAccount.s);
-      }
-
-      if (oldWeiboAccount?.from && !/^\s*$/.test(oldWeiboAccount.from)) {
-        form.setFieldValue('from', oldWeiboAccount.from);
-      }
-
-      if (oldWeiboAccount?.c && !/^\s*$/.test(oldWeiboAccount.c)) {
-        form.setFieldValue('c', oldWeiboAccount.c);
-      }
-
+      checkAndSetFormValue(form, oldWeiboAccount, ['s', 'from', 'c']);
       waitInputSPromise = Promise.withResolvers<AppCaptureValue | undefined>();
       setInputSOpen(true);
 
