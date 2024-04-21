@@ -1,0 +1,47 @@
+# https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners
+
+name: Build apps CI in xlarge runner
+
+on:
+  push:
+    branches:
+      - 'build-xlarge/v**'
+
+jobs:
+  build:
+    runs-on: macos-latest-xlarge
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: |
+          VERSION=${{ github.ref }}
+          VERSION=${VERSION#refs/heads/build-xlarge/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - run: npm run install:ci
+
+      - run: npm run build:old:ci
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: v${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          draft: true
+          prerelease: true
+          files: |
+            build/linux/48tools-${{ env.VERSION }}-linux64.zip
+            build/mac/48tools-${{ env.VERSION }}-mac.zip
+            build/mac-arm64/48tools-${{ env.VERSION }}-mac-arm64.zip
+            build/win/48tools-${{ env.VERSION }}-win64.zip
+            build/win32/48tools-${{ env.VERSION }}-win32.zip
