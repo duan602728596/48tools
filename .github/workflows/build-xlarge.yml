@@ -5,7 +5,7 @@ name: Build apps CI in xlarge runner
 on:
   push:
     branches:
-      - 'build-xlarge/v**'
+      - 'buildxlarge/v**'
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
 
       - run: |
           VERSION=${{ github.ref }}
-          VERSION=${VERSION#refs/heads/build-xlarge/v}
+          VERSION=${VERSION#refs/heads/buildxlarge/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - run: npm run install:ci
