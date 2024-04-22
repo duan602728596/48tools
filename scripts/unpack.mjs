@@ -3,16 +3,15 @@ import fsP from 'node:fs/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
-import { makeUniversalApp } from '@electron/universal';
-import { cwd, appDir, wwwDir, staticsDir, build, output, unpacked, isMacOS, isOld } from './utils.mjs';
+import { cwd, appDir, wwwDir, staticsDir, build, output, unpacked, isMacOS, isArm64 } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
 
 const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
   README: path.join(cwd, 'README.md'), // README
-  LICENSEElectron: path.join(unpacked.win, 'LICENSE.electron.txt'),   // electron许可协议
-  LICENSESChromium: path.join(unpacked.win, 'LICENSES.chromium.html') // chromium第三方许可协议
+  LICENSEElectron: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSE.electron.txt'), // electron许可协议
+  LICENSESChromium: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSES.chromium.html') // chromium第三方许可协议
 };
 const icon = {
   mac: path.join(staticsDir, 'titleBarIcon.icns'),
@@ -24,7 +23,7 @@ const electronDownloadVersion = packageJson.dependencies.electron.replace(/^\^/,
 /**
  * 编译配置
  * @param { string } outputDir - 输出文件夹
- * @param { [string, object] | undefined } target - 重写编译目标
+ * @param { [string, object] | undefined } [target] - 重写编译目标
  */
 function config(outputDir, target) {
   const cfg = {
@@ -90,7 +89,7 @@ function config(outputDir, target) {
 /**
  * 拷贝文件
  * @param { string } unpackedDir - 拷贝目录
- * @param { boolean } isMac - 是否为mac系统
+ * @param { boolean } [isMac] - 是否为mac系统
  */
 function copy(unpackedDir, isMac) {
   const queue = [
@@ -115,6 +114,75 @@ async function uglifyPackageJson() {
   await fsP.writeFile(path.join(wwwDir, 'package.json'), JSON.stringify(json), { encoding: 'utf8' });
 }
 
+async function unpackOthers() {
+  // 编译mac
+  if (isMacOS) {
+    // 编译mac
+    console.log('⏳正在编译：mac');
+    await builder.build({
+      targets: builder.Platform.MAC.createTarget(),
+      config: config(output.mac)
+    });
+  }
+
+  // 编译win64
+  console.log('⏳正在编译：win64');
+  await builder.build({
+    targets: builder.Platform.WINDOWS.createTarget(),
+    config: config(output.win)
+  });
+
+  // 编译win32
+  console.log('⏳正在编译：win32');
+  await builder.build({
+    targets: builder.Platform.WINDOWS.createTarget(),
+    config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
+  });
+
+  // 编译linux
+  console.log('⏳正在编译：linux');
+  await builder.build({
+    targets: builder.Platform.LINUX.createTarget(),
+    config: config(output.linux)
+  });
+
+  // 拷贝许可文件
+  console.log('🚚正在拷贝许可文件');
+  await Promise.all([
+    ...isMacOS ? copy(unpacked.mac, true) : [],
+    ...isMacOS ? copy(unpacked.macArm64, true) : [],
+    ...copy(unpacked.win),
+    ...copy(unpacked.win32),
+    ...copy(unpacked.linux)
+  ]);
+}
+
+async function unpackArm64() {
+  // 编译mac
+  if (isMacOS) {
+    // 编译mac-arm64
+    console.log('⏳正在编译：mac-arm64');
+    await builder.build({
+      targets: builder.Platform.MAC.createTarget(),
+      config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+    });
+  }
+
+  // 编译win-arm64
+  console.log('⏳正在编译：win-arm64');
+  await builder.build({
+    targets: builder.Platform.WINDOWS.createTarget(),
+    config: config(output.winArm64, ['win', { target: 'dir', arch: 'arm64' }])
+  });
+
+  // 拷贝许可文件
+  console.log('🚚正在拷贝许可文件');
+  await Promise.all([
+    ...isMacOS ? copy(unpacked.macArm64, true) : [],
+    ...copy(unpacked.winArm64)
+  ]);
+}
+
 /* 打包脚本 */
 async function unpack() {
   // 删除中间代码文件夹和编译后的文件夹
@@ -135,109 +203,11 @@ async function unpack() {
   ]);
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 
-  // 编译mac
-  if (isMacOS) {
-    if (isOld) {
-      // 编译mac
-      console.log('⏳正在编译：mac');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output.mac)
-        });
-      } catch (err) {
-        console.error(err);
-      }
-
-      // 编译mac-arm64
-      console.log('⏳正在编译：mac-arm64');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    } else {
-      // 编译mac
-      console.log('⏳正在编译：mac');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output._mac)
-        });
-      } catch (err) {
-        console.error(err);
-      }
-
-      // 编译mac-arm64
-      console.log('⏳正在编译：mac-arm64');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output._macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
-        });
-      } catch (err) {
-        console.error(err);
-      }
-
-      // 合并mac和mac-arm64
-      console.log('⏳正在编译：合并mac和mac-arm64');
-      try {
-        await makeUniversalApp({
-          x64AppPath: path.join(unpacked._mac, '48tools.app'),
-          arm64AppPath: path.join(unpacked._macArm64, '48tools.app'),
-          outAppPath: path.join(unpacked.mac, '48tools.app')
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    }
+  if (isArm64) {
+    await unpackArm64();
+  } else {
+    await unpackOthers();
   }
-
-  // 编译win64
-  console.log('⏳正在编译：win64');
-  try {
-    await builder.build({
-      targets: builder.Platform.WINDOWS.createTarget(),
-      config: config(output.win)
-    });
-  } catch (err) {
-    console.error(err);
-  }
-
-  // 编译win32
-  console.log('⏳正在编译：win32');
-  try {
-    await builder.build({
-      targets: builder.Platform.WINDOWS.createTarget(),
-      config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
-    });
-  } catch (err) {
-    console.error(err);
-  }
-
-  // 编译linux
-  console.log('⏳正在编译：linux');
-  try {
-    await builder.build({
-      targets: builder.Platform.LINUX.createTarget(),
-      config: config(output.linux)
-    });
-  } catch (err) {
-    console.error(err);
-  }
-
-  // 拷贝许可文件
-  console.log('🚚正在拷贝许可文件');
-  await Promise.all([
-    ...isMacOS ? copy(unpacked.mac, true) : [],
-    ...(isMacOS && isOld) ? copy(unpacked.macArm64, true) : [],
-    ...copy(unpacked.win),
-    ...copy(unpacked.win32),
-    ...copy(unpacked.linux)
-  ]);
 }
 
 unpack();

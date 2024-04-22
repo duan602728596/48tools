@@ -15,9 +15,6 @@
     "build": "node scripts/delivery.mjs",
     "build:cn": "ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/ PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm run build",
     "build:ci": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm run build",
-    "build:old": "cross-env OLD=1 node scripts/delivery.mjs",
-    "build:old:cn": "ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/ PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm run build:old",
-    "build:old:ci": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm run build:old",
     "build:png": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 packages/app/titleBarIcon.png",
     "build:icon": "ffmpeg -i statics/titleBarIcon512.png -vf scale=256:256 statics/titleBarIcon.ico",
     "build:icns": "milktea-esm image2icns --imageEntry=\"statics/titleBarIcon512.png\" --imageOutput=\"./statics/titleBarIcon.icns\" --size=512",
@@ -48,7 +45,6 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@electron/universal": "^2.0.1",
     "@sweet-milktea/milktea-cli": "^4.1.0",
     "@sweet-milktea/util-tools": "^4.1.0",
     "@types/command-line-args": "^5",

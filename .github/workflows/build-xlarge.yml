@@ -29,7 +29,7 @@ jobs:
 
       - run: npm run install:ci
 
-      - run: npm run build:old:ci
+      - run: npm run build:ci
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -40,8 +40,5 @@ jobs:
           draft: true
           prerelease: true
           files: |
-            build/linux/48tools-${{ env.VERSION }}-linux64.zip
-            build/mac/48tools-${{ env.VERSION }}-mac.zip
             build/mac-arm64/48tools-${{ env.VERSION }}-mac-arm64.zip
-            build/win/48tools-${{ env.VERSION }}-win64.zip
-            build/win32/48tools-${{ env.VERSION }}-win32.zip
+            build/win-arm64/48tools-${{ env.VERSION }}-win-arm64.zip
