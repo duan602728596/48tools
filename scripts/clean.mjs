@@ -55,7 +55,7 @@ async function pakDeleteFilesAndWriteVersion(unpackedDir) {
 async function clean() {
   // 删除多语言文件并写入版本号
   await Promise.all([
-    isMacOS && lprojDeleteFilesAndWriteVersion(unpacked.mac),
+    // isMacOS && lprojDeleteFilesAndWriteVersion(unpacked.mac),
     isMacOS && isOld && lprojDeleteFilesAndWriteVersion(unpacked.macArm64),
     pakDeleteFilesAndWriteVersion(unpacked.win),
     pakDeleteFilesAndWriteVersion(unpacked.win32),
@@ -64,7 +64,7 @@ async function clean() {
 
   // 重命名
   await Promise.all([
-    isMacOS && fs.rename(unpacked.mac, renameDir.mac),
+    // isMacOS && fs.rename(unpacked.mac, renameDir.mac),
     isMacOS && isOld && fs.rename(unpacked.macArm64, renameDir.macArm64),
     fs.rename(unpacked.win, renameDir.win),
     fs.rename(unpacked.win32, renameDir.win32),
@@ -73,7 +73,7 @@ async function clean() {
 
   // 压缩
   await Promise.all([
-    isMacOS && zipPromise(renameDir.mac, `${ renameDir.mac }.zip`),
+    // isMacOS && zipPromise(renameDir.mac, `${ renameDir.mac }.zip`),
     isMacOS && isOld && zipPromise(renameDir.macArm64, `${ renameDir.macArm64 }.zip`),
     zipPromise(renameDir.win, `${ renameDir.win }.zip`),
     zipPromise(renameDir.win32, `${ renameDir.win32 }.zip`),
