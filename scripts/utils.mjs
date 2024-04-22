@@ -34,7 +34,7 @@ export const unpacked = {
 // 系统环境
 export const isMacOS = process.platform === 'darwin';
 export const isWindows = process.platform === 'win32';
-export const isArm64 = process.arch === 'arm64';
+export const isArm64 = process.env.ARM64 === '1';
 
 /**
  * 执行命令
