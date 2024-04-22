@@ -43,3 +43,4 @@ jobs:
             build/mac-arm64/48tools-${{ env.VERSION }}-mac-arm64.zip
             build/win/48tools-${{ env.VERSION }}-win64.zip
             build/win32/48tools-${{ env.VERSION }}-win32.zip
+            build/win-arm64/48tools-${{ env.VERSION }}-win-arm64.zip

@@ -24,7 +24,7 @@ const electronDownloadVersion = packageJson.dependencies.electron.replace(/^\^/,
 /**
  * 编译配置
  * @param { string } outputDir - 输出文件夹
- * @param { [string, object] | undefined } target - 重写编译目标
+ * @param { [string, object] | undefined } [target] - 重写编译目标
  */
 function config(outputDir, target) {
   const cfg = {
@@ -90,7 +90,7 @@ function config(outputDir, target) {
 /**
  * 拷贝文件
  * @param { string } unpackedDir - 拷贝目录
- * @param { boolean } isMac - 是否为mac系统
+ * @param { boolean } [isMac] - 是否为mac系统
  */
 function copy(unpackedDir, isMac) {
   const queue = [
@@ -142,7 +142,7 @@ async function unpack() {
       console.log('⏳正在编译：mac');
       await builder.build({
         targets: builder.Platform.MAC.createTarget(),
-        config: config(output.mac)
+        config: config(output.mac, ['mac', { target: 'dir', arch: 'x64' }])
       });
 
       // 编译mac-arm64
@@ -156,7 +156,7 @@ async function unpack() {
       console.log('⏳正在编译：mac');
       await builder.build({
         targets: builder.Platform.MAC.createTarget(),
-        config: config(output._mac)
+        config: config(output.mac, ['mac', { target: 'dir', arch: 'x64' }])
       });
 
       // 编译mac-arm64
@@ -180,7 +180,7 @@ async function unpack() {
   console.log('⏳正在编译：win64');
   await builder.build({
     targets: builder.Platform.WINDOWS.createTarget(),
-    config: config(output.win)
+    config: config(output.win, ['win', { target: 'dir', arch: 'x64' }])
   });
 
   // 编译win32
@@ -190,11 +190,17 @@ async function unpack() {
     config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
   });
 
+  console.log('⏳正在编译：win-arm64');
+  await builder.build({
+    targets: builder.Platform.WINDOWS.createTarget(),
+    config: config(output.winArm64, ['win', { target: 'dir', arch: 'arm64' }])
+  });
+
   // 编译linux
   console.log('⏳正在编译：linux');
   await builder.build({
     targets: builder.Platform.LINUX.createTarget(),
-    config: config(output.linux)
+    config: config(output.linux, ['linux', { target: 'dir', arch: 'x64' }])
   });
 
   // 拷贝许可文件
@@ -204,6 +210,7 @@ async function unpack() {
     ...(isMacOS && isOld) ? copy(unpacked.macArm64, true) : [],
     ...copy(unpacked.win),
     ...copy(unpacked.win32),
+    ...copy(unpacked.winArm64),
     ...copy(unpacked.linux)
   ]);
 }

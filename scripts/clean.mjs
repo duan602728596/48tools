@@ -15,6 +15,7 @@ const renameDir = {
   macArm64: path.join(build, `mac-arm64/48tools-${ version }-mac-arm64`),
   win: path.join(build, `win/48tools-${ version }-win64`),
   win32: path.join(build, `win32/48tools-${ version }-win32`),
+  winArm64: path.join(build, `win32/48tools-${ version }-win-arm64`),
   linux: path.join(build, `linux/48tools-${ version }-linux64`)
 };
 
@@ -59,6 +60,7 @@ async function clean() {
     isMacOS && isOld && lprojDeleteFilesAndWriteVersion(unpacked.macArm64),
     pakDeleteFilesAndWriteVersion(unpacked.win),
     pakDeleteFilesAndWriteVersion(unpacked.win32),
+    pakDeleteFilesAndWriteVersion(unpacked.winArm64),
     pakDeleteFilesAndWriteVersion(unpacked.linux)
   ]);
 
@@ -68,6 +70,7 @@ async function clean() {
     isMacOS && isOld && fs.rename(unpacked.macArm64, renameDir.macArm64),
     fs.rename(unpacked.win, renameDir.win),
     fs.rename(unpacked.win32, renameDir.win32),
+    fs.rename(unpacked.win32, renameDir.winArm64),
     fs.rename(unpacked.linux, renameDir.linux)
   ]);
 
@@ -77,6 +80,7 @@ async function clean() {
     isMacOS && isOld && zipPromise(renameDir.macArm64, `${ renameDir.macArm64 }.zip`),
     zipPromise(renameDir.win, `${ renameDir.win }.zip`),
     zipPromise(renameDir.win32, `${ renameDir.win32 }.zip`),
+    zipPromise(renameDir.winArm64, `${ renameDir.winArm64 }.zip`),
     zipPromise(renameDir.linux, `${ renameDir.linux }.zip`)
   ]);
 }
