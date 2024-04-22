@@ -1,6 +1,5 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
-import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
@@ -230,8 +229,8 @@ async function unpack() {
     console.error(err);
   }
 
-  await setTimeoutPromise(60_000 * 3);
-  console.log(build, await fsP.readdir(build));
+  console.log(await fsP.readdir(unpacked.win));
+  console.log(await fsP.readFile(unpacked.win));
 
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
