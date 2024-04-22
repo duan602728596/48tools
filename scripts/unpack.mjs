@@ -197,8 +197,6 @@ async function unpack() {
     config: config(output.linux)
   });
 
-  console.log(await fsP.readdir(output.win32));
-
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
   await Promise.all([
