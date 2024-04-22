@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
+import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
@@ -229,8 +230,42 @@ async function unpack() {
     console.error(err);
   }
 
-  console.log(await fsP.readdir(unpacked.win));
-  console.log(await fsP.readFile(unpacked.win));
+  await setTimeoutPromise(60_000 * 2);
+
+  try {
+    console.log(await fsP.readdir(build.win));
+    console.log(await fsP.readFile(build.win));
+  } catch (err) {
+    console.error(err);
+  }
+
+  try {
+    console.log(await fsP.readdir(build.mac));
+    console.log(await fsP.readFile(build.mac));
+  } catch (err) {
+    console.error(err);
+  }
+
+  try {
+    console.log(await fsP.readdir(build.macArm64));
+    console.log(await fsP.readFile(build.macArm64));
+  } catch (err) {
+    console.error(err);
+  }
+
+  try {
+    console.log(await fsP.readdir(unpacked.win));
+    console.log(await fsP.readFile(unpacked.win));
+  } catch (err) {
+    console.error(err);
+  }
+
+  try {
+    console.log(await fsP.readdir(unpacked.mac));
+    console.log(await fsP.readFile(unpacked.mac));
+  } catch (err) {
+    console.error(err);
+  }
 
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
