@@ -233,22 +233,22 @@ async function unpack() {
   await setTimeoutPromise(60_000 * 2);
 
   try {
-    console.log(await fsP.readdir(build.win));
-    console.log(await fsP.readFile(build.win));
+    console.log(await fsP.readdir(output.win));
+    console.log(await fsP.readFile(output.win));
   } catch (err) {
     console.error(err);
   }
 
   try {
-    console.log(await fsP.readdir(build.mac));
-    console.log(await fsP.readFile(build.mac));
+    console.log(await fsP.readdir(output.mac));
+    console.log(await fsP.readFile(output.mac));
   } catch (err) {
     console.error(err);
   }
 
   try {
-    console.log(await fsP.readdir(build.macArm64));
-    console.log(await fsP.readFile(build.macArm64));
+    console.log(await fsP.readdir(output.macArm64));
+    console.log(await fsP.readFile(output.macArm64));
   } catch (err) {
     console.error(err);
   }
