@@ -15,7 +15,7 @@ const renameDir = {
   macArm64: path.join(build, `mac-arm64/48tools-${ version }-mac-arm64`),
   win: path.join(build, `win/48tools-${ version }-win64`),
   win32: path.join(build, `win32/48tools-${ version }-win32`),
-  winArm64: path.join(build, `win32/48tools-${ version }-win-arm64`),
+  winArm64: path.join(build, `win-arm64/48tools-${ version }-win-arm64`),
   linux: path.join(build, `linux/48tools-${ version }-linux64`)
 };
 
