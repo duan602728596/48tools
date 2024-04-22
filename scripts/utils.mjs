@@ -12,6 +12,12 @@ export const wwwDir = path.join(cwd, 'www');         // 中间代码
 export const staticsDir = path.join(cwd, 'statics'); // 静态资源目录
 export const build = path.join(cwd, 'build');        // 最终生成的可执行文件
 
+// 系统环境
+export const isMacOS = process.platform === 'darwin';
+export const isWindows = process.platform === 'win32';
+export const isOld = process.env.OLD === '1';
+export const isArm64CliEnv = process.env.ARM64 === '1';
+
 // 打包后的文件位置
 export const output = {
   mac: path.join(build, 'mac'),            // mac
@@ -23,20 +29,17 @@ export const output = {
   linux: path.join(build, 'linux')         // linux
 };
 
-export const unpacked = {
-  mac: path.join(output.mac, 'mac'),
-  macArm64: path.join(output.macArm64, 'mac-arm64'),
-  _mac: path.join(output._mac, 'mac'),
-  _macArm64: path.join(output._macArm64, 'mac-arm64'),
-  win: path.join(output.win, 'win-unpacked'),
-  win32: path.join(output.win32, 'win-ia32-unpacked'),
-  linux: path.join(output.linux, 'linux-unpacked')
-};
+const arm64Mark = isArm64CliEnv ? '-arm64' : '';
 
-// 系统环境
-export const isMacOS = process.platform === 'darwin';
-export const isWindows = process.platform === 'win32';
-export const isOld = process.env.OLD === '1';
+export const unpacked = {
+  mac: path.join(output.mac, `mac${ arm64Mark }`),
+  macArm64: path.join(output.macArm64, 'mac-arm64'),
+  _mac: path.join(output._mac, `mac${ arm64Mark }`),
+  _macArm64: path.join(output._macArm64, 'mac-arm64'),
+  win: path.join(output.win, `win${ arm64Mark }-unpacked`),
+  win32: path.join(output.win32, 'win-ia32-unpacked'),
+  linux: path.join(output.linux, `linux${ arm64Mark }-unpacked`)
+};
 
 /**
  * 执行命令

@@ -1,6 +1,5 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
-import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
@@ -141,131 +140,64 @@ async function unpack() {
     if (isOld) {
       // 编译mac
       console.log('⏳正在编译：mac');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output.mac)
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output.mac)
+      });
 
       // 编译mac-arm64
       console.log('⏳正在编译：mac-arm64');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+      });
     } else {
       // 编译mac
       console.log('⏳正在编译：mac');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output._mac)
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output._mac)
+      });
 
       // 编译mac-arm64
       console.log('⏳正在编译：mac-arm64');
-      try {
-        await builder.build({
-          targets: builder.Platform.MAC.createTarget(),
-          config: config(output._macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      await builder.build({
+        targets: builder.Platform.MAC.createTarget(),
+        config: config(output._macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+      });
 
       // 合并mac和mac-arm64
       console.log('⏳正在编译：合并mac和mac-arm64');
-      try {
-        await makeUniversalApp({
-          x64AppPath: path.join(unpacked._mac, '48tools.app'),
-          arm64AppPath: path.join(unpacked._macArm64, '48tools.app'),
-          outAppPath: path.join(unpacked.mac, '48tools.app')
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      await makeUniversalApp({
+        x64AppPath: path.join(unpacked._mac, '48tools.app'),
+        arm64AppPath: path.join(unpacked._macArm64, '48tools.app'),
+        outAppPath: path.join(unpacked.mac, '48tools.app')
+      });
     }
   }
 
   // 编译win64
   console.log('⏳正在编译：win64');
-  try {
-    await builder.build({
-      targets: builder.Platform.WINDOWS.createTarget(),
-      config: config(output.win)
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  await builder.build({
+    targets: builder.Platform.WINDOWS.createTarget(),
+    config: config(output.win)
+  });
 
   // 编译win32
   console.log('⏳正在编译：win32');
-  try {
-    await builder.build({
-      targets: builder.Platform.WINDOWS.createTarget(),
-      config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  await builder.build({
+    targets: builder.Platform.WINDOWS.createTarget(),
+    config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
+  });
 
   // 编译linux
   console.log('⏳正在编译：linux');
-  try {
-    await builder.build({
-      targets: builder.Platform.LINUX.createTarget(),
-      config: config(output.linux)
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  await builder.build({
+    targets: builder.Platform.LINUX.createTarget(),
+    config: config(output.linux)
+  });
 
-  await setTimeoutPromise(60_000 * 2);
-
-  try {
-    console.log(await fsP.readdir(output.win));
-    console.log(await fsP.readFile(output.win));
-  } catch (err) {
-    console.error(err);
-  }
-
-  try {
-    console.log(await fsP.readdir(output.mac));
-    console.log(await fsP.readFile(output.mac));
-  } catch (err) {
-    console.error(err);
-  }
-
-  try {
-    console.log(await fsP.readdir(output.macArm64));
-    console.log(await fsP.readFile(output.macArm64));
-  } catch (err) {
-    console.error(err);
-  }
-
-  try {
-    console.log(await fsP.readdir(unpacked.win));
-    console.log(await fsP.readFile(unpacked.win));
-  } catch (err) {
-    console.error(err);
-  }
-
-  try {
-    console.log(await fsP.readdir(unpacked.mac));
-    console.log(await fsP.readFile(unpacked.mac));
-  } catch (err) {
-    console.error(err);
-  }
+  console.log(await fsP.readdir(output.win32));
 
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
