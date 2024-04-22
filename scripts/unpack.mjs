@@ -140,62 +140,94 @@ async function unpack() {
     if (isOld) {
       // 编译mac
       console.log('⏳正在编译：mac');
-      await builder.build({
-        targets: builder.Platform.MAC.createTarget(),
-        config: config(output.mac)
-      });
+      try {
+        await builder.build({
+          targets: builder.Platform.MAC.createTarget(),
+          config: config(output.mac)
+        });
+      } catch (err) {
+        console.error(err);
+      }
 
       // 编译mac-arm64
       console.log('⏳正在编译：mac-arm64');
-      await builder.build({
-        targets: builder.Platform.MAC.createTarget(),
-        config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
-      });
+      try {
+        await builder.build({
+          targets: builder.Platform.MAC.createTarget(),
+          config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+        });
+      } catch (err) {
+        console.error(err);
+      }
     } else {
       // 编译mac
       console.log('⏳正在编译：mac');
-      await builder.build({
-        targets: builder.Platform.MAC.createTarget(),
-        config: config(output._mac)
-      });
+      try {
+        await builder.build({
+          targets: builder.Platform.MAC.createTarget(),
+          config: config(output._mac)
+        });
+      } catch (err) {
+        console.error(err);
+      }
 
       // 编译mac-arm64
       console.log('⏳正在编译：mac-arm64');
-      await builder.build({
-        targets: builder.Platform.MAC.createTarget(),
-        config: config(output._macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
-      });
+      try {
+        await builder.build({
+          targets: builder.Platform.MAC.createTarget(),
+          config: config(output._macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
+        });
+      } catch (err) {
+        console.error(err);
+      }
 
       // 合并mac和mac-arm64
       console.log('⏳正在编译：合并mac和mac-arm64');
-      await makeUniversalApp({
-        x64AppPath: path.join(unpacked._mac, '48tools.app'),
-        arm64AppPath: path.join(unpacked._macArm64, '48tools.app'),
-        outAppPath: path.join(unpacked.mac, '48tools.app')
-      });
+      try {
+        await makeUniversalApp({
+          x64AppPath: path.join(unpacked._mac, '48tools.app'),
+          arm64AppPath: path.join(unpacked._macArm64, '48tools.app'),
+          outAppPath: path.join(unpacked.mac, '48tools.app')
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 
   // 编译win64
   console.log('⏳正在编译：win64');
-  await builder.build({
-    targets: builder.Platform.WINDOWS.createTarget(),
-    config: config(output.win)
-  });
+  try {
+    await builder.build({
+      targets: builder.Platform.WINDOWS.createTarget(),
+      config: config(output.win)
+    });
+  } catch (err) {
+    console.error(err);
+  }
 
   // 编译win32
   console.log('⏳正在编译：win32');
-  await builder.build({
-    targets: builder.Platform.WINDOWS.createTarget(),
-    config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
-  });
+  try {
+    await builder.build({
+      targets: builder.Platform.WINDOWS.createTarget(),
+      config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
+    });
+  } catch (err) {
+    console.error(err);
+  }
 
   // 编译linux
   console.log('⏳正在编译：linux');
-  await builder.build({
-    targets: builder.Platform.LINUX.createTarget(),
-    config: config(output.linux)
-  });
+  try {
+    await builder.build({
+      targets: builder.Platform.LINUX.createTarget(),
+      config: config(output.linux)
+    });
+  } catch (err) {
+    console.error(err);
+  }
 
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
