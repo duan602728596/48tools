@@ -29,7 +29,9 @@ jobs:
 
       - run: npm run install:ci
 
-      - run: npm run build:arm64:ci
+      - run: npm run build:ci
+        env:
+          ARM64: '1'
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
