@@ -89,7 +89,7 @@ async function cleanArm64() {
   // 重命名
   await Promise.all([
     isMacOS && fs.rename(unpacked.macArm64, renameDir.macArm64),
-    fs.rename(unpacked.win, renameDir.winArm64)
+    fs.rename(unpacked.winArm64, renameDir.winArm64)
   ]);
 
   // 压缩
