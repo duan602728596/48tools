@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
+import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
@@ -139,15 +140,15 @@ async function unpack() {
   if (isMacOS) {
     if (isOld) {
       // 编译mac
-      // console.log('⏳正在编译：mac');
-      // try {
-      //   await builder.build({
-      //     targets: builder.Platform.MAC.createTarget(),
-      //     config: config(output.mac)
-      //   });
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      console.log('⏳正在编译：mac');
+      try {
+        await builder.build({
+          targets: builder.Platform.MAC.createTarget(),
+          config: config(output.mac)
+        });
+      } catch (err) {
+        console.error(err);
+      }
 
       // 编译mac-arm64
       console.log('⏳正在编译：mac-arm64');
@@ -161,15 +162,15 @@ async function unpack() {
       }
     } else {
       // 编译mac
-      // console.log('⏳正在编译：mac');
-      // try {
-      //   await builder.build({
-      //     targets: builder.Platform.MAC.createTarget(),
-      //     config: config(output._mac)
-      //   });
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      console.log('⏳正在编译：mac');
+      try {
+        await builder.build({
+          targets: builder.Platform.MAC.createTarget(),
+          config: config(output._mac)
+        });
+      } catch (err) {
+        console.error(err);
+      }
 
       // 编译mac-arm64
       console.log('⏳正在编译：mac-arm64');
@@ -229,10 +230,13 @@ async function unpack() {
     console.error(err);
   }
 
+  await setTimeoutPromise(60_000 * 3);
+  console.log(build, await fsP.readdir(build));
+
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
   await Promise.all([
-    // ...isMacOS ? copy(unpacked.mac, true) : [],
+    ...isMacOS ? copy(unpacked.mac, true) : [],
     ...(isMacOS && isOld) ? copy(unpacked.macArm64, true) : [],
     ...copy(unpacked.win),
     ...copy(unpacked.win32),
