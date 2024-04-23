@@ -13,7 +13,7 @@ type SliceReducers = {
 };
 
 // 微博签到
-interface ReqTopicCheckinReturn {
+export interface ReqTopicCheckinReturn {
   result: WeiboCheckinResult;
   quantity: Quantity;
 }
