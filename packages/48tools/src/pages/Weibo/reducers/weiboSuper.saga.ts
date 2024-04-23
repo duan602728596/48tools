@@ -77,6 +77,8 @@ function *weiboCheckIn(messageApi: MessageInstance, cookie: string): Generator {
       cont = false;
     }
   }
+
+  yield put(setCheckIn(false));
 }
 
 /* 开始签到 */
