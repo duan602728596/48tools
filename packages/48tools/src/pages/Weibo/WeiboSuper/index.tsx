@@ -20,9 +20,9 @@ import Header from '../../../components/Header/Header';
 import WeiboLoginDynamic from '../../../functionalComponents/WeiboLogin/loader';
 import { IDBCursorAccountList } from '../../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import weiboCheckIn from './function/weiboCheckIn';
 import dynamicReducers from '../../../store/dynamicReducers';
-import weiboSuperReducers, { setCheckIn, defaultQuantityValue, type WeiboSuperInitialState } from '../reducers/weiboSuper';
+import weiboSuperReducers, { defaultQuantityValue, type WeiboSuperInitialState } from '../reducers/weiboSuper';
+import weiboSuperRootSaga, { runWeiboSuperCheckinStartAction, runWeiboSuperCheckinStopAction } from '../reducers/weiboSuper.saga';
 import type { WeiboLoginInitialState } from '../../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../../commonTypes';
 import type { WeiboCheckinResult, Quantity } from '../types';
@@ -70,14 +70,16 @@ function Index(props: {}): ReactElement {
     const index: number = accountList.findIndex((o: WeiboAccount): boolean => o.id === accountValue);
 
     if (index >= 0) {
-      dispatch(setCheckIn(true));
-      weiboCheckIn(messageApi, accountList[index].cookie);
+      dispatch(runWeiboSuperCheckinStartAction({
+        messageApi,
+        cookie: accountList[index].cookie
+      }));
     }
   }
 
   // 停止签到
   function handleWeiboCheckinStopClick(event: MouseEvent): void {
-    dispatch(setCheckIn(false));
+    dispatch(runWeiboSuperCheckinStopAction());
   }
 
   // 渲染select
@@ -147,4 +149,4 @@ function Index(props: {}): ReactElement {
   );
 }
 
-export default dynamicReducers([weiboSuperReducers])(Index);
+export default dynamicReducers([weiboSuperReducers], [weiboSuperRootSaga])(Index);

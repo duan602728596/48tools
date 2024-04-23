@@ -1,4 +1,5 @@
 import got, { type Response as GotResponse } from 'got';
+import { pcUserAgent } from '../../../utils/utils';
 import type { TopicResponse, CheckinResult } from './interface';
 
 export type * from './interface';
@@ -13,7 +14,9 @@ export async function requestTopicContent(cookie: string, page: number = 1): Pro
   const res: GotResponse<TopicResponse> = await got.get(uri, {
     responseType: 'json',
     headers: {
-      Cookie: cookie
+      Cookie: cookie,
+      Referer: 'https://weibo.com/',
+      'User-Agent': pcUserAgent
     }
   });
 
@@ -30,7 +33,9 @@ export async function requestTopicCheckin(cookie: string, topicId: string): Prom
   const res: GotResponse<CheckinResult> = await got.get(uri, {
     responseType: 'json',
     headers: {
-      Cookie: cookie
+      Cookie: cookie,
+      Referer: 'https://weibo.com/',
+      'User-Agent': pcUserAgent
     }
   });
 

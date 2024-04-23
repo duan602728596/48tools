@@ -1,14 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  type Slice,
-  type PayloadAction,
-  type CaseReducer,
-  type CaseReducerActions,
-  type AsyncThunk,
-  type ActionReducerMapBuilder
-} from '@reduxjs/toolkit';
-import { requestTopicCheckin, type CheckinResult } from '@48tools-api/weibo/super';
+import { createSlice, type Slice, type PayloadAction, type CaseReducer, type CaseReducerActions } from '@reduxjs/toolkit';
 import type { WeiboCheckinResult, Quantity } from '../types';
 
 export interface WeiboSuperInitialState {
@@ -19,6 +9,7 @@ export interface WeiboSuperInitialState {
 
 type SliceReducers = {
   setCheckIn: CaseReducer<WeiboSuperInitialState, PayloadAction<boolean>>;
+  updateCheckInList: CaseReducer<WeiboSuperInitialState, PayloadAction<ReqTopicCheckinReturn>>;
 };
 
 // 微博签到
@@ -26,29 +17,6 @@ interface ReqTopicCheckinReturn {
   result: WeiboCheckinResult;
   quantity: Quantity;
 }
-
-interface ReqTopicCheckinPayload extends ReqTopicCheckinReturn {
-  cookie: string;
-  superId: string;
-}
-
-export const reqTopicCheckin: AsyncThunk<ReqTopicCheckinReturn, ReqTopicCheckinPayload, {}> = createAsyncThunk(
-  'weiboSuper/微博签到',
-  async function(payload: ReqTopicCheckinPayload, thunkAPI: any): Promise<ReqTopicCheckinReturn> {
-    const res: CheckinResult = await requestTopicCheckin(payload.cookie, payload.superId);
-
-    Object.assign(payload.result, {
-      code: Number(res.code),
-      result: Number(res.code) === 100000
-        ? `${ res.data.alert_title } ${ res.data.alert_subtitle }`
-        : (res.msg && res.msg !== '' ? res.msg : '签到失败')
-    });
-
-    return {
-      result: payload.result,
-      quantity: { ...payload.quantity }
-    };
-  });
 
 export const defaultQuantityValue: Quantity = {
   checkedInLen: 0,
@@ -75,17 +43,15 @@ const { actions, reducer }: Slice<WeiboSuperInitialState, SliceReducers, typeof 
           total: 0
         };
       }
+    },
+
+    // 更新签到状态
+    updateCheckInList(state: WeiboSuperInitialState, action: PayloadAction<ReqTopicCheckinReturn>): void {
+      state.weiboCheckinList = state.weiboCheckinList.concat([action.payload.result]); // 追加新的超话
+      state.quantity = action.payload.quantity; // 已签到状态
     }
-  },
-  extraReducers(builder: ActionReducerMapBuilder<WeiboSuperInitialState>): void {
-    builder.addCase(
-      reqTopicCheckin.fulfilled,
-      function(state: WeiboSuperInitialState, action: PayloadAction<ReqTopicCheckinReturn>): void {
-        state.weiboCheckinList = state.weiboCheckinList.concat([action.payload.result]); // 追加新的超话
-        state.quantity = action.payload.quantity; // 已签到状态
-      });
   }
 });
 
-export const { setCheckIn }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
+export const { setCheckIn, updateCheckInList }: CaseReducerActions<SliceReducers, typeof sliceName> = actions;
 export default { [sliceName]: reducer };

@@ -10,6 +10,7 @@ import {
 import type { GetDefaultMiddleware } from '@reduxjs/toolkit/src/getDefaultMiddleware';
 import type { Middlewares } from '@reduxjs/toolkit/src/configureStore';
 import type { Tuple } from '@reduxjs/toolkit/src/utils';
+import createSagaMiddleware, { type SagaMiddleware, type Saga, type Task } from 'redux-saga';
 import { reducersMapObject, ignoreOptions, apiMiddlewares } from './reducers';
 
 interface ThunkOptions<E = any> {
@@ -27,6 +28,7 @@ const reducer: Reducer = combineReducers(reducersMapObject);
 
 /* store */
 export let store: Store;
+export const sagaMiddleware: SagaMiddleware<any> = createSagaMiddleware<any>();
 
 function createStore(initialState: any = {}): void {
   store = configureStore({
@@ -36,7 +38,7 @@ function createStore(initialState: any = {}): void {
       return getDefaultMiddleware<GetDefaultMiddlewareOptions>({
         immutableCheck: ignoreOptions,
         serializableCheck: ignoreOptions
-      }).concat(apiMiddlewares);
+      }).concat(apiMiddlewares, sagaMiddleware as any);
     }
   });
 }
@@ -53,4 +55,9 @@ export function storeFactory(initialState: any = {}): Store {
 export function replaceReducers(dynamicReducers: Array<Record<string, Reducer>> ): void {
   Object.assign(reducersMapObject, ...dynamicReducers);
   store.replaceReducer(combineReducers(reducersMapObject));
+}
+
+/* 异步运行saga */
+export function runSagas(sagas: Array<Saga>): void {
+  sagas.forEach((sage: Saga): Task => sagaMiddleware.run(sage));
 }

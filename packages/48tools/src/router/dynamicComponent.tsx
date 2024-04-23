@@ -1,6 +1,6 @@
 import { lazy, Suspense, type ReactElement, type LazyExoticComponent, type ComponentType } from 'react';
 import { Spin } from 'antd';
-import { replaceReducers } from '../store/store';
+import { replaceReducers, runSagas } from '../store/store';
 
 type Loader<T> = () => Promise<{ default: ComponentType<T> }>;
 
@@ -20,7 +20,7 @@ function dynamicComponent<T = any>(loader: Loader<T>, displayFallback: boolean =
 
   return (): ReactElement => (
     <Suspense fallback={ displayFallback ? Loading : null }>
-      <Component replaceReducers={ replaceReducers } />
+      <Component replaceReducers={ replaceReducers } runSagas={ runSagas } />
     </Suspense>
   );
 }

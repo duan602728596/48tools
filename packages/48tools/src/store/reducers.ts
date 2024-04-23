@@ -98,6 +98,7 @@ export const ignoreOptions: any = {
     'concat/setConcatWorker',
     'videoCut/setCutChildListAdd',
     'videoCut/setCutChildListDelete',
+    'weiboSuper/runWeiboSuperCheckinStart',
     'weiboLive/setLiveOne',
     'weiboLive/setRemoveLiveOne',
     'FFmpegProcess/setAddProcess',

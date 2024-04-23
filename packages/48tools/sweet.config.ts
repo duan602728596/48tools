@@ -118,6 +118,8 @@ export default function(info: object): Record<string, any> {
       'react-redux',
       'react-router-dom',
       'react-sortable-hoc',
+      'redux-saga',
+      'redux-saga/effects',
       'reselect'
     ],
     entry: {

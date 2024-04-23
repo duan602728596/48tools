@@ -1,4 +1,12 @@
-import type { SuperItem } from '../types';
+export interface SuperItem {
+  title: string; // 超话id
+  content1: string;
+  content2: string;
+  intro: string;
+  link: string;
+  pic: string; // 超话图片
+  oid: string;
+}
 
 export interface TopicResponse {
   ok: number;
