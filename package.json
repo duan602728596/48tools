@@ -34,7 +34,7 @@
   "dependencies": {
     "@vercel/ncc": "^0.38.1",
     "cross-zip": "^4.0.0",
-    "electron": "^28.1.0",
+    "electron": "^30.0.1",
     "electron-builder": "^24.10.0",
     "fs-extra": "^11.2.0",
     "glob": "^10.3.10",
