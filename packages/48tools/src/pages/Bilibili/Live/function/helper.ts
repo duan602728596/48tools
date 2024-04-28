@@ -1,10 +1,5 @@
 import type { RoomPlayUrlV2 } from '@48tools-api/bilibili/live';
 
-export function ffmpegHeaders(): string {
-  return `Referer: https://live.bilibili.com\r
-Host: live.bilibili.com\r\n`;
-}
-
 export const localStorageKey: string = 'BILIBILI_AUTO_RECORD_SAVE_PATH';
 
 /* 生成直播链接 */
