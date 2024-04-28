@@ -25,7 +25,7 @@ function WeiboLogin(props: {}): ReactElement {
       <Button icon={ <IconWeiboCircleOutlined /> } onClick={ handleOpenQrcodeClick }>微博账号登陆</Button>
       <Modal open={ visible }
         title="微博账号登陆"
-        width={ 750 }
+        width={ 800 }
         centered={ true }
         destroyOnClose={ true }
         closable={ false }

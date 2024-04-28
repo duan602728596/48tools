@@ -1,5 +1,5 @@
 import got, { type Response as GotResponse } from 'got';
-import type { PcLiveJson, VisitedList, SelfFollowed, DetailInfo } from './interface';
+import type { PcLiveJson, VisitedList, DetailInfo, FollowContent } from './interface';
 
 export type * from './interface';
 
@@ -43,14 +43,13 @@ export async function requestVisitedList(gsid: string, s: string, from: string, 
 /**
  * 获取关注列表
  * @param { string } cookie
- * @param { number } [page]
+ * @param { number } [page = 1]
  */
-export async function requestSelfFollowedList(cookie: string, page: number): Promise<SelfFollowed> {
-  const res: GotResponse<SelfFollowed> = await got.get('https://m.weibo.cn/api/container/getIndex?containerid=231093_-_selffollowed', {
+export async function requestSelfFollowedListPC(cookie: string, page: number = 1): Promise<FollowContent> {
+  const res: GotResponse<FollowContent> = await got.get(`https://weibo.com/ajax/profile/followContent?page=${ page }&next_cursor=50`, {
     responseType: 'json',
     headers: {
-      Cookie: cookie,
-      Referer: 'https://weibo.com/'
+      Cookie: cookie
     }
   });
 
@@ -64,8 +63,7 @@ export async function requestDetailByUserId(id: string, cookie: string | undefin
   const res: GotResponse<DetailInfo> = await got.get('https://weibo.com/ajax/profile/detail?uid=' + id, {
     responseType: 'json',
     headers: {
-      Cookie: cookie,
-      Referer: 'https://weibo.com/'
+      Cookie: cookie
     }
   });
 

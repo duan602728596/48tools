@@ -1,0 +1,19 @@
+@import '../../../common'
+
+.table
+  $border: 1px solid rgba(0, 0, 0, .3)
+  width: 100%
+  border: $border
+  border-collapse: collapse
+
+  td
+    padding: 2px 5px
+    border-bottom: $border
+
+@media (prefers-color-scheme: dark)
+  .table
+    $border: 1px solid rgba(255, 255, 255, .3)
+    border: $border
+
+    td
+      border-bottom: $border

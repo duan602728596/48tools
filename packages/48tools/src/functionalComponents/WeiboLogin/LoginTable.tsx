@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import { Fragment, useState, useEffect, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -13,6 +12,8 @@ import commonStyle from '../../common.sass';
 import { IDBCursorAccountList, IDBDeleteAccount, WeiboLoginInitialState } from './reducers/weiboLogin';
 import { weiboLoginSelector } from './reducers/selectors';
 import dbConfig from '../../utils/IDB/IDBConfig';
+import Follow from './Follow/Follow';
+import { handleOpenWeiboClick } from './function/weiboHelper';
 import type { WeiboAccount } from '../../commonTypes';
 
 /* 已登陆列表 */
@@ -21,6 +22,8 @@ function LoginTable(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const { message: messageApi }: useAppProps = App.useApp();
   const [isDrawerVisible, setIsDrawerVisible]: [boolean, D<S<boolean>>] = useState(false); // 是否显示抽屉
+  const [isFollowDrawerVisible, setFollowDrawerVisible]: [boolean, D<S<boolean>>] = useState(false); // 是否显示关注的人的抽屉
+  const [checkWeiboAccount, setCheckWeiboAccount]: [WeiboAccount | undefined, D<S<WeiboAccount | undefined>>] = useState(); // 选中的账号
   const [drawerData, setDrawerData]: [Array<UserInfo>, D<S<Array<UserInfo>>>] = useState([]); // 访客数据
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载状态
 
@@ -29,6 +32,12 @@ function LoginTable(props: {}): ReactElement {
     dispatch(IDBDeleteAccount({
       query: record.id
     }));
+  }
+
+  // 访客(Next)
+  function handleVisitorWeiboAccountNextClick(record: WeiboAccount, event: MouseEvent): void {
+    setCheckWeiboAccount(record);
+    setFollowDrawerVisible(true);
   }
 
   // 访客
@@ -80,11 +89,6 @@ function LoginTable(props: {}): ReactElement {
     setLoading(false);
   }
 
-  // 打开微博
-  function handleOpenWeiboClick(uidStr: string, event: MouseEvent): void {
-    shell.openExternal('https://weibo.com/u/' + uidStr);
-  }
-
   // 渲染访客列表
   function visitedListRenderItem(item: UserInfo): ReactElement {
     return (
@@ -102,9 +106,9 @@ function LoginTable(props: {}): ReactElement {
   }
 
   const columns: ColumnsType<WeiboAccount> = [
-    { title: 'ID', dataIndex: 'id', width: 150 },
+    { title: 'ID', dataIndex: 'id', width: 110 },
     { title: '昵称', dataIndex: 'username' },
-    { title: '上次登陆时间', dataIndex: 'lastLoginTime', width: 180 },
+    { title: '上次登陆时间', dataIndex: 'lastLoginTime', width: 110 },
     {
       title: '抓包参数',
       key: 'app',
@@ -131,22 +135,31 @@ function LoginTable(props: {}): ReactElement {
     {
       title: '操作',
       key: 'handle',
-      width: 130,
-      render: (value: void, record: WeiboAccount, index: number): ReactElement => (
-        <Button.Group size="small">
-          <Button disabled={ !(record.s && record.from) }
-            onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }
-          >
-            访客
-          </Button>
-          <Button type="primary"
-            danger={ true }
-            onClick={ (event: MouseEvent): void => handleDeleteWeiboAccountClick(record, event) }
-          >
-            删除
-          </Button>
-        </Button.Group>
-      )
+      width: 200,
+      render: (value: void, record: WeiboAccount, index: number): ReactElement => {
+        const disabledSeeVisitor: boolean = !(record.s && record.from && record.c);
+
+        return (
+          <Button.Group size="small">
+            <Button disabled={ disabledSeeVisitor }
+              onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }
+            >
+              访客
+            </Button>
+            <Button disabled={ disabledSeeVisitor }
+              onClick={ (event: MouseEvent): void => handleVisitorWeiboAccountNextClick(record, event) }
+            >
+              关注的人
+            </Button>
+            <Button type="primary"
+              danger={ true }
+              onClick={ (event: MouseEvent): void => handleDeleteWeiboAccountClick(record, event) }
+            >
+              删除
+            </Button>
+          </Button.Group>
+        );
+      }
     }
   ];
 
@@ -178,6 +191,17 @@ function LoginTable(props: {}): ReactElement {
       >
         <Alert className="mb-[6px]" type="error" message="由于限制，访客列表只能展示有限的访客。SVIP以上的用户就别在这里看了。" />
         <List size="small" bordered={ true } dataSource={ drawerData } loading={ loading } renderItem={ visitedListRenderItem } />
+      </Drawer>
+      <Drawer open={ isFollowDrawerVisible }
+        width={ 800 }
+        classNames={{ body: 'flex flex-col' }}
+        maskClosable={ false }
+        mask={ false }
+        closeIcon={ null }
+        destroyOnClose={ true }
+        footer={ <Button type="primary" danger={ true } onClick={ (): void => setFollowDrawerVisible(false) }>关闭</Button> }
+      >
+        <Follow weiboAccount={ checkWeiboAccount! } />
       </Drawer>
     </Fragment>
   );

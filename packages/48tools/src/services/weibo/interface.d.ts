@@ -22,6 +22,20 @@ export interface VisitedSchemaItem {
   text: string;
   scheme_text?: string;
   scheme?: string;
+  recommend?: [
+    {
+      name: '粉丝数';
+      value: string;
+    },
+    {
+      name: 'IP';
+      value: string;
+    },
+    {
+      name: '';
+      value: `${ string }座`;
+    }
+  ];
 }
 
 export interface VisitedList {
@@ -35,29 +49,23 @@ export interface VisitedList {
   errmsg?: string;
 }
 
-// 关注
-export interface SelfFollowedCardGroupItem {
-  card_type: 10;
-  itemid: string;
-  users: {
-    id: number;
-    screen_name: string;
-    cover_image_phone: string;
-    followers_count: string;
-    followers_count_str: string;
-  };
-  desc1: string;
-  desc2: string;
+// 关注（PC）
+export interface FollowContentUserItem {
+  id: number;
+  idstr: string;
+  description: string;
+  avatar_hd: string;
+  followers_count: number; // 这个地方是-1的
+  followers_count_str: `${ number }` | `${ number }万`; // -1或x.x万
+  name: string;
+  screen_name: string;
 }
 
-export interface SelfFollowedCardItem {
-  card_type: 11;
-  card_group: Array<SelfFollowedCardGroupItem>;
-}
-
-export interface SelfFollowed {
+export interface FollowContent {
   data: {
-    cards: Array<SelfFollowedCardItem>;
+    follows: {
+      users: Array<FollowContentUserItem>;
+    };
   };
 }
 
