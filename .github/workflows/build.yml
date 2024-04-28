@@ -1,4 +1,4 @@
-name: Build apps CI
+name: Build apps CI (Intel)
 
 on:
   push:

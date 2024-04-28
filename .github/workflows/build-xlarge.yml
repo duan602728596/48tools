@@ -1,6 +1,6 @@
 # https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners
 
-name: Build apps CI in xlarge runner
+name: Build apps CI in xlarge runner (ARM)
 
 on:
   push:
