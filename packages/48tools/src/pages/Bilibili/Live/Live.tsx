@@ -8,7 +8,7 @@ import { Button, Table, message, Popconfirm, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { requestRoomInitData, requestRoomPlayerUrl, type RoomInit, type RoomPlayUrl } from '@48tools-api/bilibili/live';
+import { requestRoomInitData, requestRoomPlayerUrlV2, type RoomInit, type RoomPlayUrlV2 } from '@48tools-api/bilibili/live';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
@@ -28,7 +28,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
-import { ffmpegHeaders, localStorageKey } from './function/helper';
+import { localStorageKey, createV2LiveUrl } from './function/helper';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 
@@ -96,7 +96,16 @@ function Live(props: {}): ReactElement {
 
       if (result.canceled || !result.filePath) return;
 
-      const resPlayUrl: RoomPlayUrl = await requestRoomPlayerUrl(`${ resInit.data.room_id }`);
+      const resPlayUrl: RoomPlayUrlV2 = await requestRoomPlayerUrlV2(`${ resInit.data.room_id }`);
+      const playStreamPath: string | null = createV2LiveUrl(resPlayUrl);
+
+      if (!playStreamPath) {
+        messageApi.warning('直播获取错误。');
+
+        return;
+      }
+
+
       const worker: Worker = getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
@@ -114,11 +123,9 @@ function Live(props: {}): ReactElement {
 
       worker.postMessage({
         type: 'start',
-        playStreamPath: resPlayUrl.data.durl[0].url,
+        playStreamPath,
         filePath: result.filePath,
-        ffmpeg: getFFmpeg(),
-        ua: true,
-        ffmpegHeaders: ffmpegHeaders()
+        ffmpeg: getFFmpeg()
       });
 
       dispatch(setAddWorkerItem({

@@ -2,7 +2,7 @@ import got, { type Response as GotResponse } from 'got';
 import type { _PlayUrlObject } from '../../../../../main/src/logProtocol/logTemplate/bilibiliLive.mjs';
 import { getBilibiliCookie } from '../../../utils/utils';
 import { _bilibiliLiveLogProtocol } from '../../../utils/logProtocol/logActions';
-import type { RoomInit, RoomPlayUrl } from './interface';
+import type { RoomInit, RoomPlayUrlV2 } from './interface';
 
 export type * from './interface';
 
@@ -26,9 +26,10 @@ export async function requestRoomInitData(roomId: string): Promise<RoomInit> {
  * 获取直播间的直播地址
  * @param { string } roomId
  */
-export async function requestRoomPlayerUrl(roomId: string): Promise<RoomPlayUrl> {
-  const apiUrl: string = `https://api.live.bilibili.com/room/v1/Room/playUrl?cid=${ roomId }&qn=10000&platform=web`;
-  const res: GotResponse<RoomPlayUrl> = await got(apiUrl, {
+export async function requestRoomPlayerUrlV2(roomId: string): Promise<RoomPlayUrlV2> {
+  const uri: string = `https://api.live.bilibili.com/xlive/web-room/v2/index/getRoomPlayInfo?room_id=${ roomId }`
+    + '&protocol=0,1&format=0,1,2&codec=0,1,2&qn=10000&platform=web&ptype=8&dolby=5&panorama=1';
+  const res: GotResponse<RoomPlayUrlV2> = await got.get(uri, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
