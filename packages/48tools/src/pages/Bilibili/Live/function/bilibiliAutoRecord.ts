@@ -5,7 +5,7 @@ import { store } from '../../../../store/store';
 import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import { liveSlice, setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/bilibiliLive';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
-import { localStorageKey, createV2LiveUrl } from './helper';
+import { ffmpegHeaders, isCNCdnHost, localStorageKey, createV2LiveUrl } from './helper';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 
@@ -33,6 +33,7 @@ async function bilibiliAutoRecord(): Promise<void> {
 
         if (playStreamPath) {
           const worker: Worker = getFFmpegDownloadWorker();
+          const isCN: boolean = isCNCdnHost(playStreamPath);
 
           worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>) {
             const { type, error }: MessageEventData = messageEvent.data;
@@ -51,7 +52,9 @@ async function bilibiliAutoRecord(): Promise<void> {
             type: 'start',
             playStreamPath,
             filePath: path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
-            ffmpeg: getFFmpeg()
+            ffmpeg: getFFmpeg(),
+            ua: isCN,
+            ffmpegHeaders: isCN ? ffmpegHeaders() : undefined
           });
 
           dispatch(setAddWorkerItem({

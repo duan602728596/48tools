@@ -28,7 +28,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
-import { localStorageKey, createV2LiveUrl } from './function/helper';
+import { ffmpegHeaders, isCNCdnHost, localStorageKey, createV2LiveUrl } from './function/helper';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 
@@ -105,8 +105,8 @@ function Live(props: {}): ReactElement {
         return;
       }
 
-
       const worker: Worker = getFFmpegDownloadWorker();
+      const isCN: boolean = isCNCdnHost(playStreamPath);
 
       worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
         const { type, error }: MessageEventData = event1.data;
@@ -125,7 +125,9 @@ function Live(props: {}): ReactElement {
         type: 'start',
         playStreamPath,
         filePath: result.filePath,
-        ffmpeg: getFFmpeg()
+        ffmpeg: getFFmpeg(),
+        ua: isCN,
+        ffmpegHeaders: isCN ? ffmpegHeaders() : undefined
       });
 
       dispatch(setAddWorkerItem({
