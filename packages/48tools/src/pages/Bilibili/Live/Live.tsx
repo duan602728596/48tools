@@ -127,7 +127,8 @@ function Live(props: {}): ReactElement {
         filePath: result.filePath,
         ffmpeg: getFFmpeg(),
         ua: isCN,
-        ffmpegHeaders: isCN ? ffmpegHeaders() : undefined
+        ffmpegHeaders: isCN ? ffmpegHeaders() : undefined,
+        noDurationFilesize: true
       });
 
       dispatch(setAddWorkerItem({

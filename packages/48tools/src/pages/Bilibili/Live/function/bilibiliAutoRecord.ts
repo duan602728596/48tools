@@ -54,7 +54,8 @@ async function bilibiliAutoRecord(): Promise<void> {
             filePath: path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
             ffmpeg: getFFmpeg(),
             ua: isCN,
-            ffmpegHeaders: isCN ? ffmpegHeaders() : undefined
+            ffmpegHeaders: isCN ? ffmpegHeaders() : undefined,
+            noDurationFilesize: true
           });
 
           dispatch(setAddWorkerItem({

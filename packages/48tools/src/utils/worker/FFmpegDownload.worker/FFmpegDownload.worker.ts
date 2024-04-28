@@ -18,6 +18,9 @@ export type WorkerEventData = {
   qid?: string;                           // id
   ffmpegHeaders?: string;                 // ffmpeg的headers
   concat?: boolean;                       // 合并
+  // 是否添加"-flvflags no_duration_filesize"
+  // see: https://stackoverflow.com/questions/50300013/ffmpeg-streaming-stops-after-few-seconds
+  noDurationFilesize?: boolean;
 };
 
 export interface ErrorMessageEventData {
@@ -108,7 +111,8 @@ function download(workerData: WorkerEventData): void {
     libx264,
     qid,
     ffmpegHeaders,
-    concat
+    concat,
+    noDurationFilesize
   }: WorkerEventData = workerData;
   let ffmpegArgs: Array<string> = playStreamPathArray(playStreamPath).concat(
     concat ? ['-c:v', 'copy', '-c:a', 'aac', filePath] : ['-c', 'copy', filePath]);
@@ -127,6 +131,10 @@ function download(workerData: WorkerEventData): void {
 
   if (protocolWhitelist) {
     ffmpegArgs.unshift('-protocol_whitelist', 'file,http,https,tcp,tls');
+  }
+
+  if (noDurationFilesize) {
+    ffmpegArgs.push('-flvflags', 'no_duration_filesize');
   }
 
   ffmpegArgs = ['-rw_timeout', `${ (1_000 ** 2) * 60 * 5 }`, ...ffmpegArgs];
