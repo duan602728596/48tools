@@ -1,4 +1,5 @@
 import { useState, useEffect, type Dispatch as D, type SetStateAction as S } from 'react';
+import * as PropTypes from 'prop-types';
 import { requestDetailByUserId, type FollowContentUserItem, type VisitedSchemaItem, type DetailInfo } from '@48tools-api/weibo';
 import type { WeiboAccount } from '../../../commonTypes';
 
@@ -68,5 +69,13 @@ function CheckVisit(props: CheckVisitProps): string | null {
     return null;
   }
 }
+
+CheckVisit.propTypes = {
+  user: PropTypes.object.isRequired,
+  visitedList: PropTypes.array.isRequired,
+  weiboAccount: PropTypes.object.isRequired,
+  detailCache: PropTypes.object.isRequired,
+  setDetailCache: PropTypes.func.isRequired
+};
 
 export default CheckVisit;
