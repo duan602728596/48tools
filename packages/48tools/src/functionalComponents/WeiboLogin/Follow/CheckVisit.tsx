@@ -6,6 +6,8 @@ interface CheckVisitProps {
   user: FollowContentUserItem;
   visitedList: Array<VisitedSchemaItem | []>;
   weiboAccount: WeiboAccount;
+  detailCache: Record<string, DetailInfo>;
+  setDetailCache: D<S<Record<string, DetailInfo>>>;
 }
 
 /**
@@ -13,7 +15,7 @@ interface CheckVisitProps {
  * 先检查粉丝数是否匹配，再通过API获取并检查生日和IP是否匹配
  */
 function CheckVisit(props: CheckVisitProps): string | null {
-  const { user, visitedList, weiboAccount }: CheckVisitProps = props;
+  const { user, visitedList, weiboAccount, detailCache, setDetailCache }: CheckVisitProps = props;
   const [allMatch, setAllMatch]: [boolean, D<S<boolean>>] = useState(false); // 是否全部匹配
 
   // 通过粉丝数检查是否匹配
@@ -37,11 +39,19 @@ function CheckVisit(props: CheckVisitProps): string | null {
   async function checkIpAndBirthday(): Promise<void> {
     if (!followersCountMatch) return;
 
-    const res: DetailInfo = await requestDetailByUserId(user.idstr, weiboAccount.cookie);
+    let res: DetailInfo;
+
+    if (detailCache[user.idstr]) {
+      res = detailCache[user.idstr];
+    } else {
+      res = await requestDetailByUserId(user.idstr, weiboAccount.cookie);
+      setDetailCache((prevState: Record<string, DetailInfo>): Record<string, DetailInfo> => ({ ...prevState, [user.idstr]: res }));
+    }
 
     if (res?.data?.birthday && res?.data?.ip_location) {
       const ip: string = res.data.ip_location.replace('IP属地：', '');
-      const birthdayMatch: boolean = followersCountMatch.recommend!.some((o: { name: string; value: string }): boolean => o.value === res.data.birthday);
+      const birthdayMatch: boolean = followersCountMatch.recommend!.some(
+        (o: { name: string; value: string }): boolean => o.value === res.data.birthday || res.data.birthday.includes(o.value));
       const ipMatch: boolean = followersCountMatch.recommend!.some((o: { name: string; value: string }): boolean => o.value === ip);
 
       setAllMatch(followersCountMatch && birthdayMatch && ipMatch);

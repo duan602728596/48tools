@@ -1,6 +1,18 @@
-import { Fragment, useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  useEffect,
+  useRef,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent,
+  type MutableRefObject,
+  type RefObject
+} from 'react';
 import { Button, App, Avatar } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
+import VirtualList from 'rc-virtual-list';
 import { parse } from 'cookie';
 import * as classNames from 'classnames';
 import {
@@ -9,9 +21,9 @@ import {
   type VisitedList,
   type VisitedSchemaItem,
   type FollowContent,
-  type FollowContentUserItem
+  type FollowContentUserItem,
+  type DetailInfo
 } from '@48tools-api/weibo';
-import style from './follow.sass';
 import commonStyle from '../../../common.sass';
 import CheckVisit from './CheckVisit';
 import { handleOpenWeiboClick } from '../function/weiboHelper';
@@ -29,6 +41,10 @@ function Follow(props: FollowProps): ReactElement {
   const [followList, setFollowList]: [Array<FollowContentUserItem>, D<S<Array<FollowContentUserItem>>>] = useState([]); // 关注列表
   const [page, setPage]: [number, D<S<number>>] = useState(1); // 当前页数
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(true); // 加载状态
+  const [listHeight, setListHeight]: [number, D<S<number>>] = useState(0);
+  const [detailCache, setDetailCache]: [Record<string, DetailInfo>, D<S<Record<string, DetailInfo>>>] = useState({}); // 详情缓存
+  const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
+  const listRef: RefObject<HTMLDivElement> = useRef(null);
 
   // 加载访客
   async function loadVisited(): Promise<void> {
@@ -100,40 +116,56 @@ function Follow(props: FollowProps): ReactElement {
     setLoading(false);
   }
 
-  // 渲染关注列表
-  function followListRender(): Array<ReactElement> {
-    return followList.map((item: FollowContentUserItem): ReactElement => {
-      return (
-        <tr key={ item.id }>
-          <td className="w-[30px]">
-            <Avatar size="small" src={ item.avatar_hd } />
-          </td>
-          <td>
-            <Button size="small" type="text" onClick={ (event: MouseEvent): void => handleOpenWeiboClick(item.idstr, event) }>
-              { item.name }
-            </Button>
-          </td>
-          <td className={ classNames('text-[12px]', commonStyle.primaryText) }>
-            <CheckVisit visitedList={ visitedIdList } weiboAccount={ weiboAccount } user={ item } />
-          </td>
-        </tr>
-      );
-    });
+  // 监听高度
+  function handleResizeObserverCallback(entries: ResizeObserverEntry[], observer: ResizeObserver): void {
+    setListHeight((prevState: number): number => entries[0].contentRect.height);
   }
 
   useEffect(function(): void {
     loadVisited();
   }, []);
 
+  useEffect(function(): () => void {
+    resizeObserverRef.current = new ResizeObserver(handleResizeObserverCallback);
+    listRef.current && resizeObserverRef.current.observe(listRef.current);
+
+    return function(): void {
+      resizeObserverRef.current?.disconnect?.();
+      resizeObserverRef.current = null;
+    };
+  }, []);
+
   return (
     <Fragment>
       <div className="shrink-0 pb-[8px] text-right">
+        <span className={ classNames('float-left leading-[31px]', commonStyle.tips) }>根据关注数、IP、生日筛选，可能会不准确。</span>
         <Button loading={ loading } onClick={ handleLoadFollowListClick }>加载关注列表</Button>
       </div>
-      <div className="grow overflow-auto pr-[8px]">
-        <table className={ classNames(style.table, commonStyle.text) }>
-          <tbody>{ followListRender() }</tbody>
-        </table>
+      <div ref={ listRef } className="grow overflow-hidden pr-[8px]">
+        <VirtualList data={ followList } height={ listHeight } itemHeight={ 26 } itemKey="id">
+          {
+            (item: FollowContentUserItem): ReactElement => (
+              <div key={ item.id } className={ classNames('flex h-[26px]', commonStyle.text) }>
+                <div className="shrink-0">
+                  <Avatar size="small" src={ item.avatar_hd } />
+                </div>
+                <div className="shrink-0 pl-[8px]">
+                  <Button size="small" type="text" onClick={ (event: MouseEvent): void => handleOpenWeiboClick(item.idstr, event) }>
+                    { item.name }
+                  </Button>
+                </div>
+                <div className={ classNames('grow text-[12px] leading-[24px]', commonStyle.primaryText) }>
+                  <CheckVisit visitedList={ visitedIdList }
+                    weiboAccount={ weiboAccount }
+                    user={ item }
+                    detailCache={ detailCache }
+                    setDetailCache={ setDetailCache }
+                  />
+                </div>
+              </div>
+            )
+          }
+        </VirtualList>
       </div>
     </Fragment>
   );
