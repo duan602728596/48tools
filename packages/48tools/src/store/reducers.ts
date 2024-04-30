@@ -1,4 +1,5 @@
 import type { ReducersMapObject, Middleware } from '@reduxjs/toolkit';
+import type { Saga } from 'redux-saga';
 import l48Pocket48Reducers from '../pages/48/reducers/pocket48';
 import l48Live48Reducers from '../pages/48/reducers/live48';
 import roomVoiceReducers from '../pages/48/reducers/roomVoice';
@@ -110,3 +111,6 @@ export const ignoreOptions: any = {
 export const apiMiddlewares: Array<Middleware> = [
   pocketFriendsApi.middleware
 ];
+
+/* sagas */
+export const sagasArray: Array<Saga> = [];
