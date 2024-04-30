@@ -4,7 +4,6 @@ import * as fs from 'node:fs';
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue, OpenDialogReturnValue } from 'electron';
 import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 'react';
-import * as PropTypes from 'prop-types';
 import { message, Button, Image } from 'antd';
 import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 import type { UseMessageReturnType } from '@48tools-types/antd';
@@ -122,12 +121,6 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
     </Fragment>
   );
 }
-
-DownloadImages.propTypes = {
-  liveInfo: PropTypes.object,
-  coverPath: PropTypes.string,
-  carousels: PropTypes.array
-};
 
 /**
  * 弹出层打开图片下载

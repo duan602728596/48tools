@@ -1,6 +1,5 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
-import * as PropTypes from 'prop-types';
 import mpegts from 'mpegts.js';
 import type { LiveRoomInfo } from '@48tools-api/48';
 import { getFFmpeg } from '../../../utils/utils';
@@ -84,10 +83,5 @@ function LiveVideo(props: VideoProps): ReactElement {
     </div>
   );
 }
-
-LiveVideo.propTypes = {
-  playerInfo: PropTypes.object,
-  info: PropTypes.object
-};
 
 export default LiveVideo;

@@ -35,7 +35,6 @@
     "@sweet-milktea/milktea-vite": "^4.2.0",
     "@sweet-milktea/server": "^4.2.0",
     "@types/express": "^4",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "cross-env": "^7.0.3",
     "gulp": "^4.0.2",
     "gulp-changed": "^5.0.2",
@@ -45,7 +44,6 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
-    "vite-plugin-babel": "^1.2.0",
     "vite-plugin-html": "^3.2.1"
   }
 }

@@ -13,7 +13,6 @@ import {
   type FunctionComponent,
   type ForwardedRef
 } from 'react';
-import * as PropTypes from 'prop-types';
 import { Avatar, Switch } from 'antd';
 import { GiftTwoTone as IconGiftTwoTone } from '@ant-design/icons';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
@@ -231,9 +230,5 @@ function Danmu(props: DanmuProps): ReactElement {
     </Fragment>
   );
 }
-
-Danmu.propTypes = {
-  info: PropTypes.object
-};
 
 export default Danmu;

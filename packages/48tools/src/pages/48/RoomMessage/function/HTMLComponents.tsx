@@ -1,5 +1,4 @@
 import type { ReactElement, PropsWithChildren } from 'react';
-import * as PropTypes from 'prop-types';
 import type { UploadFileResult } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/CloudStorageServiceInterface';
 import { typeCNName } from '../MessageDisplay/MessageDisplay';
 import { PAGE_SIZE } from '../SearchMessage/SearchMessage';
@@ -156,11 +155,6 @@ export function Html(props: HtmlProps): ReactElement {
   );
 }
 
-Html.propTypes = {
-  time: PropTypes.string,
-  children: PropTypes.node
-};
-
 /* 通用的item，显示用户头像和消息时间 */
 interface UserInfoProps extends PropsWithChildren {
   item: SendDataItem;
@@ -185,11 +179,6 @@ function Basic(props: UserInfoProps): ReactElement {
     </li>
   );
 }
-
-Basic.propTypes = {
-  item: PropTypes.object,
-  children: PropTypes.node
-};
 
 /* 类型对应的组件 */
 interface ComponentProps<T = SendDataItem> {
@@ -349,15 +338,3 @@ export function ErrorJSONComponent(props: ComponentProps): ReactElement {
     </pre>
   );
 }
-
-Text.propTypes
-  = Reply.propTypes
-  = Media.propTypes
-  = LivePush.propTypes
-  = FlipCard.propTypes
-  = FlipMedia.propTypes
-  = ExpressImage.propTypes
-  = JSONComponent.propTypes
-  = ErrorJSONComponent.propTypes = {
-                  item: PropTypes.object
-                };

@@ -82,7 +82,6 @@ const externalsName: Array<string> = nodeModules([
 export default function(info: object): Record<string, any> {
   const plugins: Array<any> = [
     ['@babel/plugin-syntax-import-attributes', { deprecatedAssertSyntax: true }],
-    !isDev && ['transform-react-remove-prop-types', { mode: 'remove', removeImport: true }],
     ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: true }]
   ].filter(Boolean);
 
@@ -109,7 +108,6 @@ export default function(info: object): Record<string, any> {
       'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK',
       'nim-web-sdk-ng/dist/NIM_BROWSER_SDK',
       'path-to-regexp',
-      'prop-types',
       'qrcode/lib/browser',
       'react',
       'react/jsx-dev-runtime',

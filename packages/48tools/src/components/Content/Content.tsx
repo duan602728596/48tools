@@ -1,5 +1,4 @@
 import type { ReactElement, PropsWithChildren } from 'react';
-import * as PropTypes from 'prop-types';
 import * as classNames from 'classnames';
 
 interface ContentProps extends Required<PropsWithChildren> {
@@ -16,10 +15,5 @@ function Content(props: ContentProps): ReactElement {
 
   return <div className={ classNames('p-[16px]', className) }>{ children }</div>;
 }
-
-Content.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.node
-};
 
 export default Content;

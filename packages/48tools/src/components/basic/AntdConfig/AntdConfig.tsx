@@ -1,5 +1,4 @@
 import { useContext, type ReactElement, type PropsWithChildren } from 'react';
-import * as PropTypes from 'prop-types';
 import { ConfigProvider, App } from 'antd';
 import darkDerivative from 'antd/es/theme/themes/dark/index';
 import zhCN from 'antd/locale/zh_CN';
@@ -25,9 +24,5 @@ function AntdConfig(props: Required<PropsWithChildren>): ReactElement {
     </ConfigProvider>
   );
 }
-
-AntdConfig.propTypes = {
-  children: PropTypes.node
-};
 
 export default AntdConfig;

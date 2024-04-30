@@ -9,7 +9,6 @@ import {
   type MouseEvent,
   type PropsWithChildren
 } from 'react';
-import * as PropTypes from 'prop-types';
 import { Button, Tooltip, Modal, Radio } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
@@ -125,10 +124,5 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
     </ThemeContext.Provider>
   );
 }
-
-ThemeProvider.propTypes = {
-  isChildrenWindow: PropTypes.bool,
-  children: PropTypes.node
-};
 
 export default ThemeProvider;

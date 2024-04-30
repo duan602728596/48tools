@@ -1,5 +1,4 @@
 import { Fragment, useRef, type ReactElement, type RefObject, type MouseEvent } from 'react';
-import * as PropTypes from 'prop-types';
 import { Image } from 'antd';
 
 interface ImagePreviewProps {
@@ -26,9 +25,5 @@ function ImagePreview(props: ImagePreviewProps): ReactElement {
     </Fragment>
   );
 }
-
-ImagePreview.propTypes = {
-  src: PropTypes.string
-};
 
 export default ImagePreview;

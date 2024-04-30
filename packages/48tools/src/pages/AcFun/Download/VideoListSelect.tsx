@@ -1,5 +1,4 @@
 import { useState, useMemo, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
-import * as PropTypes from 'prop-types';
 import { Transfer } from 'antd';
 import type { VideoInfoWithKey } from '../types';
 
@@ -39,12 +38,5 @@ function VideoListSelect(props: VideoListSelectProps): ReactElement {
     />
   );
 }
-
-VideoListSelect.propTypes = {
-  id: PropTypes.string,
-  value: PropTypes.arrayOf(PropTypes.object),
-  onChange: PropTypes.func,
-  dataSource: PropTypes.arrayOf(PropTypes.object)
-};
 
 export default VideoListSelect;

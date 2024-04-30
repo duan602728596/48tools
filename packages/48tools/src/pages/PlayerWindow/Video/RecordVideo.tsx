@@ -1,5 +1,4 @@
 import { useEffect, useRef, useSyncExternalStore, type ReactElement, type RefObject, type MutableRefObject } from 'react';
-import * as PropTypes from 'prop-types';
 import Hls, { type Events, type ManifestParsedData } from 'hls.js';
 import { requestDownloadFile, type LiveRoomInfo } from '@48tools-api/48';
 import { source, engineUserAgent } from '../../../utils/snh48';
@@ -99,10 +98,5 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
     </div>
   );
 }
-
-RecordVideo.propTypes = {
-  playerInfo: PropTypes.object,
-  info: PropTypes.object
-};
 
 export default RecordVideo;

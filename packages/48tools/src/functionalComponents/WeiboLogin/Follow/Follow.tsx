@@ -10,7 +10,6 @@ import {
   type MutableRefObject,
   type RefObject
 } from 'react';
-import * as PropTypes from 'prop-types';
 import { Button, App, Avatar } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import VirtualList from 'rc-virtual-list';
@@ -171,9 +170,5 @@ function Follow(props: FollowProps): ReactElement {
     </Fragment>
   );
 }
-
-Follow.propTypes = {
-  weiboAccount: PropTypes.object.isRequired
-};
 
 export default Follow;

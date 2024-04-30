@@ -1,5 +1,4 @@
 import type { ReactElement, MouseEvent, PropsWithChildren } from 'react';
-import * as PropTypes from 'prop-types';
 import { useHref, useLinkClickHandler, type LinkProps } from 'react-router-dom';
 import { Button, type ButtonProps } from 'antd';
 import { pick } from '../../utils/lodash';
@@ -23,11 +22,5 @@ function ButtonLink(props: ButtonLinkProps): ReactElement {
 
   return <Button href={ href } onClick={ handleButtonClick } { ...buttonProps }>{ children }</Button>;
 }
-
-ButtonLink.propTypes = {
-  linkProps: PropTypes.object,
-  buttonProps: PropTypes.object,
-  children: PropTypes.node
-};
 
 export default ButtonLink;

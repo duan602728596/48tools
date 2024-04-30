@@ -1,6 +1,5 @@
 import { ipcRenderer, type Cookie, type IpcRendererEvent } from 'electron';
 import { useState, useEffect, useCallback, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
-import * as PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Alert, Space, App, Modal, Form, Input, type FormInstance } from 'antd';
@@ -132,9 +131,5 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
     </div>
   );
 }
-
-OpenWeiboWindow.propTypes = {
-  onCancel: PropTypes.func // 关闭弹出层的回调函数
-};
 
 export default OpenWeiboWindow;

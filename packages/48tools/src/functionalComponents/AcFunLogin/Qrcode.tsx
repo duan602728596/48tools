@@ -1,15 +1,5 @@
 import type { CancelableRequest, Response as GotResponse } from 'got';
-import {
-  Fragment,
-  useState,
-  useEffect,
-  useMemo,
-  type ReactElement,
-  type Dispatch as D,
-  type SetStateAction as S,
-  type MouseEvent
-} from 'react';
-import * as PropTypes from 'prop-types';
+import { useState, useEffect, useMemo, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Empty, App } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import * as dayjs from 'dayjs';
@@ -137,9 +127,5 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     </div>
   );
 }
-
-Qrcode.propTypes = {
-  onCancel: PropTypes.func
-};
 
 export default Qrcode;

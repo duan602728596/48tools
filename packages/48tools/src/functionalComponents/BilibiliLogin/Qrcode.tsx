@@ -1,7 +1,6 @@
 import { promisify } from 'node:util';
 import { setTimeout, clearTimeout } from 'timers';
 import { Fragment, useMemo, useEffect, useRef, type ReactElement, type RefObject, type MouseEvent } from 'react';
-import * as PropTypes from 'prop-types';
 import { Button, Alert, App } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import { toCanvas } from 'qrcode/lib/browser';
@@ -108,9 +107,5 @@ function Qrcode(props: { onCancel: Function }): ReactElement {
     </Fragment>
   );
 }
-
-Qrcode.propTypes = {
-  onCancel: PropTypes.func
-};
 
 export default Qrcode;

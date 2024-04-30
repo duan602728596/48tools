@@ -1,5 +1,4 @@
 import type { ReactElement, PropsWithChildren } from 'react';
-import * as PropTypes from 'prop-types';
 import * as classNames from 'classnames';
 import ButtonLink from '../ButtonLink/ButtonLink';
 
@@ -25,11 +24,5 @@ function Header(props: HeaderProps): ReactElement {
     </header>
   );
 }
-
-Header.propTypes = {
-  to: PropTypes.string,
-  children: PropTypes.node,
-  className: PropTypes.string
-};
 
 export default Header;

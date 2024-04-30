@@ -1,6 +1,5 @@
 import { ipcRenderer } from 'electron';
 import type { ReactElement, ReactNode, MouseEvent } from 'react';
-import * as PropTypes from 'prop-types';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
 import { ToolTwoTone as IconToolTwoTone } from '@ant-design/icons';
 import { WinIpcChannel } from '@48tools/main/src/channelEnum';
@@ -53,10 +52,5 @@ function LiveInfo(props: LiveInfoProps): ReactElement {
     </header>
   );
 }
-
-LiveInfo.propTypes = {
-  playerInfo: PropTypes.object,
-  info: PropTypes.object
-};
 
 export default LiveInfo;
