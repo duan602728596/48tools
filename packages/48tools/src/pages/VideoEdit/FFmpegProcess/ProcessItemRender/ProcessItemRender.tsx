@@ -10,7 +10,6 @@ import {
   type FunctionComponent,
   type ForwardedRef,
   type RefObject,
-  type MutableRefObject,
   type Dispatch as D,
   type SetStateAction as S
 } from 'react';
@@ -50,8 +49,8 @@ const ConsoleItem: FunctionComponent<{ item: ProcessItemConsole }> = forwardRef(
   function(props: { item: ProcessItemConsole }, ref: ForwardedRef<any>): ReactElement {
     const { item }: { item: ProcessItemConsole } = props;
     const [height, setHeight]: [number, D<S<number>>] = useState(18);
-    const spanRef: RefObject<HTMLSpanElement> = useRef(null);
-    const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
+    const spanRef: RefObject<HTMLSpanElement | null> = useRef(null);
+    const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
 
     function handleResizeObserverCallback(entries: ResizeObserverEntry[], observer: ResizeObserver): void {
       const newHeight: number = entries[0].contentRect.height + 4;

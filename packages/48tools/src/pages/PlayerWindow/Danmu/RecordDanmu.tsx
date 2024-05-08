@@ -8,7 +8,6 @@ import {
   type Dispatch as D,
   type SetStateAction as S,
   type FunctionComponent,
-  type MutableRefObject,
   type RefObject,
   type MouseEvent
 } from 'react';
@@ -50,7 +49,7 @@ const DanmuItemComponent: FunctionComponent<DanmuItemProps> = forwardRef(
   function(props: DanmuItemProps, ref: any): ReactElement | null {
     const { item, index }: DanmuItemProps = props;
     const [height, setHeight]: [number, D<S<number>>] = useState(26);
-    const divRef: RefObject<HTMLDivElement> = useRef(null);
+    const divRef: RefObject<HTMLDivElement | null> = useRef(null);
 
     useEffect(function(): void {
       if (divRef.current) {
@@ -101,9 +100,9 @@ function RecordDanmu(props: DanmuProps): ReactElement {
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState<boolean>(false); // 加载状态
   const danmuList: Array<DanmuItem> = useSyncExternalStore(danmuStore.subscribe, danmuStore.getDanmuList);
   const [danmuListHeight, setDanmuListHeight]: [number, D<S<number>>] = useState(0);
-  const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
-  const danmuListRef: RefObject<HTMLDivElement> = useRef(null);
-  const virtualListRef: RefObject<ListRef> = useRef(null);
+  const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
+  const danmuListRef: RefObject<HTMLDivElement | null> = useRef(null);
+  const virtualListRef: RefObject<ListRef | null> = useRef(null);
 
   // 加载弹幕
   async function getDanmu(): Promise<void> {

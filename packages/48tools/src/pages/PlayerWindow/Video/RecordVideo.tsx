@@ -1,4 +1,4 @@
-import { useEffect, useRef, useSyncExternalStore, type ReactElement, type RefObject, type MutableRefObject } from 'react';
+import { useEffect, useRef, useSyncExternalStore, type ReactElement, type RefObject } from 'react';
 import Hls, { type Events, type ManifestParsedData } from 'hls.js';
 import { requestDownloadFile, type LiveRoomInfo } from '@48tools-api/48';
 import { source, engineUserAgent } from '../../../utils/snh48';
@@ -19,8 +19,8 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
   const { playerInfo, info }: RecordVideoProps = props;
   const danmuList: Array<DanmuItem> = useSyncExternalStore(danmuStore.subscribe, danmuStore.getDanmuList);
   const videoLoaded: boolean = useSyncExternalStore(danmuStore.subscribe, danmuStore.getVideoLoaded);
-  const hlsPlayerRef: MutableRefObject<Hls | undefined> = useRef();
-  const videoRef: RefObject<HTMLVideoElement> = useRef(null);
+  const hlsPlayerRef: RefObject<Hls | null> = useRef(null);
+  const videoRef: RefObject<HTMLVideoElement | null> = useRef(null);
 
   // 加载视频
   async function loadVideo(): Promise<void> {

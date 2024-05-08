@@ -7,7 +7,6 @@ import {
   type Dispatch as D,
   type SetStateAction as S,
   type MouseEvent,
-  type MutableRefObject,
   type RefObject
 } from 'react';
 import { Button, App, Avatar } from 'antd';
@@ -43,8 +42,8 @@ function Follow(props: FollowProps): ReactElement {
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(true); // 加载状态
   const [listHeight, setListHeight]: [number, D<S<number>>] = useState(0);
   const [detailCache, setDetailCache]: [Record<string, DetailInfo>, D<S<Record<string, DetailInfo>>>] = useState({}); // 详情缓存
-  const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
-  const listRef: RefObject<HTMLDivElement> = useRef(null);
+  const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
+  const listRef: RefObject<HTMLDivElement | null> = useRef(null);
 
   // 加载访客
   async function loadVisited(): Promise<void> {

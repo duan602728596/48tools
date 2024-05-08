@@ -8,7 +8,6 @@ import {
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MutableRefObject,
   type RefObject,
   type ForwardedRef,
   type FunctionComponent,
@@ -82,7 +81,7 @@ const MessageItem: FunctionComponent<MessageItemProps> = forwardRef(
   function(props: MessageItemProps, ref: ForwardedRef<any>): ReactElement {
     const { item, index }: MessageItemProps = props;
     const [height, setHeight]: [number, D<S<number>>] = useState(26); // 高度
-    const divRef: RefObject<HTMLDivElement> = useRef(null);
+    const divRef: RefObject<HTMLDivElement | null> = useRef(null);
 
     // 根据不同类型渲染消息
     function messageRender(): Array<ReactElement> {
@@ -246,9 +245,9 @@ interface MessageDisplayProps {
 function MessageDisplay(props: MessageDisplayProps): ReactElement {
   const { data, loading }: MessageDisplayProps = props;
   const [messageListHeight, setMessageListHeight]: [number, D<S<number>>] = useState(0); // 当前content的高度
-  const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
-  const messageListRef: RefObject<HTMLDivElement> = useRef(null);
-  const virtualListRef: RefObject<ListRef> = useRef(null);
+  const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
+  const messageListRef: RefObject<HTMLDivElement | null> = useRef(null);
+  const virtualListRef: RefObject<ListRef | null> = useRef(null);
 
   function handleResizeObserverCallback(entries: ResizeObserverEntry[], observer: ResizeObserver): void {
     setMessageListHeight((prevState: number): number => entries[0].contentRect.height);

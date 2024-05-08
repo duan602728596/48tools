@@ -7,7 +7,7 @@ interface ImagePreviewProps {
 
 /* 图片预览 */
 function ImagePreview(props: ImagePreviewProps): ReactElement {
-  const divRef: RefObject<HTMLDivElement> = useRef(null);
+  const divRef: RefObject<HTMLDivElement | null> = useRef(null);
 
   // 点击预览图片
   function handlePreviewClick(event: MouseEvent<HTMLAnchorElement>): void {

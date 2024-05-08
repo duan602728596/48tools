@@ -8,7 +8,6 @@ import {
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MutableRefObject,
   type RefObject,
   type FunctionComponent,
   type ForwardedRef
@@ -49,7 +48,7 @@ const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
   function(props: DanmuItemProps, ref: ForwardedRef<any>): ReactElement | null {
     const { item, index }: DanmuItemProps = props;
     const [height, setHeight]: [number, D<S<number>>] = useState(26);
-    const divRef: RefObject<HTMLDivElement> = useRef(null);
+    const divRef: RefObject<HTMLDivElement | null> = useRef(null);
 
     useEffect(function(): void {
       if (divRef.current) {
@@ -116,10 +115,10 @@ function Danmu(props: DanmuProps): ReactElement {
   const { info }: DanmuProps = props;
   const [danmuData, setDanmuData]: [Array<LiveRoomMessage>, D<S<Array<LiveRoomMessage>>>] = useState([]);
   const [danmuListHeight, setDanmuListHeight]: [number, D<S<number>>] = useState(0);
-  const nimRef: MutableRefObject<NimChatroomSocket | null> = useRef(null);
-  const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
-  const danmuListRef: RefObject<HTMLDivElement> = useRef(null);
-  const virtualListRef: RefObject<ListRef> = useRef(null);
+  const nimRef: RefObject<NimChatroomSocket | null> = useRef(null);
+  const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
+  const danmuListRef: RefObject<HTMLDivElement | null> = useRef(null);
+  const virtualListRef: RefObject<ListRef | null> = useRef(null);
 
   // 获取到新信息
   function handleNewMessage(t: NimChatroomSocket, event: Array<LiveRoomMessage>): void {

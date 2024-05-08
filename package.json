@@ -51,8 +51,8 @@
     "@types/fluent-ffmpeg": "^2.1.21",
     "@types/fs-extra": "^11",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "npm:types-react@beta",
+    "@types/react-dom": "npm:types-react-dom@beta",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",
     "commitizen": "^4.3.0",
@@ -67,8 +67,8 @@
     "lint-staged": "^15.2.0"
   },
   "resolutions": {
-    "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react": "npm:types-react@beta",
+    "@types/react-dom": "npm:types-react-dom@beta"
   },
   "lint-staged": {
     "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "eslint",

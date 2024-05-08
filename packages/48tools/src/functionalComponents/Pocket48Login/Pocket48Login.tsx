@@ -8,7 +8,7 @@ import {
   type Dispatch as D,
   type SetStateAction as S,
   type MouseEvent,
-  type MutableRefObject
+  type RefObject
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -89,7 +89,7 @@ function Pocket48Login(props: {}): ReactElement {
   const { message: messageApi, modal: modalApi }: useAppProps = App.useApp();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false);
   const [tabsKey, setTabsKey]: [string, D<S<string>>] = useState('loginForm');
-  const userInfoSelectValueRef: MutableRefObject<string | null> = useRef(null);
+  const userInfoSelectValueRef: RefObject<string | null> = useRef(null);
   const [loginForm]: [FormInstance] = Form.useForm();
   const [tokenForm]: [FormInstance] = Form.useForm();
 
