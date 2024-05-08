@@ -4,13 +4,10 @@ import {
   useState,
   useEffect,
   useRef,
-  forwardRef,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type RefObject,
-  type FunctionComponent,
-  type ForwardedRef
+  type RefObject
 } from 'react';
 import { Avatar, Switch } from 'antd';
 import { GiftTwoTone as IconGiftTwoTone } from '@ant-design/icons';
@@ -40,71 +37,71 @@ function isLiveRoomTextCustom(item: LiveRoomMessage, custom: LiveRoomTextCustom 
 
 /* 显示单条弹幕 */
 interface DanmuItemProps {
+  ref?: RefObject<HTMLDivElement | null>;
   item: LiveRoomMessage;
   index: number;
 }
 
-const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
-  function(props: DanmuItemProps, ref: ForwardedRef<any>): ReactElement | null {
-    const { item, index }: DanmuItemProps = props;
-    const [height, setHeight]: [number, D<S<number>>] = useState(26);
-    const divRef: RefObject<HTMLDivElement | null> = useRef(null);
+function DanmuItem(props: DanmuItemProps): ReactElement | null {
+  const { ref, item, index }: DanmuItemProps = props;
+  const [height, setHeight]: [number, D<S<number>>] = useState(26);
+  const divRef: RefObject<HTMLDivElement | null> = useRef(null);
 
-    useEffect(function(): void {
-      if (divRef.current) {
-        const newHeight: number = divRef.current!.getBoundingClientRect().height + 2;
+  useEffect(function(): void {
+    if (divRef.current) {
+      const newHeight: number = divRef.current!.getBoundingClientRect().height + 2;
 
-        if (newHeight > 26) {
-          setHeight((prevState: number): number => newHeight);
-        }
+      if (newHeight > 26) {
+        setHeight((prevState: number): number => newHeight);
       }
-    }, []);
-
-    try {
-      const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
-      const isBarrage: boolean = custom.messageType === 'BARRAGE_NORMAL' || custom.messageType === 'BARRAGE_MEMBER';
-      const isMember: boolean = custom.messageType === 'BARRAGE_MEMBER';
-
-      if (isLiveRoomTextCustom(item, custom)) {
-        return (
-          <div ref={ ref }
-            className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName, isMember ? commonStyle.primaryText : undefined) }
-            style={{ height }}
-            data-index={ index }
-          >
-            <div ref={ divRef }>
-              <Avatar size="small" src={ source(custom.user.avatar) } />
-              <span className="ml-[3px]">{ custom.user.nickName }：</span>
-              { (isMember || isBarrage) ? custom.text : (item as LiveRoomTextMessage).text }
-            </div>
-          </div>
-        );
-      } else {
-        const tpNum: number = Number(custom.giftInfo.tpNum);
-
-        return (
-          <div ref={ ref }
-            className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName) }
-            style={{ height }}
-            data-index={ index }
-          >
-            <div ref={ divRef }>
-              <IconGiftTwoTone className="mr-[3px] text-[22px] align-[-5px]" />
-              { custom.user.nickName }
-              &nbsp;送给&nbsp;
-              { custom.giftInfo.acceptUser.userName }&nbsp;
-              { custom.giftInfo.giftNum }个
-              { custom.giftInfo.giftName }{ tpNum > 0 ? `(${ tpNum })` : null }。
-            </div>
-          </div>
-        );
-      }
-    } catch (err) {
-      console.error(err, props);
-
-      return null;
     }
-  });
+  }, []);
+
+  try {
+    const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
+    const isBarrage: boolean = custom.messageType === 'BARRAGE_NORMAL' || custom.messageType === 'BARRAGE_MEMBER';
+    const isMember: boolean = custom.messageType === 'BARRAGE_MEMBER';
+
+    if (isLiveRoomTextCustom(item, custom)) {
+      return (
+        <div ref={ ref }
+          className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName, isMember ? commonStyle.primaryText : undefined) }
+          style={{ height }}
+          data-index={ index }
+        >
+          <div ref={ divRef }>
+            <Avatar size="small" src={ source(custom.user.avatar) } />
+            <span className="ml-[3px]">{ custom.user.nickName }：</span>
+            { (isMember || isBarrage) ? custom.text : (item as LiveRoomTextMessage).text }
+          </div>
+        </div>
+      );
+    } else {
+      const tpNum: number = Number(custom.giftInfo.tpNum);
+
+      return (
+        <div ref={ ref }
+          className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName) }
+          style={{ height }}
+          data-index={ index }
+        >
+          <div ref={ divRef }>
+            <IconGiftTwoTone className="mr-[3px] text-[22px] align-[-5px]" />
+            { custom.user.nickName }
+            &nbsp;送给&nbsp;
+            { custom.giftInfo.acceptUser.userName }&nbsp;
+            { custom.giftInfo.giftNum }个
+            { custom.giftInfo.giftName }{ tpNum > 0 ? `(${ tpNum })` : null }。
+          </div>
+        </div>
+      );
+    }
+  } catch (err) {
+    console.error(err, props);
+
+    return null;
+  }
+}
 
 /* 显示弹幕 */
 interface DanmuProps {
