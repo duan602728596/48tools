@@ -90,6 +90,9 @@ export default function(info: object): Record<string, any> {
     dll: [
       '@ant-design/icons',
       '@bbkkbkk/q',
+      '@dnd-kit/core',
+      '@dnd-kit/sortable',
+      '@dnd-kit/utilities',
       '@indexeddb-tools/indexeddb',
       '@indexeddb-tools/indexeddb-redux',
       '@mdx-js/react',
@@ -115,7 +118,6 @@ export default function(info: object): Record<string, any> {
       'react-dom/server.browser',
       'react-redux',
       'react-router-dom',
-      'react-sortable-hoc',
       'redux-saga',
       'redux-saga/effects',
       'reselect'

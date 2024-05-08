@@ -3,55 +3,25 @@ import type { ParsedPath } from 'node:path';
 import { promises as fsP } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
-import { Fragment, type ReactElement, type ComponentClass, type MouseEvent } from 'react';
+import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, List, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { FileFilled as IconFileFilled, MenuOutlined as IconMenuOutlined } from '@ant-design/icons';
-import {
-  SortableContainer,
-  SortableElement,
-  SortableHandle,
-  type SortableContainerProps,
-  type SortableElementProps,
-  type SortEnd,
-  type SortEvent
-} from 'react-sortable-hoc';
+import { FileFilled as IconFileFilled } from '@ant-design/icons';
+import { DndContext, type DragEndEvent } from '@dnd-kit/core';
+import { SortableContext } from '@dnd-kit/sortable';
 import { arrayMoveImmutable } from 'array-move';
 import * as dayjs from 'dayjs';
-import * as classNames from 'classnames';
-import style from './concat.sass';
 import { showOpenDialog, showSaveDialog } from '../../../utils/remote/dialog';
 import getConcatVideoWorker from './function/concatVideo.worker/getConcatVideoWorker';
 import Header from '../../../components/Header/Header';
-import {
-  setConcatListAdd,
-  setConcatList,
-  setConcatListDelete,
-  setConcatWorker,
-  type ConcatInitialState
-} from '../reducers/concat';
+import { setConcatListAdd, setConcatList, setConcatListDelete, setConcatWorker, type ConcatInitialState } from '../reducers/concat';
 import { getFFmpeg } from '../../../utils/utils';
+import RenderListItem from './RenderListItem';
 import type { MessageEventData } from '../../../commonTypes';
 import type { ConcatItem } from '../types';
-
-/* 拖拽组件 */
-type WrappedComponentProps = { children: ReactElement };
-
-const DragHandleComponent: ComponentClass = SortableHandle(
-  (): ReactElement => <IconMenuOutlined className={ classNames('mr-[12px]', style.moveIcon) } />);
-
-const ListContainer: ComponentClass<WrappedComponentProps & SortableContainerProps> = SortableContainer(
-  function(props: WrappedComponentProps & SortableContainerProps): ReactElement {
-    return props.children;
-  });
-
-const ListItem: ComponentClass<WrappedComponentProps & SortableElementProps> = SortableElement(
-  function(props: WrappedComponentProps & SortableElementProps): ReactElement {
-    return props.children;
-  });
 
 /* redux selector */
 type RState = { concat: ConcatInitialState };
@@ -119,14 +89,14 @@ function Concat(props: {}): ReactElement {
     dispatch(setConcatWorker(worker));
   }
 
-  // 拖拽挂载
-  function helperContainer(): HTMLDivElement {
-    return document.getElementById('container')!.querySelector<HTMLDivElement>('.ant-list-items')!;
-  }
-
   // 拖拽完毕
-  function handleDragSortEnd(sort: SortEnd, event: SortEvent): void {
-    dispatch(setConcatList(arrayMoveImmutable(concatList, sort.oldIndex, sort.newIndex)));
+  function handleDragSortEnd(event: DragEndEvent): void {
+    const oldIndex: number | undefined = event.active?.data?.current?.index;
+    const newIndex: number | undefined = event.over?.data?.current?.index;
+
+    if (typeof oldIndex === 'number' && typeof newIndex === 'number') {
+      dispatch(setConcatList(arrayMoveImmutable(concatList, oldIndex, newIndex)));
+    }
   }
 
   // 选择视频
@@ -160,26 +130,7 @@ function Concat(props: {}): ReactElement {
 
   // 渲染单个组件
   function renderItem(item: ConcatItem, index: number): ReactElement {
-    return (
-      <ListItem key={ item.id } index={ index }>
-        <List.Item key={ item.id }
-          className={ style.helperItem }
-          actions={ [
-            <Button key="delete"
-              size="small"
-              type="primary"
-              danger={ true }
-              onClick={ (event: MouseEvent): void => handleDeleteItemClick(item, event) }
-            >
-              删除
-            </Button>
-          ] }
-        >
-          <DragHandleComponent />
-          { index + 1 }、{ item.filename }
-        </List.Item>
-      </ListItem>
-    );
+    return <RenderListItem item={ item } index={ index } onDeleteItem={ handleDeleteItemClick } />;
   }
 
   return (
@@ -196,12 +147,11 @@ function Concat(props: {}): ReactElement {
         </Button.Group>
       </Header>
       <div className="relative" id="container">
-        <ListContainer useDragHandle={ true }
-          helperContainer={ helperContainer }
-          onSortEnd={ handleDragSortEnd }
-        >
-          <List dataSource={ concatList } renderItem={ renderItem } bordered={ true } />
-        </ListContainer>
+        <DndContext onDragEnd={ handleDragSortEnd }>
+          <SortableContext items={ concatList }>
+            <List dataSource={ concatList } renderItem={ renderItem } bordered={ true } />
+          </SortableContext>
+        </DndContext>
       </div>
       { messageContextHolder }
     </Fragment>
