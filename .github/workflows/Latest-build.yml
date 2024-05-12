@@ -1,4 +1,4 @@
-name: Daily Build (Intel)
+name: Latest Build (Intel)
 
 on:
   push:
