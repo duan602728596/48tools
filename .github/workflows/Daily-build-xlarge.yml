@@ -30,13 +30,13 @@ jobs:
       - name: Upload 48tools-win-arm64
         uses: actions/upload-artifact@v4
         with:
-          name: 48tools-win
+          name: 48tools-win-arm64
           path: |
             build/win-arm64/*.zip 
 
       - name: Upload 48tools-mac-arm64
         uses: actions/upload-artifact@v4
         with:
-          name: 48tools-mac
+          name: 48tools-mac-arm64
           path: |
             build/mac-arm64/*.zip 
