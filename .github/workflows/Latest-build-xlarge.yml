@@ -1,6 +1,6 @@
 # https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners
 
-name: Daily Build (ARM)
+name: Latest Build (ARM)
 
 on:
   push:
