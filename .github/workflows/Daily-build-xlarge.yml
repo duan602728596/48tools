@@ -25,7 +25,8 @@ jobs:
       - run: npm run install:ci
 
       - run: npm run build:ci
-
+      
+      - name: Upload 48tools-win-arm64
         uses: actions/upload-artifact@v4
         with:
           name: 48tools-win
