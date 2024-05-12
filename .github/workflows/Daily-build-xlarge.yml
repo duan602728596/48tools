@@ -4,8 +4,9 @@ name: Daily Build (ARM)
 
 on:
   push:
-    branches:
-      - 'build/v**'
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
