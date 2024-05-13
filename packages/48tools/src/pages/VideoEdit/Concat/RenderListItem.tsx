@@ -17,10 +17,6 @@ interface RenderListItemProps {
 /* 可拖拽的ListItem */
 function RenderListItem(props: RenderListItemProps): ReactElement {
   const { item, index, onDeleteItem }: RenderListItemProps = props;
-  const sortable: UseSortableReturn = useSortable({
-    id: item.id,
-    data: { item, index }
-  });
   const {
     active,
     over,
@@ -29,7 +25,10 @@ function RenderListItem(props: RenderListItemProps): ReactElement {
     transform,
     setDroppableNodeRef,
     setDraggableNodeRef
-  }: UseSortableReturn = sortable;
+  }: UseSortableReturn = useSortable({
+    id: item.id,
+    data: { item, index }
+  });
   const dndStyle: CSSProperties = { transform: CSS.Translate.toString(transform) };
   const isActive: boolean = active?.id === item.id; // 是否被拖拽
   const isOver: boolean = over?.id === item.id && over?.id !== active?.id; // 是否是与被拖拽对象重叠
