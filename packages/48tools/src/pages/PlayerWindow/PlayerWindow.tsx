@@ -5,7 +5,6 @@ import commonStyle from '../../common.sass';
 import LiveInfo from './LiveInfo/LiveInfo';
 import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
-import Danmu from './Danmu/Danmu';
 import RecordDanmu from './Danmu/RecordDanmu';
 import type { PlayerInfo } from '../../components/basic/initialState/initialState';
 
@@ -42,9 +41,13 @@ function PlayerWindow(props: {}): ReactElement {
             : <LiveVideo playerInfo={ playerInfo } info={ info } />
         }
       </div>
-      <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
-        { inRecord ? <RecordDanmu info={ info } /> : <Danmu info={ info } /> }
-      </div>
+      {
+        inRecord ? (
+          <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
+            <RecordDanmu info={ info } />
+          </div>
+        ) : null
+      }
     </div>
   );
 }
