@@ -61,11 +61,9 @@ function open(title: string, query: string): void {
     isTest
   }));
 
-  win.loadFile(createHtmlFilePath('player'),
-    {
-      search: initialStateSearchParams.toString()
-    }
-  );
+  win.loadFile(createHtmlFilePath('player'), {
+    search: initialStateSearchParams.toString()
+  });
 
   // 切换主题
   function handleThemeEvent(value: ThemeValue): void {

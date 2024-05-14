@@ -7,7 +7,8 @@ const nodeModules = path.join(cwd, 'node_modules');
 async function replaceWebsocket(fp) {
   const filePath = path.join(nodeModules, fp);
   const file = await fsP.readFile(filePath, { encoding: 'utf8' });
-  const newFile = file.replace(/window\.WebSocket/g, 'window.WebSocket2||window.WebSocket');
+  const newFile = file.replace(
+    /window\.WebSocket/g, 'window.HACK_INTERCEPTS_SEND_Websocket||window.WebSocket');
 
   await fsP.writeFile(filePath, newFile, { encoding: 'utf8' });
 }
@@ -26,7 +27,8 @@ async function fixTypesError() {
 
   const NIMWebSDKFilePath = path.join(nodeModules, '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js');
   const NIMWebSDKFile = await fsP.readFile(NIMWebSDKFilePath, { encoding: 'utf8' });
-  const newNIMWebSDKFile = NIMWebSDKFile.replace(/\.MozWebSocket/g, '.MozWebSocket||window.WebSocket2');
+  const newNIMWebSDKFile = NIMWebSDKFile.replace(
+    /\.MozWebSocket/g, '.MozWebSocket||window.HACK_INTERCEPTS_SEND_Websocket');
 
   await fsP.writeFile(NIMWebSDKFilePath, newNIMWebSDKFile, { encoding: 'utf8' });
 }
