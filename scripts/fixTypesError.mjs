@@ -4,11 +4,11 @@ import { cwd } from './utils.mjs';
 
 const nodeModules = path.join(cwd, 'node_modules');
 
-async function replaceWebsocket(fp) {
+async function replaceWebsocket(fp, ws) {
   const filePath = path.join(nodeModules, fp);
   const file = await fsP.readFile(filePath, { encoding: 'utf8' });
   const newFile = file.replace(
-    /window\.WebSocket/g, 'window.HACK_INTERCEPTS_SEND_Websocket||window.WebSocket');
+    /window\.WebSocket/g, `window.${ ws }||window.WebSocket`);
 
   await fsP.writeFile(filePath, newFile, { encoding: 'utf8' });
 }
@@ -21,16 +21,18 @@ async function fixTypesError() {
 
   // 替换window.WebSocket
   await Promise.all([
-    replaceWebsocket('nim-web-sdk-ng/dist/NIM_BROWSER_SDK.js'),
-    replaceWebsocket('nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK.js')
+    replaceWebsocket('nim-web-sdk-ng/dist/NIM_BROWSER_SDK.js', 'HACK_INTERCEPTS_SEND_NIM_Websocket'),
+    replaceWebsocket('nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK.js', 'HACK_INTERCEPTS_SEND_QCHAT_Websocket')
   ]);
 
+  /*
   const NIMWebSDKFilePath = path.join(nodeModules, '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js');
   const NIMWebSDKFile = await fsP.readFile(NIMWebSDKFilePath, { encoding: 'utf8' });
   const newNIMWebSDKFile = NIMWebSDKFile.replace(
-    /\.MozWebSocket/g, '.MozWebSocket||window.HACK_INTERCEPTS_SEND_Websocket');
+    /\.MozWebSocket/g, '.MozWebSocket||window.HACK_INTERCEPTS_SEND_NIM_CHATROOM_Websocket');
 
   await fsP.writeFile(NIMWebSDKFilePath, newNIMWebSDKFile, { encoding: 'utf8' });
+   */
 }
 
 fixTypesError();
