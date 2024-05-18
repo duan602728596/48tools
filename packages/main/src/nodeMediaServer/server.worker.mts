@@ -1,6 +1,9 @@
+import process from 'node:process';
 import { workerData } from 'node:worker_threads';
 import NodeMediaServer from 'node-media-server';
 import type { NodeMediaServerArg } from './nodeMediaServer.mjs';
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 interface WorkerData extends NodeMediaServerArg {
   isDevelopment: boolean;

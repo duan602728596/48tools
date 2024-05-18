@@ -6,6 +6,7 @@ import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle.mjs';
 import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle.mjs';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer.mjs';
 import weiboResourceRequestInit from './webRequest/weiboResourceRequest.mjs';
+import neteaseIMRequest from './webRequest/neteaseIMRequest.mjs';
 import { storeInit, getStore } from './store.mjs';
 import logProtocol from './logProtocol/logProtocol.mjs';
 import { commandLineOptions } from './commend.mjs';
@@ -76,6 +77,7 @@ function createWindow(): void {
   });
 
   weiboResourceRequestInit();
+  neteaseIMRequest();
 }
 
 // https://github.com/microsoft/vscode/issues/116715#issuecomment-917783861

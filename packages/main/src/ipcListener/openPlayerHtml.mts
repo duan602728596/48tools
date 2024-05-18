@@ -27,8 +27,11 @@ function open(title: string, query: string): void {
     return;
   }
 
+  const player: Record<string, string> = Object.fromEntries(searchParams);
+  const inRecord: boolean = player.playerType === 'record';
+
   let win: BrowserWindow | null = new BrowserWindow({
-    width: 643,
+    width: inRecord ? 643 : 327,
     height: 680,
     webPreferences: {
       nodeIntegration: true,
@@ -43,7 +46,6 @@ function open(title: string, query: string): void {
 
   // initialState
   const initialStateSearchParams: URLSearchParams = new URLSearchParams();
-  const player: Record<string, string> = Object.fromEntries(searchParams);
 
   initialStateSearchParams.set('initialState', ils({
     theme: getStore().get('theme') ?? 'system',
@@ -59,11 +61,9 @@ function open(title: string, query: string): void {
     isTest
   }));
 
-  win.loadFile(createHtmlFilePath('player'),
-    {
-      search: initialStateSearchParams.toString()
-    }
-  );
+  win.loadFile(createHtmlFilePath('player'), {
+    search: initialStateSearchParams.toString()
+  });
 
   // 切换主题
   function handleThemeEvent(value: ThemeValue): void {
