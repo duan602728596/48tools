@@ -15,6 +15,7 @@
     "got": "^11.8.6",
     "hpagent": "^1.2.0",
     "node-media-server": "^2.6.2",
+    "node-nim": "^9.16.5",
     "playwright-core": "^1.41.1"
   }
 }
