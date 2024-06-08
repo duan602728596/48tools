@@ -1,9 +1,11 @@
 import * as process from 'node:process';
 import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
+import node_nim from 'node-nim';
 import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, initialState as ils, packageJson } from './utils.mjs';
 import { ipc, removeIpc } from './ipc.mjs';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle.mjs';
 import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle.mjs';
+import { nodeNimHandleLogin, nodeNimInitiated } from './ipcHandle/nodeNimHandleLogin.mjs';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer.mjs';
 import weiboResourceRequestInit from './webRequest/weiboResourceRequest.mjs';
 import neteaseIMRequest from './webRequest/neteaseIMRequest.mjs';
@@ -68,11 +70,13 @@ function createWindow(): void {
   try {
     ipcRemoteHandle(processWindow);
     pocket48LiveRemoteHandle(processWindow);
+    nodeNimHandleLogin();
   } catch {}
 
   processWindow.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();
     removeIpc();
+    nodeNimInitiated && node_nim.nim.client.cleanup('');
     processWindow = null;
   });
 

@@ -41,13 +41,9 @@ function PlayerWindow(props: {}): ReactElement {
             : <LiveVideo playerInfo={ playerInfo } info={ info } />
         }
       </div>
-      {
-        inRecord ? (
-          <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
-            <RecordDanmu info={ info } />
-          </div>
-        ) : null
-      }
+      <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
+        { inRecord ? <RecordDanmu info={ info } /> : null }
+      </div>
     </div>
   );
 }

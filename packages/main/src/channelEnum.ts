@@ -14,6 +14,11 @@ export const enum Pocket48LiveRemoteHandleChannel {
   Pocket48LiveClose = 'pocket48-live-close___'
 }
 
+// ipcHandle/nodeNimLoginHandle
+export const enum NodeNimLoginHandleChannel {
+  NodeNimLogin = 'node-nim-login'
+}
+
 // ipcListener/douyinCookie
 export const enum DouyinCookieChannel {
   DouyinCookie = 'douyin-cookie',

@@ -47,6 +47,7 @@ import downloadImages from './downloadImages/downloadImages';
 import autoGrab from '../function/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
 import LiveType from '../../components/LiveType/LiveType';
+import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';
 import type { WebWorkerChildItem, MessageEventData, LiveStatusEventData } from '../../../../commonTypes';
 import type { Pocket48LiveAutoGrabOptions, Pocket48LiveWorker } from '../../types';
 
@@ -406,19 +407,24 @@ function Pocket48Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Input.Search className="w-[200px] mr-[6px]"
-          placeholder="输入成员名字搜索"
-          onSearch={ (value: string): void => setSearchValue(value) }
-        />
-        <Button.Group>
-          <Button type="primary" onClick={ handleRefreshLiveListClick }>刷新列表</Button>
-          {
-            typeof autoGrabTimer === 'number'
-              ? <Button type="primary" danger={ true } onClick={ handleStopAutoGrabClick }>停止自动抓取</Button>
-              : <Button onClick={ handleStartAutoGrabClick }>开始自动抓取</Button>
-          }
-          <ButtonLink linkProps={{ to: '/48/LiveOptions' }}>自动抓取配置</ButtonLink>
-        </Button.Group>
+        <div className="mb-[8px] text-right">
+          <Pocket48Login />
+        </div>
+        <div>
+          <Input.Search className="w-[200px] mr-[6px]"
+            placeholder="输入成员名字搜索"
+            onSearch={ (value: string): void => setSearchValue(value) }
+          />
+          <Button.Group>
+            <Button type="primary" onClick={ handleRefreshLiveListClick }>刷新列表</Button>
+            {
+              typeof autoGrabTimer === 'number'
+                ? <Button type="primary" danger={ true } onClick={ handleStopAutoGrabClick }>停止自动抓取</Button>
+                : <Button onClick={ handleStartAutoGrabClick }>开始自动抓取</Button>
+            }
+            <ButtonLink linkProps={{ to: '/48/LiveOptions' }}>自动抓取配置</ButtonLink>
+          </Button.Group>
+        </div>
       </Header>
       <Table size="middle"
         columns={ columns }
