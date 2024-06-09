@@ -25,6 +25,7 @@ import {
   type Pocket48LoginInitialState
 } from '../../../../functionalComponents/Pocket48Login/reducers/pocket48Login';
 import calculate, { type CalculateResult } from '../function/calculate';
+import { Pocket48Login } from '../../../../functionalComponents/Pocket48Login/enum';
 import type { QingchunshikeUserItem } from '../../types';
 
 /* redux selector */
@@ -64,6 +65,14 @@ function CreateResult(props: {}): ReactElement {
       return;
     }
 
+    const appDataDir: string | null = localStorage.getItem(Pocket48Login.AppDataDir);
+
+    if (!appDataDir) {
+      messageApi.warning('您需要配置App Data目录。');
+
+      return;
+    }
+
     const after: number = formValue.endTime.diff(formValue.startTime, 'month');
 
     if (after > 6 && after < 0) {
@@ -88,7 +97,14 @@ function CreateResult(props: {}): ReactElement {
     dispatch(setLoading(true));
 
     try {
-      const calculateResult: CalculateResult = await calculate(userItem, formValue.startTime.valueOf(), formValue.endTime.valueOf(), userInfo.accid, userInfo.pwd);
+      const calculateResult: CalculateResult = await calculate({
+        user: userItem,
+        st: formValue.startTime.unix(),
+        et: formValue.endTime.unix(),
+        accid: userInfo.accid,
+        pwd: userInfo.pwd,
+        appDataDir
+      });
       const text: string = `################################################################
   serverId: ${ userItem.serverId }
  channelId: ${ userItem.channelId }

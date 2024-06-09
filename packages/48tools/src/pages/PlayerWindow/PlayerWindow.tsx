@@ -45,7 +45,6 @@ function PlayerWindow(props: {}): ReactElement {
             <p>您使用的操作系统是Windows，且CPU架构是ARM64。 网易云信SDK暂不支持该系统的架构。</p>
             <p>如果您需要弹幕功能，可以尝试使用x64架构的Windows系统，或者使用其他支持的操作系统。或尝试使用x64架构的软件。</p>
           </Fragment>
-
         } />
       );
     }

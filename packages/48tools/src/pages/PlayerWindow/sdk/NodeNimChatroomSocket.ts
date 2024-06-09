@@ -9,18 +9,20 @@ type OnMessage = (t: NodeNimChatroomSocket, event: Array<ChatRoomMessage>) => vo
 
 /* 网易云信C++ sdk的socket连接 */
 class NodeNimChatroomSocket {
-  #nodeMin: typeof NodeNim | undefined = undefined;
+  #nodeNim: typeof NodeNim | undefined = undefined;
   public account: string;
   public token: string;
   public roomId: number;
   public appDataDir: string;
   public chatroomRequestLoginResult: string;
   public chatroom: NodeNim.ChatRoom | undefined;
-  public onMessage: OnMessage;
+  public onMessage?: OnMessage;
 
-  constructor(account: string, token: string, roomId: number, appDataDir: string, onMessage: OnMessage) {
+  constructor(account: string, token: string, roomId: number, appDataDir: string, onMessage?: OnMessage) {
     if (!isWindowsArm) {
-      this.#nodeMin = globalThis.require('node-nim');
+      const nodeNim: any = globalThis.require('node-nim');
+
+      this.#nodeNim = 'default' in nodeNim ? nodeNim.default : nodeNim;
     }
 
     this.account = account; // 账号
@@ -33,7 +35,7 @@ class NodeNimChatroomSocket {
   // chatroom初始化
   chatroomInit(): Promise<void> {
     return new Promise((resolve: Function, reject: Function): void => {
-      this.chatroom = new this.#nodeMin!.ChatRoom();
+      this.chatroom = new this.#nodeNim!.ChatRoom();
       this.chatroom.init('', '');
       this.chatroom.initEventHandlers();
 
@@ -46,9 +48,13 @@ class NodeNimChatroomSocket {
       ): void => {
         if (status === 5 && status2 === 200) {
           console.log('Chatroom连接成功', roomInfo);
-          this.chatroom!.on('receiveMsg', (n: number, msg: ChatRoomMessage): void => {
-            this.onMessage(this, [msg]);
-          });
+
+          if (this.onMessage) {
+            this.chatroom!.on('receiveMsg', (n: number, msg: ChatRoomMessage): void => {
+              this.onMessage!(this, [msg]);
+            });
+          }
+
           resolve();
         }
       });
@@ -58,7 +64,7 @@ class NodeNimChatroomSocket {
   }
 
   async init(): Promise<boolean> {
-    if (!this.#nodeMin) return false;
+    if (!this.#nodeNim) return false;
 
     const chatroomRequestLoginResult: string | null = await ipcRenderer.invoke(NodeNimLoginHandleChannel.NodeNimLogin, {
       appKey,
@@ -80,6 +86,18 @@ class NodeNimChatroomSocket {
 
   exit(): void {
     this.chatroom?.exit?.(this.roomId, '');
+  }
+
+  async getHistoryMessage(timeTag?: number): Promise<Array<ChatRoomMessage> | undefined> {
+    if (!this.chatroom || !isWindowsArm) return;
+
+    const result: [number, number, Array<ChatRoomMessage>] = await this.chatroom.getMessageHistoryOnlineAsync(
+      this.roomId, {
+        start_timetag_: timeTag,
+        limit_: 20
+      }, null, '');
+
+    return result[2];
   }
 }
 
