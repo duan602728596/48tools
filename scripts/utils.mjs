@@ -13,8 +13,6 @@ export const staticsDir = path.join(cwd, 'statics'); // 静态资源目录
 export const build = path.join(cwd, 'build');        // 最终生成的可执行文件
 
 // SDK
-export const nodeNimSDK = path.join(wwwDir, 'node_modules/nim-sdk');
-
 const sdkDownloadBasicDir = path.join(build, 'node-nim-sdk');
 
 export const sdkDownloadDir = {
@@ -42,6 +40,15 @@ export const unpacked = {
   win32: path.join(output.win32, 'win-ia32-unpacked'),
   winArm64: path.join(output.winArm64, 'win-arm64-unpacked'),
   linux: path.join(output.linux, 'linux-unpacked')
+};
+
+export const unpackedNodeModules = {
+  mac: path.join(unpacked.mac, '48tools.app/Contents/Resources/app/node_modules'),
+  macArm64: path.join(unpacked.macArm64, '48tools.app/Contents/Resources/app/node_modules'),
+  win: path.join(unpacked.win, 'resources/app/node_modules'),
+  win32: path.join(unpacked.win32, 'resources/app/node_modules'),
+  winArm64: path.join(unpacked.winArm64, 'resources/app/node_modules'),
+  linux: path.join(unpacked.linux, 'resources/app/node_modules')
 };
 
 // 系统环境

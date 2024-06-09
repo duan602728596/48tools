@@ -1,10 +1,9 @@
 import path from 'node:path';
-import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
-import { cwd, appDir, wwwDir, staticsDir, build, nodeNimSDK, sdkDownloadDir, output, unpacked, isMacOS, isArm64 } from './utils.mjs';
+import { cwd, appDir, wwwDir, staticsDir, build, sdkDownloadDir, output, unpacked, unpackedNodeModules, isMacOS, isArm64 } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import nimSdkDownload from './nimSdkDownload.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
@@ -69,7 +68,7 @@ function config(outputDir, target) {
       icon: icon.linux,
       executableName: '48tools'
     },
-    includeSubNodeModules: true,
+    includeSubNodeModules: false,
     npmRebuild: false,
     nodeGypRebuild: false,
     electronDownload: {
@@ -120,16 +119,11 @@ async function uglifyPackageJson() {
 
 /**
  * 替换sdk
- * @param { string } [downloadDir] - 下载目录
+ * @param { string } downloadDir - 下载目录
+ * @param { string } nodeModulesDir - node_modules目录
 */
-async function copySDK(downloadDir) {
-  if (fs.existsSync(nodeNimSDK)) {
-    await rimraf(nodeNimSDK);
-  }
-
-  if (downloadDir) {
-    await fse.copy(path.join(downloadDir, 'node-nim'), nodeNimSDK);
-  }
+async function copySDK(downloadDir, nodeModulesDir) {
+  await fse.copy(path.join(downloadDir, 'node-nim'), path.join(nodeModulesDir, 'node-nim'));
 }
 
 async function unpackOthers() {
@@ -137,36 +131,36 @@ async function unpackOthers() {
   if (isMacOS) {
     // 编译mac
     console.log('⏳正在编译：mac');
-    await copySDK(sdkDownloadDir.mac);
     await builder.build({
       targets: builder.Platform.MAC.createTarget(),
       config: config(output.mac)
     });
+    await copySDK(sdkDownloadDir.mac, unpackedNodeModules.mac);
   }
 
   // 编译win64
   console.log('⏳正在编译：win64');
-  await copySDK(sdkDownloadDir.win64);
   await builder.build({
     targets: builder.Platform.WINDOWS.createTarget(),
     config: config(output.win)
   });
+  await copySDK(sdkDownloadDir.win64, unpackedNodeModules.win);
 
   // 编译win32
   console.log('⏳正在编译：win32');
-  await copySDK(sdkDownloadDir.win32);
   await builder.build({
     targets: builder.Platform.WINDOWS.createTarget(),
     config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
   });
+  await copySDK(sdkDownloadDir.win32, unpackedNodeModules.win32);
 
   // 编译linux
   console.log('⏳正在编译：linux');
-  await copySDK(sdkDownloadDir.linux);
   await builder.build({
     targets: builder.Platform.LINUX.createTarget(),
     config: config(output.linux)
   });
+  await copySDK(sdkDownloadDir.linux, unpackedNodeModules.linux);
 
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
@@ -184,11 +178,11 @@ async function unpackArm64() {
   if (isMacOS) {
     // 编译mac-arm64
     console.log('⏳正在编译：mac-arm64');
-    await copySDK(sdkDownloadDir.macArm64);
     await builder.build({
       targets: builder.Platform.MAC.createTarget(),
       config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
     });
+    await copySDK(sdkDownloadDir.macArm64, unpackedNodeModules.macArm64);
   }
 
   // 编译win-arm64
@@ -200,7 +194,6 @@ async function unpackArm64() {
 
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
-  await copySDK();
   await Promise.all([
     ...isMacOS ? copy(unpacked.macArm64, true) : [],
     ...copy(unpacked.winArm64)
