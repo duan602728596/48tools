@@ -94,7 +94,7 @@ function Pocket48Login(props: {}): ReactElement {
   const userInfoSelectValueRef: MutableRefObject<string | null> = useRef(null);
   const [loginForm]: [FormInstance] = Form.useForm();
   const [tokenForm]: [FormInstance] = Form.useForm();
-  const { modal, handleOpenSelectAppDataDirClick }: UseAppDataDirReturnType = useAppDataDir();
+  const { modalRender, handleOpenSelectAppDataDirClick }: UseAppDataDirReturnType = useAppDataDir();
 
   // select
   function handleUserInfoSelect(value: string): void {
@@ -379,7 +379,7 @@ function Pocket48Login(props: {}): ReactElement {
           <Tabs type="card" activeKey={ tabsKey } items={ tabsItem } onChange={ (key: string): void => setTabsKey(key) } />
         </div>
       </Modal>
-      { modal }
+      { modalRender() }
     </Fragment>
   );
 }

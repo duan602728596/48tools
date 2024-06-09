@@ -231,7 +231,7 @@ function handleOpenDownloadUrlClick(event: MouseEvent): void {
 /* 首页 */
 function Index(props: {}): ReactElement {
   const theme: Theme = useContext(ThemeContext);
-  const { button, modal }: UseAppDataDirReturnType = useAppDataDir();
+  const { buttonRender, modalRender }: UseAppDataDirReturnType = useAppDataDir();
 
   return (
     <Fragment>
@@ -240,7 +240,7 @@ function Index(props: {}): ReactElement {
         <div className="mb-[8px]">
           <Space>
             <FFmpegOption />
-            { button }
+            { buttonRender() }
             <ExecutablePath />
           </Space>
         </div>
@@ -274,7 +274,7 @@ function Index(props: {}): ReactElement {
           </Space>
         </div>
       </div>
-      { modal }
+      { modalRender() }
       { globalThis.__INITIAL_STATE__.isTest ? null : <NewUserTour /> }
     </Fragment>
   );

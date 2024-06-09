@@ -9,8 +9,8 @@ import { Pocket48Login } from '../enum';
 export const title: string = '口袋48 App Data目录配置';
 
 export interface UseAppDataDirReturnType {
-  modal: ReactElement;
-  button: ReactElement;
+  modalRender(): ReactElement;
+  buttonRender(): ReactElement;
   handleOpenSelectAppDataDirClick(): void;
 }
 
@@ -65,8 +65,8 @@ export function useAppDataDir(): UseAppDataDirReturnType {
   }
 
   return {
-    button: <Button onClick={ handleOpenSelectAppDataDirClick }>{ title }</Button>,
-    modal: (
+    buttonRender: (): ReactElement => <Button onClick={ handleOpenSelectAppDataDirClick }>{ title }</Button>,
+    modalRender: (): ReactElement => (
       <Modal title={ title }
         open={ visible }
         width={ 600 }
