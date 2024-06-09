@@ -58,10 +58,8 @@ async function taskFile() {
 
   // 创建目录和文件
   for (const depName of Object.keys(packageJson.dependencies)) {
-    if (!['node-nim'].includes(depName)) {
-      console.log(`正在编译模块：${ depName }...`);
-      await createFilesByDependenciesName(depName);
-    }
+    console.log(`正在编译模块：${ depName }...`);
+    await createFilesByDependenciesName(depName);
   }
 }
 
