@@ -1,9 +1,10 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import fsP from 'node:fs/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
-import { cwd, appDir, wwwDir, staticsDir, build, output, unpacked, isMacOS, isArm64 } from './utils.mjs';
+import { cwd, appDir, wwwDir, staticsDir, build, nodeNimSDK, sdkDownloadDir, output, unpacked, isMacOS, isArm64 } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -114,11 +115,26 @@ async function uglifyPackageJson() {
   await fsP.writeFile(path.join(wwwDir, 'package.json'), JSON.stringify(json), { encoding: 'utf8' });
 }
 
+/**
+ * 替换sdk
+ * @param { string } [downloadDir] - 下载目录
+*/
+async function copySDK(downloadDir) {
+  if (fs.existsSync(nodeNimSDK)) {
+    await rimraf(nodeNimSDK);
+  }
+
+  if (downloadDir) {
+    await fse.copy(path.join(downloadDir, 'node-nim'), nodeNimSDK);
+  }
+}
+
 async function unpackOthers() {
   // 编译mac
   if (isMacOS) {
     // 编译mac
     console.log('⏳正在编译：mac');
+    await copySDK(sdkDownloadDir.mac);
     await builder.build({
       targets: builder.Platform.MAC.createTarget(),
       config: config(output.mac)
@@ -127,6 +143,7 @@ async function unpackOthers() {
 
   // 编译win64
   console.log('⏳正在编译：win64');
+  await copySDK(sdkDownloadDir.win64);
   await builder.build({
     targets: builder.Platform.WINDOWS.createTarget(),
     config: config(output.win)
@@ -134,6 +151,7 @@ async function unpackOthers() {
 
   // 编译win32
   console.log('⏳正在编译：win32');
+  await copySDK(sdkDownloadDir.win32);
   await builder.build({
     targets: builder.Platform.WINDOWS.createTarget(),
     config: config(output.win32, ['win', { target: 'dir', arch: 'ia32' }])
@@ -141,6 +159,7 @@ async function unpackOthers() {
 
   // 编译linux
   console.log('⏳正在编译：linux');
+  await copySDK(sdkDownloadDir.linux);
   await builder.build({
     targets: builder.Platform.LINUX.createTarget(),
     config: config(output.linux)
@@ -162,6 +181,7 @@ async function unpackArm64() {
   if (isMacOS) {
     // 编译mac-arm64
     console.log('⏳正在编译：mac-arm64');
+    await copySDK(sdkDownloadDir.macArm64);
     await builder.build({
       targets: builder.Platform.MAC.createTarget(),
       config: config(output.macArm64, ['mac', { target: 'dir', arch: 'arm64' }])
@@ -177,6 +197,7 @@ async function unpackArm64() {
 
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件');
+  await copySDK();
   await Promise.all([
     ...isMacOS ? copy(unpacked.macArm64, true) : [],
     ...copy(unpacked.winArm64)

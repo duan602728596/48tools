@@ -12,6 +12,19 @@ export const wwwDir = path.join(cwd, 'www');         // 中间代码
 export const staticsDir = path.join(cwd, 'statics'); // 静态资源目录
 export const build = path.join(cwd, 'build');        // 最终生成的可执行文件
 
+// SDK
+export const nodeNimSDK = path.join(wwwDir, 'node_modules/nim-sdk');
+
+const sdkDownloadBasicDir = path.join(build, 'node-nim-sdk');
+
+export const sdkDownloadDir = {
+  linux: path.join(sdkDownloadBasicDir, 'linux'),
+  mac: path.join(sdkDownloadBasicDir, 'mac'),
+  macArm64: path.join(sdkDownloadBasicDir, 'mac-arm64'),
+  win64: path.join(sdkDownloadBasicDir, 'win64'),
+  win32: path.join(sdkDownloadBasicDir, 'win32')
+};
+
 // 打包后的文件位置
 export const output = {
   mac: path.join(build, 'mac'),            // mac

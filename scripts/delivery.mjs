@@ -7,6 +7,7 @@ async function delivery() {
 
   await command(npm, ['run', 'build'], path.join(cwd, 'packages/main'));
   await command(npm, ['run', 'build'], path.join(cwd, 'packages/48tools'));
+  await command('node', ['--experimental-json-modules', './scripts/nimSdkDownload.mjs'], cwd);
   await command('node', ['--experimental-json-modules', './scripts/unpack.mjs'], cwd);
   await command('node', ['--experimental-json-modules', './scripts/clean.mjs'], cwd);
 }
