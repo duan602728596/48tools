@@ -52,11 +52,11 @@ const menuItems: Array<ItemType> = [
   { label: '复制Token', key: 'copyToken' },
   { label: '复制登录信息', key: 'copyInfo' },
   { label: '一键关注', key: 'friends' },
-  globalThis.__INITIAL_STATE__.commandLineOptions['enable-48-qingchunshike']
-    && { label: '青春时刻统计', key: 'qingchunshike' },
+  // globalThis.__INITIAL_STATE__.commandLineOptions['enable-48-qingchunshike']
+  //   && { label: '青春时刻统计', key: 'qingchunshike' },
   { type: 'divider' },
   { label: '退出', key: 'exit' }
-].filter(Boolean);
+];
 
 /* redux selector */
 type RState = { pocket48Login: Pocket48LoginInitialState };
@@ -307,11 +307,13 @@ function Pocket48Login(props: {}): ReactElement {
         });
         break;
 
+        /*
       case 'qingchunshike':
         navigate('/48/Qingchunshike', {
           state: { from: location.pathname }
         });
         break;
+      */
 
       case 'exit':
         dispatch(setClearInfo());
