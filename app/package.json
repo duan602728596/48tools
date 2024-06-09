@@ -16,8 +16,5 @@
     "hpagent": "^1.2.0",
     "node-media-server": "^2.6.2",
     "playwright-core": "^1.41.1"
-  },
-  "peerDependencies": {
-    "node-nim": "^9.16.5"
   }
 }

@@ -69,7 +69,9 @@ function config(outputDir, target) {
       icon: icon.linux,
       executableName: '48tools'
     },
+    includeSubNodeModules: true,
     npmRebuild: false,
+    nodeGypRebuild: false,
     electronDownload: {
       version: electronDownloadVersion
     },
