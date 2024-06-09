@@ -6,6 +6,7 @@ import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
 import { cwd, appDir, wwwDir, staticsDir, build, nodeNimSDK, sdkDownloadDir, output, unpacked, isMacOS, isArm64 } from './utils.mjs';
 import taskfile from './taskfile.mjs';
+import nimSdkDownload from './nimSdkDownload.mjs';
 import packageJson from '../package.json' assert { type: 'json' };
 
 const staticsFiles = {
@@ -215,6 +216,7 @@ async function unpack() {
   // 拷贝编译的临时文件到中间代码文件夹
   const packages = path.join(cwd, 'packages');
 
+  await nimSdkDownload();
   await taskfile();
   await fse.copy(appDir, wwwDir);
   await Promise.all([

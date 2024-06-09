@@ -39,4 +39,4 @@ async function nimSdkDownload() {
   ]);
 }
 
-nimSdkDownload();
+export default nimSdkDownload;
