@@ -1,5 +1,5 @@
 import { ipcMain, type IpcMainInvokeEvent } from 'electron';
-import NodeNim from 'node-nim';
+import type NodeNim from 'node-nim';
 import type { NIMResCode, LoginRes } from 'node-nim';
 import { NodeNimLoginHandleChannel } from '../channelEnum.js';
 import { require } from '../utils.mjs';

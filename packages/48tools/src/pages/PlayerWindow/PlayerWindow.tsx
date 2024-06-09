@@ -1,5 +1,4 @@
-import * as process from 'node:process';
-import { useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
+import { Fragment, useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
 import { Alert } from 'antd';
 import * as classNames from 'classnames';
 import { requestLiveRoomInfo, type LiveRoomInfo } from '@48tools-api/48';
@@ -8,11 +7,14 @@ import LiveInfo from './LiveInfo/LiveInfo';
 import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
 import RecordDanmu from './Danmu/RecordDanmu';
+import Damu from './Danmu/Danmu';
+import { isWindowsArm, getUserInfo } from './function/helper';
+import { Pocket48Login } from '../../functionalComponents/Pocket48Login/enum';
 import type { PlayerInfo } from '../../components/basic/initialState/initialState';
+import type { UserInfo } from '../../functionalComponents/Pocket48Login/types';
 
 const playerInfo: PlayerInfo = globalThis.__INITIAL_STATE__.playerInfo;
 const inRecord: boolean = playerInfo.playerType === 'record';
-const isWindowsArm: boolean = process.platform === 'win32' && process.arch === 'arm64';
 
 /* 直播窗口 */
 function PlayerWindow(props: {}): ReactElement {
@@ -32,18 +34,42 @@ function PlayerWindow(props: {}): ReactElement {
 
   // 渲染弹幕
   function danmuRender(): ReactElement | null {
+    if (inRecord) {
+      return <RecordDanmu info={ info } />;
+    }
+
     if (isWindowsArm) {
       return (
-        <Alert type="warning" message={
-          <p>
-            您使用的操作系统是Windows，且CPU架构是ARM64。 网易云信SDK暂不支持该系统的架构。
-            您可以尝试使用x64架构的Windows系统，或者使用其他支持的操作系统。或尝试使用x64架构的软件。
-          </p>
+        <Alert type="error" message={
+          <Fragment>
+            <p>您使用的操作系统是Windows，且CPU架构是ARM64。 网易云信SDK暂不支持该系统的架构。</p>
+            <p>如果您需要弹幕功能，可以尝试使用x64架构的Windows系统，或者使用其他支持的操作系统。或尝试使用x64架构的软件。</p>
+          </Fragment>
+
         } />
       );
     }
 
-    return inRecord ? <RecordDanmu info={ info } /> : null;
+    const userInfo: UserInfo | null = getUserInfo();
+
+    if (!userInfo) {
+      return <Alert type="error" message={ <p>弹幕功能需要先登录口袋48账号后，重新进入直播间。</p> } />;
+    }
+
+    const appDataDir: string | null = localStorage.getItem(Pocket48Login.AppDataDir);
+
+    if (!appDataDir) {
+      return (
+        <Alert type="error" message={
+          <Fragment>
+            <p>最新的网易云信SDK需要手动配置App Data目录后才能使用。</p>
+            <p>您需要配置后才能使用弹幕功能。</p>
+          </Fragment>
+        } />
+      );
+    }
+
+    return <Damu info={ info } userInfo={ userInfo } appDataDir={ appDataDir } />;
   }
 
   useEffect(function(): void {
