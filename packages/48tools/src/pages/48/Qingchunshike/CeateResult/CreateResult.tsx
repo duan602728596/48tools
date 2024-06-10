@@ -99,8 +99,8 @@ function CreateResult(props: {}): ReactElement {
     try {
       const calculateResult: CalculateResult = await calculate({
         user: userItem,
-        st: formValue.startTime.unix(),
-        et: formValue.endTime.unix(),
+        st: formValue.startTime.valueOf(),
+        et: formValue.endTime.valueOf(),
         accid: userInfo.accid,
         pwd: userInfo.pwd,
         appDataDir
