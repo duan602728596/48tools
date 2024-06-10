@@ -244,7 +244,7 @@ function Index(props: {}): ReactElement {
             <ExecutablePath />
           </Space>
         </div>
-        <div>
+        <div className="text-right">
           <Space>
             <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
             { theme.ChangeThemeElement }
