@@ -10,6 +10,7 @@ import InVideo from './Live48/InVideo/InVideo';
 import RoomMessageDynamic from './RoomMessage/loader';
 import Voice from './Voice/Voice';
 import Friends from './Friends/Friends';
+import QingchunshikeDynamic from './Qingchunshike/loader';
 
 /* 直播和录播下载 */
 function Index(props: {}): ReactElement | null {
@@ -21,7 +22,8 @@ function Index(props: {}): ReactElement | null {
     { path: 'InVideo', element: <InVideo /> },
     { path: 'RoomMessage', element: <RoomMessageDynamic /> },
     { path: 'Voice', element: <Voice /> },
-    { path: 'Friends', element: <Friends /> }
+    { path: 'Friends', element: <Friends /> },
+    { path: 'Qingchunshike', element: <QingchunshikeDynamic /> }
   ]);
 
   return <Content className={ style.content }>{ routes }</Content>;
