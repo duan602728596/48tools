@@ -2,7 +2,7 @@ import { ipcMain, type IpcMainInvokeEvent } from 'electron';
 import type NodeNim from 'node-nim';
 import type { NIMResCode, LoginRes } from 'node-nim';
 import { NodeNimLoginHandleChannel } from '../channelEnum.js';
-import { require } from '../utils.mjs';
+import { require, isWindowsArm } from '../utils.mjs';
 
 const nimLoginAccountSet: Set<string> = new Set();
 
@@ -17,10 +17,12 @@ interface NodeNimLoginOptions {
 export let nodeNimInitiated: boolean = false;
 
 export function nodeNimCleanup(): void {
-  if (nodeNimInitiated) {
+  if (!isWindowsArm) {
     const node_nim: typeof NodeNim = require('node-nim');
 
-    nodeNimInitiated && node_nim.nim.client.cleanup('');
+    node_nim.nim.client.cleanup('');
+    nodeNimInitiated = false;
+    nimLoginAccountSet.clear();
   }
 }
 
@@ -30,10 +32,13 @@ export function nodeNimHandleLogin(): void {
   ipcMain.handle(
     NodeNimLoginHandleChannel.NodeNimLogin,
     async function(event: IpcMainInvokeEvent, options: NodeNimLoginOptions): Promise<string | null> {
+      if (isWindowsArm) return null;
+
       const node_nim: typeof NodeNim = require('node-nim');
 
       if (!nodeNimInitiated) {
         const clientInitResult: boolean = node_nim.nim.client.init(atob(options.appKey), options.appDataDir, '', {});
+
 
         if (!clientInitResult) return null;
 

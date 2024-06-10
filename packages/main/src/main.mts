@@ -89,6 +89,8 @@ app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer');
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', function(): void {
+  nodeNimCleanup();
+
   if (process.platform !== 'darwin') {
     app.quit();
   }
