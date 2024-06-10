@@ -134,7 +134,7 @@ async function liveCalculate(appDataDir: string, user: QingchunshikeUserItem, st
 
       allLiveHistoryMessage.push(...nextData);
       dispatch(setLog(`NIM -> 抓取page: ${ livePageNum++ } endTime: ${
-        dayjs(liveEndTime).format('YYYY-MM-DD HH:mm:ss')
+        dayjs(liveEndTime * 1000).format('YYYY-MM-DD HH:mm:ss')
       } endTime - st: ${ liveEndTime - st }`));
 
       if (isBreak) break;

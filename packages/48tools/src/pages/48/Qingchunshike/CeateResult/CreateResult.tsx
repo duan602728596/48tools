@@ -105,24 +105,24 @@ function CreateResult(props: {}): ReactElement {
         pwd: userInfo.pwd,
         appDataDir
       });
-      const text: string = `################################################################
+      const text: string = `============================================
   serverId: ${ userItem.serverId }
  channelId: ${ userItem.channelId }
 liveRoomId: ${ userItem.liveRoomId }
-################################################################
+============================================
 ${ userItem.description }
 ${ formValue.startTime.format('YYYY-MM-DD HH:mm:ss') } - ${ formValue.endTime.format('YYYY-MM-DD HH:mm:ss') }
 
 【数据统计可能不准确，仅供参考。】
-################################################################
+============================================
 总分数：${ (calculateResult.qchatCalculateResult.all + calculateResult.nimCalculateResult.all).toFixed(1) }
-################################################################
+============================================
 房间：${ calculateResult.qchatCalculateResult.all.toFixed(1) }
-${ calculateResult.qchatCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `${ a }：${ b }`).join('\n') }
-################################################################
+${ calculateResult.qchatCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `  - ${ a }：${ b }`).join('\n') }
+============================================
 直播：${ calculateResult.nimCalculateResult.all.toFixed(1) }
-${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `${ a }：${ b }`).join('\n') }
-################################################################`;
+${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `  - ${ a }：${ b }`).join('\n') }
+============================================`;
 
       await fsP.writeFile(result.filePath, text, { encoding: 'utf-8' });
       messageApi.success('生成成功。');

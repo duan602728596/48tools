@@ -46,6 +46,8 @@ class NodeNimChatroomSocket {
         roomInfo: ChatRoomInfo,
         myInfo: ChatRoomMemberInfo
       ): void => {
+        console.log('Chatroom连接状态：', status, status2);
+
         if (status === 5 && status2 === 200) {
           console.log('Chatroom连接成功', roomInfo);
 
@@ -89,7 +91,7 @@ class NodeNimChatroomSocket {
   }
 
   async getHistoryMessage(timeTag?: number): Promise<Array<ChatRoomMessage> | undefined> {
-    if (!this.chatroom || !isWindowsArm) return;
+    if (!this.chatroom || isWindowsArm) return;
 
     const result: [number, number, Array<ChatRoomMessage>] = await this.chatroom.getMessageHistoryOnlineAsync(
       this.roomId, {
