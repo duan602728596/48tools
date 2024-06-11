@@ -20,7 +20,7 @@ class NodeNimChatroomSocket {
 
   constructor(account: string, token: string, roomId: number, appDataDir: string, onMessage?: OnMessage) {
     if (!isWindowsArm) {
-      const nodeNim: any = globalThis.require('node-nim');
+      const nodeNim: { default: typeof NodeNim } | typeof NodeNim = globalThis.require('node-nim');
 
       this.#nodeNim = 'default' in nodeNim ? nodeNim.default : nodeNim;
     }

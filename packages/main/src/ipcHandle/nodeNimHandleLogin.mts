@@ -4,7 +4,26 @@ import type { NIMResCode, LoginRes } from 'node-nim';
 import { NodeNimLoginHandleChannel } from '../channelEnum.js';
 import { require, isWindowsArm } from '../utils.mjs';
 
-const nimLoginAccountSet: Set<string> = new Set();
+const nimLoginAccountSet: Set<string> = new Set(); // 记录当前已登录的账号
+let nodeNimInitiated: boolean = false;             // 记录NodeNim是否已初始化
+
+/* 加载node-nim模块 */
+function requireNodeMim(): typeof NodeNim {
+  const nodeNim: { default: typeof NodeNim } | typeof NodeNim = require('node-nim');
+
+  return 'default' in nodeNim ? nodeNim.default : nodeNim;
+}
+
+/* 窗口关闭后需要清除和重置状态 */
+export function nodeNimCleanup(): void {
+  if (!isWindowsArm) {
+    const node_nim: typeof NodeNim = requireNodeMim();
+
+    node_nim.nim.client.cleanup('');
+    nodeNimInitiated = false;
+    nimLoginAccountSet.clear();
+  }
+}
 
 interface NodeNimLoginOptions {
   appKey: string;
@@ -12,18 +31,6 @@ interface NodeNimLoginOptions {
   token: string;
   appDataDir: string;
   roomId: number;
-}
-
-export let nodeNimInitiated: boolean = false;
-
-export function nodeNimCleanup(): void {
-  if (!isWindowsArm) {
-    const node_nim: typeof NodeNim = require('node-nim');
-
-    node_nim.nim.client.cleanup('');
-    nodeNimInitiated = false;
-    nimLoginAccountSet.clear();
-  }
 }
 
 /* NodeNim相关 */
@@ -34,11 +41,11 @@ export function nodeNimHandleLogin(): void {
     async function(event: IpcMainInvokeEvent, options: NodeNimLoginOptions): Promise<string | null> {
       if (isWindowsArm) return null;
 
-      const node_nim: typeof NodeNim = require('node-nim');
+      const node_nim: typeof NodeNim = requireNodeMim();
 
       if (!nodeNimInitiated) {
-        const clientInitResult: boolean = node_nim.nim.client.init(atob(options.appKey), options.appDataDir, '', {});
-
+        const clientInitResult: boolean = node_nim.nim.client.init(
+          atob(options.appKey), options.appDataDir, '', {});
 
         if (!clientInitResult) return null;
 

@@ -29,6 +29,7 @@ export const isTest: boolean = process.env.TEST === 'true';
 /* 文件夹路径 */
 export const wwwPath: string = path.join(__dirname, '..');
 
+/* 判断是否是Windows系统和ARM架构 */
 export const isWindowsArm: boolean = process.platform === 'win32' && process.arch === 'arm64';
 
 /**
