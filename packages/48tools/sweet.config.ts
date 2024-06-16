@@ -76,6 +76,7 @@ const externalsName: Array<string> = nodeModules([
   'fluent-ffmpeg',
   'got',
   'hpagent',
+  'node-nim',
   'playwright-core'
 ]);
 

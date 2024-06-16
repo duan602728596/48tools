@@ -81,7 +81,7 @@ export function formatDataArray(data: Array<CustomMessageV2>): Array<FormatCusto
 export function formatSendData(data: Array<CustomMessageV2>): Array<SendDataItem> {
   const newData: Array<SendDataItem> = [];
 
-  data.forEach((o: CustomMessageV2) => {
+  data.forEach((o: CustomMessageV2): void => {
     let bodys: string | SendDataItem['bodys'];
     let extInfo: string | SendDataItem['extInfo'];
 
@@ -103,10 +103,17 @@ export function formatSendData(data: Array<CustomMessageV2>): Array<SendDataItem
 
     // 处理user内的地址
     try {
-      if (typeof extInfo === 'object') {
-        extInfo['user']['teamLogo'] = source(extInfo['user']['teamLogo']);
-        extInfo['user']['avatar'] = source(extInfo['user']['avatar']);
-        extInfo['user']['pfUrl'] = source(extInfo['user']['pfUrl']);
+      if (typeof extInfo !== 'string') {
+        Object.assign(extInfo.user, {
+          teamLogo: source(extInfo.user.teamLogo),
+          avatar: source(extInfo.user.avatar),
+          pfUrl: source(extInfo.user.pfUrl)
+        });
+
+        // 是否包含房主的消息
+        if (extInfo.user.roleId !== 3) {
+          return;
+        }
       }
     } catch (err) {
       console.error(err);

@@ -80,6 +80,7 @@ interface UserV2 {
   teamLogo: string;
   userId: number;
   vip: boolean;
+  pfUrl: string;
 }
 
 // roleId = 3为xox

@@ -17,6 +17,7 @@ import FFmpegOption from './FFmpegOption/FFmpegOption';
 import ExecutablePath from './ExecutablePath/ExecutablePath';
 import NewUserTour from './NewUserTour/NewUserTour';
 import ThemeContext, { type Theme } from '../../components/basic/Theme/ThemeContext';
+import { useAppDataDir, type UseAppDataDirReturnType } from '../../functionalComponents/Pocket48Login/useAppDataDir/useAppDataDir';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
 import IconMicrophoneSvgComponent from './images/microphone.component.svg';
@@ -230,15 +231,21 @@ function handleOpenDownloadUrlClick(event: MouseEvent): void {
 /* 首页 */
 function Index(props: {}): ReactElement {
   const theme: Theme = useContext(ThemeContext);
+  const { buttonRender, modalRender }: UseAppDataDirReturnType = useAppDataDir();
 
   return (
     <Fragment>
       <div className="p-[16px]">
         { nativeRender() }
-        <div>
+        <div className="mb-[8px]">
           <Space>
             <FFmpegOption />
+            { buttonRender() }
             <ExecutablePath />
+          </Space>
+        </div>
+        <div className="text-right">
+          <Space>
             <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
             { theme.ChangeThemeElement }
             <Tooltip title="开发者工具">
@@ -267,6 +274,7 @@ function Index(props: {}): ReactElement {
           </Space>
         </div>
       </div>
+      { modalRender() }
       { globalThis.__INITIAL_STATE__.isTest ? null : <NewUserTour /> }
     </Fragment>
   );

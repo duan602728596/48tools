@@ -4,6 +4,7 @@ import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, initialState a
 import { ipc, removeIpc } from './ipc.mjs';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle.mjs';
 import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle.mjs';
+import { nodeNimHandleLogin, nodeNimCleanup } from './ipcHandle/nodeNimHandleLogin.mjs';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer.mjs';
 import weiboResourceRequestInit from './webRequest/weiboResourceRequest.mjs';
 import neteaseIMRequest from './webRequest/neteaseIMRequest.mjs';
@@ -68,11 +69,13 @@ function createWindow(): void {
   try {
     ipcRemoteHandle(processWindow);
     pocket48LiveRemoteHandle(processWindow);
+    nodeNimHandleLogin();
   } catch {}
 
   processWindow.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();
     removeIpc();
+    nodeNimCleanup();
     processWindow = null;
   });
 
@@ -86,6 +89,8 @@ app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer');
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', function(): void {
+  nodeNimCleanup();
+
   if (process.platform !== 'darwin') {
     app.quit();
   }

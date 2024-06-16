@@ -28,10 +28,9 @@ function open(title: string, query: string): void {
   }
 
   const player: Record<string, string> = Object.fromEntries(searchParams);
-  const inRecord: boolean = player.playerType === 'record';
 
   let win: BrowserWindow | null = new BrowserWindow({
-    width: inRecord ? 643 : 327,
+    width: 643,
     height: 680,
     webPreferences: {
       nodeIntegration: true,
