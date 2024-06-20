@@ -129,12 +129,12 @@ async function liveCalculate(appDataDir: string, user: QingchunshikeUserItem, st
     const historyMessage: Array<ChatRoomMessage> = (await nim.getHistoryMessage(liveEndTime)) ?? [];
 
     if (historyMessage?.length) {
-      liveEndTime = historyMessage.at(-1)!.timetag_!;
+      liveEndTime = Number(historyMessage.at(-1)!.timetag_!);
       const { nextData, isBreak }: { nextData: Array<GiftText['attach']>; isBreak: boolean } = filterLive(historyMessage, st);
 
       allLiveHistoryMessage.push(...nextData);
       dispatch(setLog(`NIM -> 抓取page: ${ livePageNum++ } endTime: ${
-        dayjs(liveEndTime * 1000).format('YYYY-MM-DD HH:mm:ss')
+        dayjs(liveEndTime).format('YYYY-MM-DD HH:mm:ss')
       } endTime - st: ${ liveEndTime - st }`));
 
       if (isBreak) break;
@@ -143,7 +143,7 @@ async function liveCalculate(appDataDir: string, user: QingchunshikeUserItem, st
     }
   }
 
-  await nim.exit();
+  nim.exit();
 
   const giftResult: Array<GiftResult> = [];
 

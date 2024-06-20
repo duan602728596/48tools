@@ -87,7 +87,9 @@ class NodeNimChatroomSocket {
   }
 
   exit(): void {
-    this.chatroom?.exit?.(this.roomId, '');
+    if (this.chatroom) {
+      this.chatroom.exit(this.roomId, '');
+    }
   }
 
   async getHistoryMessage(timeTag?: number): Promise<Array<ChatRoomMessage> | undefined> {
