@@ -42,13 +42,13 @@ interface NativeItem {
 }
 
 const IconBilibiliLogo: ReactElement
-    = <Icon className={ classNames('relative', style.iconBilibili) } component={ IconBilibiliLogoSvgComponent } />,
+    = <Icon className="relative text-[32px]" component={ IconBilibiliLogoSvgComponent } />,
   IconAcFunLogo: ReactElement
-    = <Icon className={ classNames('relative', style.iconAcFun) } component={ IconAcFunLogoSvgComponent } />,
+    = <Icon className="relative text-[46px]" component={ IconAcFunLogoSvgComponent } />,
   IconDouyinLogo: ReactElement
-    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />,
+    = <Icon className="text-[18px]" component={ IconDouyinSvgComponent } />,
   IconKuaishouLogo: ReactElement
-    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconKuaishouSvgComponent } />;
+    = <Icon className="text-[18px]" component={ IconKuaishouSvgComponent } />;
 
 /* 导航配置 */
 const navLinkConfig: Array<Array<NativeItem>> = [
@@ -56,23 +56,23 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋48直播抓取',
       url: '/48/Pocket48Live',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV5) } component={ IconLiveSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconLiveSvgComponent } />
     },
     {
       name: '口袋48录播下载',
       url: '/48/Pocket48Record',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconVideoSvgComponent } />,
+      icon: <Icon className="text-[18px]" component={ IconVideoSvgComponent } />,
       testId: 'pocket48-record-link'
     },
     {
       name: '官方公演直播抓取',
       url: '/48/InLive',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconMicrophoneSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconMicrophoneSvgComponent } />
     },
     {
       name: '官方公演录播下载',
       url: '/48/InVideo',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconRecordSvgComponent } />,
+      icon: <Icon className="text-[18px]" component={ IconRecordSvgComponent } />,
       testId: '48-in-video-link'
     }
   ],
@@ -80,7 +80,7 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋房间电台',
       url: '/48/Voice',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDiantaiSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconDiantaiSvgComponent } />
     },
     {
       name: '口袋房间消息',
@@ -157,17 +157,17 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconCutSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconCutSvgComponent } />
     },
     {
       name: '视频合并',
       url: '/VideoEdit/Concat',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconConcatSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconConcatSvgComponent } />
     },
     {
       name: '执行FFmpeg命令',
       url: '/VideoEdit/FFmpegProcess',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconPowerShellSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconPowerShellSvgComponent } />
     }
   ]
 ];

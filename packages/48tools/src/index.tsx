@@ -11,6 +11,7 @@ import Routers from './router/Routers';
 import MDXProvider from './components/basic/MdxProvider/MDXProvider';
 import IDBInit from './utils/IDB/IDBInit';
 import './entry/main.tailwindcss.css';
+import './entry/index/index.global.sass';
 import './components/basic/Accessibility/Accessibility';
 import './utils/logProtocol/logProtocolBroadcastChannel';
 import './utils/GLOBAL_REJECT_UNAUTHORIZED';

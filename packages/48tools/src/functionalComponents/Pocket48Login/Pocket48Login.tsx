@@ -336,7 +336,6 @@ function Pocket48Login(props: {}): ReactElement {
     return createElement(
       userInfo ? Dropdown.Button : Button,
       {
-        className: style.inlineBlock,
         menu: userInfo ? {
           items: menuItems,
           onClick: handleMenuClick
@@ -362,7 +361,7 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      { loginButtonRender() }
+      <div className="inline-block">{ loginButtonRender() }</div>
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }
