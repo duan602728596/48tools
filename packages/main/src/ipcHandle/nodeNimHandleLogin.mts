@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import fsPromises from 'node:fs/promises';
 import { ipcMain, type IpcMainInvokeEvent } from 'electron';
 import type NodeNim from 'node-nim';
 import type { NIMResCode, LoginRes } from 'node-nim';
@@ -25,6 +27,15 @@ export function nodeNimCleanup(): void {
   }
 }
 
+/* 清除app data目录 */
+async function deleteAppDataDir(appDataDir: string): Promise<void> {
+  if (fs.existsSync(appDataDir)) {
+    try {
+      await fsPromises.rm(appDataDir, { recursive: true });
+    } catch { /* noop */ }
+  }
+}
+
 interface NodeNimLoginOptions {
   appKey: string;
   account: string;
@@ -44,6 +55,9 @@ export function nodeNimHandleLogin(): void {
       const node_nim: typeof NodeNim = requireNodeMim();
 
       if (!nodeNimInitiated) {
+        // 清除app data目录
+        await deleteAppDataDir(options.appDataDir);
+
         const clientInitResult: boolean = node_nim.nim.client.init(
           atob(options.appKey), options.appDataDir, '', {});
 
@@ -69,5 +83,13 @@ export function nodeNimHandleLogin(): void {
       if (resEnterCode !== node_nim.NIMResCode.kNIMResSuccess) return null;
 
       return roomEnterResult;
+    });
+
+  // 清理NodeNim
+  ipcMain.handle(
+    NodeNimLoginHandleChannel.NodeNimClean,
+    async function(event: IpcMainInvokeEvent, options: Pick<NodeNimLoginOptions, 'appDataDir'>): Promise<void> {
+      nodeNimCleanup();
+      await deleteAppDataDir(options.appDataDir);
     });
 }

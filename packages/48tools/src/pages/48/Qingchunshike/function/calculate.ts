@@ -144,6 +144,7 @@ async function liveCalculate(appDataDir: string, user: QingchunshikeUserItem, st
   }
 
   nim.exit();
+  await nim.clean();
 
   const giftResult: Array<GiftResult> = [];
 
