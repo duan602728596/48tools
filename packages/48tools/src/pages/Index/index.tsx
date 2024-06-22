@@ -237,25 +237,27 @@ function Index(props: {}): ReactElement {
     <Fragment>
       <div className="p-[16px]">
         { nativeRender() }
-        <div className="mb-[8px]">
-          <Space>
-            <FFmpegOption />
-            { buttonRender() }
-            <ExecutablePath />
-          </Space>
-        </div>
-        <div className="text-right">
-          <Space>
-            <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
-            { theme.ChangeThemeElement }
-            <Tooltip title="开发者工具">
-              <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
-            </Tooltip>
-            <Tooltip title="问题反馈">
-              <Button id="issues" type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
-            </Tooltip>
-            <ButtonLink linkProps={{ to: '/Agreement/Agreement' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
-          </Space>
+        <div className="w-[fit-content]">
+          <div className="mb-[8px]">
+            <Space>
+              <FFmpegOption />
+              { buttonRender() }
+              <ExecutablePath />
+            </Space>
+          </div>
+          <div className="text-right">
+            <Space>
+              <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
+              { theme.ChangeThemeElement }
+              <Tooltip title="开发者工具">
+                <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+              </Tooltip>
+              <Tooltip title="问题反馈">
+                <Button id="issues" type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
+              </Tooltip>
+              <ButtonLink linkProps={{ to: '/Agreement/Agreement' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
+            </Space>
+          </div>
         </div>
         <Divider className="my-[16px]" />
         <div className={ commonStyle.text }>
