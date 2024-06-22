@@ -29,7 +29,7 @@ class NodeNimChatroomSocket {
     this.account = account; // 账号
     this.token = token;     // token
     this.roomId = roomId;   // 房间id
-    this.appDataDir = path.join(appDataDir, account); // app数据目录
+    this.appDataDir = path.join(appDataDir, '_48tools_node_nim_app_data_', account); // app数据目录
     this.onMessage = onMessage;
   }
 
