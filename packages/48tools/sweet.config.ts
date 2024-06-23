@@ -85,6 +85,7 @@ export default function(info: object): Record<string, any> {
     ['@babel/plugin-syntax-import-attributes', { deprecatedAssertSyntax: true }],
     ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: true }]
   ].filter(Boolean);
+  const distDir: string = path.join(__dirname, 'dist');
 
   const config: { [key: string]: any } = {
     frame: 'react',
@@ -178,10 +179,23 @@ export default function(info: object): Record<string, any> {
     ],
     plugins: [
       new CopyPlugin({
-        patterns: [{
-          from: srcPath('pages/48/sdk/1'),
-          to: path.join(__dirname, 'dist')
-        }]
+        patterns: [
+          {
+            from: srcPath('pages/48/sdk/1'),
+            to: distDir
+          },
+          {
+            from: srcPath('pages/Toutiao/sdk/AB'),
+            to: distDir
+          },
+          {
+            from: path.join(__dirname, '../../node_modules/@pyscript/core/dist'),
+            to: path.join(distDir, 'PyScript'),
+            globOptions: {
+              ignore: ['*.map', '*.css']
+            }
+          }
+        ]
       }),
       analyzer && new BundleAnalyzerPlugin()
     ].filter(Boolean)

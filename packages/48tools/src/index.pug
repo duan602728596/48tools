@@ -16,5 +16,10 @@ html
     include components/basic/initialState/initialState
     include components/basic/HACK_INTERCEPTS_SEND_Websocket/HACK_INTERCEPTS_SEND_Websocket
 
+
+    // PyScript运行时
+    script process.browser = true;
+    script(type='module' src='PyScript/core.js')
+
     if htmlWebpackPlugin.options.mode === 'development'
       script(src=imports.dll)

@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@mdx-js/loader": "^3.0.0",
+    "@pyscript/core": "^0.4.51",
     "@sweet-milktea/milktea": "^4.2.0",
     "@sweet-milktea/milktea-cli": "^4.1.0",
     "copy-webpack-plugin": "^11.0.0",

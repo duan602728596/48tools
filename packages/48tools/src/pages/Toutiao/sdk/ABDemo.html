@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script type="module" src="https://pyscript.net/releases/2024.6.2/core.js"></script>
+</head>
+<body>
+<button id="getABogusResult">Get ABogus Result</button>
+<div id="result"></div>
+<script type="py" src="./AB/AB.py"></script>
+<script>
+  document.getElementById('getABogusResult').addEventListener('click', function() {
+    const params = {
+      a: 'a',
+      b: 'b'
+    }
+    const key = 'a1';
+    const event = new CustomEvent('ABogus', {
+      detail: { params: JSON.stringify(params), key }
+    });
+
+    window.addEventListener('ABogusResult', function(e) {
+      console.log(e);
+      document.getElementById('result').innerHTML = e._result;
+    });
+
+    window.dispatchEvent(event);
+  });
+</script>
+</body>
+</html>
