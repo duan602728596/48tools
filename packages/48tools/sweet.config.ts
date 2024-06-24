@@ -141,7 +141,7 @@ export default function(info: object): Record<string, any> {
     javascript: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules|toutiaosdk-acrawler\.js|Signer\.js/i
+      exclude: /node_modules|(toutiaosdk-acrawler|bdms)\.js|Signer\.js/i
     },
     typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
@@ -157,7 +157,7 @@ export default function(info: object): Record<string, any> {
     },
     rules: [
       {
-        test: /toutiaosdk-acrawler\.js/,
+        test: /(toutiaosdk-acrawler|bdms)\.js/,
         type: 'asset/resource',
         generator: {
           filename: '[name][ext]'
@@ -179,23 +179,10 @@ export default function(info: object): Record<string, any> {
     ],
     plugins: [
       new CopyPlugin({
-        patterns: [
-          {
-            from: srcPath('pages/48/sdk/1'),
-            to: distDir
-          },
-          {
-            from: srcPath('pages/Toutiao/sdk/AB'),
-            to: distDir
-          },
-          {
-            from: path.join(__dirname, '../../node_modules/@pyscript/core/dist'),
-            to: path.join(distDir, 'PyScript'),
-            globOptions: {
-              ignore: ['*.map', '*.css']
-            }
-          }
-        ]
+        patterns: [{
+          from: srcPath('pages/48/sdk/1'),
+          to: distDir
+        }]
       }),
       analyzer && new BundleAnalyzerPlugin()
     ].filter(Boolean)

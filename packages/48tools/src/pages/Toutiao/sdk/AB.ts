@@ -1,52 +1,18 @@
-import { randomUUID } from 'node:crypto';
-import type { PromiseWithResolvers } from '@48tools-types/ECMAScript';
+import loadScript from '../../../utils/loadScript';
 
-const { promise, resolve }: PromiseWithResolvers<void> = Promise.withResolvers();
-let ABPyInit: boolean = false;
-let timer: NodeJS.Timeout | null = null;
+let ABogus: any;
 
-function loadABPyScript(): void {
-  if (!ABPyInit) {
-    const script: HTMLScriptElement = document.createElement('script');
-
-    script.type = 'py';
-    script.src = 'AB.py';
-    document.body.appendChild(script);
-
-    timer = setInterval((): void => {
-      if (document.getElementById('py-0')) {
-        clearTimeout(timer!);
-        timer = null;
-        ABPyInit = true;
-        resolve();
-      }
-    }, 5_000);
+/**
+ * 计算a_bogus
+ * window.bdms.init._v[2].p[42](0, 1, 6, params, data, ua)
+ * https://www.cnblogs.com/steed4ever/p/18167077
+ * http://www.lxspider.com/?p=956
+ */
+export async function getABResult(params: string, data: string, ua: string): Promise<string> {
+  if (!ABogus) {
+    await loadScript(require('./bdms.js'), 'bdms');
+    ABogus = globalThis.bdms.init._v[2].p[42];
   }
-}
 
-/* 计算a_bogus */
-export async function getABResult(params: Record<string, string>, ua: string): Promise<string> {
-  loadABPyScript();
-  await promise;
-  return new Promise<string>((resolve: Function, reject: Function): void => {
-    const key: string = randomUUID();
-    const event: CustomEvent = new CustomEvent('ABogus', {
-      detail: {
-        params: JSON.stringify(params),
-        key,
-        ua
-      }
-    });
-
-    window.addEventListener('ABogusResult', function(e: CustomEvent): void {
-      const rKey: string = e['_key'];
-      const rResult: string = e['_result'];
-
-      if (key === rKey) {
-        resolve(rResult);
-      }
-    });
-
-    window.dispatchEvent(event);
-  });
+  return ABogus(0, 1, 6, params, data, ua);
 }
