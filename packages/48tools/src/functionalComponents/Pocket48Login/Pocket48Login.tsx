@@ -326,7 +326,7 @@ function Pocket48Login(props: {}): ReactElement {
 
     if (userInfo) {
       icon = (
-        <Avatar key="icon" className={ style.avatar } size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
+        <Avatar key="icon" size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
           { userInfo?.unknown ? '?' : undefined }
         </Avatar>
       );
