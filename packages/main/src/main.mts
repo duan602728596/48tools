@@ -1,6 +1,6 @@
 import * as process from 'node:process';
 import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
-import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, initialState as ils, packageJson } from './utils.mjs';
+import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, createInitialState, packageJson } from './utils.mjs';
 import { ipc, removeIpc } from './ipc.mjs';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle.mjs';
 import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle.mjs';
@@ -51,7 +51,7 @@ function createWindow(): void {
   processWindow.loadFile(createHtmlFilePath('index'),
     {
       query: {
-        initialState: ils({
+        initialState: createInitialState({
           theme: themeSource ?? 'system',
           commandLineOptions,
           isTest

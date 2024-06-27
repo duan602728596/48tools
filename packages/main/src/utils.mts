@@ -53,7 +53,7 @@ export function createHtmlFilePath(htmlName: string): string {
 }
 
 /* 生成initialState */
-export function initialState(value: any): string {
+export function createInitialState(value: Record<string, any>): string {
   return encodeURIComponent(JSON.stringify(value));
 }
 
