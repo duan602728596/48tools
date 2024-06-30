@@ -8,8 +8,9 @@ import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
 import RecordDanmu from './Danmu/RecordDanmu';
 import Damu from './Danmu/Danmu';
-import { isWindowsArm, getUserInfo } from './function/helper';
+import { getUserInfo } from './function/helper';
 import { Pocket48Login } from '../../functionalComponents/Pocket48Login/enum';
+import { nodeNim } from './sdk/NodeNimChatroomSocket';
 import type { PlayerInfo } from '../../components/basic/initialState/initialState';
 import type { UserInfo } from '../../functionalComponents/Pocket48Login/types';
 
@@ -38,11 +39,11 @@ function PlayerWindow(props: {}): ReactElement {
       return <RecordDanmu info={ info } />;
     }
 
-    if (isWindowsArm) {
+    if (!nodeNim) {
       return (
         <Alert type="error" message={
           <Fragment>
-            <p>您使用的操作系统是Windows，且CPU架构是ARM64。 网易云信SDK暂不支持该系统的架构。</p>
+            <p>您使用的软件支持的操作系统是Windows，CPU架构是ARM64。网易云信SDK暂不支持该系统的架构。</p>
             <p>如果您需要弹幕功能，可以尝试使用x64架构的Windows系统，或者使用其他支持的操作系统。或尝试使用x64架构的软件。</p>
           </Fragment>
         } />
