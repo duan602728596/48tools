@@ -34,11 +34,12 @@
   "dependencies": {
     "@vercel/ncc": "^0.38.1",
     "cross-zip": "^4.0.0",
-    "electron": "^30.0.1",
+    "electron": "^31.0.2",
     "electron-builder": "^24.10.0",
     "fs-extra": "^11.2.0",
     "glob": "^10.3.10",
     "lerna": "^8.0.1",
+    "node-nim": "^9.16.5",
     "rimraf": "^5.0.5",
     "tslib": "^2.6.2",
     "typescript": "^5.4.5"

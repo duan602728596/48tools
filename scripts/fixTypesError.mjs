@@ -2,31 +2,37 @@ import path from 'node:path';
 import fsP from 'node:fs/promises';
 import { cwd } from './utils.mjs';
 
-const reduxToolkitPath = path.join(cwd, 'node_modules/@reduxjs/toolkit');
+const nodeModules = path.join(cwd, 'node_modules');
+
+async function replaceWebsocket(fp, ws) {
+  const filePath = path.join(nodeModules, fp);
+  const file = await fsP.readFile(filePath, { encoding: 'utf8' });
+  const newFile = file.replace(
+    /window\.WebSocket/g, `window.${ ws }||window.WebSocket`);
+
+  await fsP.writeFile(filePath, newFile, { encoding: 'utf8' });
+}
 
 async function fixTypesError() {
-  // 修复useRef未传递初始参数的错误的问题
-  const buildHooksFilePath = path.join(reduxToolkitPath, 'src/query/react/buildHooks.ts');
-  const buildHooksFile = await fsP.readFile(buildHooksFilePath, { encoding: 'utf8' });
-  const newBuildHooksFile = buildHooksFile.replaceAll(/useRef<[a-zA-Z0-9<>]+(\s*\|\s*undefined)?>\(\)/g, (x) => {
-    return x.replace(/\(\)/, '(undefined)');
-  });
+  const reduxToolkitFilePath = path.join(nodeModules, '@reduxjs/toolkit/src/query/react/module.ts');
+  const reduxToolkitFile = await fsP.readFile(reduxToolkitFilePath, { encoding: 'utf8' });
 
-  await fsP.writeFile(buildHooksFilePath, newBuildHooksFile, { encoding: 'utf8' });
+  await fsP.writeFile(reduxToolkitFilePath, `// @ts-nocheck\n${ reduxToolkitFile }`, { encoding: 'utf8' });
 
-  // 修复rc-util中对于createRoot的引用问题
-  // https://github.com/ant-design/ant-design/issues/48709
-  const renderFilePath = path.join(cwd, 'node_modules/rc-util/es/React/render.js');
-  const renderFileArray = (await fsP.readFile(renderFilePath, { encoding: 'utf8' })).split('\n');
+  // 替换window.WebSocket
+  await Promise.all([
+    replaceWebsocket('nim-web-sdk-ng/dist/NIM_BROWSER_SDK.js', 'HACK_INTERCEPTS_SEND_NIM_Websocket'),
+    replaceWebsocket('nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK.js', 'HACK_INTERCEPTS_SEND_QCHAT_Websocket')
+  ]);
 
-  renderFileArray.unshift('import { createRoot as _createRoot } from "react-dom/client";');
-  renderFileArray.forEach((item, index) => {
-    if (item.includes('_objectSpread({}, ReactDOM)')) {
-      renderFileArray[index] = item.replace('_objectSpread({}, ReactDOM)', '_objectSpread({}, ReactDOM, { createRoot: _createRoot })');
-    }
-  });
+  /*
+  const NIMWebSDKFilePath = path.join(nodeModules, '@yxim/nim-web-sdk/dist/SDK/NIM_Web_SDK.js');
+  const NIMWebSDKFile = await fsP.readFile(NIMWebSDKFilePath, { encoding: 'utf8' });
+  const newNIMWebSDKFile = NIMWebSDKFile.replace(
+    /\.MozWebSocket/g, '.MozWebSocket||window.HACK_INTERCEPTS_SEND_NIM_CHATROOM_Websocket');
 
-  await fsP.writeFile(renderFilePath, renderFileArray.join('\n'), { encoding: 'utf8' });
+  await fsP.writeFile(NIMWebSDKFilePath, newNIMWebSDKFile, { encoding: 'utf8' });
+   */
 }
 
 fixTypesError();

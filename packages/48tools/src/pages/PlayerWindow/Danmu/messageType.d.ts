@@ -1,3 +1,5 @@
+import type { ChatRoomMessage } from 'node-nim';
+
 export interface LiveRoomCustomUser {
   pfUrl: string;
   teamLogo: string;
@@ -109,3 +111,8 @@ export interface LiveRoomMemberBarrage extends LiveRoomBasicEvent {
 
 export type LiveRoomUserMessage = LiveRoomTextMessage | LiveRoomMemberBarrage;
 export type LiveRoomMessage = LiveRoomUserMessage | LiveRoomServerGiftInfoMessage;
+
+/* C++ */
+export interface CppLiveRoomBasicEvent extends ChatRoomMessage {
+  vid: string; // vid是后添加的，用来标识不同的弹幕
+}

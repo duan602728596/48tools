@@ -1,23 +1,23 @@
 import * as dayjs from 'dayjs';
 import type { Dispatch } from '@reduxjs/toolkit';
 import type { QChatMessage } from 'nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK/QChatMsgServiceInterface';
-import type { NIMChatroomMessage } from '@yxim/nim-web-sdk/dist/SDK/NIM_Web_Chatroom/NIMChatroomMessageInterface';
+import type { ChatRoomMessage } from 'node-nim';
 import { store } from '../../../../store/store';
 import QChatSocket from './QChatSocket';
-import NIM from './NIM';
+import NodeNimChatroomSocket from '../../../PlayerWindow/sdk/NodeNimChatroomSocket';
 import { setLog } from '../../reducers/qingchunshike';
 import type { QingchunshikeUserItem, GiftResult, GiftText } from '../../types';
 
-function filterLive(data: Array<NIMChatroomMessage>, st: number): { nextData: Array<GiftText['attach']>; isBreak: boolean } {
+function filterLive(data: Array<ChatRoomMessage>, st: number): { nextData: Array<GiftText['attach']>; isBreak: boolean } {
   const nextData: Array<GiftText['attach']> = [];
   let isBreak: boolean = false;
 
   for (const item of data) {
-    if (item.time < st) {
+    if (item.timetag_! < st) {
       isBreak = true;
       break;
-    } else if (item.type === 'custom' && item.custom) {
-      const customJson: GiftText['attach'] = JSON.parse(item.custom);
+    } else if (item.msg_type_ === 100 && item.msg_setting_?.ext_) {
+      const customJson: GiftText['attach'] = JSON.parse(item.msg_setting_.ext_);
 
       if (
         'giftInfo' in customJson
@@ -114,9 +114,9 @@ async function qchatCalculate(user: QingchunshikeUserItem, st: number, et: numbe
 }
 
 /* 直播计算 */
-async function liveCalculate(user: QingchunshikeUserItem, st: number, et: number, accid: string, pwd: string): Promise<Array<GiftResult>> {
+async function liveCalculate(appDataDir: string, user: QingchunshikeUserItem, st: number, et: number, accid: string, pwd: string): Promise<Array<GiftResult>> {
   const dispatch: Dispatch = store.dispatch;
-  const nim: NIM = new NIM(accid, pwd, Number(user.liveRoomId));
+  const nim: NodeNimChatroomSocket = new NodeNimChatroomSocket(accid, pwd, Number(user.liveRoomId), appDataDir);
 
   await nim.init();
 
@@ -126,10 +126,10 @@ async function liveCalculate(user: QingchunshikeUserItem, st: number, et: number
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const historyMessage: Array<NIMChatroomMessage> = await nim.getHistoryMessage(liveEndTime);
+    const historyMessage: Array<ChatRoomMessage> = (await nim.getHistoryMessage(liveEndTime)) ?? [];
 
     if (historyMessage?.length) {
-      liveEndTime = historyMessage.at(-1)!.time;
+      liveEndTime = Number(historyMessage.at(-1)!.timetag_!);
       const { nextData, isBreak }: { nextData: Array<GiftText['attach']>; isBreak: boolean } = filterLive(historyMessage, st);
 
       allLiveHistoryMessage.push(...nextData);
@@ -143,7 +143,8 @@ async function liveCalculate(user: QingchunshikeUserItem, st: number, et: number
     }
   }
 
-  await nim.disconnect();
+  nim.exit();
+  await nim.clean();
 
   const giftResult: Array<GiftResult> = [];
 
@@ -194,9 +195,18 @@ export interface CalculateResult {
   nimCalculateResult: CalculateOneResult;
 }
 
-async function calculate(user: QingchunshikeUserItem, st: number, et: number, accid: string, pwd: string): Promise<CalculateResult> {
+interface calculateOptions {
+  user: QingchunshikeUserItem;
+  st: number;
+  et: number;
+  accid: string;
+  pwd: string;
+  appDataDir: string;
+}
+
+async function calculate({ user, st, et, accid, pwd, appDataDir }: calculateOptions): Promise<CalculateResult> {
   const qchatCalculateResult: Array<GiftResult> = await qchatCalculate(user, st, et, accid, pwd);
-  const nimCalculateResult: Array<GiftResult> = await liveCalculate(user, st, et, accid, pwd);
+  const nimCalculateResult: Array<GiftResult> = await liveCalculate(appDataDir, user, st, et, accid, pwd);
 
   return {
     qchatCalculateResult: calculateOne(qchatCalculateResult),

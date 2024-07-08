@@ -1,7 +1,17 @@
 import { randomBytes } from 'node:crypto';
-import Signer from './Signer';
+import { getABResult } from '../../pages/Toutiao/sdk/AB';
+import { pcUserAgent2 } from '../utils';
 
 const CHARACTERS: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+/**
+ * X-Bogus加密计算：
+ * Signer.sign(params, data = '');
+ * urlParam.set('X-Bogus', xbogus);
+ *
+ * a_bogus加密计算：
+ * window.bdms.init._v[2].p[42](0, 1, 6, params, data = '', ua)
+ */
 
 /**
  * msToken的生成
@@ -14,7 +24,7 @@ export function msToken(length: number = 128): string {
 }
 
 /* ua必须对应Params */
-export function awemePostQueryV2(secUserId: string, maxCursor: number): string {
+export async function awemePostQueryV2(secUserId: string, maxCursor: number): Promise<string> {
   const urlParam: URLSearchParams = new URLSearchParams({
     aid: '6383',
     sec_user_id: secUserId,
@@ -23,23 +33,23 @@ export function awemePostQueryV2(secUserId: string, maxCursor: number): string {
     cookie_enabled: 'true',
     platform: 'PC'
   });
-  const xbogus: string = Signer.sign(urlParam.toString(), '');
+  const a_bogus: string = await getABResult(urlParam.toString(), '', pcUserAgent2);
 
-  urlParam.set('X-Bogus', xbogus);
+  urlParam.set('a_bogus', a_bogus);
 
   return urlParam.toString();
 }
 
-export function awemeDetailQueryV2(id: string): string {
+export async function awemeDetailQueryV2(id: string): Promise<string> {
   const urlParam: URLSearchParams = new URLSearchParams({
     aid: '6383',
     aweme_id: id,
     cookie_enabled: 'true',
     platform: 'PC'
   });
-  const xbogus: string = Signer.sign(urlParam.toString(), '');
+  const a_bogus: string = await getABResult(urlParam.toString(), '', pcUserAgent2);
 
-  urlParam.set('X-Bogus', xbogus);
+  urlParam.set('a_bogus', a_bogus);
 
   return urlParam.toString();
 }

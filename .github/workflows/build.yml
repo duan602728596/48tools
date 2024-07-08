@@ -25,7 +25,7 @@ jobs:
           VERSION=${VERSION#refs/heads/build/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - run: npm run install:ci
+      - run: SKIP_YARN_COREPACK_CHECK=0 npm run install:ci
 
       - run: npm run build:ci
 

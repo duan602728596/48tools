@@ -104,7 +104,7 @@ function SearchMessage(props: {}): ReactElement {
   });
   const [exportMessageModalOpen, setExportMessageModalOpen]: [boolean, D<S<boolean>>] = useState(false); // 导出消息
 
-  // 点击导出PDF到文件夹中
+  // 点击导出html到文件夹中
   async function handleSavePDFDataClick(event: MouseEvent): Promise<void> {
     const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: `html_${ query['ownerName'] }_${ query['ownerId'] }_${ dayjs().format(fileTimeFormat) }`
@@ -121,7 +121,7 @@ function SearchMessage(props: {}): ReactElement {
 
     const time: string = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
-    // 创建pdf文件
+    // 创建html文件
     for (let i: number = 0, j: number = homeMessageRaw.length, page: number = 1; i < j; i += PAGE_SIZE, page++) {
       const dataSlice: Array<SendDataItem> = formatSendData(homeMessageRaw.slice(i, i + PAGE_SIZE));
 

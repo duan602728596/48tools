@@ -25,6 +25,7 @@ import {
   type Pocket48LoginInitialState
 } from '../../../../functionalComponents/Pocket48Login/reducers/pocket48Login';
 import calculate, { type CalculateResult } from '../function/calculate';
+import { Pocket48Login } from '../../../../functionalComponents/Pocket48Login/enum';
 import type { QingchunshikeUserItem } from '../../types';
 
 /* redux selector */
@@ -64,6 +65,14 @@ function CreateResult(props: {}): ReactElement {
       return;
     }
 
+    const appDataDir: string | null = localStorage.getItem(Pocket48Login.AppDataDir);
+
+    if (!appDataDir) {
+      messageApi.warning('您需要配置App Data目录。');
+
+      return;
+    }
+
     const after: number = formValue.endTime.diff(formValue.startTime, 'month');
 
     if (after > 6 && after < 0) {
@@ -88,25 +97,32 @@ function CreateResult(props: {}): ReactElement {
     dispatch(setLoading(true));
 
     try {
-      const calculateResult: CalculateResult = await calculate(userItem, formValue.startTime.valueOf(), formValue.endTime.valueOf(), userInfo.accid, userInfo.pwd);
-      const text: string = `################################################################
+      const calculateResult: CalculateResult = await calculate({
+        user: userItem,
+        st: formValue.startTime.valueOf(),
+        et: formValue.endTime.valueOf(),
+        accid: userInfo.accid,
+        pwd: userInfo.pwd,
+        appDataDir
+      });
+      const text: string = `============================================
   serverId: ${ userItem.serverId }
  channelId: ${ userItem.channelId }
 liveRoomId: ${ userItem.liveRoomId }
-################################################################
+============================================
 ${ userItem.description }
 ${ formValue.startTime.format('YYYY-MM-DD HH:mm:ss') } - ${ formValue.endTime.format('YYYY-MM-DD HH:mm:ss') }
 
 【数据统计可能不准确，仅供参考。】
-################################################################
+============================================
 总分数：${ (calculateResult.qchatCalculateResult.all + calculateResult.nimCalculateResult.all).toFixed(1) }
-################################################################
+============================================
 房间：${ calculateResult.qchatCalculateResult.all.toFixed(1) }
-${ calculateResult.qchatCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `${ a }：${ b }`).join('\n') }
-################################################################
+${ calculateResult.qchatCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `  - ${ a }：${ b }`).join('\n') }
+============================================
 直播：${ calculateResult.nimCalculateResult.all.toFixed(1) }
-${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `${ a }：${ b }`).join('\n') }
-################################################################`;
+${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): string => `  - ${ a }：${ b }`).join('\n') }
+============================================`;
 
       await fsP.writeFile(result.filePath, text, { encoding: 'utf-8' });
       messageApi.success('生成成功。');
@@ -154,6 +170,7 @@ ${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): 
   return (
     <Fragment>
       <Card className="mt-[8px]" title="选择配置和时间范围" extra={ <Button type="primary" loading={ loading } onClick={ handleCreateResultClick }>生成结果</Button> }>
+        <Alert className="mb-[16px]" type="error" message={ <div className="text-[18px]">请不要在观看口袋直播时生成数据！会出现问题！</div> } />
         <Alert className="mb-[16px]" type="warning" message={
           <Fragment>
             <div>数据统计可能不准确，仅供参考。开始时间和结束时间请选择青春时刻期间。最长时间不超过6个月。</div>

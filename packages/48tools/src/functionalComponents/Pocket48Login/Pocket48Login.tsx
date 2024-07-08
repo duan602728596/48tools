@@ -37,6 +37,7 @@ import { setUserInfo, setClearInfo } from './reducers/pocket48Login';
 import { source } from '../../utils/snh48';
 import LoginForm from './LoginForm/LoginForm';
 import TokenForm from './TokenForm/TokenForm';
+import { useAppDataDir, title, type UseAppDataDirReturnType } from './useAppDataDir/useAppDataDir';
 import type { Pocket48LoginInitialState } from './reducers/pocket48Login';
 import type { UserInfo } from './types';
 
@@ -47,6 +48,7 @@ function selectOptions(bigUserInfo: UserItem, smallUserInfo: Array<UserItem> = [
 }
 
 const menuItems: Array<ItemType> = [
+  { label: title, key: 'setAppData' },
   { label: '复制Token', key: 'copyToken' },
   { label: '复制登录信息', key: 'copyInfo' },
   { label: '一键关注', key: 'friends' },
@@ -92,6 +94,7 @@ function Pocket48Login(props: {}): ReactElement {
   const userInfoSelectValueRef: RefObject<string | null> = useRef(null);
   const [loginForm]: [FormInstance] = Form.useForm();
   const [tokenForm]: [FormInstance] = Form.useForm();
+  const { modalRender, handleOpenSelectAppDataDirClick }: UseAppDataDirReturnType = useAppDataDir();
 
   // select
   function handleUserInfoSelect(value: string): void {
@@ -278,6 +281,10 @@ function Pocket48Login(props: {}): ReactElement {
   // menu的选择
   function handleMenuClick(e: MenuInfo): void {
     switch (e.key) {
+      case 'setAppData':
+        handleOpenSelectAppDataDirClick();
+        break;
+
       case 'copyToken':
         if (userInfo) {
           clipboard.writeText(userInfo.token);
@@ -319,7 +326,7 @@ function Pocket48Login(props: {}): ReactElement {
 
     if (userInfo) {
       icon = (
-        <Avatar key="icon" className={ style.avatar } size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
+        <Avatar key="icon" size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
           { userInfo?.unknown ? '?' : undefined }
         </Avatar>
       );
@@ -329,7 +336,6 @@ function Pocket48Login(props: {}): ReactElement {
     return createElement(
       userInfo ? Dropdown.Button : Button,
       {
-        className: style.inlineBlock,
         menu: userInfo ? {
           items: menuItems,
           onClick: handleMenuClick
@@ -355,7 +361,7 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      { loginButtonRender() }
+      <div className="inline-block">{ loginButtonRender() }</div>
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }
@@ -372,6 +378,7 @@ function Pocket48Login(props: {}): ReactElement {
           <Tabs type="card" activeKey={ tabsKey } items={ tabsItem } onChange={ (key: string): void => setTabsKey(key) } />
         </div>
       </Modal>
+      { modalRender() }
     </Fragment>
   );
 }

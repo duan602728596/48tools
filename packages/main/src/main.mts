@@ -1,11 +1,12 @@
 import * as process from 'node:process';
 import { app, BrowserWindow, Menu, nativeTheme } from 'electron';
-import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, initialState as ils, packageJson } from './utils.mjs';
+import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, createInitialState, packageJson } from './utils.mjs';
 import { ipc, removeIpc } from './ipc.mjs';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle.mjs';
 import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle.mjs';
+import { nodeNimHandleLogin, nodeNimCleanup } from './ipcHandle/nodeNimHandleLogin.mjs';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer.mjs';
-import weiboResourceRequestInit from './webRequest/weiboResourceRequest.mjs';
+import webRequest from './webRequest/webRequest.mjs';
 import { storeInit, getStore } from './store.mjs';
 import logProtocol from './logProtocol/logProtocol.mjs';
 import { commandLineOptions } from './commend.mjs';
@@ -50,7 +51,7 @@ function createWindow(): void {
   processWindow.loadFile(createHtmlFilePath('index'),
     {
       query: {
-        initialState: ils({
+        initialState: createInitialState({
           theme: themeSource ?? 'system',
           commandLineOptions,
           isTest
@@ -67,15 +68,17 @@ function createWindow(): void {
   try {
     ipcRemoteHandle(processWindow);
     pocket48LiveRemoteHandle(processWindow);
+    nodeNimHandleLogin();
   } catch {}
 
   processWindow.on('closed', async function(): Promise<void> {
     await nodeMediaServerClose();
     removeIpc();
+    nodeNimCleanup();
     processWindow = null;
   });
 
-  weiboResourceRequestInit();
+  webRequest();
 }
 
 // https://github.com/microsoft/vscode/issues/116715#issuecomment-917783861
@@ -84,6 +87,8 @@ app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer');
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', function(): void {
+  nodeNimCleanup();
+
   if (process.platform !== 'darwin') {
     app.quit();
   }

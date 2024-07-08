@@ -13,32 +13,29 @@ import { Avatar, Switch } from 'antd';
 import { GiftTwoTone as IconGiftTwoTone } from '@ant-design/icons';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import * as classNames from 'classnames';
+import type { ChatRoomMessage } from 'node-nim';
 import type { LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../../common.sass';
-import NimChatroomSocket from '../sdk/NimChatroomSocket';
+import NodeNimChatroomSocket from '../sdk/NodeNimChatroomSocket';
 import { source } from '../../../utils/snh48';
-import type {
-  LiveRoomMessage,
-  LiveRoomTextMessage,
-  LiveRoomGiftInfoCustom,
-  LiveRoomTextCustom
-} from './messageType';
+import type { LiveRoomTextMessage, LiveRoomGiftInfoCustom, LiveRoomTextCustom, CppLiveRoomBasicEvent } from './messageType';
+import type{ UserInfo } from '../../../functionalComponents/Pocket48Login/types';
 
 const VirtualItemClassName: string = 'Virtual-Item-2';
 
 /**
  * 判断是否要显示文字
- * @param { LiveRoomMessage } item - 消息
+ * @param { CppLiveRoomBasicEvent } item - 消息
  * @param { LiveRoomTextCustom | LiveRoomGiftInfoCustom } custom - 自定义消息
  */
-function isLiveRoomTextCustom(item: LiveRoomMessage, custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom): custom is LiveRoomTextCustom {
-  return item.type === 'text' || custom.messageType === 'BARRAGE_MEMBER' || custom.messageType === 'BARRAGE_NORMAL';
+function isLiveRoomTextCustom(item: CppLiveRoomBasicEvent, custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom): custom is LiveRoomTextCustom {
+  return item.msg_type_ === 0 || custom.messageType === 'BARRAGE_MEMBER' || custom.messageType === 'BARRAGE_NORMAL';
 }
 
 /* 显示单条弹幕 */
 interface DanmuItemProps {
   ref?: RefObject<HTMLDivElement | null>;
-  item: LiveRoomMessage;
+  item: CppLiveRoomBasicEvent;
   index: number;
 }
 
@@ -58,7 +55,7 @@ function DanmuItem(props: DanmuItemProps): ReactElement | null {
   }, []);
 
   try {
-    const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
+    const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.msg_setting_!.ext_!);
     const isBarrage: boolean = custom.messageType === 'BARRAGE_NORMAL' || custom.messageType === 'BARRAGE_MEMBER';
     const isMember: boolean = custom.messageType === 'BARRAGE_MEMBER';
 
@@ -106,45 +103,48 @@ function DanmuItem(props: DanmuItemProps): ReactElement | null {
 /* 显示弹幕 */
 interface DanmuProps {
   info: LiveRoomInfo | undefined;
+  userInfo: UserInfo | null;
+  appDataDir: string | null;
 }
 
 function Danmu(props: DanmuProps): ReactElement {
-  const { info }: DanmuProps = props;
-  const [danmuData, setDanmuData]: [Array<LiveRoomMessage>, D<S<Array<LiveRoomMessage>>>] = useState([]);
+  const { info, userInfo, appDataDir }: DanmuProps = props;
+  const [danmuData, setDanmuData]: [Array<CppLiveRoomBasicEvent>, D<S<Array<CppLiveRoomBasicEvent>>>] = useState([]);
   const [danmuListHeight, setDanmuListHeight]: [number, D<S<number>>] = useState(0);
-  const nimRef: RefObject<NimChatroomSocket | null> = useRef(null);
+  const nimRef: RefObject<NodeNimChatroomSocket | null> = useRef(null);
   const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
   const danmuListRef: RefObject<HTMLDivElement | null> = useRef(null);
   const virtualListRef: RefObject<ListRef | null> = useRef(null);
 
   // 获取到新信息
-  function handleNewMessage(t: NimChatroomSocket, event: Array<LiveRoomMessage>): void {
-    const filterMessage: Array<LiveRoomMessage> = [];
+  function handleNewMessage(t: NodeNimChatroomSocket, event: Array<ChatRoomMessage>): void {
+    const filterMessage: Array<CppLiveRoomBasicEvent> = [];
 
     for (const item of event) {
-      if (item.type === 'text') {
-        item.vid = randomUUID();
-        filterMessage.unshift(item);
-      } else if (item.type === 'custom') {
-        const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.custom);
+      if (item.msg_type_ === 0) {
+        filterMessage.unshift({ ...item, vid: randomUUID() });
+      } else if (item.msg_type_ === 100 && item.msg_setting_?.ext_) {
+        const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.msg_setting_.ext_);
 
         if (custom.messageType === 'BARRAGE_MEMBER' || custom.messageType === 'BARRAGE_NORMAL' || 'giftInfo' in custom) {
-          item.vid = randomUUID();
-          filterMessage.unshift(item);
+          filterMessage.unshift({ ...item, vid: randomUUID() });
         }
       }
     }
 
-    setDanmuData((prevState: LiveRoomMessage[]): LiveRoomMessage[] => filterMessage.concat(prevState));
+    setDanmuData((prevState: CppLiveRoomBasicEvent[]): CppLiveRoomBasicEvent[] => filterMessage.concat(prevState));
   }
 
   // 开启弹幕功能
   function danmuOpen(): void {
-    if (!nimRef.current && info) {
-      nimRef.current = new NimChatroomSocket({
-        roomId: info.content.roomId,
-        onMessage: handleNewMessage
-      });
+    if (!nimRef.current && info && userInfo && appDataDir) {
+      nimRef.current = new NodeNimChatroomSocket(
+        userInfo.accid,
+        userInfo.pwd,
+        Number(info.content.roomId),
+        appDataDir,
+        handleNewMessage
+      );
       nimRef.current.init();
     }
   }
@@ -152,7 +152,7 @@ function Danmu(props: DanmuProps): ReactElement {
   // 关闭弹幕功能
   function danmuClose(): void {
     if (nimRef.current) {
-      nimRef.current.disconnect();
+      nimRef.current.exit();
       nimRef.current = null;
     }
   }
@@ -218,7 +218,7 @@ function Danmu(props: DanmuProps): ReactElement {
       <div ref={ danmuListRef } className={ classNames('grow relative z-50 overflow-hidden', commonStyle.virtualList) }>
         <VirtualList ref={ virtualListRef } data={ danmuData } height={ danmuListHeight } itemHeight={ 26 } itemKey="vid">
           {
-            (item: LiveRoomTextMessage, index: number): ReactElement =>
+            (item: CppLiveRoomBasicEvent, index: number): ReactElement =>
               <DanmuItem key={ item.vid } item={ item } index={ index } />
           }
         </VirtualList>

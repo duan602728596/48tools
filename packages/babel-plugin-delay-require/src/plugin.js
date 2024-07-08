@@ -2,7 +2,7 @@ const ImportInfo = require('./utils/ImportInfo.js');
 
 /**
  * 修改绑定和引用
- * @param { import('@babel/core').NodePath<import('@babel/types').ImportDeclaration> } path - import节点路径
+ * @param { import('@babel/core').NodePath } path - import节点路径
  * @param { ImportInfo } importInfo - 导入信息
  */
 function variableRename(path, importInfo) {
@@ -113,7 +113,7 @@ function findParentScope(t, path) {
  * @param { import('@babel/types') } t
  * @param { Array<import('@babel/core').Node> } body
  * @param { string } name
- * @param { import('@babel/core').Node } node
+ * @param { import('@babel/core').Node } [node]
  */
 function hasExpressionStatement(t, body, name, node) {
   return body.some((o) => t.isExpressionStatement(o)
@@ -126,7 +126,7 @@ function hasExpressionStatement(t, body, name, node) {
  * @param { import('@babel/types') } t
  * @param { Array<string> } moduleNames
  * @param { string } variableName
- * @param { boolean } idle
+ * @param { boolean } [idle]
  */
 function plugin({ t, moduleNames, variableName, idle }) {
   const prefixVariableName = variableName ?? '__ELECTRON__DELAY_REQUIRE__';

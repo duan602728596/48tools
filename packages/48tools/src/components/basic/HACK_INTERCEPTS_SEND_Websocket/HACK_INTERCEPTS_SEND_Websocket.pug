@@ -1,0 +1,88 @@
+script.
+  /** Fix Pocket 48's verification problem for UA and client-type. */
+  (function() {
+    /**
+     * @param { Record<string, any> } obj
+     * @param { (k: string, v: any) => boolean } callback
+     */
+    function objectSome(obj, callback) {
+      let result = false;
+
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          result = callback(key, obj[key]);
+
+          if (result) break;
+        }
+      }
+
+      return result;
+    }
+
+    /**
+     * Rewrite the WebSocket's send method to fix the verification problem.
+     * @class HACK_INTERCEPTS_SEND_NIM_Websocket
+     */
+    class HACK_INTERCEPTS_SEND_NIM_Websocket extends WebSocket {}
+
+    HACK_INTERCEPTS_SEND_NIM_Websocket.prototype.ORIGINAL_send = HACK_INTERCEPTS_SEND_NIM_Websocket.prototype.send;
+
+    HACK_INTERCEPTS_SEND_NIM_Websocket.prototype.send = function () {
+      if (/3:::/.test(arguments[0])) {
+        const message = arguments[0].replace(/3:::/, '');
+        let data = null;
+
+        try {
+          data = JSON.parse(message);
+        } catch { /* noop */ }
+
+        if (data && data?.SER === 1 && data?.SID === 2 && data?.Q?.length) {
+          for (const Q of data.Q) {
+            if (/Property/i.test(Q.t) && Q.v && objectSome(Q.v, (k, v) => /Electron/i.test(v))) {
+              Q.v['3'] = 2;
+              Q.v['42'] = 'PocketFans201807/24020203';
+              arguments[0] = `3:::${ JSON.stringify(data) }`;
+              break;
+            }
+          }
+        }
+      }
+
+      return this.ORIGINAL_send.apply(this, arguments);
+    };
+
+    globalThis.HACK_INTERCEPTS_SEND_NIM_Websocket = HACK_INTERCEPTS_SEND_NIM_Websocket;
+
+    /**
+     * Rewrite the WebSocket's send method to fix the verification problem.
+     * @class HACK_INTERCEPTS_SEND_QCHAT_Websocket
+     */
+    class HACK_INTERCEPTS_SEND_QCHAT_Websocket extends WebSocket {}
+
+    HACK_INTERCEPTS_SEND_QCHAT_Websocket.prototype.ORIGINAL_send = HACK_INTERCEPTS_SEND_QCHAT_Websocket.prototype.send;
+
+    HACK_INTERCEPTS_SEND_QCHAT_Websocket.prototype.send = function() {
+      if (/3:::/.test(arguments[0])) {
+        const message = arguments[0].replace(/3:::/, '');
+        let data = null;
+
+        try {
+          data = JSON.parse(message);
+        } catch { /* noop */ }
+
+        if (data && data?.SER === 1 && data?.SID === 24 && data?.Q?.length) {
+          for (const Q of data.Q) {
+            if (/Property/i.test(Q.t) && Q.v && objectSome(Q.v, (k, v) => /Electron/i.test(v))) {
+              Q.v['6'] = 2;
+              arguments[0] = `3:::${ JSON.stringify(data) }`;
+              break;
+            }
+          }
+        }
+      }
+
+      return this.ORIGINAL_send.apply(this, arguments);
+    };
+
+    globalThis.HACK_INTERCEPTS_SEND_QCHAT_Websocket = HACK_INTERCEPTS_SEND_QCHAT_Websocket;
+  })();
