@@ -22,13 +22,7 @@ import type { LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../../common.sass';
 import NodeNimChatroomSocket from '../sdk/NodeNimChatroomSocket';
 import { source } from '../../../utils/snh48';
-import type {
-  LiveRoomMessage,
-  LiveRoomTextMessage,
-  LiveRoomGiftInfoCustom,
-  LiveRoomTextCustom,
-  CppLiveRoomBasicEvent
-} from './messageType';
+import type { LiveRoomTextMessage, LiveRoomGiftInfoCustom, LiveRoomTextCustom, CppLiveRoomBasicEvent } from './messageType';
 import type{ UserInfo } from '../../../functionalComponents/Pocket48Login/types';
 
 const VirtualItemClassName: string = 'Virtual-Item-2';
