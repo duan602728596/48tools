@@ -1,5 +1,5 @@
 import { ipcRenderer, shell } from 'electron';
-import { Fragment, useContext, type ReactElement, type ReactNode, type MouseEvent } from 'react';
+import { Fragment, use, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
   ToolTwoTone as IconToolTwoTone,
@@ -230,7 +230,7 @@ function handleOpenDownloadUrlClick(event: MouseEvent): void {
 
 /* 首页 */
 function Index(props: {}): ReactElement {
-  const theme: Theme = useContext(ThemeContext);
+  const { ChangeThemeElement }: Theme = use(ThemeContext);
   const { buttonRender, modalRender }: UseAppDataDirReturnType = useAppDataDir();
 
   return (
@@ -248,7 +248,7 @@ function Index(props: {}): ReactElement {
           <div className="text-right">
             <Space>
               <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
-              { theme.ChangeThemeElement }
+              { ChangeThemeElement }
               <Tooltip title="开发者工具">
                 <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
               </Tooltip>
