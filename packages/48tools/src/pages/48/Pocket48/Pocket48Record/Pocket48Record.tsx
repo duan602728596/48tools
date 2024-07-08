@@ -72,8 +72,8 @@ import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../ty
 
 /**
  * 格式化m3u8文件内视频的地址
- * @param { string } data: m3u8文件内容
- * @param { number } port: 代理的端口号
+ * @param { string } data - m3u8文件内容
+ * @param { number } port - 代理的端口号
  */
 export function formatTsUrl(data: string, port: number): string {
   const dataArr: string[] = data.split('\n');
@@ -253,7 +253,7 @@ function Pocket48Record(props: {}): ReactElement {
   /**
    * 下载视频
    * @param { LiveInfo } record
-   * @param { 0 | 1 } downloadType: 下载方式。0：正常下载，1：拼碎片
+   * @param { 0 | 1 } downloadType - 下载方式。0：正常下载，1：拼碎片
    * @param { MouseEvent<HTMLButtonElement> } event
    */
   async function handleDownloadM3u8Click(record: LiveInfo, downloadType: 0 | 1, event: MouseEvent): Promise<void> {
