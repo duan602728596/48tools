@@ -7,11 +7,13 @@ import {
   Fragment,
   useState,
   useEffect,
+  useTransition,
   type ReactElement,
   type ReactNode,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent
+  type MouseEvent,
+  type TransitionStartFunction
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -122,9 +124,9 @@ function Pocket48Record(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
-  const [userIdSearchLoading, setUserIdSearchLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [refreshLiveListLoading, refreshLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
+  const [userIdSearchLoading, userIdSearchStartTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
   const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
   const roomId: Array<RoomItem> = reqRoomId.data ?? [];
@@ -137,14 +139,12 @@ function Pocket48Record(props: {}): ReactElement {
     }
 
     if (!value) {
-      setUserIdSearchLoading(false);
       setUserIdSearchResult([]);
 
       return;
     }
 
-    setUserIdSearchLoading(true);
-    searchTimer = setTimeout((): void => {
+    searchTimer = setTimeout((): void => userIdSearchStartTransition((): void => {
       const result: Array<BaseOptionType> = [];
 
       if (/^[\u4E00-\u9FFF]+$/i.test(value)) {
@@ -187,8 +187,7 @@ function Pocket48Record(props: {}): ReactElement {
       }
 
       setUserIdSearchResult(result);
-      setUserIdSearchLoading(false);
-    }, 500);
+    }));
   }
 
   // 表单的onFieldsChange事件
@@ -366,44 +365,40 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 加载列表
-  async function handleLoadRecordListClick(event: MouseEvent): Promise<void> {
-    setLoading(true);
+  function handleLoadRecordListClick(event: MouseEvent): void {
+    refreshLiveListStartTransition(async (): Promise<void> => {
+      try {
+        const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
+        const res: LiveData = await requestLiveList(recordNext, false, groupId, userId);
+        const data: Array<LiveInfo> = recordList.concat(res.content.liveList);
 
-    try {
-      const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
-      const res: LiveData = await requestLiveList(recordNext, false, groupId, userId);
-      const data: Array<LiveInfo> = recordList.concat(res.content.liveList);
-
-      dispatch(setRecordList({
-        next: res.content.next,
-        data
-      }));
-    } catch (err) {
-      messageApi.error('录播列表加载失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+        dispatch(setRecordList({
+          next: res.content.next,
+          data
+        }));
+      } catch (err) {
+        messageApi.error('录播列表加载失败！');
+        console.error(err);
+      }
+    });
   }
 
   // 刷新列表
-  async function handleRefreshLiveListClick(event: MouseEvent): Promise<void> {
-    setLoading(true);
+  function handleRefreshLiveListClick(event: MouseEvent): void {
+    refreshLiveListStartTransition(async (): Promise<void> => {
+      try {
+        const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
+        const res: LiveData = await requestLiveList('0', false, groupId, userId);
 
-    try {
-      const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
-      const res: LiveData = await requestLiveList('0', false, groupId, userId);
-
-      dispatch(setRecordList({
-        next: res.content.next,
-        data: res.content.liveList
-      }));
-    } catch (err) {
-      messageApi.error('录播列表加载失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+        dispatch(setRecordList({
+          next: res.content.next,
+          data: res.content.liveList
+        }));
+      } catch (err) {
+        messageApi.error('录播列表加载失败！');
+        console.error(err);
+      }
+    });
   }
 
   // 渲染分页
@@ -559,7 +554,7 @@ function Pocket48Record(props: {}): ReactElement {
         columns={ columns }
         dataSource={ recordList }
         bordered={ true }
-        loading={ loading }
+        loading={ refreshLiveListLoading }
         rowKey="liveId"
         pagination={{
           showQuickJumper: true,
