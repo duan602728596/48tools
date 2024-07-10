@@ -1,5 +1,4 @@
 import { useCallback, type ReactElement } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate, type NavigateFunction } from 'react-router-dom';
 import { NavBar } from 'antd-mobile';
 
@@ -14,9 +13,5 @@ function Header(props: { title: string }): ReactElement {
 
   return <NavBar back="返回" onBack={ handleGoHomeClick }>{ props.title }</NavBar>;
 }
-
-Header.propTypes = {
-  title: PropTypes.string
-};
 
 export default Header;
