@@ -21,7 +21,7 @@
     "@indexeddb-tools/indexeddb": "^1.0.0",
     "@indexeddb-tools/indexeddb-redux": "^1.0.0",
     "@mdx-js/react": "^3.0.0",
-    "@reduxjs/toolkit": "^2.0.1",
+    "@reduxjs/toolkit": "^2.2.6",
     "@yxim/nim-web-sdk": "^8.9.121",
     "antd": "^5.18.3",
     "array-move": "^4.0.0",
