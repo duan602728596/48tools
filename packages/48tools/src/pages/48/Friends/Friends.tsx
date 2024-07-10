@@ -72,7 +72,7 @@ function groupToMap(array: Array<RoomItem> = []): Array<RoomIdFormatItem> {
 function Friends(props: {}): ReactElement {
   const location: Location = useLocation();
   const fromPathname: string = location?.state?.from ?? '/';
-  const [addLoading, setAddLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [disableClick, setDisableClick]: [boolean, D<S<boolean>>] = useState(false); // 禁止所有的点击事件
   const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
   const roomId: Array<RoomIdFormatItem> = groupToMap(reqRoomId.data ?? []);
 
@@ -89,8 +89,8 @@ function Friends(props: {}): ReactElement {
           <Group key={ item.title }
             title={ item.title }
             data={ item.data }
-            addLoading={ addLoading }
-            setAddLoading={ setAddLoading }
+            disableClick={ disableClick }
+            setDisableClick={ setDisableClick }
           />
         ];
       } else {
@@ -98,13 +98,13 @@ function Friends(props: {}): ReactElement {
           <Group key={ item.title }
             title={ item.title }
             data={ item.data }
-            addLoading={ addLoading }
-            setAddLoading={ setAddLoading }
+            disableClick={ disableClick }
+            setDisableClick={ setDisableClick }
           />
         );
       }
     }).flat();
-  }, [roomId, addLoading, setAddLoading]);
+  }, [roomId, disableClick, setDisableClick]);
 
   return (
     <Fragment>

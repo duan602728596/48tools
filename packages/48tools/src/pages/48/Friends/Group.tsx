@@ -13,20 +13,20 @@ const colProps: Record<string, number> = { xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xx
 interface GroupProps {
   title: string;
   data: Array<RoomItem>;
-  readonly addLoading: boolean;
-  readonly setAddLoading: D<S<boolean>>;
+  readonly disableClick: boolean;
+  readonly setDisableClick: D<S<boolean>>;
 }
 
 /* 渲染组 */
 function Group(props: GroupProps): ReactElement {
-  const { title, data, addLoading, setAddLoading }: GroupProps = props;
+  const { title, data, disableClick, setDisableClick }: GroupProps = props;
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [successIds, setSuccessIds]: [Array<number>, D<S<Array<number>>>] = useState([]);
 
   // 点击一键关注
   async function handleAddClick(event: MouseEvent): Promise<void> {
-    setAddLoading(true);
+    setDisableClick(true);
     setLoading(true);
 
     for (const item of data) {
@@ -40,7 +40,7 @@ function Group(props: GroupProps): ReactElement {
     }
 
     messageApi.success('全部关注完毕！');
-    setAddLoading(false);
+    setDisableClick(false);
     setLoading(false);
     setSuccessIds([]);
   }
@@ -63,7 +63,7 @@ function Group(props: GroupProps): ReactElement {
     <Fragment>
       <h4 className={ commonStyle.text }>{ title }</h4>
       <Row className={ classNames('text-[12px]', commonStyle.text) } gutter={ [8, 8] }>{ renderItem() }</Row>
-      <Button className="mt-[16px]" type="primary" disabled={ addLoading } loading={ loading } onClick={ handleAddClick }>
+      <Button className="mt-[16px]" type="primary" disabled={ disableClick } loading={ loading } onClick={ handleAddClick }>
         一键关注
       </Button>
       <Divider />
