@@ -22,7 +22,6 @@
     "antd-mobile": "^5.33.2",
     "antd-mobile-icons": "^0.3.0",
     "classnames": "^2.5.1",
-    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
