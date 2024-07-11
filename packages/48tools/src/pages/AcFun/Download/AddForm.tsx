@@ -2,11 +2,13 @@ import { randomUUID } from 'node:crypto';
 import {
   Fragment,
   useState,
+  useTransition,
   type ReactElement,
   type ReactNode,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent
+  type MouseEvent,
+  type TransitionStartFunction
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -45,9 +47,9 @@ function AddForm(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
-  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
-  const [refreshVideoListLoading, setRefreshVideoListLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [videoList, setVideoList]: [Array<VideoInfoWithKey>, D<S<Array<VideoInfoWithKey>>>] = useState([]); // 视频列表
+  const [addDownloadQueueLoading, startAddDownloadQueueTransition]: [boolean, TransitionStartFunction] = useTransition();
+  const [refreshVideoListLoading, startRefreshVideoListTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
 
   // 视频列表刷新
@@ -60,22 +62,20 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    setRefreshVideoListLoading(true);
+    startRefreshVideoListTransition(async (): Promise<void> => {
+      try {
+        const { videoList: list }: ParseAcFunUrlResult = await parseAcFunUrl(formValue.type, formValue.id);
 
-    try {
-      const { videoList: list }: ParseAcFunUrlResult = await parseAcFunUrl(formValue.type, formValue.id);
-
-      if (list) {
-        setVideoList(list.map((o: VideoInfo, i: number): VideoInfoWithKey => ({ ...o, key: o.id, pageIndex: i + 1 })));
-      } else {
-        messageApi.warning('没有获取到视频列表！');
+        if (list) {
+          setVideoList(list.map((o: VideoInfo, i: number): VideoInfoWithKey => ({ ...o, key: o.id, pageIndex: i + 1 })));
+        } else {
+          messageApi.warning('没有获取到视频列表！');
+        }
+      } catch (err) {
+        messageApi.error('视频列表获取失败！');
+        console.error(err);
       }
-    } catch (err) {
-      messageApi.error('视频列表获取失败！');
-      console.error(err);
-    }
-
-    setRefreshVideoListLoading(false);
+    });
   }
 
   // 确定添加多个视频
@@ -119,28 +119,26 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    setLoading(true);
+    startAddDownloadQueueTransition(async (): Promise<void> => {
+      try {
+        const { representation }: ParseAcFunUrlResult = await parseAcFunUrl(formValue.type, formValue.id);
 
-    try {
-      const { representation }: ParseAcFunUrlResult = await parseAcFunUrl(formValue.type, formValue.id);
-
-      if (representation) {
-        dispatch(setAddDownloadList({
-          qid: randomUUID(),
-          type: formValue.type,
-          id: formValue.id,
-          representation: representation.map((o: Representation): Representation => pick(o, ['m3u8Slice', 'url', 'qualityLabel']))
-        }));
-        setVisible(false);
-      } else {
-        messageApi.warning('没有获取到媒体地址！');
+        if (representation) {
+          dispatch(setAddDownloadList({
+            qid: randomUUID(),
+            type: formValue.type,
+            id: formValue.id,
+            representation: representation.map((o: Representation): Representation => pick(o, ['m3u8Slice', 'url', 'qualityLabel']))
+          }));
+          setVisible(false);
+        } else {
+          messageApi.warning('没有获取到媒体地址！');
+        }
+      } catch (err) {
+        messageApi.error('地址解析失败！');
+        console.error(err);
       }
-    } catch (err) {
-      messageApi.error('地址解析失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+    });
   }
 
   // 关闭窗口后重置表单
@@ -166,13 +164,12 @@ function AddForm(props: {}): ReactElement {
         width={ 880 }
         centered={ true }
         maskClosable={ false }
-        confirmLoading={ loading }
         afterClose={ handleAddModalClose }
         footer={
           <Fragment>
             <Button onClick={ handleCloseAddModalClick }>取消</Button>
             <Button onClick={ handleAddDownloadVideoListClick }>确定选择视频列表</Button>
-            <Button type="primary" onClick={ handleAddDownloadQueueClick }>确定</Button>
+            <Button type="primary" loading={ addDownloadQueueLoading } onClick={ handleAddDownloadQueueClick }>确定</Button>
           </Fragment>
         }
         onCancel={ handleCloseAddModalClick }
