@@ -46,7 +46,7 @@ function GetLiveUrl(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [form]: [FormInstance] = Form.useForm();
-  const [getLiveListLoading, getLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition(); // 获取直播地址时的loading状态
+  const [getLiveListLoading, startGetLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition(); // 获取直播地址时的loading状态
 
   // 开始直播录制
   async function handleStartInLiveSubmit(value: InLiveFormValue): Promise<void> {
@@ -141,7 +141,7 @@ function GetLiveUrl(props: {}): ReactElement {
 
   // 获取直播列表
   function getLiveList(): void {
-    getLiveListStartTransition(async (): Promise<void> => {
+    startGetLiveListStartTransition(async (): Promise<void> => {
       try {
         const res: OpenLiveList = await requestOpenLiveList();
 

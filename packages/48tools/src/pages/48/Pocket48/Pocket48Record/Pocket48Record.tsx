@@ -112,8 +112,8 @@ function Pocket48Record(props: {}): ReactElement {
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
-  const [refreshLiveListLoading, refreshLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
-  const [userIdSearchLoading, userIdSearchStartTransition]: [boolean, TransitionStartFunction] = useTransition();
+  const [refreshLiveListLoading, startRefreshLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
+  const [userIdSearchLoading, startUserIdSearchStartTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
   const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
   const roomId: Array<RoomItem> = reqRoomId.data ?? [];
@@ -131,7 +131,7 @@ function Pocket48Record(props: {}): ReactElement {
       return;
     }
 
-    searchTimer = setTimeout((): void => userIdSearchStartTransition((): void => {
+    searchTimer = setTimeout((): void => startUserIdSearchStartTransition((): void => {
       const result: Array<BaseOptionType> = [];
 
       if (/^[\u4E00-\u9FFF]+$/i.test(value)) {
@@ -353,7 +353,7 @@ function Pocket48Record(props: {}): ReactElement {
 
   // 加载列表
   function handleLoadRecordListClick(event: MouseEvent): void {
-    refreshLiveListStartTransition(async (): Promise<void> => {
+    startRefreshLiveListStartTransition(async (): Promise<void> => {
       try {
         const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
         const res: LiveData = await requestLiveList(recordNext, false, groupId, userId);
@@ -372,7 +372,7 @@ function Pocket48Record(props: {}): ReactElement {
 
   // 刷新列表
   function handleRefreshLiveListClick(event: MouseEvent): void {
-    refreshLiveListStartTransition(async (): Promise<void> => {
+    startRefreshLiveListStartTransition(async (): Promise<void> => {
       try {
         const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
         const res: LiveData = await requestLiveList('0', false, groupId, userId);

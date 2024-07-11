@@ -79,7 +79,7 @@ function Pocket48Live(props: {}): ReactElement {
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [searchValue, setSearchValue]: [string, D<S<string>>] = useState(''); // 搜索值
-  const [refreshLiveListLoading, refreshLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
+  const [refreshLiveListLoading, startRefreshLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
 
   // 搜索结果
   const filterSearchResultLiveList: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
@@ -325,7 +325,7 @@ function Pocket48Live(props: {}): ReactElement {
 
   // 点击刷新直播列表
   function handleRefreshLiveListClick(event: MouseEvent): void {
-    refreshLiveListStartTransition(async (): Promise<void> => {
+    startRefreshLiveListStartTransition(async (): Promise<void> => {
       try {
         await dispatch<any>(reqLiveList());
       } catch (err) {

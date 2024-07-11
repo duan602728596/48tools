@@ -77,7 +77,7 @@ function InVideo(props: {}): ReactElement {
   }: RSelector = rSelector;
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [getLiveListLoading, getLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
+  const [getLiveListLoading, startGetLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
 
   const inVideoList: Array<OpenLiveInfo> = useMemo(function(): Array<OpenLiveInfo> {
     if (inVideoQueryLiveType) return rSelector[`${ inVideoQueryLiveType }InVideoList`];
@@ -178,7 +178,7 @@ function InVideo(props: {}): ReactElement {
   function handleGetVideoListClick(event: MouseEvent): void {
     if (!inVideoQueryLiveType) return;
 
-    getLiveListStartTransition(async (): Promise<void> => {
+    startGetLiveListStartTransition(async (): Promise<void> => {
       try {
         const res: OpenLiveList = await requestOpenLiveList({
           groupId: getTeamId(inVideoQueryLiveType),
@@ -205,7 +205,7 @@ function InVideo(props: {}): ReactElement {
   function handleGetNextPageVideoListClick(event: MouseEvent): void {
     if (!inVideoQueryLiveType) return;
 
-    getLiveListStartTransition(async (): Promise<void> => {
+    startGetLiveListStartTransition(async (): Promise<void> => {
       try {
         const res: OpenLiveList = await requestOpenLiveList({
           groupId: getTeamId(inVideoQueryLiveType),
