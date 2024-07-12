@@ -1,16 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import {
-  Fragment,
-  useState,
-  type ReactElement,
-  type ReactNode,
-  type Dispatch as D,
-  type SetStateAction as S,
-  type MouseEvent
-} from 'react';
+import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, type FormInstance } from 'antd';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import {
@@ -35,7 +28,7 @@ import {
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
 
 /* 视频分类 */
-const bilibiliVideoTypes: Array<{ label: string; value: string }> = [
+const bilibiliVideoTypesOptions: Array<DefaultOptionType> = [
   { value: 'bv', label: '视频（BV）' },
   { value: 'av', label: '视频（av）' },
   { value: 'au', label: '音频（au）' },
@@ -45,19 +38,12 @@ const bilibiliVideoTypes: Array<{ label: string; value: string }> = [
 ];
 
 type TypesResult = { [key: string]: string };
-export const bilibiliVideoTypesMap: TypesResult = bilibiliVideoTypes.reduce(
+export const bilibiliVideoTypesMap: TypesResult = bilibiliVideoTypesOptions.reduce(
   function(result: TypesResult, item: { label: string; value: string }, index: number): TypesResult {
     result[item.value] = item.label;
 
     return result;
   }, {});
-
-/* 视频分类的select选项的渲染 */
-function typeSelectOptionsRender(): Array<ReactNode> {
-  return bilibiliVideoTypes.map((item: { label: string; value: string }, index: number): ReactElement => {
-    return <Select.Option key={ item.value } value={ item.value }>{ item.label }</Select.Option>;
-  });
-}
 
 interface dashInfo {
   dash: DashVideoInfo;
@@ -305,7 +291,7 @@ function AddForm(props: {}): ReactElement {
             wrapperCol={{ span: 20 }}
           >
             <Form.Item name="type" label="下载类型" data-test-id="bilibili-download-form-type">
-              <Select>{ typeSelectOptionsRender() }</Select>
+              <Select options={ bilibiliVideoTypesOptions } />
             </Form.Item>
             <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
               <Input />

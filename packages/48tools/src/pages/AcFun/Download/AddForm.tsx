@@ -1,16 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import {
-  Fragment,
-  useState,
-  type ReactElement,
-  type ReactNode,
-  type Dispatch as D,
-  type SetStateAction as S,
-  type MouseEvent
-} from 'react';
+import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Form, Select, Input, Alert, message, Transfer, type FormInstance } from 'antd';
+import { Button, Modal, Form, Select, Input, Alert, message, type FormInstance } from 'antd';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
@@ -20,25 +13,18 @@ import VideoListSelect from './VideoListSelect';
 import type { Representation, VideoInfo, VideoInfoWithKey, DownloadItem } from '../types';
 
 /* 视频分类 */
-const acfunVideoTypes: Array<{ label: string; value: string }> = [
+const acfunVideoTypesOptions: Array<DefaultOptionType> = [
   { value: 'ac', label: '视频（ac）' },
   { value: 'aa', label: '番剧（aa）' }
 ];
 
 type TypesResult = { [key: string]: string };
-export const acfunVideoTypesMap: TypesResult = acfunVideoTypes.reduce(
+export const acfunVideoTypesMap: TypesResult = acfunVideoTypesOptions.reduce(
   function(result: TypesResult, item: { label: string; value: string }, index: number): TypesResult {
     result[item.value] = item.label;
 
     return result;
   }, {});
-
-/* 视频分类的select选项的渲染 */
-function typeSelectOptionsRender(): Array<ReactNode> {
-  return acfunVideoTypes.map((item: { label: string; value: string }, index: number): ReactElement => {
-    return <Select.Option key={ item.value } value={ item.value }>{ item.label }</Select.Option>;
-  });
-}
 
 /* 添加A站视频下载队列 */
 function AddForm(props: {}): ReactElement {
@@ -184,7 +170,7 @@ function AddForm(props: {}): ReactElement {
           wrapperCol={{ span: 20 }}
         >
           <Form.Item name="type" label="下载类型" data-test-id="acfun-download-form-type">
-            <Select>{ typeSelectOptionsRender() }</Select>
+            <Select options={ acfunVideoTypesOptions } />
           </Form.Item>
           <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
             <Input />
