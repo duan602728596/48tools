@@ -5,7 +5,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Modal, Input, Form, Select, Space, Button, message, type FormInstance } from 'antd';
 import type { ModalProps } from 'antd/es/modal';
-import type { BaseOptionType } from 'rc-select/es/Select';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { DeleteFilled as IconDeleteFilled } from '@ant-design/icons';
 import * as classNames from 'classnames';
@@ -70,7 +70,7 @@ function EditModal(props: EditModalProps & EditModalUseProps): ReactElement {
   }
 
   // 选中后修改模板
-  function handleTemplateSelect(value: string, option: { item: TplItem } & BaseOptionType): void {
+  function handleTemplateSelect(value: string, option: { item: TplItem } & DefaultOptionType): void {
     form.setFieldsValue({
       args: option.item.value
     });

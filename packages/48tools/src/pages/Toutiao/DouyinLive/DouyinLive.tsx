@@ -14,7 +14,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Popconfirm, Table, message, Modal, Select, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { BaseOptionType } from 'rc-select/es/Select';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { requestLiveEnter, requestTtwidCookie, type LiveEnter } from '@48tools-api/toutiao/douyin';
@@ -51,7 +51,7 @@ function DouyinLive(props: {}): ReactElement {
   const { workerList: douyinLiveWorkerList, liveList: douyinLiveList, autoRecordTimer }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false); // 弹出层状态
-  const [liveOptions, setLiveOptions]: [Array<BaseOptionType>, D<S<BaseOptionType[]>>] = useState([]); // 直播的地址
+  const [liveOptions, setLiveOptions]: [Array<DefaultOptionType>, D<S<DefaultOptionType[]>>] = useState([]); // 直播的地址
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止自动录制
@@ -75,7 +75,7 @@ function DouyinLive(props: {}): ReactElement {
   // 选择并开始录制
   async function handleStartRecordSelect(
     value: string,
-    options: BaseOptionType & { type: 'flv' | 'm3u8'; item: LiveItem }
+    options: DefaultOptionType & { type: 'flv' | 'm3u8'; item: LiveItem }
   ): Promise<void> {
     const time: string = getFileTime();
 
@@ -152,7 +152,7 @@ function DouyinLive(props: {}): ReactElement {
 
       if (typeof res === 'object') {
         if (res?.data?.data?.length && res.data.data[0]?.stream_url) {
-          const options: Array<BaseOptionType> = [];
+          const options: Array<DefaultOptionType> = [];
 
           for (const key in res.data.data[0].stream_url.flv_pull_url) {
             options.push({

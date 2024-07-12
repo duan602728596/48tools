@@ -18,7 +18,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, message, Table, Select, Form, Space, Popconfirm, Modal, AutoComplete, Spin, type FormInstance } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { BaseOptionType } from 'rc-select/es/Select';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
@@ -110,7 +110,7 @@ function Pocket48Record(props: {}): ReactElement {
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
-  const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
+  const [userIdSearchResult, setUserIdSearchResult]: [Array<DefaultOptionType>, D<S<Array<DefaultOptionType>>>] = useState([]);
   const [userIdSearchLoading, setUserIdSearchLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [form]: [FormInstance] = Form.useForm();
   const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
@@ -132,7 +132,7 @@ function Pocket48Record(props: {}): ReactElement {
 
     setUserIdSearchLoading(true);
     searchTimer = setTimeout((): void => {
-      const result: Array<BaseOptionType> = [];
+      const result: Array<DefaultOptionType> = [];
 
       if (/^[\u4E00-\u9FFF]+$/i.test(value)) {
         // 搜索中文
