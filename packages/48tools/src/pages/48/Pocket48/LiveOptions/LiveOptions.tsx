@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Form, Input, InputNumber, Button, message, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import * as classNames from 'classnames';
 import commonStyle from '../../../../common.sass';
 import { showOpenDialog } from '../../../../utils/remote/dialog';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
@@ -74,7 +75,7 @@ function LiveOptions(props: {}): ReactElement {
           <Form.Item name="users" rules={ [{ required: true, message: '请填写成员姓名或ID', whitespace: true }] } noStyle={ true }>
             <Input.TextArea rows={ 7 } />
           </Form.Item>
-          <p className={ commonStyle.tips }>
+          <p className={ classNames('mt-[8px]', commonStyle.tips) }>
             使用"<b className="mx-[6px] my-0">,</b>"分隔姓名或ID
           </p>
         </Form.Item>
