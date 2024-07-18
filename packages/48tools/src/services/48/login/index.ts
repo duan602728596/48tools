@@ -1,6 +1,6 @@
 import got, { type Response as GotResponse } from 'got';
 import { createHeaders } from '../../../utils/snh48';
-import type { SMSResult, LoginUserInfo, IMUserInfo, UserInfoReloadOrSwitch } from './interface';
+import type { SMSResult, LoginUserInfo, IMUserInfo, UserInfoReloadOrSwitch, UserMoney } from './interface';
 
 export type * from './interface';
 
@@ -78,6 +78,19 @@ export async function requestUserInfoSwitch(token: string, userId: number): Prom
     responseType: 'json',
     headers: createHeaders(token),
     json: { toUserId: userId }
+  });
+
+  return res.body;
+}
+
+/* user money */
+export async function requestUserMoney(token: string): Promise<UserMoney> {
+  console.log(globalThis.__x6c2adf8__);
+
+  const res: GotResponse<UserMoney> = await got.post('https://pocketapi.48.cn/user/api/v1/user/money', {
+    responseType: 'json',
+    headers: createHeaders(token),
+    json: { token }
   });
 
   return res.body;

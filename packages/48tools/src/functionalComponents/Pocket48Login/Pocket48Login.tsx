@@ -3,6 +3,7 @@ import {
   Fragment,
   createElement,
   useState,
+  useEffect,
   useRef,
   type ReactElement,
   type Dispatch as D,
@@ -25,10 +26,12 @@ import {
   requestImUserInfo,
   requestUserInfoReload,
   requestUserInfoSwitch,
+  requestUserMoney,
   type LoginUserInfo,
   type IMUserInfo,
   type UserInfoReloadOrSwitch,
-  type UserItem
+  type UserItem,
+  type UserMoney
 } from '@48tools-api/48/login';
 import commonStyle from '../../common.sass';
 import style from './pocket48Login.sass';
@@ -322,15 +325,19 @@ function Pocket48Login(props: {}): ReactElement {
   // button的渲染
   function loginButtonRender(): ReactElement {
     let icon: ReactElement | null = null;
-    let nickname: string = '口袋48登录';
+    let nickname: string | ReactElement = '口袋48登录';
 
     if (userInfo) {
-      icon = (
-        <Avatar key="icon" size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
-          { userInfo?.unknown ? '?' : undefined }
-        </Avatar>
-      );
-      nickname = userInfo.unknown ? '未知用户' : userInfo.nickname;
+      if (userInfo.isExpired) {
+        nickname = <span className={ commonStyle.tips }>账号已过期，请重新登录。</span>;
+      } else {
+        icon = (
+          <Avatar key="icon" size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
+            { userInfo?.unknown ? '?' : undefined }
+          </Avatar>
+        );
+        nickname = userInfo.unknown ? '未知用户' : userInfo.nickname;
+      }
     }
 
     return createElement(
@@ -345,6 +352,25 @@ function Pocket48Login(props: {}): ReactElement {
       [icon, nickname]
     );
   }
+
+  // 验证账号是否过期
+  async function checkTokenExpired(): Promise<void> {
+    if (!userInfo) return;
+
+    const { token, isExpired }: UserInfo = userInfo;
+
+    if (isExpired) return;
+
+    const res: UserMoney = await requestUserMoney(token);
+
+    if (!res.success) {
+      dispatch(setUserInfo({ ...userInfo, isExpired: true }));
+    }
+  }
+
+  useEffect(function(): void {
+    checkTokenExpired();
+  }, []);
 
   const tabsItem: Array<Tab> = [
     {
