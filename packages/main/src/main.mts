@@ -5,6 +5,7 @@ import { ipc, removeIpc } from './ipc.mjs';
 import ipcRemoteHandle from './ipcHandle/ipcRemoteHandle.mjs';
 import pocket48LiveRemoteHandle from './ipcHandle/pocket48LiveRemoteHandle.mjs';
 import { nodeNimHandleLogin, nodeNimCleanup } from './ipcHandle/nodeNimHandleLogin.mjs';
+import helpHandle from './ipcHandle/helpHandle.mjs';
 import { nodeMediaServerClose } from './nodeMediaServer/nodeMediaServer.mjs';
 import webRequest from './webRequest/webRequest.mjs';
 import { storeInit, getStore } from './store.mjs';
@@ -69,6 +70,7 @@ function createWindow(): void {
     ipcRemoteHandle(processWindow);
     pocket48LiveRemoteHandle(processWindow);
     nodeNimHandleLogin();
+    helpHandle();
   } catch {}
 
   processWindow.on('closed', async function(): Promise<void> {

@@ -56,3 +56,8 @@ export const enum NodeMediaServerChannel {
 export const enum ProxyServerChannel {
   ProxyServer = 'proxy-server'
 }
+
+// help
+export const enum HelpChannel {
+  Help = 'help'
+}

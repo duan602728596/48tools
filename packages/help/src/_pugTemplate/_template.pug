@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    link(rel='stylesheet' href='./style/help.css')
+    block head
+
+  body
+    div.container
+      include ./_aside
+
+      // iframe
+      div.main
+        div.main-box
+          block article

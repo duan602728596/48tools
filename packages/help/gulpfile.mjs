@@ -70,7 +70,10 @@ function createWebpackConfig() {
 
 /* html */
 function pugTask() {
-  const src = ['src/**/*.pug'];
+  const src = [
+    'src/**/*.pug',
+    '!src/**/_*.pug'
+  ];
 
   if (isDev) {
     return gulp.src(src)
@@ -107,8 +110,9 @@ function sassTask() {
 }
 
 /* javascript */
+/*
 function webpackTask() {
-  const src = ['src/script/help.ts'];
+  const src = [];
 
   if (isDev) {
     return gulp.src(src)
@@ -124,11 +128,27 @@ function webpackTask() {
       .pipe(gulp.dest('dist'));
   }
 }
+*/
+
+/* 图片 */
+function imageTask() {
+  const src = ['src/**/*.{png,jpg,jpeg,gif,svg,webp,avif}'];
+
+  if (isDev) {
+    return gulp.src(src)
+      .pipe(mfs.changed())
+      .pipe(mfs.dest('dist'));
+  } else {
+    return gulp.src(src)
+      .pipe(gulp.dest('dist'));
+  }
+}
 
 function watchProject() {
   gulp.watch('src/**/*.pug', pugTask);
   gulp.watch('src/**/*.{sass,scss}', sassTask);
-  gulp.watch('src/**/*.{ts,tsx,mts,cts}', webpackTask);
+  // gulp.watch('src/**/*.{ts,tsx,mts,cts}', webpackTask);
+  gulp.watch('src/**/*.{png,jpg,jpeg,gif,svg,webp,avif}', imageTask);
 }
 
 async function server() {
@@ -137,13 +157,13 @@ async function server() {
 
 function devInit() {
   return gulp.series(
-    gulp.parallel(pugTask, sassTask, webpackTask),
+    gulp.parallel(pugTask, sassTask, /* webpackTask, */ imageTask),
     gulp.parallel(watchProject, server)
   );
 }
 
 function proInit() {
-  return gulp.parallel(pugTask, sassTask, webpackTask);
+  return gulp.parallel(pugTask, sassTask, /* webpackTask, */ imageTask);
 }
 
 export default isDev ? devInit() : proInit();
