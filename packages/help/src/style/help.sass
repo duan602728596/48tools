@@ -2,10 +2,56 @@ body
   margin: 0
   overflow: hidden
 
-body, html, .main
+body, html, .container
   width: 100%
   height: 100%
 
-.main
+/* 主页面布局 */
+.container
   display: flex
   overflow: auto
+
+.aside, .main
+  height: 100%
+
+.aside
+  flex-shrink: 0
+  box-sizing: border-box
+  width: 300px
+  padding: 16px
+  border-right: 1px solid #595757
+  overflow: auto
+
+.main
+  flex-grow: 1
+  overflow: hidden
+
+/* 导航 */
+.nav-list
+  margin: 0
+  padding: 0
+  list-style: none
+  font-size: 14px
+  user-select: none
+
+  li
+    padding: 8px 0
+
+.nav-list-children li
+  margin-left: 22px
+
+.nav-summary
+  cursor: pointer
+
+.nav-link
+  color: #000
+  text-decoration: none
+
+  &:hover
+    text-decoration: underline
+
+/* iframe */
+.iframe
+  width: 100%
+  height: 100%
+  border: none

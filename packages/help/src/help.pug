@@ -5,6 +5,23 @@ html
     title 48tools帮助文件
 
   body
-    div.main
+    div.container
+      aside.aside
+        // 侧边导航栏
+        ul.nav-list
+          li
+            details(open)
+              summary.nav-summary 48tools帮助文件
+              ul.nav-list.nav-list-children
+                li
+                  details(open)
+                    summary.nav-summary 口袋48相关
+                    ul.nav-list.nav-list-children
+                      li
+                        a.nav-link.help-nav-link#app-data-directory-configuration(href='./48/appDataDirectoryConfiguration.html') AppData目录配置
+
+      // iframe
+      div.main
+        iframe.iframe#help-iframe(src='./48/appDataDirectoryConfiguration.html')
 
     script(src='./script/help.js')
