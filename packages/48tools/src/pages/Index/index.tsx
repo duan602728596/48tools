@@ -1,5 +1,5 @@
 import { ipcRenderer, shell } from 'electron';
-import { Fragment, use, type ReactElement, type ReactNode, type MouseEvent } from 'react';
+import { Fragment, createElement, use, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
   ToolTwoTone as IconToolTwoTone,
@@ -18,6 +18,7 @@ import ExecutablePath from './ExecutablePath/ExecutablePath';
 import NewUserTour from './NewUserTour/NewUserTour';
 import ThemeContext, { type Theme } from '../../components/basic/Theme/ThemeContext';
 import { useAppDataDir, type UseAppDataDirReturnType } from '../../functionalComponents/Pocket48Login/useAppDataDir/useAppDataDir';
+import HelpButtonGroup, { type HelpButtonGroupProps } from '../../components/HelpButtonGroup/HelpButtonGroup';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
 import IconMicrophoneSvgComponent from './images/microphone.component.svg';
@@ -39,6 +40,7 @@ interface NativeItem {
   icon: ReactElement;
   hBtn?: boolean;
   testId?: string;
+  help?: HelpButtonGroupProps;
 }
 
 const IconBilibiliLogo: ReactElement
@@ -181,24 +183,28 @@ function nativeRender(): Array<ReactNode> {
     const groupElement: Array<ReactElement> = [];
 
     for (const navItem of group) {
-      groupElement.push(
-        <div key={ navItem.name }>
-          <ButtonLink linkProps={{ to: navItem.url }}
-            buttonProps={{
-              className: navItem.hBtn ? 'overflow-hidden' : undefined,
-              icon: navItem.icon,
-              block: true,
-              'data-test-id': navItem.testId
-            }}
-          >
-            { navItem.name }
-          </ButtonLink>
-        </div>
+      let buttonLinkElement: ReactElement = (
+        <ButtonLink linkProps={{ to: navItem.url }}
+          buttonProps={{
+            className: navItem.hBtn ? 'overflow-hidden' : undefined,
+            icon: navItem.icon,
+            block: true,
+            'data-test-id': navItem.testId
+          }}
+        >
+          { navItem.name }
+        </ButtonLink>
       );
+
+      if (navItem.help) {
+        buttonLinkElement = createElement(HelpButtonGroup, navItem.help, buttonLinkElement);
+      }
+
+      groupElement.push(<div key={ navItem.name }>{ buttonLinkElement }</div>);
     }
 
     element.push(
-      <nav key={ `nav-${ i }` } className="grid grid-cols-4 gap-[16px] w-[755px]">
+      <nav key={ `nav-${ i }` } className="grid grid-cols-4 gap-[16px] w-[800px]">
         { groupElement }
       </nav>,
       <Divider key={ `driver-${ i }` } className="my-[16px]" />
