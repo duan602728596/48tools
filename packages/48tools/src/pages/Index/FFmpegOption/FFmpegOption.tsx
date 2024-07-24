@@ -8,6 +8,7 @@ import * as classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 import { ffmpegInstallHtmlPage } from '../../../utils/utils';
+import HelpButtonGroup from '../../../components/HelpButtonGroup/HelpButtonGroup';
 import IconFFmpegSvgComponent from '../images/ffmpeg.component.svg';
 
 const IconFFmpeg: ReactElement = <Icon className={ style.ffmpegIcon } component={ IconFFmpegSvgComponent } />;
@@ -74,14 +75,16 @@ function FFmpegOption(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Button type="primary"
-        id="ffmpeg-options"
-        danger={ true }
-        icon={ IconFFmpeg }
-        onClick={ handleOpenFFmpegOptionClick }
-      >
-        FFmpeg配置
-      </Button>
+      <HelpButtonGroup navId="ffmpeg-option">
+        <Button type="primary"
+          id="ffmpeg-options"
+          danger={ true }
+          icon={ IconFFmpeg }
+          onClick={ handleOpenFFmpegOptionClick }
+        >
+          FFmpeg配置
+        </Button>
+      </HelpButtonGroup>
       <span className={ classNames('inline-block ml-[6px] text-[12px]', style.tips) }>
         <IconSwapLeftOutlined className="mr-[3px] text-[16px]" />
         使用前先配置FFmpeg

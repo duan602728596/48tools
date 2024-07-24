@@ -1,0 +1,47 @@
+extends _pugTemplate/_template
+
+block head
+  title FFmpeg配置 - 48tools帮助文件
+
+block article
+  h1 FFmpeg配置
+  article
+    p.mb-4 48tools中，直播录制、录播下载、查看直播、视频处理等功能都需要使用FFmpeg。但是48tools不会自带FFmpeg，需要用户自行安装。
+    h2 FFmpeg的下载
+    p 用户可以根据自己的操作系统，下载对应的安装包：
+    div
+      table.d-inline-block.table.table-striped.table-bordered
+        tbody
+          tr
+            td Windows
+            td
+              a(href='https://www.gyan.dev/ffmpeg/builds/' target='_blank') https://www.gyan.dev/ffmpeg/builds/
+          tr
+            td MacOS
+            td
+              a(href='https://evermeet.cx/ffmpeg/' target='_blank') https://evermeet.cx/ffmpeg/
+          tr
+            td Linux
+            td
+              a(href='https://www.ffmpeg.org/download.html' target='_blank') https://www.ffmpeg.org/download.html
+    button.mb-3.btn.btn-primary#ffmpeg-download-btn(type='button') 下载
+    p 下载时要选择full build，避免导致视频转码失败。
+    img.d-block.mb-4.img-thumbnail(src='./image/ffmpegOptions/fullBuildFFmpegLink.webp' width=600 alt='下载时要选择full build')
+
+    h2 FFmpeg可执行文件的配置
+    p 在软件首页选择FFmpeg配置，并配置可执行文件：
+    img.d-block.mb-3.img-thumbnail(src='./image/ffmpegOptions/ffmpegOptionButton.webp' alt='FFmpeg配置按钮')
+    dl.d-inline-block
+      dt
+        img.d-block.img-thumbnail(src='./image/ffmpegOptions/ffmpegPathMac.webp' width=600 alt='FFmpeg配置路径(MacOS)')
+      dd.mb-3.text-center
+        em
+          small FFmpeg在MacOS系统下的路径配置
+      dt
+        img.d-block.img-thumbnail(src='./image/ffmpegOptions/ffmpegPathWin.webp' width=600 alt='FFmpeg配置按钮(Windows)')
+      dd.mb-3.text-center
+        em
+          small FFmpeg在Windows系统下的路径配置
+
+block script
+  script(src='./script/ffmpegOption.js')
