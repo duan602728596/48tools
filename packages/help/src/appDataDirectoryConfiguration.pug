@@ -5,13 +5,13 @@ block head
 
 block article
   h1 AppData目录配置
-  article.article-main
+  article
     p 48tools中，调用口袋48弹幕功能使用的是
-      a.article-link(href='https://doc.yunxin.163.com/all/resource?platform=all' target='_blank') 网易云信的C++ SDK
+      a(href='https://doc.yunxin.163.com/all/resource?platform=all' target='_blank') 网易云信的C++ SDK
       | 。
     p 该SDK在初始化和登录后，会在AppData目录中生成一些文件。
-    img(src='./image/1.webp' width=600 alt='AppData目录中生成的文件')
+    img.mb-3.img-thumbnail(src='./image/1.webp' width=600 alt='AppData目录中生成的文件')
     p 所以需要用户在使用48tools时，找个安全的位置配置AppData目录。每次登录前，都会删除AppData目录中的所有文件。
     p 生成的路径格式如下：
-      pre.article-code
-        code {AppData}/_48tools_node_nim_app_data_/{account}/
+    pre.d-inline-block.p-4.text-bg-secondary
+      code {AppData}/_48tools_node_nim_app_data_/{account}/

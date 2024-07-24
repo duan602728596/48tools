@@ -1,15 +1,14 @@
 doctype html
-html
+html.w-100.h-100
   head
     meta(charset='utf-8')
-    link(rel='stylesheet' href='./style/help.css')
+    link(rel='stylesheet' href='./style/common.css')
     block head
 
-  body
-    div.container
+  body.m-0.w-100.h-100
+    div.d-flex.w-100.h-100.overflow-hidden
       include ./_aside
 
-      // iframe
-      div.main
-        div.main-box
+      div.flex-grow-1
+        div.p-4.h-100.overflow-auto.main
           block article
