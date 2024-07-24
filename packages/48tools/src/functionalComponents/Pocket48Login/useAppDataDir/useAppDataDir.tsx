@@ -67,7 +67,7 @@ export function useAppDataDir(): UseAppDataDirReturnType {
 
   return {
     buttonRender: (): ReactElement => (
-      <HelpButtonGroup navId="appDataDirectoryConfiguration">
+      <HelpButtonGroup navId="appdata-directory-configuration">
         <Button onClick={ handleOpenSelectAppDataDirClick }>{ title }</Button>
       </HelpButtonGroup>
     ),
