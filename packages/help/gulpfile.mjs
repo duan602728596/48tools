@@ -3,9 +3,11 @@ import gulp from 'gulp';
 import plumber from 'gulp-plumber';
 import pug from 'gulp-pug';
 import gulpSass from 'gulp-sass';
+import postcss from 'gulp-postcss';
 import webpackStream from 'webpack-stream';
 import GulpMemoryFs from 'gulp-memory-fs';
 import * as sass from 'sass';
+import cssnano from 'cssnano';
 import named from 'vinyl-named';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -96,15 +98,12 @@ function sassTask() {
     return gulp.src(src)
       .pipe(mfs.changed())
       .pipe(plumber())
-      .pipe(Sass({
-        style: 'expanded'
-      }).on('error', Sass.logError))
+      .pipe(Sass().on('error', Sass.logError))
       .pipe(mfs.dest('dist'));
   } else {
     return gulp.src(src)
-      .pipe(Sass({
-        style: 'compressed'
-      }).on('error', Sass.logError))
+      .pipe(Sass().on('error', Sass.logError))
+      .pipe(postcss([cssnano({ preset: 'default' })]))
       .pipe(gulp.dest('dist'));
   }
 }
