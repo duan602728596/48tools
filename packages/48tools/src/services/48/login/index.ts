@@ -85,8 +85,6 @@ export async function requestUserInfoSwitch(token: string, userId: number): Prom
 
 /* user money */
 export async function requestUserMoney(token: string): Promise<UserMoney> {
-  console.log(globalThis.__x6c2adf8__);
-
   const res: GotResponse<UserMoney> = await got.post('https://pocketapi.48.cn/user/api/v1/user/money', {
     responseType: 'json',
     headers: createHeaders(token),
