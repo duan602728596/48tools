@@ -1,4 +1,5 @@
 import process from 'node:process';
+import path from 'node:path';
 import gulp from 'gulp';
 import plumber from 'gulp-plumber';
 import pug from 'gulp-pug';
@@ -109,25 +110,24 @@ function sassTask() {
 }
 
 /* javascript */
-/*
 function webpackTask() {
-  const src = [];
+  const src = ['src/**/*.entry.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'];
+  const rename = (file) => path.basename(file.path, path.extname(file.path)).replace(/\.entry/i, '');
 
   if (isDev) {
     return gulp.src(src)
-      .pipe(named())
+      .pipe(named(rename))
       .pipe(mfs.changed())
       .pipe(plumber())
       .pipe(webpackStream(createWebpackConfig()))
       .pipe(mfs.dest('dist'));
   } else {
     return gulp.src(src)
-      .pipe(named())
+      .pipe(named(rename))
       .pipe(webpackStream(createWebpackConfig()))
       .pipe(gulp.dest('dist'));
   }
 }
-*/
 
 /* 图片 */
 function imageTask() {
@@ -146,7 +146,7 @@ function imageTask() {
 function watchProject() {
   gulp.watch('src/**/*.pug', pugTask);
   gulp.watch('src/**/*.{sass,scss}', sassTask);
-  // gulp.watch('src/**/*.{ts,tsx,mts,cts}', webpackTask);
+  gulp.watch('src/**/*.{ts,tsx,mts,cts}', webpackTask);
   gulp.watch('src/**/*.{png,jpg,jpeg,gif,svg,webp,avif}', imageTask);
 }
 
@@ -156,13 +156,13 @@ async function server() {
 
 function devInit() {
   return gulp.series(
-    gulp.parallel(pugTask, sassTask, /* webpackTask, */ imageTask),
+    gulp.parallel(pugTask, sassTask, webpackTask, imageTask),
     gulp.parallel(watchProject, server)
   );
 }
 
 function proInit() {
-  return gulp.parallel(pugTask, sassTask, /* webpackTask, */ imageTask);
+  return gulp.parallel(pugTask, sassTask, webpackTask, imageTask);
 }
 
 export default isDev ? devInit() : proInit();
