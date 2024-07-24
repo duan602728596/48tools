@@ -11,6 +11,7 @@ import packageJson from '../package.json' assert { type: 'json' };
 const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
   README: path.join(cwd, 'README.md'), // README
+  help: path.join(cwd, 'packages/help/dist'), // 帮助文档
   LICENSEElectron: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSE.electron.txt'), // electron许可协议
   LICENSESChromium: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSES.chromium.html') // chromium第三方许可协议
 };
@@ -97,7 +98,8 @@ function config(outputDir, target) {
 function copy(unpackedDir, isMac) {
   const queue = [
     fse.copy(staticsFiles.LICENSE, path.join(unpackedDir, 'LICENSE')),
-    fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md'))
+    fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md')),
+    fse.copy(staticsFiles.help, path.join(unpackedDir, 'help'))
   ];
 
   if (isMac) {
@@ -193,7 +195,7 @@ async function unpackArm64() {
   });
 
   // 拷贝许可文件
-  console.log('🚚正在拷贝许可文件');
+  console.log('🚚正在拷贝许可文件和帮助文档');
   await Promise.all([
     ...isMacOS ? copy(unpacked.macArm64, true) : [],
     ...copy(unpacked.winArm64)
