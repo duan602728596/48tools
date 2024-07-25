@@ -1,5 +1,14 @@
 import { randomUUID } from 'node:crypto';
-import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
+import {
+  Fragment,
+  useState,
+  useTransition,
+  type ReactElement,
+  type Dispatch as D,
+  type SetStateAction as S,
+  type MouseEvent,
+  type TransitionStartFunction
+} from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, type FormInstance } from 'antd';
@@ -16,7 +25,6 @@ import {
   type PugvSeasonEpisodesItem,
   type PugvSeasonPlayUrl
 } from '@48tools-api/bilibili/download';
-import style from './addForm.sass';
 import {
   parseVideoUrlV2,
   parseAudioUrl,
@@ -57,8 +65,8 @@ function AddForm(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
-  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
   const [dash, setDash]: [dashInfo | undefined, D<S<dashInfo | undefined>>] = useState(undefined);
+  const [modalLoading, startModalLoadingTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
 
   // 选择DASH video并准备下载
@@ -114,8 +122,6 @@ function AddForm(props: {}): ReactElement {
     } else {
       messageApi.warning('没有获取到媒体地址！');
     }
-
-    setLoading(false);
   }
 
   // 选择DASH video
@@ -134,36 +140,34 @@ function AddForm(props: {}): ReactElement {
       return;
     }
 
-    setLoading(true);
+    startModalLoadingTransition(async (): Promise<void> => {
+      try {
+        const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
+          ? formValue.proxy : undefined;
 
-    try {
-      const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
-        ? formValue.proxy : undefined;
+        // 课程的处理
+        if (formValue.type === 'pugv_ep') {
+          return await getPugvData(formValue, proxy);
+        }
 
-      // 课程的处理
-      if (formValue.type === 'pugv_ep') {
-        return await getPugvData(formValue, proxy);
+        const res: ParseVideoUrlDASHObjectResult | undefined = await parseVideoUrlDASH(
+          formValue.type, formValue.id, formValue.page, proxy);
+
+        if (res && res?.videoData?.dash) {
+          setDash({
+            dash: res.videoData.dash,
+            supportFormats: res.videoData.support_formats,
+            pic: res.pic,
+            title: res.title
+          });
+        } else {
+          messageApi.warning('没有获取到媒体地址！');
+        }
+      } catch (err) {
+        messageApi.error('地址解析失败！');
+        console.error(err);
       }
-
-      const res: ParseVideoUrlDASHObjectResult | undefined = await parseVideoUrlDASH(
-        formValue.type, formValue.id, formValue.page, proxy);
-
-      if (res && res?.videoData?.dash) {
-        setDash({
-          dash: res.videoData.dash,
-          supportFormats: res.videoData.support_formats,
-          pic: res.pic,
-          title: res.title
-        });
-      } else {
-        messageApi.warning('没有获取到媒体地址！');
-      }
-    } catch (err) {
-      messageApi.error('地址解析失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+    });
   }
 
   // 确定添加视频
@@ -176,50 +180,48 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    setLoading(true);
+    startModalLoadingTransition(async (): Promise<void> => {
+      try {
+        const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
+          ? formValue.proxy : undefined;
 
-    try {
-      const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
-        ? formValue.proxy : undefined;
+        // 课程的处理
+        if (formValue.type === 'pugv_ep') {
+          return await getPugvData(formValue, proxy);
+        }
 
-      // 课程的处理
-      if (formValue.type === 'pugv_ep') {
-        return await getPugvData(formValue, proxy);
+        let result: string | ParseVideoUrlV2ObjectResult | void;
+
+        if (formValue.type === 'au') {
+          // 下载音频
+          result = await parseAudioUrl(formValue.id, proxy);
+        } else if (formValue.type === 'ss' || formValue.type === 'ep') {
+          // 下载番剧
+          result = await parseBangumiVideo(formValue.type, formValue.id, proxy);
+        } else {
+          // 下载av、bv视频，会返回视频封面
+          result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page, proxy);
+        }
+
+        if (result) {
+          dispatch(setAddDownloadList({
+            qid: randomUUID(),
+            durl: typeof result === 'object' ? result.flvUrl : result,
+            pic: typeof result === 'object' ? result.pic : undefined,
+            type: formValue.type,
+            id: formValue.id,
+            page: formValue.page ?? 1,
+            title: typeof result === 'object' ? result.title : undefined
+          }));
+          setVisible(false);
+        } else {
+          messageApi.warning('没有获取到媒体地址！');
+        }
+      } catch (err) {
+        messageApi.error('地址解析失败！');
+        console.error(err);
       }
-
-      let result: string | ParseVideoUrlV2ObjectResult | void;
-
-      if (formValue.type === 'au') {
-        // 下载音频
-        result = await parseAudioUrl(formValue.id, proxy);
-      } else if (formValue.type === 'ss' || formValue.type === 'ep') {
-        // 下载番剧
-        result = await parseBangumiVideo(formValue.type, formValue.id, proxy);
-      } else {
-        // 下载av、bv视频，会返回视频封面
-        result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page, proxy);
-      }
-
-      if (result) {
-        dispatch(setAddDownloadList({
-          qid: randomUUID(),
-          durl: typeof result === 'object' ? result.flvUrl : result,
-          pic: typeof result === 'object' ? result.pic : undefined,
-          type: formValue.type,
-          id: formValue.id,
-          page: formValue.page ?? 1,
-          title: typeof result === 'object' ? result.title : undefined
-        }));
-        setVisible(false);
-      } else {
-        messageApi.warning('没有获取到媒体地址！');
-      }
-    } catch (err) {
-      messageApi.error('地址解析失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+    });
   }
 
   // 返回
@@ -267,7 +269,7 @@ function AddForm(props: {}): ReactElement {
         width={ 480 }
         centered={ true }
         maskClosable={ false }
-        confirmLoading={ loading }
+        confirmLoading={ modalLoading }
         afterClose={ handleAddModalClose }
         footer={
           dash ? (
@@ -284,7 +286,7 @@ function AddForm(props: {}): ReactElement {
       >
         <div className="h-[210px]">
           {/* add的表单 */}
-          <Form className={ dash ? style.none : undefined }
+          <Form className={ dash ? 'hidden' : undefined }
             form={ form }
             initialValues={{ type: 'bv' }}
             labelCol={{ span: 4 }}
