@@ -5,9 +5,10 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Select, App } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { useAppProps } from 'antd/es/app/context';
-import type { DashSupportFormats, DashVideoItem } from '@48tools-api/bilibili/download';
+import type { DashSupportFormats } from '@48tools-api/bilibili/download';
 import { parseVideoUrlDASH, type ParseVideoUrlDASHObjectResult } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
+import { getUrlFromDash, type GetUrlFromDashReturn } from '../function/getUrlFromDash';
 import type { DashInfo } from '../../types';
 
 interface DASHSelectProps {
@@ -29,17 +30,7 @@ function DASHSelect(props: DASHSelectProps): ReactElement {
   function handleDownloadSelect(value: number, option: DefaultOptionType): void {
     if (!dash) return;
 
-    const videoItem: DashVideoItem = dash.dash.video.find((o: DashVideoItem): boolean => o.id === value)
-      ?? dash.dash.video[0];
-
-    const videoUrl: string = videoItem.backupUrl?.[0]
-      ?? videoItem.backup_url?.[0]
-      ?? videoItem.baseUrl
-      ?? videoItem.base_url;
-    const audioUrl: string = dash.dash.audio[0].backupUrl?.[0]
-      ?? dash.dash.audio[0].backup_url?.[0]
-      ?? dash.dash.audio[0].baseUrl
-      ?? dash.dash.audio[0].base_url;
+    const { videoUrl, audioUrl }: GetUrlFromDashReturn = getUrlFromDash(dash, value);
 
     dispatch(setAddDownloadList({
       qid: randomUUID(),
