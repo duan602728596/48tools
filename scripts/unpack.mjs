@@ -165,7 +165,7 @@ async function unpackOthers() {
   await copySDK(sdkDownloadDir.linux, unpackedNodeModules.linux);
 
   // 拷贝许可文件
-  console.log('🚚正在拷贝许可文件');
+  console.log('🚚在拷贝许可文件和帮助文档');
   await Promise.all([
     ...isMacOS ? copy(unpacked.mac, true) : [],
     ...isMacOS ? copy(unpacked.macArm64, true) : [],
