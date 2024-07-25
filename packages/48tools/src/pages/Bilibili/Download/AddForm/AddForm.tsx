@@ -34,6 +34,7 @@ import {
   type ParseVideoUrlDASHObjectResult
 } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
+import type { DashInfo } from '../../types';
 
 /* 视频分类 */
 const bilibiliVideoTypesOptions: Array<DefaultOptionType> = [
@@ -53,19 +54,12 @@ export const bilibiliVideoTypesMap: TypesResult = bilibiliVideoTypesOptions.redu
     return result;
   }, {});
 
-interface dashInfo {
-  dash: DashVideoInfo;
-  supportFormats: Array<DashSupportFormats>;
-  pic: string;
-  title: string;
-}
-
 /* 添加下载信息 */
 function AddForm(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
-  const [dash, setDash]: [dashInfo | undefined, D<S<dashInfo | undefined>>] = useState(undefined);
+  const [dash, setDash]: [DashInfo | undefined, D<S<DashInfo | undefined>>] = useState(undefined);
   const [modalLoading, startModalLoadingTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
 

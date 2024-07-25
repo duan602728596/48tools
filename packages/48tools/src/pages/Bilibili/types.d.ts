@@ -1,3 +1,5 @@
+import type { DashSupportFormats, DashVideoInfo } from '@48tools-api/bilibili/download';
+
 /* ========== Download ========== */
 export interface DownloadItem {
   qid: string;              // 当前的下载id，随机
@@ -70,4 +72,12 @@ export interface ProgressEventData {
   percent: number;
   transferred: number;
   total: number;
+}
+
+// dash
+interface DashInfo {
+  dash: DashVideoInfo;
+  supportFormats: Array<DashSupportFormats>;
+  pic: string;
+  title: string;
 }

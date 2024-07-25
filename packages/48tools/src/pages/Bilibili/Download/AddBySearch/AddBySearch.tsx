@@ -5,7 +5,6 @@ import {
   useEffect,
   useTransition,
   type ReactElement,
-  type ReactNode,
   type Dispatch as D,
   type SetStateAction as S,
   type MouseEvent,
@@ -13,7 +12,7 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Input, Form, Table, Spin, message, type FormInstance } from 'antd';
+import { Button, Modal, Input, Form, Table, Spin, message, List, App, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { ColumnsType } from 'antd/es/table';
 import * as classNames from 'classnames';
@@ -27,6 +26,7 @@ import {
   type ParseVideoUrlV2ObjectResult
 } from '../function/parseBilibiliUrl';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
+import DASHSelect from './DASHSelect';
 import type { DownloadItem as BilibiliDownloadItem } from '../../types';
 
 interface PageQuery {
@@ -180,36 +180,40 @@ function AddBySearch(props: {}): ReactElement {
   }
 
   // 渲染下载列表
-  function videoListDownloadRender(): Array<ReactNode> {
-    return bvVideoList.map((o: DownloadItem, index: number): ReactElement => {
-      return (
-        <Button key={ o.cid }
-          className={ classNames('block text-left', style.downloadBtn) }
-          block={ true }
-          onClick={ (event: MouseEvent): Promise<void> => handleAddDownloadQueueClick(o, event) }
-        >
-          { index + 1 }、
-          { o.part }
-        </Button>
-      );
-    });
+  function videoListDownloadRender(o: DownloadItem, index: number): ReactElement {
+    return (
+      <List.Item key={ o.cid } className="px-0">
+        <div className="flex w-full">
+          <div className="shrink-0 grow-0 mr-[6px] w-4/6">
+            <Button className={ classNames('block text-left', style.downloadBtn) }
+              block={ true }
+              onClick={ (event: MouseEvent): Promise<void> => handleAddDownloadQueueClick(o, event) }
+            >
+              { index + 1 }、
+              { o.part }
+            </Button>
+          </div>
+          <div className="shrink-0 grow-0 w-2/6">
+            <DASHSelect id={ o.bvid } page={ o.index } />
+          </div>
+        </div>
+      </List.Item>
+    );
   }
 
   const columns: ColumnsType<SpaceArcSearchVListItem> = [
     {
-      title: '标题',
-      dataIndex: 'title'
-    },
-    {
       title: '操作',
+      dataIndex: 'title',
       key: 'handle',
-      width: 120,
-      render: (value: undefined, record: SpaceArcSearchVListItem, index: number): ReactElement => {
+      render: (value: string, record: SpaceArcSearchVListItem, index: number): ReactElement => {
         return (
-          <Button size="small"
+          <Button className={ style.downloadBtn }
+            size="small"
+            block={ true }
             onClick={ (event: MouseEvent): void => handleGetUrlListClick(record, event) }
           >
-            查看视频
+            { value }
           </Button>
         );
       }
@@ -232,29 +236,29 @@ function AddBySearch(props: {}): ReactElement {
           '个人主页批量下载',
           <span key="tips" className={ classNames('font-normal', commonStyle.tips) }>（搜索和下载需要先登录）</span>
         ] }
-        width={ 800 }
+        width={ 900 }
         centered={ true }
         destroyOnClose={ true }
         maskClosable={ false }
         footer={ <Button onClick={ handleCancelClick }>关闭</Button> }
         onCancel={ handleCancelClick }
       >
-        <div className="flex flex-col h-[400px]">
+        <div className="flex flex-col h-[500px]">
           <Form className="shrink-0 mb-[8px]" form={ form } layout="inline" onFinish={ handleSearchSubmit }>
             <Form.Item name="spaceId">
-              <Input className="w-[300px]" placeholder="账号ID" />
+              <Input className="w-[204px]" placeholder="账号ID" />
             </Form.Item>
             <Button htmlType="submit">搜索</Button>
           </Form>
           <div className="flex grow">
-            <div className="w-6/12">
+            <div className="w-4/12">
               <Table className="w-full"
                 size="small"
                 columns={ columns }
                 dataSource={ dataSource }
                 loading={ getDataLoading }
                 rowKey="bvid"
-                scroll={{ y: 275 }}
+                scroll={{ y: 380 }}
                 pagination={{
                   current: pageQuery.current,
                   pageSize: 30,
@@ -265,11 +269,12 @@ function AddBySearch(props: {}): ReactElement {
                 }}
               />
             </div>
-            <div className="w-6/12 h-[370px] pl-[12px] overflow-auto">
+            <div className="w-8/12 h-[460px] pl-[12px] overflow-auto">
               {
                 getUrlListLoading ? (
                   <div className="text-center">
-                    <Spin size="large" tip="解析中..." />
+                    <Spin size="large" />
+                    <span className="ml-[24px]">解析中...</span>
                   </div>
                 ) : (
                   <Fragment>
@@ -281,10 +286,11 @@ function AddBySearch(props: {}): ReactElement {
                           onClick={ handleAddMoreDownloadQueuesClick }
                         >
                           下载全部
+                          <span className={ commonStyle.tips }>（暂不支持选择分辨率）</span>
                         </Button>
                       )
                     }
-                    { videoListDownloadRender() }
+                    <List size="small" bordered={ true } dataSource={ bvVideoList } renderItem={ videoListDownloadRender } />
                   </Fragment>
                 )
               }
