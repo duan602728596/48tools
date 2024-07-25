@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { cwd } from './utils.mjs';
 
-async function checkTestConfigFile(NIMTestDir) {
+async function checkTestConfigFile() {
   const testFile = path.join(cwd, 'packages/test/src/testConfig.ts');
   const file = await fs.readFile(testFile, { encoding: 'utf8' });
 
