@@ -12,17 +12,19 @@ import cssnano from 'cssnano';
 import named from 'vinyl-named';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import { metaHelper } from '@sweet-milktea/utils';
 
-const { __dirname } = metaHelper(import.meta.url);
 const Sass = gulpSass(sass);
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const mfs = new GulpMemoryFs({
-  dir: 'dist',
-  reload: true
-});
+let mfs;
+
+if (isDev) {
+  mfs = new GulpMemoryFs({
+    dir: 'dist',
+    reload: true
+  });
+}
 
 function createWebpackConfig() {
   const webpackConfig = {
