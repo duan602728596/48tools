@@ -11,19 +11,20 @@ import {
 } from 'react';
 import { Button, Tooltip, Modal, Radio } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';
+import type { CheckboxOptionType } from 'antd/es/checkbox/Group';
 import { SkinTwoTone as IconSkinTwoTone } from '@ant-design/icons';
 import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import ThemeContext from './ThemeContext';
 
 localStorage.setItem('THEME_VALUE', globalThis?.__INITIAL_STATE__?.theme ?? 'system');
 
-const themeOptions: Array<{ label: string; value: string }> = [
+type ThemeValue = 'light' | 'dark' | 'system';
+
+const themeOptions: Array<CheckboxOptionType<ThemeValue>> = [
   { label: '自动', value: 'system' },
   { label: '浅色主题', value: 'light' },
   { label: '暗黑主题', value: 'dark' }
 ];
-
-type ThemeValue = 'light' | 'dark' | 'system';
 
 interface ThemeProviderProps extends Required<PropsWithChildren>{
   isChildrenWindow?: boolean; // 是否为子窗口
@@ -119,9 +120,9 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   }, [media]);
 
   return (
-    <ThemeContext.Provider value={{ ChangeThemeElement, isDark }}>
+    <ThemeContext value={{ ChangeThemeElement, isDark }}>
       { children }
-    </ThemeContext.Provider>
+    </ThemeContext>
   );
 }
 

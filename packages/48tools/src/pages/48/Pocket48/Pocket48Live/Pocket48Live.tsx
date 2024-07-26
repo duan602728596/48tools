@@ -5,10 +5,12 @@ import {
   useState,
   useEffect,
   useMemo,
+  useTransition,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent
+  type MouseEvent,
+  type TransitionStartFunction
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -76,8 +78,8 @@ function Pocket48Live(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
   const [searchValue, setSearchValue]: [string, D<S<string>>] = useState(''); // 搜索值
+  const [refreshLiveListLoading, startRefreshLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
 
   // 搜索结果
   const filterSearchResultLiveList: Array<LiveInfo> = useMemo(function(): Array<LiveInfo> {
@@ -322,17 +324,15 @@ function Pocket48Live(props: {}): ReactElement {
   }
 
   // 点击刷新直播列表
-  async function handleRefreshLiveListClick(event: MouseEvent): Promise<void> {
-    setLoading(true);
-
-    try {
-      await dispatch<any>(reqLiveList());
-    } catch (err) {
-      messageApi.error('直播列表加载失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+  function handleRefreshLiveListClick(event: MouseEvent): void {
+    startRefreshLiveListStartTransition(async (): Promise<void> => {
+      try {
+        await dispatch<any>(reqLiveList());
+      } catch (err) {
+        messageApi.error('直播列表加载失败！');
+        console.error(err);
+      }
+    });
   }
 
   const columns: ColumnsType<LiveInfo> = [
@@ -430,7 +430,7 @@ function Pocket48Live(props: {}): ReactElement {
         columns={ columns }
         dataSource={ filterSearchResultLiveList }
         bordered={ true }
-        loading={ loading }
+        loading={ refreshLiveListLoading }
         rowKey="liveId"
         pagination={{
           showQuickJumper: true

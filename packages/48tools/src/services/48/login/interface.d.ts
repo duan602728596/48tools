@@ -53,3 +53,12 @@ export interface UserInfoReloadOrSwitch extends Pocket48ResponseBase {
     };
   };
 }
+
+/* user money */
+export interface UserMoney extends Pocket48ResponseBase {
+  content: {
+    moneyPay: number;
+    moneyTotal: number;
+    moneyFree: number;
+  };
+}

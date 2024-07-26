@@ -4,14 +4,10 @@ import {
   useState,
   useEffect,
   useRef,
-  forwardRef,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MutableRefObject,
-  type RefObject,
-  type FunctionComponent,
-  type ForwardedRef
+  type RefObject
 } from 'react';
 import { Avatar, Switch } from 'antd';
 import { GiftTwoTone as IconGiftTwoTone } from '@ant-design/icons';
@@ -22,13 +18,7 @@ import type { LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../../common.sass';
 import NodeNimChatroomSocket from '../sdk/NodeNimChatroomSocket';
 import { source } from '../../../utils/snh48';
-import type {
-  LiveRoomMessage,
-  LiveRoomTextMessage,
-  LiveRoomGiftInfoCustom,
-  LiveRoomTextCustom,
-  CppLiveRoomBasicEvent
-} from './messageType';
+import type { LiveRoomTextMessage, LiveRoomGiftInfoCustom, LiveRoomTextCustom, CppLiveRoomBasicEvent } from './messageType';
 import type{ UserInfo } from '../../../functionalComponents/Pocket48Login/types';
 
 const VirtualItemClassName: string = 'Virtual-Item-2';
@@ -44,71 +34,71 @@ function isLiveRoomTextCustom(item: CppLiveRoomBasicEvent, custom: LiveRoomTextC
 
 /* 显示单条弹幕 */
 interface DanmuItemProps {
+  ref?: RefObject<HTMLDivElement | null>;
   item: CppLiveRoomBasicEvent;
   index: number;
 }
 
-const DanmuItem: FunctionComponent<DanmuItemProps> = forwardRef(
-  function(props: DanmuItemProps, ref: ForwardedRef<any>): ReactElement | null {
-    const { item, index }: DanmuItemProps = props;
-    const [height, setHeight]: [number, D<S<number>>] = useState(26);
-    const divRef: RefObject<HTMLDivElement> = useRef(null);
+function DanmuItem(props: DanmuItemProps): ReactElement | null {
+  const { ref, item, index }: DanmuItemProps = props;
+  const [height, setHeight]: [number, D<S<number>>] = useState(26);
+  const divRef: RefObject<HTMLDivElement | null> = useRef(null);
 
-    useEffect(function(): void {
-      if (divRef.current) {
-        const newHeight: number = divRef.current!.getBoundingClientRect().height + 2;
+  useEffect(function(): void {
+    if (divRef.current) {
+      const newHeight: number = divRef.current!.getBoundingClientRect().height + 2;
 
-        if (newHeight > 26) {
-          setHeight((prevState: number): number => newHeight);
-        }
+      if (newHeight > 26) {
+        setHeight((prevState: number): number => newHeight);
       }
-    }, []);
-
-    try {
-      const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.msg_setting_!.ext_!);
-      const isBarrage: boolean = custom.messageType === 'BARRAGE_NORMAL' || custom.messageType === 'BARRAGE_MEMBER';
-      const isMember: boolean = custom.messageType === 'BARRAGE_MEMBER';
-
-      if (isLiveRoomTextCustom(item, custom)) {
-        return (
-          <div ref={ ref }
-            className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName, isMember ? commonStyle.primaryText : undefined) }
-            style={{ height }}
-            data-index={ index }
-          >
-            <div ref={ divRef }>
-              <Avatar size="small" src={ source(custom.user.avatar) } />
-              <span className="ml-[3px]">{ custom.user.nickName }：</span>
-              { (isMember || isBarrage) ? custom.text : (item as LiveRoomTextMessage).text }
-            </div>
-          </div>
-        );
-      } else {
-        const tpNum: number = Number(custom.giftInfo.tpNum);
-
-        return (
-          <div ref={ ref }
-            className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName) }
-            style={{ height }}
-            data-index={ index }
-          >
-            <div ref={ divRef }>
-              <IconGiftTwoTone className="mr-[3px] text-[22px] align-[-5px]" />
-              { custom.user.nickName }
-              &nbsp;送给&nbsp;
-              { custom.giftInfo.acceptUser.userName }&nbsp;
-              { custom.giftInfo.giftNum }个
-              { custom.giftInfo.giftName }{ tpNum > 0 ? `(${ tpNum })` : null }。
-            </div>
-          </div>
-        );
-      }
-    } catch (err) {
-      console.error(err, props);
-
-      return null;
     }
-  });
+  }, []);
+
+  try {
+    const custom: LiveRoomTextCustom | LiveRoomGiftInfoCustom = JSON.parse(item.msg_setting_!.ext_!);
+    const isBarrage: boolean = custom.messageType === 'BARRAGE_NORMAL' || custom.messageType === 'BARRAGE_MEMBER';
+    const isMember: boolean = custom.messageType === 'BARRAGE_MEMBER';
+
+    if (isLiveRoomTextCustom(item, custom)) {
+      return (
+        <div ref={ ref }
+          className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName, isMember ? commonStyle.primaryText : undefined) }
+          style={{ height }}
+          data-index={ index }
+        >
+          <div ref={ divRef }>
+            <Avatar size="small" src={ source(custom.user.avatar) } />
+            <span className="ml-[3px]">{ custom.user.nickName }：</span>
+            { (isMember || isBarrage) ? custom.text : (item as LiveRoomTextMessage).text }
+          </div>
+        </div>
+      );
+    } else {
+      const tpNum: number = Number(custom.giftInfo.tpNum);
+
+      return (
+        <div ref={ ref }
+          className={ classNames('py-[1px] pl-[3px] pr-[20px]', VirtualItemClassName) }
+          style={{ height }}
+          data-index={ index }
+        >
+          <div ref={ divRef }>
+            <IconGiftTwoTone className="mr-[3px] text-[22px] align-[-5px]" />
+            { custom.user.nickName }
+            &nbsp;送给&nbsp;
+            { custom.giftInfo.acceptUser.userName }&nbsp;
+            { custom.giftInfo.giftNum }个
+            { custom.giftInfo.giftName }{ tpNum > 0 ? `(${ tpNum })` : null }。
+          </div>
+        </div>
+      );
+    }
+  } catch (err) {
+    console.error(err, props);
+
+    return null;
+  }
+}
 
 /* 显示弹幕 */
 interface DanmuProps {
@@ -121,10 +111,10 @@ function Danmu(props: DanmuProps): ReactElement {
   const { info, userInfo, appDataDir }: DanmuProps = props;
   const [danmuData, setDanmuData]: [Array<CppLiveRoomBasicEvent>, D<S<Array<CppLiveRoomBasicEvent>>>] = useState([]);
   const [danmuListHeight, setDanmuListHeight]: [number, D<S<number>>] = useState(0);
-  const nimRef: MutableRefObject<NodeNimChatroomSocket | null> = useRef(null);
-  const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
-  const danmuListRef: RefObject<HTMLDivElement> = useRef(null);
-  const virtualListRef: RefObject<ListRef> = useRef(null);
+  const nimRef: RefObject<NodeNimChatroomSocket | null> = useRef(null);
+  const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
+  const danmuListRef: RefObject<HTMLDivElement | null> = useRef(null);
+  const virtualListRef: RefObject<ListRef | null> = useRef(null);
 
   // 获取到新信息
   function handleNewMessage(t: NodeNimChatroomSocket, event: Array<ChatRoomMessage>): void {

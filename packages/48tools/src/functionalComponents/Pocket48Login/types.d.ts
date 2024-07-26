@@ -5,6 +5,7 @@ export interface UserInfo {
   accid: string;
   pwd: string;
   unknown?: boolean;
+  isExpired?: boolean;
 }
 
 export type UserInfoString = `{

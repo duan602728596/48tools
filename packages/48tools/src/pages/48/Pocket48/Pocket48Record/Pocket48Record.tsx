@@ -7,31 +7,20 @@ import {
   Fragment,
   useState,
   useEffect,
+  useTransition,
   type ReactElement,
   type ReactNode,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent
+  type MouseEvent,
+  type TransitionStartFunction
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import {
-  Button,
-  message,
-  Table,
-  Tag,
-  Select,
-  Form,
-  Space,
-  Popconfirm,
-  Modal,
-  AutoComplete,
-  Spin,
-  type FormInstance
-} from 'antd';
+import { Button, message, Table, Select, Form, Space, Popconfirm, Modal, AutoComplete, Spin, type FormInstance } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { BaseOptionType } from 'rc-select/es/Select';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
@@ -72,8 +61,8 @@ import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../ty
 
 /**
  * 格式化m3u8文件内视频的地址
- * @param { string } data: m3u8文件内容
- * @param { number } port: 代理的端口号
+ * @param { string } data - m3u8文件内容
+ * @param { number } port - 代理的端口号
  */
 export function formatTsUrl(data: string, port: number): string {
   const dataArr: string[] = data.split('\n');
@@ -122,9 +111,9 @@ function Pocket48Record(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [modalApi, modalContextHolder]: UseModalReturnType = Modal.useModal();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载loading
-  const [userIdSearchResult, setUserIdSearchResult]: [Array<BaseOptionType>, D<S<Array<BaseOptionType>>>] = useState([]);
-  const [userIdSearchLoading, setUserIdSearchLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [userIdSearchResult, setUserIdSearchResult]: [Array<DefaultOptionType>, D<S<Array<DefaultOptionType>>>] = useState([]);
+  const [refreshLiveListLoading, startRefreshLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
+  const [userIdSearchLoading, startUserIdSearchStartTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
   const reqRoomId: ReqRoomId = useReqRoomIdQuery(undefined);
   const roomId: Array<RoomItem> = reqRoomId.data ?? [];
@@ -137,15 +126,13 @@ function Pocket48Record(props: {}): ReactElement {
     }
 
     if (!value) {
-      setUserIdSearchLoading(false);
       setUserIdSearchResult([]);
 
       return;
     }
 
-    setUserIdSearchLoading(true);
-    searchTimer = setTimeout((): void => {
-      const result: Array<BaseOptionType> = [];
+    searchTimer = setTimeout((): void => startUserIdSearchStartTransition((): void => {
+      const result: Array<DefaultOptionType> = [];
 
       if (/^[\u4E00-\u9FFF]+$/i.test(value)) {
         // 搜索中文
@@ -187,8 +174,7 @@ function Pocket48Record(props: {}): ReactElement {
       }
 
       setUserIdSearchResult(result);
-      setUserIdSearchLoading(false);
-    }, 500);
+    }));
   }
 
   // 表单的onFieldsChange事件
@@ -253,7 +239,7 @@ function Pocket48Record(props: {}): ReactElement {
   /**
    * 下载视频
    * @param { LiveInfo } record
-   * @param { 0 | 1 } downloadType: 下载方式。0：正常下载，1：拼碎片
+   * @param { 0 | 1 } downloadType - 下载方式。0：正常下载，1：拼碎片
    * @param { MouseEvent<HTMLButtonElement> } event
    */
   async function handleDownloadM3u8Click(record: LiveInfo, downloadType: 0 | 1, event: MouseEvent): Promise<void> {
@@ -366,44 +352,40 @@ function Pocket48Record(props: {}): ReactElement {
   }
 
   // 加载列表
-  async function handleLoadRecordListClick(event: MouseEvent): Promise<void> {
-    setLoading(true);
+  function handleLoadRecordListClick(event: MouseEvent): void {
+    startRefreshLiveListStartTransition(async (): Promise<void> => {
+      try {
+        const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
+        const res: LiveData = await requestLiveList(recordNext, false, groupId, userId);
+        const data: Array<LiveInfo> = recordList.concat(res.content.liveList);
 
-    try {
-      const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
-      const res: LiveData = await requestLiveList(recordNext, false, groupId, userId);
-      const data: Array<LiveInfo> = recordList.concat(res.content.liveList);
-
-      dispatch(setRecordList({
-        next: res.content.next,
-        data
-      }));
-    } catch (err) {
-      messageApi.error('录播列表加载失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+        dispatch(setRecordList({
+          next: res.content.next,
+          data
+        }));
+      } catch (err) {
+        messageApi.error('录播列表加载失败！');
+        console.error(err);
+      }
+    });
   }
 
   // 刷新列表
-  async function handleRefreshLiveListClick(event: MouseEvent): Promise<void> {
-    setLoading(true);
+  function handleRefreshLiveListClick(event: MouseEvent): void {
+    startRefreshLiveListStartTransition(async (): Promise<void> => {
+      try {
+        const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
+        const res: LiveData = await requestLiveList('0', false, groupId, userId);
 
-    try {
-      const { groupId, userId }: { groupId?: number | 'all'; userId?: string | number | undefined } = form.getFieldsValue();
-      const res: LiveData = await requestLiveList('0', false, groupId, userId);
-
-      dispatch(setRecordList({
-        next: res.content.next,
-        data: res.content.liveList
-      }));
-    } catch (err) {
-      messageApi.error('录播列表加载失败！');
-      console.error(err);
-    }
-
-    setLoading(false);
+        dispatch(setRecordList({
+          next: res.content.next,
+          data: res.content.liveList
+        }));
+      } catch (err) {
+        messageApi.error('录播列表加载失败！');
+        console.error(err);
+      }
+    });
   }
 
   // 渲染分页
@@ -559,7 +541,7 @@ function Pocket48Record(props: {}): ReactElement {
         columns={ columns }
         dataSource={ recordList }
         bordered={ true }
-        loading={ loading }
+        loading={ refreshLiveListLoading }
         rowKey="liveId"
         pagination={{
           showQuickJumper: true,

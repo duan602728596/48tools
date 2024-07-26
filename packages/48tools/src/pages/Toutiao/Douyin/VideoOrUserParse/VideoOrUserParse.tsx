@@ -12,7 +12,7 @@ import {
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Input, message, Modal, Select, Table, Button } from 'antd';
-import type { BaseOptionType } from 'rc-select/es/Select';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { ColumnsType } from 'antd/es/table';
 import { Onion } from '@bbkkbkk/q';
 import type { UseMessageReturnType } from '@48tools-types/antd';
@@ -272,7 +272,7 @@ function VideoOrUserParse(props: {}): ReactElement {
   function handleUserListDownloadUrlSelect(
     record: UserDataItem | AwemeItem,
     value: string,
-    option: { item: DownloadUrlItem } & BaseOptionType
+    option: { item: DownloadUrlItem } & DefaultOptionType
   ): void {
     dispatch(setAddDownloadList({
       qid: randomUUID(),
@@ -286,7 +286,7 @@ function VideoOrUserParse(props: {}): ReactElement {
   }
 
   // 选择下载地址
-  function handleDownloadUrlSelect(value: string, option: { item: DownloadUrlItem } & BaseOptionType): void {
+  function handleDownloadUrlSelect(value: string, option: { item: DownloadUrlItem } & DefaultOptionType): void {
     setSelectedUrl(option.item);
   }
 
@@ -343,7 +343,7 @@ function VideoOrUserParse(props: {}): ReactElement {
         <Fragment>
           <Select className={ style.userListUrlSelect }
             size="small"
-            onSelect={ (v: string, option: { item: DownloadUrlItem } & BaseOptionType): void =>
+            onSelect={ (v: string, option: { item: DownloadUrlItem } & DefaultOptionType): void =>
               handleUserListDownloadUrlSelect(record, v, option) }
           >
             { userDataSelectOptionsRender(record) }

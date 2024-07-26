@@ -4,13 +4,9 @@ import {
   useEffect,
   useCallback,
   useRef,
-  forwardRef,
   type ReactElement,
   type MouseEvent,
-  type FunctionComponent,
-  type ForwardedRef,
   type RefObject,
-  type MutableRefObject,
   type Dispatch as D,
   type SetStateAction as S
 } from 'react';
@@ -46,47 +42,52 @@ function statusRender(item: ProcessItem): ReactElement | undefined {
 }
 
 /* 渲染log的单行 */
-const ConsoleItem: FunctionComponent<{ item: ProcessItemConsole }> = forwardRef(
-  function(props: { item: ProcessItemConsole }, ref: ForwardedRef<any>): ReactElement {
-    const { item }: { item: ProcessItemConsole } = props;
-    const [height, setHeight]: [number, D<S<number>>] = useState(18);
-    const spanRef: RefObject<HTMLSpanElement> = useRef(null);
-    const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
+interface ConsoleItemProps {
+  ref?: RefObject<HTMLParagraphElement | null>;
+  item: ProcessItemConsole;
+}
 
-    function handleResizeObserverCallback(entries: ResizeObserverEntry[], observer: ResizeObserver): void {
-      const newHeight: number = entries[0].contentRect.height + 4;
+function ConsoleItem(props: ConsoleItemProps): ReactElement {
+  const { ref, item }: ConsoleItemProps = props;
+  const [height, setHeight]: [number, D<S<number>>] = useState(18);
+  const spanRef: RefObject<HTMLSpanElement | null> = useRef(null);
+  const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
+
+  function handleResizeObserverCallback(entries: ResizeObserverEntry[], observer: ResizeObserver): void {
+    const newHeight: number = entries[0].contentRect.height + 4;
+
+    if (newHeight > 18) {
+      setHeight((prevState: number): number => newHeight);
+    }
+  }
+
+  useEffect(function(): void {
+    if (spanRef.current) {
+      const newHeight: number = spanRef.current!.getBoundingClientRect().height + 4;
 
       if (newHeight > 18) {
         setHeight((prevState: number): number => newHeight);
       }
     }
+  }, []);
 
-    useEffect(function(): void {
-      if (spanRef.current) {
-        const newHeight: number = spanRef.current!.getBoundingClientRect().height + 4;
+  useEffect(function(): () => void {
+    resizeObserverRef.current = new ResizeObserver(handleResizeObserverCallback);
+    spanRef.current && resizeObserverRef.current.observe(spanRef.current);
 
-        if (newHeight > 18) {
-          setHeight((prevState: number): number => newHeight);
-        }
-      }
-    }, []);
+    return function(): void {
+      resizeObserverRef.current?.disconnect?.();
+      resizeObserverRef.current = null;
+    };
+  }, []);
 
-    useEffect(function(): () => void {
-      resizeObserverRef.current = new ResizeObserver(handleResizeObserverCallback);
-      spanRef.current && resizeObserverRef.current.observe(spanRef.current);
+  return (
+    <p ref={ ref } className="my-0 py-[4px]" style={{ height }}>
+      <span ref={ spanRef } className="block">{ item.text }</span>
+    </p>
+  );
+}
 
-      return function(): void {
-        resizeObserverRef.current?.disconnect?.();
-        resizeObserverRef.current = null;
-      };
-    }, []);
-
-    return (
-      <p ref={ ref } className="my-0 py-[4px]" style={{ height }}>
-        <span ref={ spanRef } className="block">{ item.text }</span>
-      </p>
-    );
-  });
 
 interface ProcessItemRenderProps {
   index: number;

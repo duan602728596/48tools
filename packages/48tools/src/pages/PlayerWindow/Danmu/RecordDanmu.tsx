@@ -3,12 +3,9 @@ import {
   useEffect,
   useRef,
   useSyncExternalStore,
-  forwardRef,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type FunctionComponent,
-  type MutableRefObject,
   type RefObject,
   type MouseEvent
 } from 'react';
@@ -42,54 +39,54 @@ function handleVideoGoToClick(event: MouseEvent<HTMLAnchorElement>): void {
 
 /* 显示单条弹幕 */
 interface DanmuItemProps {
+  ref?: RefObject<HTMLDivElement | null>;
   item: DanmuItem;
   index: number;
 }
 
-const DanmuItemComponent: FunctionComponent<DanmuItemProps> = forwardRef(
-  function(props: DanmuItemProps, ref: any): ReactElement | null {
-    const { item, index }: DanmuItemProps = props;
-    const [height, setHeight]: [number, D<S<number>>] = useState(26);
-    const divRef: RefObject<HTMLDivElement> = useRef(null);
+function DanmuItemComponent(props: DanmuItemProps): ReactElement | null {
+  const { ref, item, index }: DanmuItemProps = props;
+  const [height, setHeight]: [number, D<S<number>>] = useState(26);
+  const divRef: RefObject<HTMLDivElement | null> = useRef(null);
 
-    useEffect(function(): void {
-      if (divRef.current) {
-        const newHeight: number = divRef.current!.getBoundingClientRect().height + 2;
+  useEffect(function(): void {
+    if (divRef.current) {
+      const newHeight: number = divRef.current!.getBoundingClientRect().height + 2;
 
-        if (newHeight > 26) {
-          setHeight((prevState: number): number => newHeight);
-        }
+      if (newHeight > 26) {
+        setHeight((prevState: number): number => newHeight);
       }
-    }, []);
+    }
+  }, []);
 
-    return (
-      <div ref={ ref }
-        className={ classNames('py-[1px] pl-[6px] pr-[20px]', VirtualItemClassName) }
-        style={{ height }}
-        data-index={ index }
-      >
-        <div ref={ divRef }>
-          <div className="flex leading-[26px]">
-            <div className="shrink-0 mr-[6px]">
-              <a className={ commonStyle.link }
-                role="button"
-                aria-label="时间"
-                tabIndex={ 0 }
-                data-time={ item.currentTime }
-                onClick={ handleVideoGoToClick }
-              >
-                [{ item.time }]
-              </a>
-            </div>
-            <div className="grow">
-              { item.nickname }：
-              { item.message }
-            </div>
+  return (
+    <div ref={ ref }
+      className={ classNames('py-[1px] pl-[6px] pr-[20px]', VirtualItemClassName) }
+      style={{ height }}
+      data-index={ index }
+    >
+      <div ref={ divRef }>
+        <div className="flex leading-[26px]">
+          <div className="shrink-0 mr-[6px]">
+            <a className={ commonStyle.link }
+              role="button"
+              aria-label="时间"
+              tabIndex={ 0 }
+              data-time={ item.currentTime }
+              onClick={ handleVideoGoToClick }
+            >
+              [{ item.time }]
+            </a>
+          </div>
+          <div className="grow">
+            { item.nickname }：
+            { item.message }
           </div>
         </div>
       </div>
-    );
-  });
+    </div>
+  );
+}
 
 /* 弹幕 */
 interface DanmuProps {
@@ -101,9 +98,9 @@ function RecordDanmu(props: DanmuProps): ReactElement {
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState<boolean>(false); // 加载状态
   const danmuList: Array<DanmuItem> = useSyncExternalStore(danmuStore.subscribe, danmuStore.getDanmuList);
   const [danmuListHeight, setDanmuListHeight]: [number, D<S<number>>] = useState(0);
-  const resizeObserverRef: MutableRefObject<ResizeObserver | null> = useRef(null);
-  const danmuListRef: RefObject<HTMLDivElement> = useRef(null);
-  const virtualListRef: RefObject<ListRef> = useRef(null);
+  const resizeObserverRef: RefObject<ResizeObserver | null> = useRef(null);
+  const danmuListRef: RefObject<HTMLDivElement | null> = useRef(null);
+  const virtualListRef: RefObject<ListRef | null> = useRef(null);
 
   // 加载弹幕
   async function getDanmu(): Promise<void> {

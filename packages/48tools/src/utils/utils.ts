@@ -140,10 +140,8 @@ export function getExecutablePath(): string | null {
 }
 
 // pc端ua
-export const pcUserAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 '
-  + '(KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.52';
-export const pcUserAgent2: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-  + '(KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76';
+export const pcUserAgent: string = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.52';
+export const pcUserAgent2: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0';
 
 const isWin: boolean = os.platform() === 'win32';
 const isMac: boolean = os.platform() === 'darwin';

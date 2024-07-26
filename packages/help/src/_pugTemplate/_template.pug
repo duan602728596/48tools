@@ -1,0 +1,17 @@
+doctype html
+html.w-100.h-100
+  head
+    meta(charset='utf-8')
+    link(rel='stylesheet' href='./style/common.css')
+    block head
+
+  body.m-0.w-100.h-100
+    div.d-flex.w-100.h-100.overflow-hidden
+      include ./_aside
+
+      div.flex-grow-1
+        div.p-4.h-100.overflow-auto.main
+          block article
+
+    script(src='./script/common.js')
+    block script

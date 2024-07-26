@@ -27,7 +27,7 @@ export interface BilibiliCookie {
  */
 function Qrcode(props: { onCancel: Function }): ReactElement {
   const { message: messageApi }: useAppProps = App.useApp();
-  const canvasRef: RefObject<HTMLCanvasElement> = useRef(null);
+  const canvasRef: RefObject<HTMLCanvasElement | null> = useRef(null);
   const bilibiliCookie: BilibiliCookie | null = useMemo(function(): BilibiliCookie | null {
     const info: string | null = localStorage.getItem(BILIBILI_COOKIE_KEY);
 

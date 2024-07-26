@@ -23,6 +23,7 @@ lib
 .lib.mid
 www
 build
+!packages/help/build
 dist
 packages/test/ffmpeg
 node-nim-cache0

@@ -3,12 +3,13 @@ import {
   Fragment,
   createElement,
   useState,
+  useEffect,
   useRef,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
   type MouseEvent,
-  type MutableRefObject
+  type RefObject
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -25,10 +26,12 @@ import {
   requestImUserInfo,
   requestUserInfoReload,
   requestUserInfoSwitch,
+  requestUserMoney,
   type LoginUserInfo,
   type IMUserInfo,
   type UserInfoReloadOrSwitch,
-  type UserItem
+  type UserItem,
+  type UserMoney
 } from '@48tools-api/48/login';
 import commonStyle from '../../common.sass';
 import style from './pocket48Login.sass';
@@ -91,7 +94,7 @@ function Pocket48Login(props: {}): ReactElement {
   const { message: messageApi, modal: modalApi }: useAppProps = App.useApp();
   const [open, setOpen]: [boolean, D<S<boolean>>] = useState(false);
   const [tabsKey, setTabsKey]: [string, D<S<string>>] = useState('loginForm');
-  const userInfoSelectValueRef: MutableRefObject<string | null> = useRef(null);
+  const userInfoSelectValueRef: RefObject<string | null> = useRef(null);
   const [loginForm]: [FormInstance] = Form.useForm();
   const [tokenForm]: [FormInstance] = Form.useForm();
   const { modalRender, handleOpenSelectAppDataDirClick }: UseAppDataDirReturnType = useAppDataDir();
@@ -322,21 +325,24 @@ function Pocket48Login(props: {}): ReactElement {
   // button的渲染
   function loginButtonRender(): ReactElement {
     let icon: ReactElement | null = null;
-    let nickname: string = '口袋48登录';
+    let nickname: string | ReactElement = '口袋48登录';
 
     if (userInfo) {
-      icon = (
-        <Avatar key="icon" className={ style.avatar } size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
-          { userInfo?.unknown ? '?' : undefined }
-        </Avatar>
-      );
-      nickname = userInfo.unknown ? '未知用户' : userInfo.nickname;
+      if (userInfo.isExpired) {
+        nickname = <span className={ commonStyle.tips }>账号已过期，请重新登录。</span>;
+      } else {
+        icon = (
+          <Avatar key="icon" size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
+            { userInfo?.unknown ? '?' : undefined }
+          </Avatar>
+        );
+        nickname = userInfo.unknown ? '未知用户' : userInfo.nickname;
+      }
     }
 
     return createElement(
       userInfo ? Dropdown.Button : Button,
       {
-        className: style.inlineBlock,
         menu: userInfo ? {
           items: menuItems,
           onClick: handleMenuClick
@@ -346,6 +352,25 @@ function Pocket48Login(props: {}): ReactElement {
       [icon, nickname]
     );
   }
+
+  // 验证账号是否过期
+  async function checkTokenExpired(): Promise<void> {
+    if (!userInfo) return;
+
+    const { token, isExpired }: UserInfo = userInfo;
+
+    if (isExpired) return;
+
+    const res: UserMoney = await requestUserMoney(token);
+
+    if (!res.success) {
+      dispatch(setUserInfo({ ...userInfo, isExpired: true }));
+    }
+  }
+
+  useEffect(function(): void {
+    checkTokenExpired();
+  }, []);
 
   const tabsItem: Array<Tab> = [
     {
@@ -362,7 +387,7 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      { loginButtonRender() }
+      <div className="inline-block">{ loginButtonRender() }</div>
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }

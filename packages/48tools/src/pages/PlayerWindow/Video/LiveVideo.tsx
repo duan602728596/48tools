@@ -1,5 +1,5 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
-import { useEffect, useRef, type ReactElement, type RefObject, type MutableRefObject } from 'react';
+import { useEffect, useRef, type ReactElement, type RefObject } from 'react';
 import mpegts from 'mpegts.js';
 import type { LiveRoomInfo } from '@48tools-api/48';
 import { getFFmpeg } from '../../../utils/utils';
@@ -26,9 +26,9 @@ interface VideoProps {
 /* 视频的播放 */
 function LiveVideo(props: VideoProps): ReactElement {
   const { playerInfo, info }: VideoProps = props;
-  const childRef: MutableRefObject<ChildProcessWithoutNullStreams | undefined> = useRef();
-  const flvPlayerRef: MutableRefObject<mpegts.Player | undefined> = useRef();
-  const videoRef: RefObject<HTMLVideoElement> = useRef(null);
+  const childRef: RefObject<ChildProcessWithoutNullStreams | null> = useRef(null);
+  const flvPlayerRef: RefObject<mpegts.Player | null> = useRef(null);
+  const videoRef: RefObject<HTMLVideoElement | null> = useRef(null);
 
   // 加载视频
   function loadVideo(): void {

@@ -1,5 +1,5 @@
 import { ipcRenderer, shell } from 'electron';
-import { Fragment, useContext, type ReactElement, type ReactNode, type MouseEvent } from 'react';
+import { Fragment, createElement, use, type ReactElement, type ReactNode, type MouseEvent } from 'react';
 import { Button, Divider, Space, Image, Tooltip } from 'antd';
 import Icon, {
   ToolTwoTone as IconToolTwoTone,
@@ -18,6 +18,7 @@ import ExecutablePath from './ExecutablePath/ExecutablePath';
 import NewUserTour from './NewUserTour/NewUserTour';
 import ThemeContext, { type Theme } from '../../components/basic/Theme/ThemeContext';
 import { useAppDataDir, type UseAppDataDirReturnType } from '../../functionalComponents/Pocket48Login/useAppDataDir/useAppDataDir';
+import HelpButtonGroup, { type HelpButtonGroupProps } from '../../components/HelpButtonGroup/HelpButtonGroup';
 import IconLiveSvgComponent from './images/live.component.svg';
 import IconVideoSvgComponent from './images/video.component.svg';
 import IconMicrophoneSvgComponent from './images/microphone.component.svg';
@@ -39,16 +40,17 @@ interface NativeItem {
   icon: ReactElement;
   hBtn?: boolean;
   testId?: string;
+  help?: HelpButtonGroupProps;
 }
 
 const IconBilibiliLogo: ReactElement
-    = <Icon className={ classNames('relative', style.iconBilibili) } component={ IconBilibiliLogoSvgComponent } />,
+    = <Icon className="relative text-[32px]" component={ IconBilibiliLogoSvgComponent } />,
   IconAcFunLogo: ReactElement
-    = <Icon className={ classNames('relative', style.iconAcFun) } component={ IconAcFunLogoSvgComponent } />,
+    = <Icon className="relative text-[46px]" component={ IconAcFunLogoSvgComponent } />,
   IconDouyinLogo: ReactElement
-    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDouyinSvgComponent } />,
+    = <Icon className="text-[18px]" component={ IconDouyinSvgComponent } />,
   IconKuaishouLogo: ReactElement
-    = <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconKuaishouSvgComponent } />;
+    = <Icon className="text-[18px]" component={ IconKuaishouSvgComponent } />;
 
 /* 导航配置 */
 const navLinkConfig: Array<Array<NativeItem>> = [
@@ -56,23 +58,23 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋48直播抓取',
       url: '/48/Pocket48Live',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV5) } component={ IconLiveSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconLiveSvgComponent } />
     },
     {
       name: '口袋48录播下载',
       url: '/48/Pocket48Record',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconVideoSvgComponent } />,
+      icon: <Icon className="text-[18px]" component={ IconVideoSvgComponent } />,
       testId: 'pocket48-record-link'
     },
     {
       name: '官方公演直播抓取',
       url: '/48/InLive',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconMicrophoneSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconMicrophoneSvgComponent } />
     },
     {
       name: '官方公演录播下载',
       url: '/48/InVideo',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconRecordSvgComponent } />,
+      icon: <Icon className="text-[18px]" component={ IconRecordSvgComponent } />,
       testId: '48-in-video-link'
     }
   ],
@@ -80,7 +82,7 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋房间电台',
       url: '/48/Voice',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconDiantaiSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconDiantaiSvgComponent } />
     },
     {
       name: '口袋房间消息',
@@ -157,17 +159,17 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconCutSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconCutSvgComponent } />
     },
     {
       name: '视频合并',
       url: '/VideoEdit/Concat',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconConcatSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconConcatSvgComponent } />
     },
     {
       name: '执行FFmpeg命令',
       url: '/VideoEdit/FFmpegProcess',
-      icon: <Icon className={ classNames('text-[18px]', style.iconV4) } component={ IconPowerShellSvgComponent } />
+      icon: <Icon className="text-[18px]" component={ IconPowerShellSvgComponent } />
     }
   ]
 ];
@@ -181,24 +183,28 @@ function nativeRender(): Array<ReactNode> {
     const groupElement: Array<ReactElement> = [];
 
     for (const navItem of group) {
-      groupElement.push(
-        <div key={ navItem.name }>
-          <ButtonLink linkProps={{ to: navItem.url }}
-            buttonProps={{
-              className: navItem.hBtn ? 'overflow-hidden' : undefined,
-              icon: navItem.icon,
-              block: true,
-              'data-test-id': navItem.testId
-            }}
-          >
-            { navItem.name }
-          </ButtonLink>
-        </div>
+      let buttonLinkElement: ReactElement = (
+        <ButtonLink linkProps={{ to: navItem.url }}
+          buttonProps={{
+            className: navItem.hBtn ? 'overflow-hidden' : undefined,
+            icon: navItem.icon,
+            block: true,
+            'data-test-id': navItem.testId
+          }}
+        >
+          { navItem.name }
+        </ButtonLink>
       );
+
+      if (navItem.help) {
+        buttonLinkElement = createElement(HelpButtonGroup, navItem.help, buttonLinkElement);
+      }
+
+      groupElement.push(<div key={ navItem.name }>{ buttonLinkElement }</div>);
     }
 
     element.push(
-      <nav key={ `nav-${ i }` } className="grid grid-cols-4 gap-[16px] w-[755px]">
+      <nav key={ `nav-${ i }` } className="grid grid-cols-4 gap-[16px] w-[800px]">
         { groupElement }
       </nav>,
       <Divider key={ `driver-${ i }` } className="my-[16px]" />
@@ -230,32 +236,34 @@ function handleOpenDownloadUrlClick(event: MouseEvent): void {
 
 /* 首页 */
 function Index(props: {}): ReactElement {
-  const theme: Theme = useContext(ThemeContext);
+  const { ChangeThemeElement }: Theme = use(ThemeContext);
   const { buttonRender, modalRender }: UseAppDataDirReturnType = useAppDataDir();
 
   return (
     <Fragment>
       <div className="p-[16px]">
         { nativeRender() }
-        <div className="mb-[8px]">
-          <Space>
-            <FFmpegOption />
-            { buttonRender() }
-            <ExecutablePath />
-          </Space>
-        </div>
-        <div className="text-right">
-          <Space>
-            <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
-            { theme.ChangeThemeElement }
-            <Tooltip title="开发者工具">
-              <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
-            </Tooltip>
-            <Tooltip title="问题反馈">
-              <Button id="issues" type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
-            </Tooltip>
-            <ButtonLink linkProps={{ to: '/Agreement/Agreement' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
-          </Space>
+        <div className="w-[fit-content]">
+          <div className="mb-[8px]">
+            <Space>
+              <FFmpegOption />
+              { buttonRender() }
+              <ExecutablePath />
+            </Space>
+          </div>
+          <div className="text-right">
+            <Space>
+              <Button id="help-doc" icon={ <IconFileSyncOutlined /> } onClick={ handleOpenHelpClick }>使用手册</Button>
+              { ChangeThemeElement }
+              <Tooltip title="开发者工具">
+                <Button type="text" icon={ <IconToolTwoTone /> } onClick={ handleOpenDeveloperToolsClick } />
+              </Tooltip>
+              <Tooltip title="问题反馈">
+                <Button id="issues" type="text" icon={ <IconBugTwoTone /> } onClick={ handleOpenIssuesClick } />
+              </Tooltip>
+              <ButtonLink linkProps={{ to: '/Agreement/Agreement' }} buttonProps={{ type: 'text' }}>License</ButtonLink>
+            </Space>
+          </div>
         </div>
         <Divider className="my-[16px]" />
         <div className={ commonStyle.text }>

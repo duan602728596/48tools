@@ -29,8 +29,14 @@ export const isTest: boolean = process.env.TEST === 'true';
 /* 文件夹路径 */
 export const wwwPath: string = path.join(__dirname, '..');
 
-/* 判断是否是Windows系统和ARM架构 */
-export const isWindowsArm: boolean = process.platform === 'win32' && process.arch === 'arm64';
+/* 判断系统 */
+export const isMacOS: boolean = process.platform === 'darwin';
+
+/* 软件主目录 */
+export const softwareRootPath: string = path.join(__dirname, '../'.repeat(isMacOS ? 5 : 3));
+
+/* help文件 */
+export const helpDir: string = isDevelopment ? path.join(__dirname, '../../help/dist') : path.join(softwareRootPath, 'help');
 
 /**
  * worker.js文件路径
@@ -53,7 +59,7 @@ export function createHtmlFilePath(htmlName: string): string {
 }
 
 /* 生成initialState */
-export function initialState(value: any): string {
+export function createInitialState(value: Record<string, any>): string {
   return encodeURIComponent(JSON.stringify(value));
 }
 
@@ -61,5 +67,4 @@ export function initialState(value: any): string {
 export const packageJson: any = require(path.join(wwwPath, 'package.json'));
 
 /* User-Agent */
-export const pcUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-  + 'Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.68';
+export const pcUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0';

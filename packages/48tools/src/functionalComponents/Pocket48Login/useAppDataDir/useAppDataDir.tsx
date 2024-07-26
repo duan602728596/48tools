@@ -5,6 +5,7 @@ import type { Store } from 'antd/es/form/interface';
 import type { useAppProps } from 'antd/es/app/context';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 import { Pocket48Login } from '../enum';
+import HelpButtonGroup from '../../../components/HelpButtonGroup/HelpButtonGroup';
 
 export const title: string = '口袋48 App Data目录配置';
 
@@ -65,7 +66,11 @@ export function useAppDataDir(): UseAppDataDirReturnType {
   }
 
   return {
-    buttonRender: (): ReactElement => <Button onClick={ handleOpenSelectAppDataDirClick }>{ title }</Button>,
+    buttonRender: (): ReactElement => (
+      <HelpButtonGroup navId="appdata-directory-configuration">
+        <Button onClick={ handleOpenSelectAppDataDirClick }>{ title }</Button>
+      </HelpButtonGroup>
+    ),
     modalRender: (): ReactElement => (
       <Modal title={ title }
         open={ visible }

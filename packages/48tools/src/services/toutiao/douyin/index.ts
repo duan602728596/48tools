@@ -1,9 +1,9 @@
 import got, { type Response as GotResponse } from 'got';
-import { pcUserAgent } from '../../../utils/utils';
+import { pcUserAgent, pcUserAgent2 } from '../../../utils/utils';
 import { awemePostQueryV2, awemeDetailQueryV2 } from '../../../utils/toutiao/signUtils';
 import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
 import { msToken } from '../../../utils/toutiao/signUtils';
-import Signer from '../../../utils/toutiao/Signer';
+import { getABResult } from '../../../pages/Toutiao/sdk/AB';
 import type {
   AwemePostResponse,
   AwemeDetailResponse,
@@ -78,14 +78,14 @@ export async function requestGetVideoRedirectUrl(uri: string): Promise<string> {
  * @param { VideoQuery } videoQuery
  */
 export async function requestAwemePostV2(cookie: string, videoQuery: VideoQuery): Promise<AwemePostResponse | string> {
-  const query: string = awemePostQueryV2(videoQuery.secUserId, videoQuery.maxCursor);
+  const query: string = await awemePostQueryV2(videoQuery.secUserId, videoQuery.maxCursor);
   const res: GotResponse<AwemePostResponse | string> = await got.get(
     `https://www.douyin.com/aweme/v1/web/aweme/post/?${ query }`, {
       responseType: 'json',
       headers: {
         Referer: `https://www.douyin.com/user/${ videoQuery.secUserId }`,
         Host: 'www.douyin.com',
-        'User-Agent': '',
+        'User-Agent': pcUserAgent2,
         Cookie: cookie
       },
       followRedirect: false
@@ -102,14 +102,14 @@ export async function requestAwemePostReturnType(cookie: string, videoQuery: Vid
 
 /* 请求视频的detail */
 export async function requestAwemeDetailV2(cookie: string, id: string, signature: string): Promise<AwemeDetailResponse | string> {
-  const query: string = awemeDetailQueryV2(id);
+  const query: string = await awemeDetailQueryV2(id);
   const res: GotResponse<AwemeDetailResponse | string> = await got.get(
     `https://www.douyin.com/aweme/v1/web/aweme/detail/?${ query }`, {
       responseType: 'json',
       headers: {
         Referer: `https://www.douyin.com/video/${ id }`,
         Host: 'www.douyin.com',
-        'User-Agent': '',
+        'User-Agent': pcUserAgent2,
         Cookie: cookie
       },
       followRedirect: false
@@ -159,9 +159,9 @@ export async function requestLiveEnter(cookie: string, rid: string): Promise<Liv
     web_rid: rid,
     msToken: token
   });
-  const xbogus: string = Signer.sign(searchParams.toString(), pcUserAgent);
+  const a_bogus: string = await getABResult(searchParams.toString(), '', pcUserAgent);
 
-  searchParams.set('X-Bogus', xbogus);
+  searchParams.set('a_bogus', a_bogus);
 
   const res: GotResponse<LiveEnter | string> = await got.get(
     `https://live.douyin.com/webcast/room/web/enter/?${ searchParams.toString() }`, {

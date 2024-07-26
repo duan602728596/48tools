@@ -1,16 +1,6 @@
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue } from 'electron';
-import {
-  Fragment,
-  useState,
-  useEffect,
-  useMemo,
-  type ReactElement,
-  type ReactNode,
-  type Dispatch as D,
-  type SetStateAction as S,
-  type MouseEvent
-} from 'react';
+import { Fragment, useEffect, useMemo, useTransition, type ReactElement, type ReactNode, type MouseEvent, type TransitionStartFunction } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -87,7 +77,7 @@ function InVideo(props: {}): ReactElement {
   }: RSelector = rSelector;
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const [getLiveListLoading, startGetLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition();
 
   const inVideoList: Array<OpenLiveInfo> = useMemo(function(): Array<OpenLiveInfo> {
     if (inVideoQueryLiveType) return rSelector[`${ inVideoQueryLiveType }InVideoList`];
@@ -185,62 +175,58 @@ function InVideo(props: {}): ReactElement {
   }
 
   // 加载下一页
-  async function handleGetVideoListClick(event: MouseEvent): Promise<void> {
+  function handleGetVideoListClick(event: MouseEvent): void {
     if (!inVideoQueryLiveType) return;
 
-    setLoading(true);
+    startGetLiveListStartTransition(async (): Promise<void> => {
+      try {
+        const res: OpenLiveList = await requestOpenLiveList({
+          groupId: getTeamId(inVideoQueryLiveType),
+          record: true
+        });
 
-    try {
-      const res: OpenLiveList = await requestOpenLiveList({
-        groupId: getTeamId(inVideoQueryLiveType),
-        record: true
-      });
-
-      if (res?.content?.liveList) {
-        dispatch(setInVideoGroupList({
-          liveType: inVideoQueryLiveType,
-          data: res.content.liveList,
-          nextPage: Number(res.content.next)
-        }));
-      } else {
+        if (res?.content?.liveList) {
+          dispatch(setInVideoGroupList({
+            liveType: inVideoQueryLiveType,
+            data: res.content.liveList,
+            nextPage: Number(res.content.next)
+          }));
+        } else {
+          messageApi.error('录播加载失败！');
+        }
+      } catch (err) {
+        console.error(err);
         messageApi.error('录播加载失败！');
       }
-    } catch (err) {
-      console.error(err);
-      messageApi.error('录播加载失败！');
-    }
-
-    setLoading(false);
+    });
   }
 
   // 刷新列表
-  async function handleGetNextPageVideoListClick(event: MouseEvent): Promise<void> {
+  function handleGetNextPageVideoListClick(event: MouseEvent): void {
     if (!inVideoQueryLiveType) return;
 
-    setLoading(true);
+    startGetLiveListStartTransition(async (): Promise<void> => {
+      try {
+        const res: OpenLiveList = await requestOpenLiveList({
+          groupId: getTeamId(inVideoQueryLiveType),
+          record: true,
+          next: rSelector[`${ inVideoQueryLiveType }NextPage`]
+        });
 
-    try {
-      const res: OpenLiveList = await requestOpenLiveList({
-        groupId: getTeamId(inVideoQueryLiveType),
-        record: true,
-        next: rSelector[`${ inVideoQueryLiveType }NextPage`]
-      });
-
-      if (res?.content?.liveList) {
-        dispatch(setInVideoGroupList({
-          liveType: inVideoQueryLiveType,
-          data: inVideoList.concat(res.content.liveList),
-          nextPage: Number(res.content.next)
-        }));
-      } else {
-        messageApi.error('录播加载失败！需要登录账号！');
+        if (res?.content?.liveList) {
+          dispatch(setInVideoGroupList({
+            liveType: inVideoQueryLiveType,
+            data: inVideoList.concat(res.content.liveList),
+            nextPage: Number(res.content.next)
+          }));
+        } else {
+          messageApi.error('录播加载失败！需要登录账号！');
+        }
+      } catch (err) {
+        console.error(err);
+        messageApi.error('录播加载失败！');
       }
-    } catch (err) {
-      console.error(err);
-      messageApi.error('录播加载失败！');
-    }
-
-    setLoading(false);
+    });
   }
 
   // 渲染分页
@@ -326,7 +312,7 @@ function InVideo(props: {}): ReactElement {
         columns={ columns }
         dataSource={ inVideoList }
         bordered={ true }
-        loading={ loading }
+        loading={ getLiveListLoading }
         rowKey="liveId"
         pagination={{
           showQuickJumper: true,

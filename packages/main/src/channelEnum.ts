@@ -16,7 +16,8 @@ export const enum Pocket48LiveRemoteHandleChannel {
 
 // ipcHandle/nodeNimLoginHandle
 export const enum NodeNimLoginHandleChannel {
-  NodeNimLogin = 'node-nim-login'
+  NodeNimLogin = 'node-nim-login',
+  NodeNimClean = 'node-nim-clean'
 }
 
 // ipcListener/douyinCookie
@@ -54,4 +55,9 @@ export const enum NodeMediaServerChannel {
 // proxyServer
 export const enum ProxyServerChannel {
   ProxyServer = 'proxy-server'
+}
+
+// help
+export const enum HelpChannel {
+  Help = 'help'
 }

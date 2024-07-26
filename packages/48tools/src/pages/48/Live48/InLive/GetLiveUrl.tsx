@@ -1,13 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { SaveDialogReturnValue } from 'electron';
-import {
-  Fragment,
-  useState,
-  useEffect,
-  type ReactElement,
-  type Dispatch as D,
-  type SetStateAction as S
-} from 'react';
+import { Fragment, useEffect, useTransition, type ReactElement, type TransitionStartFunction } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -53,7 +46,7 @@ function GetLiveUrl(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [form]: [FormInstance] = Form.useForm();
-  const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 获取直播地址时的loading状态
+  const [getLiveListLoading, startGetLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition(); // 获取直播地址时的loading状态
 
   // 开始直播录制
   async function handleStartInLiveSubmit(value: InLiveFormValue): Promise<void> {
@@ -147,37 +140,35 @@ function GetLiveUrl(props: {}): ReactElement {
   }
 
   // 获取直播列表
-  async function getLiveList(): Promise<void> {
-    setLoading(true);
+  function getLiveList(): void {
+    startGetLiveListStartTransition(async (): Promise<void> => {
+      try {
+        const res: OpenLiveList = await requestOpenLiveList();
 
-    try {
-      const res: OpenLiveList = await requestOpenLiveList();
+        if (res.content.liveList) {
+          dispatch(setOpenLiveListOptions(
+            res.content.liveList.map((o: OpenLiveInfo): DefaultOptionType => {
+              const title: string = `${ o.title }-${ o.subTitle }`;
 
-      if (res.content.liveList) {
-        dispatch(setOpenLiveListOptions(
-          res.content.liveList.map((o: OpenLiveInfo): DefaultOptionType => {
-            const title: string = `${ o.title }-${ o.subTitle }`;
-
-            return {
-              label: (
-                <div title={ title }>
-                  { o.status === 1 ? <span className={ classNames('mr-[4px]', commonStyle.tips) }>[未开始]</span> : null }
-                  { title }
-                </div>
-              ),
-              value: o.liveId
-            };
-          })
-        ));
-      } else {
-        messageApi.error('获取公演直播列表失败！需要登录账号！');
+              return {
+                label: (
+                  <div title={ title }>
+                    { o.status === 1 ? <span className={ classNames('mr-[4px]', commonStyle.tips) }>[未开始]</span> : null }
+                    { title }
+                  </div>
+                ),
+                value: o.liveId
+              };
+            })
+          ));
+        } else {
+          messageApi.error('获取公演直播列表失败！需要登录账号！');
+        }
+      } catch (err) {
+        console.error(err);
+        messageApi.error('获取公演直播列表失败！');
       }
-    } catch (err) {
-      console.error(err);
-      messageApi.error('获取公演直播列表失败！');
-    }
-
-    setLoading(false);
+    });
   }
 
   useEffect(function(): void {
@@ -204,7 +195,7 @@ function GetLiveUrl(props: {}): ReactElement {
               ] } />
           </Form.Item>
           <Form.Item name="live" noStyle={ true }>
-            <Select className={ style.liveSelect } loading={ loading } placeholder="选择公演" options={ OpenLiveListOptions } />
+            <Select className={ style.liveSelect } loading={ getLiveListLoading } placeholder="选择公演" options={ OpenLiveListOptions } />
           </Form.Item>
           <Tooltip title="刷新公演直播列表">
             <Button className={ style.reloadButton } icon={ <IconReloadOutlined /> } onClick={ getLiveList } />

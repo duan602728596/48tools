@@ -1,4 +1,4 @@
-import { useContext, type ReactElement, type PropsWithChildren } from 'react';
+import { use, type ReactElement, type PropsWithChildren } from 'react';
 import { ConfigProvider, App } from 'antd';
 import darkDerivative from 'antd/es/theme/themes/dark/index';
 import zhCN from 'antd/locale/zh_CN';
@@ -7,7 +7,7 @@ import ThemeContext, { type Theme } from '../Theme/ThemeContext';
 
 /* antd ConfigProvider */
 function AntdConfig(props: Required<PropsWithChildren>): ReactElement {
-  const { isDark }: Theme = useContext(ThemeContext);
+  const { isDark }: Theme = use(ThemeContext);
 
   return (
     <ConfigProvider locale={ zhCN }

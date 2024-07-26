@@ -170,6 +170,7 @@ ${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): 
   return (
     <Fragment>
       <Card className="mt-[8px]" title="选择配置和时间范围" extra={ <Button type="primary" loading={ loading } onClick={ handleCreateResultClick }>生成结果</Button> }>
+        <Alert className="mb-[16px]" type="error" message={ <div className="text-[18px]">请不要在观看口袋直播时生成数据！会出现问题！</div> } />
         <Alert className="mb-[16px]" type="warning" message={
           <Fragment>
             <div>数据统计可能不准确，仅供参考。开始时间和结束时间请选择青春时刻期间。最长时间不超过6个月。</div>

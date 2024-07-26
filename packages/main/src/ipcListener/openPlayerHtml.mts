@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState.js';
 import type { Pocket48LiveType, Pocket48LiveMode } from '@48tools/48tools/src/services/48/enum.js';
-import { isTest, titleBarIcon, createHtmlFilePath, initialState as ils } from '../utils.mjs';
+import { isTest, titleBarIcon, createHtmlFilePath, createInitialState } from '../utils.mjs';
 import { themeEvent, type ThemeValue } from './themeChange.mjs';
 import { getStore } from '../store.mjs';
 import { commandLineOptions } from '../commend.mjs';
@@ -46,7 +46,7 @@ function open(title: string, query: string): void {
   // initialState
   const initialStateSearchParams: URLSearchParams = new URLSearchParams();
 
-  initialStateSearchParams.set('initialState', ils({
+  initialStateSearchParams.set('initialState', createInitialState({
     theme: getStore().get('theme') ?? 'system',
     commandLineOptions,
     playerInfo: {
