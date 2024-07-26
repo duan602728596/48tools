@@ -1,19 +1,25 @@
 /* 高亮选中的url */
-const navList: HTMLElement | null = document.getElementById('nav-list');
+function selectedUrl(): void {
+  const navList: HTMLElement | null = document.getElementById('nav-list');
 
-if (navList) {
+  if (!navList) return;
+
+  // 解析html路径中的文件名
   const urlSplit: Array<string> = window.location.href.split(/[\\/]+/)
     .filter((s: string): boolean => s !== '');
-  const end: string | undefined = urlSplit.at(-1);
+  const urlSplitEnd: string | undefined = urlSplit.at(-1);
   let name: string = 'index';
 
-  if (end && /\.html$/i.test(end)) {
-    name = end.replace(/\.html$/i, '').toLowerCase();
+  if (urlSplitEnd && /\.html$/i.test(urlSplitEnd)) {
+    name = urlSplitEnd.replace(/\.html$/i, '').toLowerCase();
   }
 
+  // 高亮
   const targetLink: HTMLElement | null = navList.querySelector(`[data-url-id="${ name }"]`);
 
-  if (targetLink) {
-    targetLink.classList.add('text-primary', 'fw-bold');
-  }
+  if (!targetLink) return;
+
+  targetLink.classList.add('text-primary', 'fw-bold');
 }
+
+export default selectedUrl;

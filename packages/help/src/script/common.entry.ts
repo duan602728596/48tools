@@ -1,1 +1,3 @@
-import './common/selectedUrl';
+import selectedUrl from './common/selectedUrl';
+
+selectedUrl();
