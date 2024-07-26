@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: npm run install:ci
+      - run: SKIP_YARN_COREPACK_CHECK=0 npm run install:ci
 
       - run: npm run build:ci
       
