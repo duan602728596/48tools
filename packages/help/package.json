@@ -14,7 +14,7 @@
     "cross-env": "^7.0.3",
     "cssnano": "^7.0.4",
     "gulp": "^4.0.2",
-    "gulp-memory-fs": "^3.0.1",
+    "gulp-memory-fs": "^4.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^10.0.0",
     "gulp-pug": "^5.0.0",
