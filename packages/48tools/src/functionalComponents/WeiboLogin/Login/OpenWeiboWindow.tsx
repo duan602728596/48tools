@@ -2,7 +2,7 @@ import { ipcRenderer, type Cookie, type IpcRendererEvent } from 'electron';
 import { useState, useEffect, useCallback, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Alert, Space, App, Modal, Form, Input, type FormInstance } from 'antd';
+import { Button, Alert, Space, App, Modal, Form, Input, Divider, type FormInstance } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
@@ -30,6 +30,21 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   const [inputSOpen, setInputSOpen]: [boolean, D<S<boolean>>] = useState(false);
   const { message: messageApi }: useAppProps = App.useApp();
   const [form]: [FormInstance] = Form.useForm();
+
+  // 提取url中的参数
+  function handleExtractParamsFromUrlClick(event: MouseEvent): void {
+    const demoUrl: string | undefined = form.getFieldValue('demoUrl');
+
+    if (!demoUrl || /^\s*$/i.test(demoUrl)) return;
+
+    const demoUrlParse: URL = new URL(demoUrl);
+
+    form.setFieldsValue({
+      s: demoUrlParse.searchParams.get('s'),
+      from: demoUrlParse.searchParams.get('from'),
+      c: demoUrlParse.searchParams.get('c')
+    });
+  }
 
   // 输入s
   function handleInputSOkClick(event: MouseEvent): void {
@@ -126,6 +141,19 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
           <Form.Item name="c" label="c">
             <Input />
           </Form.Item>
+          <Divider />
+          <div>
+            <div className="flex">
+              <div className="grow">
+                <Form.Item name="demoUrl">
+                  <Input />
+                </Form.Item>
+              </div>
+              <div className="shrink-0 ml-[8px]">
+                <Button onClick={ handleExtractParamsFromUrlClick }>提取url中的参数</Button>
+              </div>
+            </div>
+          </div>
         </Form>
       </Modal>
     </div>
