@@ -1,0 +1,16 @@
+extends _pugTemplate/_template
+
+block head
+  title 微博登录 - 48tools帮助文件
+
+block article
+  h1.h1 微博登录
+  article
+    p 想要自动签到超话，或者查看访客记录，都需要先登录微博账号。
+    p 点击“登录微博”后，会弹出微博首页，用户需要在微博首页完成登录。登录可以输入账号密码，也可以使用微博扫码登录。
+    p 微博首页完成登录后，关闭页面，即可完成微博登录操作。
+    h2.h2 微博访客记录
+    p 微博登录后并关闭页面后，会出现如下弹窗：
+    img.d-block.mb-3.img-thumbnail(src='./image/weiboLogin/inputAppFrom.webp' width=400 alt='App抓包获得的参数')
+    | 该参数需要用户通过手机App抓包后获得。
+    img.d-block.mb-3.img-thumbnail(src='./image/weiboLogin/zhuabao.webp' width=400 alt='App抓包结果')

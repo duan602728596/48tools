@@ -152,7 +152,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '微博超话签到',
       url: '/WeiboSuper',
-      icon: <IconWeiboOutlined />
+      icon: <IconWeiboOutlined />,
+      help: { navId: 'weibo-login', tooltipTitle: '查看微博登录帮助' }
     }
   ],
   [
@@ -197,7 +198,9 @@ function nativeRender(): Array<ReactNode> {
       );
 
       if (navItem.help) {
-        buttonLinkElement = createElement(HelpButtonGroup, navItem.help, buttonLinkElement);
+        buttonLinkElement = createElement(HelpButtonGroup, Object.assign({
+          spaceCompactProps: { className: 'flex' }
+        }, navItem.help), buttonLinkElement);
       }
 
       groupElement.push(<div key={ navItem.name }>{ buttonLinkElement }</div>);
