@@ -139,13 +139,14 @@ function webpackTask() {
 /* 图片 */
 function imageTask() {
   const src = ['src/**/*.{png,jpg,jpeg,gif,svg,webp,avif}'];
+  const gulpSrcOptions = { encoding: false };
 
   if (isDev) {
-    return gulp.src(src)
+    return gulp.src(src, gulpSrcOptions)
       .pipe(mfs.changed())
       .pipe(mfs.dest('dist'));
   } else {
-    return gulp.src(src)
+    return gulp.src(src, gulpSrcOptions)
       .pipe(gulp.dest('dist'));
   }
 }

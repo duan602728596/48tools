@@ -15,7 +15,7 @@
     "node-media-server": "^2.6.2"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-terser": "^2.1.0",
     "typescript": "^5.4.5"
   }
