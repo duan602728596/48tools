@@ -1,4 +1,6 @@
-extends _pugTemplate/_template
+extends pug/template/_template
+
+include pug/components/_image
 
 block head
   title FFmpeg配置 - 48tools帮助文件
@@ -26,19 +28,19 @@ block article
               a(href='https://www.ffmpeg.org/download.html' target='_blank') https://www.ffmpeg.org/download.html
     button.mb-3.btn.btn-primary#ffmpeg-download-btn(type='button') 下载
     p 下载时要选择full build，避免导致视频转码失败。
-    img.d-block.mb-4.img-thumbnail(src='./image/ffmpegOptions/fullBuildFFmpegLink.webp' width=600 alt='下载时要选择full build')
+    +Image('./image/ffmpegOptions/fullBuildFFmpegLink.webp', '下载时要选择full build', 600)
 
     h2.h2 FFmpeg可执行文件的配置
     p 在软件首页选择FFmpeg配置，并配置可执行文件：
-    img.d-block.mb-3.img-thumbnail(src='./image/ffmpegOptions/ffmpegOptionButton.webp' alt='FFmpeg配置按钮')
+    +Image('./image/ffmpegOptions/ffmpegOptionButton.webp', 'FFmpeg配置按钮', 600)
     dl.d-inline-block
       dt
-        img.d-block.img-thumbnail(src='./image/ffmpegOptions/ffmpegPathMac.webp' width=600 alt='FFmpeg配置路径(MacOS)')
+        Image('./image/ffmpegOptions/ffmpegPathMac.webp', 'FFmpeg配置路径(MacOS)', 600)
       dd.mb-3.text-center
         em
           small FFmpeg在MacOS系统下的路径配置
       dt
-        img.d-block.img-thumbnail(src='./image/ffmpegOptions/ffmpegPathWin.webp' width=600 alt='FFmpeg配置按钮(Windows)')
+        Image('./image/ffmpegOptions/ffmpegPathWin.webp', 'FFmpeg配置按钮(Windows)', 600)
       dd.mb-3.text-center
         em
           small FFmpeg在Windows系统下的路径配置

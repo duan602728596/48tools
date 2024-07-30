@@ -1,4 +1,6 @@
-extends _pugTemplate/_template
+extends pug/template/_template
+
+include pug/components/_image
 
 block head
   title 微博登录 - 48tools帮助文件
@@ -11,6 +13,6 @@ block article
     p 微博首页完成登录后，关闭页面，即可完成微博登录操作。
     h2.h2 微博访客记录
     p 微博登录后并关闭页面后，会出现如下弹窗：
-    img.d-block.mb-3.img-thumbnail(src='./image/weiboLogin/inputAppFrom.webp' width=400 alt='App抓包获得的参数')
-    | 该参数需要用户通过手机App抓包后获得。
-    img.d-block.mb-3.img-thumbnail(src='./image/weiboLogin/zhuabao.webp' width=400 alt='App抓包结果')
+    +Image('./image/weiboLogin/inputAppFrom.webp', 'App抓包获得的参数', 400)
+    p 该参数需要用户通过手机App抓包后获得。
+    +Image('./image/weiboLogin/zhuabao.webp', 'App抓包结果', 400)
