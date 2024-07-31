@@ -7,13 +7,13 @@ import gulpSass from 'gulp-sass';
 import postcss from 'gulp-postcss';
 import webpackStream from 'webpack-stream';
 import GulpMemoryFs from 'gulp-memory-fs';
-import * as sass from 'sass';
+import * as sassCompiler from 'sass';
 import cssnano from 'cssnano';
 import named from 'vinyl-named';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 
-const Sass = gulpSass(sass);
+const sass = gulpSass(sassCompiler);
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -106,11 +106,11 @@ function sassTask() {
     return gulp.src(src)
       .pipe(mfs.changed())
       .pipe(plumber())
-      .pipe(Sass().on('error', Sass.logError))
+      .pipe(sass().on('error', sass.logError))
       .pipe(mfs.dest('dist'));
   } else {
     return gulp.src(src)
-      .pipe(Sass().on('error', Sass.logError))
+      .pipe(sass().on('error', sass.logError))
       .pipe(postcss([cssnano({ preset: 'default' })]))
       .pipe(gulp.dest('dist'));
   }
