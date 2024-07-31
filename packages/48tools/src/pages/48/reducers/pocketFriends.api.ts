@@ -33,9 +33,9 @@ const pocketFriendsApi: PocketFriendsApi = createApi({
     return {
       reqRoomId: builder.query({
         async queryFn(): Promise<{ data: Array<RoomItem> }> {
-          const res: RoomIdObj = await requestRoomId();
+          const res: RoomIdObj | null = await requestRoomId();
 
-          return { data: res.roomId };
+          return { data: res?.roomId ?? [] };
         },
         providesTags: [TAG_TYPES.ROOMID]
       })
