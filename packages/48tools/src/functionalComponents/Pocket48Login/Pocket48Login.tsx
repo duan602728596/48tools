@@ -41,6 +41,7 @@ import { source } from '../../utils/snh48';
 import LoginForm from './LoginForm/LoginForm';
 import TokenForm from './TokenForm/TokenForm';
 import { useAppDataDir, title, type UseAppDataDirReturnType } from './useAppDataDir/useAppDataDir';
+import HelpButtonGroup from '../../components/HelpButtonGroup/HelpButtonGroup';
 import type { Pocket48LoginInitialState } from './reducers/pocket48Login';
 import type { UserInfo } from './types';
 
@@ -387,7 +388,9 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <div className="inline-block">{ loginButtonRender() }</div>
+      <div className="inline-block">
+        <HelpButtonGroup navId="pocket48-login">{ loginButtonRender() }</HelpButtonGroup>
+      </div>
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }
