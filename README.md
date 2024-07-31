@@ -47,14 +47,14 @@
 ## 技术栈
 
 Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使用corepack。   
-使用playwright + @playwright/test进行e2e测试。
+使用playwright + @playwright/test进行E2E测试。
 
 ## 模块
 
 * 48tools: 软件源代码。
-* app：编译程序主目录。
 * main：Electron主程序运行源代码。
-* test：e2e测试。
+* help：软件本地帮助文件源代码。
+* test：E2E测试代码。
 
 ## 开发
 
@@ -73,7 +73,7 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使
 
 ## 测试
 
-进入`packages/test`，运行`npm run test`，运行e2e测试。
+进入`packages/test`，运行`npm run test`，运行E2E测试。
 
 ## 源代码托管地址
 
