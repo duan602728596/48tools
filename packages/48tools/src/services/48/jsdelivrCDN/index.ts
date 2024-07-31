@@ -3,6 +3,8 @@ import type { RoomIdObj } from './interface';
 
 export type * from './interface';
 
+let cacheRoomIdRes: RoomIdObj | null = null;
+
 /**
  * 通过url查找roomId
  * @param { string } url
@@ -10,15 +12,13 @@ export type * from './interface';
 async function requestRoomIdCore(url: string): Promise<RoomIdObj | null> {
   try {
     const controller: AbortController = new AbortController();
-    const timer: NodeJS.Timeout = setTimeout((): void => {
-      controller.abort();
-    }, 10_000);
+    const timeoutTimer: NodeJS.Timeout = setTimeout((): void => controller.abort(), 10_000);
     const res: Response = await fetch(url, {
       method: 'GET',
       signal: controller.signal
     });
 
-    clearTimeout(timer);
+    clearTimeout(timeoutTimer);
 
     return res.json();
   } catch {
@@ -34,10 +34,20 @@ export async function requestRoomId(): Promise<RoomIdObj | null> {
   // 使用主地址
   const res: RoomIdObj | null = await requestRoomIdCore(`${ url }?t=${ new Date().getTime() }`);
 
-  if (res) return res;
+  if (res) {
+    cacheRoomIdRes = res;
+
+    return res;
+  }
 
   // 使用备用地址
   const mirrorRes: RoomIdObj | null = await requestRoomIdCore(`${ mirrorUrl }?t=${ new Date().getTime() }`);
 
-  return mirrorRes;
+  if (mirrorRes) {
+    cacheRoomIdRes = mirrorRes;
+
+    return mirrorRes;
+  }
+
+  return cacheRoomIdRes;
 }
