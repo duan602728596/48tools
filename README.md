@@ -8,8 +8,8 @@
 
 ## 软件下载链接
 
-进入到 https://github.com/duan602728596/48tools/releases 、 https://gitee.com/duanhaochen/a48tools/releases      
-或 https://github.com/duan602728596/document/blob/master/48/README.md 下载。
+* Github：https://github.com/duan602728596/48tools/releases
+* 百度网盘：https://github.com/duan602728596/document/blob/master/48/README.md
 
 ## 软件功能
 
@@ -55,12 +55,14 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使
 * main：Electron主程序运行源代码。
 * help：软件本地帮助文件源代码。
 * test：E2E测试代码。
+* babel-plugin-delay-require：Babel插件，支持Node模块的按需加载。
 
 ## 开发
 
 1. main模块：进入`packages/main`，运行`npm run start`，开发主程序源代码；或运行`npm run dev`，编译开发环境的主程序源代码。
 2. 48tools模块：进入`packages/48tools`，运行`npm run dll`，然后运行`npm run start`。
 3. 48tools模块：进入`packages/48tools`，运行`npm run runel`，启动软件。
+4. help模块：进入`packages/help`，运行`npm run start`，开发帮助文件源代码。
 
 ## 编译
 
@@ -68,14 +70,15 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使
 
 1. main模块：进入`packages/main`，运行`npm run build`，编译主程序源代码。
 2. 48tools模块：进入`packages/48tools`，运行`npm run build`，编译软件源代码。
-3. 运行`node scripts/unpack.mjs`，打包软件。
-4. 运行`node scripts/clean.mjs`，删除软件中的无用的文件。
+3. help模块：进入`packages/help`，运行`npm run build`，编译帮助文件源代码。
+4. 运行`node scripts/unpack.mjs`，打包软件。
+5. 运行`node scripts/clean.mjs`，删除软件中的无用的文件。
 
 ## 测试
 
-进入`packages/test`，运行`npm run test`，运行E2E测试。
+1. 完成开发的所有编译过程。
+2. 进入`packages/test`，运行`npm run test`，运行E2E测试。
 
 ## 源代码托管地址
 
-github：[https://github.com/duan602728596/48tools](https://github.com/duan602728596/48tools)。   
-gitee同步地址：[https://gitee.com/duanhaochen/a48tools](https://gitee.com/duanhaochen/a48tools)。
+github：[https://github.com/duan602728596/48tools](https://github.com/duan602728596/48tools)。
