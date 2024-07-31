@@ -325,8 +325,8 @@ function Voice(props: {}): ReactElement {
               ? <Button type="primary" danger={ true } onClick={ handleStopAutoRecordClick }>停止录制</Button>
               : <Button type="primary" onClick={ handleStartAutoRecordClick }>自动录制</Button>
           }
-          <Pocket48Login />
         </Button.Group>
+        <Pocket48Login className="align-bottom" />
       </Header>
       <p className={ classNames('text-[12px]', commonStyle.tips) }>
         为了避免对服务器造成压力，自动录制最多支持选择5位成员。
