@@ -336,7 +336,7 @@ function Pocket48Login(props: Pocket48LoginProps): ReactElement {
 
     if (userInfo) {
       if (userInfo.isExpired) {
-        nickname = <span className={ commonStyle.tips }>账号已过期，请重新登录。</span>;
+        nickname = <span key="isExpired" className={ commonStyle.tips }>账号已过期，请重新登录</span>;
       } else {
         icon = (
           <Avatar key="icon" size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
