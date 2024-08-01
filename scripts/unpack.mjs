@@ -98,8 +98,7 @@ function config(outputDir, target) {
 function copy(unpackedDir, isMac) {
   const queue = [
     fse.copy(staticsFiles.LICENSE, path.join(unpackedDir, 'LICENSE')),
-    fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md')),
-    fse.copy(staticsFiles.help, path.join(unpackedDir, 'help'))
+    fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md'))
   ];
 
   if (isMac) {
@@ -219,7 +218,8 @@ async function unpack() {
   await Promise.all([
     uglifyPackageJson(),
     fse.copy(path.join(packages, 'main/lib'), path.join(wwwDir, 'boot')),
-    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'view'))
+    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'view')),
+    fse.copy(staticsFiles.help, path.join(wwwDir, 'help'))
   ]);
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 
