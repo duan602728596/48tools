@@ -1,7 +1,9 @@
 extends pug/template/_template
 
+include pug/components/_title
+
 block head
-  title 口袋48登录 - 48tools帮助文件
+  +Title('口袋48登录')
 
 block article
   h1.h1 口袋48登录

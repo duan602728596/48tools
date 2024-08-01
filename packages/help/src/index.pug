@@ -1,7 +1,9 @@
 extends pug/template/_template
 
+include pug/components/_title
+
 block head
-  title 关于48tools - 48tools帮助文件
+  +Title('关于48tools')
 
 block article
   h1.h1 关于48tools

@@ -1,9 +1,10 @@
 extends pug/template/_template
 
 include pug/components/_image
+include pug/components/_title
 
 block head
-  title FFmpeg配置 - 48tools帮助文件
+  +Title('FFmpeg配置')
 
 block article
   h1.h1 FFmpeg配置

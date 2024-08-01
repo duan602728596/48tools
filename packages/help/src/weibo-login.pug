@@ -1,9 +1,10 @@
 extends pug/template/_template
 
 include pug/components/_image
+include pug/components/_title
 
 block head
-  title 微博登录 - 48tools帮助文件
+  +Title('微博登录')
 
 block article
   h1.h1 微博登录
