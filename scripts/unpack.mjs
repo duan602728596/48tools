@@ -217,8 +217,8 @@ async function unpack() {
   await Promise.all([
     uglifyPackageJson(),
     fse.copy(path.join(packages, 'main/lib'), path.join(wwwDir, 'boot')),
-    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'view'))/* ,
-    fse.copy(path.join(packages, 'help/dist'), path.join(wwwDir, 'help')) */
+    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'view')),
+    fse.copy(path.join(packages, 'help/dist'), path.join(wwwDir, 'help'))
   ]);
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 
