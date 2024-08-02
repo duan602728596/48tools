@@ -78,7 +78,7 @@ function PlayerWindow(props: {}): ReactElement {
 
   return (
     <div className={ classNames('flex w-full h-full', commonStyle.text) }>
-      <div className="flex flex-col grow p-[16px] h-full">
+      <div className="flex flex-col grow p-[16px] box-border h-full">
         <LiveInfo playerInfo={ playerInfo } info={ info } />
         {
           inRecord
@@ -86,7 +86,7 @@ function PlayerWindow(props: {}): ReactElement {
             : <LiveVideo playerInfo={ playerInfo } info={ info } />
         }
       </div>
-      <div className="flex flex-col shrink-0 pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
+      <div className="flex flex-col shrink-0 box-border pr-[16px] pt-[16px] pb-[16px] w-[300px] h-full text-[12px]">
         { danmuRender() }
       </div>
     </div>
