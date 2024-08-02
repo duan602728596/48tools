@@ -15,7 +15,6 @@ class ElectronApp {
   electronApp: ElectronApplication;
   win: Page;
   mediaDir?: string;
-  timer?: NodeJS.Timer;
 
   // 初始化
   async init(options?: InitOptions): Promise<void> {

@@ -31,6 +31,11 @@ export const enum Live48OptionsVP {
   Dark = 2002
 }
 
+export const enum Pocket48RoomMessageVP {
+  Light = 2003,
+  Dark = 2004
+}
+
 /* AcFun */
 export const enum AcFunDownload {
   GetVideo = 300,

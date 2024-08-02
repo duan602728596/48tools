@@ -87,7 +87,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋房间消息',
       url: '/48/RoomMessage',
-      icon: <IconMessageFilled />
+      icon: <IconMessageFilled />,
+      testId: '48-room-message'
     },
     {
       name: 'B站视频下载',
