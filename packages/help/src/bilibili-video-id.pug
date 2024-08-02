@@ -1,12 +1,15 @@
 extends pug/template/_template
 
 include pug/components/_image
+include pug/components/_link
 include pug/components/_title
 
-mixin Link(href)
-  a(href=href target='_blank')= href
-
-mixin ResetIdText(href, type, typeCN, id, typeText)
+//- 重复的文本渲染
+//- @param { string } href - 链接
+//- @param { string } type - 视频类型
+//- @param { string } typeCN - 视频类型中文
+//- @param { string } id - 视频ID
+mixin ResetIdText(href, type, typeCN, id)
   | #{typeCN} #{type} ID：比如#{typeCN}地址：
   +Link(href)
   | 。我们需要填写的#{type} ID为：
