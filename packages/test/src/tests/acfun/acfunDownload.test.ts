@@ -9,6 +9,7 @@ import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
 import { mockShowSaveDialog, setFFmpegPath } from '../../actions/utilActions.js';
 import { testTitle } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 
 /* acfun视频下载 */
 export const title: string = 'AcFun/Download Page';
@@ -54,7 +55,7 @@ export function callback(): void {
     await app.win.waitForTimeout(2_000);
   }
 
-  test(testTitle(31, 'Should get acfun video'), async function(): Promise<void> {
+  test(testTitle(TestId.AcFunDownload.GetVideo, 'Should get acfun video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -88,7 +89,7 @@ export function callback(): void {
     expect(willBeDownload.length).toEqual(6);
   });
 
-  test(testTitle(33, 'Should download acfun video'), async function(): Promise<void> {
+  test(testTitle(TestId.AcFunDownload.DownloadVideo, 'Should download acfun video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

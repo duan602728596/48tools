@@ -6,6 +6,7 @@ import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
 import { testConfig } from '../../testConfig.js';
 import { setDouyinCookie } from '../../actions/utilActions.js';
+import * as TestId from '../../TestId.js';
 
 /* 视频下载测试 */
 export const title: string = 'Douyin/Video download';
@@ -43,13 +44,13 @@ export function callback(): void {
     return rows;
   }
 
-  test(testTitle(51, 'Should get video by full url'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinVideo.GetVideoByFullUrl, 'Should get video by full url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
     if (!testConfig.douyin.cookie) {
-      testLog(51, 'Do not run test because no douyin cookie');
+      testLog(TestId.DouyinVideo.GetVideoByFullUrl, 'Do not run test because no douyin cookie');
       test.skip();
     } else {
       await setDouyinCookie(app);
@@ -62,13 +63,13 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(52, 'Should get video by video id'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinVideo.GetVideoByVideoId, 'Should get video by video id'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
     if (!testConfig.douyin.cookie) {
-      testLog(52, 'Do not run test because no douyin cookie');
+      testLog(TestId.DouyinVideo.GetVideoByVideoId, 'Do not run test because no douyin cookie');
       test.skip();
     } else {
       await setDouyinCookie(app);
@@ -80,13 +81,13 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(53, 'Should get video by share url'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinVideo.GetVideoByShareUrl, 'Should get video by share url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
     if (!testConfig.douyin.cookie) {
-      testLog(53, 'Do not run test because no douyin cookie');
+      testLog(TestId.DouyinVideo.GetVideoByShareUrl, 'Do not run test because no douyin cookie');
       test.skip();
     } else {
       await setDouyinCookie(app);
@@ -98,13 +99,13 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(54, 'Should get images by full url'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinVideo.GetImagesByFullUrl, 'Should get images by full url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
     if (!testConfig.douyin.cookie) {
-      testLog(54, 'Do not run test because no douyin cookie');
+      testLog(TestId.DouyinVideo.GetImagesByFullUrl, 'Do not run test because no douyin cookie');
       test.skip();
     } else {
       await setDouyinCookie(app);
@@ -117,13 +118,13 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(55, 'Should get images by note id'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinVideo.GetImagesByNoteId, 'Should get images by note id'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
 
     if (!testConfig.douyin.cookie) {
-      testLog(55, 'Do not run test because no douyin cookie');
+      testLog(TestId.DouyinVideo.GetImagesByNoteId, 'Do not run test because no douyin cookie');
       test.skip();
     } else {
       await setDouyinCookie(app);
@@ -135,7 +136,7 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(56, 'Should get images by share url'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinVideo.GetImagesByShareUrl, 'Should get images by share url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

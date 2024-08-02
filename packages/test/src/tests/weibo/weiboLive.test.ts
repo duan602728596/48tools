@@ -8,6 +8,7 @@ import ElectronApp from '../../utils/ElectronApp';
 import { testTitle } from '../../utils/testUtils.js';
 import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions';
 import testIdClick from '../../actions/testIdClick';
+import * as TestId from '../../TestId.js';
 
 /* 微博直播测试 */
 export const title: string = 'WeiboLive Page';
@@ -25,7 +26,7 @@ export function callback(): void {
     app = null;
   });
 
-  test(testTitle(60, 'Should get weibo live video'), async function(): Promise<void> {
+  test(testTitle(TestId.Weibo.LiveVideo, 'Should get weibo live video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

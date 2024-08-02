@@ -3,6 +3,7 @@ import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
 import { testTitle } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 
 /* 48官方公演录播下载测试 */
 export const title: string = '48/InVideo Page';
@@ -45,23 +46,23 @@ export function callback(): void {
     expect(images.length).toEqual(20);
   }
 
-  test(testTitle(21, 'Should get SNH48 public performance video data'), async function(): Promise<void> {
+  test(testTitle(TestId.SNH48InVideo.SNH48, 'Should get SNH48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('SNH48');
   });
 
-  test(testTitle(22, 'Should get BEJ48 public performance video data'), async function(): Promise<void> {
+  test(testTitle(TestId.SNH48InVideo.BEJ48, 'Should get BEJ48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('BEJ48');
   });
 
-  test(testTitle(23, 'Should get GNZ48 public performance video data'), async function(): Promise<void> {
+  test(testTitle(TestId.SNH48InVideo.GNZ48, 'Should get GNZ48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('GNZ48');
   });
 
-  test(testTitle(24, 'Should get CKG48 public performance video data'), async function(): Promise<void> {
+  test(testTitle(TestId.SNH48InVideo.CKG48, 'Should get CKG48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('CKG48');
   });
 
-  test(testTitle(25, 'Should get CGT48 public performance video data'), async function(): Promise<void> {
+  test(testTitle(TestId.SNH48InVideo.CGT48, 'Should get CGT48 public performance video data'), async function(): Promise<void> {
     await getTeamsVideoData('CGT48');
   });
 }

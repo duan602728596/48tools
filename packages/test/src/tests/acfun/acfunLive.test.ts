@@ -10,6 +10,7 @@ import * as config from '../../utils/config.js';
 import { requestAcfunLiveList } from '../../services/services.js';
 import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess.js';
 import { testTitle } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 import type { AcfunLiveListResponse } from '../../services/interface';
 
 /* A站直播测试 */
@@ -28,7 +29,7 @@ export function callback(): void {
     app = null;
   });
 
-  test(testTitle(32, 'Should get acfun live video'), async function(): Promise<void> {
+  test(testTitle(TestId.AcFunLive.GetLiveVideo, 'Should get acfun live video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

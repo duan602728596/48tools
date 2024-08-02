@@ -2,6 +2,7 @@ import { test, expect, type ElementHandle } from '@playwright/test';
 import type { ElementHandleForTag } from 'playwright-core/types/structs';
 import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 
 /* 客户端主界面入口测试 */
 export const title: string = 'index Page';
@@ -19,7 +20,7 @@ export function callback(): void {
     app = null;
   });
 
-  test(testTitle(11, 'Should render navs and images'), async function(): Promise<void> {
+  test(testTitle(TestId.Index.Index, 'Should render navs and images'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

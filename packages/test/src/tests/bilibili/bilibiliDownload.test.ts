@@ -9,6 +9,7 @@ import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
 import { setFFmpegPath, setBilibiliCookie, mockShowSaveDialog } from '../../actions/utilActions.js';
 import { testTitle, testLog } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 import { testConfig } from '../../testConfig.js';
 
 /* B站视频下载测试 */
@@ -93,7 +94,7 @@ export function callback(): void {
   }
 
   // BV查询
-  test(testTitle(41, 'Should get bilibili video'), async function(): Promise<void> {
+  test(testTitle(TestId.BiliBiliDownload.GetBilibiliVideo, 'Should get bilibili video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -128,7 +129,7 @@ export function callback(): void {
     expect(willBeDownload.length).toEqual(6);
   });
 
-  test(testTitle(42, 'Should get bilibili video with proxy'), async function(): Promise<void> {
+  test(testTitle(TestId.BiliBiliDownload.GetBilibiliVideoWithProxy, 'Should get bilibili video with proxy'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -205,7 +206,7 @@ export function callback(): void {
   }
 
   // 根据ID搜索
-  test(testTitle(43, 'Should get bilibili video by id'), async function(): Promise<void> {
+  test(testTitle(TestId.BiliBiliDownload.GetBilibiliVideoById, 'Should get bilibili video by id'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -237,7 +238,7 @@ export function callback(): void {
   });
 
   // 视频的下载
-  test(testTitle(45, 'Should download bilibili video'), async function(): Promise<void> {
+  test(testTitle(TestId.BiliBiliDownload.DownloadBilibiliVideo, 'Should download bilibili video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -271,7 +272,7 @@ export function callback(): void {
   });
 
   // 选择其他的分辨率
-  test(testTitle(46, 'Should download bilibili video with other resolution'),
+  test(testTitle(TestId.BiliBiliDownload.WithOtherResolution, 'Should download bilibili video with other resolution'),
     async function(): Promise<void> {
       if (!app) {
         throw new Error('app is null');
