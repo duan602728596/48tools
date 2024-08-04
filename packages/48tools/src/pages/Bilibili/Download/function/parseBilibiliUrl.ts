@@ -11,11 +11,20 @@ import {
   type WebInterfaceViewData,
   type WebInterfaceViewDataPageItem
 } from '@48tools-api/bilibili/download';
-import type { InitialState, EpisodesItem, NextDataMediaInfo, NextData } from '../../types';
+import type { InitialState, NextData, VideoOnceInfo, VideoEpInfo, VideoOnceInfoResult } from '../../types';
 
 interface ParseHtmlResult {
   initialState?: InitialState;
   h1Title: string;
+}
+
+// 选择分辨率的解析结果
+export interface ParseVideoUrlDASHObjectResult {
+  videoData: VideoData;
+  pic: string;
+  title: string;
+  aid?: number;
+  cid?: number;
 }
 
 /**
@@ -54,45 +63,31 @@ function parseHtml(html: string): ParseHtmlResult {
  * @param { 'ss' | 'ep' } type - 类型为ss时，取第一个
  * @param { string } id - ss id或ep id，需要根据这个来查具体信息
  */
-function parseHtmlNext(html: string, type: string, id: string): ParseHtmlResult {
+function parseHtmlNext(html: string, type: string, id: string): ParseVideoUrlDASHObjectResult | undefined {
   const parseDocument: Document = new DOMParser().parseFromString(html, 'text/html');
   const nextData: HTMLElement | null = parseDocument.getElementById('__NEXT_DATA__');
-  let initialState: InitialState | undefined = undefined;
 
   if (nextData) {
     const scriptStr: string = nextData.innerHTML;
     const nextDataJson: NextData = JSON.parse(scriptStr);
-    const mediaInfo: NextDataMediaInfo | undefined = nextDataJson?.props?.pageProps?.dehydratedState?.queries
-      ?.[0]?.state?.data?.seasonInfo?.mediaInfo;
+    const [videoOnceInfo, videoEpInfo]: [VideoOnceInfo, VideoEpInfo] = nextDataJson?.props?.pageProps?.dehydratedState?.queries ?? [];
 
-    if (mediaInfo) {
-      const epInfo: EpisodesItem = type === 'ss'
-        ? mediaInfo.episodes[0]
-        : (mediaInfo.episodes.find((o: EpisodesItem): boolean => o.id === Number(id)) ?? mediaInfo.episodes[0]);
+    if (videoOnceInfo && videoEpInfo && videoOnceInfo?.state?.data?.result?.video_info?.dash) {
+      const videoOnceInfoResult: VideoOnceInfoResult = videoOnceInfo?.state?.data?.result;
 
-      initialState = {
-        aid: epInfo.aid,
+      return {
+        title: `${ videoEpInfo.season_title }-${ videoOnceInfoResult.play_view_business_info.episode_info.long_title }`,
+        pic: videoEpInfo.cover,
         videoData: {
-          aid: epInfo.aid,
-          bvid: epInfo.bvid,
-          pages: mediaInfo.episodes.map((o: EpisodesItem): { cid: number; part: string } => ({
-            cid: o.cid,
-            part: o.long_title
-          })),
-          title: mediaInfo.title
+          durl: [],
+          dash: videoOnceInfoResult.video_info.dash,
+          support_formats: videoOnceInfoResult.video_info.support_formats
         },
-        epInfo: {
-          aid: epInfo.aid,
-          cid: epInfo.cid
-        }
+        aid: videoOnceInfoResult.play_view_business_info.episode_info.aid,
+        cid: videoOnceInfoResult.play_view_business_info.episode_info.cid
       };
     }
   }
-
-  return {
-    initialState,
-    h1Title: initialState?.videoData?.title ?? ''
-  };
 }
 
 interface ParseVideoUrlCoreObjectResult {
@@ -163,12 +158,6 @@ export async function parseVideoUrlV2(
   return result;
 }
 
-export interface ParseVideoUrlDASHObjectResult {
-  videoData: VideoData;
-  pic: string;
-  title: string;
-}
-
 /**
  * 解析视频url。testID：1rp4y1e745
  * @param { string } type - 视频类型
@@ -227,25 +216,16 @@ export async function parseVideoList(bvid: string): Promise<Array<ParseVideoList
 export async function parseBangumiVideo(type: string, id: string, proxy: string | undefined): Promise<string | void> {
   const videoUrl: string = `https://www.bilibili.com/bangumi/play/${ type }${ id }`;
   const html: string = await requestBilibiliHtml(videoUrl, proxy);
-  let parseHtmlResult: ParseHtmlResult = parseHtmlNext(html, type, id);
+  const parseHtmlResult: ParseVideoUrlDASHObjectResult | undefined = parseHtmlNext(html, type, id);
 
-  console.log(parseHtmlResult);
+  if (parseHtmlResult && parseHtmlResult.aid && parseHtmlResult.cid) {
+    const res: BangumiVideoInfo = await requestBangumiVideoInfo(parseHtmlResult.aid, parseHtmlResult.cid, proxy);
 
-  if (!parseHtmlResult.initialState) {
-    parseHtmlResult = parseHtml(html);
-  }
-
-  if (!parseHtmlResult.initialState) {
-    return undefined;
-  }
-
-  const { aid, cid }: { aid: number; cid: number } = parseHtmlResult.initialState.epInfo;
-  const res: BangumiVideoInfo = await requestBangumiVideoInfo(aid, cid, proxy);
-
-  if (res.data) {
-    return res.data.durl[0].url;
-  } else {
-    return undefined;
+    if (res.data) {
+      return res.data.durl[0].url;
+    } else {
+      return undefined;
+    }
   }
 }
 

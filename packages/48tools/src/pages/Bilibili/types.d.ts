@@ -34,34 +34,40 @@ export interface InitialState {
 }
 
 // 番剧__NEXT_DATA__的数据结构
-export interface EpisodesItem {
-  aid: number;
-  bvid: string;
-  cid: number;
-  id: number;
-  long_title: string;
+export interface VideoOnceInfoResult {
+  play_view_business_info: {
+    episode_info: {
+      aid: number;
+      bvid: string;
+      cid: number;
+      long_title: string;
+      title: string;
+    };
+  };
+  video_info: {
+    dash: DashVideoInfo;
+    support_formats: Array<DashSupportFormats>;
+  };
 }
 
-export interface NextDataMediaInfo {
-  media_id: number;  // ss id
-  season_id: number; // ss id
-  title: string;     // 标题
-  episodes: Array<EpisodesItem>;
+export interface VideoOnceInfo {
+  state: {
+    data: {
+      result: VideoOnceInfoResult;
+    };
+  };
+}
+
+export interface VideoEpInfo {
+  cover: string;
+  season_title: string;
 }
 
 export interface NextData {
   props: {
     pageProps: {
       dehydratedState: {
-        queries: [{
-          state: {
-            data: {
-              seasonInfo: {
-                mediaInfo: NextDataMediaInfo;
-              };
-            };
-          };
-        }];
+        queries: [VideoOnceInfo, VideoEpInfo];
       };
     };
   };
