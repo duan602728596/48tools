@@ -38,7 +38,7 @@ export function callback(): void {
     await setFFmpegPath(app);
     await testIdClick(app, 'weibo-live-link');
     await app.win.click('#liveValue');
-    await app.win.keyboard.type('1022:2321325021334517186741');
+    await app.win.keyboard.type('1022:2321325062308580950486');
 
     const antBtn: Locator = await app.win.locator('.ant-btn');
 
