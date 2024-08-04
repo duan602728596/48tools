@@ -15,8 +15,6 @@ export async function requestPcLiveJson(liveId: string): Promise<PcLiveJson> {
     }
   });
 
-  console.log(res);
-
   return res.body;
 }
 
