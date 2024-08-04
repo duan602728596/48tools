@@ -12,7 +12,7 @@ const config: PlaywrightTestConfig = defineConfig({
   testDir: path.join(__dirname, 'src'),
   outputDir: path.join(__dirname, 'dist'),
   snapshotPathTemplate: path.join(__dirname, '__screenshots__', '{arg}{ext}'),
-  workers: os.cpus().length,
+  workers: 1,
   timeout: 1_200_000,
   testIgnore: [
     '**/src/tests',
