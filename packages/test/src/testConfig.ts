@@ -1,4 +1,7 @@
+import { PartialTest } from './TestId.js';
+
 interface TestConfig {
+  partialTest?: false | Array<PartialTest>; // 跑部分测试
   bilibili: {
     useProxy: boolean;
     proxy: string;
@@ -10,6 +13,14 @@ interface TestConfig {
 }
 
 export const testConfig: TestConfig = {
+  partialTest: [
+    PartialTest.IndexName,
+    PartialTest.Pocket48Name,
+    PartialTest.BilibiliName,
+    PartialTest.AcFunName,
+    PartialTest.DouyinName,
+    PartialTest.WeiboName
+  ],
   bilibili: {
     // 如果为true，会跑港澳台的测试用例
     useProxy: true,

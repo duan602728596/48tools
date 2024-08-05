@@ -2,6 +2,15 @@
  * 统一记录所有测试用例的ID
  */
 
+export const enum PartialTest {
+  IndexName = 'index',
+  Pocket48Name = 'pocket48',
+  BilibiliName = 'bilibili',
+  AcFunName = 'acfun',
+  DouyinName = 'douyin',
+  WeiboName = 'weibo'
+}
+
 /* Index */
 export const enum Index {
   Index = 100

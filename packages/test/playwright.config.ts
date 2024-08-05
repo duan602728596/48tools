@@ -1,5 +1,4 @@
 import * as path from 'node:path';
-import * as os from 'node:os';
 import { metaHelper } from '@sweet-milktea/utils';
 import { defineConfig, type PlaywrightTestConfig } from '@playwright/test';
 
