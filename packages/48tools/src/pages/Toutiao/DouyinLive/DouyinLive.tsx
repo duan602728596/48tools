@@ -245,7 +245,7 @@ function DouyinLive(props: {}): ReactElement {
       <Header>
         <Button.Group>
           <AutoRecordingSavePath localStorageItemKey="DOUYIN_LIVE_AUTO_RECORD_SAVE_PATH" />
-          <AddLiveRoomForm modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveLiveItem } />
+          <AddLiveRoomForm dataTestId="douyin-add-live-id-btn" modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveLiveItem } />
           {
             autoRecordTimer === null
               ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>

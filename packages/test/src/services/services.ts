@@ -54,3 +54,10 @@ export async function requestAcfunLiveList(): Promise<AcfunLiveListResponse> {
 
   return res.body;
 }
+
+/* 获取抖音直播列表 */
+export async function requestDouyinLiveHtml(): Promise<string> {
+  const res: GotResponse<string> = await got.get('https://live.douyin.com/category/1_3');
+
+  return res.body;
+}

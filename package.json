@@ -52,6 +52,7 @@
     "@types/command-line-args": "^5",
     "@types/fluent-ffmpeg": "^2.1.21",
     "@types/fs-extra": "^11",
+    "@types/jsdom": "^21",
     "@types/node": "^20",
     "@types/react": "npm:types-react@beta",
     "@types/react-dom": "npm:types-react-dom@beta",

@@ -84,6 +84,10 @@ export const enum DouyinUser {
   GetUserInfoByShareUrl = 508
 }
 
+export const enum DouyinLive {
+  GetLiveVideo = 509
+}
+
 export const enum DouyinDownloadVP {
   Light = 5001,
   Dark = 5002

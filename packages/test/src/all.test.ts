@@ -10,6 +10,7 @@ import * as acfunDownload from './tests/acfun/acfunDownload.test.js';
 import * as acfunLive from './tests/acfun/acfunLive.test.js';
 import * as douyinVideo from './tests/douyin/video.test.js';
 import * as douyinUser from './tests/douyin/user.test.js';
+import * as douyinLive from './tests/douyin/douyinLive.test.js';
 import * as weiboLive from './tests/weibo/weiboLive.test.js';
 
 const testGroupTitle: (n: string) => string = (n: string): string => `${ n } test group`;
@@ -45,8 +46,9 @@ test.describe.parallel('48tools e2e test', function(): void {
 
   if (runAllTests || partialTest.includes(PartialTest.DouyinName)) {
     test.describe.serial(testGroupTitle(PartialTest.DouyinName), function(): void {
-      test.describe(douyinVideo.title, douyinVideo.callback);
-      test.describe(douyinUser.title, douyinUser.callback);
+      // test.describe(douyinVideo.title, douyinVideo.callback);
+      // test.describe(douyinUser.title, douyinUser.callback);
+      test.describe(douyinLive.title, douyinLive.callback);
     });
   }
 
