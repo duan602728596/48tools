@@ -27,6 +27,7 @@ build
 dist
 packages/test/ffmpeg
 node-nim-cache0
+.eslintcache
 
 docker/*.zip
 docker/48tools-**/*

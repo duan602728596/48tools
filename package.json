@@ -7,8 +7,8 @@
     "email": "duanhaochen@126.com"
   },
   "scripts": {
-    "eslint": "eslint ./ --fix",
-    "eslint:no-fix": "eslint ./",
+    "eslint": "cross-env COMMITLINT=1 eslint ./ --fix --cache --cache-location .eslintcache",
+    "eslint:no-fix": "cross-env COMMITLINT=1 eslint ./ --cache --cache-location .eslintcache",
     "lerna:install": "lerna bootstrap --force-local",
     "update-version": "milktea-esm update",
     "update-version:dev": "milktea-esm update --__DEV__",
@@ -76,7 +76,7 @@
     "react-dom": "rc"
   },
   "lint-staged": {
-    "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "eslint",
+    "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "cross-env COMMITLINT=1 eslint --cache --cache-location .eslintcache",
     "packages/test/src/testConfig.ts": "npm run check-token"
   },
   "config": {
