@@ -1,5 +1,5 @@
 import got, { type Response as GotResponse } from 'got';
-import type { PcLiveJson, VisitedList, DetailInfo, FollowContent } from './interface';
+import type { PcLiveJson, VisitedList, DetailInfo, FollowContent, WeiboUserImages, WeiboShowDetails } from './interface';
 
 export type * from './interface';
 
@@ -61,6 +61,40 @@ export async function requestSelfFollowedListPC(cookie: string, page: number = 1
  */
 export async function requestDetailByUserId(id: string, cookie: string | undefined): Promise<DetailInfo> {
   const res: GotResponse<DetailInfo> = await got.get('https://weibo.com/ajax/profile/detail?uid=' + id, {
+    responseType: 'json',
+    headers: {
+      Cookie: cookie
+    }
+  });
+
+  return res.body;
+}
+
+/**
+ * 获取微博图片
+ * @param { string } uid
+ * @param { string } sinceId
+ * @param { string } cookie
+ */
+export async function requestWeiboUserImages(uid: string, sinceId: string, cookie: string): Promise<WeiboUserImages> {
+  const res: GotResponse<WeiboUserImages> = await got.get(`https://weibo.com/ajax/profile/getImageWall?uid=${ uid }&sinceid=${ sinceId }`, {
+    responseType: 'json',
+    headers: {
+      Cookie: cookie,
+      Referer: `https://weibo.com/u/${ uid }?tabtype=album`
+    }
+  });
+
+  return res.body;
+}
+
+/**
+ * 获取图片的详细地址
+ * @param { string } mid
+ * @param { string } cookie
+ */
+export async function requestWeiboShow(mid: string, cookie: string): Promise<WeiboShowDetails> {
+  const res: GotResponse<WeiboShowDetails> = await got.get(`https://weibo.com/ajax/statuses/show?id=${ mid }&locale=zh`, {
     responseType: 'json',
     headers: {
       Cookie: cookie

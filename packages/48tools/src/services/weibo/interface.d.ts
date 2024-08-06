@@ -77,3 +77,61 @@ export interface DetailInfo {
     ip_location: string | `IP属地：${ string }`;
   };
 }
+
+// 微博图片
+interface WeiboUserImageItem {
+  pid: string;
+  mid: string;
+  object_id: string;
+}
+
+interface WeiboUserImagePic extends WeiboUserImageItem {
+  type: 'pic';
+}
+
+interface WeiboUserImageMedia extends WeiboUserImageItem {
+  type: 'gif' | 'livephoto';
+  video: string;
+}
+
+export interface WeiboUserImages {
+  data: {
+    since_id: string;
+    list: Array<WeiboUserImagePic | WeiboUserImageMedia>;
+  };
+  ok: number;
+}
+
+interface WeiboShowDetailsImageObject {
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface WeiboShowDetailsInfo {
+  pic_id: string;
+  fid: string;
+  mw2000: WeiboShowDetailsImageObject;
+  largest: WeiboShowDetailsImageObject;
+  largecover: WeiboShowDetailsImageObject;
+  large: WeiboShowDetailsImageObject;
+  bmiddle: WeiboShowDetailsImageObject;
+  thumbnail: WeiboShowDetailsImageObject;
+}
+
+export interface WeiboShowDetailsPicInfo extends WeiboShowDetailsInfo {
+  type: 'pic';
+}
+
+export interface WeiboShowDetailsMediaInfo extends WeiboShowDetailsInfo {
+  type: 'gif' | 'livephoto';
+  video: string;
+}
+
+export interface WeiboShowDetails {
+  data: {
+    pic_ids: Array<string>;
+    pic_infos: Record<string, WeiboShowDetailsPicInfo | WeiboShowDetailsMediaInfo>;
+  };
+  ok: number;
+}
