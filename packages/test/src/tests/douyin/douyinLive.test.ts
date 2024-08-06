@@ -1,4 +1,4 @@
-import * as path from 'node:path';
+import path from 'node:path';
 import { test, expect, type JSHandle } from '@playwright/test';
 import fse from 'fs-extra';
 import { JSDOM } from 'jsdom';

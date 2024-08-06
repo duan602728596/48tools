@@ -1,4 +1,4 @@
-import * as path from 'node:path';
+import path from 'node:path';
 import { _electron as electron, type ElectronApplication, type Page } from '@playwright/test';
 import electronPath from 'electron/index.js';
 import fse from 'fs-extra';

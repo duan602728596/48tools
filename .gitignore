@@ -26,6 +26,7 @@ build
 !packages/help/build
 dist
 packages/test/ffmpeg
+packages/test/.configscache
 node-nim-cache0
 .eslintcache
 

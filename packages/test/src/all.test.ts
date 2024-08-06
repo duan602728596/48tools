@@ -46,8 +46,8 @@ test.describe.parallel('48tools e2e test', function(): void {
 
   if (runAllTests || partialTest.includes(PartialTest.DouyinName)) {
     test.describe.serial(testGroupTitle(PartialTest.DouyinName), function(): void {
-      // test.describe(douyinVideo.title, douyinVideo.callback);
-      // test.describe(douyinUser.title, douyinUser.callback);
+      test.describe(douyinVideo.title, douyinVideo.callback);
+      test.describe(douyinUser.title, douyinUser.callback);
       test.describe(douyinLive.title, douyinLive.callback);
     });
   }

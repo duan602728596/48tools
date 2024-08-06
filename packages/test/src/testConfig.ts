@@ -1,4 +1,5 @@
 import { PartialTest } from './TestId.js';
+import { readConfigsCacheFile } from './utils/testUtils.js';
 
 interface TestConfig {
   partialTest?: false | Array<PartialTest>; // 跑部分测试
@@ -25,9 +26,9 @@ export const testConfig: TestConfig = {
     // 如果为true，会跑港澳台的测试用例
     useProxy: true,
     proxy: 'http://127.0.0.1:15732',
-    cookie: undefined
+    cookie: await readConfigsCacheFile('bilibili-cookie.txt')
   },
   douyin: {
-    cookie: undefined
+    cookie: await readConfigsCacheFile('douyin-cookie.txt')
   }
 };

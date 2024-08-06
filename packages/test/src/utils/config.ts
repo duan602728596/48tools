@@ -21,3 +21,6 @@ export const douyinDir: string = path.join(testDir, 'douyin');
 
 // 微博的文件夹
 export const weiboDir: string = path.join(testDir, 'weibo');
+
+// 配置缓存
+export const configsCache: string = path.join(testDir, '../../.configscache');
