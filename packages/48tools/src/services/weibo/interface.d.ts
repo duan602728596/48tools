@@ -79,25 +79,19 @@ export interface DetailInfo {
 }
 
 // 微博图片
-interface WeiboUserImageItem {
+type WeiboImageType = 'pic' | 'gif' | 'livephoto';
+
+export interface WeiboUserImageItem {
   pid: string;
   mid: string;
   object_id: string;
-}
-
-interface WeiboUserImagePic extends WeiboUserImageItem {
-  type: 'pic';
-}
-
-interface WeiboUserImageMedia extends WeiboUserImageItem {
-  type: 'gif' | 'livephoto';
-  video: string;
+  type: WeiboImageType;
 }
 
 export interface WeiboUserImages {
   data: {
     since_id: string;
-    list: Array<WeiboUserImagePic | WeiboUserImageMedia>;
+    list: Array<WeiboUserImageItem>;
   };
   ok: number;
 }
@@ -108,7 +102,7 @@ interface WeiboShowDetailsImageObject {
   height: number;
 }
 
-interface WeiboShowDetailsInfo {
+export interface WeiboShowDetailsInfo {
   pic_id: string;
   fid: string;
   mw2000: WeiboShowDetailsImageObject;
@@ -117,21 +111,15 @@ interface WeiboShowDetailsInfo {
   large: WeiboShowDetailsImageObject;
   bmiddle: WeiboShowDetailsImageObject;
   thumbnail: WeiboShowDetailsImageObject;
-}
-
-export interface WeiboShowDetailsPicInfo extends WeiboShowDetailsInfo {
-  type: 'pic';
-}
-
-export interface WeiboShowDetailsMediaInfo extends WeiboShowDetailsInfo {
-  type: 'gif' | 'livephoto';
-  video: string;
+  type: WeiboImageType;
+  video?: string;
 }
 
 export interface WeiboShowDetails {
-  data: {
-    pic_ids: Array<string>;
-    pic_infos: Record<string, WeiboShowDetailsPicInfo | WeiboShowDetailsMediaInfo>;
+  pic_infos?: Record<string, WeiboShowDetailsInfo>;
+  mix_media_info?: {
+    items: Array<{ data: WeiboShowDetailsInfo }>;
   };
+  pic_ids: Array<string>;
   ok: number;
 }

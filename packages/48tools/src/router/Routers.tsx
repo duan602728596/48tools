@@ -9,6 +9,7 @@ import Kuaishou from '../pages/Kuaishou/index';
 import VideoEditDynamic from '../pages/VideoEdit/loader';
 import WeiboLive from '../pages/Weibo/WeiboLive/WeiboLive';
 import WeiboSuperDynamic from '../pages/Weibo/WeiboSuper/loader';
+import WeiboImagesDownloadDynamic from '../pages/Weibo/ImagesDownload/loader';
 import Agreement from '../pages/Agreement/index';
 import { needToReadPower } from '../pages/Agreement/function/helper';
 
@@ -32,6 +33,7 @@ function Routers(props: {}): ReactElement | null {
     { path: 'VideoEdit/*', element: <VideoEditDynamic /> },
     { path: 'WeiboLive', element: <WeiboLive /> },
     { path: 'WeiboSuper', element: <WeiboSuperDynamic /> },
+    { path: 'WeiboImagesDownload', element: <WeiboImagesDownloadDynamic /> },
     { path: 'Agreement/*', element: <Agreement /> }
   ]);
 

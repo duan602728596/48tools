@@ -159,6 +159,11 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   ],
   [
     {
+      name: '微博图片批量下载',
+      url: '/WeiboImagesDownload',
+      icon: <IconWeiboOutlined />
+    },
+    {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
       icon: <Icon className="text-[18px]" component={ IconCutSvgComponent } />

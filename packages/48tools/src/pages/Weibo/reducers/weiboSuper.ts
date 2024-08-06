@@ -25,7 +25,7 @@ export const defaultQuantityValue: Quantity = {
 
 const sliceName: 'weiboSuper' = 'weiboSuper';
 const { actions, reducer }: Slice<WeiboSuperInitialState, SliceReducers, typeof sliceName> = createSlice({
-  name: 'weiboSuper',
+  name: sliceName,
   initialState: {
     weiboCheckinList: [], // 超话签到结果
     checkIn: false,       // 是否在签到中，用来打断签到的
