@@ -23,4 +23,4 @@ export const douyinDir: string = path.join(testDir, 'douyin');
 export const weiboDir: string = path.join(testDir, 'weibo');
 
 // 配置缓存
-export const configsCache: string = path.join(testDir, '../../.configscache');
+export const configsCache: string = path.join(__dirname, '../../.configscache');
