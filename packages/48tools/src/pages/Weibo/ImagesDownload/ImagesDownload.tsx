@@ -169,7 +169,7 @@ function ImagesDownload(props: {}): ReactElement {
   }
 
   // 下载选中图片
-  async function handleDownloadCheckedImagesClick(asVideo: boolean, event: MouseEvent): Promise<void> {
+  async function handleDownloadCheckedImagesClick(event: MouseEvent): Promise<void> {
     const checkedList: Array<WeiboImageItem> = list.filter((o: WeiboImageItem): boolean => !!o.checked);
 
     if (checkedList.length <= 0) return;
@@ -177,10 +177,12 @@ function ImagesDownload(props: {}): ReactElement {
     const time: string = dayjs().format(fileTimeFormat);
     const result: SaveDialogReturnValue = await showSaveDialog({
       properties: ['createDirectory'],
-      defaultPath: '微博图片下载_' + time
+      defaultPath: `微博图片下载_${ accountId }_${ time }`
     });
 
     if (result.canceled || !result.filePath) return;
+
+    messageApi.info('开始下载微博图片，请等待。');
 
     const worker: Worker = getDownloadWorker();
 
@@ -191,7 +193,6 @@ function ImagesDownload(props: {}): ReactElement {
     });
 
     worker.postMessage({
-      asVideo,
       filePath: result.filePath,
       checkedList
     });
@@ -241,15 +242,8 @@ function ImagesDownload(props: {}): ReactElement {
             鼠标右键点击选中要下载的图片。<br />
             下载完毕后会清空所有选中。
           </p>
-          <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadCheckedImagesClick(true, event) }>
-            下载选中的图片（LivePhoto、GIF作为视频）
-          </Button>
-          <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadCheckedImagesClick(false, event) }>
-            下载选中的图片（LivePhoto、GIF作为图片）
-          </Button>
-          <Button onClick={ handleClearAllCheckedClick }>
-            清空所有选中
-          </Button>
+          <Button onClick={ handleDownloadCheckedImagesClick }>下载选中的图片</Button>
+          <Button onClick={ handleClearAllCheckedClick }>清空所有选中</Button>
           <Button type="primary" loading={ imageLoading } onClick={ handleGetNextImagesClick }>加载下一页</Button>
         </Space>
       </Space>

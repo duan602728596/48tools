@@ -28,23 +28,26 @@ async function requestDownloadFileByStream(fileUrl: string, filename: string): P
 
 /* 下载图片 */
 addEventListener('message', async function(event: MessageEvent<WorkerEventData>): Promise<void> {
-  const { filePath, asVideo, checkedList }: WorkerEventData = event.data;
+  const { filePath, checkedList }: WorkerEventData = event.data;
   const downloadList: Array<Promise<void>> = [];
-
-  for (const item of checkedList) {
-    let fileUrl: string = item.infos.largest.url;
-
-    if (item.infos.video && asVideo) {
-      fileUrl = item.infos.video;
-    }
-
-    const filename: string = path.join(filePath, `${ item.pid }${ path.extname(fileUrl) }`);
-
-    downloadList.push(requestDownloadFileByStream(fileUrl, filename));
-  }
 
   if (!fs.existsSync(filePath)) {
     await fsPromises.mkdir(filePath, { recursive: true });
+  }
+
+  for (const item of checkedList) {
+    const fileUrl: string = item.infos.largest.url;
+    const filename: string = path.join(filePath, `${ item.pid }${ path.extname(fileUrl) }`);
+
+    downloadList.push(requestDownloadFileByStream(fileUrl, filename));
+
+    // 额外下载视频
+    if (item.infos.video) {
+      const videoFileUrl: string = item.infos.video;
+      const videoFilename: string = path.join(filePath, `${ item.pid }${ path.extname(videoFileUrl) }`);
+
+      downloadList.push(requestDownloadFileByStream(videoFileUrl, videoFilename));
+    }
   }
 
   await Promise.allSettled(downloadList);
