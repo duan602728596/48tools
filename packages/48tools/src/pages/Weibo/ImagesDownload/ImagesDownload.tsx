@@ -90,7 +90,7 @@ function ImagesDownload(props: {}): ReactElement {
         // 请求图片
         const res: WeiboUserImages = await requestWeiboUserImages(uid, sid, c);
 
-        if (!res?.data?.list) {
+        if (!res?.data?.list?.length) {
           messageApi.error('没有图片！请检查微博uid填写是否正确！');
 
           return;
