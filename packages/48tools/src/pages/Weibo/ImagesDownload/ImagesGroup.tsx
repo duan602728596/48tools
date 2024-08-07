@@ -8,7 +8,7 @@ import {
   VideoCameraOutlined as IconVideoCameraOutlined
 } from '@ant-design/icons';
 import * as classNames from 'classnames';
-import style from './imagesDownload.sass';
+import style from './imagesGroup.sass';
 import { setImageCheckedItem } from '../reducers/weiboImagesDownload';
 import imageLoadedError from '../images/imageLoadedError.svg';
 import type { WeiboImageItem, WeiboImagesGroup } from '../types';

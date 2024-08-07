@@ -3,10 +3,9 @@ import { useMemo, useTransition, type ReactElement, type MouseEvent, type Transi
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Space, Form, Input, Button, App, Empty, type FormInstance } from 'antd';
+import { Space, Form, Input, Button, App, Empty, Card, type FormInstance } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import VirtualList from 'rc-virtual-list';
-import * as classNames from 'classnames';
 import * as dayjs from 'dayjs';
 import {
   requestWeiboUserImages,
@@ -15,7 +14,6 @@ import {
   type WeiboShowDetails,
   type WeiboShowDetailsInfo
 } from '@48tools-api/weibo';
-import style from './imagesDownload.sass';
 import commonStyle from '../../../common.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import { nativeMessage } from '../../../utils/remote/nativeMessage';
@@ -91,6 +89,13 @@ function ImagesDownload(props: {}): ReactElement {
       try {
         // 请求图片
         const res: WeiboUserImages = await requestWeiboUserImages(uid, sid, c);
+
+        if (!res?.data?.list) {
+          messageApi.error('没有图片！请检查微博uid填写是否正确！');
+
+          return;
+        }
+
         const midSet: Set<string> = new Set<string>();
 
         for (const r of res.data.list) {
@@ -215,18 +220,20 @@ function ImagesDownload(props: {}): ReactElement {
         </Form>
       </Header>
       <Space>
-        <div className={ classNames('w-[600px] h-[600px] overflow-hidden', style.listBorder) }>
-          {
-            listGroup.length === 0 ? <Empty className="mt-[215px]" /> : (
-              <VirtualList data={ listGroup } height={ 600 } itemHeight={ 100 } itemKey="pids">
-                {
-                  (item: WeiboImagesGroup, index: number): ReactElement =>
-                    <ImagesGroup key={ item.pids } item={ item } index={ index } />
-                }
-              </VirtualList>
-            )
-          }
-        </div>
+        <Card size="small">
+          <div className="w-[600px] h-[600px] overflow-hidden select-none">
+            {
+              listGroup.length === 0 ? <Empty className="mt-[215px]" /> : (
+                <VirtualList data={ listGroup } height={ 600 } itemHeight={ 100 } itemKey="pids">
+                  {
+                    (item: WeiboImagesGroup, index: number): ReactElement =>
+                      <ImagesGroup key={ item.pids } item={ item } index={ index } />
+                  }
+                </VirtualList>
+              )
+            }
+          </div>
+        </Card>
         <Space direction="vertical">
           <p className={ commonStyle.tips }>
             需要微博账号登录后才能下载。<br />
