@@ -1,0 +1,44 @@
+extends pug/template/_template
+
+include pug/components/_image
+include pug/components/_link
+include pug/components/_title
+
+//- 重复的文本渲染
+//- @param { string } href - 链接
+//- @param { string } type - 视频类型
+//- @param { string } typeCN - 视频类型中文
+//- @param { string } id - 视频ID
+mixin ResetIdText(href, type, typeCN, id)
+  | #{typeCN} #{type} ID：比如#{typeCN}地址：
+  +Link(href)
+  | 。我们需要填写的#{type} ID为：
+  b= id
+  | 。
+
+block head
+  +Title('输入正确的视频ID')
+
+block article
+  h1.h1 输入正确的视频ID
+  article
+    p 在下载B站视频时，我们需要输入正确的B站视频ID才能成功下载。ID从B站视频链接中获取。
+    p 下面是B站视频ID的获取方法：
+    ul
+        li
+          +ResetIdText('https://www.bilibili.com/video/BV1Hp4y1t7Nd', 'BV', '视频', '1Hp4y1t7Nd')
+          | 注意，
+          b 不要
+          | 把前面的BV粘贴过去，我们需要手动选择下载类型。
+          +Image('./image/bilibili/bilibili-video-download-type.webp', '手动选择下载类型', 400)
+          | 后面获取ID同理，都不要粘贴前面的视频类型。
+        li
+          +ResetIdText('https://www.bilibili.com/video/av370522884', 'av', '视频', '370522884')
+        li
+          +ResetIdText('https://www.bilibili.com/audio/au590187', 'au', '音频', '590187')
+        li
+          +ResetIdText('https://www.bilibili.com/bangumi/play/ep63470', 'ep', '番剧', '63470')
+        li
+          +ResetIdText('https://www.bilibili.com/bangumi/play/ss1547', 'ss', '番剧', '1547')
+        li
+          +ResetIdText('https://www.bilibili.com/cheese/play/ep205797', 'ep', '课程', '205797')

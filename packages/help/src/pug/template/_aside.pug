@@ -1,0 +1,34 @@
+// 侧边导航栏
+mixin NavLink(id, title)
+  a.nav-link(href='./' + id + '.html' data-url-id=id)= title
+
+aside.flex-shrink-0.p-3.h-100.border-end.border-secondary-subtle.overflow-auto.aside
+  ul.m-0.p-0.nav-list#nav-list
+    li
+      details(open)
+        summary.pb-2 48tools帮助文件
+        ul.m-0.p-0.nav-list
+          li.pb-2
+            +NavLink('index', '关于48tools')
+          li.pb-2
+            +NavLink('ffmpeg-option', 'FFmpeg配置')
+          li
+            details(open)
+              summary.pb-2 口袋48相关
+              ul.m-0.p-0.nav-list
+                li.pb-2
+                  +NavLink('pocket48-login', '口袋48登录')
+                li.pb-2
+                  +NavLink('appdata-directory-configuration', 'AppData目录配置')
+          li
+            details(open)
+              summary.pb-2 B站功能
+              ul.m-0.p-0.nav-list
+                li.pb-2
+                  +NavLink('bilibili-video-id', '输入正确的视频ID')
+          li
+            details(open)
+              summary.pb-2 微博功能
+              ul.m-0.p-0.nav-list
+                li.pb-2
+                  +NavLink('weibo-login', '微博登录')

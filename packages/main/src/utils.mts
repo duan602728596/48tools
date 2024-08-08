@@ -29,14 +29,10 @@ export const isTest: boolean = process.env.TEST === 'true';
 /* 文件夹路径 */
 export const wwwPath: string = path.join(__dirname, '..');
 
-/* 判断系统 */
-export const isMacOS: boolean = process.platform === 'darwin';
-
-/* 软件主目录 */
-export const softwareRootPath: string = path.join(__dirname, '../'.repeat(isMacOS ? 5 : 3));
-
 /* help文件 */
-export const helpDir: string = isDevelopment ? path.join(__dirname, '../../help/dist') : path.join(softwareRootPath, 'help');
+export const helpDir: string = isDevelopment
+  ? path.join(__dirname, '../../help/dist')
+  : path.join(process.resourcesPath, 'app/help');
 
 /**
  * worker.js文件路径

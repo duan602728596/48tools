@@ -1,19 +1,19 @@
 import process from 'node:process';
 import path from 'node:path';
 import gulp from 'gulp';
-import plumber from 'gulp-plumber';
-import pug from 'gulp-pug';
+import gulpPlumber from 'gulp-plumber';
+import gulpPug from 'gulp-pug';
 import gulpSass from 'gulp-sass';
-import postcss from 'gulp-postcss';
+import gulpPostcss from 'gulp-postcss';
 import webpackStream from 'webpack-stream';
 import GulpMemoryFs from 'gulp-memory-fs';
-import * as sass from 'sass';
+import * as sassCompiler from 'sass';
 import cssnano from 'cssnano';
 import named from 'vinyl-named';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 
-const Sass = gulpSass(sass);
+const sass = gulpSass(sassCompiler);
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -88,12 +88,12 @@ function pugTask() {
   if (isDev) {
     return gulp.src(src)
       .pipe(mfs.changed())
-      .pipe(plumber())
-      .pipe(pug({ pretty: true }))
+      .pipe(gulpPlumber())
+      .pipe(gulpPug({ pretty: true }))
       .pipe(mfs.dest('dist'));
   } else {
     return gulp.src(src)
-      .pipe(pug())
+      .pipe(gulpPug())
       .pipe(gulp.dest('dist'));
   }
 }
@@ -105,13 +105,13 @@ function sassTask() {
   if (isDev) {
     return gulp.src(src)
       .pipe(mfs.changed())
-      .pipe(plumber())
-      .pipe(Sass().on('error', Sass.logError))
+      .pipe(gulpPlumber())
+      .pipe(sass().on('error', sass.logError))
       .pipe(mfs.dest('dist'));
   } else {
     return gulp.src(src)
-      .pipe(Sass().on('error', Sass.logError))
-      .pipe(postcss([cssnano({ preset: 'default' })]))
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulpPostcss([cssnano({ preset: 'default' })]))
       .pipe(gulp.dest('dist'));
   }
 }
@@ -125,7 +125,7 @@ function webpackTask() {
     return gulp.src(src)
       .pipe(named(rename))
       .pipe(mfs.changed())
-      .pipe(plumber())
+      .pipe(gulpPlumber())
       .pipe(webpackStream(createWebpackConfig()))
       .pipe(mfs.dest('dist'));
   } else {
@@ -139,13 +139,14 @@ function webpackTask() {
 /* 图片 */
 function imageTask() {
   const src = ['src/**/*.{png,jpg,jpeg,gif,svg,webp,avif}'];
+  const gulpSrcOptions = { encoding: false };
 
   if (isDev) {
-    return gulp.src(src)
+    return gulp.src(src, gulpSrcOptions)
       .pipe(mfs.changed())
       .pipe(mfs.dest('dist'));
   } else {
-    return gulp.src(src)
+    return gulp.src(src, gulpSrcOptions)
       .pipe(gulp.dest('dist'));
   }
 }

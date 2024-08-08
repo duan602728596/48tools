@@ -2,6 +2,7 @@ import { test, expect, type Locator, type ElementHandle } from '@playwright/test
 import ElectronApp from '../../utils/ElectronApp.js';
 import testIdClick from '../../actions/testIdClick.js';
 import { testTitle } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 
 /* 口袋48录播下载测试 */
 export const title: string = '48/Pocket48Record Page';
@@ -19,7 +20,7 @@ export function callback(): void {
     app = null;
   });
 
-  test(testTitle(25, 'Should get record data'), async function(): Promise<void> {
+  test(testTitle(TestId.Pocket48Record.ShouldGetRecordData, 'Should get record data'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -39,7 +40,7 @@ export function callback(): void {
     expect(rows.length).toEqual(10);
   });
 
-  test(testTitle(26, 'Should search record data'), async function(): Promise<void> {
+  test(testTitle(TestId.Pocket48Record.ShouldSearchRecordData, 'Should search record data'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

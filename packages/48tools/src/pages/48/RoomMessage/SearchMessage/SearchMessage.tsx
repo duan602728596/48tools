@@ -343,7 +343,7 @@ function SearchMessage(props: {}): ReactElement {
           onSearch={ handleServerSearch }
           onSelect={ handleOwnerSelect }
         />
-        <Button.Group className="ml-[8px]">
+        <Button.Group className="mx-[8px]">
           <Button disabled={ searchSelectValue === undefined || homeMessageLoading }
             onClick={ handleGetHomeownerMessageClick }
           >
@@ -352,8 +352,8 @@ function SearchMessage(props: {}): ReactElement {
           <Button type="primary" onClick={ (event: MouseEvent): void => setExportMessageModalOpen(true) }>
             导出当前数据
           </Button>
-          <Pocket48Login />
         </Button.Group>
+        <Pocket48Login className="align-bottom" />
       </Header>
       <div className="flex-grow overflow-hidden">
         <MessageDisplay data={ homeMessageSlice } loading={ homeMessageLoading } />

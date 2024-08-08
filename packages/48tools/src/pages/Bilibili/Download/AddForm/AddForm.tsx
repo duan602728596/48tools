@@ -33,6 +33,7 @@ import {
 } from '../function/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
 import { getUrlFromDash, type GetUrlFromDashReturn } from '../function/getUrlFromDash';
+import HelpButtonGroup from '../../../../components/HelpButtonGroup/HelpButtonGroup';
 import type { DashInfo } from '../../types';
 
 /* 视频分类 */
@@ -278,8 +279,12 @@ function AddForm(props: {}): ReactElement {
             <Form.Item name="type" label="下载类型" data-test-id="bilibili-download-form-type">
               <Select options={ bilibiliVideoTypesOptions } />
             </Form.Item>
-            <Form.Item name="id" label="ID" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] }>
-              <Input />
+            <Form.Item label="ID">
+              <HelpButtonGroup spaceCompactProps={{ className: 'w-full' }} navId="bilibili-video-id" tooltipTitle="输入正确的视频ID">
+                <Form.Item name="id" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] } noStyle={ true }>
+                  <Input />
+                </Form.Item>
+              </HelpButtonGroup>
             </Form.Item>
             <Form.Item name="page" label="Page">
               <InputNumber />

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle, vpImage } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 
 /* 口袋48 */
 export const title: string = 'VP 48 Page';
@@ -31,14 +32,14 @@ export function callback(): void {
     await expect(app.win).toHaveScreenshot(vpImage('48', 'pocket48-live-options', isDark));
   }
 
-  test(testTitle(2000, 'pocket48 live options page'), async function(): Promise<void> {
+  test(testTitle(TestId.Live48OptionsVP.Light, 'pocket48 live options page'), async function(): Promise<void> {
     await liveOptionsVPTest();
 
     // 为下一个测试用例做修改
     dark = true;
   });
 
-  test(testTitle(2001, 'pocket48 live options page dark mode'), async function(): Promise<void> {
+  test(testTitle(TestId.Live48OptionsVP.Dark, 'pocket48 live options page dark mode'), async function(): Promise<void> {
     await liveOptionsVPTest(true);
   });
 }

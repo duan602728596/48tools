@@ -1,7 +1,9 @@
-extends _pugTemplate/_template
+extends pug/template/_template
+
+include pug/components/_title
 
 block head
-  title 关于48tools - 48tools帮助文件
+  +Title('关于48tools')
 
 block article
   h1.h1 关于48tools
@@ -46,4 +48,4 @@ block article
       b GNU General Public License v3.0
       | 许可证的约束。
     p 项目开源地址：
-      a(href='https://github.com/duan602728596/48tools' target='_blank') Github
+      a(href='https://github.com/duan602728596/48tools' target='_blank' rel='noreferrer') Github

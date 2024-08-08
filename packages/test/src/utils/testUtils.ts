@@ -1,3 +1,7 @@
+import fs, { promises as fsPromoses } from 'node:fs';
+import path from 'node:path';
+import { configsCache } from './config.js';
+
 /**
  * 生成测试的title
  * @param { number } serialNumber - 编号
@@ -24,4 +28,16 @@ export function testLog(serialNumber: number, title: string): void {
  */
 export function vpImage(dir: string, filename: string, dark?: boolean): Array<string> {
   return [dir, `${ filename }${ dark ? '-dark' : '' }.png`];
+}
+
+/**
+ * 读取文件
+ * @param { string } filename - 文件地址
+ */
+export function readConfigsCacheFile(filename: string): Promise<string> | undefined {
+  const file: string = path.join(configsCache, filename);
+
+  if (fs.existsSync(file)) {
+    return fsPromoses.readFile(file, 'utf-8');
+  }
 }

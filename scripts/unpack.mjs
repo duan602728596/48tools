@@ -11,7 +11,6 @@ import packageJson from '../package.json' assert { type: 'json' };
 const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
   README: path.join(cwd, 'README.md'), // README
-  help: path.join(cwd, 'packages/help/dist'), // 帮助文档
   LICENSEElectron: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSE.electron.txt'), // electron许可协议
   LICENSESChromium: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSES.chromium.html') // chromium第三方许可协议
 };
@@ -98,8 +97,7 @@ function config(outputDir, target) {
 function copy(unpackedDir, isMac) {
   const queue = [
     fse.copy(staticsFiles.LICENSE, path.join(unpackedDir, 'LICENSE')),
-    fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md')),
-    fse.copy(staticsFiles.help, path.join(unpackedDir, 'help'))
+    fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md'))
   ];
 
   if (isMac) {
@@ -165,7 +163,7 @@ async function unpackOthers() {
   await copySDK(sdkDownloadDir.linux, unpackedNodeModules.linux);
 
   // 拷贝许可文件
-  console.log('🚚在拷贝许可文件和帮助文档');
+  console.log('🚚在拷贝许可文件');
   await Promise.all([
     ...isMacOS ? copy(unpacked.mac, true) : [],
     ...isMacOS ? copy(unpacked.macArm64, true) : [],
@@ -219,7 +217,8 @@ async function unpack() {
   await Promise.all([
     uglifyPackageJson(),
     fse.copy(path.join(packages, 'main/lib'), path.join(wwwDir, 'boot')),
-    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'view'))
+    fse.copy(path.join(packages, '48tools/dist'), path.join(wwwDir, 'view')),
+    fse.copy(path.join(packages, 'help/dist'), path.join(wwwDir, 'help'))
   ]);
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 

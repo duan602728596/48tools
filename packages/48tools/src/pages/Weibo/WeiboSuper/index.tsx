@@ -1,20 +1,10 @@
 import { shell } from 'electron';
-import {
-  Fragment,
-  useState,
-  useEffect,
-  type ReactElement,
-  type ReactNode,
-  type Dispatch as D,
-  type SetStateAction as S,
-  type MouseEvent
-} from 'react';
+import { Fragment, useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Select, Button, Space, List, Alert, Avatar, Tag, message } from 'antd';
+import { Button, Space, List, Alert, Avatar, Tag, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import style from './index.sass';
 import Content from '../../../components/Content/Content';
 import Header from '../../../components/Header/Header';
 import WeiboLoginDynamic from '../../../functionalComponents/WeiboLogin/loader';
@@ -23,6 +13,7 @@ import dbConfig from '../../../utils/IDB/IDBConfig';
 import dynamicReducers from '../../../store/dynamicReducers';
 import weiboSuperReducers, { defaultQuantityValue, type WeiboSuperInitialState } from '../reducers/weiboSuper';
 import weiboSuperRootSaga, { runWeiboSuperCheckinStartAction, runWeiboSuperCheckinStopAction } from '../reducers/weiboSuper.saga';
+import AccountSelect from '../components/AccountSelect/AccountSelect';
 import type { WeiboLoginInitialState } from '../../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import type { WeiboAccount } from '../../../commonTypes';
 import type { WeiboCheckinResult, Quantity } from '../types';
@@ -82,13 +73,6 @@ function Index(props: {}): ReactElement {
     dispatch(runWeiboSuperCheckinStopAction());
   }
 
-  // 渲染select
-  function accountSelectRender(): Array<ReactNode> {
-    return accountList.map((item: WeiboAccount, index: number): ReactElement => {
-      return <Select.Option key={ item.id } value={ item.id }>{ item.username }</Select.Option>;
-    });
-  }
-
   // 渲染已签到列表
   function weiboCheckinListRender(item: WeiboCheckinResult): ReactElement {
     return (
@@ -122,13 +106,10 @@ function Index(props: {}): ReactElement {
       <Content>
         <Header>
           <Space>
-            <Select className={ style.accountSelect }
-              value={ accountValue }
+            <AccountSelect value={ accountValue }
               disabled={ checkIn }
               onSelect={ (value: string): void => setAccountValue(value) }
-            >
-              { accountSelectRender() }
-            </Select>
+            />
             <Button.Group>
               {
                 checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (

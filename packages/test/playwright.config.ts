@@ -1,5 +1,4 @@
 import * as path from 'node:path';
-import * as os from 'node:os';
 import { metaHelper } from '@sweet-milktea/utils';
 import { defineConfig, type PlaywrightTestConfig } from '@playwright/test';
 
@@ -11,7 +10,8 @@ const config: PlaywrightTestConfig = defineConfig({
   },
   testDir: path.join(__dirname, 'src'),
   outputDir: path.join(__dirname, 'dist'),
-  workers: os.cpus().length,
+  snapshotPathTemplate: path.join(__dirname, '__screenshots__', '{arg}{ext}'),
+  workers: 1,
   timeout: 1_200_000,
   testIgnore: [
     '**/src/tests',

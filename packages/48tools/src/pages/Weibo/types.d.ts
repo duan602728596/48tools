@@ -1,4 +1,5 @@
 import type { SuperItem } from '@48tools-api/weibo/super';
+import type { WeiboUserImageItem, WeiboShowDetailsImageObject } from '@48tools-api/weibo/interface';
 
 export interface WeiboCheckinResult extends Pick<SuperItem, 'title' | 'pic' | 'content1' | 'link'> {
   code?: number;
@@ -19,4 +20,19 @@ export interface LiveItem {
   worker: Worker;
   title: string;
   status: 0 | 1; // 0：已停止 1：录制中
+}
+
+/* 微博图片 */
+export interface WeiboImageItem extends Pick<WeiboUserImageItem, 'pid' | 'type'> {
+  infos: {
+    thumbnail: Pick<WeiboShowDetailsImageObject, 'url'>;
+    largest: Pick<WeiboShowDetailsImageObject, 'url'>;
+    video?: string;
+  };
+  checked?: boolean;
+}
+
+export interface WeiboImagesGroup {
+  pids: string;
+  items: Array<WeiboImageItem>;
 }

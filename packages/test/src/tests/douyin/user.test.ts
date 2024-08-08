@@ -4,6 +4,7 @@ import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle } from '../../utils/testUtils.js';
 import testIdClick from '../../actions/testIdClick.js';
 import selectItemClick from '../../actions/selectItemClick.js';
+import * as TestId from '../../TestId.js';
 
 /* 视频下载测试 */
 export const title: string = 'Douyin/User search';
@@ -41,7 +42,7 @@ export function callback(): void {
     return rows;
   }
 
-  test(testTitle(57, 'Should get user info by full url'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinUser.GetUserInfoByFullUrl, 'Should get user info by full url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -53,7 +54,7 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(58, 'Should get user info by user id'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinUser.GetUserInfoByUserId, 'Should get user info by user id'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }
@@ -64,7 +65,7 @@ export function callback(): void {
     expect(rows.length).toEqual(1);
   });
 
-  test(testTitle(59, 'Should get user info by share url'), async function(): Promise<void> {
+  test(testTitle(TestId.DouyinUser.GetUserInfoByShareUrl, 'Should get user info by share url'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

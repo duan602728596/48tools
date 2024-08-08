@@ -1,13 +1,18 @@
-let ffmpegDownloadUrl: string = 'https://www.ffmpeg.org/download.html';
+const ffmpegDownloadUrlObject: Record<'default' | 'win' | 'mac', `https://${ string }`> = {
+  default: 'https://www.ffmpeg.org/download.html',
+  win: 'https://www.gyan.dev/ffmpeg/builds/',
+  mac: 'https://evermeet.cx/ffmpeg/'
+};
+let ffmpegDownloadUrl: string = ffmpegDownloadUrlObject.default;
 
 /* 根据UA获取系统的类型 */
 function setFFmpegDownloadUrl(): void {
   const userAgent: string = navigator.userAgent.toLowerCase();
 
   if (userAgent.includes('win')) {
-    ffmpegDownloadUrl = 'https://www.gyan.dev/ffmpeg/builds/';
+    ffmpegDownloadUrl = ffmpegDownloadUrlObject.win;
   } else if (userAgent.includes('mac')) {
-    ffmpegDownloadUrl = 'https://evermeet.cx/ffmpeg/';
+    ffmpegDownloadUrl = ffmpegDownloadUrlObject.mac;
   }
 }
 

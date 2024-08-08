@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { fixupPluginRules } from '@eslint/compat';
 import babelEslintParser from '@babel/eslint-parser';
 import typescriptEslintParser from '@typescript-eslint/parser';
@@ -5,6 +6,8 @@ import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
 import eslintPluginReact from 'eslint-plugin-react';
 import eslintPluginImport from 'eslint-plugin-import';
 import globals from 'globals';
+
+const commitLint = process.env.COMMITLINT === '1';
 
 const ignores = [
   'node_modules/**',
@@ -246,7 +249,7 @@ const eslintRules = {
   ],
   // import
   'import/no-unresolved': [ // 确保导入的模块可以解析为本地文件系统上的模块
-    'error',
+    commitLint ? 'error' : 'off',
     {
       commonjs: true,
       ignore: ['filenamify/browser', 'SDK', '^@48tools-api/', '^@48tools-types/']

@@ -9,6 +9,7 @@ import * as config from '../../utils/config.js';
 import { requestBilibiliLiveList } from '../../services/services.js';
 import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess.js';
 import { testTitle } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 import type { BilibiliLiveListResponse } from '../../services/interface.js';
 
 /* B站直播测试 */
@@ -27,7 +28,7 @@ export function callback(): void {
     app = null;
   });
 
-  test(testTitle(44, 'Should get bilibili live video'), async function(): Promise<void> {
+  test(testTitle(TestId.BiliBiliLive.GetLiveVideo, 'Should get bilibili live video'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

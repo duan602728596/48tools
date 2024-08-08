@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle, vpImage } from '../../utils/testUtils.js';
+import * as TestId from '../../TestId.js';
 
 /* 客户端主界面入口测试 */
 export const title: string = 'VP index Page';
@@ -32,14 +33,14 @@ export function callback(): void {
     await expect(app.win).toHaveScreenshot(vpImage('index', 'index', isDark));
   }
 
-  test(testTitle(1000, 'index page'), async function(): Promise<void> {
+  test(testTitle(TestId.IndexVP.Light, 'index page'), async function(): Promise<void> {
     await indexVPTest();
 
     // 为下一个测试用例做修改
     dark = true;
   });
 
-  test(testTitle(1001, 'index page dark mode'), async function(): Promise<void> {
+  test(testTitle(TestId.IndexVP.Dark, 'index page dark mode'), async function(): Promise<void> {
     await indexVPTest(true);
   });
 }

@@ -21,6 +21,7 @@ import type { useAppProps } from 'antd/es/app/context';
 import type { LabeledValue } from '@48tools-types/antd';
 import type { Tab } from 'rc-tabs/es/interface';
 import type { ItemType, MenuInfo } from 'rc-menu/es/interface';
+import * as classNames from 'classnames';
 import {
   requestMobileCodeLogin,
   requestImUserInfo,
@@ -41,6 +42,7 @@ import { source } from '../../utils/snh48';
 import LoginForm from './LoginForm/LoginForm';
 import TokenForm from './TokenForm/TokenForm';
 import { useAppDataDir, title, type UseAppDataDirReturnType } from './useAppDataDir/useAppDataDir';
+import HelpButtonGroup from '../../components/HelpButtonGroup/HelpButtonGroup';
 import type { Pocket48LoginInitialState } from './reducers/pocket48Login';
 import type { UserInfo } from './types';
 
@@ -86,7 +88,12 @@ interface ReloadInfoReturn {
   token?: string;    // switch时返回token
 }
 
-function Pocket48Login(props: {}): ReactElement {
+interface Pocket48LoginProps {
+  className?: string;
+}
+
+function Pocket48Login(props: Pocket48LoginProps): ReactElement {
+  const { className }: Pocket48LoginProps = props;
   const { userInfo }: Pocket48LoginInitialState = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const location: Location = useLocation(),
@@ -329,7 +336,7 @@ function Pocket48Login(props: {}): ReactElement {
 
     if (userInfo) {
       if (userInfo.isExpired) {
-        nickname = <span className={ commonStyle.tips }>账号已过期，请重新登录。</span>;
+        nickname = <span key="isExpired" className={ commonStyle.tips }>账号已过期，请重新登录</span>;
       } else {
         icon = (
           <Avatar key="icon" size="small" src={ userInfo.unknown ? undefined : source(userInfo.avatar) }>
@@ -387,7 +394,9 @@ function Pocket48Login(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <div className="inline-block">{ loginButtonRender() }</div>
+      <div className={ classNames('inline-block', className) }>
+        <HelpButtonGroup navId="pocket48-login">{ loginButtonRender() }</HelpButtonGroup>
+      </div>
       <Modal title="口袋48登录"
         open={ open }
         width={ 400 }

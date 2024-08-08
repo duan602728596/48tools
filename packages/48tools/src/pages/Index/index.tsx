@@ -87,7 +87,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '口袋房间消息',
       url: '/48/RoomMessage',
-      icon: <IconMessageFilled />
+      icon: <IconMessageFilled />,
+      testId: '48-room-message'
     },
     {
       name: 'B站视频下载',
@@ -152,10 +153,16 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '微博超话签到',
       url: '/WeiboSuper',
-      icon: <IconWeiboOutlined />
+      icon: <IconWeiboOutlined />,
+      help: { navId: 'weibo-login', tooltipTitle: '查看微博登录帮助' }
     }
   ],
   [
+    {
+      name: '微博图片批量下载',
+      url: '/WeiboImagesDownload',
+      icon: <IconWeiboOutlined />
+    },
     {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
@@ -197,7 +204,9 @@ function nativeRender(): Array<ReactNode> {
       );
 
       if (navItem.help) {
-        buttonLinkElement = createElement(HelpButtonGroup, navItem.help, buttonLinkElement);
+        buttonLinkElement = createElement(HelpButtonGroup, Object.assign({
+          spaceCompactProps: { className: 'flex' }
+        }, navItem.help), buttonLinkElement);
       }
 
       groupElement.push(<div key={ navItem.name }>{ buttonLinkElement }</div>);
