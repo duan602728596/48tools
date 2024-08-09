@@ -1,19 +1,13 @@
-import {
-  ipcMain,
-  BrowserWindow,
-  nativeTheme,
-  type Session,
-  type IpcMainEvent,
-  type Cookie
-} from 'electron';
+import { ipcMain, BrowserWindow, nativeTheme, type Session, type IpcMainEvent, type Cookie } from 'electron';
+import { processWindow } from '../ProcessWindow.mjs';
 import { pcUserAgent } from '../utils.mjs';
 import { KuaishouCookieChannel } from '../channelEnum.js';
 
-const kuaishouUrl: string = 'https://www.kuaishou.com';
+const KUAISHOU_URL: string = 'https://www.kuaishou.com';
 let kuaishouWin: BrowserWindow | null = null;
 
 /* 打开快手网站并获取cookie */
-function kuaishouWebsite(win: BrowserWindow, videoId: string): void {
+function kuaishouWebsite(videoId: string): void {
   if (kuaishouWin !== null) return;
 
   kuaishouWin = new BrowserWindow({
@@ -25,18 +19,18 @@ function kuaishouWebsite(win: BrowserWindow, videoId: string): void {
     title: '快手',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
-  kuaishouWin.loadURL(kuaishouUrl, {
+  kuaishouWin.loadURL(KUAISHOU_URL, {
     userAgent: pcUserAgent
   });
 
   // 关闭前获取登陆后的cookie
   kuaishouWin.on('close', async function(): Promise<void> {
-    if (kuaishouWin) {
+    if (processWindow && kuaishouWin) {
       const ses: Session = kuaishouWin.webContents.session;
-      const winSes: Session = win.webContents.session;
-      const cookies: Array<Cookie> = await ses.cookies.get({ url: kuaishouUrl });
+      const winSes: Session = processWindow.webContents.session;
+      const cookies: Array<Cookie> = await ses.cookies.get({ url: KUAISHOU_URL });
 
-      win.webContents.send(KuaishouCookieChannel.KuaiShouCookieResponse, cookies, videoId);
+      processWindow.webContents.send(KuaishouCookieChannel.KuaiShouCookieResponse, cookies, videoId);
       await Promise.all([
         ses.clearStorageData({ storages: ['cookies'] }),
         winSes.clearStorageData({ storages: ['cookies'] })
@@ -49,8 +43,8 @@ function kuaishouWebsite(win: BrowserWindow, videoId: string): void {
   });
 }
 
-export function kuaishouCaptchaCookie(win: BrowserWindow): void {
+export function kuaishouCaptchaCookie(): void {
   ipcMain.on(KuaishouCookieChannel.KuaishouCookie, function(event: IpcMainEvent, videoId: string): void {
-    kuaishouWebsite(win, videoId);
+    kuaishouWebsite(videoId);
   });
 }

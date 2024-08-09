@@ -1,7 +1,6 @@
 import {
   ipcMain,
   dialog,
-  type BrowserWindow,
   type IpcMainInvokeEvent,
   type OpenDialogOptions,
   type OpenDialogReturnValue,
@@ -10,10 +9,11 @@ import {
   type MessageBoxOptions,
   type MessageBoxReturnValue
 } from 'electron';
+import { processWindow } from '../ProcessWindow.mjs';
 import { IpcRemoteHandleChannel } from '../channelEnum.js';
 
 /* Remote方法的迁移 */
-function ipcRemoteHandle(win: BrowserWindow): void {
+function ipcRemoteHandle(): void {
   // 显示打开的文件选择框
   ipcMain.handle(
     IpcRemoteHandleChannel.ShowOpenDialog,
@@ -31,8 +31,10 @@ function ipcRemoteHandle(win: BrowserWindow): void {
   // 显示native的message提示
   ipcMain.handle(
     IpcRemoteHandleChannel.NativeMessage,
-    function(event: IpcMainInvokeEvent, options: MessageBoxOptions): Promise<MessageBoxReturnValue> {
-      return dialog.showMessageBox(win, options);
+    function(event: IpcMainInvokeEvent, options: MessageBoxOptions): Promise<MessageBoxReturnValue> | void {
+      if (processWindow) {
+        return dialog.showMessageBox(processWindow, options);
+      }
     });
 }
 

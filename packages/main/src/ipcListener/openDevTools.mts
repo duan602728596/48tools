@@ -1,10 +1,11 @@
-import { ipcMain, type BrowserWindow, type IpcMainEvent } from 'electron';
+import { ipcMain, type IpcMainEvent } from 'electron';
+import { processWindow } from '../ProcessWindow.mjs';
 import { WinIpcChannel } from '../channelEnum.js';
 
 /* 打开开发者工具 */
-function openDevTools(win: BrowserWindow): void {
+function openDevTools(): void {
   ipcMain.on(WinIpcChannel.DeveloperTools, function(event: IpcMainEvent): void {
-    win.webContents.openDevTools();
+    processWindow?.webContents.openDevTools();
   });
 }
 

@@ -1,4 +1,4 @@
-import { ipcMain, type BrowserWindow } from 'electron';
+import { ipcMain } from 'electron';
 import openDevTools from './ipcListener/openDevTools.mjs';
 import openPlayerHtml from './ipcListener/openPlayerHtml.mjs';
 import openPlayerDevTools from './ipcListener/openPlayerDevTools.mjs';
@@ -37,14 +37,14 @@ export function removeIpc(): void {
 }
 
 /* ipc通信 */
-export function ipc(win: BrowserWindow): void {
-  openDevTools(win);          // 打开开发者工具
-  openPlayerHtml();           // 打开播放器
-  openPlayerDevTools();       // 打开播放器开发者工具
-  themeChange();              // 主题更换
-  weiboLogin(win);            // 微博登录
-  nodeMediaServer();          // 启动node-media-server
-  proxyServer();              // 启动代理服务
-  kuaishouCaptchaCookie(win); // 快手cookie
-  douyinCaptchaCookie(win);   // 抖音cookie
+export function ipc(): void {
+  openDevTools();          // 打开开发者工具
+  openPlayerHtml();        // 打开播放器
+  openPlayerDevTools();    // 打开播放器开发者工具
+  themeChange();           // 主题更换
+  weiboLogin();            // 微博登录
+  nodeMediaServer();       // 启动node-media-server
+  proxyServer();           // 启动代理服务
+  kuaishouCaptchaCookie(); // 快手cookie
+  douyinCaptchaCookie();   // 抖音cookie
 }

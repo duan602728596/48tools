@@ -1,12 +1,13 @@
 import { BrowserWindow, ipcMain, nativeTheme, type Session, type Cookie, type IpcMainEvent } from 'electron';
+import { processWindow } from '../ProcessWindow.mjs';
 import { pcUserAgent } from '../utils.mjs';
 import { WeiboLoginChannel } from '../channelEnum.js';
 
-const weiboUrl: string = 'https://weibo.com/';
+const WEIBO_URL: string = 'https://weibo.com/';
 let weiboLoginWin: BrowserWindow | null = null;
 
 /* 微博登陆 */
-function login(win: BrowserWindow): void {
+function login(): void {
   if (weiboLoginWin !== null) return;
 
   weiboLoginWin = new BrowserWindow({
@@ -17,19 +18,19 @@ function login(win: BrowserWindow): void {
     title: '微博账号登录',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#000000' : undefined
   });
-  weiboLoginWin.loadURL(weiboUrl, {
+  weiboLoginWin.loadURL(WEIBO_URL, {
     userAgent: pcUserAgent,
-    httpReferrer: 'https://weibo.com/'
+    httpReferrer: WEIBO_URL
   });
 
   // 关闭前获取登陆后的cookie
   weiboLoginWin.on('close', async function(): Promise<void> {
-    if (weiboLoginWin) {
+    if (processWindow && weiboLoginWin) {
       const ses: Session = weiboLoginWin.webContents.session;
-      const winSes: Session = win.webContents.session;
-      const cookies: Array<Cookie> = await ses.cookies.get({ url: weiboUrl });
+      const winSes: Session = processWindow.webContents.session;
+      const cookies: Array<Cookie> = await ses.cookies.get({ url: WEIBO_URL });
 
-      win.webContents.send(WeiboLoginChannel.WeiboLoginCookie, cookies);
+      processWindow.webContents.send(WeiboLoginChannel.WeiboLoginCookie, cookies);
       await Promise.all([
         ses.clearStorageData({ storages: ['cookies'] }),
         winSes.clearStorageData({ storages: ['cookies'] })
@@ -42,9 +43,9 @@ function login(win: BrowserWindow): void {
   });
 }
 
-function weiboLogin(win: BrowserWindow): void {
+function weiboLogin(): void {
   ipcMain.on(WeiboLoginChannel.WeiboLogin, function(event: IpcMainEvent): void {
-    login(win);
+    login();
   });
 }
 

@@ -1,12 +1,13 @@
 import { BrowserWindow, type Session, type Cookie, ipcMain, type IpcMainEvent } from 'electron';
+import { processWindow } from '../ProcessWindow.mjs';
 import { pcUserAgent } from '../utils.mjs';
 import { DouyinCookieChannel } from '../channelEnum.js';
 
-const douyinUrl: string = 'https://www.douyin.com/user/MS4wLjABAAAA6-qJnU8aVPJ4chZQFIyuVHSB3_K3w1rH_L_IuLjaswk';
+const DOUYIN_URL: string = 'https://www.douyin.com/user/MS4wLjABAAAA6-qJnU8aVPJ4chZQFIyuVHSB3_K3w1rH_L_IuLjaswk';
 let douyinWin: BrowserWindow | null = null;
 
 /* 打开抖音网站并操作验证码 */
-function douyinCookie(win: BrowserWindow): void {
+function douyinCookie(): void {
   if (douyinWin !== null) return;
 
   douyinWin = new BrowserWindow({
@@ -17,18 +18,18 @@ function douyinCookie(win: BrowserWindow): void {
     },
     title: '抖音'
   });
-  douyinWin.loadURL(douyinUrl, {
+  douyinWin.loadURL(DOUYIN_URL, {
     userAgent: pcUserAgent
   });
 
   // 关闭前获取登陆后的cookie
   douyinWin.on('close', async function(): Promise<void> {
-    if (douyinWin) {
+    if (processWindow && douyinWin) {
       const ses: Session = douyinWin.webContents.session;
-      const winSes: Session = win.webContents.session;
+      const winSes: Session = processWindow.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({});
 
-      win.webContents.send(DouyinCookieChannel.DouyinCookieResponse, cookies);
+      processWindow.webContents.send(DouyinCookieChannel.DouyinCookieResponse, cookies);
       await Promise.all([
         ses.clearStorageData({ storages: ['cookies'] }),
         winSes.clearStorageData({ storages: ['cookies'] })
@@ -41,8 +42,8 @@ function douyinCookie(win: BrowserWindow): void {
   });
 }
 
-export function douyinCaptchaCookie(win: BrowserWindow): void {
+export function douyinCaptchaCookie(): void {
   ipcMain.on(DouyinCookieChannel.DouyinCookie, function(event: IpcMainEvent): void {
-    douyinCookie(win);
+    douyinCookie();
   });
 }
