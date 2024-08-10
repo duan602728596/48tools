@@ -1,6 +1,5 @@
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState.js';
-import type { Pocket48LiveType, Pocket48LiveMode } from '@48tools/48tools/src/services/48/enum.js';
 import { isTest, titleBarIcon, createHtmlFilePath, createInitialState } from '../utils.mjs';
 import { themeEvent, type ThemeValue } from './themeChange.mjs';
 import { getStore } from '../store.mjs';
@@ -9,6 +8,14 @@ import { WinIpcChannel } from '../channelEnum.js';
 
 /* 记录id和窗口的关系 */
 export const playerWindowMaps: Map<string, BrowserWindow> = new Map();
+
+interface PlayerInfoSearchParams extends Omit<PlayerInfo, 'liveType' | 'liveMode' | 'rtmpPort' | 'httpPort' | 'proxyPort'> {
+  liveType: `${ PlayerInfo['liveType'] }`;
+  liveMode: `${ PlayerInfo['liveMode'] }`;
+  rtmpPort: `${ PlayerInfo['rtmpPort'] }`;
+  httpPort: `${ PlayerInfo['httpPort'] }`;
+  proxyPort: `${ PlayerInfo['proxyPort'] }`;
+}
 
 /**
  * 打开播放器页面
@@ -27,7 +34,7 @@ function open(title: string, query: string): void {
     return;
   }
 
-  const player: Record<string, string> = Object.fromEntries(searchParams);
+  const playerSearchParams: PlayerInfoSearchParams = Object.fromEntries(searchParams) as unknown as PlayerInfoSearchParams;
 
   let win: BrowserWindow | null = new BrowserWindow({
     width: 643,
@@ -50,13 +57,13 @@ function open(title: string, query: string): void {
     theme: getStore().get('theme') ?? 'system',
     commandLineOptions,
     playerInfo: {
-      ...player,
-      liveType: Number(player.liveType) as Pocket48LiveType,
-      liveMode: Number(player.liveMode) as Pocket48LiveMode,
-      rtmpPort: player.rtmpPort ? Number(player.rtmpPort) : undefined,
-      httpPort: player.httpPort ? Number(player.httpPort) : undefined,
-      proxyPort: player.proxyPort ? Number(player.proxyPort) : undefined
-    } as PlayerInfo,
+      ...playerSearchParams,
+      liveType: Number(playerSearchParams.liveType),
+      liveMode: Number(playerSearchParams.liveMode),
+      rtmpPort: playerSearchParams.rtmpPort ? Number(playerSearchParams.rtmpPort) : undefined,
+      httpPort: playerSearchParams.httpPort ? Number(playerSearchParams.httpPort) : undefined,
+      proxyPort: playerSearchParams.proxyPort ? Number(playerSearchParams.proxyPort) : undefined
+    },
     isTest
   }));
 

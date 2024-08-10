@@ -1,11 +1,11 @@
 {
   "name": "@48tools/main",
-  "version": "4.14.1",
+  "version": "4.14.2",
   "description": "Electron主程序运行源代码",
   "license": "GPL-3.0",
   "scripts": {
-    "start": "npm run clean && tsc --outDir lib --watch",
-    "dev": "npm run clean && tsc --outDir lib",
+    "start": "npm run clean && tsc --outDir lib --sourceMap --watch",
+    "dev": "npm run clean && tsc --outDir lib --sourceMap",
     "build": "npm run clean && tsc --outDir .lib.mid && gulp",
     "clean": "rimraf ./lib && rimraf ./.lib.mid"
   },
@@ -16,7 +16,9 @@
   },
   "devDependencies": {
     "gulp": "^5.0.0",
+    "gulp-change-file-content": "^1.0.1",
     "gulp-terser": "^2.1.0",
+    "source-map-support": "^0.5.21",
     "typescript": "^5.4.5"
   }
 }

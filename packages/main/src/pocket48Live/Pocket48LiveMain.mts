@@ -1,6 +1,6 @@
 import { Worker } from 'node:worker_threads';
 import * as path from 'node:path';
-import type { BrowserWindow } from 'electron';
+import { processWindow } from '../ProcessWindow.mjs';
 import { isDevelopment, workerProductionBasePath, metaHelper, type MetaHelperResult } from '../utils.mjs';
 import { Pocket48LiveRemoteHandleChannel } from '../channelEnum.js';
 
@@ -42,17 +42,15 @@ export class Pocket48LiveMain {
   playStreamPath: string;
   filePath: string;
   ffmpeg: string;
-  win: BrowserWindow;
   worker: Worker;
 
-  constructor(args: Pocket48LiveArgs, win: BrowserWindow) {
+  constructor(args: Pocket48LiveArgs) {
     this.id = args.id;
     this.liveId = args.liveId;
     this.roomId = args.roomId;
     this.playStreamPath = args.playStreamPath;
     this.filePath = args.filePath;
     this.ffmpeg = args.ffmpeg;
-    this.win = win;
     this.worker = new Worker(
       isDevelopment
         ? path.join(__dirname, 'liveDownload.worker.mjs')
@@ -71,7 +69,7 @@ export class Pocket48LiveMain {
 
   handleWorkerMessage: (message: CloseMessage | ErrorMessage) => void = (message: CloseMessage | ErrorMessage): void => {
     this.worker.terminate();
-    this.win.webContents.send(`${ Pocket48LiveRemoteHandleChannel.Pocket48LiveClose }${ this.id }`, JSON.stringify({
+    processWindow?.webContents.send(`${ Pocket48LiveRemoteHandleChannel.Pocket48LiveClose }${ this.id }`, JSON.stringify({
       id: this.id,
       log: message.type === 'close' ? message.log : null
     }));
