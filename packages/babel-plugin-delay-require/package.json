@@ -3,10 +3,16 @@
   "version": "0.0.0",
   "description": "将node模块延迟加载",
   "type": "commonjs",
-  "main": "src/index.js",
+  "main": "lib/index.cjs",
   "scripts": {
+    "start": "npm run clean && tsc --outDir lib --sourceMap --watch",
+    "dev": "npm run clean && tsc --outDir lib --sourceMap",
+    "clean": "rimraf ./lib",
     "test": "node test/test.mjs",
     "debug": "node --inspect test/test.mjs debug"
+  },
+  "dependencies": {
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",

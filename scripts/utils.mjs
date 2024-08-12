@@ -78,3 +78,5 @@ export function command(cmd, args, cwdPath) {
     });
   });
 }
+
+export const npm = isWindows ? 'npm.cmd' : 'npm';

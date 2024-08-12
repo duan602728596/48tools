@@ -1,6 +1,6 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
-import { cwd } from './utils.mjs';
+import { cwd, command, npm } from './utils.mjs';
 
 const nodeModules = path.join(cwd, 'node_modules');
 
@@ -33,6 +33,11 @@ import * as ReactDOMClient from 'react-dom/client';`)
   await fsP.writeFile(rcUtilPath, newFile, { encoding: 'utf8' });
 }
 
+/* 编译插件 */
+async function buildPluginBabelPluginDelayRequire() {
+  await command(npm, ['run', 'dev'], path.join(cwd, 'packages/babel-plugin-delay-require'));
+}
+
 /* 执行postinstall脚本 */
 async function postInstall() {
   // 替换window.WebSocket
@@ -43,6 +48,9 @@ async function postInstall() {
 
   // 修复rc-util
   await fixRcUtil();
+
+  // 编译babel插件
+  await buildPluginBabelPluginDelayRequire();
 }
 
 postInstall();

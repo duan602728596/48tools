@@ -1,5 +1,5 @@
 import { transformAsync } from '@babel/core';
-import babelPluginDelayRequire from '../src/index.js';
+import babelPluginDelayRequire from '../lib/index.cjs';
 
 const moduleNames = ['a', 'b', 'c'];
 
