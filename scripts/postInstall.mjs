@@ -8,9 +8,10 @@ const nodeModules = path.join(cwd, 'node_modules');
 async function replaceWebsocket(fp, ws) {
   const filePath = path.join(nodeModules, fp);
   const file = await fsP.readFile(filePath, { encoding: 'utf8' });
-  const replaceValue = `window.${ ws }||window.WebSocket`;
+  const fixedComments = `/* ${ fp } fixed */`;
+  const replaceValue = `${ fixedComments } window.${ ws }||window.WebSocket`;
 
-  if (file.includes(replaceValue)) return;
+  if (file.includes(fixedComments)) return;
 
   const newFile = file.replace(/window\.WebSocket/g, replaceValue);
 
@@ -32,7 +33,8 @@ import * as ReactDOMClient from 'react-dom/client';`)
   await fsP.writeFile(rcUtilPath, newFile, { encoding: 'utf8' });
 }
 
-async function fixTypesError() {
+/* 执行postinstall脚本 */
+async function postInstall() {
   // 替换window.WebSocket
   await Promise.all([
     replaceWebsocket('nim-web-sdk-ng/dist/NIM_BROWSER_SDK.js', 'HACK_INTERCEPTS_SEND_NIM_Websocket'),
@@ -43,4 +45,4 @@ async function fixTypesError() {
   await fixRcUtil();
 }
 
-fixTypesError();
+postInstall();
