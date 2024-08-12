@@ -83,7 +83,7 @@ const externalsName: Array<string> = nodeModules([
 export default function(info: object): Record<string, any> {
   const plugins: Array<any> = [
     ['@babel/plugin-syntax-import-attributes', { deprecatedAssertSyntax: true }],
-    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: true }]
+    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: !isDev }]
   ].filter(Boolean);
   const distDir: string = path.join(__dirname, 'dist');
 
