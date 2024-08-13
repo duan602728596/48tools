@@ -14,6 +14,7 @@ function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: P
   return {
     pre(state: BabelFile): void {
       this.importInfoArray = [];
+      this.useIdle = false;
     },
     visitor: pluginVisitor(t, {
       prefixVariableName,

@@ -17,6 +17,7 @@ export type PluginOptionsRequired = Required<PluginOptions>;
 /* 插件对象 */
 export interface BabelPluginDelayRequireState extends PluginPass {
   importInfoArray: Array<ImportInfo>;
+  useIdle: boolean;
 }
 
 export type BabelPluginDelayRequireObject = PluginObj<BabelPluginDelayRequireState>;

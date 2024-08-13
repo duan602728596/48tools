@@ -166,6 +166,20 @@ c();`;
       .test(result.code), true);
 });
 
+// 'use idle' Directive
+test('"use idle" directive for require modules', async function() {
+  const code1 = `import a from 'a';
+
+function test() {
+  a();
+}`;
+  const code2 = `'use idle';${ code1 }`;
+  const [result1, result2] = await Promise.all([transform(code1), transform(code2)]);
+
+  deepStrictEqual(result1.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+  deepStrictEqual(result2.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
+});
+
 if (args[0] === 'debug') {
   await setTimeoutPromise(60_000_000);
 }

@@ -14,7 +14,13 @@ import type { TraverseOptions } from '@babel/traverse';
 import { ImportInfo } from './utils/ImportInfo.cjs';
 import * as c from './utils/createNode.cjs';
 import * as h from './utils/helper.cjs';
-import { FindScopeReturn, FindParentScopeReturn, FindScopeBody, ClassBodyArray } from './utils/helper.cjs';
+import {
+  FindScopeReturn,
+  FindParentScopeReturn,
+  FindScopeBody,
+  ClassBodyArray,
+  hasUseIdleDirective
+} from './utils/helper.cjs';
 import type {
   BabelTypes,
   PluginOptionsRequired,
@@ -121,6 +127,8 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
       enter(this: BabelPluginDelayRequireState, path: NodePath<Program>): void {
         const body: Array<Statement> = path.node.body;
 
+        this.useIdle = hasUseIdleDirective(t, path.node.directives);
+
         // 获取模块加载的信息
         path.traverse(ProgramEnterVisitor(options, prefixVariableName), { importInfoArray: this.importInfoArray });
 
@@ -140,7 +148,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
       exit(this: BabelPluginDelayRequireState, path: NodePath<Program>): void {
         path.traverse(ProgramLevelVisitor(t, prefixVariableNameRegexp));
 
-        if (options.idle && this.importInfoArray.length) {
+        if ((options.idle || this.useIdle) && this.importInfoArray.length) {
           path.node.body.push(...this.importInfoArray.map((importInfo: ImportInfo) => c.idleExpressionStatement(t, importInfo)));
         }
       }
