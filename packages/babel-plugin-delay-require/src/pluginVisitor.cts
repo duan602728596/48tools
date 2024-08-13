@@ -1,4 +1,4 @@
-import type { NodePath, Node } from '@babel/core';
+import type { NodePath } from '@babel/core';
 import type {
   Program,
   Statement,
@@ -191,19 +191,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
         if (!Array.isArray(body) || h.hasExpressionStatement(t, body, importInfo.formatVariableName)) return;
 
         // 插入表达式
-        const index: number = body.findLastIndex((o: Node): boolean => (
-          // 局部作用域，添加到globalThis.require之后
-          t.isExpressionStatement(o)
-          && t.isAssignmentExpression(o.expression, { operator: '??=' })
-          && ('name' in o.expression.left)
-          && prefixVariableNameRegexp.test(o.expression.left.name)
-        ) || (
-          // 全局作用域时，添加到let之后
-          t.isProgram(findScopeResult.path.node)
-          && t.isVariableDeclaration(o, { kind: 'let' })
-          && ('name' in o.declarations[0].id)
-          && prefixVariableNameRegexp.test(o.declarations[0].id.name)
-        ));
+        const index: number = h.findLatestInsertExpression(t, body, findScopeResult.path.node, prefixVariableNameRegexp);
 
         body.splice(index >= 0 ? index + 1 : 0, 0, c.globalThisRequireExpressionStatement(t, importInfo));
       }

@@ -128,3 +128,26 @@ export function isClassDeclarationAndModifiedStaticBlock(t: BabelTypes, findScop
     return classBody[0].body;
   }
 }
+
+/**
+ * 查找最后位置的插入表达式
+ * @param { BabelTypes } t
+ * @param { ClassBodyArray | Array<Statement> | Array<TSTypeElement> } body
+ * @param { Node } node
+ * @param { RegExp } prefixVariableNameRegexp
+ */
+export function findLatestInsertExpression(t: BabelTypes, body: ClassBodyArray | Array<Statement> | Array<TSTypeElement>, node: Node, prefixVariableNameRegexp: RegExp): number {
+  return body.findLastIndex((o: Node): boolean => (
+    // 局部作用域，添加到globalThis.require之后
+    t.isExpressionStatement(o)
+    && t.isAssignmentExpression(o.expression, { operator: '??=' })
+    && ('name' in o.expression.left)
+    && prefixVariableNameRegexp.test(o.expression.left.name)
+  ) || (
+    // 全局作用域时，添加到let之后
+    t.isProgram(node)
+    && t.isVariableDeclaration(o, { kind: 'let' })
+    && ('name' in o.declarations[0].id)
+    && prefixVariableNameRegexp.test(o.declarations[0].id.name)
+  ));
+}
