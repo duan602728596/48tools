@@ -1,3 +1,5 @@
+'use idle';
+
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import got, { type Response as GotResponse, type Headers as GotHeaders } from 'got';

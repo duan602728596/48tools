@@ -1,3 +1,5 @@
+'use idle';
+
 import { promises as fsP } from 'node:fs';
 import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, useEffect, useMemo, useTransition, type ReactElement, type ReactNode, type MouseEvent, type TransitionStartFunction } from 'react';

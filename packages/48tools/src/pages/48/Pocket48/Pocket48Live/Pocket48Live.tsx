@@ -1,3 +1,5 @@
+'use idle';
+
 import { randomUUID } from 'node:crypto';
 import { ipcRenderer, clipboard, type SaveDialogReturnValue } from 'electron';
 import {
