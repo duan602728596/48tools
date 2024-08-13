@@ -170,7 +170,8 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
       },
 
       exit(this: BabelPluginDelayRequireState, path: NodePath<Identifier>): void {
-        if (!prefixVariableNameRegexp.test(path.node.name)) return;
+        // 不是修改过的变量 & 过滤全局变量
+        if (!prefixVariableNameRegexp.test(path.node.name) || filterGlobalTypes.includes(path.parentPath.node.type)) return;
 
         // 检查作用域
         const { name }: Identifier = path.node;
@@ -179,10 +180,6 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
         if (!importInfo) return;
 
         const findScopeResult: FindScopeReturn = h.findScope(t, path); // 当前作用域的path和body
-
-        // 过滤全局变量
-        if (filterGlobalTypes.includes(path.parentPath.node.type)) return;
-
         let body: FindScopeBody = findScopeResult.body;
 
         // class时添加作用域的方式有变化
@@ -191,9 +188,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
         modifiedBody && (body = modifiedBody);
 
         // 查找当前作用域是否绑定过
-        if (!Array.isArray(body)) return;
-
-        if (h.hasExpressionStatement(t, body, importInfo.formatVariableName)) return;
+        if (!Array.isArray(body) || h.hasExpressionStatement(t, body, importInfo.formatVariableName)) return;
 
         // 插入表达式
         const index: number = body.findLastIndex((o: Node): boolean => (
@@ -209,13 +204,8 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
           && ('name' in o.declarations[0].id)
           && prefixVariableNameRegexp.test(o.declarations[0].id.name)
         ));
-        const node: ExpressionStatement = c.globalThisRequireExpressionStatement(t, importInfo);
 
-        if (index >= 0) {
-          body.splice(index + 1, 0, node);
-        } else {
-          body.unshift(node as any);
-        }
+        body.splice(index >= 0 ? index + 1 : 0, 0, c.globalThisRequireExpressionStatement(t, importInfo));
       }
     }
   };
