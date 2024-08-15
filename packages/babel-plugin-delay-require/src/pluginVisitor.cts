@@ -17,13 +17,7 @@ import type { TraverseOptions } from '@babel/traverse';
 import { ImportInfo } from './utils/ImportInfo.cjs';
 import * as c from './utils/createNode.cjs';
 import * as h from './utils/helper.cjs';
-import {
-  FindScopeReturn,
-  FindParentScopeReturn,
-  FindScopeBody,
-  ClassBodyArray,
-  hasUseIdleDirective
-} from './utils/helper.cjs';
+import type { FindScopeReturn, FindParentScopeReturn, FindScopeBody, ClassBodyArray } from './utils/helper.cjs';
 import type {
   BabelTypes,
   PluginOptionsRequired,
@@ -90,7 +84,8 @@ function ProgramLevelVisitor(t: BabelTypes, prefixVariableNameRegexp: RegExp, mo
         && t.isMemberExpression(path.node.expression.left)
         && t.isIdentifier(path.node.expression.left.object)
         && t.isIdentifier(path.node.expression.left.property)
-        && prefixVariableNameRegexp.test(`${ path.node.expression.left.object.name }.${ path.node.expression.left.property.name }`)
+        && path.node.expression.left.object.name === 'globalThis'
+        && prefixVariableNameRegexp.test(path.node.expression.left.property.name)
       ) {
         _removeDuplicateNode(path, path.node.expression.left.property.name);
       }
@@ -178,7 +173,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
       enter(this: BabelPluginDelayRequireState, path: NodePath<Program>): void {
         const body: Array<Statement> = path.node.body;
 
-        this.useIdle = hasUseIdleDirective(t, path.node.directives);
+        this.useIdle = h.hasUseIdleDirective(t, path.node.directives);
 
         // 获取模块加载的信息
         path.traverse(ProgramEnterVisitor(options, prefixVariableName), { importInfoArray: this.importInfoArray });
@@ -216,10 +211,8 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
 
     Identifier: {
       enter(this: BabelPluginDelayRequireState, path: NodePath<Identifier>): void {
-        if (!prefixVariableNameRegexp.test(path.node.name)) return;
-
         // 过滤全局变量
-        if (filterGlobalTypes.includes(path.parentPath.node.type)) return;
+        if (!prefixVariableNameRegexp.test(path.node.name) || filterGlobalTypes.includes(path.parentPath.node.type)) return;
 
         // 将字符串的变量拆分为memberExpression
         const replaceMemberExpression: MemberExpression | null = c.arrayToMemberExpression(t, path.node.name.split('.'));
@@ -243,9 +236,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
       exit(path: NodePath<MemberExpression>): void {
         const [left, right]: [Expression, Expression | PrivateName] = [path.node.object, path.node.property];
 
-        if (!(t.isIdentifier(left) && t.isIdentifier(right))) return;
-
-        if (!prefixVariableNameRegexp.test(`${ left.name }.${ right.name }`)) return;
+        if (!(t.isIdentifier(left) && t.isIdentifier(right) && left.name === 'globalThis' && prefixVariableNameRegexp.test(right.name))) return;
 
         // 检查作用域
         _insertExpression.call(this, path, right.name);

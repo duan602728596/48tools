@@ -10,13 +10,16 @@ function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: P
   const mountToGlobalThis: boolean = options?.mountToGlobalThis ?? false;
 
   const prefixVariableName: string = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
-  const prefixVariableNameRegexp: RegExp = mountToGlobalThis ? new RegExp(`^globalThis\\.${ prefixVariableName }`) : new RegExp(`^${ prefixVariableName }`);
+  const prefixVariableNameRegexp: RegExp = new RegExp(prefixVariableName);
 
   return {
+    name: 'babel-plugin-delay-require',
+
     pre(state: BabelFile): void {
       this.importInfoArray = [];
       this.useIdle = false;
     },
+
     visitor: pluginVisitor(t, {
       prefixVariableName,
       prefixVariableNameRegexp,
