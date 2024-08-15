@@ -6,6 +6,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
+import type { PluginItem } from '@babel/core';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
 const analyzer: boolean = process.env.ANALYZER === 'true';
@@ -80,14 +81,14 @@ const externalsName: Array<string> = nodeModules([
   'playwright-core'
 ]);
 
-export default function(info: object): Record<string, any> {
-  const plugins: Array<any> = [
+export default function(info: Record<string, any>): Record<string, any> {
+  const plugins: Array<PluginItem> = [
     ['@babel/plugin-syntax-import-attributes', { deprecatedAssertSyntax: true }],
-    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: false }]
-  ].filter(Boolean);
+    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: false, mountToGlobalThis: true }]
+  ];
   const distDir: string = path.join(__dirname, 'dist');
 
-  const config: { [key: string]: any } = {
+  const config: Record<string, any> = {
     frame: 'react',
     dll: [
       '@ant-design/icons',
