@@ -7,7 +7,7 @@ import { transform } from './utils.mjs';
 const args = process.argv.slice(2);
 
 // 函数作用域
-test('function scope', async function() {
+test.describe('function scope', function() {
   const code = `import a from 'a';
 
 function test() {
@@ -25,28 +25,48 @@ function test() {
     }
   }
 }`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
-  deepStrictEqual(/let __ELECTRON__DELAY_REQUIRE__a;(.|\n)+test\s*\(\)/.test(result.code), true);
-  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+test1\s*\(\)/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+    deepStrictEqual(/let __ELECTRON__DELAY_REQUIRE__a;(.|\n)+test\s*\(\)/.test(result.code), true);
+    deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+test1\s*\(\)/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(\)(.|\n)+globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+test1\s*\(\)/.test(result.code), true);
+  });
 });
 
 // if作用域
-test('if scope', async function() {
+test.describe('if scope', function() {
   const code = `import * as b from 'b';
 
 function test() {
   if (b()) {}
 }`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
-  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+if/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+if/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(\)(.|\n)+globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+if/.test(result.code), true);
+  });
 });
 
 // 顺序的不同
-test('different order', async function() {
+test.describe('different order', function() {
   const code = `import { c1 } from 'c';
 
 function test() {
@@ -54,28 +74,48 @@ function test() {
 
   c1();
 }`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
-  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+if/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+if/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(\)(.|\n)+globalThis\.__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+if/.test(result.code), true);
+  });
 });
 
 // class作用域
-test('class scope', async function() {
+test.describe('class scope', function() {
   const code = `import a from 'a';
 
 class Test {
   v = a.b();
   m = a.c();
 }`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
-  deepStrictEqual(/static\s*\{(.|\n)+__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+}/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+    deepStrictEqual(/static\s*\{(.|\n)+__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+}/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+    deepStrictEqual(/static\s*\{(.|\n)+globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}=(.|\n)+}/.test(result.code), true);
+  });
 });
 
 // switch作用域
-test('switch scope', async function() {
+test.describe('switch scope', function() {
   const code = `import * as b from 'b';
 
 function test() {
@@ -87,27 +127,47 @@ function test() {
       break;
   }
 }`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
-  deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+switch/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(\)(.|\n)+__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+switch/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(\)(.|\n)+globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}=(.|\n)+switch/.test(result.code), true);
+  });
 });
 
 // 箭头函数
-test('arrow function', async function() {
+test.describe('arrow function', function() {
   const code = `import { c2 } from 'c';
 
 function test(m) {
   const v = m.some((o) => o === c2);
 }`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
-  deepStrictEqual(/test\s*\(m\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+const v/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(m\)(.|\n)+__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+const v/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 1);
+    deepStrictEqual(/test\s*\(m\)(.|\n)+globalThis\.__ELECTRON__DELAY_REQUIRE__c \?{2}=(.|\n)+const v/.test(result.code), true);
+  });
 });
 
 // 多个同名的包
-test('multiple same name packages(1)', async function() {
+test.describe('multiple same name packages(1)', function() {
   const code = `import * as b from 'b';
 import { e, f, g } from 'b';
 
@@ -115,16 +175,29 @@ console.log(b);
 console.log(e());
 console.log(f());
 console.log(g());`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b\)/.test(result.code), true);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b\)/.test(result.code), true);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b\)/.test(result.code), true);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+  });
 });
 
-test('multiple same name packages(2)', async function() {
+test.describe('multiple same name packages(2)', function() {
   const code = `import b from 'b';
 import { e, f, g } from 'b';
 
@@ -132,17 +205,30 @@ console.log(b);
 console.log(e());
 console.log(f());
 console.log(g());`;
-  const result = await transform(code);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b\.default\)/.test(result.code), true);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
-  deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b\.default\)/.test(result.code), true);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, false, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 1);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b\.default\)/.test(result.code), true);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b.e\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b.f\(\)\)/.test(result.code), true);
+    deepStrictEqual(/\(globalThis\.__ELECTRON__DELAY_REQUIRE__b.g\(\)\)/.test(result.code), true);
+  });
 });
 
 // 使用requestIdleCallback在空闲时间加载模块
-test('use requestIdleCallback for require modules', async function() {
+test.describe('use requestIdleCallback for require modules', function() {
   const code = `import a from 'a';
 import b from 'b';
 import c from 'c';
@@ -150,34 +236,56 @@ import c from 'c';
 a();
 b();
 c();`;
-  const result = await transform(code, true);
 
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
-  deepStrictEqual(
-    /globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g
-      .test(result.code), true);
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 2);
-  deepStrictEqual(
-    /globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__b \?{2}= globalThis\.require\(["']b["']\)\)/g
-      .test(result.code), true);
-  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 2);
-  deepStrictEqual(
-    /globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__c \?{2}= globalThis\.require\(["']c["']\)\)/g
-      .test(result.code), true);
+  test('not mount to globalThis', async function() {
+    const result = await transform(code, true);
+
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result.code), true);
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__b \?{2}= globalThis\.require\(["']b["']\)\)/g.test(result.code), true);
+    deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__c \?{2}= globalThis\.require\(["']c["']\)\)/g.test(result.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const result = await transform(code, true, true);
+
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result.code), true);
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => globalThis\.__ELECTRON__DELAY_REQUIRE__b \?{2}= globalThis\.require\(["']b["']\)\)/g.test(result.code), true);
+    deepStrictEqual(result.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__c \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => globalThis\.__ELECTRON__DELAY_REQUIRE__c \?{2}= globalThis\.require\(["']c["']\)\)/g.test(result.code), true);
+  });
 });
 
 // 'use idle' Directive
-test('"use idle" directive for require modules', async function() {
+test.describe('"use idle" directive for require modules', function() {
   const code1 = `import a from 'a';
 
 function test() {
   a();
 }`;
   const code2 = `'use idle';${ code1 }`;
-  const [result1, result2] = await Promise.all([transform(code1), transform(code2)]);
 
-  deepStrictEqual(result1.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
-  deepStrictEqual(result2.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
+  test('not mount to globalThis', async function() {
+    const [result1, result2] = await Promise.all([transform(code1), transform(code2)]);
+
+    deepStrictEqual(result1.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result1.code), false);
+    deepStrictEqual(result2.code.match(/__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result2.code), true);
+  });
+
+  test('mount to globalThis', async function() {
+    const [result1, result2] = await Promise.all([transform(code1, false, true), transform(code2, false, true)]);
+
+    deepStrictEqual(result1.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 1);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result1.code), false);
+    deepStrictEqual(result2.code.match(/globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}=/g).length, 2);
+    deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => globalThis\.__ELECTRON__DELAY_REQUIRE__a \?{2}= globalThis\.require\(["']a["']\)\)/g.test(result2.code), true);
+  });
 });
 
 if (args[0] === 'debug') {

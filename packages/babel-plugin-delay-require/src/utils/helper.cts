@@ -36,17 +36,19 @@ export function hasUseIdleDirective(t: BabelTypes, directives: Array<Directive>)
  * 修改绑定和引用
  * @param { NodePath<Program> } path - import节点路径
  * @param { ImportInfo } importInfo - 导入信息
+ * @param { boolean } mountToGlobalThis - 是否挂载到globalThis
  */
-export function variableRename(path: NodePath<Program>, importInfo: ImportInfo): void {
+export function variableRename(path: NodePath<Program>, importInfo: ImportInfo, mountToGlobalThis: boolean): void {
+  const globalThisPrefix: string = mountToGlobalThis ? 'globalThis.' : '';
   const exportDefault: '.default' | '' = importInfo.exportDefault ? '.default' : '';
 
   importInfo.variableName.forEach((variableName: string): void => {
-    path.scope.rename(variableName, `${ importInfo.formatVariableName }${ exportDefault }`);
+    path.scope.rename(variableName, `${ globalThisPrefix }${ importInfo.formatVariableName }${ exportDefault }`);
   });
 
   if (importInfo.specifier.length) {
     importInfo.specifier.forEach(([a, b]: ImportSpecifierItem) => {
-      path.scope.rename(b ?? a, `${ importInfo.formatVariableName }.${ a }`);
+      path.scope.rename(b ?? a, `${ globalThisPrefix }${ importInfo.formatVariableName }.${ a }`);
     });
   }
 }
@@ -109,9 +111,19 @@ export function findParentScope(path: NodePath | undefined): FindParentScopeRetu
  * @param { BabelTypes } t
  * @param { Array<Node> } body
  * @param { string } name
+ * @param { boolean } [mountToGlobalThis] - 是否挂载到globalThis
  * @param { Node } [node]
  */
-export function hasExpressionStatement(t: BabelTypes, body: Array<Node>, name: string, node?: Node): boolean {
+export function hasExpressionStatement(t: BabelTypes, body: Array<Node>, name: string, mountToGlobalThis: boolean, node?: Node): boolean {
+  if (mountToGlobalThis) {
+    return body.some((o: Node): boolean => t.isExpressionStatement(o)
+      && o !== node
+      && t.isAssignmentExpression(o.expression, { operator: '??=' })
+      && t.isMemberExpression(o.expression.left)
+      && t.isIdentifier(o.expression.left.object, { name: 'globalThis' })
+      && t.isIdentifier(o.expression.left.property, { name }));
+  }
+
   return body.some((o: Node): boolean => t.isExpressionStatement(o)
     && o !== node
     && t.isAssignmentExpression(o.expression, { operator: '??=' })

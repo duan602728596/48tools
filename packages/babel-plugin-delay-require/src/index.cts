@@ -7,9 +7,10 @@ function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: P
   const moduleNames: Array<string> = options?.moduleNames ?? [];
   const variableName: string | undefined = options?.variableName;
   const idle: boolean = options?.idle ?? false;
+  const mountToGlobalThis: boolean = options?.mountToGlobalThis ?? false;
 
   const prefixVariableName: string = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
-  const prefixVariableNameRegexp: RegExp = new RegExp(`^${ prefixVariableName }`);
+  const prefixVariableNameRegexp: RegExp = mountToGlobalThis ? new RegExp(`^globalThis\\.${ prefixVariableName }`) : new RegExp(`^${ prefixVariableName }`);
 
   return {
     pre(state: BabelFile): void {
@@ -22,7 +23,8 @@ function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: P
       options: {
         moduleNames,
         variableName: prefixVariableName,
-        idle
+        idle,
+        mountToGlobalThis
       }
     })
   };

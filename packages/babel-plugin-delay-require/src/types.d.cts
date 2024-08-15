@@ -10,6 +10,7 @@ export interface PluginOptions {
   moduleNames?: Array<string>;       // 用于延迟加载的模块数组
   variableName?: string | undefined; // 模块的变量名称的开头，用来标识是延迟加载的模块
   idle?: boolean;                    // 是否使用requestIdleCallback在空闲时间加载模块
+  mountToGlobalThis?: boolean;       // 是否挂载到globalThis上
 }
 
 export type PluginOptionsRequired = Required<PluginOptions>;

@@ -8,7 +8,10 @@ import type {
   ImportSpecifier,
   VariableDeclaration,
   ExpressionStatement,
-  Identifier
+  Identifier,
+  MemberExpression,
+  Expression,
+  PrivateName
 } from '@babel/types';
 import type { TraverseOptions } from '@babel/traverse';
 import { ImportInfo } from './utils/ImportInfo.cjs';
@@ -44,31 +47,52 @@ interface PluginVisitorOptions {
 }
 
 /* 查找父级作用域是否绑定过，绑定则删除 */
-function ProgramLevelVisitor(t: BabelTypes, prefixVariableNameRegexp: RegExp): TraverseOptions {
+function ProgramLevelVisitor(t: BabelTypes, prefixVariableNameRegexp: RegExp, mountToGlobalThis: boolean): TraverseOptions {
+  /**
+   * 删除绑定的作用域
+   * @param { NodePath } path - 当前节点
+   * @param { string } name - 变量名
+   */
+  function _removeDuplicateNode(path: NodePath<ExpressionStatement>, name: string): void {
+    const findScopeResult: FindScopeReturn = h.findScope(t, path); // 当前作用域的path和body
+    let isFatherFindVariable: boolean = false;
+    let findParentScopeResult: FindParentScopeReturn = h.findParentScope(findScopeResult.path);
+
+    while (!isFatherFindVariable) {
+      if (Array.isArray(findParentScopeResult.body)) {
+        isFatherFindVariable = h.hasExpressionStatement(t, findParentScopeResult.body, name, mountToGlobalThis, path.node);
+      }
+
+      if (isFatherFindVariable) break;
+
+      findParentScopeResult = h.findParentScope(findParentScopeResult.path);
+
+      if (!findParentScopeResult.path) break;
+    }
+
+    if (isFatherFindVariable) path.remove();
+  }
+
   return {
     ExpressionStatement(path: NodePath<ExpressionStatement>): void {
       if (
-        t.isAssignmentExpression(path.node.expression, { operator: '??=' })
+        !mountToGlobalThis
+        && t.isAssignmentExpression(path.node.expression, { operator: '??=' })
         && ('name' in path.node.expression.left)
         && prefixVariableNameRegexp.test(path.node.expression.left.name)
       ) {
-        const findScopeResult: FindScopeReturn = h.findScope(t, path); // 当前作用域的path和body
-        let isFatherFindVariable: boolean = false;
-        let findParentScopeResult: FindParentScopeReturn = h.findParentScope(findScopeResult.path);
+        _removeDuplicateNode(path, path.node.expression.left.name);
+      }
 
-        while (!isFatherFindVariable) {
-          if (Array.isArray(findParentScopeResult.body)) {
-            isFatherFindVariable = h.hasExpressionStatement(t, findParentScopeResult.body, path.node.expression.left.name, path.node);
-          }
-
-          if (isFatherFindVariable) break;
-
-          findParentScopeResult = h.findParentScope(findParentScopeResult.path);
-
-          if (!findParentScopeResult.path) break;
-        }
-
-        if (isFatherFindVariable) path.remove();
+      if (
+        mountToGlobalThis
+        && t.isAssignmentExpression(path.node.expression, { operator: '??=' })
+        && t.isMemberExpression(path.node.expression.left)
+        && t.isIdentifier(path.node.expression.left.object)
+        && t.isIdentifier(path.node.expression.left.property)
+        && prefixVariableNameRegexp.test(`${ path.node.expression.left.object.name }.${ path.node.expression.left.property.name }`)
+      ) {
+        _removeDuplicateNode(path, path.node.expression.left.property.name);
       }
     }
   };
@@ -122,7 +146,34 @@ function ProgramEnterVisitor(options: PluginOptionsRequired, prefixVariableName:
 
 /* 插件入口 */
 function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRegexp, options }: PluginVisitorOptions): BabelPluginDelayRequireVisitor {
-  return {
+  /**
+   * 插入表达式
+   * @param { NodePath } path - 当前节点
+   * @param { string } name - 变量名
+   */
+  function _insertExpression(this: BabelPluginDelayRequireState, path: NodePath, name: string): void {
+    const importInfo: ImportInfo | undefined = this.importInfoArray.find((o: ImportInfo): boolean => name === o.formatVariableName);
+
+    if (!importInfo) return;
+
+    const findScopeResult: FindScopeReturn = h.findScope(t, path); // 当前作用域的path和body
+    let body: FindScopeBody = findScopeResult.body;
+
+    // class时添加作用域的方式有变化
+    const modifiedBody: ClassBodyArray | undefined = h.isClassDeclarationAndModifiedStaticBlock(t, findScopeResult);
+
+    modifiedBody && (body = modifiedBody);
+
+    // 查找当前作用域是否绑定过
+    if (!Array.isArray(body) || h.hasExpressionStatement(t, body, importInfo.formatVariableName, options.mountToGlobalThis)) return;
+
+    // 插入表达式
+    const index: number = h.findLatestInsertExpression(t, body, findScopeResult.path.node, prefixVariableNameRegexp);
+
+    body.splice(index >= 0 ? index + 1 : 0, 0, c.globalThisRequireExpressionStatement(t, importInfo, options.mountToGlobalThis));
+  }
+
+  const visitor: BabelPluginDelayRequireVisitor = {
     Program: {
       enter(this: BabelPluginDelayRequireState, path: NodePath<Program>): void {
         const body: Array<Statement> = path.node.body;
@@ -133,7 +184,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
         path.traverse(ProgramEnterVisitor(options, prefixVariableName), { importInfoArray: this.importInfoArray });
 
         // 插入模块
-        if (this.importInfoArray.length > 0) {
+        if (!options.mountToGlobalThis && this.importInfoArray.length > 0) {
           const index: number = body.findLastIndex((o: Statement): boolean => t.isImportDeclaration(o));
 
           if (index >= 0) {
@@ -142,14 +193,14 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
         }
 
         // 修改绑定和引用
-        this.importInfoArray.forEach((importInfo: ImportInfo): void => h.variableRename(path, importInfo));
+        this.importInfoArray.forEach((importInfo: ImportInfo): void => h.variableRename(path, importInfo, options.mountToGlobalThis));
       },
 
       exit(this: BabelPluginDelayRequireState, path: NodePath<Program>): void {
-        path.traverse(ProgramLevelVisitor(t, prefixVariableNameRegexp));
+        path.traverse(ProgramLevelVisitor(t, prefixVariableNameRegexp, options.mountToGlobalThis));
 
         if ((options.idle || this.useIdle) && this.importInfoArray.length) {
-          path.node.body.push(...this.importInfoArray.map((importInfo: ImportInfo) => c.idleExpressionStatement(t, importInfo)));
+          path.node.body.push(...this.importInfoArray.map((importInfo: ImportInfo) => c.idleExpressionStatement(t, importInfo, options.mountToGlobalThis)));
         }
       }
     },
@@ -170,41 +221,43 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
         // 过滤全局变量
         if (filterGlobalTypes.includes(path.parentPath.node.type)) return;
 
-        const members: Array<string> = path.node.name.split('.');
+        // 将字符串的变量拆分为memberExpression
+        const replaceMemberExpression: MemberExpression | null = c.arrayToMemberExpression(t, path.node.name.split('.'));
 
-        if (members.length > 1) {
-          path.replaceWith(t.memberExpression(t.identifier(members[0]), t.identifier(members[1])));
-        }
+        if (replaceMemberExpression) path.replaceWith(replaceMemberExpression);
       },
 
       exit(this: BabelPluginDelayRequireState, path: NodePath<Identifier>): void {
-        // 不是修改过的变量 & 过滤全局变量
         if (!prefixVariableNameRegexp.test(path.node.name) || filterGlobalTypes.includes(path.parentPath.node.type)) return;
 
         // 检查作用域
         const { name }: Identifier = path.node;
-        const importInfo: ImportInfo | undefined = this.importInfoArray.find((o: ImportInfo): boolean => name === o.formatVariableName);
 
-        if (!importInfo) return;
-
-        const findScopeResult: FindScopeReturn = h.findScope(t, path); // 当前作用域的path和body
-        let body: FindScopeBody = findScopeResult.body;
-
-        // class时添加作用域的方式有变化
-        const modifiedBody: ClassBodyArray | undefined = h.isClassDeclarationAndModifiedStaticBlock(t, findScopeResult);
-
-        modifiedBody && (body = modifiedBody);
-
-        // 查找当前作用域是否绑定过
-        if (!Array.isArray(body) || h.hasExpressionStatement(t, body, importInfo.formatVariableName)) return;
-
-        // 插入表达式
-        const index: number = h.findLatestInsertExpression(t, body, findScopeResult.path.node, prefixVariableNameRegexp);
-
-        body.splice(index >= 0 ? index + 1 : 0, 0, c.globalThisRequireExpressionStatement(t, importInfo));
+        _insertExpression.call(this, path, name);
       }
     }
   };
+
+  const mountToGlobalThisVisitor: BabelPluginDelayRequireVisitor = {
+    MemberExpression: {
+      exit(path: NodePath<MemberExpression>): void {
+        const [left, right]: [Expression, Expression | PrivateName] = [path.node.object, path.node.property];
+
+        if (!(t.isIdentifier(left) && t.isIdentifier(right))) return;
+
+        if (!prefixVariableNameRegexp.test(`${ left.name }.${ right.name }`)) return;
+
+        // 检查作用域
+        _insertExpression.call(this, path, right.name);
+      }
+    }
+  };
+
+  if (options.mountToGlobalThis) {
+    Object.assign(visitor, mountToGlobalThisVisitor);
+  }
+
+  return visitor;
 }
 
 export default pluginVisitor;

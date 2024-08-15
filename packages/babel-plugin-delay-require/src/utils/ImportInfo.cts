@@ -19,6 +19,7 @@ export class ImportInfo {
   prefixVariableName: string;
   moduleName: string;
   exportDefault?: boolean;
+  mountToGlobalThis?: boolean;
 
   /**
    * 将模块名转换成变量名
