@@ -23,6 +23,7 @@ const appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node
 async function nccBuild(input, output) {
   const { code } = await ncc(input, {
     minify: true,
+    target: 'es2020',
     externals: ['electron']
   });
 
