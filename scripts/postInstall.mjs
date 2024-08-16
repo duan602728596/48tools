@@ -38,6 +38,11 @@ async function buildPluginBabelPluginDelayRequire() {
   await command(npm, ['run', 'dev'], path.join(cwd, 'packages/babel-plugin-delay-require'));
 }
 
+/* 编译got cjs */
+async function buildGotCjsPackage() {
+  await command(npm, ['run', 'build'], path.join(cwd, 'packages/got-cjs'));
+}
+
 /* 执行postinstall脚本 */
 async function postInstall() {
   // 替换window.WebSocket
@@ -51,6 +56,9 @@ async function postInstall() {
 
   // 编译babel插件
   await buildPluginBabelPluginDelayRequire();
+
+  // 编译got cjs
+  await buildGotCjsPackage();
 }
 
 postInstall();

@@ -25,9 +25,5 @@ await webpackBuild({
   node: {
     __filename: true,
     __dirname: true
-  },
-  experiments: {
-    topLevelAwait: true
   }
 });
-console.log('got-cjs build success!');

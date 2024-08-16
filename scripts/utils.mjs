@@ -85,12 +85,12 @@ export function command(cmd, args, cwdPath) {
 export const npm = isWindows ? 'npm.cmd' : 'npm';
 
 /* webpack编译 */
-export function webpackBuild(webpackConig) {
+export function webpackBuild(webpackConig, onlyDisplayError) {
   function webpackRunningCallback(err, stats) {
     if (err) {
       console.error(err);
     } else {
-      console.log(stats.toString({
+      !onlyDisplayError && console.log(stats.toString({
         colors: true
       }));
     }
