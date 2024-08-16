@@ -204,7 +204,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
     ImportDeclaration: {
       exit(this: BabelPluginDelayRequireState, path: NodePath<ImportDeclaration>): void {
         // 删除被引用的模块
-        if (this.importInfoArray.find((o: ImportInfo) => t.isStringLiteral(path.node.source, { value: o.moduleName }))) {
+        if (this.importInfoArray.find((o: ImportInfo) => t.isStringLiteral(path.node.source, { value: o.originalModuleName }))) {
           path.remove();
         }
       }
