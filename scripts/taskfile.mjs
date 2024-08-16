@@ -1,14 +1,11 @@
 import process from 'node:process';
 import path from 'node:path';
-import { createRequire } from 'node:module';
 import ncc from '@vercel/ncc';
 import fse from 'fs-extra/esm';
 import { rimraf } from 'rimraf';
 import { requireJson } from '@sweet-milktea/utils';
-import { appDir } from './utils.mjs';
+import { require, appDir } from './utils.mjs';
 import packageJson from '../app/package.json' assert { type: 'json' };
-
-const require = createRequire(import.meta.url);
 
 const argv = process.argv.slice(2);
 

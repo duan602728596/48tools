@@ -1,3 +1,4 @@
+// @ts-ignore
 import type { CancelableRequest, Response as GotResponse } from 'got';
 import { useState, useEffect, useMemo, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
 import { Button, Empty, App } from 'antd';

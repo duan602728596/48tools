@@ -1,3 +1,4 @@
+// @ts-ignore
 import got, { type Response as GotResponse } from 'got';
 import getLiveWorker from './live.worker/getLiveWorker';
 import { getAcFuncCookie } from '../../utils/utils';

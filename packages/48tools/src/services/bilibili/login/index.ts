@@ -1,3 +1,4 @@
+// @ts-ignore
 import got, { type Response as GotResponse } from 'got';
 import type { LoginUrl, LoginInfo } from './interface';
 

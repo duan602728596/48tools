@@ -1,8 +1,11 @@
 import path from 'node:path';
 import process from 'node:process';
 import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
+import webpack from 'webpack';
 import { metaHelper } from '@sweet-milktea/utils';
 
+export const require = createRequire(import.meta.url);
 export const { __dirname } = metaHelper(import.meta.url);
 
 // 定义文件位置
@@ -80,3 +83,23 @@ export function command(cmd, args, cwdPath) {
 }
 
 export const npm = isWindows ? 'npm.cmd' : 'npm';
+
+/* webpack编译 */
+export function webpackBuild(webpackConig) {
+  function webpackRunningCallback(err, stats) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(stats.toString({
+        colors: true
+      }));
+    }
+  }
+
+  return new Promise((resolve, reject) => {
+    const compiler = webpack(webpackConig);
+
+    compiler.hooks.done.tap('webpack-build-done', resolve);
+    compiler.run(webpackRunningCallback);
+  });
+}

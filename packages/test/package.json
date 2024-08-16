@@ -13,7 +13,7 @@
     "@sweet-milktea/utils": "^4.0.0",
     "cookie": "^0.6.0",
     "fs-extra": "^11.2.0",
-    "got": "^14.0.0"
+    "got": "^14.4.2"
   },
   "devDependencies": {
     "cross-zip": "^4.0.0",

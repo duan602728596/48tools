@@ -67,7 +67,6 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react": "^7.35.0",
     "globals": "^15.8.0",
-    "got": "^11.8.6",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0"
   },
