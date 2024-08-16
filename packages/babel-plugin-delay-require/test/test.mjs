@@ -288,6 +288,20 @@ function test() {
   });
 });
 
+test('replace module name', async function() {
+  const code = `import a from 'a';
+
+function test() {
+  a();
+}`;
+  const result = await transform(code, true, false, {
+    a: '@custom/a1'
+  });
+
+  deepStrictEqual(result.code.match(/__ELECTRON__DELAY_REQUIRE___custom_a1 \?{2}=/g).length, 2);
+  deepStrictEqual(/globalThis\.requestIdleCallback\?\.\(\(\) => __ELECTRON__DELAY_REQUIRE___custom_a1 \?{2}= globalThis\.require\(["']@custom\/a1["']\)\)/g.test(result.code), true);
+});
+
 if (args[0] === 'debug') {
   await setTimeoutPromise(60_000_000);
 }

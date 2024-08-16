@@ -8,6 +8,7 @@ function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: P
   const variableName: string | undefined = options?.variableName;
   const idle: boolean = options?.idle ?? false;
   const mountToGlobalThis: boolean = options?.mountToGlobalThis ?? false;
+  const replaceModuleName: Record<string, string> = options?.replaceModuleName ?? {};
 
   const prefixVariableName: string = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
   const prefixVariableNameRegexp: RegExp = new RegExp(prefixVariableName);
@@ -27,7 +28,8 @@ function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: P
         moduleNames,
         variableName: prefixVariableName,
         idle,
-        mountToGlobalThis
+        mountToGlobalThis,
+        replaceModuleName
       }
     })
   };

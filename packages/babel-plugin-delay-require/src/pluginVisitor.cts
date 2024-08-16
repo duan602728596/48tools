@@ -129,7 +129,8 @@ function ProgramEnterVisitor(options: PluginOptionsRequired, prefixVariableName:
       if (!importInfo) {
         importInfo = new ImportInfo({
           prefixVariableName,
-          moduleName: sourceValue
+          moduleName: sourceValue,
+          aliasName: options.replaceModuleName[sourceValue]
         });
         this.importInfoArray.push(importInfo);
       }
