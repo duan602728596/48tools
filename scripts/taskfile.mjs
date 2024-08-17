@@ -3,8 +3,9 @@ import path from 'node:path';
 import ncc from '@vercel/ncc';
 import fse from 'fs-extra/esm';
 import { rimraf } from 'rimraf';
+import { merge } from 'webpack-merge';
 import { requireJson } from '@sweet-milktea/utils';
-import { require, appDir, webpackBuild } from './utils.mjs';
+import { require, appDir, webpackBuild, webpackNodeDefaultCjsBuildConfig } from './utils.mjs';
 import packageJson from '../app/package.json' assert { type: 'json' };
 
 const argv = process.argv.slice(2);
@@ -35,28 +36,16 @@ async function nccBuild(input, output) {
 async function webpackBuildPackage(input, output) {
   const parseResult = path.parse(output);
 
-  await webpackBuild({
+  await webpackBuild(merge(webpackNodeDefaultCjsBuildConfig, {
     mode: 'production',
     entry: {
       index: [input]
     },
     output: {
       path: parseResult.dir,
-      filename: parseResult.base,
-      library: { type: 'commonjs' },
-      globalObject: 'globalThis'
-    },
-    externalsPresets: {
-      node: true,
-      electron: true
-    },
-    target: ['node', 'node20'],
-    performance: { hints: false },
-    node: {
-      __filename: true,
-      __dirname: true
+      filename: parseResult.base
     }
-  }, true);
+  }), true);
 }
 
 /**
