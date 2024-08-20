@@ -1,5 +1,5 @@
 import { ipcRenderer, type Cookie, type IpcRendererEvent } from 'electron';
-import { useState, useEffect, useCallback, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
+import { useState, useEffect, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Alert, Space, App, Modal, Form, Input, Divider, type FormInstance } from 'antd';
@@ -53,54 +53,53 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   }
 
   // 监听是否登陆
-  const handleWeiboLoginCookieListener: (event: IpcRendererEvent, cookies: Array<Cookie>) => Promise<void>
-    = useCallback(async function(event: IpcRendererEvent, cookies: Array<Cookie>): Promise<void> {
-      const subIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SUB');
+  async function handleWeiboLoginCookieListener(event: IpcRendererEvent, cookies: Array<Cookie>): Promise<void> {
+    const subIndex: number = cookies.findIndex((o: Cookie): boolean => o.name === 'SUB');
 
-      if (subIndex < 0) {
-        messageApi.error('Cookie获取失败！');
+    if (subIndex < 0) {
+      messageApi.error('Cookie获取失败！');
 
-        return;
+      return;
+    }
+
+    const cookieStr: string = cookies.map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; ');
+    const uid: string | undefined = await requestUid(cookieStr);
+
+    if (!uid) {
+      messageApi.error('账号的uid获取失败！');
+
+      return;
+    }
+
+    const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
+
+    // 等待输入s
+    const oldWeiboAccount: WeiboAccount | undefined = accountList.find((o: WeiboAccount): boolean => o.id === uid);
+
+    checkAndSetFormValue(form, oldWeiboAccount, ['s', 'from', 'c']);
+    waitInputSPromise = Promise.withResolvers<AppCaptureValue | undefined>();
+    setInputSOpen(true);
+
+    const sValue: AppCaptureValue | undefined = await waitInputSPromise.promise;
+
+    waitInputSPromise = undefined;
+    form.resetFields();
+
+    // 保存账号
+    await dispatch(IDBSaveAccount({
+      data: {
+        id: uid,
+        username: resUserInfo.data.user.screen_name ?? uid,
+        cookie: cookieStr,
+        lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        s: sValue?.s,
+        from: sValue?.from,
+        c: sValue?.c
       }
-
-      const cookieStr: string = cookies.map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; ');
-      const uid: string | undefined = await requestUid(cookieStr);
-
-      if (!uid) {
-        messageApi.error('账号的uid获取失败！');
-
-        return;
-      }
-
-      const resUserInfo: UserInfo = await requestUserInfo(uid, cookieStr);
-
-      // 等待输入s
-      const oldWeiboAccount: WeiboAccount | undefined = accountList.find((o: WeiboAccount): boolean => o.id === uid);
-
-      checkAndSetFormValue(form, oldWeiboAccount, ['s', 'from', 'c']);
-      waitInputSPromise = Promise.withResolvers<AppCaptureValue | undefined>();
-      setInputSOpen(true);
-
-      const sValue: AppCaptureValue | undefined = await waitInputSPromise.promise;
-
-      waitInputSPromise = undefined;
-      form.resetFields();
-
-      // 保存账号
-      await dispatch(IDBSaveAccount({
-        data: {
-          id: uid,
-          username: resUserInfo.data.user.screen_name ?? uid,
-          cookie: cookieStr,
-          lastLoginTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-          s: sValue?.s,
-          from: sValue?.from,
-          c: sValue?.c
-        }
-      }));
-      messageApi.success('登陆成功！');
-      props?.onCancel?.();
-    }, []);
+    }));
+    messageApi.success('登陆成功！');
+    props?.onCancel?.();
+  }
 
   // 登陆
   function handleLoginWeiboClick(event: MouseEvent): void {

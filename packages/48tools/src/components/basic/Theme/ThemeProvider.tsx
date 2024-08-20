@@ -1,7 +1,6 @@
 import { ipcRenderer, type IpcRendererEvent } from 'electron';
 import {
   useState,
-  useMemo,
   useEffect,
   type ReactElement,
   type Dispatch as D,
@@ -44,9 +43,7 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false); // 配置当前主题
 
   // 当前是暗黑模式
-  const isDark: boolean = useMemo(function(): boolean {
-    return theme === 'dark' || (theme === 'system' && themeMatches);
-  }, [theme, themeMatches]);
+  const isDark: boolean = theme === 'dark' || (theme === 'system' && themeMatches);
 
   // media变化
   function handleMatchMediaChange(event: MediaQueryListEvent): void {
