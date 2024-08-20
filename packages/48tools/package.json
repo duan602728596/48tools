@@ -10,7 +10,8 @@
     "start": "npm run clean && cross-env NODE_ENV=development NODE_OPTIONS=\"--max_old_space_size=4096\" milktea-esm start",
     "build": "npm run clean && cross-env NODE_ENV=production milktea-esm build",
     "build:analyzer": "npm run clean && cross-env NODE_ENV=production ANALYZER=true milktea-esm build",
-    "clean": "rimraf ./dist"
+    "clean": "rimraf ./dist",
+    "healthcheck": "react-compiler-healthcheck"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -51,6 +52,7 @@
     "electron": "^31.0.2",
     "postcss": "^8.4.32",
     "postcss-loader": "^7.3.4",
+    "react-compiler-healthcheck": "latest",
     "tailwindcss": "^3.4.0",
     "ts-loader": "^9.5.1",
     "webpack-bundle-analyzer": "^4.10.1"
