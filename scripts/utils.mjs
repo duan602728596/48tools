@@ -85,6 +85,23 @@ export function command(cmd, args, cwdPath) {
 export const npm = isWindows ? 'npm.cmd' : 'npm';
 
 /* webpack编译 */
+export const webpackNodeDefaultCjsBuildConfig = {
+  output: {
+    library: { type: 'commonjs' },
+    globalObject: 'globalThis'
+  },
+  externalsPresets: {
+    node: true,
+    electron: true
+  },
+  target: ['node', 'node20'],
+  performance: { hints: false },
+  node: {
+    __filename: true,
+    __dirname: true
+  }
+};
+
 export function webpackBuild(webpackConig, onlyDisplayError) {
   function webpackRunningCallback(err, stats) {
     if (err) {
