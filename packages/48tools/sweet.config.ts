@@ -58,6 +58,12 @@ function srcPath(p: string): string {
   return path.join(__dirname, 'src', p);
 }
 
+const reactCompiler: { sources(p: string): boolean } = {
+  sources(p: string): boolean {
+    return /48tools[\\/]src[\\/].+\.tsx/.test(p);
+  }
+};
+
 const externalsName: Array<string> = nodeModules([
   'child_process',
   'crypto',
@@ -155,7 +161,8 @@ export default function(info: Record<string, any>): Record<string, any> {
     typescript: {
       configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
       plugins,
-      exclude: /node_modules|Signer\.js/
+      exclude: /node_modules|Signer\.js/,
+      reactCompiler
     },
     sass: {
       include: /src/
