@@ -129,6 +129,7 @@ export default function(info: Record<string, any>): Record<string, any> {
       'path-to-regexp',
       'qrcode/lib/browser',
       'react',
+      'react/compiler-runtime',
       'react/jsx-dev-runtime',
       'react-dom',
       'react-dom/client',
@@ -159,7 +160,7 @@ export default function(info: Record<string, any>): Record<string, any> {
       exclude: /node_modules|(toutiaosdk-acrawler|bdms)\.js|Signer\.js/i
     },
     typescript: {
-      configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
+      configFile: 'tsconfig.prod.json',
       plugins,
       exclude: /node_modules|Signer\.js/,
       reactCompiler
