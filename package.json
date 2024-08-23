@@ -46,7 +46,6 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@eslint/compat": "^1.1.1",
     "@sweet-milktea/milktea-cli": "^4.1.0",
     "@sweet-milktea/util-tools": "^4.1.0",
     "@types/command-line-args": "^5",
