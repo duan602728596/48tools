@@ -34,13 +34,13 @@ import * as ReactDOMClient from 'react-dom/client';`)
 }
 
 /* 编译插件 */
-async function buildPluginBabelPluginDelayRequire() {
-  await command(npm, ['run', 'dev'], path.join(cwd, 'packages/babel-plugin-delay-require'));
+async function buildPlugin(pluginName) {
+  await command(npm, ['run', 'dev'], path.join(cwd, 'packages', pluginName));
 }
 
 /* 编译got cjs */
-async function buildGotCjsPackage() {
-  await command(npm, ['run', 'build'], path.join(cwd, 'packages/got-cjs'));
+async function buildCjsPackage(packageName) {
+  await command(npm, ['run', 'build'], path.join(cwd, 'packages', packageName));
 }
 
 /* 执行postinstall脚本 */
@@ -55,10 +55,13 @@ async function postInstall() {
   await fixRcUtil();
 
   // 编译babel插件
-  await buildPluginBabelPluginDelayRequire();
+  await buildPlugin('babel-plugin-delay-require');
+
+  // 编译postcss插件
+  await buildPlugin('postcss-plugin-remove-classnames');
 
   // 编译got cjs
-  await buildGotCjsPackage();
+  await buildCjsPackage('got-cjs');
 }
 
 postInstall();

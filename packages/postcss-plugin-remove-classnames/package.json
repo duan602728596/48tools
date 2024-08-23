@@ -1,0 +1,20 @@
+{
+  "name": "@48tools/postcss-plugin-remove-classnames",
+  "version": "0.0.0",
+  "description": "删除指定的CSS className",
+  "type": "commonjs",
+  "main": "lib/index.cjs",
+  "scripts": {
+    "start": "npm run clean && tsc --outDir lib --sourceMap --watch",
+    "dev": "npm run clean && tsc --outDir lib --sourceMap",
+    "clean": "rimraf ./lib",
+    "test": "node test/test.mjs"
+  },
+  "dependencies": {
+    "source-map-support": "^0.5.21"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.41",
+    "typescript": "^5.4.5"
+  }
+}
