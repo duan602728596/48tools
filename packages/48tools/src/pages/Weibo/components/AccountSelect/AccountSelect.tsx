@@ -4,7 +4,6 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Select } from 'antd';
 import type { DefaultOptionType, SelectHandler } from 'rc-select/es/Select';
-import style from './accountSelect.sass';
 import { IDBCursorAccountList, type WeiboLoginInitialState } from '../../../../functionalComponents/WeiboLogin/reducers/weiboLogin';
 import dbConfig from '../../../../utils/IDB/IDBConfig';
 import type { WeiboAccount } from '../../../../commonTypes';
@@ -46,7 +45,7 @@ function AccountSelect(props: AccountSelectProps): ReactElement {
   }, []);
 
   return (
-    <Select className={ style.accountSelect }
+    <Select className="!w-[200px]"
       value={ value }
       options={ options }
       disabled={ disabled }

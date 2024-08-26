@@ -50,7 +50,7 @@ function RenderListItem(props: RenderListItemProps): ReactElement {
       ] }
       { ...attributes }
     >
-      <IconMenuOutlined ref={ setDraggableNodeRef } className={ classNames('mr-[12px]', style.moveIcon) } { ...listeners } />
+      <IconMenuOutlined ref={ setDraggableNodeRef } className="mr-[12px] !cursor-move" { ...listeners } />
       { index + 1 }、{ item.filename }
     </List.Item>
   );

@@ -181,7 +181,7 @@ ${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): 
           <Form.Item className={ style.formItem } label="配置">
             <Space>
               <Form.Item name="option" rules={ [{ required: true, message: '请选择配置' }] } noStyle={ true }>
-                <Select className={ style.select }>{ userListSelectRender() }</Select>
+                <Select className="!w-[207px]">{ userListSelectRender() }</Select>
               </Form.Item>
               <Button className="ml-[8px]" type="primary" danger={ true } onClick={ handleDeleteOptionClick }>删除当前配置</Button>
             </Space>

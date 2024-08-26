@@ -8,9 +8,7 @@ import Icon, {
   MessageFilled as IconMessageFilled,
   FileSyncOutlined as IconFileSyncOutlined
 } from '@ant-design/icons';
-import * as classNames from 'classnames';
 import { WinIpcChannel } from '@48tools/main/src/channelEnum';
-import style from './index.sass';
 import commonStyle from '../../common.sass';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import FFmpegOption from './FFmpegOption/FFmpegOption';
@@ -286,8 +284,8 @@ function Index(props: {}): ReactElement {
             下载软件的最新版本。如果你想要赞助作者，请扫码打赏。
           </p>
           <Space size={ 8 }>
-            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlZfbAvif } />
-            <Image className={ classNames('cursor-pointer', style.dashangImage) } src={ imageUrlWxAvif } />
+            <Image className="cursor-pointer !w-[180px]" src={ imageUrlZfbAvif } />
+            <Image className="cursor-pointer !w-[180px]" src={ imageUrlWxAvif } />
           </Space>
         </div>
       </div>

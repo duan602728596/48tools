@@ -1,7 +1,6 @@
 import { Component, type ReactElement, type FocusEventHandler } from 'react';
 import { Select, type SelectProps } from 'antd';
 import type { SelectHandler, DefaultOptionType } from 'rc-select/es/Select';
-import style from './fixSelect.sass';
 
 interface FixSelectState {
   open: boolean;
@@ -38,7 +37,7 @@ class FixSelect extends Component<SelectProps, FixSelectState> {
   render(): ReactElement | null {
     return (
       <Select { ...this.props }
-        className={ style.searchSelect }
+        className="!w-[180px]"
         showSearch={ true }
         open={ this.state.open }
         onFocus={ this.handleSelectForce }

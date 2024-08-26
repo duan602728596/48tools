@@ -25,7 +25,6 @@ import {
   type WebToken,
   type LiveWebStartPlay
 } from '@48tools-api/acfun';
-import style from './live.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
@@ -163,7 +162,7 @@ function Live(props: {}): ReactElement {
               onCancel={ handleCloseClick }
             >
               <div className="h-[60px]" data-test-id="acfun-live-type">
-                <Select className={ style.selectInput } onSelect={ (value: string): string => (ctx.player = value) }>
+                <Select className="!w-full" onSelect={ (value: string): string => (ctx.player = value) }>
                   {
                     representation.map((o: LiveRepresentation): ReactElement => (
                       <Select.Option key={ o.url } value={ o.url }>{ o.name }</Select.Option>
