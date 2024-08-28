@@ -1,3 +1,4 @@
+import './sourcemap.cjs';
 import type { Plugin, Rule, Helpers } from 'postcss';
 
 interface PostcssPluginRemoveClassNamesOptions {
