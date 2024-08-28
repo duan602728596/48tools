@@ -11,7 +11,7 @@ import { requestAcfunLiveList } from '../../services/services.js';
 import { liveRecordingTypeRoomIdAndStart, stopAndDeleteRoomId } from '../../actions/liveRecordingProcess.js';
 import { testTitle } from '../../utils/testUtils.js';
 import * as TestId from '../../TestId.js';
-import type { AcfunLiveListResponse } from '../../services/interface';
+import type { AcfunLiveListResponse } from '../../services/interface.js';
 
 /* A站直播测试 */
 export const title: string = 'AcFun/Live Page';

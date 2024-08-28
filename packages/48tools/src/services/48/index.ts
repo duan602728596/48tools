@@ -3,8 +3,7 @@
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 // @ts-ignore
-import got, { type Response as GotResponse, type Headers as GotHeaders } from 'got';
-import type { Delays } from 'got/dist/source/core/timed-out.js';
+import got, { type Response as GotResponse, type Headers as GotHeaders, type Delays } from 'got';
 import { createHeaders, getPocket48Token } from '../../utils/snh48';
 import type {
   LiveInfo,

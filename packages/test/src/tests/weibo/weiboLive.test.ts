@@ -1,13 +1,13 @@
 import path from 'node:path';
 import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
-import { test, expect, type ElementHandle, type Locator } from '@playwright/test';
+import { test, expect, type Locator } from '@playwright/test';
 import fse from 'fs-extra';
 import { isFileExists } from '@sweet-milktea/utils';
-import * as config from '../../utils/config';
-import ElectronApp from '../../utils/ElectronApp';
+import * as config from '../../utils/config.js';
+import ElectronApp from '../../utils/ElectronApp.js';
 import { testTitle } from '../../utils/testUtils.js';
-import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions';
-import testIdClick from '../../actions/testIdClick';
+import { setFFmpegPath, mockShowSaveDialog } from '../../actions/utilActions.js';
+import testIdClick from '../../actions/testIdClick.js';
 import * as TestId from '../../TestId.js';
 
 /* 微博直播测试 */
