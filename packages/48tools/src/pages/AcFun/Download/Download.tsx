@@ -7,7 +7,6 @@ import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
-import style from './download.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
@@ -180,7 +179,7 @@ function Download(props: {}): ReactElement {
                   <Button type="primary" danger={ true }>停止下载</Button>
                 </Popconfirm>
               ) : (
-                <Select className={ style.downloadSelect }
+                <Select className="!w-[150px]"
                   placeholder="下载"
                   notFoundContent={
                     record.representation ? undefined : (

@@ -20,7 +20,6 @@ import {
   type LiveOne,
   type LiveOnePlayStreams
 } from '@48tools-api/48';
-import style from './inVideo.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../../components/Header/Header';
@@ -293,7 +292,7 @@ function InVideo(props: {}): ReactElement {
     <Fragment>
       <Header>
         <Space size={ 8 } data-test-id="48-in-video-group-type">
-          <Select className={ style.typeSelect } value={ inVideoQueryLiveType } onSelect={ handleLiveTypeSelect }>
+          <Select className="!w-[150px]" value={ inVideoQueryLiveType } onSelect={ handleLiveTypeSelect }>
             <Select.Option value="snh48">SNH48</Select.Option>
             <Select.Option value="bej48">BEJ48</Select.Option>
             <Select.Option value="gnz48">GNZ48</Select.Option>

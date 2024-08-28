@@ -24,7 +24,6 @@ import {
   type AwemeItem,
   type DouyinHtmlResponseType
 } from '@48tools-api/toutiao/douyin';
-import style from './videoOrUserParse.sass';
 import douyinStyle from '../douyin.sass';
 import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
 import verifyMiddleware, { verifyCookieInNewWindow } from '../function/middlewares/verifyMiddleware';
@@ -341,7 +340,7 @@ function VideoOrUserParse(props: {}): ReactElement {
       width: 330,
       render: (value: undefined, record: UserDataItem | AwemeItem, index: number): ReactNode => (
         <Fragment>
-          <Select className={ style.userListUrlSelect }
+          <Select className="!w-[220px]"
             size="small"
             onSelect={ (v: string, option: { item: DownloadUrlItem } & DefaultOptionType): void =>
               handleUserListDownloadUrlSelect(record, v, option) }
@@ -365,7 +364,7 @@ function VideoOrUserParse(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Input.Search className={ style.input }
+      <Input.Search className="!mr-[8px] !w-[350px]"
         enterButton="解析视频"
         placeholder="输入视频ID、用户ID或用户主页地址"
         loading={ urlLoading }
@@ -393,7 +392,7 @@ function VideoOrUserParse(props: {}): ReactElement {
         }
         onCancel={ (event: MouseEvent): void => setVisible(false) }
       >
-        <Select className={ style.urlSelect }
+        <Select className="!w-[300px]"
           value={ selectedUrl }
           onSelect={ handleDownloadUrlSelect }
         >
