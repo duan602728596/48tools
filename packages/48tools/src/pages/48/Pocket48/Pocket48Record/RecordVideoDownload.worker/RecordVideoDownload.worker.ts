@@ -3,6 +3,7 @@ import * as fs from 'node:fs';
 import { promises as fsP, type BigIntStats } from 'node:fs';
 import * as path from 'node:path';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
+// @ts-ignore
 import got from 'got';
 import type GotRequest from 'got/dist/source/core';
 
@@ -67,7 +68,9 @@ async function requestDownloadFileByStream(fileUrl: string, filename: string): P
     }
   });
 
-  await pipeline(downloadFileReq, fs.createWriteStream(filename));
+  if (downloadFileReq) {
+    await pipeline(downloadFileReq, fs.createWriteStream(filename));
+  }
 }
 
 /**

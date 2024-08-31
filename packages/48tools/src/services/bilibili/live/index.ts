@@ -1,3 +1,4 @@
+// @ts-ignore
 import got, { type Response as GotResponse } from 'got';
 import type { _PlayUrlObject } from '../../../../../main/src/logProtocol/logTemplate/bilibiliLive.mjs';
 import { getBilibiliCookie } from '../../../utils/utils';

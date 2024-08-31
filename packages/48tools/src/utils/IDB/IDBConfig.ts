@@ -23,7 +23,7 @@ export const objectStoreMaps: Record<string, ObjectStoreItem> = {
   acfunLive: {
     name: 'acfun_live',
     key: 'id',
-    data: ['description', 'roomId']
+    data: ['description', 'roomId', 'autoRecord']
   },
 
   // 2：一些配置
@@ -65,7 +65,7 @@ export const objectStoreMaps: Record<string, ObjectStoreItem> = {
   kuaishouLive: {
     name: 'kuaishou_live',
     key: 'id',
-    data: ['description', 'roomId']
+    data: ['description', 'roomId', 'autoRecord']
   },
 
   // 8: 房间信息
@@ -78,7 +78,7 @@ export const objectStoreMaps: Record<string, ObjectStoreItem> = {
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 15,
+  version: 16,
   objectStore: Object.values<ObjectStoreItem>(objectStoreMaps)
 };
 

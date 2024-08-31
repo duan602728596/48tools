@@ -1,8 +1,7 @@
 import type { RoomPlayUrlV2 } from '@48tools-api/bilibili/live';
 
 export function ffmpegHeaders(): string {
-  return `Referer: https://live.bilibili.com\r
-Host: live.bilibili.com\r\n`;
+  return 'Referer: https://live.bilibili.com\r\n';
 }
 
 /**

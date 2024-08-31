@@ -1,3 +1,5 @@
+'use idle';
+
 import { randomUUID } from 'node:crypto';
 import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, useEffect, useTransition, type ReactElement, type TransitionStartFunction } from 'react';

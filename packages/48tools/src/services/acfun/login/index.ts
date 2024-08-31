@@ -1,3 +1,4 @@
+// @ts-ignore
 import got, { type Response as GotResponse, type CancelableRequest } from 'got';
 import type { PcDirectQr, ScanResult, AcceptResult } from './interface';
 

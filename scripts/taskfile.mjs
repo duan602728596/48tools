@@ -1,14 +1,12 @@
 import process from 'node:process';
 import path from 'node:path';
-import { createRequire } from 'node:module';
 import ncc from '@vercel/ncc';
 import fse from 'fs-extra/esm';
 import { rimraf } from 'rimraf';
+import { merge } from 'webpack-merge';
 import { requireJson } from '@sweet-milktea/utils';
-import { appDir } from './utils.mjs';
+import { require, appDir, webpackBuild, webpackNodeDefaultCjsBuildConfig } from './utils.mjs';
 import packageJson from '../app/package.json' assert { type: 'json' };
-
-const require = createRequire(import.meta.url);
 
 const argv = process.argv.slice(2);
 
@@ -23,10 +21,31 @@ const appNodeModules = path.join(appDir, 'node_modules'); // app文件夹的node
 async function nccBuild(input, output) {
   const { code } = await ncc(input, {
     minify: true,
+    target: 'es2020',
     externals: ['electron']
   });
 
   await fse.outputFile(output, code);
+}
+
+/**
+ * webpack编译
+ * @param { string } input - 文件路径
+ * @param { string } output - 输出目录
+ */
+async function webpackBuildPackage(input, output) {
+  const parseResult = path.parse(output);
+
+  await webpackBuild(merge(webpackNodeDefaultCjsBuildConfig, {
+    mode: 'production',
+    entry: {
+      index: [input]
+    },
+    output: {
+      path: parseResult.dir,
+      filename: parseResult.base
+    }
+  }), true);
 }
 
 /**
@@ -39,7 +58,12 @@ async function createFilesByDependenciesName(dependenciesName) {
     .dir.split(/node_modules/)[0], 'node_modules', dependenciesName); // 模块在node_modules中的原位置
 
   await fse.ensureDir(dependenciesDir); // 创建目录
-  await nccBuild(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.js')); // 编译文件
+
+  if (dependenciesName === 'got') {
+    await webpackBuildPackage(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.js'));
+  } else {
+    await nccBuild(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.js')); // 编译文件
+  }
 
   // 拷贝许可证
   const depPackageJson = await requireJson(path.join(dependenciesNodeModulesDir, 'package.json'));

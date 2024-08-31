@@ -1,3 +1,5 @@
+'use idle';
+
 import * as path from 'node:path';
 import { promises as fsP } from 'node:fs';
 import { randomUUID } from 'node:crypto';

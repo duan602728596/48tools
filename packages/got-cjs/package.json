@@ -1,0 +1,10 @@
+{
+  "name": "@48tools/got-cjs",
+  "version": "0.0.0",
+  "main": "dist/index.cjs",
+  "type": "commonjs",
+  "scripts": {
+    "build": "npm run clean && node build.mjs",
+    "clean": "rimraf ./dist"
+  }
+}

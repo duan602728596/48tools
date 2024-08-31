@@ -1,6 +1,9 @@
+'use idle';
+
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
-import got, { type Response as GotResponse, type Headers as GotHeaders } from 'got';
+// @ts-ignore
+import got, { type Response as GotResponse, type Headers as GotHeaders, type Delays } from 'got';
 import { createHeaders, getPocket48Token } from '../../utils/snh48';
 import type {
   LiveInfo,
@@ -19,6 +22,16 @@ import type {
 
 export type * from './interface';
 
+const timeoutTime: number = 10 * 60 * 1_000;
+const timeoutOptions: Delays = {
+  lookup: timeoutTime,
+  connect: timeoutTime,
+  secureConnect: timeoutTime,
+  socket: timeoutTime,
+  send: timeoutTime,
+  response: timeoutTime
+};
+
 /**
  * 获取单个直播间的信息
  * @param { string } id - 直播间id
@@ -29,7 +42,7 @@ export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
     headers: createHeaders(),
     responseType: 'json',
     json: { liveId: id },
-    timeout: 10 * 60 * 1_000
+    timeout: timeoutOptions
   });
 
   return res.body;
@@ -102,7 +115,7 @@ export async function requestLiveList(
     headers: createHeaders(),
     responseType: 'json',
     json: body,
-    timeout: 10 * 60 * 1_000
+    timeout: timeoutOptions
   });
 
   if (firstData && res?.body?.content?.liveList) {
@@ -271,7 +284,7 @@ export async function requestLiveOne(liveId: string, token?: string): Promise<Li
     headers: createHeaders(token),
     responseType: 'json',
     json: { liveId },
-    timeout: 10 * 60 * 1_000
+    timeout: timeoutOptions
   });
 
   return res.body;
@@ -288,7 +301,7 @@ export async function requestLiveStream(liveId: string, token?: string): Promise
     headers: createHeaders(token),
     responseType: 'json',
     json: { liveId, streamType: 3 },
-    timeout: 10 * 60 * 1_000
+    timeout: timeoutOptions
   });
 
   return res.body;

@@ -4,7 +4,6 @@ import { Button, Modal, Form, Alert, Input, message, type FormInstance, type Mod
 import type { Store } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { ChromeFilled as IconChromeFilled } from '@ant-design/icons';
-import style from './executablePath.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 
 interface ExecutablePathProps {
@@ -101,14 +100,14 @@ function ExecutablePath(props: ExecutablePathProps): ReactElement {
             <Fragment>
               <p>
                 配置无头浏览器的可执行文件，需要选择
-                <i className={ style.iText }>Chrome浏览器</i>或者
-                <i className={ style.iText }>Edge浏览器</i>的
+                <i className="mx-[3px]">Chrome浏览器</i>或者
+                <i className="mx-[3px]">Edge浏览器</i>的
                 <b>可执行文件</b>的文件地址。
               </p>
               <p>
                 例如：Windows系统选择
-                <i className={ style.iText }>"Chrome.exe"</i>文件，MacOS系统需要选择
-                <i className={ style.iText }>"Google Chrome.app/Contents/MacOS/Google Chrome"</i>文件。
+                <i className="mx-[3px]">"Chrome.exe"</i>文件，MacOS系统需要选择
+                <i className="mx-[3px]">"Google Chrome.app/Contents/MacOS/Google Chrome"</i>文件。
               </p>
             </Fragment>
           } />

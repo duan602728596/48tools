@@ -1,5 +1,4 @@
 import process from 'node:process';
-import { fixupPluginRules } from '@eslint/compat';
 import babelEslintParser from '@babel/eslint-parser';
 import typescriptEslintParser from '@typescript-eslint/parser';
 import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
@@ -49,8 +48,8 @@ const languageGlobalsOptions = {
 };
 
 const plugins = {
-  react: fixupPluginRules(eslintPluginReact),
-  import: fixupPluginRules(eslintPluginImport)
+  react: eslintPluginReact,
+  import: eslintPluginImport
 };
 
 const settings = {

@@ -1,6 +1,6 @@
 {
   "name": "@48tools/app",
-  "version": "4.14.2",
+  "version": "4.14.3",
   "description": "工具合集，提供各种常用功能，包括口袋48直播、公演直播、A站、B站、视频裁剪等。",
   "license": "GPL-3.0",
   "author": {
@@ -12,7 +12,7 @@
     "command-line-args": "^5.2.1",
     "electron-store": "^8.1.0",
     "fluent-ffmpeg": "^2.1.2",
-    "got": "^11.8.6",
+    "got": "^14.4.2",
     "hpagent": "^1.2.0",
     "node-media-server": "^2.6.2",
     "playwright-core": "^1.41.1"

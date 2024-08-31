@@ -1,6 +1,6 @@
 {
   "name": "@48tools/48tools",
-  "version": "4.14.2",
+  "version": "4.14.3",
   "description": "48tools的软件源代码",
   "license": "GPL-3.0",
   "main": "../main/lib/main.mjs",
@@ -10,7 +10,8 @@
     "start": "npm run clean && cross-env NODE_ENV=development NODE_OPTIONS=\"--max_old_space_size=4096\" milktea-esm start",
     "build": "npm run clean && cross-env NODE_ENV=production milktea-esm build",
     "build:analyzer": "npm run clean && cross-env NODE_ENV=production ANALYZER=true milktea-esm build",
-    "clean": "rimraf ./dist"
+    "clean": "rimraf ./dist",
+    "healthcheck": "react-compiler-healthcheck"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
@@ -44,20 +45,21 @@
   },
   "devDependencies": {
     "@mdx-js/loader": "^3.0.0",
-    "@sweet-milktea/milktea": "^4.3.0",
+    "@sweet-milktea/milktea": "^4.4.0",
     "@sweet-milktea/milktea-cli": "^4.1.0",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "electron": "^31.0.2",
     "postcss": "^8.4.32",
     "postcss-loader": "^7.3.4",
+    "react-compiler-healthcheck": "latest",
     "tailwindcss": "^3.4.0",
     "ts-loader": "^9.5.1",
     "webpack-bundle-analyzer": "^4.10.1"
   },
   "optionalDependencies": {
     "fluent-ffmpeg": "^2.1.2",
-    "got": "^11.8.6",
+    "got": "^14.4.2",
     "hpagent": "^1.2.0",
     "playwright-core": "^1.41.1"
   }

@@ -24,7 +24,7 @@
     "set-version": "node scripts/setVersion.mjs",
     "check-token": "node scripts/checkToken.mjs",
     "cz1": "NODE_OPTIONS=\"--max-old-space-size=409600\" git cz",
-    "postinstall": "husky install && node scripts/fixTypesError.mjs"
+    "postinstall": "husky install && node scripts/postInstall.mjs"
   },
   "private": true,
   "workspaces": [
@@ -46,7 +46,6 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@eslint/compat": "^1.1.1",
     "@sweet-milktea/milktea-cli": "^4.1.0",
     "@sweet-milktea/util-tools": "^4.1.0",
     "@types/command-line-args": "^5",
@@ -77,7 +76,7 @@
     "react-dom": "rc"
   },
   "lint-staged": {
-    "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "cross-env COMMITLINT=1 eslint --cache --cache-location .eslintcache",
+    "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "cross-env COMMITLINT=1 eslint --cache --cache-location .eslintcache --no-warn-ignored",
     "packages/test/src/testConfig.ts": "npm run check-token"
   },
   "config": {

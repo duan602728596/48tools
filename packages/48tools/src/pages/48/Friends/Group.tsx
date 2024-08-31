@@ -1,6 +1,6 @@
 import { setTimeout as setTimeoutPromise } from 'node:timers/promises';
 import { Fragment, useState, type ReactElement, type Dispatch as D, type SetStateAction as S, type MouseEvent } from 'react';
-import { Row, Col, Divider, Button, message } from 'antd';
+import { Row, Col, Divider, Button, message, type ColProps } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { requestFriendshipAdd } from '@48tools-api/48';
 import type { RoomItem } from '@48tools-api/48/jsdelivrCDN';
@@ -8,7 +8,7 @@ import * as classNames from 'classnames';
 import commonStyle from '../../../common.sass';
 import style from './group.sass';
 
-const colProps: Record<string, number> = { xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 };
+const colProps: ColProps = { xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 };
 
 interface GroupProps {
   title: string;

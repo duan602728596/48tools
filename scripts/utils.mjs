@@ -1,8 +1,11 @@
 import path from 'node:path';
 import process from 'node:process';
 import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
+import webpack from 'webpack';
 import { metaHelper } from '@sweet-milktea/utils';
 
+export const require = createRequire(import.meta.url);
 export const { __dirname } = metaHelper(import.meta.url);
 
 // 定义文件位置
@@ -76,5 +79,44 @@ export function command(cmd, args, cwdPath) {
     child.on('error', function(error) {
       reject(error);
     });
+  });
+}
+
+export const npm = isWindows ? 'npm.cmd' : 'npm';
+
+/* webpack编译 */
+export const webpackNodeDefaultCjsBuildConfig = {
+  output: {
+    library: { type: 'commonjs' },
+    globalObject: 'globalThis'
+  },
+  externalsPresets: {
+    node: true,
+    electron: true
+  },
+  target: ['node', 'node20'],
+  performance: { hints: false },
+  node: {
+    __filename: true,
+    __dirname: true
+  }
+};
+
+export function webpackBuild(webpackConig, onlyDisplayError) {
+  function webpackRunningCallback(err, stats) {
+    if (err) {
+      console.error(err);
+    } else {
+      !onlyDisplayError && console.log(stats.toString({
+        colors: true
+      }));
+    }
+  }
+
+  return new Promise((resolve, reject) => {
+    const compiler = webpack(webpackConig);
+
+    compiler.hooks.done.tap('webpack-build-done', resolve);
+    compiler.run(webpackRunningCallback);
   });
 }

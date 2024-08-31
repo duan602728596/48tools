@@ -6,6 +6,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
+import type { PluginItem } from '@babel/core';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
 const analyzer: boolean = process.env.ANALYZER === 'true';
@@ -57,6 +58,12 @@ function srcPath(p: string): string {
   return path.join(__dirname, 'src', p);
 }
 
+const reactCompiler: { sources(p: string): boolean } = {
+  sources(p: string): boolean {
+    return /48tools[\\/]src[\\/].+\.tsx/.test(p);
+  }
+};
+
 const externalsName: Array<string> = nodeModules([
   'child_process',
   'crypto',
@@ -80,14 +87,21 @@ const externalsName: Array<string> = nodeModules([
   'playwright-core'
 ]);
 
-export default function(info: object): Record<string, any> {
-  const plugins: Array<any> = [
+export default function(info: Record<string, any>): Record<string, any> {
+  const plugins: Array<PluginItem> = [
     ['@babel/plugin-syntax-import-attributes', { deprecatedAssertSyntax: true }],
-    ['@48tools/babel-plugin-delay-require', { moduleNames: externalsName, idle: true }]
-  ].filter(Boolean);
+    ['@48tools/babel-plugin-delay-require', {
+      moduleNames: externalsName,
+      idle: false,
+      mountToGlobalThis: true,
+      replaceModuleName: isDev ? {
+        got: '@48tools/got-cjs'
+      } : undefined
+    }]
+  ];
   const distDir: string = path.join(__dirname, 'dist');
 
-  const config: { [key: string]: any } = {
+  const config: Record<string, any> = {
     frame: 'react',
     dll: [
       '@ant-design/icons',
@@ -115,6 +129,7 @@ export default function(info: object): Record<string, any> {
       'path-to-regexp',
       'qrcode/lib/browser',
       'react',
+      'react/compiler-runtime',
       'react/jsx-dev-runtime',
       'react-dom',
       'react-dom/client',
@@ -145,9 +160,10 @@ export default function(info: object): Record<string, any> {
       exclude: /node_modules|(toutiaosdk-acrawler|bdms)\.js|Signer\.js/i
     },
     typescript: {
-      configFile: isDev ? 'tsconfig.json' : 'tsconfig.prod.json',
+      configFile: 'tsconfig.prod.json',
       plugins,
-      exclude: /node_modules|Signer\.js/
+      exclude: /node_modules|Signer\.js/,
+      reactCompiler
     },
     sass: {
       include: /src/

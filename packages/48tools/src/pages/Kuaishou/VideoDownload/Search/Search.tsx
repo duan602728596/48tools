@@ -17,7 +17,6 @@ import type { UseMessageReturnType } from '@48tools-types/antd';
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
 import { requestShortVideo, type ShortVideoDownloadResponse } from '@48tools-api/kuaishou';
 import { KuaishouCookieChannel } from '@48tools/main/src/channelEnum';
-import style from './search.sass';
 import { kuaishouCookie } from '../function/kuaishouCookie';
 import { setAddVideoDownloadList } from '../../reducers/kuaishouVideoDownload';
 
@@ -118,7 +117,7 @@ function Search(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Input.Search className={ style.input }
+      <Input.Search className="!mr-[8px] !w-[350px]"
         enterButton="解析视频"
         placeholder="输入视频ID或视频地址"
         loading={ urlLoading }

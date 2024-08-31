@@ -18,7 +18,6 @@ import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { requestLiveEnter, requestTtwidCookie, type LiveEnter } from '@48tools-api/toutiao/douyin';
-import style from './douyinLive.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
@@ -271,7 +270,7 @@ function DouyinLive(props: {}): ReactElement {
         destroyOnClose={ true }
         footer={ <Button onClick={ (event: MouseEvent): void => setOpen(false) }>关闭</Button> }
       >
-        <Select className={ style.select } options={ liveOptions } onSelect={ handleStartRecordSelect } />
+        <Select className="!w-[350px]" options={ liveOptions } onSelect={ handleStartRecordSelect } />
       </Modal>
       { messageContextHolder }
     </Fragment>

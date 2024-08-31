@@ -1,6 +1,6 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
-import { cwd } from './utils.mjs';
+import { cwd, command, npm } from './utils.mjs';
 
 const nodeModules = path.join(cwd, 'node_modules');
 
@@ -8,9 +8,10 @@ const nodeModules = path.join(cwd, 'node_modules');
 async function replaceWebsocket(fp, ws) {
   const filePath = path.join(nodeModules, fp);
   const file = await fsP.readFile(filePath, { encoding: 'utf8' });
-  const replaceValue = `window.${ ws }||window.WebSocket`;
+  const fixedComments = `/* ${ fp } fixed */`;
+  const replaceValue = `${ fixedComments } window.${ ws }||window.WebSocket`;
 
-  if (file.includes(replaceValue)) return;
+  if (file.includes(fixedComments)) return;
 
   const newFile = file.replace(/window\.WebSocket/g, replaceValue);
 
@@ -32,7 +33,18 @@ import * as ReactDOMClient from 'react-dom/client';`)
   await fsP.writeFile(rcUtilPath, newFile, { encoding: 'utf8' });
 }
 
-async function fixTypesError() {
+/* 编译插件 */
+async function buildPlugin(pluginName) {
+  await command(npm, ['run', 'dev'], path.join(cwd, 'packages', pluginName));
+}
+
+/* 编译got cjs */
+async function buildCjsPackage(packageName) {
+  await command(npm, ['run', 'build'], path.join(cwd, 'packages', packageName));
+}
+
+/* 执行postinstall脚本 */
+async function postInstall() {
   // 替换window.WebSocket
   await Promise.all([
     replaceWebsocket('nim-web-sdk-ng/dist/NIM_BROWSER_SDK.js', 'HACK_INTERCEPTS_SEND_NIM_Websocket'),
@@ -41,6 +53,15 @@ async function fixTypesError() {
 
   // 修复rc-util
   await fixRcUtil();
+
+  // 编译babel插件
+  await buildPlugin('babel-plugin-delay-require');
+
+  // 编译postcss插件
+  await buildPlugin('postcss-plugin-remove-classnames');
+
+  // 编译got cjs
+  await buildCjsPackage('got-cjs');
 }
 
-fixTypesError();
+postInstall();
