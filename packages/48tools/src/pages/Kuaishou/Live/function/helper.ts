@@ -1,0 +1,1 @@
+export const localStorageKey: string = 'KUAISHOU_AUTO_RECORD_SAVE_PATH';

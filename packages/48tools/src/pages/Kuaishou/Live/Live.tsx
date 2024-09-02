@@ -1,40 +1,65 @@
+import { setInterval, clearInterval } from 'node:timers';
 import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Popconfirm, Table } from 'antd';
-import type { UseMessageReturnType } from '@48tools-types/antd';
+import { Button, Checkbox, message, Popconfirm, Table } from 'antd';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { ColumnsType } from 'antd/es/table';
+import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import {
   IDBCursorLiveList,
   IDBSaveLiveItem,
+  IDBSaveAutoRecordLiveItem,
   IDBDeleteLiveItem,
   setAddWorkerItem,
   setRemoveWorkerItem,
+  setAutoRecordTimer,
   selectorsObject
 } from '../reducers/kuaishouLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import getLiveInfo from './function/getLiveInfo';
 import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
-import type { LiveSliceInitialState, LiveSliceSelectorNoAutoRecordTimer } from '../../../store/slice/LiveSlice';
+import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
+import { localStorageKey } from './function/helper';
+import kuaishouAutoRecord from './function/kuaishouAutoRecord';
+import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';
 import type { LiveInfo, PlayUrlItem } from '../types';
 
 /* redux selector */
 type RState = { kuaishouLive: LiveSliceInitialState };
 
-const selector: Selector<RState, LiveSliceSelectorNoAutoRecordTimer> = createStructuredSelector({ ...selectorsObject });
+const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({ ...selectorsObject });
 
 /* 快手直播 */
 function Live(props: {}): ReactElement {
-  const { workerList: kuaishouLiveWorkerList, liveList: kuaishouLiveList }: LiveSliceSelectorNoAutoRecordTimer = useSelector(selector);
+  const { workerList: kuaishouLiveWorkerList, liveList: kuaishouLiveList, autoRecordTimer }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
+
+  // 停止自动录制
+  function handleAutoRecordStopClick(event: MouseEvent): void {
+    clearInterval(autoRecordTimer!);
+    dispatch(setAutoRecordTimer(null));
+  }
+
+  // 自动录制
+  function handleAutoRecordStartClick(event: MouseEvent): void {
+    const kuaishouAutoRecordSavePath: string | null = localStorage.getItem(localStorageKey);
+
+    if (kuaishouAutoRecordSavePath) {
+      dispatch(setAutoRecordTimer(setInterval(kuaishouAutoRecord, 60_000)));
+      kuaishouAutoRecord();
+    } else {
+      messageApi.warning('请先配置视频自动保存的目录！');
+    }
+  }
 
   // 录制直播
   async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
@@ -85,6 +110,13 @@ function Live(props: {}): ReactElement {
     }
   }
 
+  // 修改自动录制的checkbox
+  function handleAutoRecordCheck(record: LiveItem, event: CheckboxChangeEvent): void {
+    dispatch(IDBSaveAutoRecordLiveItem({
+      data: { ...record, autoRecord: event.target.checked }
+    }));
+  }
+
   // 停止
   function handleStopClick(record: LiveItem, event?: MouseEvent): void {
     const index: number = kuaishouLiveWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
@@ -104,6 +136,17 @@ function Live(props: {}): ReactElement {
   const columns: ColumnsType<LiveItem> = [
     { title: '说明', dataIndex: 'description' },
     { title: '房间ID', dataIndex: 'roomId' },
+    {
+      title: '自动录制',
+      dataIndex: 'autoRecord',
+      width: 100,
+      render: (value: boolean, record: LiveItem, index: number): ReactElement => (
+        <Checkbox checked={ value }
+          disabled={ autoRecordTimer !== null }
+          onChange={ (event: CheckboxChangeEvent): void => handleAutoRecordCheck(record, event) }
+        />
+      )
+    },
     {
       title: '操作',
       key: 'handle',
@@ -128,7 +171,7 @@ function Live(props: {}): ReactElement {
             }
             <Button type="primary"
               danger={ true }
-              disabled={ idx >= 0 }
+              disabled={ idx >= 0 || autoRecordTimer !== null }
               onClick={ (event: MouseEvent): void => handleDeleteRoomIdClick(record, event) }
             >
               删除
@@ -148,10 +191,18 @@ function Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <AddLiveRoomForm modalTitle="添加快手直播间信息"
-          customRoomIdRule={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
-          IDBSaveDataFunc={ IDBSaveLiveItem }
-        />
+        <Button.Group>
+          <AddLiveRoomForm modalTitle="添加快手直播间信息"
+            customRoomIdRule={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
+            IDBSaveDataFunc={ IDBSaveLiveItem }
+          />
+          <AutoRecordingSavePath localStorageItemKey={ localStorageKey } />
+          {
+            autoRecordTimer === null
+              ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
+              : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
+          }
+        </Button.Group>
       </Header>
       <Table size="middle"
         columns={ columns }
