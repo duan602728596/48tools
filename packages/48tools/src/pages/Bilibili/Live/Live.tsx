@@ -1,5 +1,4 @@
 import { setInterval, clearInterval } from 'node:timers';
-import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
@@ -8,9 +7,6 @@ import { Button, Table, message, Popconfirm, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { requestRoomInitData, requestRoomPlayerUrlV2, type RoomInit, type RoomPlayUrlV2 } from '@48tools-api/bilibili/live';
-import { showSaveDialog } from '../../../utils/remote/dialog';
-import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
@@ -20,16 +16,14 @@ import {
   IDBSaveLiveItem,
   IDBSaveAutoRecordLiveItem,
   IDBDeleteLiveItem,
-  setAddWorkerItem,
-  setRemoveWorkerItem,
   setAutoRecordTimer,
   selectorsObject
 } from '../reducers/bilibiliLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import { getFFmpeg, getFileTime } from '../../../utils/utils';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
-import { ffmpegHeaders, isCNCdnHost, localStorageKey, createV2LiveUrl } from './function/helper';
-import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
+import { localStorageKey } from './function/helper';
+import liveWorker from './function/liveWorker';
+import type { WebWorkerChildItem, LiveItem } from '../../../commonTypes';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 
 /* redux selector */
@@ -78,67 +72,8 @@ function Live(props: {}): ReactElement {
   }
 
   // 开始录制
-  async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
-    const time: string = getFileTime();
-
-    try {
-      const resInit: RoomInit = await requestRoomInitData(record.roomId);
-
-      if (resInit.data.live_status !== 1) {
-        messageApi.warning('直播未开始。');
-
-        return;
-      }
-
-      const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
-      });
-
-      if (result.canceled || !result.filePath) return;
-
-      const resPlayUrl: RoomPlayUrlV2 = await requestRoomPlayerUrlV2(`${ resInit.data.room_id }`);
-      const playStreamPath: string | null = createV2LiveUrl(resPlayUrl);
-
-      if (!playStreamPath) {
-        messageApi.warning('直播获取错误。');
-
-        return;
-      }
-
-      const worker: Worker = getFFmpegDownloadWorker();
-      const isCN: boolean = isCNCdnHost(playStreamPath);
-
-      worker.addEventListener('message', function(event1: MessageEvent<MessageEventData>): void {
-        const { type, error }: MessageEventData = event1.data;
-
-        if (type === 'close' || type === 'error') {
-          if (type === 'error') {
-            messageApi.error(`${ record.description }[${ record.roomId }]录制失败！`);
-          }
-
-          worker.terminate();
-          dispatch(setRemoveWorkerItem(record.id));
-        }
-      }, false);
-
-      worker.postMessage({
-        type: 'start',
-        playStreamPath,
-        filePath: result.filePath,
-        ffmpeg: getFFmpeg(),
-        ua: isCN,
-        ffmpegHeaders: isCN ? ffmpegHeaders() : undefined,
-        noDurationFilesize: true
-      });
-
-      dispatch(setAddWorkerItem({
-        id: record.id,
-        worker
-      }));
-    } catch (err) {
-      console.error(err);
-      messageApi.error('录制失败！');
-    }
+  function handleRecordClick(record: LiveItem, event: MouseEvent): void {
+    liveWorker(record, messageApi, undefined);
   }
 
   // 删除
@@ -179,7 +114,7 @@ function Live(props: {}): ReactElement {
                   <Button type="primary" danger={ true }>停止录制</Button>
                 </Popconfirm>
               ) : (
-                <Button onClick={ (event: MouseEvent ): Promise<void> => handleRecordClick(record, event) }>
+                <Button onClick={ (event: MouseEvent ): void => handleRecordClick(record, event) }>
                   开始录制
                 </Button>
               )
