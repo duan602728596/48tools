@@ -142,9 +142,9 @@ function VideoDownload(props: {}): ReactElement {
         <Button type="primary" danger={ true } onClick={ handleClearKuaishouCookie }>清除快手Cookie的缓存</Button>
       </Header>
       <Alert className="mb-[8px]" type="warning" message={ [
-        '第一次下载时或获取快手Cookie失败时，需要进入快手首页进行一些操作后，关闭窗口。然后才能正常下载。',
+        '第一次下载时或获取快手Cookie失败时，需要进行滑动验证码的操作，并关闭窗口。然后才能正常下载。',
         <br key="br" />,
-        '如果窗口内出现没有视频的情况，请点击首页，进行滑动验证码的操作，然后关闭窗口。'
+        '如果窗口内出现没有滑动验证码的情况，请向上或向下切换推荐的视频。'
       ] } />
       <Table size="middle"
         columns={ columns }
