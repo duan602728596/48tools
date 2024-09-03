@@ -1,5 +1,5 @@
 import { requestLiveHtml } from '@48tools-api/kuaishou';
-import type { LiveInfo, KuaishouLiveInitialState } from '../../types';
+import type { LiveInfo, KuaishouLiveInitialState, PlayListItem } from '../../types';
 
 /**
  * 解析initialState
@@ -31,10 +31,16 @@ async function getLiveInfo(id: string): Promise<LiveInfo | undefined> {
   const res: string = await requestLiveHtml(id);
   const initialState: KuaishouLiveInitialState | undefined = parseHtml(res);
 
-  if (initialState?.liveroom?.liveStream?.playUrls?.[0]?.adaptationSet?.representation?.length) {
+  if (!initialState) return;
+
+  const playListItem: PlayListItem | undefined = initialState?.liveroom?.playList?.[0];
+
+  if (!playListItem) return;
+
+  if (playListItem?.liveStream?.playUrls?.[0]?.adaptationSet?.representation?.length) {
     return {
-      title: initialState.liveroom.liveStream.caption,
-      list: initialState.liveroom.liveStream.playUrls[0].adaptationSet.representation
+      title: playListItem.liveStream.caption,
+      list: playListItem.liveStream.playUrls[0].adaptationSet.representation
     };
   }
 }
