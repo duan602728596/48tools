@@ -1,6 +1,12 @@
 import { requestLiveHtml } from '@48tools-api/kuaishou';
 import type { LiveInfo, KuaishouLiveInitialState, PlayListItem } from '../../types';
 
+function evalFunction(objectString: string): Function {
+  // eslint-disable-next-line no-new-func
+  return new Function(`'use strict';
+return (${ objectString })`);
+}
+
 /**
  * 解析initialState
  * @param { string } html
@@ -18,7 +24,7 @@ function parseHtml(html: string): KuaishouLiveInitialState | undefined {
         .replace(/window\._{2}INITIAL_STATE_{2}\s*=\s*/, '') // 剔除"="前面的字符串
         .replace(/;\(function\(\){var s;.+$/i, '');          // 剔除后面可能存在的函数
 
-      initialState = JSON.parse(str);
+      initialState = evalFunction(str)();
       break;
     }
   }

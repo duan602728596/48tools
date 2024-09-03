@@ -78,6 +78,8 @@ function Live(props: {}): ReactElement {
         defaultPath: `[快手直播]${ record.roomId }_${ playUrlItem.qualityType }_${ liveInfo.title }_${ time }.flv`
       });
 
+      if (result.canceled || !result.filePath) return;
+
       const worker: Worker = getFFmpegDownloadWorker();
 
       worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>) {
