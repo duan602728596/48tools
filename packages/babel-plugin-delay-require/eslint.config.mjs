@@ -1,4 +1,4 @@
-import eslintNode from '../../eslint/eslintNode.mjs';
+import eslintNode from '../../eslint/eslintNodeConfig.mjs';
 
 const ignores = [
   'node_modules/**',
