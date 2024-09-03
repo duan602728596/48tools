@@ -22,7 +22,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import bilibiliAutoRecord from './function/bilibiliAutoRecord';
 import { localStorageKey } from './function/helper';
-import liveWorker from './function/liveWorker';
+import bilibiliLiveWorker from './function/bilibiliLiveWorker';
 import type { WebWorkerChildItem, LiveItem } from '../../../commonTypes';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 
@@ -73,7 +73,7 @@ function Live(props: {}): ReactElement {
 
   // 开始录制
   function handleRecordClick(record: LiveItem, event: MouseEvent): void {
-    liveWorker(record, messageApi, undefined);
+    bilibiliLiveWorker(record, messageApi, undefined);
   }
 
   // 删除

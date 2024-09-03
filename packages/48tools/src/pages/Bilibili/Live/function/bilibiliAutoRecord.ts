@@ -4,7 +4,7 @@ import { store } from '../../../../store/store';
 import { getFileTime } from '../../../../utils/utils';
 import { liveSlice } from '../../reducers/bilibiliLive';
 import { localStorageKey } from './helper';
-import liveWorker from './liveWorker';
+import bilibiliLiveWorker from './bilibiliLiveWorker';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 
@@ -23,7 +23,7 @@ async function bilibiliAutoRecord(): Promise<void> {
 
     const time: string = getFileTime();
 
-    await liveWorker(record, undefined, path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`));
+    await bilibiliLiveWorker(record, undefined, path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`));
   }
 }
 

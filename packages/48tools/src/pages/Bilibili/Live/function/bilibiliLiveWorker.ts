@@ -16,12 +16,12 @@ import { getFFmpeg, getFileTime } from '../../../../utils/utils';
 import type { LiveItem, MessageEventData } from '../../../../commonTypes';
 
 /**
- * 创建worker的逻辑封装
+ * 创建bilibili直播worker的逻辑封装
  * @param { LiveItem } record
  * @param { MessageInstance | undefined } messageApi - 是否显示消息
  * @param { string | undefined } filePath - 文件路径
  */
-async function liveWorker(record: LiveItem, messageApi: MessageInstance | undefined, filePath: string | undefined): Promise<void> {
+async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance | undefined, filePath: string | undefined): Promise<void> {
   const { dispatch }: Store = store;
   const time: string = getFileTime();
 
@@ -94,4 +94,4 @@ async function liveWorker(record: LiveItem, messageApi: MessageInstance | undefi
   }
 }
 
-export default liveWorker;
+export default bilibiliLiveWorker;
