@@ -1,12 +1,7 @@
 import type { SaveDialogReturnValue } from 'electron';
 import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
-import {
-  requestRoomInitData,
-  requestRoomPlayerUrlV2,
-  type RoomInit,
-  type RoomPlayUrlV2
-} from '@48tools-api/bilibili/live';
+import { requestRoomInitData, requestRoomPlayerUrlV2, type RoomInit, type RoomPlayUrlV2 } from '@48tools-api/bilibili/live';
 import { store } from '../../../../store/store';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import { createV2LiveUrl, ffmpegHeaders, isCNCdnHost } from './helper';

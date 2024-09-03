@@ -14,6 +14,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { Onion } from '@bbkkbkk/q';
 import {
@@ -114,6 +115,10 @@ function Live(props: {}): ReactElement {
 
     function SelectPlayerUrl(props1: {}): ReactElement {
       const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(true);
+      const liveUrlSelectOptions: Array<DefaultOptionType> = representation.map((o: LiveRepresentation): DefaultOptionType => ({
+        label: o.name,
+        value: o.url
+      }));
 
       // 全部关闭后清除
       function afterClose(): void {
@@ -162,13 +167,7 @@ function Live(props: {}): ReactElement {
               onCancel={ handleCloseClick }
             >
               <div className="h-[60px]" data-test-id="acfun-live-type">
-                <Select className="!w-full" onSelect={ (value: string): string => (ctx.player = value) }>
-                  {
-                    representation.map((o: LiveRepresentation): ReactElement => (
-                      <Select.Option key={ o.url } value={ o.url }>{ o.name }</Select.Option>
-                    ))
-                  }
-                </Select>
+                <Select className="!w-full" options={ liveUrlSelectOptions } onSelect={ (value: string): string => (ctx.player = value) } />
               </div>
             </Modal>
           </AntdConfig>

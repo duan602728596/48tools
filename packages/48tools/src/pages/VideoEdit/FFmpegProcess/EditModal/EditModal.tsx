@@ -11,13 +11,8 @@ import { DeleteFilled as IconDeleteFilled } from '@ant-design/icons';
 import * as classNames from 'classnames';
 import style from './editModal.sass';
 import dbConfig from '../../../../utils/IDB/IDBConfig';
-import {
-  IDBCursorTemplateList,
-  IDBSaveTemplateList,
-  IDBDeleteTemplateList,
-  type FFmpegProcessInitialState
-} from '../../reducers/FFmpegProcess';
-import { templateSelectOptions, template, type TplItem } from './template';
+import { IDBCursorTemplateList, IDBSaveTemplateList, IDBDeleteTemplateList, type FFmpegProcessInitialState } from '../../reducers/FFmpegProcess';
+import { templateSelectOptions, template, type TplItem, type TplOption } from './template';
 import type { dbTemplateItem } from '../../types';
 
 /* redux selector */
@@ -82,19 +77,23 @@ function EditModal(props: EditModalProps & EditModalUseProps): ReactElement {
   }
 
   // 渲染selectOptions
-  function dbTemplateSelectOptionsRender(): Array<ReactElement> {
-    return dbTemplateList.map((o: dbTemplateItem): ReactElement => {
-      return (
-        <Select.Option key={ o.id } value={ o.id } item={{ id: o.id, label: o.name, value: o.args }}>
-          { o.name }
-          <IconDeleteFilled className={ classNames('cursor-pointer float-right', style.deleteIcon) }
-            tabIndex={ 0 }
-            role="button"
-            aria-label="删除"
-            onClick={ (event: ReactMouseEvent): void => handleDeleteTemplateClick(o, event) }
-          />
-        </Select.Option>
-      );
+  function dbTemplateSelectOptionsRender(): Array<TplOption> {
+    return dbTemplateList.map((o: dbTemplateItem): TplOption => {
+      return {
+        label: (
+          <Fragment>
+            { o.name }
+            <IconDeleteFilled className={ classNames('cursor-pointer float-right', style.deleteIcon) }
+              tabIndex={ 0 }
+              role="button"
+              aria-label="删除"
+              onClick={ (event: ReactMouseEvent): void => handleDeleteTemplateClick(o, event) }
+            />
+          </Fragment>
+        ),
+        value: o.id,
+        item: { id: o.id, label: o.name, value: o.args }
+      };
     });
   }
 
@@ -127,10 +126,10 @@ function EditModal(props: EditModalProps & EditModalUseProps): ReactElement {
             </Form.Item>
           </Form.Item>
           <Form.Item name="template" label="选择命令模板">
-            <Select className={ style.templateSelect } onSelect={ handleTemplateSelect }>
-              { templateSelectOptions }
-              { dbTemplateSelectOptionsRender() }
-            </Select>
+            <Select className={ style.templateSelect }
+              options={ templateSelectOptions.concat(dbTemplateSelectOptionsRender()) }
+              onSelect={ handleTemplateSelect }
+            />
           </Form.Item>
           <Form.Item label="将当前命令保存到本地">
             <Space size={ 6 }>
