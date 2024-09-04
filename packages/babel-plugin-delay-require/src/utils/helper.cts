@@ -26,7 +26,7 @@ import type { BabelTypes } from '../types.cjs';
 import type { ImportInfo, ImportSpecifierItem } from './ImportInfo.cjs';
 
 /* 判断是否有use idle */
-export function hasUseIdleDirective(t: BabelTypes, directives: Array<Directive>): boolean {
+export function hasUseIdleDirective(directives: Array<Directive>): boolean {
   const useIdleRegexp: RegExp = / *use +idle */i;
 
   return directives.some((o: Directive): boolean => useIdleRegexp.test(o.value.value));
