@@ -95,7 +95,7 @@ export default function(info: Record<string, any>): Record<string, any> {
       idle: false,
       mountToGlobalThis: true,
       replaceModuleName: isDev ? {
-        got: '@48tools/got-cjs'
+        got: '@48tools/esm-build/got'
       } : undefined
     }]
   ];

@@ -38,11 +38,6 @@ async function buildPlugin(pluginName) {
   await command(npm, ['run', 'dev'], path.join(cwd, 'packages', pluginName));
 }
 
-/* 编译got cjs */
-async function buildCjsPackage(packageName) {
-  await command(npm, ['run', 'build'], path.join(cwd, 'packages', packageName));
-}
-
 /* 执行postinstall脚本 */
 async function postInstall() {
   // 替换window.WebSocket
@@ -60,8 +55,8 @@ async function postInstall() {
   // 编译postcss插件
   await buildPlugin('postcss-plugin-remove-classnames');
 
-  // 编译got cjs
-  await buildCjsPackage('got-cjs');
+  // 编译esm -> cjs
+  await command(npm, ['run', 'build'], path.join(cwd, 'packages/esm-build'));
 }
 
 postInstall();
