@@ -45,6 +45,14 @@ export function setDouyinCookie(app: ElectronApp): Promise<JSHandle> | void {
   }
 }
 
+/* 设置快手的cookie */
+export function setKuaishouCookie(app: ElectronApp): Promise<JSHandle> | void {
+  if (testConfig.kuaishou.cookie) {
+    return app.win.evaluateHandle((cookie: string): void =>
+      localStorage.setItem('KUAISHOU_COOKIE', cookie), testConfig.kuaishou.cookie);
+  }
+}
+
 /* mock show-save-dialog事件 */
 export async function mockShowSaveDialog(app: ElectronApp, savePath: string): Promise<void> {
   await app.electronApp.evaluate(({ ipcMain }: typeof Electron, _savePath: string): void => {

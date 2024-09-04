@@ -12,6 +12,7 @@ import * as douyinVideo from './tests/douyin/video.test.js';
 import * as douyinUser from './tests/douyin/user.test.js';
 import * as douyinLive from './tests/douyin/douyinLive.test.js';
 import * as weiboLive from './tests/weibo/weiboLive.test.js';
+import * as kuaishou from './tests/kuaishou/kuaishouVideoDownload.test.js';
 
 const testGroupTitle: (n: string) => string = (n: string): string => `${ n } test group`;
 
@@ -53,6 +54,14 @@ test.describe.parallel('48tools e2e test', function(): void {
   }
 
   if (runAllTests || partialTest.includes(PartialTest.WeiboName)) {
-    test.describe(weiboLive.title, weiboLive.callback);
+    test.describe.serial(testGroupTitle(PartialTest.WeiboName), function(): void {
+      test.describe(weiboLive.title, weiboLive.callback);
+    });
+  }
+
+  if (runAllTests || partialTest.includes(PartialTest.KuaishouName)) {
+    test.describe.serial(testGroupTitle(PartialTest.KuaishouName), function(): void {
+      test.describe(kuaishou.title, kuaishou.callback);
+    });
   }
 });

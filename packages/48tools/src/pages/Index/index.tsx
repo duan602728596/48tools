@@ -135,7 +135,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '快手视频下载',
       url: '/Kuaishou/VideoDownload',
-      icon: IconKuaishouLogo
+      icon: IconKuaishouLogo,
+      testId: 'kuaishou-download-link'
     },
     {
       name: '快手直播抓取',
