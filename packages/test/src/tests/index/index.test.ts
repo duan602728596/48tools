@@ -20,7 +20,7 @@ export function callback(): void {
     app = null;
   });
 
-  test(testTitle(TestId.Index.Index, 'Should render navs and images'), async function(): Promise<void> {
+  test(testTitle(TestId.Index.Index1, 'Should render navs and images'), async function(): Promise<void> {
     if (!app) {
       throw new Error('app is null');
     }

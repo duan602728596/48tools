@@ -13,7 +13,7 @@ export const enum PartialTest {
 
 /* Index */
 export const enum Index {
-  Index = 100
+  Index1 = 100
 }
 
 export const enum IndexVP {
