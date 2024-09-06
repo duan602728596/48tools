@@ -36,6 +36,8 @@ export async function netMediaServerInit(): Promise<void> {
       rtmpPort: netMediaServerPort.rtmpPort,
       httpPort: netMediaServerPort.httpPort
     });
+    console.log(`net-media-server rtmp port: ${ netMediaServerPort.rtmpPort }`);
+    console.log(`net-media-server http port: ${ netMediaServerPort.httpPort }`);
     start = true;
   } catch (err) {
     console.error(err);

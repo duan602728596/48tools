@@ -29,6 +29,9 @@ export const isTest: boolean = process.env.TEST === 'true';
 /* 文件夹路径 */
 export const wwwPath: string = path.join(__dirname, '..');
 
+/* view文件 */
+export const viewDir: string = path.join(wwwPath, isDevelopment ? '../48tools/dist' : 'view');
+
 /* help文件 */
 export const helpDir: string = isDevelopment
   ? path.join(__dirname, '../../help/dist')
@@ -49,9 +52,7 @@ export const titleBarIcon: string | undefined = isDevelopment ? undefined : path
  * @param { string } htmlName - 文件名
  */
 export function createHtmlFilePath(htmlName: string): string {
-  return isDevelopment
-    ? path.join(wwwPath, `../48tools/dist/${ htmlName }.html`)
-    : path.join(wwwPath, `view/${ htmlName }.html`);
+  return path.join(viewDir, `${ htmlName }.html`);
 }
 
 /* 生成initialState */
