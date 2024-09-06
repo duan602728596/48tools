@@ -19,7 +19,7 @@ const resultArray = [];
  * @return { string }
  */
 function formatBytes(bytes) {
-  const [a, b, c, d] = [1024, 1024 ** 2, 1024 ** 3];
+  const [a, b, c] = [1024, 1024 ** 2, 1024 ** 3];
 
   if (bytes < a) {
     return `${ bytes } Bytes`;
