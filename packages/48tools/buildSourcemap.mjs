@@ -1,9 +1,9 @@
 import { promisify } from 'node:util';
 import { brotliCompress } from 'node:zlib';
 import fsPromise from 'node:fs/promises';
+import path from 'node:path';
 import { glob } from 'glob';
 import { outputFile, remove } from 'fs-extra/esm';
-import path from 'node:path';
 import { metaHelper } from '@sweet-milktea/utils';
 
 const { __dirname } = metaHelper(import.meta.url);
@@ -13,6 +13,11 @@ const dist = path.join(__dirname, 'dist');
 const sourcemapDir = path.join(dist, '_$M_');
 const resultArray = [];
 
+/**
+ * 格式化输出
+ * @param { number } bytes
+ * @return { string }
+ */
 function formatBytes(bytes) {
   const [a, b, c, d] = [1024, 1024 ** 2, 1024 ** 3];
 
@@ -63,7 +68,7 @@ async function sourcemapBrAndModifyUrl(name) {
   await remove(sourcemapFile);
 }
 
-/* 读取文件 */
+/* 压缩文件 */
 const mapFiles = await glob('*.map', {
   cwd: path.join(__dirname, 'dist')
 });
