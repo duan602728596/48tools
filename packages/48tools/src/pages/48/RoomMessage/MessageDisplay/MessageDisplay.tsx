@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { List, Popover, Typography, Empty, Spin, type TypographyProps } from 'antd';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import style from './messageDisplay.sass';
 import commonStyle from '../../../../common.sass';
 import { omit } from '../../../../utils/lodash';

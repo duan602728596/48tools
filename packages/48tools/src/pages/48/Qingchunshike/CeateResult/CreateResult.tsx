@@ -9,7 +9,7 @@ import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import style from './createResult.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import {

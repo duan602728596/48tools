@@ -3,7 +3,7 @@ import { Button, List } from 'antd';
 import { MenuOutlined as IconMenuOutlined } from '@ant-design/icons';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import type { UseSortableReturn } from '@48tools-types/dnd-kit';
 import style from './renderListItem.sass';
 import type { ConcatItem } from '../types';

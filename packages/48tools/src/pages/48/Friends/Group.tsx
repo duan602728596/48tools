@@ -4,7 +4,7 @@ import { Row, Col, Divider, Button, message, type ColProps } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { requestFriendshipAdd } from '@48tools-api/48';
 import type { RoomItem } from '@48tools-api/48/jsdelivrCDN';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import commonStyle from '../../../common.sass';
 import style from './group.sass';
 

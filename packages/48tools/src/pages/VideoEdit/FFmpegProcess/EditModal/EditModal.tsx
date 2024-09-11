@@ -8,7 +8,7 @@ import type { ModalProps } from 'antd/es/modal';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { DeleteFilled as IconDeleteFilled } from '@ant-design/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import style from './editModal.sass';
 import dbConfig from '../../../../utils/IDB/IDBConfig';
 import { IDBCursorTemplateList, IDBSaveTemplateList, IDBDeleteTemplateList, type FFmpegProcessInitialState } from '../../reducers/FFmpegProcess';

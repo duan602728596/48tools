@@ -20,7 +20,7 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {
   requestServerJump,
   requestServerSearch,

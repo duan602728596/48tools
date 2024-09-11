@@ -5,7 +5,7 @@ import { Table, Button, Drawer, App, List, Avatar, Alert } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import { parse } from 'cookie';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { requestVisitedList, type VisitedList, type VisitedSchemaItem } from '@48tools-api/weibo';
 import { requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
 import commonStyle from '../../common.sass';

@@ -15,7 +15,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Button, Modal, Input, Form, Table, Spin, message, List, App, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { ColumnsType } from 'antd/es/table';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { requestSpaceArcSearch, type SpaceArcSearchVListItem, type SpaceArcSearch } from '@48tools-api/bilibili/download';
 import commonStyle from '../../../../common.sass';
 import style from './addBySearch.sass';

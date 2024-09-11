@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { useLocation, type Location } from 'react-router-dom';
 import { Button, Spin, Empty, Divider } from 'antd';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import type { RoomItem } from '@48tools-api/48/jsdelivrCDN';
 import commonStyle from '../../../common.sass';
 import Header from '../../../components/Header/Header';

@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect, type ReactElement, type Dispatch as D, type SetStateAction as S } from 'react';
 import { Alert } from 'antd';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { requestLiveRoomInfo, type LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../common.sass';
 import LiveInfo from './LiveInfo/LiveInfo';

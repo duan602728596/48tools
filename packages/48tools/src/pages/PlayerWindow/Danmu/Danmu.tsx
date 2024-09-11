@@ -12,7 +12,7 @@ import {
 import { Avatar, Switch } from 'antd';
 import { GiftTwoTone as IconGiftTwoTone } from '@ant-design/icons';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import type { ChatRoomMessage } from 'node-nim';
 import type { LiveRoomInfo } from '@48tools-api/48';
 import commonStyle from '../../../common.sass';

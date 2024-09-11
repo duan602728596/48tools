@@ -2,7 +2,7 @@ import { useState, useSyncExternalStore, type ReactElement, type Dispatch as D, 
 import { Button, Form, Input, Select, App, type FormInstance } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import type { DefaultOptionType } from 'rc-select/es/Select';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {
   requestSMS,
   type SMSResult,
