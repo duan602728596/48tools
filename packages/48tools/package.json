@@ -33,7 +33,7 @@
     "hls.js": "^1.4.14",
     "mpegts.js": "^1.7.3",
     "nim-web-sdk-ng": "^0.17.0",
-    "path-to-regexp": "^6.2.1",
+    "path-to-regexp": "^8.1.0",
     "qrcode": "^1.5.3",
     "react": "rc",
     "react-dom": "rc",
