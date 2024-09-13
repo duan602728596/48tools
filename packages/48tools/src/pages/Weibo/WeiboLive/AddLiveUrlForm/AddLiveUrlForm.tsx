@@ -6,7 +6,8 @@ import { requestPcLiveJson, type PcLiveJson } from '@48tools-api/weibo';
 import { checkEmptyString } from '../function/helper';
 import type { LiveItem } from '../../types';
 
-const weiboLiveMatch: MatchFunction = match('/l/wblive/p/show/:liveId');
+type LiveParam = Partial<{ liveId: string }>;
+const weiboLiveMatch: MatchFunction<LiveParam> = match('/l/wblive/p/show/:liveId');
 
 interface AddLiveUrlFormProps {
   onGetLiveInfoCallback(info: Omit<LiveItem, 'qid' | 'worker' | 'status'>): void | Promise<void>;
@@ -25,7 +26,7 @@ function AddLiveUrlForm(props: AddLiveUrlFormProps): ReactElement {
       return;
     }
 
-    let liveId: string;
+    let liveId: string | undefined = undefined;
 
     try {
       const url: URL = new URL(liveValue);
@@ -36,10 +37,10 @@ function AddLiveUrlForm(props: AddLiveUrlFormProps): ReactElement {
         return;
       }
 
-      const matchResult: Match = weiboLiveMatch(url.pathname);
+      const matchResult: Match<LiveParam> = weiboLiveMatch(url.pathname);
 
-      if (typeof matchResult === 'object') {
-        liveId = matchResult.params['liveId'];
+      if (typeof matchResult === 'object' && matchResult.params.liveId) {
+        liveId = matchResult.params.liveId;
       } else {
         messageApi.warning('无法解析地址中的直播间ID!');
 

@@ -20,7 +20,8 @@ import { KuaishouCookieChannel } from '@48tools/main/src/channelEnum';
 import { kuaishouCookie } from '../function/kuaishouCookie';
 import { setAddVideoDownloadList } from '../../reducers/kuaishouVideoDownload';
 
-const kuaishouShortVideoUrlMatch: MatchFunction = match('/short-video/:videoId');
+type VideoParam = Partial<{ videoId: string }>;
+const kuaishouShortVideoUrlMatch: MatchFunction<VideoParam> = match('/short-video/:videoId');
 
 /**
  * 根据ID或视频url搜索
@@ -52,7 +53,7 @@ function Search(props: {}): ReactElement {
     if (/^\s*$/.test(value)) return;
 
     // 验证是否为快手视频且提取url
-    let videoId: string | null = null;
+    let videoId: string | undefined = undefined;
     let urlParse: URL | null = null;
 
     try {
@@ -64,10 +65,10 @@ function Search(props: {}): ReactElement {
         return;
       }
 
-      const matchResult: Match = kuaishouShortVideoUrlMatch(urlParse.pathname);
+      const matchResult: Match<VideoParam> = kuaishouShortVideoUrlMatch(urlParse.pathname);
 
       if (typeof matchResult === 'object') {
-        videoId = matchResult.params['videoId'];
+        videoId = matchResult.params.videoId;
       }
     } catch {
       videoId = value;
