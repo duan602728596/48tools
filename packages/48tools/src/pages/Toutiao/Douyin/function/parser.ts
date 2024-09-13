@@ -7,14 +7,14 @@ type UserParam = Partial<{ userId: string }>;
 const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接
 const iesdouyinRegexp: RegExp = /www.iesdouyin.com/i; // 抖音分享长链接
 const iesdouyinhrefHtmlRegexp: RegExp = /<a href="https?:\/\/www\.iesdouyin\.com\//i; // 是一个链接
-const shareVideo: RegExp = /share\/(video|note)/i;    // 分享视频
+const shareVideo: RegExp = /share\/\\(video|note\\)/i;    // 分享视频
 const douyinRegexp: RegExp = /www\.douyin\.com/i;     // 抖音域名
-const douyinVideoRegexp: RegExp = /\/(video|note)\/[0-9]+/i; // 抖音视频
+const douyinVideoRegexp: RegExp = /\/\\(video|note\\)\/[0-9]+/i; // 抖音视频
 const videoIdRegexp: RegExp = /^[0-9]+$/;                    // 视频id
 const douyinUserRegexp: RegExp = /\/user\//i;                // 抖音用户
-const douyinVideoUrlMatch: MatchFunction<VideoParam> = match('/(video|note)/:videoId');
+const douyinVideoUrlMatch: MatchFunction<VideoParam> = match('/\\(video|note\\)/:videoId');
 const douyinUserUrlMatch: MatchFunction<UserParam> = match('/user/:userId');
-const douyinShareVideoUrlMatch: MatchFunction<VideoParam> = match('/share/(video|note)/:videoId');
+const douyinShareVideoUrlMatch: MatchFunction<VideoParam> = match('/share/\\(video|note\\)/:videoId');
 const douyinShareUserUrlMatch: MatchFunction<UserParam> = match('/share/user/:userId');
 
 export enum DouyinUrlType {
