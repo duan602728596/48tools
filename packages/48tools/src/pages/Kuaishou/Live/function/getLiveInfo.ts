@@ -1,4 +1,5 @@
 import { requestLiveHtml } from '@48tools-api/kuaishou';
+import { kuaishouCookie } from '../../../../functionalComponents/KuaishouLogin/function/kuaishouCookie';
 import type { LiveInfo, KuaishouLiveInitialState, PlayListItem } from '../../types';
 
 function evalFunction(objectString: string): Function {
@@ -34,10 +35,12 @@ function parseHtml(html: string): KuaishouLiveInitialState | undefined {
 
 /* 获取直播间的相关信息 */
 async function getLiveInfo(id: string): Promise<LiveInfo | undefined> {
-  const res: string = await requestLiveHtml(id);
+  const res: string = await requestLiveHtml(id, kuaishouCookie.cookie);
   const initialState: KuaishouLiveInitialState | undefined = parseHtml(res);
 
   if (!initialState) return;
+
+  console.log(initialState, kuaishouCookie.cookie);
 
   const playListItem: PlayListItem | undefined = initialState?.liveroom?.playList?.[0];
 

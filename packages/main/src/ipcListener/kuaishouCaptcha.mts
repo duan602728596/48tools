@@ -11,8 +11,8 @@ function kuaishouWebsite(videoId: string): void {
   if (kuaishouWin !== null) return;
 
   kuaishouWin = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1300,
+    height: 800,
     webPreferences: {
       contextIsolation: false
     },
@@ -28,7 +28,7 @@ function kuaishouWebsite(videoId: string): void {
     if (processWindow && kuaishouWin) {
       const ses: Session = kuaishouWin.webContents.session;
       const winSes: Session = processWindow.webContents.session;
-      const cookies: Array<Cookie> = await ses.cookies.get({ url: KUAISHOU_URL });
+      const cookies: Array<Cookie> = await ses.cookies.get({});
 
       processWindow.webContents.send(KuaishouCookieChannel.KuaiShouCookieResponse, cookies, videoId);
       await Promise.all([

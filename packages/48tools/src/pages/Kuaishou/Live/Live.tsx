@@ -28,6 +28,7 @@ import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker
 import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
 import { localStorageKey } from './function/helper';
 import kuaishouAutoRecord from './function/kuaishouAutoRecord';
+import KuaishouLogin from '../../../functionalComponents/KuaishouLogin/KuaishouLogin';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';
 import type { LiveInfo, PlayUrlItem } from '../types';
@@ -193,7 +194,7 @@ function Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group>
+        <Button.Group className="mr-[8px]">
           <AddLiveRoomForm modalTitle="添加快手直播间信息"
             customRoomIdRule={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
             IDBSaveDataFunc={ IDBSaveLiveItem }
@@ -205,6 +206,7 @@ function Live(props: {}): ReactElement {
               : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
           }
         </Button.Group>
+        <KuaishouLogin />
       </Header>
       <Table size="middle"
         columns={ columns }

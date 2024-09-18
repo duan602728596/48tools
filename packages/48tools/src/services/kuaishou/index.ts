@@ -8,13 +8,15 @@ export type * from './interface';
 /**
  * 请求快手直播的网站，并返回html
  * @param { string } id - 直播间的ID
+ * @param { string } cookie
  */
-export async function requestLiveHtml(id: string): Promise<string> {
+export async function requestLiveHtml(id: string, cookie?: string): Promise<string> {
   const res: GotResponse<string> = await got.get(`https://live.kuaishou.com/u/${ id }`, {
     responseType: 'text',
     headers: {
       'User-Agent': pcUserAgent,
-      Host: 'live.kuaishou.com'
+      Host: 'live.kuaishou.com',
+      Cookie: cookie ?? `did=web_${ rStr(31) }`
     }
   });
 

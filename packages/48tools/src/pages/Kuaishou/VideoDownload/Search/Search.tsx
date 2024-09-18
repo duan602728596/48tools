@@ -1,9 +1,7 @@
 import { randomUUID } from 'node:crypto';
-import { ipcRenderer, type IpcRendererEvent, type Cookie } from 'electron';
 import {
   Fragment,
   useState,
-  useEffect,
   useCallback,
   type ReactElement,
   type Dispatch as D,
@@ -16,9 +14,9 @@ import { Input, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
 import { requestShortVideo, type ShortVideoDownloadResponse } from '@48tools-api/kuaishou';
-import { KuaishouCookieChannel } from '@48tools/main/src/channelEnum';
-import { kuaishouCookie } from '../function/kuaishouCookie';
+import { kuaishouCookie } from '../../../../functionalComponents/KuaishouLogin/function/kuaishouCookie';
 import { setAddVideoDownloadList } from '../../reducers/kuaishouVideoDownload';
+import useKuaishouLogin, { type UseKuaishouLoginReturn } from '../../../../functionalComponents/KuaishouLogin/useKuaishouLogin';
 
 type VideoParam = Partial<{ videoId: string }>;
 const kuaishouShortVideoUrlMatch: MatchFunction<VideoParam> = match('/short-video/:videoId');
@@ -47,6 +45,20 @@ function Search(props: {}): ReactElement {
 
       setUrlLoading((): boolean => false);
     }, []);
+
+  // 监听cookie的返回
+  async function kuaishouLoginCallback(cookie: string, videoId: string): Promise<void> {
+    const res: ShortVideoDownloadResponse = await requestShortVideo(videoId, cookie);
+
+    if (res.data.captcha || res.data.url) {
+      messageApi.warning('获取快手Cookie失败，请重试！');
+      setUrlLoading((): boolean => false);
+    } else if (videoId && videoId !== '') {
+      addUrlToVideoDownload(res);
+    }
+  }
+
+  const kuaishouLogin: UseKuaishouLoginReturn = useKuaishouLogin({ callback: kuaishouLoginCallback });
 
   // 解析视频地址
   async function handleGetVideoInfoSearch(value: string, event: ChangeEvent<HTMLInputElement>): Promise<void> {
@@ -83,35 +95,11 @@ function Search(props: {}): ReactElement {
 
     // 出现验证码
     if (res.data.captcha || res.data.url) {
-      ipcRenderer.send(KuaishouCookieChannel.KuaishouCookie, videoId);
+      kuaishouLogin.handleOpenKuaishouLoginWin(videoId);
     } else {
       addUrlToVideoDownload(res);
     }
   }
-
-  // 监听cookie的返回
-  const handleKuaishouCookieResponse: (event: IpcRendererEvent, cookie: Array<Cookie>, videoId: string) => Promise<void>
-    = useCallback(async function(event: IpcRendererEvent, cookie: Array<Cookie>, videoId: string): Promise<void> {
-      kuaishouCookie.cookie = cookie.filter((o: Cookie): boolean => o.name !== '')
-        .map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; ');
-
-      const res: ShortVideoDownloadResponse = await requestShortVideo(videoId, kuaishouCookie.cookie);
-
-      if (res.data.captcha || res.data.url) {
-        messageApi.warning('获取快手Cookie失败，请重试！');
-        setUrlLoading((): boolean => false);
-      } else {
-        addUrlToVideoDownload(res);
-      }
-    }, []);
-
-  useEffect(function(): () => void {
-    ipcRenderer.on(KuaishouCookieChannel.KuaiShouCookieResponse, handleKuaishouCookieResponse);
-
-    return function(): void {
-      ipcRenderer.off(KuaishouCookieChannel.KuaiShouCookieResponse, handleKuaishouCookieResponse);
-    };
-  }, []);
 
   return (
     <Fragment>

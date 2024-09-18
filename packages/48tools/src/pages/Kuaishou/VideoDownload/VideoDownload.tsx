@@ -17,8 +17,9 @@ import {
   type KuaishouVideoDownloadInitialState
 } from '../reducers/kuaishouVideoDownload';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
-import { kuaishouCookie } from './function/kuaishouCookie';
+import { kuaishouCookie } from '../../../functionalComponents/KuaishouLogin/function/kuaishouCookie';
 import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
+import KuaishouLogin from '../../../functionalComponents/KuaishouLogin/KuaishouLogin';
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 import type { DownloadItem } from '../types';
 
@@ -41,12 +42,6 @@ function VideoDownload(props: {}): ReactElement {
   const { downloadList, downloadProgress }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
-
-  // 清除快手的cookie
-  function handleClearKuaishouCookie(event: MouseEvent): void {
-    kuaishouCookie.clean();
-    messageApi.success('Cookie已清除！');
-  }
 
   // 删除一个任务
   function handleDeleteTaskClick(item: DownloadItem, event: MouseEvent): void {
@@ -139,10 +134,10 @@ function VideoDownload(props: {}): ReactElement {
     <Fragment>
       <Header>
         <Search />
-        <Button type="primary" danger={ true } onClick={ handleClearKuaishouCookie }>清除快手Cookie的缓存</Button>
+        <KuaishouLogin />
       </Header>
       <Alert className="mb-[8px]" type="warning" message={ [
-        '第一次下载时或获取快手Cookie失败时，需要进行滑动验证码的操作，并关闭窗口。然后才能正常下载。',
+        '第一次下载时或获取快手Cookie失败时，需要登录或进行滑动验证码的操作，并关闭窗口。然后才能正常下载。',
         <br key="br" />,
         '如果窗口内出现没有滑动验证码的情况，请向上或向下切换推荐的视频。'
       ] } />
