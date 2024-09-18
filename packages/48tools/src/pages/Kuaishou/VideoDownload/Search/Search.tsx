@@ -92,11 +92,8 @@ function Search(props: {}): ReactElement {
   // 监听cookie的返回
   const handleKuaishouCookieResponse: (event: IpcRendererEvent, cookie: Array<Cookie>, videoId: string) => Promise<void>
     = useCallback(async function(event: IpcRendererEvent, cookie: Array<Cookie>, videoId: string): Promise<void> {
-      const didCookie: Cookie | undefined = cookie.find((item: Cookie): boolean => item.name === 'did');
-
-      if (!didCookie) return;
-
-      didCookie && (kuaishouCookie.cookie = `${ didCookie.name }=${ didCookie.value }`);
+      kuaishouCookie.cookie = cookie.filter((o: Cookie): boolean => o.name !== '')
+        .map((o: Cookie): string => `${ o.name }=${ o.value }`).join('; ');
 
       const res: ShortVideoDownloadResponse = await requestShortVideo(videoId, kuaishouCookie.cookie);
 
