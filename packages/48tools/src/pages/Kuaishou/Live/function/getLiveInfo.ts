@@ -40,8 +40,6 @@ async function getLiveInfo(id: string): Promise<LiveInfo | undefined> {
 
   if (!initialState) return;
 
-  console.log(initialState, kuaishouCookie.cookie);
-
   const playListItem: PlayListItem | undefined = initialState?.liveroom?.playList?.[0];
 
   if (!playListItem) return;
