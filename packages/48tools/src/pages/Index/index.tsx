@@ -145,13 +145,13 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     },
     {
       name: '微博直播录制',
-      url: '/WeiboLive',
+      url: '/Weibo/Live',
       icon: <IconWeiboOutlined />,
       testId: 'weibo-live-link'
     },
     {
       name: '微博超话签到',
-      url: '/WeiboSuper',
+      url: '/Weibo/Super',
       icon: <IconWeiboOutlined />,
       help: { navId: 'weibo-login', tooltipTitle: '查看微博登录帮助' }
     }
@@ -159,7 +159,7 @@ const navLinkConfig: Array<Array<NativeItem>> = [
   [
     {
       name: '微博图片批量下载',
-      url: '/WeiboImagesDownload',
+      url: '/Weibo/ImagesDownload',
       icon: <IconWeiboOutlined />
     },
     {
