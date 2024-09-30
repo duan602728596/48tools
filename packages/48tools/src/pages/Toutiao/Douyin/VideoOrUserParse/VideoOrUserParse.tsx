@@ -33,50 +33,39 @@ import { douyinCookie } from '../../../../utils/toutiao/DouyinCookieStore';
 import * as toutiaosdk from '../../sdk/toutiaosdk';
 import type { DownloadUrlItem, DownloadItem, UserDataItem, VideoQuery } from '../../types';
 
-/* select渲染 */
-function selectOptionsRender(downloadUrl: Array<DownloadUrlItem>): Array<ReactElement> {
-  return downloadUrl.map((item: DownloadUrlItem, index: number): ReactElement => {
-    return <Select.Option key={ item.label + item.value } value={ item.value } item={ item }>{ item.label }</Select.Option>;
-  });
-}
-
 function isUserDataItem(x: UserDataItem | AwemeItem): x is UserDataItem {
   return 'playApi' in x.video;
 }
 
 /* userData select渲染 */
-function userDataSelectOptionsRender(record: UserDataItem | AwemeItem): Array<ReactElement> {
-  const element: Array<ReactElement> = [];
+function userDataSelectOptions(record: UserDataItem | AwemeItem): Array<DefaultOptionType> {
+  const options: Array<DefaultOptionType> = [];
   let i: number = 1;
 
   if (isUserDataItem(record)) {
     const noWatchMarkValue: string = `https:${ record.video.playApi }`;
 
-    element.push(
-      <Select.Option key={ `${ record.awemeId }无水印@${ noWatchMarkValue }@a` }
-        value={ noWatchMarkValue }
-        item={{ label: '无水印', value: noWatchMarkValue }}
-        alert={ true }
-      >
-        无水印
-      </Select.Option>
-    );
+    options.push({
+      label: '无水印',
+      value: noWatchMarkValue,
+      item: { label: '无水印', value: noWatchMarkValue }
+    });
 
     for (const bitRate of record.video.bitRateList) {
       for (const addr of bitRate.playAddr) {
         const labelText: string = `下载地址-${ i++ }(${ bitRate.width }*${ bitRate.height })`;
         const value: string = `https:${ addr.src }`;
 
-        element.push(
-          <Select.Option key={ `${ record.awemeId }@${ labelText }@${ value }@b` } value={ value } item={{
+        options.push({
+          label: labelText,
+          value,
+          item: {
             label: labelText,
             value,
             width: bitRate.width,
             height: bitRate.height
-          }}>
-            { labelText }
-          </Select.Option>
-        );
+          }
+        });
         i += 1;
       }
     }
@@ -85,16 +74,16 @@ function userDataSelectOptionsRender(record: UserDataItem | AwemeItem): Array<Re
       for (const videoUrl of bitRate.play_addr.url_list) {
         const labelText: string = `下载地址-${ i++ }(${ bitRate.play_addr.width }*${ bitRate.play_addr.height })`;
 
-        element.push(
-          <Select.Option key={ `${ record.aweme_id }@${ labelText }@${ videoUrl }@c` } value={ videoUrl } item={{
+        options.push({
+          label: labelText,
+          value: videoUrl,
+          item: {
             label: labelText,
             value: videoUrl,
             width: bitRate.play_addr.width,
             height: bitRate.play_addr.height
-          }}>
-            { labelText }
-          </Select.Option>
-        );
+          }
+        });
       }
     }
 
@@ -102,22 +91,22 @@ function userDataSelectOptionsRender(record: UserDataItem | AwemeItem): Array<Re
       for (const addr of image.url_list) {
         const labelText: string = `图片-下载地址${ i++ }(${ image.width }*${ image.height })`;
 
-        element.push(
-          <Select.Option key={ `${ record.aweme_id }@${ labelText }@${ addr }@d` } value={ addr } item={{
+        options.push({
+          label: labelText,
+          value: addr,
+          item: {
             label: labelText,
             value: addr,
             width: image.width,
             height: image.height,
             isImage: true
-          }}>
-            { labelText }
-          </Select.Option>
-        );
+          }
+        });
       }
     }
   }
 
-  return element;
+  return options;
 }
 
 /* 视频或用户解析 */
@@ -141,6 +130,7 @@ function VideoOrUserParse(props: {}): ReactElement {
     = useState(undefined); // 加载下一页时用
   const [userTitle, setUserTitle]: [string, D<S<string>>] = useState('');
   const [userVideoLoadDataLoading, setUserVideoLoadDataLoading]: [boolean, D<S<boolean>>] = useState(false);
+  const downloadSelectOptions: Array<DefaultOptionType> = downloadUrl.map((o: DownloadUrlItem) => ({ label: o.label, value: o.value, item: o }));
 
   // 点击加载下一页
   async function handleLoadUserVideoDataClick(event: MouseEvent): Promise<void> {
@@ -342,11 +332,10 @@ function VideoOrUserParse(props: {}): ReactElement {
         <Fragment>
           <Select className="!w-[220px]"
             size="small"
+            options={ userDataSelectOptions(record) }
             onSelect={ (v: string, option: { item: DownloadUrlItem } & DefaultOptionType): void =>
               handleUserListDownloadUrlSelect(record, v, option) }
-          >
-            { userDataSelectOptionsRender(record) }
-          </Select>
+          />
           {
             ('images' in record) && record?.images?.length ? (
               <Button className="ml-[4px]"
@@ -394,10 +383,9 @@ function VideoOrUserParse(props: {}): ReactElement {
       >
         <Select className="!w-[300px]"
           value={ selectedUrl }
+          options={ downloadSelectOptions }
           onSelect={ handleDownloadUrlSelect }
-        >
-          { selectOptionsRender(downloadUrl) }
-        </Select>
+        />
       </Modal>
       {/* 用户视频列表 */}
       <Modal title={ userTitle }

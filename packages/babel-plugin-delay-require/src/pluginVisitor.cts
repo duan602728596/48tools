@@ -174,7 +174,7 @@ function pluginVisitor(t: BabelTypes, { prefixVariableName, prefixVariableNameRe
       enter(this: BabelPluginDelayRequireState, path: NodePath<Program>): void {
         const body: Array<Statement> = path.node.body;
 
-        this.useIdle = h.hasUseIdleDirective(t, path.node.directives);
+        this.useIdle = h.hasUseIdleDirective(path.node.directives);
 
         // 获取模块加载的信息
         path.traverse(ProgramEnterVisitor(options, prefixVariableName), { importInfoArray: this.importInfoArray });

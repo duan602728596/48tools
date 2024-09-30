@@ -22,7 +22,7 @@ import {
 } from '@ant-design/icons';
 import { red, orange, green } from '@ant-design/colors';
 import VirtualList from 'rc-virtual-list';
-import * as className from 'classnames';
+import classNames from 'classnames';
 import style from './processItemRender.sass';
 import { setDeleteProcess } from '../../reducers/FFmpegProcess';
 import type { ProcessItem, ProcessItemConsole } from '../../types';
@@ -160,7 +160,7 @@ function ProcessItemRender(props: ProcessItemRenderProps): ReactElement {
       {
         consoleDisplay && (
           <VirtualList ref={ virtualListRef }
-            className={ className('relative h-[200px] overflow-hidden text-[12px]', style.virtualList) }
+            className={ classNames('relative h-[200px] overflow-hidden text-[12px]', style.virtualList) }
             style={{ zIndex: index + 1 }}
             component="pre"
             itemKey="key"

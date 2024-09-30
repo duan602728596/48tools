@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { Form, Input, InputNumber, Button, message, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import commonStyle from '../../../../common.sass';
 import { showOpenDialog } from '../../../../utils/remote/dialog';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';

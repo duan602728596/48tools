@@ -27,7 +27,7 @@ export class ImportInfo {
    * @param { string } moduleName
    */
   static moduleNameToVariableName(moduleName: string): string {
-    return moduleName.replace(/[@\-\/:]/g, '_');
+    return moduleName.replace(/[^a-zA-Z0-9_$]/g, '_');
   }
 
   /**

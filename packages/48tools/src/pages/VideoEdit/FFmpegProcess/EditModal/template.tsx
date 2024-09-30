@@ -1,11 +1,12 @@
-import type { ReactElement } from 'react';
-import { Select } from 'antd';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 
 export interface TplItem {
   id: string;
   label: string;
   value: string;
 }
+
+export type TplOption = { item: TplItem } & DefaultOptionType;
 
 enum Text {
   Input = '视频地址',
@@ -35,6 +36,8 @@ export const template: Array<TplItem> = [
   }
 ];
 
-export const templateSelectOptions: Array<ReactElement> = template.map((o: TplItem): ReactElement => {
-  return <Select.Option key={ o.label } value={ o.id } item={ o }>{ o.label }</Select.Option>;
-});
+export const templateSelectOptions: Array<TplOption> = template.map((o: TplItem): TplOption => ({
+  label: o.label,
+  value: o.id,
+  item: o
+}));

@@ -1,5 +1,12 @@
 import { requestLiveHtml } from '@48tools-api/kuaishou';
-import type { LiveInfo, KuaishouLiveInitialState } from '../../types';
+import { kuaishouCookie } from '../../../../functionalComponents/KuaishouLogin/function/kuaishouCookie';
+import type { LiveInfo, KuaishouLiveInitialState, PlayListItem } from '../../types';
+
+function evalFunction(objectString: string): Function {
+  // eslint-disable-next-line no-new-func
+  return new Function(`'use strict';
+return (${ objectString })`);
+}
 
 /**
  * 解析initialState
@@ -18,7 +25,7 @@ function parseHtml(html: string): KuaishouLiveInitialState | undefined {
         .replace(/window\._{2}INITIAL_STATE_{2}\s*=\s*/, '') // 剔除"="前面的字符串
         .replace(/;\(function\(\){var s;.+$/i, '');          // 剔除后面可能存在的函数
 
-      initialState = JSON.parse(str);
+      initialState = evalFunction(str)();
       break;
     }
   }
@@ -28,13 +35,19 @@ function parseHtml(html: string): KuaishouLiveInitialState | undefined {
 
 /* 获取直播间的相关信息 */
 async function getLiveInfo(id: string): Promise<LiveInfo | undefined> {
-  const res: string = await requestLiveHtml(id);
+  const res: string = await requestLiveHtml(id, kuaishouCookie.cookie);
   const initialState: KuaishouLiveInitialState | undefined = parseHtml(res);
 
-  if (initialState?.liveroom?.liveStream?.playUrls?.[0]?.adaptationSet?.representation?.length) {
+  if (!initialState) return;
+
+  const playListItem: PlayListItem | undefined = initialState?.liveroom?.playList?.[0];
+
+  if (!playListItem) return;
+
+  if (playListItem?.liveStream?.playUrls?.[0]?.adaptationSet?.representation?.length) {
     return {
-      title: initialState.liveroom.liveStream.caption,
-      list: initialState.liveroom.liveStream.playUrls[0].adaptationSet.representation
+      title: playListItem.liveStream.caption,
+      list: playListItem.liveStream.playUrls[0].adaptationSet.representation
     };
   }
 }

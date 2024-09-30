@@ -8,12 +8,13 @@ export const enum PartialTest {
   BilibiliName = 'bilibili',
   AcFunName = 'acfun',
   DouyinName = 'douyin',
-  WeiboName = 'weibo'
+  WeiboName = 'weibo',
+  KuaishouName = 'kuaishou'
 }
 
 /* Index */
 export const enum Index {
-  Index = 100
+  Index1 = 100
 }
 
 export const enum IndexVP {
@@ -96,4 +97,9 @@ export const enum DouyinDownloadVP {
 /* 微博 */
 export const enum Weibo {
   LiveVideo = 600
+}
+
+/* 快手 */
+export const enum KuaishouDownload {
+  GetKuaishouVideo = 700
 }

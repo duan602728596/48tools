@@ -1,18 +1,21 @@
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
 import { requestDouyinUrl, type DouyinHtmlResponseType } from '@48tools-api/toutiao/douyin';
 
+type VideoParam = Partial<{ videoId: string }>;
+type UserParam = Partial<{ userId: string }>;
+
 const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接
 const iesdouyinRegexp: RegExp = /www.iesdouyin.com/i; // 抖音分享长链接
 const iesdouyinhrefHtmlRegexp: RegExp = /<a href="https?:\/\/www\.iesdouyin\.com\//i; // 是一个链接
-const shareVideo: RegExp = /share\/(video|note)/i;    // 分享视频
+const shareVideo: RegExp = /share\/\\(video|note\\)/i;    // 分享视频
 const douyinRegexp: RegExp = /www\.douyin\.com/i;     // 抖音域名
-const douyinVideoRegexp: RegExp = /\/(video|note)\/[0-9]+/i; // 抖音视频
+const douyinVideoRegexp: RegExp = /\/\\(video|note\\)\/[0-9]+/i; // 抖音视频
 const videoIdRegexp: RegExp = /^[0-9]+$/;                    // 视频id
 const douyinUserRegexp: RegExp = /\/user\//i;                // 抖音用户
-const douyinVideoUrlMatch: MatchFunction = match('/(video|note)/:videoId');
-const douyinUserUrlMatch: MatchFunction = match('/user/:userId');
-const douyinShareVideoUrlMatch: MatchFunction = match('/share/(video|note)/:videoId');
-const douyinShareUserUrlMatch: MatchFunction = match('/share/user/:userId');
+const douyinVideoUrlMatch: MatchFunction<VideoParam> = match('/\\(video|note\\)/:videoId');
+const douyinUserUrlMatch: MatchFunction<UserParam> = match('/user/:userId');
+const douyinShareVideoUrlMatch: MatchFunction<VideoParam> = match('/share/\\(video|note\\)/:videoId');
+const douyinShareUserUrlMatch: MatchFunction<UserParam> = match('/share/user/:userId');
 
 export enum DouyinUrlType {
   Video = 'video',
@@ -48,18 +51,18 @@ async function douyinUrlParse(urlParse: URL, url: string, cookie: string | undef
       const href: string = parseDocument.querySelector('a')!.getAttribute('href')!;
 
       if (shareVideo.test(href)) {
-        const matchResult: Match = douyinShareVideoUrlMatch(new URL(href).pathname);
+        const matchResult: Match<VideoParam> = douyinShareVideoUrlMatch(new URL(href).pathname);
 
         if (typeof matchResult === 'object') {
           type = DouyinUrlType.Video;
-          id = matchResult.params['videoId'];
+          id = matchResult.params.videoId;
         }
       } else {
-        const matchResult: Match = douyinShareUserUrlMatch(new URL(href).pathname);
+        const matchResult: Match<UserParam> = douyinShareUserUrlMatch(new URL(href).pathname);
 
         if (typeof matchResult === 'object') {
           type = DouyinUrlType.User;
-          id = matchResult.params['userId'];
+          id = matchResult.params.userId;
         }
       }
     }
@@ -68,19 +71,19 @@ async function douyinUrlParse(urlParse: URL, url: string, cookie: string | undef
     id = modalId;
   } else if (douyinRegexp.test(urlParse.hostname) && douyinVideoRegexp.test(urlParse.pathname)) {
     // /video/:videoId
-    const matchResult: Match = douyinVideoUrlMatch(urlParse.pathname);
+    const matchResult: Match<VideoParam> = douyinVideoUrlMatch(urlParse.pathname);
 
     if (typeof matchResult === 'object') {
       type = DouyinUrlType.Video;
-      id = matchResult.params['videoId'];
+      id = matchResult.params.videoId;
     }
   } else if (douyinRegexp.test(urlParse.hostname) && douyinUserRegexp.test(urlParse.pathname)) {
     // /user/:userId
-    const matchResult: Match = douyinUserUrlMatch(urlParse.pathname);
+    const matchResult: Match<UserParam> = douyinUserUrlMatch(urlParse.pathname);
 
     if (typeof matchResult === 'object') {
       type = DouyinUrlType.User;
-      id = matchResult.params['userId'];
+      id = matchResult.params.userId;
     }
   }
 

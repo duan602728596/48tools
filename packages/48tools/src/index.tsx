@@ -10,6 +10,7 @@ import ThemeProvider from './components/basic/Theme/ThemeProvider';
 import Routers from './router/Routers';
 import MDXProvider from './components/basic/MdxProvider/MDXProvider';
 import IDBInit from './utils/IDB/IDBInit';
+import { proxyServerInit } from './utils/proxyServer/proxyServer';
 import './entry/main.tailwindcss.css';
 import './entry/index/index.global.sass';
 import './components/basic/Accessibility/Accessibility';
@@ -36,3 +37,7 @@ root.render(
 );
 
 IDBInit();
+
+if (process.env.BUILD_SOURCEMAP) {
+  proxyServerInit();
+}

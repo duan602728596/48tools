@@ -3,6 +3,7 @@ import { NodeMediaServerChannel } from '@48tools/main/src/channelEnum';
 import { getFFmpeg, detectPort } from '../utils';
 
 let start: boolean = false;
+let startLock: boolean = false;
 
 /* 端口号 */
 export interface NetMediaServerPort {
@@ -21,16 +22,26 @@ export function getNetMediaServerPort(): NetMediaServerPort {
 
 /* 启动服务，将rtmp转换成flv */
 export async function netMediaServerInit(): Promise<void> {
-  if (start) return;
+  if (start || startLock) return;
 
-  netMediaServerPort.rtmpPort = await detectPort(netMediaServerPort.rtmpPort);
-  netMediaServerPort.httpPort = await detectPort(netMediaServerPort.httpPort, [netMediaServerPort.rtmpPort]);
+  startLock = true;
 
-  // 等待渲染线程启动后，发送消息到主线程，启动node-media-server服务
-  ipcRenderer.send(NodeMediaServerChannel.NodeMediaServer, {
-    ffmpeg: getFFmpeg(),
-    rtmpPort: netMediaServerPort.rtmpPort,
-    httpPort: netMediaServerPort.httpPort
-  });
-  start = true;
+  try {
+    netMediaServerPort.rtmpPort = await detectPort(netMediaServerPort.rtmpPort);
+    netMediaServerPort.httpPort = await detectPort(netMediaServerPort.httpPort, [netMediaServerPort.rtmpPort]);
+
+    // 等待渲染线程启动后，发送消息到主线程，启动node-media-server服务
+    ipcRenderer.send(NodeMediaServerChannel.NodeMediaServer, {
+      ffmpeg: getFFmpeg(),
+      rtmpPort: netMediaServerPort.rtmpPort,
+      httpPort: netMediaServerPort.httpPort
+    });
+    console.log(`net-media-server rtmp port: ${ netMediaServerPort.rtmpPort }`);
+    console.log(`net-media-server http port: ${ netMediaServerPort.httpPort }`);
+    start = true;
+  } catch (err) {
+    console.error(err);
+  }
+
+  startLock = false;
 }

@@ -11,16 +11,20 @@ export interface PlayUrlItem {
 }
 
 /* 快手视频地址 */
+export interface PlayListItem {
+  liveStream: {
+    caption: string;
+    playUrls: Array<{
+      adaptationSet: {
+        representation: Array<PlayUrlItem>;
+      };
+    }>;
+  };
+}
+
 export interface KuaishouLiveInitialState {
   liveroom: {
-    liveStream: {
-      caption: string;
-      playUrls: Array<{
-        adaptationSet: {
-          representation: Array<PlayUrlItem>;
-        };
-      }>;
-    };
+    playList: Array<PlayListItem>;
   };
 }
 

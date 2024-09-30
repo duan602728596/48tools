@@ -13,7 +13,7 @@ import { Button, App, Avatar } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import VirtualList from 'rc-virtual-list';
 import { parse } from 'cookie';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {
   requestVisitedList,
   requestSelfFollowedListPC,

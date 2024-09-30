@@ -5,10 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Card, Alert, Form, DatePicker, Select, Button, Space, message, type FormInstance } from 'antd';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import style from './createResult.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import {
@@ -148,10 +149,11 @@ ${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): 
   }
 
   // 渲染用户
-  function userListSelectRender(): Array<ReactElement> {
-    return userList.map((item: QingchunshikeUserItem): ReactElement => {
-      return <Select.Option key={ item.id } value={ item.id }>{ item.description }</Select.Option>;
-    });
+  function userListSelectOptions(): Array<DefaultOptionType> {
+    return userList.map((item: QingchunshikeUserItem): DefaultOptionType => ({
+      value: item.id,
+      label: item.description
+    }));
   }
 
   // 渲染log
@@ -181,7 +183,7 @@ ${ calculateResult.nimCalculateResult.tpNumList.map(([a, b]: [string, number]): 
           <Form.Item className={ style.formItem } label="配置">
             <Space>
               <Form.Item name="option" rules={ [{ required: true, message: '请选择配置' }] } noStyle={ true }>
-                <Select className="!w-[207px]">{ userListSelectRender() }</Select>
+                <Select className="!w-[207px]" options={ userListSelectOptions() } />
               </Form.Item>
               <Button className="ml-[8px]" type="primary" danger={ true } onClick={ handleDeleteOptionClick }>删除当前配置</Button>
             </Space>

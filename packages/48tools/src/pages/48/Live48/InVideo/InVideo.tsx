@@ -7,9 +7,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Select, Button, Table, message, Space, Popconfirm } from 'antd';
-import * as dayjs from 'dayjs';
 import type { ColumnsType } from 'antd/es/table';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
+import * as dayjs from 'dayjs';
 import filenamify from 'filenamify/browser';
 import {
   requestDownloadFile,
@@ -37,6 +38,9 @@ import { ProgressNative, type ProgressSet } from '../../../../components/Progres
 import { formatTsUrl, getTeamId } from '../function/utils';
 import type { WebWorkerChildItem } from '../../../../commonTypes';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
+
+const liveTypeSelectOptions: Array<DefaultOptionType> = ['SNH48', 'BEJ48', 'GNZ48', 'CKG48', 'CGT48']
+  .map((o: string): DefaultOptionType => ({ label: o, value: o.toLowerCase() }));
 
 /* redux selector */
 type RSelector = Pick<Live48InitialState,
@@ -241,6 +245,7 @@ function InVideo(props: {}): ReactElement {
     {
       title: '下载进度',
       dataIndex: 'liveId',
+      width: 100,
       render: (value: string, record: OpenLiveInfo, index: number): ReactNode => {
         const inDownload: boolean = Object.hasOwn(progress, value);
         const idx: number = videoListChild.findIndex(
@@ -292,13 +297,7 @@ function InVideo(props: {}): ReactElement {
     <Fragment>
       <Header>
         <Space size={ 8 } data-test-id="48-in-video-group-type">
-          <Select className="!w-[150px]" value={ inVideoQueryLiveType } onSelect={ handleLiveTypeSelect }>
-            <Select.Option value="snh48">SNH48</Select.Option>
-            <Select.Option value="bej48">BEJ48</Select.Option>
-            <Select.Option value="gnz48">GNZ48</Select.Option>
-            <Select.Option value="ckg48">CKG48</Select.Option>
-            <Select.Option value="cgt48">CGT48</Select.Option>
-          </Select>
+          <Select className="!w-[150px]" options={ liveTypeSelectOptions } value={ inVideoQueryLiveType } onSelect={ handleLiveTypeSelect } />
           <Button.Group>
             <Button type="primary" disabled={ inVideoQueryLiveType === undefined } onClick={ handleGetVideoListClick }>
               刷新录播

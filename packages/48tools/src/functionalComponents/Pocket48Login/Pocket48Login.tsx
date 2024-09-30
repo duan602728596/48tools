@@ -21,7 +21,7 @@ import type { useAppProps } from 'antd/es/app/context';
 import type { LabeledValue } from '@48tools-types/antd';
 import type { Tab } from 'rc-tabs/es/interface';
 import type { ItemType, MenuInfo } from 'rc-menu/es/interface';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {
   requestMobileCodeLogin,
   requestImUserInfo,

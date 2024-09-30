@@ -1,5 +1,5 @@
 import type { ReactElement, PropsWithChildren } from 'react';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 
 interface ContentProps extends Required<PropsWithChildren> {
   className?: string;

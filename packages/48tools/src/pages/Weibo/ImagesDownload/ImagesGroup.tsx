@@ -7,7 +7,7 @@ import {
   GifOutlined as IconGifOutlined,
   VideoCameraOutlined as IconVideoCameraOutlined
 } from '@ant-design/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import style from './imagesGroup.sass';
 import { setImageCheckedItem } from '../reducers/weiboImagesDownload';
 import imageLoadedError from '../images/imageLoadedError.svg';

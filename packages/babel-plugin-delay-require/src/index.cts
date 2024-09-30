@@ -5,12 +5,11 @@ import type { BabelTypes, PluginOptions, BabelPluginDelayRequireObject } from '.
 
 function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: PluginOptions): BabelPluginDelayRequireObject {
   const moduleNames: Array<string> = options?.moduleNames ?? [];
-  const variableName: string | undefined = options?.variableName;
   const idle: boolean = options?.idle ?? false;
   const mountToGlobalThis: boolean = options?.mountToGlobalThis ?? false;
   const replaceModuleName: Record<string, string> = options?.replaceModuleName ?? {};
 
-  const prefixVariableName: string = variableName ?? '__ELECTRON__DELAY_REQUIRE__';
+  const prefixVariableName: string = '__ELECTRON__DELAY_REQUIRE__';
   const prefixVariableNameRegexp: RegExp = new RegExp(prefixVariableName);
 
   return {
@@ -26,7 +25,6 @@ function babelPluginDelayRequire({ types: t }: { types: BabelTypes }, options: P
       prefixVariableNameRegexp,
       options: {
         moduleNames,
-        variableName: prefixVariableName,
         idle,
         mountToGlobalThis,
         replaceModuleName

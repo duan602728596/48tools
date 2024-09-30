@@ -61,6 +61,21 @@ import LiveType from '../../components/LiveType/LiveType';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 import type { RecordFieldData, RecordVideoDownloadWebWorkerItem } from '../../types';
 
+const groupIdSelectOptions: Array<DefaultOptionType> = [
+  { label: '全部', value: 'all' },
+  { label: 'SNH48', value: 10 },
+  { label: 'BEJ48', value: 11 },
+  { label: 'GNZ48', value: 12 },
+  { label: 'CKG48', value: 14 },
+  { label: 'CGT48', value: 21 },
+  { label: 'IDFT', value: 15 },
+  { label: '明星殿堂', value: 19 },
+  { label: 'THE9', value: 17 },
+  { label: '硬糖少女303', value: 18 },
+  { label: '丝芭影视', value: 20 },
+  { label: '海外练习生', value: 16 }
+];
+
 /**
  * 格式化m3u8文件内视频的地址
  * @param { string } data - m3u8文件内容
@@ -505,20 +520,7 @@ function Pocket48Record(props: {}): ReactElement {
             <div className="relative inline-block mr-[8px] align-super">
               <Space.Compact>
                 <Form.Item name="groupId" noStyle={ true }>
-                  <Select className="w-[130px]">
-                    <Select.Option value="all">全部</Select.Option>
-                    <Select.Option value={ 10 }>SNH48</Select.Option>
-                    <Select.Option value={ 11 }>BEJ48</Select.Option>
-                    <Select.Option value={ 12 }>GNZ48</Select.Option>
-                    <Select.Option value={ 14 }>CKG48</Select.Option>
-                    <Select.Option value={ 21 }>CGT48</Select.Option>
-                    <Select.Option value={ 15 }>IDFT</Select.Option>
-                    <Select.Option value={ 19 }>明星殿堂</Select.Option>
-                    <Select.Option value={ 17 }>THE9</Select.Option>
-                    <Select.Option value={ 18 }>硬糖少女303</Select.Option>
-                    <Select.Option value={ 20 }>丝芭影视</Select.Option>
-                    <Select.Option value={ 16 }>海外练习生</Select.Option>
-                  </Select>
+                  <Select className="w-[130px]" options={ groupIdSelectOptions } />
                 </Form.Item>
                 <Form.Item name="userId" noStyle={ true }>
                   <AutoComplete className="w-[250px]"

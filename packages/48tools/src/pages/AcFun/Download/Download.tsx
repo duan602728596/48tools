@@ -5,6 +5,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Table, Select, Button, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import { showSaveDialog } from '../../../utils/remote/dialog';
@@ -131,13 +132,12 @@ function Download(props: {}): ReactElement {
   }
 
   // 渲染下载
-  function handleDownloadQualitySelectOptionRender(representation: Array<Representation>): Array<ReactNode> {
-    return representation.map((item: Representation, index: number): ReactElement => {
-      return (
-        <Select.Option key={ item.url } value={ `${ item.qualityLabel }@${ item.url }` }>
-          { item.qualityLabel }
-        </Select.Option>
-      );
+  function downloadQualitySelectOptions(representation: Array<Representation>): Array<DefaultOptionType> {
+    return representation.map((item: Representation, index: number): DefaultOptionType => {
+      return {
+        label: item.qualityLabel,
+        value: `${ item.qualityLabel }@${ item.url }`
+      };
     });
   }
 
@@ -181,6 +181,7 @@ function Download(props: {}): ReactElement {
               ) : (
                 <Select className="!w-[150px]"
                   placeholder="下载"
+                  options={ record.representation ? downloadQualitySelectOptions(record.representation) : [] }
                   notFoundContent={
                     record.representation ? undefined : (
                       <div className="text-center py-[8px]">
@@ -195,9 +196,7 @@ function Download(props: {}): ReactElement {
                       ? undefined
                       : (open: boolean): Promise<void> => handleLoadDataDropdownVisibleChange(record, open)
                   }
-                >
-                  { record.representation ? handleDownloadQualitySelectOptionRender(record.representation) : null }
-                </Select>
+                />
               )
             }
             <Button type="primary"

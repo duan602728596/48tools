@@ -10,7 +10,7 @@ import {
   type MouseEvent
 } from 'react';
 import { Spin, Empty } from 'antd';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import VirtualList, { type ListRef } from 'rc-virtual-list';
 import { requestDanmuFile } from '@48tools-api/48/danmu';
 import type { LiveRoomInfo } from '@48tools-api/48';

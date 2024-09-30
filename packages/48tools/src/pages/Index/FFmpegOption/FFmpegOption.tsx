@@ -4,7 +4,7 @@ import { Button, Modal, Form, Input, message, Alert, type FormInstance } from 'a
 import type { Store } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import Icon, { DownloadOutlined as IconDownloadOutlined, SwapLeftOutlined as IconSwapLeftOutlined } from '@ant-design/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import style from './FFmpegOption.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 import { ffmpegInstallHtmlPage } from '../../../utils/utils';

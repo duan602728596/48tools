@@ -1,5 +1,6 @@
 import * as process from 'node:process';
 import * as path from 'node:path';
+import * as webpack from 'webpack';
 // @ts-ignore
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 // @ts-ignore
@@ -9,6 +10,7 @@ import type { Options as HtmlMinifierOptions } from 'html-minifier-terser';
 import type { PluginItem } from '@babel/core';
 
 const isDev: boolean = process.env.NODE_ENV === 'development';
+const buildSourcemap: boolean = process.env.BUILD_SOURCEMAP === 'true';
 const analyzer: boolean = process.env.ANALYZER === 'true';
 
 // html代码压缩配置
@@ -95,7 +97,7 @@ export default function(info: Record<string, any>): Record<string, any> {
       idle: false,
       mountToGlobalThis: true,
       replaceModuleName: isDev ? {
-        got: '@48tools/got-cjs'
+        got: '@48tools/esm-build/got'
       } : undefined
     }]
   ];
@@ -201,9 +203,16 @@ export default function(info: Record<string, any>): Record<string, any> {
           to: distDir
         }]
       }),
+      buildSourcemap && new webpack.DefinePlugin({
+        'process.env.BUILD_SOURCEMAP': JSON.stringify(true)
+      }),
       analyzer && new BundleAnalyzerPlugin()
     ].filter(Boolean)
   };
+
+  if (!isDev && buildSourcemap) {
+    config.devtool = 'source-map';
+  }
 
   return config;
 }

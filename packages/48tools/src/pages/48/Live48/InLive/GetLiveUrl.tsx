@@ -11,7 +11,7 @@ import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { ReloadOutlined as IconReloadOutlined } from '@ant-design/icons';
 import filenamify from 'filenamify/browser';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import {
   requestOpenLiveList,
   requestLiveOne,
