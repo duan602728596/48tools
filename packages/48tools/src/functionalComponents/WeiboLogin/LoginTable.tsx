@@ -40,7 +40,7 @@ function LoginTable(props: {}): ReactElement {
     setFollowDrawerVisible(true);
   }
 
-  // 访客
+  /** @deprecated */
   async function handleVisitorWeiboAccountClick(record: WeiboAccount, event: MouseEvent): Promise<void> {
     if (!(record.s && record.from && record.c)) {
       messageApi.warning('App相关参数为空！');
@@ -141,6 +141,7 @@ function LoginTable(props: {}): ReactElement {
 
         return (
           <Button.Group size="small">
+            {/** @deprecated */}
             <Button disabled={ disabledSeeVisitor }
               onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }
             >
@@ -183,6 +184,7 @@ function LoginTable(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      {/** @deprecated */}
       <Drawer open={ isDrawerVisible }
         maskClosable={ false }
         mask={ false }

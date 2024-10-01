@@ -59,6 +59,8 @@ export async function requestSelfFollowedListPC(cookie: string, page: number = 1
 
 /**
  * 获取详细信息
+ * @param { string } id
+ * @param { string | undefined } cookie
  */
 export async function requestDetailByUserId(id: string, cookie: string | undefined): Promise<DetailInfo> {
   const res: GotResponse<DetailInfo> = await got.get('https://weibo.com/ajax/profile/detail?uid=' + id, {
