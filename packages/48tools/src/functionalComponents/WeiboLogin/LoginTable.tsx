@@ -104,6 +104,8 @@ function LoginTable(props: {}): ReactElement {
   function visitedListRenderItem(item: VisitedSchemaItemWithUserInfo, index: number): ReactElement {
     const tags: Array<ReactElement> = [];
 
+    if (item.text) tags.push(<Tag key="text" className="mt-[4px]" color="purple">{ item.text }</Tag>);
+
     if (item.new_status) tags.push(<Tag key="new_status" className="mt-[4px]" color="magenta">{ item.new_status }</Tag>);
 
     if (item.region) tags.push(<Tag key="region" className="mt-[4px]" color="red">{ item.region }</Tag>);
