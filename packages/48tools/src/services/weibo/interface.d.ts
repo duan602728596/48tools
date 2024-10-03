@@ -22,20 +22,13 @@ export interface VisitedSchemaItem {
   text: string;
   scheme_text?: string;
   scheme?: string;
-  recommend?: [
-    {
-      name: '粉丝数';
-      value: string;
-    },
-    {
-      name: 'IP';
-      value: string;
-    },
-    {
-      name: '';
-      value: `${ string }座`;
-    }
-  ];
+  recommend?: Array<{
+    name: string;
+    value: string;
+  }>;
+  new_status?: string;
+  region?: string; // 位置
+  sunshine?: string;
 }
 
 export interface VisitedList {

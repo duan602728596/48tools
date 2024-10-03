@@ -1,9 +1,10 @@
 import { Fragment, useState, useEffect, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Table, Button, Drawer, App, List, Avatar, Alert } from 'antd';
+import { Table, Button, Drawer, App, List, Avatar, Alert, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
+import { UserOutlined as IconUserOutlined } from '@ant-design/icons';
 import { parse } from 'cookie';
 import classNames from 'classnames';
 import { requestVisitedList, type VisitedList, type VisitedSchemaItem } from '@48tools-api/weibo';
@@ -16,6 +17,12 @@ import Follow from './Follow/Follow';
 import { handleOpenWeiboClick } from './function/weiboHelper';
 import type { WeiboAccount } from '../../commonTypes';
 
+/* 定义合并后的账号信息 */
+interface VisitedSchemaItemWithUserInfo extends VisitedSchemaItem {
+  userInfo?: UserInfo['data']['user'];
+  formatSchemeString?: string;
+}
+
 /* 已登陆列表 */
 function LoginTable(props: {}): ReactElement {
   const { accountList }: WeiboLoginInitialState = useSelector(weiboLoginSelector);
@@ -24,7 +31,7 @@ function LoginTable(props: {}): ReactElement {
   const [isDrawerVisible, setIsDrawerVisible]: [boolean, D<S<boolean>>] = useState(false); // 是否显示抽屉
   const [isFollowDrawerVisible, setFollowDrawerVisible]: [boolean, D<S<boolean>>] = useState(false); // 是否显示关注的人的抽屉
   const [checkWeiboAccount, setCheckWeiboAccount]: [WeiboAccount | undefined, D<S<WeiboAccount | undefined>>] = useState(); // 选中的账号
-  const [drawerData, setDrawerData]: [Array<UserInfo>, D<S<Array<UserInfo>>>] = useState([]); // 访客数据
+  const [drawerData, setDrawerData]: [Array<VisitedSchemaItemWithUserInfo>, D<S<Array<VisitedSchemaItemWithUserInfo>>>] = useState([]); // 访客数据
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载状态
 
   // 删除账号
@@ -69,18 +76,22 @@ function LoginTable(props: {}): ReactElement {
     setLoading(true);
 
     try {
-      const visitedIdList: Array<string> = (res?.data?.data ?? [])
-        .filter((o: VisitedSchemaItem | []): o is Required<VisitedSchemaItem> => {
-          return !Array.isArray(o) && ('scheme' in o);
-        })
-        .map((o: Required<VisitedSchemaItem>): string => {
-          return o.scheme.split('=')[1];
-        });
-      const userInfos: Array<UserInfo> = await Promise.all<UserInfo>(
-        visitedIdList.map((o: string): Promise<UserInfo> => requestUserInfo(o, record.cookie))
-      );
+      const visitedList: Array<VisitedSchemaItemWithUserInfo> = (res?.data?.data ?? [])
+        .map((o: VisitedSchemaItem): VisitedSchemaItemWithUserInfo => {
+          const formatSchemeString: string | undefined = o.scheme ? o.scheme.split('=')[1] : undefined;
 
-      setDrawerData(userInfos);
+          return Object.assign(o, { formatSchemeString });
+        });
+
+      for (const item of visitedList) {
+        if (item.formatSchemeString) {
+          const resUserInfo: UserInfo = await requestUserInfo(item.formatSchemeString, record.cookie);
+
+          item.userInfo = resUserInfo.data.user;
+        }
+      }
+
+      setDrawerData(visitedList);
     } catch (err) {
       console.error(err);
       messageApi.error('加载访客列表详细信息失败！');
@@ -90,19 +101,47 @@ function LoginTable(props: {}): ReactElement {
   }
 
   // 渲染访客列表
-  function visitedListRenderItem(item: UserInfo): ReactElement {
-    return (
-      <List.Item key={ item.data.user.idstr }>
-        <List.Item.Meta avatar={ <Avatar src={ item.data.user.avatar_hd } /> }
-          title={
-            <Button type="text" onClick={ (event: MouseEvent): void => handleOpenWeiboClick(item.data.user.idstr, event) }>
-              { item.data.user.screen_name }
-            </Button>
-          }
-          description={ item.data.user.description }
-        />
-      </List.Item>
-    );
+  function visitedListRenderItem(item: VisitedSchemaItemWithUserInfo, index: number): ReactElement {
+    const tags: Array<ReactElement> = [];
+
+    if (item.new_status) tags.push(<Tag key="new_status" className="mt-[4px]" color="magenta">{ item.new_status }</Tag>);
+
+    if (item.region) tags.push(<Tag key="region" className="mt-[4px]" color="red">{ item.region }</Tag>);
+
+    if (item.sunshine) tags.push(<Tag key="sunshine" className="mt-[4px]" color="volcano">{ item.sunshine }</Tag>);
+
+    if (item.recommend?.length) {
+      item.recommend.forEach((o: { name: string; value: string }, i: number): void => {
+        tags.push(
+          <Tag key={ `${ o.value }_${ i }` } className="mt-[4px]">
+            { (o.name && o.name !== '') ? `${ o.name }：${ o.value }` : o.value }
+          </Tag>
+        );
+      });
+    }
+
+    if (item.userInfo) {
+      return (
+        <List.Item key={ item.userInfo.idstr }>
+          <List.Item.Meta avatar={ <Avatar src={ item.userInfo.avatar_hd } /> }
+            title={
+              <Button type="text" onClick={ (event: MouseEvent): void => handleOpenWeiboClick(item.userInfo!.idstr, event) }>
+                { item.userInfo.screen_name }
+              </Button>
+            }
+            description={ item.userInfo.description }
+          />
+          <div>{ tags }</div>
+        </List.Item>
+      );
+    } else {
+      return (
+        <List.Item key={ index }>
+          <List.Item.Meta title="未知用户" avatar={ <Avatar icon={ <IconUserOutlined /> } /> } />
+          <div>{ tags }</div>
+        </List.Item>
+      );
+    }
   }
 
   const columns: ColumnsType<WeiboAccount> = [
@@ -192,7 +231,7 @@ function LoginTable(props: {}): ReactElement {
         footer={ <Button type="primary" danger={ true } onClick={ (): void => setIsDrawerVisible(false) }>关闭</Button> }
       >
         <Alert className="mb-[6px]" type="error" message="由于限制，访客列表只能展示有限的访客。SVIP以上的用户就别在这里看了。" />
-        <List size="small" bordered={ true } dataSource={ drawerData } loading={ loading } renderItem={ visitedListRenderItem } />
+        <List size="small" itemLayout="vertical" bordered={ true } dataSource={ drawerData } loading={ loading } renderItem={ visitedListRenderItem } />
       </Drawer>
       <Drawer open={ isFollowDrawerVisible }
         width={ 800 }
