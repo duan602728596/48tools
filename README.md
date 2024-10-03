@@ -61,7 +61,7 @@
 
 ### 技术栈
 
-Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使用corepack。   
+Pug + Sass + TypeScript + React + antd + Webpack + TailwindCSS + Electron。包管理工具使用corepack。   
 使用playwright + @playwright/test进行E2E测试。
 
 ### 模块
@@ -70,7 +70,9 @@ Pug + Sass + TypeScript + React + antd + Webpack + Electron。包管理工具使
 * main：Electron主程序运行源代码。
 * help：软件本地帮助文件源代码。
 * test：E2E测试代码。
+* esm-build：将在渲染进程中使用的仅支持esm的Nodejs模块编译成cjs模块。
 * babel-plugin-delay-require：Babel插件，支持Node模块的按需加载。
+* postcss-plugin-remove-classnames：postcss插件，删除TailwindCSS生成的无用的class。
 
 ### 开发过程
 
