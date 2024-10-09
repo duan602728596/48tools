@@ -7,7 +7,7 @@ import { merge } from 'webpack-merge';
 import { requireJson } from '@sweet-milktea/utils';
 import { require, appDir, webpackBuild, webpackNodeDefaultCjsBuildConfig } from './utils.mjs';
 import { buildModules } from '../packages/esm-build/buildModules.mjs';
-import packageJson from '../app/package.json' assert { type: 'json' };
+import { appPackageJson } from './jsonImport/jsonImport.mjs';
 
 const argv = process.argv.slice(2);
 
@@ -83,7 +83,7 @@ async function taskFile() {
   await rimraf(appNodeModules);
 
   // 创建目录和文件
-  for (const depName of Object.keys(packageJson.dependencies)) {
+  for (const depName of Object.keys(appPackageJson.dependencies)) {
     if (!['node-nim'].includes(depName)) {
       console.log(`正在编译模块：${ depName }...`);
       await createFilesByDependenciesName(depName);
