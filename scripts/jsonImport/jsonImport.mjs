@@ -10,6 +10,8 @@ if (semver.gte(process.version, '22.0.0')) {
   jsonImport = await import('./ltV22.mjs');
 }
 
-export const packageJson = jsonImport.packageJson;
-export const lernaJson = jsonImport.lernaJson;
-export const appPackageJson = jsonImport.appPackageJson;
+export const {
+  packageJson,
+  lernaJson,
+  appPackageJson
+} = jsonImport;
