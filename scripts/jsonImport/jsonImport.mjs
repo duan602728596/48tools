@@ -5,9 +5,9 @@ import semver from 'semver';
 let jsonImport;
 
 if (semver.gte(process.version, '22.0.0')) {
-  jsonImport = await import('./importAttributes.mjs');
+  jsonImport = await import('./gteV22.mjs');
 } else {
-  jsonImport = await import('./importAssertions.mjs');
+  jsonImport = await import('./ltV22.mjs');
 }
 
 export const packageJson = jsonImport.packageJson;
