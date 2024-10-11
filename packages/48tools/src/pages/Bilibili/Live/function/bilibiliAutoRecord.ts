@@ -1,11 +1,11 @@
 import * as path from 'node:path';
 import type { Store } from '@reduxjs/toolkit';
 import { store } from '../../../../store/store';
-import { getFileTime } from '../../../../utils/utils';
+import { getFilePath } from '../../../../utils/utils';
 import { liveSlice } from '../../reducers/bilibiliLive';
 import { localStorageKey } from './helper';
 import bilibiliLiveWorker from './bilibiliLiveWorker';
-import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
+import type { WebWorkerChildItem } from '../../../../commonTypes';
 import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
 
 /* 自动录制直播 */
@@ -21,9 +21,11 @@ async function bilibiliAutoRecord(): Promise<void> {
 
     if (index >= 0) continue;
 
-    const time: string = getFileTime();
-
-    await bilibiliLiveWorker(record, undefined, path.join(bilibiliAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`));
+    await bilibiliLiveWorker(record, undefined, path.join(bilibiliAutoRecordSavePath, getFilePath({
+      typeTitle: 'B站直播',
+      infoArray: [record.roomId, record.description],
+      ext: 'flv'
+    })));
   }
 }
 

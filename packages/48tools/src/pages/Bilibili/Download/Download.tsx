@@ -20,8 +20,6 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Table, message, Popconfirm } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import filenamify from 'filenamify/browser';
-import * as dayjs from 'dayjs';
 import { requestDownloadFileByStream } from '@48tools-api/48';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
@@ -46,7 +44,7 @@ import {
 import { getFFmpeg } from '../../../utils/utils';
 import { proxyServerInit, getProxyServerPort } from '../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
-import { fileTimeFormat } from '../../../utils/utils';
+import { getFilePath } from '../../../utils/utils';
 import type { DownloadItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 
@@ -85,7 +83,11 @@ function Download(props: {}): ReactElement {
       const urlResult: url.URL = new url.URL(item.pic);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[B站封面下载]${ item.type }${ item.id }${ parseResult.ext }`
+        defaultPath: getFilePath({
+          typeTitle: 'B站封面下载',
+          infoArray: [item.type, item.id],
+          ext: parseResult.ext
+        })
       });
 
       if (result.canceled || !result.filePath) return;
@@ -186,10 +188,12 @@ function Download(props: {}): ReactElement {
 
     try {
       if (selectedDownloadList.length) {
-        const defaultDir: string = `[bilibili]下载合集_${ dayjs().format(fileTimeFormat) }`;
         const result: SaveDialogReturnValue = await showSaveDialog({
           properties: ['createDirectory'],
-          defaultPath: defaultDir
+          defaultPath: getFilePath({
+            typeTitle: 'B站视频下载(合集)',
+            infoArray: ['下载合集', 'video-length', selectedDownloadList.length]
+          })
         });
 
         if (result.canceled || !result.filePath) return;
@@ -204,16 +208,20 @@ function Download(props: {}): ReactElement {
           const item: DownloadItem = selectedDownloadList[i];
 
           if (item.dash) {
-            createDashWorker(item, path.join(result.filePath, `${ item.type }${ item.id }_${ item.page }${
-              item.title ? `_${ filenamify(item.title) }` : ''
-            }_DASH_${ Math.random() }.mp4`));
+            createDashWorker(item, path.join(result.filePath, getFilePath({
+              typeTitle: 'B站视频下载(DASH)',
+              infoArray: [`${ item.type }${ item.id }`, item.page, item.title ?? ''],
+              ext: 'mp4'
+            })));
           } else {
             const urlResult: url.URL = new url.URL(item.durl);
             const parseResult: ParsedPath = path.parse(urlResult.pathname);
 
-            createWorker(item, path.join(result.filePath, `${ item.type }${ item.id }_${ item.page }${
-              item.title ? `_${ filenamify(item.title) }` : ''
-            }${ parseResult.ext }`));
+            createWorker(item, path.join(result.filePath, getFilePath({
+              typeTitle: 'B站视频下载',
+              infoArray: [`${ item.type }${ item.id }`, item.page, item.title ?? ''],
+              ext: parseResult.ext
+            })));
           }
         }
       }
@@ -230,9 +238,11 @@ function Download(props: {}): ReactElement {
   async function handleDashDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${
-          item.title ? `_${ filenamify(item.title) }` : ''
-        }_DASH.mp4`
+        defaultPath: getFilePath({
+          typeTitle: 'B站视频下载(DASH)',
+          infoArray: [`${ item.type }${ item.id }`, item.page, item.title ?? ''],
+          ext: 'mp4'
+        })
       });
 
       if (result.canceled || !result.filePath) return;
@@ -249,9 +259,11 @@ function Download(props: {}): ReactElement {
       const urlResult: url.URL = new url.URL(item.durl);
       const parseResult: ParsedPath = path.parse(urlResult.pathname);
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[B站下载]${ item.type }${ item.id }_${ item.page }${
-          item.title ? `_${ filenamify(item.title) }` : ''
-        }${ parseResult.ext }`
+        defaultPath: getFilePath({
+          typeTitle: 'B站视频下载',
+          infoArray: [`${ item.type }${ item.id }`, item.page, item.title ?? ''],
+          ext: parseResult.ext
+        })
       });
 
       if (result.canceled || !result.filePath) return;

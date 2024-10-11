@@ -13,12 +13,11 @@ import { FileFilled as IconFileFilled } from '@ant-design/icons';
 import { DndContext, type DragEndEvent } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import { arrayMoveImmutable } from 'array-move';
-import * as dayjs from 'dayjs';
 import { showOpenDialog, showSaveDialog } from '../../../utils/remote/dialog';
 import getConcatVideoWorker from './function/concatVideo.worker/getConcatVideoWorker';
 import Header from '../../../components/Header/Header';
 import { setConcatListAdd, setConcatList, setConcatListDelete, setConcatWorker, type ConcatInitialState } from '../reducers/concat';
-import { getFFmpeg } from '../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import RenderListItem from './RenderListItem';
 import type { MessageEventData } from '../../../commonTypes';
 import type { ConcatItem } from '../types';
@@ -50,9 +49,12 @@ function Concat(props: {}): ReactElement {
     if (!concatList?.length) return;
 
     const pathResult: ParsedPath = path.parse(concatList[0].value);
-    const time: string = dayjs().format('YYYY_MM_DD_HH_mm_ss');
     const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `[视频合并]${ time }${ pathResult.ext }`
+      defaultPath: getFilePath({
+        typeTitle: '视频合并',
+        infoArray: ['video-length', concatList.length],
+        ext: pathResult.ext
+      })
     });
 
     if (result.canceled || !result.filePath) return;

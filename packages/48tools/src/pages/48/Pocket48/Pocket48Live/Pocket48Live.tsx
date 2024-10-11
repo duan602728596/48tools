@@ -22,7 +22,6 @@ import type { ColumnsType } from 'antd/es/table';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { UseModalReturnType, UseMessageReturnType, ModuleFuncReturn } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
-import filenamify from 'filenamify/browser';
 import { Onion } from '@bbkkbkk/q';
 import { requestLiveRoomInfo, type LiveInfo, type LiveRoomInfo } from '@48tools-api/48';
 import { WinIpcChannel } from '@48tools/main/src/channelEnum';
@@ -41,7 +40,7 @@ import {
   IDBGetPocket48LiveOptions,
   type Pocket48InitialState
 } from '../../reducers/pocket48';
-import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFileTime, getFilePath } from '../../../../utils/utils';
 import {
   netMediaServerInit,
   getNetMediaServerPort,
@@ -210,8 +209,11 @@ function Pocket48Live(props: {}): ReactElement {
   async function handleGetVideoBackupClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[口袋48直播(备用录制)]${ record.userInfo.nickname }_${ filenamify(record.title) }`
-          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.flv`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48直播(备用录制)',
+          infoArray: [record.userInfo.nickname, record.title, getFileTime(record.ctime)],
+          ext: 'flv'
+        })
       });
 
       if (result.canceled || !result.filePath) return;
@@ -263,8 +265,11 @@ function Pocket48Live(props: {}): ReactElement {
   async function handleGetVideoClick(record: LiveInfo, transcoding: boolean, event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[口袋48直播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
-          + `@${ getFileTime(record.ctime) }__${ getFileTime() }.${ transcoding ? 'ts' : 'flv' }`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48直播',
+          infoArray: [record.userInfo.nickname, record.title, getFileTime(record.ctime)],
+          ext: transcoding ? 'ts' : 'flv'
+        })
       });
 
       if (result.canceled || !result.filePath) return;

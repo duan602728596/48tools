@@ -7,7 +7,7 @@ import { showSaveDialog } from '../../../../utils/remote/dialog';
 import { createV2LiveUrl, ffmpegHeaders, isCNCdnHost } from './helper';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/bilibiliLive';
-import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../../utils/utils';
 import type { LiveItem, MessageEventData } from '../../../../commonTypes';
 
 /**
@@ -18,7 +18,6 @@ import type { LiveItem, MessageEventData } from '../../../../commonTypes';
  */
 async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance | undefined, filePath: string | undefined): Promise<void> {
   const { dispatch }: Store = store;
-  const time: string = getFileTime();
 
   try {
     const resInit: RoomInit = await requestRoomInitData(record.roomId);
@@ -35,7 +34,11 @@ async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance 
       liveFilePath = filePath;
     } else {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[B站直播]${ record.roomId }_${ time }.flv`
+        defaultPath: getFilePath({
+          typeTitle: 'B站直播',
+          infoArray: [record.roomId],
+          ext: 'flv'
+        })
       });
 
       if (result.canceled || !result.filePath) return;

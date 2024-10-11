@@ -24,7 +24,7 @@ import { updateNextStatus, setImagesList, selectorsObject, setClearAllChecked, t
 import ImagesGroup from './ImagesGroup';
 import dynamicReducers from '../../../store/dynamicReducers';
 import weiboImagesDownloadReducers from '../reducers/weiboImagesDownload';
-import { fileTimeFormat } from '../../../utils/utils';
+import { getFilePath } from '../../../utils/utils';
 import getDownloadWorker from './download.worker/getDownloadWorker';
 import { pick } from '../../../utils/lodash';
 import type { WeiboImageItem, WeiboImagesGroup } from '../types';
@@ -173,10 +173,12 @@ function ImagesDownload(props: {}): ReactElement {
 
     if (checkedList.length <= 0) return;
 
-    const time: string = dayjs().format(fileTimeFormat);
     const result: SaveDialogReturnValue = await showSaveDialog({
       properties: ['createDirectory'],
-      defaultPath: `微博图片下载_${ accountId }_${ time }`
+      defaultPath: getFilePath({
+        typeTitle: '微博图片下载',
+        infoArray: [accountId ?? 0]
+      })
     });
 
     if (result.canceled || !result.filePath) return;

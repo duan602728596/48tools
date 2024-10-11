@@ -10,7 +10,6 @@ import { Form, Select, message, Button, Space, Tooltip, Radio, type FormInstance
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { ReloadOutlined as IconReloadOutlined } from '@ant-design/icons';
-import filenamify from 'filenamify/browser';
 import classNames from 'classnames';
 import {
   requestOpenLiveList,
@@ -28,7 +27,7 @@ import style from './getLiveUrl.sass';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { setOpenLiveListOptions, setAddInLiveList, setStopInLiveList, type Live48InitialState } from '../../reducers/live48';
-import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../../utils/utils';
 import { getPocket48Token } from '../../../../utils/snh48';
 import type { MessageEventData } from '../../../../commonTypes';
 import type { InLiveFormValue, InLiveWebWorkerItemNoplayStreamPath } from '../../types';
@@ -100,9 +99,12 @@ function GetLiveUrl(props: {}): ReactElement {
     }
 
     // 开始录制
-    const time: string = getFileTime();
     const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `[48公演直播]${ filenamify(resLiveOne.content.title) }_${ value.live }_${ value.streamName }_${ time }.flv`
+      defaultPath: getFilePath({
+        typeTitle: '48公演直播',
+        infoArray: [resLiveOne.content.title, value.live, value.streamName],
+        ext: 'flv'
+      })
     });
 
     if (result.canceled || !result.filePath) return;
