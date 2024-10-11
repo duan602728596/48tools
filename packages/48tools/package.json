@@ -27,7 +27,7 @@
     "antd": "^5.18.3",
     "array-move": "^4.0.0",
     "classnames": "^2.5.1",
-    "cookie": "^0.6.0",
+    "cookie": "^0.7.0",
     "dayjs": "^1.11.10",
     "filenamify": "^6.0.0",
     "hls.js": "^1.4.14",

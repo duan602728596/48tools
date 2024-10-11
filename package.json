@@ -72,9 +72,10 @@
   "resolutions": {
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc",
+    "express/cookie": "^0.7.0",
+    "express/path-to-regexp": "^0.1.10",
     "react": "rc",
-    "react-dom": "rc",
-    "express/path-to-regexp": "^0.1.10"
+    "react-dom": "rc"
   },
   "lint-staged": {
     "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "cross-env COMMITLINT=1 eslint --cache --cache-location .eslintcache --no-warn-ignored",
