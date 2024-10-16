@@ -1,6 +1,6 @@
 {
   "name": "@48tools/main",
-  "version": "4.14.5",
+  "version": "4.14.6",
   "description": "Electron主程序运行源代码",
   "license": "GPL-3.0",
   "scripts": {
