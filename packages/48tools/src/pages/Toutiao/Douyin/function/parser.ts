@@ -1,20 +1,21 @@
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
 import { requestDouyinUrl, type DouyinHtmlResponseType } from '@48tools-api/toutiao/douyin';
 
-type VideoParam = Partial<{ videoId: string }>;
+type VideoParamType = 'video' | 'note';
+type VideoParam = Partial<{ videoId: string; videoType: VideoParamType }>;
 type UserParam = Partial<{ userId: string }>;
 
 const vdouinRegexp: RegExp = /v\.douyin\.com/i;       // 抖音分享短链接
 const iesdouyinRegexp: RegExp = /www.iesdouyin.com/i; // 抖音分享长链接
 const iesdouyinhrefHtmlRegexp: RegExp = /<a href="https?:\/\/www\.iesdouyin\.com\//i; // 是一个链接
-const shareVideo: RegExp = /share\/\\(video|note\\)/i;    // 分享视频
+const shareVideo: RegExp = /share\/(video|note)/i;    // 分享视频
 const douyinRegexp: RegExp = /www\.douyin\.com/i;     // 抖音域名
-const douyinVideoRegexp: RegExp = /\/\\(video|note\\)\/[0-9]+/i; // 抖音视频
+const douyinVideoRegexp: RegExp = /\/(video|note)\/[0-9]+/i; // 抖音视频
 const videoIdRegexp: RegExp = /^[0-9]+$/;                    // 视频id
 const douyinUserRegexp: RegExp = /\/user\//i;                // 抖音用户
-const douyinVideoUrlMatch: MatchFunction<VideoParam> = match('/\\(video|note\\)/:videoId');
+const douyinVideoUrlMatch: MatchFunction<VideoParam> = match('/:videoType/:videoId');
 const douyinUserUrlMatch: MatchFunction<UserParam> = match('/user/:userId');
-const douyinShareVideoUrlMatch: MatchFunction<VideoParam> = match('/share/\\(video|note\\)/:videoId');
+const douyinShareVideoUrlMatch: MatchFunction<VideoParam> = match('/share/:videoType/:videoId');
 const douyinShareUserUrlMatch: MatchFunction<UserParam> = match('/share/user/:userId');
 
 export enum DouyinUrlType {
@@ -25,6 +26,18 @@ export enum DouyinUrlType {
 export interface ParseResult {
   type: DouyinUrlType;
   id: string;
+}
+
+/**
+ * 判断字符串是否是video或note
+ * @param { VideoParamType | undefined } t
+ */
+function isVideoParamType(t: VideoParamType | undefined): t is VideoParamType {
+  if (!t) return false;
+
+  const tLow: string = t.toLowerCase();
+
+  return tLow === 'video' || tLow === 'note';
 }
 
 /**
@@ -53,7 +66,7 @@ async function douyinUrlParse(urlParse: URL, url: string, cookie: string | undef
       if (shareVideo.test(href)) {
         const matchResult: Match<VideoParam> = douyinShareVideoUrlMatch(new URL(href).pathname);
 
-        if (typeof matchResult === 'object') {
+        if (typeof matchResult === 'object' && isVideoParamType(matchResult.params.videoType)) {
           type = DouyinUrlType.Video;
           id = matchResult.params.videoId;
         }
@@ -73,7 +86,7 @@ async function douyinUrlParse(urlParse: URL, url: string, cookie: string | undef
     // /video/:videoId
     const matchResult: Match<VideoParam> = douyinVideoUrlMatch(urlParse.pathname);
 
-    if (typeof matchResult === 'object') {
+    if (typeof matchResult === 'object' && isVideoParamType(matchResult.params.videoType)) {
       type = DouyinUrlType.Video;
       id = matchResult.params.videoId;
     }

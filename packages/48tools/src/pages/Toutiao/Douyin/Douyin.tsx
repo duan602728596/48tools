@@ -110,7 +110,9 @@ function Douyin(props: {}): ReactElement {
         filePath,
         durl: uri,
         qid: item.qid,
-        headers: {},
+        headers: {
+          Referer: 'https://www.douyin.com/'
+        },
         resStatus302: true
       });
     });
