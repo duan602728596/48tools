@@ -34,7 +34,7 @@ function globalsSettings(keys) {
 
   keys.forEach((key) => Object.assign(globalsObject, globals[key]));
 
-  for (let i = 15; i <= 25; i++ ) {
+  for (let i = 15; i <= 25; i++) {
     Object.assign(globalsObject, globals[`es20${ i }`]);
   }
 
