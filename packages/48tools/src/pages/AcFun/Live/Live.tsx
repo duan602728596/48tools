@@ -136,7 +136,7 @@ function Live(props: {}): ReactElement {
           const result: SaveDialogReturnValue = await showSaveDialog({
             defaultPath: getFilePath({
               typeTitle: 'A站直播',
-              infoArray: [record.roomId],
+              infoArray: [record.roomId, record.description],
               ext: 'flv'
             })
           });

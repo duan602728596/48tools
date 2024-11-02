@@ -115,7 +115,7 @@ async function autoGrab(
         rTime: string = rTimeDay.format(fileTimeFormat), // 文件创建时间
         filename: string = getFilePath({
           typeTitle: '口袋48直播(自动录制)',
-          infoArray: [item.userInfo.nickname, item.liveId, item.title, cTime],
+          infoArray: [item.userInfo.nickname, item.title, item.liveId, cTime],
           timeString: rTime,
           ext: transcoding ? 'ts' : 'flv'
         }); // 文件名

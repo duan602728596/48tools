@@ -267,7 +267,7 @@ function Pocket48Record(props: {}): ReactElement {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: '口袋48录播',
-          infoArray: [record.userInfo.nickname, record.title, getFileTime(record.ctime)],
+          infoArray: [record.userInfo.nickname, record.title, record.liveId, getFileTime(record.ctime)],
           ext: isM3u8 ? '.ts' : parseResult.ext
         })
       });
@@ -358,7 +358,7 @@ function Pocket48Record(props: {}): ReactElement {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: '口袋48弹幕',
-          infoArray: [record.userInfo.nickname, record.title],
+          infoArray: [record.userInfo.nickname, record.title, record.liveId],
           ext
         })
       });

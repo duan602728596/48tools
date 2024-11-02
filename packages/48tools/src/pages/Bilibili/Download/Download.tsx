@@ -85,7 +85,7 @@ function Download(props: {}): ReactElement {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: 'B站封面下载',
-          infoArray: [item.type, item.id],
+          infoArray: [item.type, item.id, item.title ?? ''],
           ext: parseResult.ext
         })
       });
