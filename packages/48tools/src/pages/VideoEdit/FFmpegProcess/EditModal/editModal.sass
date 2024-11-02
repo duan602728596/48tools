@@ -1,4 +1,4 @@
-@import '../../../../common'
+@use '../../../../common' as common
 
 .templateSelect
   width: 250px !important
@@ -7,9 +7,9 @@
     display: none
 
 .deleteIcon
-  color: $dust-red
+  color: common.$dust-red
   transform: translateY(5px)
 
 @media (prefers-color-scheme: dark)
   .deleteIcon
-    color: $dust-red-dark
+    color: common.$dust-red-dark
