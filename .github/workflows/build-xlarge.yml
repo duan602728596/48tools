@@ -30,6 +30,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - run: YARN_ENABLE_IMMUTABLE_INSTALLS=false npm run install:ci
+        if: ${{ always() }}
 
       - run: npm run build:ci
 
