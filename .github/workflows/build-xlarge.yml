@@ -17,22 +17,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - run: corepack enable
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
 
       - run: |
           VERSION=${{ github.ref }}
           VERSION=${VERSION#refs/heads/build/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - run: |
-          corepack enable
-          corepack prepare yarn@4.5.1 --activate
-          yarn set version 4.5.1
-
-      - run: SKIP_YARN_COREPACK_CHECK=0 npm run install:ci
+      - run: npm run install:ci
 
       - run: npm run build:ci
 
