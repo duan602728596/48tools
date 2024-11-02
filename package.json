@@ -30,7 +30,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "yarn@4.2.1",
+  "packageManager": "yarn@4.5.1",
   "dependencies": {
     "@vercel/ncc": "^0.38.1",
     "cross-zip": "^4.0.0",
