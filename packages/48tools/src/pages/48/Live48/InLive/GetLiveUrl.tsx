@@ -1,15 +1,16 @@
 'use idle';
 
 import { randomUUID } from 'node:crypto';
-import type { SaveDialogReturnValue } from 'electron';
-import { Fragment, useEffect, useTransition, type ReactElement, type TransitionStartFunction } from 'react';
+import { clipboard, type SaveDialogReturnValue } from 'electron';
+import { Fragment, useEffect, useTransition, type ReactElement, type TransitionStartFunction, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Form, Select, message, Button, Space, Tooltip, Radio, type FormInstance } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
+import type { MessageInstance } from 'antd/es/message/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { ReloadOutlined as IconReloadOutlined } from '@ant-design/icons';
+import { ReloadOutlined as IconReloadOutlined, CopyOutlined as IconCopyOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import {
   requestOpenLiveList,
@@ -32,6 +33,64 @@ import { getPocket48Token } from '../../../../utils/snh48';
 import type { MessageEventData } from '../../../../commonTypes';
 import type { InLiveFormValue, InLiveWebWorkerItemNoplayStreamPath } from '../../types';
 
+/* 获取直播地址 */
+interface GetPlayStreamReturn {
+  streamPath: string | undefined;
+  resLiveOne: LiveOne;
+  playStreamItem: LiveOnePlayStreams;
+}
+
+async function getPlayStream(value: InLiveFormValue, messageApi: MessageInstance): Promise<GetPlayStreamReturn | undefined> {
+  if (!value.live) {
+    messageApi.warning('请选择直播！');
+
+    return;
+  }
+
+  const token: string | undefined = getPocket48Token();
+  const resLiveOne: LiveOne = await requestLiveOne(value.live, token);
+  const playStream: Array<LiveOnePlayStreams> = resLiveOne?.content?.playStreams ?? [];
+
+  if (!playStream.length) {
+    messageApi.warning('当前直播未开始！');
+
+    return;
+  }
+
+  const playStreamItem: LiveOnePlayStreams | undefined = playStream.find((o: LiveOnePlayStreams): boolean => o.streamName === value.streamName);
+
+  if (!playStreamItem) {
+    messageApi.error('未找到流信息！');
+
+    return;
+  }
+
+  let streamPath: string | undefined = undefined;
+
+  if (playStreamItem.vipShow) {
+    const resStreamPath: LiveStream = await requestLiveStream(value.live, token);
+
+    if (!resStreamPath.content) {
+      // rtmp://cyflv.48.cn/chaoqing/9999?wsSecret=af170e44259cb3b0bc3e63fbb2bb2b84&wsTime=66055829&keeptime=60
+      messageApi.warning(resStreamPath.message ?? '当前直播分辨率需要VIP！');
+
+      return;
+    } else {
+      streamPath = resStreamPath.content;
+    }
+  } else {
+    if (!playStreamItem.streamPath) {
+      messageApi.warning('当前直播未开始！');
+
+      return;
+    } else {
+      streamPath = playStreamItem.streamPath;
+    }
+  }
+
+  return { streamPath, resLiveOne, playStreamItem };
+}
+
 /* redux selector */
 type RSelector = Pick<Live48InitialState, 'OpenLiveListOptions'>;
 type RState = { live48: Live48InitialState };
@@ -49,54 +108,31 @@ function GetLiveUrl(props: {}): ReactElement {
   const [form]: [FormInstance] = Form.useForm();
   const [getLiveListLoading, startGetLiveListStartTransition]: [boolean, TransitionStartFunction] = useTransition(); // 获取直播地址时的loading状态
 
+  // 复制录制地址
+  async function handleCopyClick(event: MouseEvent): Promise<void> {
+    const value: InLiveFormValue = form.getFieldsValue();
+
+    const playStreamResult: GetPlayStreamReturn | undefined = await getPlayStream(value, messageApi);
+
+    if (!playStreamResult) return;
+
+    const { streamPath }: GetPlayStreamReturn = playStreamResult;
+
+    if (!(streamPath && value.live)) return;
+
+    clipboard.writeText(streamPath);
+    messageApi.success('直播流地址复制到剪贴板。');
+  }
+
   // 开始直播录制
   async function handleStartInLiveSubmit(value: InLiveFormValue): Promise<void> {
-    if (!value.live) {
-      messageApi.warning('请选择直播！');
+    const playStreamResult: GetPlayStreamReturn | undefined = await getPlayStream(value, messageApi);
 
-      return;
-    }
+    if (!playStreamResult) return;
 
-    const token: string | undefined = getPocket48Token();
-    const resLiveOne: LiveOne = await requestLiveOne(value.live, token);
-    const playStream: Array<LiveOnePlayStreams> = resLiveOne?.content?.playStreams ?? [];
+    const { streamPath, resLiveOne, playStreamItem }: GetPlayStreamReturn = playStreamResult;
 
-    if (!playStream.length) {
-      messageApi.warning('当前直播未开始！');
-
-      return;
-    }
-
-    const playStreamItem: LiveOnePlayStreams | undefined = playStream.find((o: LiveOnePlayStreams): boolean => o.streamName === value.streamName);
-
-    if (!playStreamItem) {
-      messageApi.error('未找到流信息！');
-
-      return;
-    }
-
-    let streamPath: string;
-
-    if (playStreamItem.vipShow) {
-      const resStreamPath: LiveStream = await requestLiveStream(value.live, token);
-
-      if (!resStreamPath.content) {
-        // rtmp://cyflv.48.cn/chaoqing/9999?wsSecret=af170e44259cb3b0bc3e63fbb2bb2b84&wsTime=66055829&keeptime=60
-        messageApi.warning(resStreamPath.message ?? '当前直播分辨率需要VIP！');
-
-        return;
-      } else {
-        streamPath = resStreamPath.content;
-      }
-    } else {
-      if (!playStreamItem.streamPath) {
-        messageApi.warning('当前直播未开始！');
-
-        return;
-      } else {
-        streamPath = playStreamItem.streamPath;
-      }
-    }
+    if (!(streamPath && value.live)) return;
 
     // 开始录制
     const result: SaveDialogReturnValue = await showSaveDialog({
@@ -201,9 +237,14 @@ function GetLiveUrl(props: {}): ReactElement {
           <Form.Item name="live" noStyle={ true }>
             <Select className={ style.liveSelect } loading={ getLiveListLoading } placeholder="选择公演" options={ OpenLiveListOptions } />
           </Form.Item>
-          <Tooltip title="刷新公演直播列表">
-            <Button className={ style.reloadButton } icon={ <IconReloadOutlined /> } onClick={ getLiveList } />
-          </Tooltip>
+          <Button.Group className={ style.buttonGroup }>
+            <Tooltip title="刷新公演直播列表">
+              <Button className={ style.reloadButton } icon={ <IconReloadOutlined /> } onClick={ getLiveList } />
+            </Tooltip>
+            <Tooltip title="复制直播流地址">
+              <Button icon={ <IconCopyOutlined /> } onClick={ handleCopyClick } />
+            </Tooltip>
+          </Button.Group>
         </Space>
         <Button className="ml-[8px]" type="primary" htmlType="submit">开始直播录制</Button>
       </Form>
