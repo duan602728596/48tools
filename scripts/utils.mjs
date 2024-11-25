@@ -67,10 +67,14 @@ export const isArm64 = process.arch === 'arm64';
  */
 export function command(cmd, args, cwdPath) {
   return new Promise((resolve, reject) => {
-    const child = spawn(cmd, args, {
+    const spawnOptions = {
       stdio: 'inherit',
       cwd: cwdPath
-    });
+    };
+
+    if (isWindows) spawnOptions.shell = true;
+
+    const child = spawn(cmd, args, spawnOptions);
 
     child.on('close', function(code) {
       resolve();
