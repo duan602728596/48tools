@@ -7,7 +7,6 @@ import type { useAppProps } from 'antd/es/app/context';
 import * as dayjs from 'dayjs';
 import { requestUid, requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
 import { WeiboLoginChannel } from '@48tools/main/src/channelEnum';
-import type { PromiseWithResolvers } from '@48tools-types/ECMAScript';
 import { IDBSaveAccount, type WeiboLoginInitialState } from '../reducers/weiboLogin';
 import { weiboLoginSelector } from '../reducers/selectors';
 import type { WeiboAccount } from '../../../commonTypes';
