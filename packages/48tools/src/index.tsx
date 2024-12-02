@@ -1,5 +1,5 @@
 import { createRoot, type Root } from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import 'antd/dist/reset.css';
 import * as dayjs from 'dayjs';

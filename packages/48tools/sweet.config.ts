@@ -137,7 +137,7 @@ export default function(info: Record<string, any>): Record<string, any> {
       'react-dom/client',
       'react-dom/server.browser',
       'react-redux',
-      'react-router-dom',
+      'react-router',
       'redux-saga',
       'redux-saga/effects',
       'reselect'

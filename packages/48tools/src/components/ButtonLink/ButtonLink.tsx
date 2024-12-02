@@ -1,5 +1,5 @@
 import type { ReactElement, MouseEvent, PropsWithChildren } from 'react';
-import { useHref, useLinkClickHandler, type LinkProps } from 'react-router-dom';
+import { useHref, useLinkClickHandler, type LinkProps } from 'react-router';
 import { Button, type ButtonProps } from 'antd';
 import { pick } from '../../utils/lodash';
 

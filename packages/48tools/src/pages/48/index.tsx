@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router';
 import style from './RoomMessage/roomMessage.sass';
 import Content from '../../components/Content/Content';
 import Pocket48Live from './Pocket48/Pocket48Live/Pocket48Live';
