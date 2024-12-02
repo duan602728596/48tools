@@ -5,11 +5,13 @@ import { ffmpegInstallHtmlPage } from '../../../utils/utils';
 
 const NOW_USER_TOUR_VERSION_KEY: 'USER_TOUR_VERSION' = 'USER_TOUR_VERSION';
 const NOW_USER_TOUR_VERSION: '1' = '1'; // 当前引导版本
-const userTourVersion: string | null = localStorage.getItem(NOW_USER_TOUR_VERSION_KEY); // 本地引导版本
-const displayUserTourVersion: boolean = NOW_USER_TOUR_VERSION !== userTourVersion;
 
 /* 新手引导 */
-function NewUserTour(): ReactElement | null {
+function NewUserTour(props: {}): ReactElement | null {
+  // 本地引导版本
+  const userTourVersion: string | null = localStorage.getItem(NOW_USER_TOUR_VERSION_KEY);
+  const displayUserTourVersion: boolean = NOW_USER_TOUR_VERSION !== userTourVersion;
+
   const [tourOpen, setTourOpen]: [boolean, D<S<boolean>>] = useState(displayUserTourVersion);
 
   // 引导中
