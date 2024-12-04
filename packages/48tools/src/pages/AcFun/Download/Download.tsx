@@ -21,7 +21,7 @@ import {
   setRepresentation,
   type AcFunDownloadInitialState
 } from '../reducers/acfunDownload';
-import { getFFmpeg } from '../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import { parseAcFunUrl, type ParseAcFunUrlResult } from './function/parseAcFunUrl';
 import { pick } from '../../../utils/lodash';
@@ -82,7 +82,11 @@ function Download(props: {}): ReactElement {
   async function handleDownloadAcFunVideoClick(record: DownloadItem, value: string): Promise<void> {
     const [label, durl]: string[] = value.split(/@/);
     const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `[A站下载]${ record.type }${ record.id }_${ label }.mp4`
+      defaultPath: getFilePath({
+        typeTitle: 'A站视频下载',
+        infoArray: [`${ record.type }${ record.id }`, label],
+        ext: 'mp4'
+      })
     });
 
     if (result.canceled || !result.filePath) return;

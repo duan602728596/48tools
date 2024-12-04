@@ -3,7 +3,6 @@ import type { DataDispatchFunc, CursorDispatchFunc, QueryDispatchFunc } from '@i
 import IDBRedux, { pocket48UserInfoObjectStoreName } from '../../../utils/IDB/IDBRedux';
 import type { QingchunshikeUserItem } from '../types';
 
-
 // 青春时刻
 export interface QingchunshikeInitialState {
   userList: Array<QingchunshikeUserItem>;

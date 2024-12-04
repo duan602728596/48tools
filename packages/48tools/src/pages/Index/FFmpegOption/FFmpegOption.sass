@@ -1,15 +1,15 @@
-@import '../../../common'
+@use '../../../common' as common
 
 .tips
   padding: 3px 4px
-  vertical-align: -4px
-  border: 1px dashed $dust-red
-  color: $dust-red
+  vertical-align: 6px
+  border: 1px dashed common.$dust-red
+  color: common.$dust-red
 
 @media (prefers-color-scheme: dark)
   .tips
-    border: 1px dashed $dust-red-dark
-    color: $dust-red-dark
+    border: 1px dashed common.$dust-red-dark
+    color: common.$dust-red-dark
 
 .ffmpegIcon
   font-size: 22px

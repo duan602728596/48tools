@@ -1,10 +1,10 @@
-@import '../../../common'
+@use '../../../common' as common
 
 .helperItem
   background-color: #fafafa
 
 .over
-  background-color: $cyan
+  background-color: common.$cyan
 
 .active
   position: relative
@@ -16,7 +16,7 @@
     background-color: transparent
 
   .over
-    background-color: $cyan-dark
+    background-color: common.$cyan-dark
 
   .active
     box-shadow: 0 0 8px rgba(255, 255, 255, .5)

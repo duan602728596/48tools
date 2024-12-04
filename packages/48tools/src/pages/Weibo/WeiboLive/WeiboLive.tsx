@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { SaveDialogReturnValue } from 'electron';
-import type { ReactElement, MouseEvent } from 'react';
+import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -9,7 +9,6 @@ import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import filenamify from 'filenamify/browser';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import Content from '../../../components/Content/Content';
 import Header from '../../../components/Header/Header';
 import AddLiveUrlForm from './AddLiveUrlForm/AddLiveUrlForm';
 import { setLiveOne, setRemoveLiveOne, selectorsObject, type WeiboLiveInitialState } from '../reducers/weiboLive';
@@ -139,7 +138,7 @@ function WeiboLive(props: {}): ReactElement {
   ];
 
   return (
-    <Content>
+    <Fragment>
       <Header>
         <AddLiveUrlForm onGetLiveInfoCallback={ onGetLiveInfoCallback } />
       </Header>
@@ -152,7 +151,7 @@ function WeiboLive(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
-    </Content>
+    </Fragment>
   );
 }
 

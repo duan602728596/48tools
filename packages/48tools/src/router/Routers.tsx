@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useRoutes, Navigate } from 'react-router-dom';
+import { useRoutes, Navigate } from 'react-router';
 import Index from '../pages/Index/index';
 import Pocket48 from '../pages/48/index';
 import Bilibili from '../pages/Bilibili/index';

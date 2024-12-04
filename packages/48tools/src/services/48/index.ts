@@ -39,7 +39,7 @@ const timeoutOptions: Delays = {
 export async function requestLiveRoomInfo(id: string): Promise<LiveRoomInfo> {
   const res: GotResponse<LiveRoomInfo> = await got('https://pocketapi.48.cn/live/api/v1/live/getLiveOne', {
     method: 'POST',
-    headers: createHeaders(),
+    headers: await createHeaders(),
     responseType: 'json',
     json: { liveId: id },
     timeout: timeoutOptions
@@ -112,7 +112,7 @@ export async function requestLiveList(
 
   const res: GotResponse<LiveData> = await got('https://pocketapi.48.cn/live/api/v1/live/getLiveList', {
     method: 'POST',
-    headers: createHeaders(),
+    headers: await createHeaders(),
     responseType: 'json',
     json: body,
     timeout: timeoutOptions
@@ -133,7 +133,7 @@ export async function requestServerSearch(searchContent: string): Promise<Server
 
   const res: GotResponse<ServerSearchResult> = await got('https://pocketapi.48.cn/im/api/v1/im/server/search', {
     method: 'POST',
-    headers: createHeaders(token),
+    headers: await createHeaders(token),
     responseType: 'json',
     json: { searchContent }
   });
@@ -149,7 +149,7 @@ export async function requestServerJump(id: number): Promise<ServerJumpResult | 
 
   const res: GotResponse<ServerJumpResult> = await got('https://pocketapi.48.cn/im/api/v1/im/server/jump', {
     method: 'POST',
-    headers: createHeaders(token),
+    headers: await createHeaders(token),
     responseType: 'json',
     json: {
       starId: id,
@@ -178,7 +178,7 @@ export async function requestHomeownerMessage(
   const res: GotResponse<HomeMessageResult> = await got(
     'https://pocketapi.48.cn/im/api/v1/team/message/list/homeowner', {
       method: 'POST',
-      headers: createHeaders(token),
+      headers: await createHeaders(token),
       responseType: 'json',
       json: {
         channelId,
@@ -203,7 +203,7 @@ export async function requestVoiceOperate(serverId: number, channelId: number): 
 
   const res: GotResponse<VoiceOperate> = await got('https://pocketapi.48.cn/im/api/v1/team/voice/operate', {
     method: 'POST',
-    headers: createHeaders(token),
+    headers: await createHeaders(token),
     responseType: 'json',
     json: { serverId, channelId, operateCode: 2 }
   });
@@ -242,7 +242,7 @@ export async function requestFriendshipAdd(toSourceId: number): Promise<FriendSh
   if (!token) return;
 
   const res: GotResponse<FriendShipAdd> = await got.post('https://pocketapi.48.cn/user/api/v2/friendships/friends/add', {
-    headers: createHeaders(token),
+    headers: await createHeaders(token),
     responseType: 'json',
     json: {
       toSourceId,
@@ -260,7 +260,7 @@ export async function requestOpenLiveList(args: {
   record?: boolean;
 } = {}): Promise<OpenLiveList> {
   const res: GotResponse<OpenLiveList> = await got.post('https://pocketapi.48.cn/live/api/v1/live/getOpenLiveList', {
-    headers: createHeaders(),
+    headers: await createHeaders(),
     responseType: 'json',
     json: {
       debug: false,
@@ -281,7 +281,7 @@ export async function requestOpenLiveList(args: {
 export async function requestLiveOne(liveId: string, token?: string): Promise<LiveOne> {
   const res: GotResponse<LiveOne> = await got('https://pocketapi.48.cn/live/api/v1/live/getOpenLiveOne', {
     method: 'POST',
-    headers: createHeaders(token),
+    headers: await createHeaders(token),
     responseType: 'json',
     json: { liveId },
     timeout: timeoutOptions
@@ -298,7 +298,7 @@ export async function requestLiveOne(liveId: string, token?: string): Promise<Li
 export async function requestLiveStream(liveId: string, token?: string): Promise<LiveStream> {
   const res: GotResponse<LiveStream> = await got('https://pocketapi.48.cn/live/api/v1/live/getlivestream', {
     method: 'POST',
-    headers: createHeaders(token),
+    headers: await createHeaders(token),
     responseType: 'json',
     json: { liveId, streamType: 3 },
     timeout: timeoutOptions
@@ -317,7 +317,7 @@ export async function requestRoomInfo(channelId: string | number): Promise<RoomI
   if (!token) return;
 
   const res: GotResponse<RoomInfo> = await got.post('https://pocketapi.48.cn/im/api/v1/im/team/room/info', {
-    headers: createHeaders(token),
+    headers: await createHeaders(token),
     responseType: 'json',
     json: { channelId: `${ channelId }` }
   });

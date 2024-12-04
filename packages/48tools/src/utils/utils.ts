@@ -4,6 +4,7 @@ import type { Server as NetServer } from 'node:net';
 import * as os from 'node:os';
 import { chromium, firefox, webkit, type BrowserType } from 'playwright-core';
 import * as dayjs from 'dayjs';
+import filenamify from 'filenamify/browser';
 import { BILIBILI_COOKIE_KEY, type BilibiliCookie } from '../functionalComponents/BilibiliLogin/Qrcode';
 import { ACFUN_COOKIE_KEY, type AcFunCookie } from '../functionalComponents/AcFunLogin/Qrcode';
 
@@ -71,6 +72,32 @@ export function getFileTime(value?: number | string): string {
   } else {
     return dayjs().format(fileTimeFormat);
   }
+}
+
+/**
+ * 统一生成filePath
+ * @param { string } obj.typeTitle - 文件或文件夹的类型
+ * @param { Array<string | number> } obj.infoArray - 文件或文件夹上添加的一些信息
+ * @param { string | number } [obj.time] - 时间戳
+ * @param { string } [obj.timeString] - 时间
+ * @param { string } [obj.ext] - 文件扩展名
+ */
+export function getFilePath(obj: {
+  typeTitle: string;
+  infoArray: (string | number)[];
+  timeString?: string;
+  time?: string | number;
+  ext?: string
+}): string {
+  let result: string = `[${ obj.typeTitle }]_`;
+
+  if (obj.infoArray.length) result += filenamify(obj.infoArray.join('_'));
+
+  result += `__${ obj.timeString || getFileTime(obj.time) }`;
+
+  if (obj.ext) result += (/^\./.test(obj.ext) ? obj.ext : `.${ obj.ext }`);
+
+  return result;
 }
 
 /**

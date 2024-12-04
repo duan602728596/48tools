@@ -11,7 +11,6 @@ import type { ColumnsType } from 'antd/es/table';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import * as dayjs from 'dayjs';
-import filenamify from 'filenamify/browser';
 import {
   requestDownloadFile,
   requestOpenLiveList,
@@ -32,7 +31,7 @@ import {
   setInVideoGroupList,
   type Live48InitialState
 } from '../../reducers/live48';
-import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../../utils/utils';
 import { proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
 import { formatTsUrl, getTeamId } from '../function/utils';
@@ -124,8 +123,11 @@ function InVideo(props: {}): ReactElement {
       }
 
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[48公演录播]${ filenamify(record.title) }`
-          + `@${ record.liveId }_${ getFileTime() }.ts`
+        defaultPath: getFilePath({
+          typeTitle: '48公演录播',
+          infoArray: [record.title, record.liveId],
+          ext: 'ts'
+        })
       });
 
       if (result.canceled || !result.filePath) return;

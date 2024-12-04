@@ -12,7 +12,7 @@ import getPocket48LiveDownloadWorker from './Pocket48LiveDownload.worker/getPock
 import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
-import { getFFmpeg, fileTimeFormat } from '../../../../utils/utils';
+import { getFFmpeg, fileTimeFormat, getFilePath } from '../../../../utils/utils';
 import Pocket48LiveRender from '../function/Pocket48LiveRender';
 import type { MessageEventData, LiveStatusEventData, WebWorkerChildItem } from '../../../../commonTypes';
 
@@ -113,8 +113,12 @@ async function autoGrab(
         cTime: string = cTimeDay.format(fileTimeFormat), // 直播开始时间
         rTimeDay: Dayjs = dayjs(),
         rTime: string = rTimeDay.format(fileTimeFormat), // 文件创建时间
-        filename: string = `[口袋48直播]${ item.userInfo.nickname }_${ cTime }_${ item.liveId }_${ rTime }`
-          + `.${ transcoding ? 'ts' : 'flv' }`; // 文件名
+        filename: string = getFilePath({
+          typeTitle: '口袋48直播(自动录制)',
+          infoArray: [item.userInfo.nickname, item.title, item.liveId, cTime],
+          timeString: rTime,
+          ext: transcoding ? 'ts' : 'flv'
+        }); // 文件名
 
       try {
         // 追加log

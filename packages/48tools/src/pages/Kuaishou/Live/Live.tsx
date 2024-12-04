@@ -23,7 +23,7 @@ import {
 } from '../reducers/kuaishouLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import getLiveInfo from './function/getLiveInfo';
-import { getFFmpeg, getFileTime } from '../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
 import { localStorageKey } from './function/helper';
@@ -74,9 +74,12 @@ function Live(props: {}): ReactElement {
         return;
       }
 
-      const time: string = getFileTime();
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[快手直播]${ record.roomId }_${ playUrlItem.qualityType }_${ liveInfo.title }_${ time }.flv`
+        defaultPath: getFilePath({
+          typeTitle: '快手直播',
+          infoArray: [record.roomId, liveInfo.title, playUrlItem.qualityType, record.description],
+          ext: 'flv'
+        })
       });
 
       if (result.canceled || !result.filePath) return;

@@ -5,7 +5,6 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
 import { Button, Space, List, Alert, Avatar, Tag, message } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import Content from '../../../components/Content/Content';
 import Header from '../../../components/Header/Header';
 import WeiboLoginDynamic from '../../../functionalComponents/WeiboLogin/loader';
 import { IDBCursorAccountList } from '../../../functionalComponents/WeiboLogin/reducers/weiboLogin';
@@ -103,28 +102,26 @@ function Index(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <Content>
-        <Header>
-          <Space>
-            <AccountSelect value={ accountValue }
-              disabled={ checkIn }
-              onSelect={ (value: string): void => setAccountValue(value) }
-            />
-            <Button.Group>
-              {
-                checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (
-                  <Button type="primary" disabled={ accountValue === undefined } onClick={ handleWeiboCheckinStartClick }>
-                    超话签到
-                  </Button>
-                )
-              }
-              <WeiboLoginDynamic />
-            </Button.Group>
-          </Space>
-        </Header>
-        <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />
-        <List size="small" dataSource={ weiboCheckinList } renderItem={ weiboCheckinListRender } />
-      </Content>
+      <Header>
+        <Space>
+          <AccountSelect value={ accountValue }
+            disabled={ checkIn }
+            onSelect={ (value: string): void => setAccountValue(value) }
+          />
+          <Button.Group>
+            {
+              checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (
+                <Button type="primary" disabled={ accountValue === undefined } onClick={ handleWeiboCheckinStartClick }>
+                  超话签到
+                </Button>
+              )
+            }
+            <WeiboLoginDynamic />
+          </Button.Group>
+        </Space>
+      </Header>
+      <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />
+      <List size="small" dataSource={ weiboCheckinList } renderItem={ weiboCheckinListRender } />
       { messageContextHolder }
     </Fragment>
   );

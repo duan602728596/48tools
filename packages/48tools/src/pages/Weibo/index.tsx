@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router';
 import Content from '../../components/Content/Content';
 import WeiboLive from './WeiboLive/WeiboLive';
 import WeiboSuperDynamic from './WeiboSuper/loader';

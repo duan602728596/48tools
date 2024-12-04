@@ -14,7 +14,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { useLocation, useNavigate, type Location, type NavigateFunction } from 'react-router-dom';
+import { useLocation, useNavigate, type Location, type NavigateFunction } from 'react-router';
 import { Button, Form, Modal, Avatar, Tabs, Dropdown, Select, App, type FormInstance } from 'antd';
 import type { ModalFunc } from 'antd/es/modal/confirm';
 import type { useAppProps } from 'antd/es/app/context';

@@ -15,8 +15,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - run: corepack enable
+
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -25,7 +27,8 @@ jobs:
           VERSION=${VERSION#refs/heads/build/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - run: SKIP_YARN_COREPACK_CHECK=0 npm run install:ci
+      - run: YARN_ENABLE_IMMUTABLE_INSTALLS=false npm run install:ci
+        if: ${{ always() }}
 
       - run: npm run build:ci
 

@@ -33,7 +33,7 @@ import {
   setDownloadProgress,
   type DouyinDownloadInitialState
 } from '../reducers/douyinDownload';
-import { fileTimeFormat } from '../../../utils/utils';
+import { fileTimeFormat, getFilePath } from '../../../utils/utils';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
 import type { DownloadItem } from '../types';
 
@@ -110,7 +110,9 @@ function Douyin(props: {}): ReactElement {
         filePath,
         durl: uri,
         qid: item.qid,
-        headers: {},
+        headers: {
+          Referer: 'https://www.douyin.com/'
+        },
         resStatus302: true
       });
     });
@@ -162,10 +164,10 @@ function Douyin(props: {}): ReactElement {
   // 下载
   async function handleDownloadClick(item: DownloadItem, event: MouseEvent): Promise<void> {
     try {
-      let defaultPathTitle: string = `[抖音]${ filenamify(item.title) }`;
+      const infoArray: Array<string> = [item.title];
 
       if (typeof item.width === 'number' && typeof item.height === 'number') {
-        defaultPathTitle += `_${ item.width }x${ item.height }`;
+        infoArray.push(`${ item.width }x${ item.height }`);
       }
 
       let fileExt: string = '.mp4';
@@ -176,7 +178,13 @@ function Douyin(props: {}): ReactElement {
         fileExt = path.parse(urlResult.pathname).ext;
       }
 
-      const result: SaveDialogReturnValue = await showSaveDialog({ defaultPath: `${ defaultPathTitle }${ fileExt }` });
+      const result: SaveDialogReturnValue = await showSaveDialog({
+        defaultPath: getFilePath({
+          typeTitle: item.isImage ? '抖音图片下载' : '抖音视频下载',
+          infoArray,
+          ext: fileExt
+        })
+      });
 
       if (result.canceled || !result.filePath) return;
 

@@ -1,3 +1,4 @@
+import { parse, type ParsedPath } from 'node:path';
 import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,7 +17,7 @@ import {
   setCutChildListDelete,
   type VideoCutInitialState
 } from '../reducers/videoCut';
-import { getFFmpeg } from '../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 import type { CutItem } from '../types';
 
@@ -53,8 +54,13 @@ function Index(props: {}): ReactElement {
 
   // 开始裁剪
   async function handleStartCutClick(item: CutItem, event: MouseEvent): Promise<void> {
+    const parseResult: ParsedPath = parse(item.name);
     const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `[视频裁剪]${ item.id }.${ item.name }`
+      defaultPath: getFilePath({
+        typeTitle: '视频裁剪',
+        infoArray: [item.id, parseResult.name],
+        ext: parseResult.ext
+      })
     });
 
     if (result.canceled || !result.filePath) return;

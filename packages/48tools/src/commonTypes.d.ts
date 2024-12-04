@@ -23,8 +23,11 @@ export interface WeiboAccount {
   username: string;
   cookie: string;
   lastLoginTime: string; // 最后登陆时间
+  /** @deprecated */
   s: string | undefined;
+  /** @deprecated */
   from: string | undefined;
+  /** @deprecated */
   c: string | undefined;
 }
 

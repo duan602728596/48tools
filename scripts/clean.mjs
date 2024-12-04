@@ -5,7 +5,7 @@ import { glob } from 'glob';
 import fse from 'fs-extra/esm';
 import zip from 'cross-zip';
 import { build, unpacked, isMacOS, isWindows, isArm64 } from './utils.mjs';
-import lernaJson from '../lerna.json' assert { type: 'json' };
+import { lernaJson } from './jsonImport/jsonImport.mjs';
 
 const zipPromise = util.promisify(zip.zip);
 

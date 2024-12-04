@@ -1,5 +1,5 @@
 import type { SaveDialogReturnValue } from 'electron';
-import { useMemo, useTransition, type ReactElement, type MouseEvent, type TransitionStartFunction } from 'react';
+import { Fragment, useMemo, useTransition, type ReactElement, type MouseEvent, type TransitionStartFunction } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -18,14 +18,13 @@ import commonStyle from '../../../common.sass';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import { nativeMessage } from '../../../utils/remote/nativeMessage';
 import Header from '../../../components/Header/Header';
-import Content from '../../../components/Content/Content';
 import WeiboLoginDynamic from '../../../functionalComponents/WeiboLogin/loader';
 import AccountSelect from '../components/AccountSelect/AccountSelect';
 import { updateNextStatus, setImagesList, selectorsObject, setClearAllChecked, type WeiboImagesDownloadInitialState } from '../reducers/weiboImagesDownload';
 import ImagesGroup from './ImagesGroup';
 import dynamicReducers from '../../../store/dynamicReducers';
 import weiboImagesDownloadReducers from '../reducers/weiboImagesDownload';
-import { fileTimeFormat } from '../../../utils/utils';
+import { getFilePath } from '../../../utils/utils';
 import getDownloadWorker from './download.worker/getDownloadWorker';
 import { pick } from '../../../utils/lodash';
 import type { WeiboImageItem, WeiboImagesGroup } from '../types';
@@ -174,10 +173,12 @@ function ImagesDownload(props: {}): ReactElement {
 
     if (checkedList.length <= 0) return;
 
-    const time: string = dayjs().format(fileTimeFormat);
     const result: SaveDialogReturnValue = await showSaveDialog({
       properties: ['createDirectory'],
-      defaultPath: `微博图片下载_${ accountId }_${ time }`
+      defaultPath: getFilePath({
+        typeTitle: '微博图片下载',
+        infoArray: [accountId ?? 0]
+      })
     });
 
     if (result.canceled || !result.filePath) return;
@@ -199,7 +200,7 @@ function ImagesDownload(props: {}): ReactElement {
   }
 
   return (
-    <Content>
+    <Fragment>
       <Header>
         <Form form={ form }>
           <div className="mb-[8px]">
@@ -220,8 +221,8 @@ function ImagesDownload(props: {}): ReactElement {
           </div>
         </Form>
       </Header>
-      <Space>
-        <Card size="small">
+      <div className="flex">
+        <Card className="grow-0 shrink-0" size="small">
           <div className="w-[600px] h-[600px] overflow-hidden select-none">
             {
               listGroup.length === 0 ? <Empty className="mt-[215px]" /> : (
@@ -235,19 +236,25 @@ function ImagesDownload(props: {}): ReactElement {
             }
           </div>
         </Card>
-        <Space direction="vertical">
+        <div className="ml-[8px] grow-0 shrink-0 content-center">
           <p className={ commonStyle.tips }>
             需要微博账号登录后才能下载。<br />
             鼠标左键点击预览图片。<br />
             鼠标右键点击选中要下载的图片。<br />
             下载完毕后会清空所有选中。
           </p>
-          <Button onClick={ handleDownloadCheckedImagesClick }>下载选中的图片</Button>
-          <Button onClick={ handleClearAllCheckedClick }>清空所有选中</Button>
-          <Button type="primary" loading={ imageLoading } onClick={ handleGetNextImagesClick }>加载下一页</Button>
-        </Space>
-      </Space>
-    </Content>
+          <div className="inline-block">
+            <Space direction="vertical">
+              <Button block={ true } onClick={ handleDownloadCheckedImagesClick }>下载选中的图片</Button>
+              <Button block={ true } onClick={ handleClearAllCheckedClick }>清空所有选中</Button>
+              <Button type="primary" block={ true } loading={ imageLoading } onClick={ handleGetNextImagesClick }>
+                加载下一页
+              </Button>
+            </Space>
+          </div>
+        </div>
+      </div>
+    </Fragment>
   );
 }
 

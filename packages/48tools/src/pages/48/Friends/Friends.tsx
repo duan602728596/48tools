@@ -8,7 +8,7 @@ import {
   type Dispatch as D,
   type SetStateAction as S
 } from 'react';
-import { useLocation, type Location } from 'react-router-dom';
+import { useLocation, type Location } from 'react-router';
 import { Button, Spin, Empty, Divider } from 'antd';
 import classNames from 'classnames';
 import type { RoomItem } from '@48tools-api/48/jsdelivrCDN';

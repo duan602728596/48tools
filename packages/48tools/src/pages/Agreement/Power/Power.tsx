@@ -1,5 +1,5 @@
 import type { ReactElement, MouseEvent } from 'react';
-import { useNavigate, useSearchParams, type NavigateFunction, type SetURLSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, type NavigateFunction, type SetURLSearchParams } from 'react-router';
 import { Typography, Button } from 'antd';
 import Header from '../../../components/Header/Header';
 import PowerText from './PowerText.mdx';

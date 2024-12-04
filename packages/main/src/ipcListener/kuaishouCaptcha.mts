@@ -11,7 +11,7 @@ function kuaishouWebsite(videoId: string): void {
   if (kuaishouWin !== null) return;
 
   kuaishouWin = new BrowserWindow({
-    width: 1300,
+    width: 1_300,
     height: 800,
     webPreferences: {
       contextIsolation: false

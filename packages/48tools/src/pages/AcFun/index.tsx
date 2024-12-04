@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router';
 import Content from '../../components/Content/Content';
 import Download from './Download/Download';
 import Live from './Live/Live';

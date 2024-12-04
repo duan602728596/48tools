@@ -40,7 +40,7 @@ import {
   selectorsObject
 } from '../reducers/acfunLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import { getAcFuncCookie, getFFmpeg, getFileTime } from '../../../utils/utils';
+import { getAcFuncCookie, getFFmpeg, getFilePath } from '../../../utils/utils';
 import AntdConfig from '../../../components/basic/AntdConfig/AntdConfig';
 import ThemeProvider from '../../../components/basic/Theme/ThemeProvider';
 import type { LiveSliceInitialState, LiveSliceSelectorNoAutoRecordTimer } from '../../../store/slice/LiveSlice';
@@ -133,9 +133,12 @@ function Live(props: {}): ReactElement {
       // 确认
       async function handleOkClick(event: MouseEvent): Promise<void> {
         if (ctx.player) {
-          const time: string = getFileTime();
           const result: SaveDialogReturnValue = await showSaveDialog({
-            defaultPath: `[A站直播]${ record.roomId }_${ time }.flv`
+            defaultPath: getFilePath({
+              typeTitle: 'A站直播',
+              infoArray: [record.roomId, record.description],
+              ext: 'flv'
+            })
           });
 
           if (result.canceled || !result.filePath) return;

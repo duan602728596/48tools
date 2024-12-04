@@ -32,7 +32,7 @@ import {
   selectorsObject
 } from '../reducers/douyinLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import { getFFmpeg, getFileTime } from '../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
@@ -76,13 +76,13 @@ function DouyinLive(props: {}): ReactElement {
     value: string,
     options: DefaultOptionType & { type: 'flv' | 'm3u8'; item: LiveItem }
   ): Promise<void> {
-    const time: string = getFileTime();
-
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[抖音直播]${ options.item.roomId }_${ options.item.description }_${ time }.${
-          options.type === 'm3u8' ? 'ts' : 'flv'
-        }`
+        defaultPath: getFilePath({
+          typeTitle: '抖音直播',
+          infoArray: [options.item.roomId, options.item.description],
+          ext: options.type === 'm3u8' ? 'ts' : 'flv'
+        })
       });
 
       if (result.canceled || !result.filePath) return;

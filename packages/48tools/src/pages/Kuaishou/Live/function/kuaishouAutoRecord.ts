@@ -1,7 +1,7 @@
 import * as path from 'node:path';
 import type { Store } from '@reduxjs/toolkit';
 import { store } from '../../../../store/store';
-import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../../utils/utils';
 import { liveSlice, setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/kuaishouLive';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { localStorageKey } from './helper';
@@ -22,8 +22,6 @@ async function kuaishouAutoRecord(): Promise<void> {
     const index: number = liveSlice.getWorkerList(getState().kuaishouLive).findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) continue;
-
-    const time: string = getFileTime();
 
     try {
       const liveInfo: LiveInfo | undefined = await getLiveInfo(record.roomId);
@@ -48,7 +46,11 @@ async function kuaishouAutoRecord(): Promise<void> {
         worker.postMessage({
           type: 'start',
           playStreamPath: playUrlItem.url,
-          filePath: path.join(kuaishouAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
+          filePath: path.join(kuaishouAutoRecordSavePath, getFilePath({
+            typeTitle: '快手直播',
+            infoArray: [record.roomId, liveInfo.title, playUrlItem.qualityType, record.description],
+            ext: 'flv'
+          })),
           ffmpeg: getFFmpeg()
         });
 

@@ -26,7 +26,6 @@ import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseModalReturnType, UseMessageReturnType } from '@48tools-types/antd';
 import { LoadingOutlined as IconLoadingOutlined } from '@ant-design/icons';
 import * as dayjs from 'dayjs';
-import filenamify from 'filenamify/browser';
 import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import {
   requestLiveList,
@@ -50,7 +49,7 @@ import {
   setDownloadProgress,
   type Pocket48InitialState
 } from '../../reducers/pocket48';
-import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFileTime, getFilePath } from '../../../../utils/utils';
 import { engineUserAgent } from '../../../../utils/snh48';
 import downloadImages from '../Pocket48Live/downloadImages/downloadImages';
 import { getProxyServerPort, proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
@@ -266,8 +265,11 @@ function Pocket48Record(props: {}): ReactElement {
       const isM3u8: boolean = parseResult.ext === '.m3u8'; // 以前的视频可能是mp4的
 
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[口袋48录播]${ record.userInfo.nickname }_${ filenamify(record.title) }`
-          + `@${ getFileTime(record.ctime) }__${ getFileTime() }${ isM3u8 ? '.ts' : parseResult.ext }`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48录播',
+          infoArray: [record.userInfo.nickname, record.title, record.liveId, getFileTime(record.ctime)],
+          ext: isM3u8 ? '.ts' : parseResult.ext
+        })
       });
 
       if (result.canceled || !result.filePath) return;
@@ -345,7 +347,6 @@ function Pocket48Record(props: {}): ReactElement {
   async function handleDownloadLrcClick(record: LiveInfo, event: MouseEvent): Promise<void> {
     try {
       const res: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
-      const time: string = getFileTime(record.ctime);
 
       if (res.content.msgFilePath === '') {
         messageApi.warning('弹幕文件不存在！');
@@ -355,7 +356,11 @@ function Pocket48Record(props: {}): ReactElement {
 
       const { ext }: ParsedPath = path.parse(res.content.msgFilePath);
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[口袋48弹幕]${ record.userInfo.nickname }_${ filenamify(record.title) }_${ time }${ ext }`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48弹幕',
+          infoArray: [record.userInfo.nickname, record.title, record.liveId],
+          ext
+        })
       });
 
       if (result.canceled || !result.filePath) return;

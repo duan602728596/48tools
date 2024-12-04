@@ -19,12 +19,21 @@ function rStr(len: number): string {
   return result;
 }
 
-function $token(): string {
+declare global {
+  interface GlobalThis {
+    __c4x8zwu2__: PromiseWithResolvers<boolean>;
+    __x6c2adf8__(): string;
+  }
+}
+
+async function $__x6c2adf8__(): Promise<string> {
+  await globalThis.__c4x8zwu2__.promise;
+
   return Reflect.get(globalThis, '__x6c2adf8__').call();
 }
 
 /* 创建请求头 */
-export function createHeaders(token?: string | undefined, pa?: boolean): { [key: string]: string } {
+export async function createHeaders(token?: string | undefined, pa?: boolean): Promise<Record<string, string>> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json;charset=utf-8',
     appInfo: JSON.stringify({
@@ -47,7 +56,7 @@ export function createHeaders(token?: string | undefined, pa?: boolean): { [key:
   }
 
   if (token || pa) {
-    headers.pa = $token();
+    headers.pa = await $__x6c2adf8__();
   }
 
   return headers;

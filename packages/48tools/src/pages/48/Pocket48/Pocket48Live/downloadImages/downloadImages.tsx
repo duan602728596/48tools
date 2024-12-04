@@ -15,6 +15,7 @@ import style from './downloadImages.sass';
 import { showOpenDialog, showSaveDialog } from '../../../../../utils/remote/dialog';
 import ImagePreview from './ImagePreview';
 import { source } from '../../../../../utils/snh48';
+import { getFilePath } from '../../../../../utils/utils';
 
 interface DownloadImagesProps {
   liveInfo: LiveInfo;
@@ -35,7 +36,10 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
       const href: string = event.target['getAttribute']('href');
       const pathResult: ParsedPath = path.parse(href);
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[口袋48图片]${ liveInfo.userInfo.nickname }_${ liveInfo.title }_${ pathResult.base }`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48图片',
+          infoArray: [liveInfo.userInfo.nickname, liveInfo.title, pathResult.base]
+        })
       });
 
       if (result.canceled || !result.filePath) return;
@@ -77,7 +81,10 @@ function DownloadImages(props: DownloadImagesProps): ReactElement {
       if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
 
       // 保存的目录
-      const dir: string = path.join(result.filePaths[0], `[口袋48图片]${ liveInfo.userInfo.nickname }_${ liveInfo.title }`);
+      const dir: string = path.join(result.filePaths[0], getFilePath({
+        typeTitle: '口袋48图片',
+        infoArray: [liveInfo.userInfo.nickname, liveInfo.title]
+      }));
       const imageFiles: Array<string> = [coverPath].concat(carousels ?? []);
 
       // 创建目录

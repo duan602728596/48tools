@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import type { Store } from '@reduxjs/toolkit';
 import { requestLiveEnter, requestTtwidCookie, type LiveEnter } from '@48tools-api/toutiao/douyin';
 import { store } from '../../../../store/store';
-import { getFFmpeg, getFileTime } from '../../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../../utils/utils';
 import { liveSlice, setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/douyinLive';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { douyinCookie } from '../../../../utils/toutiao/DouyinCookieStore';
@@ -24,8 +24,6 @@ async function douyinLiveAutoRecord(): Promise<void> {
       .findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
     if (index >= 0) continue;
-
-    const time: string = getFileTime();
 
     try {
       const resInit: LiveEnter | string = await requestLiveEnter(douyinCookie.toString(), record.roomId);
@@ -49,7 +47,11 @@ async function douyinLiveAutoRecord(): Promise<void> {
         worker.postMessage({
           type: 'start',
           playStreamPath: resInit.data.data[0].stream_url.flv_pull_url.FULL_HD1,
-          filePath: path.join(douyinAutoRecordSavePath, `${ record.roomId }_${ record.description }_${ time }.flv`),
+          filePath: path.join(douyinAutoRecordSavePath, getFilePath({
+            typeTitle: '抖音直播',
+            infoArray: [record.roomId, record.description],
+            ext: 'flv'
+          })),
           ffmpeg: getFFmpeg(),
           ua: true
         });

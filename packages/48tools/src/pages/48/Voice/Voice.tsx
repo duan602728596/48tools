@@ -47,7 +47,7 @@ import {
   type RoomVoiceInitialState
 } from '../reducers/roomVoice';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import { getFFmpeg, getFileTime } from '../../../utils/utils';
+import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { startAutoRecord, stopAutoRecord } from './function/autoRecord';
 import type { RoomVoiceItem } from '../types';
@@ -127,8 +127,6 @@ function Voice(props: {}): ReactElement {
 
   // 开始录制
   async function handleRecordClick(record: RoomVoiceItem, event: MouseEvent): Promise<void> {
-    const time: string = getFileTime();
-
     try {
       const res: VoiceOperate | undefined = await requestVoiceOperate(record.serverId, record.channelId);
 
@@ -143,7 +141,11 @@ function Voice(props: {}): ReactElement {
       }
 
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `[口袋48房间电台]${ record.nickname }_${ record.serverId }_${ record.channelId }_${ time }.ts`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48房间电台',
+          infoArray: [record.nickname, record.serverId, record.channelId],
+          ext: 'ts'
+        })
       });
 
       if (result.canceled || !result.filePath) return;

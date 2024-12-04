@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router';
 import Agreement from './Agreement';
 import Power from './Power/Power';
 import CreditsDynamic from './Credits/loader';

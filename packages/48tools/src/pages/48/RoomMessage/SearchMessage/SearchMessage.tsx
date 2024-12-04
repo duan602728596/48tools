@@ -48,7 +48,7 @@ import createHtml from '../function/createHtml';
 import MessageDisplay from '../MessageDisplay/MessageDisplay';
 import LocalMessage from '../LocalMessage/LocalMessage';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import { fileTimeFormat } from '../../../../utils/utils';
+import { getFilePath } from '../../../../utils/utils';
 import { source } from '../../../../utils/snh48';
 import IconJSONSvgComponent from '../../images/JSON.component.svg';
 import type { QueryRecord, FormatCustomMessage, SendDataItem } from '../../types';
@@ -107,7 +107,10 @@ function SearchMessage(props: {}): ReactElement {
   // 点击导出html到文件夹中
   async function handleSavePDFDataClick(event: MouseEvent): Promise<void> {
     const result: SaveDialogReturnValue = await showSaveDialog({
-      defaultPath: `html_${ query['ownerName'] }_${ query['ownerId'] }_${ dayjs().format(fileTimeFormat) }`
+      defaultPath: getFilePath({
+        typeTitle: '口袋48房间消息(html)',
+        infoArray: ['json', query['ownerName'], query['ownerId']]
+      })
     });
 
     if (result.canceled || !result.filePath) return;
@@ -141,7 +144,10 @@ function SearchMessage(props: {}): ReactElement {
   async function handleSaveJSONDataClick(event: MouseEvent): Promise<void> {
     try {
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `json_${ query['ownerName'] }_${ query['ownerId'] }_${ dayjs().format(fileTimeFormat) }`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48房间消息(json)',
+          infoArray: ['json', query['ownerName'], query['ownerId']]
+        })
       });
 
       if (result.canceled || !result.filePath) return;
@@ -288,7 +294,11 @@ function SearchMessage(props: {}): ReactElement {
       const bgUrl: string = res.content.userChatConfig.bgImg;
       const bgUrlParseResult: ParsedPath = path.parse(bgUrl);
       const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: `${ bgUrlParseResult.name }${ bgUrlParseResult.ext }`
+        defaultPath: getFilePath({
+          typeTitle: '口袋48房间背景图片下载',
+          infoArray: [bgUrlParseResult.name],
+          ext: bgUrlParseResult.ext
+        })
       });
 
       if (result.canceled || !result.filePath) return;

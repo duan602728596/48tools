@@ -11,7 +11,7 @@ function login(): void {
   if (weiboLoginWin !== null) return;
 
   weiboLoginWin = new BrowserWindow({
-    width: 1250,
+    width: 1_250,
     webPreferences: {
       contextIsolation: false
     },
