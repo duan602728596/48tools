@@ -15,7 +15,7 @@
     "build": "node scripts/delivery.mjs",
     "build:cn": "ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/ PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm run build",
     "build:ci": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm run build",
-    "build:png": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 packages/app/titleBarIcon.png",
+    "build:png": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 app/titleBarIcon.png",
     "build:icon": "ffmpeg -i statics/titleBarIcon512.png -vf scale=256:256 statics/titleBarIcon.ico",
     "build:icns": "milktea-esm image2icns --imageEntry=\"statics/titleBarIcon512.png\" --imageOutput=\"./statics/titleBarIcon.icns\" --size=512",
     "build:linuxPng": "ffmpeg -i statics/titleBarIcon512.png -vf scale=128:128 statics/titleBarIcon_linux.png",
