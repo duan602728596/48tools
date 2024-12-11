@@ -98,7 +98,7 @@ export async function requestAwemePostV2(cookie: string, videoQuery: VideoQuery)
 export async function requestAwemePostReturnType(cookie: string, videoQuery: VideoQuery): Promise<DouyinUserApiType> {
   const res: AwemePostResponse | string = await requestAwemePostV2(cookie, videoQuery);
 
-  return { type: 'userApi', data: typeof res === 'object' ? res : undefined };
+  return { type: 'userApi', data: (typeof res === 'object' && ('aweme_list' in res)) ? res : undefined };
 }
 
 /* 请求视频的detail */
@@ -122,7 +122,7 @@ export async function requestAwemeDetailV2(cookie: string, id: string, signature
 export async function requestAwemeDetailReturnType(cookie: string, id: string, signature: string): Promise<DouyinDetailApiType> {
   const res: AwemeDetailResponse | string = await requestAwemeDetailV2(cookie, id, signature);
 
-  return { type: 'detailApi', data: typeof res === 'object' ? res : undefined };
+  return { type: 'detailApi', data: (typeof res === 'object' && ('aweme_detail' in res)) ? res : undefined };
 }
 
 /* 请求ttwid */
