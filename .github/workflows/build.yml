@@ -38,8 +38,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: v${{ env.VERSION }}
           tag_name: v${{ env.VERSION }}
-          draft: true
-          prerelease: true
+          draft: false
+          prerelease: false
+          append_body: true
           files: |
             build/linux/48tools-${{ env.VERSION }}-linux64.zip
             build/mac/48tools-${{ env.VERSION }}-mac.zip
