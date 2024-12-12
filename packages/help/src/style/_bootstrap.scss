@@ -1,13 +1,13 @@
 @use 'sass:map';
 
 /** 1. Include function */
-@import '../../../../node_modules/bootstrap/scss/functions';
+@use '../../../../node_modules/bootstrap/scss/functions';
 
 /** 2. Variable overrides */
 $enable-dark-mode: false; // 关闭暗黑模式 - bootstrap/scss/root
 
 /** 3. Remainder of required Bootstrap stylesheets */
-@import '../../../../node_modules/bootstrap/scss/variables';
+@use '../../../../node_modules/bootstrap/scss/variables';
 
 /** 4. Default map overrides */
 $display-font-sizes: (); // bootstrap/scss/type
@@ -188,26 +188,26 @@ $utilities: (
 );
 
 /** 5. Remainder of required parts */
-@import '../../../../node_modules/bootstrap/scss/maps';
-@import '../../../../node_modules/bootstrap/scss/mixins';
-@import '../../../../node_modules/bootstrap/scss/root';
+@use '../../../../node_modules/bootstrap/scss/maps';
+@use '../../../../node_modules/bootstrap/scss/mixins';
+@use '../../../../node_modules/bootstrap/scss/root';
 
 /** 6. Content */
-@import '../../../../node_modules/bootstrap/scss/reboot';
-@import '../../../../node_modules/bootstrap/scss/type';
-@import './bootstrap/images';
-@import './bootstrap/tables';
+@use '../../../../node_modules/bootstrap/scss/reboot';
+@use '../../../../node_modules/bootstrap/scss/type';
+@use './bootstrap/images';
+@use './bootstrap/tables';
 
 /** 7. Components */
 $theme-colors: ('primary': $primary); // bootstrap/scss/buttons
 
-@import './bootstrap/buttons';
+@use './bootstrap/buttons';
 
 /** 8. Helpers */
 $theme-colors: ('secondary': $secondary); // scss/helpers/color-bg
 
-@import '../../../../node_modules/bootstrap/scss/helpers/color-bg';
+@use '../../../../node_modules/bootstrap/scss/helpers/color-bg';
 
 /** 9. utilities */
-@import '../../../../node_modules/bootstrap/scss/utilities';
-@import '../../../../node_modules/bootstrap/scss/utilities/api';
+@use '../../../../node_modules/bootstrap/scss/utilities';
+@use '../../../../node_modules/bootstrap/scss/utilities/api';
