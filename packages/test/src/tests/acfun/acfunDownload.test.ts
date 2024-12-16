@@ -77,8 +77,8 @@ export function callback(): void {
     // 佐贺偶像是传奇 https://www.acfun.cn/bangumi/aa5022161
     await query('番剧（aa）', '5022161');
 
-    // 干物妹！小埋 https://www.acfun.cn/bangumi/aa5025415_36188_333697
-    await query('番剧（aa）', '5025415_36188_333697');
+    // 干物妹！小埋 https://www.acfun.cn/bangumi/aa6002917_36188_1742845
+    await query('番剧（aa）', '6002917_36188_1742845');
 
     // 等待查询结果
     await app.win.waitForTimeout(2_000);
