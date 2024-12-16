@@ -38,6 +38,19 @@ async function buildPlugin(pluginName) {
   await command(npm, ['run', 'dev'], path.join(cwd, 'packages', pluginName));
 }
 
+/* 修复playwright */
+async function fixPlaywrightType() {
+  const playwrightTypePath = path.join(nodeModules, 'playwright/test.d.ts');
+  const file = await fsP.readFile(playwrightTypePath, { encoding: 'utf8' });
+
+  if (file.includes('/* playwright/test fixed */')) return;
+
+  let newFile = file.replace(/\/test';/g, "/test.js';");
+
+  newFile += '\n/* playwright/test fixed */';
+  await fsP.writeFile(playwrightTypePath, newFile, { encoding: 'utf8' });
+}
+
 /* 执行postinstall脚本 */
 async function postInstall() {
   // 替换window.WebSocket
@@ -46,8 +59,10 @@ async function postInstall() {
     replaceWebsocket('nim-web-sdk-ng/dist/QCHAT_BROWSER_SDK.js', 'HACK_INTERCEPTS_SEND_QCHAT_Websocket')
   ]);
 
-  // 修复rc-util
-  await fixRcUtil();
+  await Promise.all([
+    fixRcUtil(),        // 修复rc-util
+    fixPlaywrightType() // 修复playwright
+  ]);
 
   // 编译babel插件
   await buildPlugin('babel-plugin-delay-require');
