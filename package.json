@@ -82,7 +82,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "express/cookie": "^0.7.0",
-    "express/path-to-regexp": "^0.1.10"
+    "express/path-to-regexp": "^0.1.10",
+    "rc-resize-observer": "1.4.0"
   },
   "lint-staged": {
     "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "cross-env COMMITLINT=1 eslint --cache --cache-location .eslintcache --no-warn-ignored",
