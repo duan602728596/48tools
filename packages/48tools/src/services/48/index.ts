@@ -23,7 +23,8 @@ import type {
 export type * from './interface';
 
 const timeoutTime: number = 10 * 60 * 1_000;
-const timeoutOptions: Delays = {
+
+export const timeoutOptions: Delays = {
   lookup: timeoutTime,
   connect: timeoutTime,
   secureConnect: timeoutTime,

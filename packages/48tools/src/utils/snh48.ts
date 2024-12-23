@@ -62,6 +62,42 @@ export async function createHeaders(token?: string | undefined, pa?: boolean): P
   return headers;
 }
 
+const meet48Info: Record<string, string> = {
+  appVersion: '1.8.4',
+  bundleId: 'com.dapp.meet48',
+  appBuildId: '24121304'
+};
+const meet48AppUserAgent: string = `Meet48/${
+  meet48Info.appVersion
+} (${ meet48Info.bundleId }; build: ${ meet48Info.appBuildId }; IOS: 18.2.0) Almofire/5.8.0`;
+
+/* 创建meet48的请求头 */
+export function createMeet48Headers(): Record<string, string> {
+  const deviceId: string = `${ rStr(8) }-${ rStr(4) }-${ rStr(4) }-${ rStr(4) }-${ rStr(12) }`;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json;charset=utf-8',
+    Host: 'meet48-v2.meet48.xyz',
+    'X-versionCode': meet48Info.appVersion,
+    'X-Device-Info': JSON.stringify({
+      bundleId: meet48Info.bundleId,
+      appName: 'Meet48',
+      osType: 'ios',
+      appBuildId: meet48Info.appBuildId,
+      deviceName: 'iPhoneXR',
+      osVersion: '18.2',
+      appVersion: meet48Info.appVersion,
+      osLoginType: 'common',
+      deviceId,
+      vendor: 'apple'
+    }),
+    'X-Web-Type': '1',
+    'X-DeviceId': deviceId,
+    'X-Custom-DeviceType': 'IOS'
+  };
+
+  return headers;
+}
+
 /* 拼接静态文件地址 */
 export function source(pathname: string | undefined): string {
   if (!pathname || pathname === '') return '';
