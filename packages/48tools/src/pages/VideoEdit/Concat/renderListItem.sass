@@ -1,22 +1,12 @@
 @use '../../../common' as common
 
 .helperItem
-  background-color: #fafafa
+  background-color: light-dark(#fafafa, transparent)
 
 .over
-  background-color: common.$cyan
+  background-color: common.$ld-cyan
 
 .active
   position: relative
   z-index: 1
-  box-shadow: 0 0 8px rgba(0, 0, 0, .5)
-
-@media (prefers-color-scheme: dark)
-  .helperItem
-    background-color: transparent
-
-  .over
-    background-color: common.$cyan-dark
-
-  .active
-    box-shadow: 0 0 8px rgba(255, 255, 255, .5)
+  box-shadow: 0 0 8px light-dark(rgba(0, 0, 0, .5), rgba(255, 255, 255, .5))

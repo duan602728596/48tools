@@ -1,13 +1,9 @@
 // 样式表的加载
 style#dark-theme.
-  @media (prefers-color-scheme: light) {
-    body.theme {
-      background-color: #fff;
-    }
+  :root {
+    color-scheme: light dark;
   }
 
-  @media (prefers-color-scheme: dark) {
-    body.theme {
-      background-color: #000;
-    }
+  body.theme {
+    background-color: light-dark(#fff, #000);
   }

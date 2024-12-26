@@ -1,9 +1,4 @@
-$geek-blue: #2f54eb      // 蓝色
-$geek-blue-dark: #2b4acb // 暗黑模式蓝色
+@use '../../../common' as common
 
 .loadingText
-  color: $geek-blue
-
-@media (prefers-color-scheme: dark)
-  .loadingText
-    color: $geek-blue-dark
+  color: common.$ld-geek-blue

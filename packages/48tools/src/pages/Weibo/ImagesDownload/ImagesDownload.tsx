@@ -6,7 +6,6 @@ import { createStructuredSelector, type Selector } from 'reselect';
 import { Space, Form, Input, Button, App, Empty, Card, type FormInstance } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import VirtualList from 'rc-virtual-list';
-import * as dayjs from 'dayjs';
 import {
   requestWeiboUserImages,
   requestWeiboShow,

@@ -2,46 +2,44 @@ $text: rgba(0, 0, 0, 0.88)           // 文字颜色
 $text-dark: rgba(255, 255, 255, .85) // 暗黑模式下的文字颜色
 $dust-red: #ff4d4f                   // 红色
 $dust-red-dark: #dc4446              // 暗黑模式红色
-$daybreak-blue: #1677ff              // 蓝色
-$daybreak-blue-hover: #69b1ff        // 蓝色 hover
-$daybreak-blue-dark: #1668dc         // 暗黑模式蓝色
-$daybreak-blue-dark-hover: #15417e   // 暗黑模式蓝色 hover
+$daybreak-blue: #1677ff              // 拂晓蓝
+$daybreak-blue-hover: #69b1ff        // 拂晓蓝 hover
+$daybreak-blue-dark: #1668dc         // 暗黑模式拂晓蓝
+$daybreak-blue-dark-hover: #15417e   // 暗黑模式拂晓蓝 hover
 $cyan: #13c2c2                       // 青色
 $cyan-dark: #13a8a8                  // 暗黑模式青色
+$geek-blue: #2f54eb                  // 极客蓝
+$geek-blue-dark: #2b4acb             // 暗黑模式极客蓝
+$golden-purple: #9254de              // 酱紫
+$golden-purple-dark: #722ed1         // 暗黑模式酱紫
+
+$ld-dust-red: light-dark($dust-red, $dust-red-dark)
+$ld-daybreak-blue: light-dark($daybreak-blue, $daybreak-blue-dark)
+$ld-daybreak-blue-hover: light-dark($daybreak-blue-hover, $daybreak-blue-dark-hover)
+$ld-cyan: light-dark($cyan, $cyan-dark)
+$ld-geek-blue: light-dark($geek-blue, $geek-blue-dark)
+$ld-golden-purple: light-dark($golden-purple, $golden-purple-dark)
 
 // 红色提示文字
 .tips
-  color: $dust-red
+  color: $ld-dust-red
 
 // 链接
 .link
-  color: $daybreak-blue
+  color: $ld-daybreak-blue
   transition: color .3s
   cursor: pointer
 
   &:hover
-    color: $daybreak-blue-hover
+    color: $ld-daybreak-blue-hover
 
 .primaryText
-  color: $cyan
+  color: $ld-cyan
 
 @media (prefers-color-scheme: dark)
   .text
     color: $text-dark
 
-  .tips
-    color: $dust-red-dark
-
-  .link
-    color: $daybreak-blue-dark
-
-    &:hover
-      color: $daybreak-blue-dark-hover
-
-  .primaryText
-    color: $cyan-dark
-
-// 修复rc-virtual-list组件的暗黑模式下滚动条颜色
-@media (prefers-color-scheme: dark)
+  // 修复rc-virtual-list组件的暗黑模式下滚动条颜色
   .virtualList :global(.rc-virtual-list-scrollbar-thumb)
     background: rgba(255, 255, 255, .5) !important
