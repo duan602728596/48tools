@@ -53,6 +53,8 @@
 
 在软件目录打开终端，运行`sudo xattr -rd com.apple.quarantine 48tools.app`或`sudo xattr -cr 48tools.app`。然后尝试重新运行。
 
+<img src="statics/macos-arm-run-app.png" width="580">
+
 ## 许可证
 
 本软件以及所有源代码受**GNU General Public License v3.0**许可证的约束。
