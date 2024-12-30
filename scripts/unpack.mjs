@@ -12,7 +12,8 @@ const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
   README: path.join(cwd, 'README.md'), // README
   LICENSEElectron: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSE.electron.txt'), // electron许可协议
-  LICENSESChromium: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSES.chromium.html') // chromium第三方许可协议
+  LICENSESChromium: path.join(isArm64 ? unpacked.winArm64 : unpacked.win, 'LICENSES.chromium.html'), // chromium第三方许可协议
+  MacOSArmRunAppImage: path.join(staticsDir, 'macos-arm-run-app.png') // 说明图片
 };
 const icon = {
   mac: path.join(staticsDir, 'titleBarIcon.icns'),
@@ -93,8 +94,9 @@ function config(outputDir, target) {
  * 拷贝文件
  * @param { string } unpackedDir - 拷贝目录
  * @param { boolean } [isMac] - 是否为mac系统
+ * @param { boolean } [isArm] - 是否为arm系统
  */
-function copy(unpackedDir, isMac) {
+function copy(unpackedDir, isMac, isArm) {
   const queue = [
     fse.copy(staticsFiles.LICENSE, path.join(unpackedDir, 'LICENSE')),
     fse.copy(staticsFiles.README, path.join(unpackedDir, 'README.md'))
@@ -105,6 +107,10 @@ function copy(unpackedDir, isMac) {
       fse.copy(staticsFiles.LICENSEElectron, path.join(unpackedDir, 'LICENSE.electron.txt')),
       fse.copy(staticsFiles.LICENSESChromium, path.join(unpackedDir, 'LICENSES.chromium.html'))
     );
+
+    if (isArm) {
+      queue.push(fse.copy(staticsFiles.MacOSArmRunAppImage, path.join(unpackedDir, '提示“软件已损坏，无法打开”的解决办法.png')));
+    }
   }
 
   return queue;
@@ -163,7 +169,7 @@ async function unpackOthers() {
   await copySDK(sdkDownloadDir.linux, unpackedNodeModules.linux);
 
   // 拷贝许可文件
-  console.log('🚚在拷贝许可文件');
+  console.log('🚚在正拷贝许可文件');
   await Promise.all([
     ...isMacOS ? copy(unpacked.mac, true) : [],
     ...isMacOS ? copy(unpacked.macArm64, true) : [],
@@ -195,7 +201,7 @@ async function unpackArm64() {
   // 拷贝许可文件
   console.log('🚚正在拷贝许可文件和帮助文档');
   await Promise.all([
-    ...isMacOS ? copy(unpacked.macArm64, true) : [],
+    ...isMacOS ? copy(unpacked.macArm64, true, true) : [],
     ...copy(unpacked.winArm64)
   ]);
 }
