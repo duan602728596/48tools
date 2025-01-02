@@ -10,6 +10,7 @@ import VideoEditDynamic from '../pages/VideoEdit/loader';
 import Weibo from '../pages/Weibo/Index';
 import Agreement from '../pages/Agreement/Index';
 import { needToReadPower } from '../pages/Agreement/function/helper';
+import ShowroomLive from '../pages/ShowRoomLive/Index';
 
 function Routers(props: {}): ReactElement | null {
   const routes: ReactElement | null = useRoutes([
@@ -30,7 +31,8 @@ function Routers(props: {}): ReactElement | null {
     { path: 'Kuaishou/*', element: <Kuaishou /> },
     { path: 'VideoEdit/*', element: <VideoEditDynamic /> },
     { path: 'Weibo/*', element: <Weibo /> },
-    { path: 'Agreement/*', element: <Agreement /> }
+    { path: 'Agreement/*', element: <Agreement /> },
+    { path: 'ShowroomLive/Live', element: <ShowroomLive /> }
   ]);
 
   return routes;
