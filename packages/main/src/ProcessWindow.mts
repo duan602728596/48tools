@@ -37,9 +37,9 @@ export function createWindow(): void {
   /* 初始化窗口 */
   processWindow = new BrowserWindow({
     width: 1_000,
-    height: 800,
+    height: 830,
     minWidth: 1_000,
-    minHeight: 800,
+    minHeight: 830,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
