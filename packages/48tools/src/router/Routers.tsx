@@ -1,14 +1,14 @@
 import type { ReactElement } from 'react';
 import { useRoutes, Navigate } from 'react-router';
-import Index from '../pages/Index/index';
-import Pocket48 from '../pages/48/index';
-import Bilibili from '../pages/Bilibili/index';
-import AcFun from '../pages/AcFun/index';
-import Toutiao from '../pages/Toutiao/index';
-import Kuaishou from '../pages/Kuaishou/index';
+import Index from '../pages/Index/Index';
+import Pocket48 from '../pages/48/Index';
+import Bilibili from '../pages/Bilibili/Index';
+import AcFun from '../pages/AcFun/Index';
+import Toutiao from '../pages/Toutiao/Index';
+import Kuaishou from '../pages/Kuaishou/Index';
 import VideoEditDynamic from '../pages/VideoEdit/loader';
-import Weibo from '../pages/Weibo/index';
-import Agreement from '../pages/Agreement/index';
+import Weibo from '../pages/Weibo/Index';
+import Agreement from '../pages/Agreement/Index';
 import { needToReadPower } from '../pages/Agreement/function/helper';
 
 function Routers(props: {}): ReactElement | null {

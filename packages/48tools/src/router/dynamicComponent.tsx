@@ -2,7 +2,8 @@ import { lazy, Suspense, type ReactElement, type LazyExoticComponent, type Compo
 import { Spin } from 'antd';
 import { replaceReducers, runSagas } from '../store/store';
 
-type Loader<T> = () => Promise<{ default: ComponentType<T> }>;
+export type LoaderReturn<T = any> = Promise<{ default: ComponentType<T> }>
+type Loader<T = any> = () => LoaderReturn<T>;
 
 const Loading: ReactElement = (
   <div className="pt-[220px] text-center">
