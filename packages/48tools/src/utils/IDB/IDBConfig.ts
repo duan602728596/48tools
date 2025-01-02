@@ -11,7 +11,19 @@ export interface IDBConfig {
   objectStore: Array<ObjectStoreItem>;
 }
 
-export const objectStoreMaps: Record<string, ObjectStoreItem> = {
+export const objectStoreMaps: Record<
+  'bilibiliLive'
+  | 'acfunLive'
+  | 'options'
+  | 'weiboLoginList'
+  | 'ffmpegTemplate'
+  | 'pocket48RoomVoice'
+  | 'douyinLive'
+  | 'kuaishouLive'
+  | 'pocket48UserInfo'
+  | 'showroomLive',
+  ObjectStoreItem
+> = {
   // 0：b站直播间信息
   bilibiliLive: {
     name: 'bilibili_live',
@@ -73,12 +85,19 @@ export const objectStoreMaps: Record<string, ObjectStoreItem> = {
     name: '48_user_info',
     key: 'id',
     data: ['userId', 'serverId', 'channelId', 'liveRoomId', 'description']
+  },
+
+  // 9: showroom-live
+  showroomLive: {
+    name: 'showroom_live',
+    key: 'id',
+    data: ['description', 'roomId']
   }
 };
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 16,
+  version: 17,
   objectStore: Object.values<ObjectStoreItem>(objectStoreMaps)
 };
 

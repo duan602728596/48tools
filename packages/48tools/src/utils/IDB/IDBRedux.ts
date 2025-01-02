@@ -13,4 +13,5 @@ export const pocket48RoomVoiceObjectStoreName: string = objectStoreMaps.pocket48
 export const douyinLiveObjectStoreName: string = objectStoreMaps.douyinLive.name;
 export const kuaishouLiveObjectStoreName: string = objectStoreMaps.kuaishouLive.name;
 export const pocket48UserInfoObjectStoreName: string = objectStoreMaps.pocket48UserInfo.name;
+export const showroomLiveObjectStoreName: string = objectStoreMaps.showroomLive.name;
 export default IDBRedux;

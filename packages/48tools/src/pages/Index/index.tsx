@@ -33,9 +33,10 @@ import imageUrlZfbAvif from './images/zfb.avif';
 import imageUrlWxAvif from './images/wx.avif';
 
 interface NativeItem {
-  name: string;
+  name: string | ReactElement;
+  key?: string;
   url: string;
-  icon: ReactElement;
+  icon?: ReactElement;
   hBtn?: boolean;
   testId?: string;
   help?: HelpButtonGroupProps;
@@ -163,6 +164,23 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       icon: <IconWeiboOutlined />
     },
     {
+      name: (
+        <span>
+          <span key="t1" className="text-[rgb(243,152,0)]">S</span>
+          <span key="t2" className="text-[rgb(255,225,0)]">H</span>
+          <span key="t3" className="text-[rgb(170,206,54)]">O</span>
+          <span key="t4" className="text-[rgb(0,167,60)]">W</span>
+          <span key="t5" className="text-[rgb(84,195,241)]">R</span>
+          <span key="t6" className="text-[rgb(48,113,185)]">O</span>
+          <span key="t7" className="text-[rgb(166,96,163)]">O</span>
+          <span key="t8" className="mr-[6px] text-[rgb(233,82,142)]">M</span>
+          直播录制
+        </span>
+      ),
+      key: 'showroom',
+      url: '/ShowroomLive/Live'
+    },
+    {
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
       icon: <Icon className="text-[18px]" component={ IconCutSvgComponent } />
@@ -171,7 +189,9 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       name: '视频合并',
       url: '/VideoEdit/Concat',
       icon: <Icon className="text-[18px]" component={ IconConcatSvgComponent } />
-    },
+    }
+  ],
+  [
     {
       name: '执行FFmpeg命令',
       url: '/VideoEdit/FFmpegProcess',
@@ -208,14 +228,14 @@ function nativeRender(): Array<ReactNode> {
         }, navItem.help), buttonLinkElement);
       }
 
-      groupElement.push(<div key={ navItem.name }>{ buttonLinkElement }</div>);
+      groupElement.push(<div key={ typeof navItem.name === 'string' ? navItem.name : navItem.key }>{ buttonLinkElement }</div>);
     }
 
     element.push(
       <nav key={ `nav-${ i }` } className="grid grid-cols-4 gap-[16px] w-[800px]">
         { groupElement }
       </nav>,
-      <Divider key={ `driver-${ i }` } className="my-[16px]" />
+      <Divider key={ `driver-${ i }` } className="my-[12px]" />
     );
   }
 
