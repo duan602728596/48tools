@@ -1,3 +1,3 @@
-import dynamicComponent from '../../../router/dynamicComponent';
+import dynamicComponent, { type LoaderReturn } from '../../../router/dynamicComponent';
 
-export default dynamicComponent(() => import('./RoomMessage'));
+export default dynamicComponent((): LoaderReturn => import('./RoomMessage'));
