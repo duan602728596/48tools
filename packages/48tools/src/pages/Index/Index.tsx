@@ -31,6 +31,7 @@ import IconPowerShellSvgComponent from './images/powershell.component.svg';
 import IconDiantaiSvgComponent from './images/diantai.component.svg';
 import imageUrlZfbAvif from './images/zfb.avif';
 import imageUrlWxAvif from './images/wx.avif';
+import ShowroomTextIcon from './ShowroomTextIcon/ShowroomTextIcon';
 
 interface NativeItem {
   name: string | ReactElement;
@@ -166,15 +167,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: (
         <span>
-          <span key="t1" className="text-[rgb(243,152,0)]">S</span>
-          <span key="t2" className="text-[rgb(255,225,0)]">H</span>
-          <span key="t3" className="text-[rgb(170,206,54)]">O</span>
-          <span key="t4" className="text-[rgb(0,167,60)]">W</span>
-          <span key="t5" className="text-[rgb(84,195,241)]">R</span>
-          <span key="t6" className="text-[rgb(48,113,185)]">O</span>
-          <span key="t7" className="text-[rgb(166,96,163)]">O</span>
-          <span key="t8" className="mr-[6px] text-[rgb(233,82,142)]">M</span>
-          直播录制
+          { ShowroomTextIcon }
+          <span className="ml-[6px]">直播录制</span>
         </span>
       ),
       key: 'showroom',

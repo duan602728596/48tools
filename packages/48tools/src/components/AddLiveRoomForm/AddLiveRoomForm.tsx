@@ -17,7 +17,7 @@ const roomIdRule: Array<Rule> = [
 /* 添加A站 B站 抖音的直播间ID，保存到数据库 */
 interface AddLiveRoomFormProps {
   dataTestId?: string;
-  modalTitle: string;
+  modalTitle: string | ReactElement;
   tips?: string;
   IDBSaveDataFunc: DataDispatchFunc;
   customRoomIdRule?: Array<Rule>;
