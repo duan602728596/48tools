@@ -32,6 +32,13 @@ function formatBytes(bytes) {
   }
 }
 
+/* 格式化输出的列标题 */
+const consoleColumns = {
+  name: 'Name',
+  originalFileSize: 'Original File Size',
+  compressFileSize: 'Compress File Size'
+};
+
 /**
  * 压缩文件和修改地址
  * @param { string } name - sourcemap文件名
@@ -59,9 +66,9 @@ async function sourcemapBrAndModifyUrl(name) {
   const afterSize = (await fsPromise.stat(sourcemapBrFile)).size;
 
   resultArray.push({
-    Name: name,
-    'Original File Size': formatBytes(beforeSize),
-    'Compress File Size': formatBytes(afterSize)
+    [consoleColumns.name]: name,
+    [consoleColumns.originalFileSize]: formatBytes(beforeSize),
+    [consoleColumns.compressFileSize]: formatBytes(afterSize)
   });
 
   // 删除原文件
@@ -74,4 +81,4 @@ const mapFiles = await glob('*.map', {
 });
 
 await Promise.all(mapFiles.map((name) => sourcemapBrAndModifyUrl(name)));
-console.table(resultArray, ['Name', 'Original File Size', 'Compress File Size']);
+console.table(resultArray, Object.values(consoleColumns));
