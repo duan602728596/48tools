@@ -9,7 +9,7 @@ import { HelpChannel } from '../../../../main/src/channelEnum';
 export interface HelpButtonGroupProps extends PropsWithChildren {
   spaceCompactProps?: SpaceCompactProps;
   buttonProps?: ButtonProps;
-  tooltipTitle?: string;
+  tooltipTitle?: string | ReactElement;
   navId?: string;
 }
 

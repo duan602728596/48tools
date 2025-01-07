@@ -1,0 +1,23 @@
+extends pug/template/_template
+
+include pug/components/_image
+include pug/components/_link
+include pug/components/_title
+
+block head
+  +Title('SHOWROOM直播录制')
+
+block article
+  h1.h1 SHOWROOM直播录制
+  article
+    p.mb-4 SHOWROOM直播录制需要开启VPN才能正常录制。直播地址的请求和直播流的下载都需要VPN，所以使用Tun（虚拟网卡）模式代理最佳。
+    h2.h2 直播间ID的获取
+    p 录制直播需要获取直播间的ID。首先需要进入直播间。例如：
+      +Link('https://www.showroom-live.com/r/63b069202432')
+      | 。
+    p 然后在右上角点击红圈所示图标，进入当前主播的个人主页。
+    +Image('./image/showroomLive/liveRoom1.webp', 'showroom直播间', 700)
+    p 个人主页的URL中的room_id，即为抓取直播需要填写的直播间ID。
+    p 例如：
+      +Link('https://www.showroom-live.com/room/profile?room_id=534056')
+      | 。URL中的room_id: 534056即为抓取直播需要填写的直播间ID。

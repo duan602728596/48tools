@@ -23,6 +23,7 @@ import {
 import ShowroomTextIcon from '../Index/ShowroomTextIcon/ShowroomTextIcon';
 import { getFFmpeg, getFilePath } from '../../utils/utils';
 import getFFmpegDownloadWorker from '../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
+import HelpButtonGroup from '../../components/HelpButtonGroup/HelpButtonGroup';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../store/slice/LiveSlice';
 import type { LiveItem, MessageEventData, WebWorkerChildItem } from '../../commonTypes';
 
@@ -152,13 +153,15 @@ function Index(props: {}): ReactElement {
   return (
     <Content>
       <Header>
-        <AddLiveRoomForm modalTitle={
-          <Fragment>
-            添加
-            <span className="font-normal">{ ShowroomTextIcon }</span>
-            直播间信息
-          </Fragment>
-        } IDBSaveDataFunc={ IDBSaveLiveItem } />
+        <HelpButtonGroup navId="showroom-live" tooltipTitle={ <Fragment>如何添加{ ShowroomTextIcon }的直播间ID</Fragment> }>
+          <AddLiveRoomForm modalTitle={
+            <Fragment>
+              添加
+              <span className="font-normal">{ ShowroomTextIcon }</span>
+              直播间信息
+            </Fragment>
+          } IDBSaveDataFunc={ IDBSaveLiveItem } />
+        </HelpButtonGroup>
       </Header>
       <Alert className="mb-[8px]" type="warning" message="录制时需要开启VPN，使用Tun（虚拟网卡）模式代理最佳。" />
       <Table size="middle"
