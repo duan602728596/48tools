@@ -41,7 +41,7 @@ export function callback(): void {
 
     // 选择视频类型并输入查询
     await selectItemClick(app, 'acfun-download-form-type', selectItemTitle);
-    await app.win.type('#id', id);
+    await app.win.locator('#id').fill(id);
     await app.win.click('.ant-modal-footer button.ant-btn-primary');
     await app.win.waitForFunction((): boolean => {
       const wrap: HTMLElement | null = document.querySelector('.ant-modal-wrap');

@@ -178,7 +178,7 @@ export function callback(): void {
       await app.win.waitForSelector('#spaceId');
     }
 
-    await app.win.type('#spaceId', userId.toString());
+    await app.win.locator('#spaceId').fill(userId.toString());
     await app.win.click('.ant-modal-body .ant-form .ant-btn');
     await app.win.waitForTimeout(1_500); // 等待查询结果
     await app.win.waitForFunction((): boolean => document.querySelectorAll('.ant-spin').length === 0);

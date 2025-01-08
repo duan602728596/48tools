@@ -9,8 +9,8 @@ export async function liveRecordingTypeRoomIdAndStart(app: ElectronApp, roomId: 
     app.win.waitForSelector('#description'),
     app.win.waitForSelector('#roomId')
   ]);
-  await app.win.type('#description', 'test1');
-  await app.win.type('#roomId', roomId);
+  await app.win.locator('#description').fill('test1');
+  await app.win.locator('#roomId').fill(roomId);
   await app.win.click('.ant-modal-footer button.ant-btn-primary');
   await app.win.waitForTimeout(2_000);
 
