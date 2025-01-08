@@ -28,7 +28,7 @@ async function fixRcUtil() {
   const newFile = file.replace("import * as ReactDOM from 'react-dom';", `import * as ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';`)
     .replace('var fullClone = _objectSpread({}, ReactDOM);', 'var fullClone = _objectSpread({}, ReactDOM, ReactDOMClient);')
-    .replace('reactRender(node, container);', '/* rc-util fixed */ try { reactRender(node, container); } catch {}');
+    .replace('reactRender(node, container);', '/* rc-util fixed */ (() => { try { reactRender(node, container); } catch {} })();');
 
   await fsP.writeFile(rcUtilPath, newFile, { encoding: 'utf8' });
 }
