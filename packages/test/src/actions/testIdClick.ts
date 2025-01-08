@@ -7,7 +7,7 @@ import ElectronApp from '../utils/ElectronApp.js';
  * @param { string } testId - test id
  */
 async function testIdClick(app: ElectronApp, testId: string): Promise<void> {
-  const navBtn: Locator = await app.win.locator(`[data-test-id="${ testId }"]`);
+  const navBtn: Locator = app.win.getByTestId(testId);
 
   await navBtn.click();
 }

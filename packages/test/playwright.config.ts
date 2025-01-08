@@ -6,7 +6,8 @@ const { __dirname }: { __dirname: string } = metaHelper(import.meta.url);
 const config: PlaywrightTestConfig = defineConfig({
   use: {
     locale: 'zh-CN',
-    ignoreHTTPSErrors: true
+    ignoreHTTPSErrors: true,
+    testIdAttribute: 'data-test-id'
   },
   testDir: path.join(__dirname, 'src'),
   outputDir: path.join(__dirname, 'dist'),
