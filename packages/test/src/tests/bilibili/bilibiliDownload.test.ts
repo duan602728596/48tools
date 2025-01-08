@@ -257,7 +257,7 @@ export function callback(): void {
     ]);
 
     // 下载
-    const actionBtns: Locator = await app.win.locator('.ant-table-tbody .ant-table-cell button');
+    const actionBtns: Locator = app.win.locator('.ant-table-tbody .ant-table-cell button');
 
     await actionBtns.nth(0).click();
     await setTimeoutPromise(5_000);

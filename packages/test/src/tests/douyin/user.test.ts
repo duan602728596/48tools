@@ -31,7 +31,7 @@ export function callback(): void {
     await testIdClick(app, 'douyin-download-link');
     await app.win.locator('.ant-input').fill(text);
     await app.win.click('.ant-input-search-with-button .ant-btn');
-    await selectItemClick(app, await app.win.locator('.ant-modal-body .ant-table-cell .ant-select').nth(0), 0);
+    await selectItemClick(app, app.win.locator('.ant-modal-body .ant-table-cell .ant-select').nth(0), 0);
     await app.win.click('.ant-modal-footer .ant-btn-default');
     await setTimeoutPromise(2_000);
 

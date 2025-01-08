@@ -15,7 +15,7 @@ export async function liveRecordingTypeRoomIdAndStart(app: ElectronApp, roomId: 
   await app.win.waitForTimeout(2_000);
 
   // 点击开始录制
-  const actionBtns: Locator = await app.win.locator('.ant-table-cell button');
+  const actionBtns: Locator = app.win.locator('.ant-table-cell button');
 
   await actionBtns.nth(0).click();
 }
@@ -24,7 +24,7 @@ export async function liveRecordingTypeRoomIdAndStart(app: ElectronApp, roomId: 
 export async function stopAndDeleteRoomId(app: ElectronApp): Promise<void> {
   await setTimeoutPromise(10_000);
 
-  const actionBtns: Locator = await app.win.locator('.ant-table-cell button');
+  const actionBtns: Locator = app.win.locator('.ant-table-cell button');
 
   await actionBtns.nth(0).click();
   await app.win.locator('.ant-popover button.ant-btn-primary').click();

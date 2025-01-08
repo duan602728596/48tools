@@ -108,7 +108,7 @@ export function callback(): void {
     ]);
 
     // 下载
-    await selectItemClick(app, await app.win.locator('.ant-table-cell .ant-select'), '360P');
+    await selectItemClick(app, app.win.locator('.ant-table-cell .ant-select'), '360P');
     await setTimeoutPromise(5_000);
     await app.win.waitForFunction((): boolean => {
       const button: HTMLButtonElement | null = document.querySelector('.ant-table-cell button');

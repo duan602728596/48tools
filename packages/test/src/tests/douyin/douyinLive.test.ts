@@ -78,7 +78,7 @@ export function callback(): void {
     }
 
     await liveRecordingTypeRoomIdAndStart(app, liveId);
-    await selectItemClick(app, await app.win.locator('.ant-modal-body .ant-select'), 'M3U8 - SD1');
+    await selectItemClick(app, app.win.locator('.ant-modal-body .ant-select'), 'M3U8 - SD1');
     await stopAndDeleteRoomId(app);
     expect(await isFileExists(douyinLiveVideoPath)).toEqual(true);
   });

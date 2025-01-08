@@ -40,7 +40,7 @@ export function callback(): void {
     await app.win.click('#liveValue');
     await app.win.keyboard.type('1022:2321325062308580950486');
 
-    const antBtn: Locator = await app.win.locator('.ant-btn');
+    const antBtn: Locator = app.win.locator('.ant-btn');
 
     await antBtn.nth(1).click();
     await setTimeoutPromise(10_000);

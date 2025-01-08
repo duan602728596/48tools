@@ -11,7 +11,7 @@ async function selectItemClick(app: ElectronApp, selectId: string | Locator, tit
   let select: Locator;
 
   if (typeof selectId === 'string') {
-    select = await app.win.locator(`[data-test-id="${ selectId }"] .ant-select`);
+    select = app.win.locator(`[data-test-id="${ selectId }"] .ant-select`);
   } else {
     select = selectId;
   }
@@ -19,8 +19,8 @@ async function selectItemClick(app: ElectronApp, selectId: string | Locator, tit
   await select.click();
 
   const selectItem: Locator = typeof title === 'string'
-    ? await app.win.locator(`.ant-select-item[title="${ title }"]`)
-    : await app.win.locator('.ant-select-item').nth(title);
+    ? app.win.locator(`.ant-select-item[title="${ title }"]`)
+    : app.win.locator('.ant-select-item').nth(title);
 
   await selectItem.click();
   await app.win.waitForTimeout(1_000);

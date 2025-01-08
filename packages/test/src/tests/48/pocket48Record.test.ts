@@ -30,7 +30,7 @@ export function callback(): void {
     // 测试能够正常加载数据
     await app.win.waitForSelector('.ant-table-wrapper');
 
-    const antBtn: Locator = await app.win.locator('.ant-btn');
+    const antBtn: Locator = app.win.locator('.ant-btn');
 
     await antBtn.nth(2).click();
     await app.win.waitForSelector('.ant-table-row');
@@ -60,14 +60,14 @@ export function callback(): void {
     await app.win.keyboard.type('刘倩倩');
     await app.win.waitForTimeout(5_000);
 
-    const selectItem: Locator = await app.win.locator('.ant-select-item[title="刘倩倩（327568）"]');
+    const selectItem: Locator = app.win.locator('.ant-select-item[title="刘倩倩（327568）"]');
 
     await selectItem.click();
     await app.win.waitForTimeout(1_000);
     */
     await app.win.keyboard.type('327568');
 
-    const antBtn: Locator = await app.win.locator('.ant-btn');
+    const antBtn: Locator = app.win.locator('.ant-btn');
 
     await antBtn.nth(2).click();
     await app.win.waitForSelector('.ant-table-row');
