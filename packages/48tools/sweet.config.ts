@@ -107,6 +107,7 @@ export default function(info: Record<string, any>): Record<string, any> {
     frame: 'react',
     dll: [
       '@ant-design/icons',
+      '@ant-design/v5-patch-for-react-19',
       '@bbkkbkk/q',
       '@dnd-kit/core',
       '@dnd-kit/sortable',

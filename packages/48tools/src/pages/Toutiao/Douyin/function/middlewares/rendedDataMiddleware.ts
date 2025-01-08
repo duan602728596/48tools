@@ -36,8 +36,8 @@ function userApiRender(ctx: GetVideoUrlOnionContext): void {
 
 function detailApiRender(ctx: GetVideoUrlOnionContext): void {
   if (ctx.data && ('aweme_detail' in ctx.data)) {
-    const awemeList: Array<BitRateItem> = ctx.data.aweme_detail.video.bit_rate ?? [];
-    const images: Array<AwemeItemRate> = ctx.data.aweme_detail.images ?? [];
+    const awemeList: Array<BitRateItem> = ctx.data.aweme_detail?.video?.bit_rate ?? [];
+    const images: Array<AwemeItemRate> = ctx.data.aweme_detail?.images ?? [];
     const urls: DownloadUrlItem[] = [];
 
     // 视频

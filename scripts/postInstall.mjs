@@ -18,21 +18,6 @@ async function replaceWebsocket(fp, ws) {
   await fsP.writeFile(filePath, newFile, { encoding: 'utf8' });
 }
 
-/* 修复rc-util */
-async function fixRcUtil() {
-  const rcUtilPath = path.join(nodeModules, 'rc-util/es/React/render.js');
-  const file = await fsP.readFile(rcUtilPath, { encoding: 'utf8' });
-
-  if (file.includes('/* rc-util fixed */')) return;
-
-  const newFile = file.replace("import * as ReactDOM from 'react-dom';", `import * as ReactDOM from 'react-dom';
-import * as ReactDOMClient from 'react-dom/client';`)
-    .replace('var fullClone = _objectSpread({}, ReactDOM);', 'var fullClone = _objectSpread({}, ReactDOM, ReactDOMClient);')
-    .replace('reactRender(node, container);', '/* rc-util fixed */ (() => { try { reactRender(node, container); } catch {} })();');
-
-  await fsP.writeFile(rcUtilPath, newFile, { encoding: 'utf8' });
-}
-
 /* 编译插件 */
 async function buildPlugin(pluginName) {
   await command(npm, ['run', 'dev'], path.join(cwd, 'packages', pluginName));
@@ -62,7 +47,6 @@ async function postInstall() {
   ]);
 
   await Promise.all([
-    fixRcUtil(),        // 修复rc-util
     fixPlaywrightType(path.join(nodeModules, 'playwright/test.d.ts')), // 修复playwright
     fixPlaywrightType(path.join(nodeModules, 'playwright-core/index.d.ts'))
   ]);

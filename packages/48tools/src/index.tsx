@@ -1,6 +1,7 @@
 import { createRoot, type Root } from 'react-dom/client';
 import { HashRouter } from 'react-router';
 import { Provider } from 'react-redux';
+import '@ant-design/v5-patch-for-react-19';
 import 'antd/dist/reset.css';
 import * as dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
