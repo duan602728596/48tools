@@ -75,20 +75,24 @@ function FFmpegOption(props: {}): ReactElement {
 
   return (
     <Fragment>
-      <HelpButtonGroup navId="ffmpeg-option">
-        <Button type="primary"
-          id="ffmpeg-options"
-          danger={ true }
-          icon={ IconFFmpeg }
-          onClick={ handleOpenFFmpegOptionClick }
-        >
-          FFmpeg配置
-        </Button>
-      </HelpButtonGroup>
-      <span className={ classNames('inline-block ml-[6px] text-[12px]', style.tips) }>
-        <IconSwapLeftOutlined className="mr-[3px] text-[16px]" />
-        使用前先配置FFmpeg
-      </span>
+      <div className="flex">
+        <HelpButtonGroup navId="ffmpeg-option">
+          <Button type="primary"
+            id="ffmpeg-options"
+            danger={ true }
+            icon={ IconFFmpeg }
+            onClick={ handleOpenFFmpegOptionClick }
+          >
+            FFmpeg配置
+          </Button>
+        </HelpButtonGroup>
+        <div className="ml-[6px] content-center">
+          <span className={ classNames('inline-block text-[12px]', style.tips) }>
+            <IconSwapLeftOutlined className="mr-[3px] text-[16px]" />
+            使用前先配置FFmpeg
+          </span>
+        </div>
+      </div>
       <Modal title="FFmpeg配置"
         open={ visible }
         width={ 600 }
