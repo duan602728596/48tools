@@ -28,7 +28,7 @@ export const testConfig: TestConfig = {
   bilibili: {
     // 如果为true，会跑港澳台的测试用例
     useProxy: true,
-    proxy: 'http://127.0.0.1:15732',
+    proxy: 'http://127.0.0.1:7897',
     cookie: await readConfigsCacheFile('bilibili-cookie.txt')
   },
   douyin: {
