@@ -1,5 +1,6 @@
 import fs, { promises as fsPromoses } from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { configsCache } from './config.js';
 
 /**
@@ -27,7 +28,7 @@ export function testLog(serialNumber: number, title: string): void {
  * @param { boolean } [dark] - 暗黑模式文件
  */
 export function vpImage(dir: string, filename: string, dark?: boolean): Array<string> {
-  return [dir, `${ filename }${ dark ? '-dark' : '' }.png`];
+  return [os.platform(), dir, `${ filename }${ dark ? '-dark' : '' }.png`];
 }
 
 /**
