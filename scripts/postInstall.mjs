@@ -38,17 +38,19 @@ async function buildPlugin(pluginName) {
   await command(npm, ['run', 'dev'], path.join(cwd, 'packages', pluginName));
 }
 
-/* 修复playwright */
-async function fixPlaywrightType() {
-  const playwrightTypePath = path.join(nodeModules, 'playwright/test.d.ts');
-  const file = await fsP.readFile(playwrightTypePath, { encoding: 'utf8' });
+/**
+ * 修复playwright
+ * @param { string } typeFilePath - 文件路径
+ */
+async function fixPlaywrightType(typeFilePath) {
+  const file = await fsP.readFile(typeFilePath, { encoding: 'utf8' });
 
   if (file.includes('/* playwright/test fixed */')) return;
 
   let newFile = file.replace(/\/test';/g, "/test.js';");
 
   newFile += '\n/* playwright/test fixed */';
-  await fsP.writeFile(playwrightTypePath, newFile, { encoding: 'utf8' });
+  await fsP.writeFile(typeFilePath, newFile, { encoding: 'utf8' });
 }
 
 /* 执行postinstall脚本 */
@@ -61,7 +63,8 @@ async function postInstall() {
 
   await Promise.all([
     fixRcUtil(),        // 修复rc-util
-    fixPlaywrightType() // 修复playwright
+    fixPlaywrightType(path.join(nodeModules, 'playwright/test.d.ts')), // 修复playwright
+    fixPlaywrightType(path.join(nodeModules, 'playwright-core/index.d.ts'))
   ]);
 
   // 编译babel插件
