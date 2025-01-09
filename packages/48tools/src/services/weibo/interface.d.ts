@@ -29,6 +29,7 @@ export interface VisitedSchemaItem {
   new_status?: string;
   region?: string; // 位置
   sunshine?: string;
+  visit_day: string;
 }
 
 export interface VisitedList {
@@ -52,6 +53,7 @@ export interface FollowContentUserItem {
   followers_count_str: `${ number }` | `${ number }万`; // -1或x.x万
   name: string;
   screen_name: string;
+  location: string;
 }
 
 export interface FollowContent {
@@ -68,6 +70,9 @@ export interface DetailInfo {
     birthday: `${ string }座`;
     created_at: string;
     ip_location: string | `IP属地：${ string }`;
+    sunshine_credit?: {
+      level: `信用${ string }`;
+    };
   };
 }
 

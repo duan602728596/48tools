@@ -7,6 +7,8 @@ import type { useAppProps } from 'antd/es/app/context';
 import { UserOutlined as IconUserOutlined } from '@ant-design/icons';
 import { parse } from 'cookie';
 import classNames from 'classnames';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import { requestVisitedList, type VisitedList, type VisitedSchemaItem } from '@48tools-api/weibo';
 import { requestUserInfo, type UserInfo } from '@48tools-api/weibo/login';
 import commonStyle from '../../common.sass';
@@ -16,6 +18,8 @@ import dbConfig from '../../utils/IDB/IDBConfig';
 import Follow from './Follow/Follow';
 import { handleOpenWeiboClick } from './function/weiboHelper';
 import type { WeiboAccount } from '../../commonTypes';
+
+dayjs.extend(customParseFormat);
 
 /* 定义合并后的账号信息 */
 interface VisitedSchemaItemWithUserInfo extends VisitedSchemaItem {
@@ -47,7 +51,6 @@ function LoginTable(props: {}): ReactElement {
     setFollowDrawerVisible(true);
   }
 
-  /** @deprecated */
   async function handleVisitorWeiboAccountClick(record: WeiboAccount, event: MouseEvent): Promise<void> {
     if (!(record.s && record.from && record.c)) {
       messageApi.warning('App相关参数为空！');
@@ -122,6 +125,8 @@ function LoginTable(props: {}): ReactElement {
       });
     }
 
+    const visitedDay: string = dayjs(item.visit_day, 'YYYYMMDD').format('YYYY-MM-DD');
+
     if (item.userInfo) {
       return (
         <List.Item key={ item.userInfo.idstr }>
@@ -133,6 +138,7 @@ function LoginTable(props: {}): ReactElement {
             }
             description={ item.userInfo.description }
           />
+          <div>访问时间：{ visitedDay }</div>
           <div>{ tags }</div>
         </List.Item>
       );
@@ -140,6 +146,7 @@ function LoginTable(props: {}): ReactElement {
       return (
         <List.Item key={ index }>
           <List.Item.Meta title="未知用户" avatar={ <Avatar icon={ <IconUserOutlined /> } /> } />
+          <div>访问时间：{visitedDay}</div>
           <div>{ tags }</div>
         </List.Item>
       );
@@ -225,7 +232,6 @@ function LoginTable(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
-      {/** @deprecated */}
       <Drawer open={ isDrawerVisible }
         maskClosable={ false }
         mask={ false }
