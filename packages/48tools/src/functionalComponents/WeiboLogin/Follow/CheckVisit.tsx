@@ -1,12 +1,13 @@
 import {
   Fragment,
   useState,
+  useEffect,
   useTransition,
   type ReactElement,
   type Dispatch as D,
   type SetStateAction as S,
-  type MouseEvent,
-  type TransitionStartFunction } from 'react';
+  type TransitionStartFunction
+} from 'react';
 import { Button } from 'antd';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -35,7 +36,7 @@ function CheckVisit(props: CheckVisitProps): ReactElement | null {
   const [checkLoading, startCheckTransition]: [boolean, TransitionStartFunction] = useTransition();
 
   // 检查是否匹配
-  function handleCheckVisitMatchingClick(event: MouseEvent): void {
+  function handleCheckVisitMatchingClick(): void {
     startCheckTransition(async (): Promise<void> => {
       let res: DetailInfo;
 
@@ -83,6 +84,12 @@ function CheckVisit(props: CheckVisitProps): ReactElement | null {
 
     return tags.join('，');
   }
+
+  useEffect(function(): void {
+    if (userDetailCache[user.idstr]) {
+      handleCheckVisitMatchingClick();
+    }
+  }, [user]);
 
   return (
     <Fragment>
