@@ -12,6 +12,7 @@ import { Button } from 'antd';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import { requestDetailByUserId, type FollowContentUserItem, type VisitedSchemaItem, type DetailInfo } from '@48tools-api/weibo';
+import commonStyle from '../../../common.sass';
 import type { WeiboAccount } from '../../../commonTypes';
 
 dayjs.extend(customParseFormat);
@@ -31,8 +32,8 @@ interface CheckVisitProps {
  */
 function CheckVisit(props: CheckVisitProps): ReactElement | null {
   const { user, visitedList, weiboAccount }: CheckVisitProps = props;
-  const [matchVisited, setMatchVisited]: [VisitedSchemaItem | undefined, D<S<VisitedSchemaItem | undefined>>]
-    = useState<VisitedSchemaItem | undefined>(undefined);
+  const [matchVisited, setMatchVisited]: [VisitedSchemaItem | null, D<S<VisitedSchemaItem | null>>] = useState<VisitedSchemaItem | null>(null);
+  const [userTags, setUserTags]: [string | null, D<S<string | null>>] = useState<string | null>(null);
   const [checkLoading, startCheckTransition]: [boolean, TransitionStartFunction] = useTransition();
 
   // 检查是否匹配
@@ -48,31 +49,44 @@ function CheckVisit(props: CheckVisitProps): ReactElement | null {
         if ('data' in res) userDetailCache[user.idstr] = res;
       }
 
+      const ip: string | undefined = typeof res.data.ip_location === 'string' ? res.data.ip_location.replace('IP属地：', '') : undefined;
       const followersCountMatchVisited: VisitedSchemaItem | undefined = visitedList.find((o: VisitedSchemaItem | []): o is VisitedSchemaItem => {
         if (Array.isArray(o) || !o.recommend) return false;
 
         // 匹配星座
         const birthdayMatch: boolean = o.recommend.some((p: { name: string; value: string }): boolean => res.data.birthday.includes(p.value));
         // 匹配ID
-        const ipMatch: boolean = o.region === res.data.ip_location.replace('IP属地：', '');
+        const ipMatch: boolean = !!(ip && o.region && o.region === ip);
         // 检查信用
         const sunshineCredit: string | undefined = o.sunshine ? o.sunshine.replace('阳光', '') : undefined;
         let sunshineCreditMatch: boolean = true;
 
         if (sunshineCredit && res.data?.sunshine_credit?.level) {
-          sunshineCreditMatch = sunshineCredit === res.data.sunshine_credit.level;
+          sunshineCreditMatch = sunshineCredit === res.data?.sunshine_credit.level;
         }
 
         return birthdayMatch && ipMatch && sunshineCreditMatch;
       });
 
-      setMatchVisited((prevState: VisitedSchemaItem | undefined): VisitedSchemaItem | undefined => followersCountMatchVisited);
+      if (followersCountMatchVisited) {
+        setMatchVisited((prevState: VisitedSchemaItem | null): VisitedSchemaItem | null => followersCountMatchVisited);
+      } else {
+        const tags: Array<string> = [];
+
+        if (ip) tags.push(ip);
+
+        if (res.data.birthday && !/^\s*$/.test(res.data.birthday)) tags.push(res.data.birthday);
+
+        if (res.data?.sunshine_credit?.level) tags.push(res.data?.sunshine_credit?.level);
+
+        setUserTags((prevState: string | null): string | null => tags.join('，'));
+      }
     });
   }
 
   // 输出匹配的状态
-  function matchVisitedTags(): string | null {
-    if (!matchVisited) return null;
+  function matchVisitedTags(): ReactElement | string | null {
+    if (!matchVisited) return userTags;
 
     const tags: Array<string> = [dayjs(matchVisited.visit_day, 'YYYYMMDD').format('YYYY-MM-DD')];
 
@@ -82,7 +96,7 @@ function CheckVisit(props: CheckVisitProps): ReactElement | null {
       tags.push(...matchVisited.recommend.map((o: { name: string; value: string }): string => o.value));
     }
 
-    return tags.join('，');
+    return <span className={ commonStyle.primaryText }>{ tags.join('，') }</span>;
   }
 
   useEffect(function(): void {

@@ -135,7 +135,7 @@ function Follow(props: FollowProps): ReactElement {
   return (
     <Fragment>
       <div className="flex shrink-0 pb-[8px] text-right">
-        <Alert type="warning" message="这里只列出可能匹配的访客，不一定准确。检查需要点击“检查”，否则可能会被风控。" />
+        <Alert type="warning" message="这里只列出可能匹配的访客，不一定准确。检查需要点击“检查”。" />
         <div className="grow content-center text-right">
           <Button loading={ loading } onClick={ handleLoadFollowListClick }>加载关注列表</Button>
         </div>
