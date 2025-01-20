@@ -358,7 +358,7 @@ function Pocket48Record(props: {}): ReactElement {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: '口袋48弹幕',
-          infoArray: [record.userInfo.nickname, record.title, record.liveId],
+          infoArray: [record.userInfo.nickname, record.title, record.liveId, getFileTime(record.ctime)],
           ext
         })
       });
