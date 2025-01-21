@@ -12,6 +12,7 @@ import style from './cutForm.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 import { setCutListAdd } from '../reducers/videoCut';
 import { getFullTime, getHwaccels } from './function/function';
+import ButtonLink from '../../../components/ButtonLink/ButtonLink';
 import type { CutItem } from '../types';
 
 const timeRules: Rule[] = [{
@@ -79,7 +80,7 @@ function CutForm(props: {}): ReactElement {
   }, []);
 
   return (
-    <Card className="min-w-[880px] !mb-[8px]">
+    <Card className="min-w-[880px] !mb-[8px]" size="small">
       <Form form={ form } initialValues={{ hwaccel: '无' }} onFinish={ handleFormSubmit }>
         <Form.Item label="选择需要裁剪的视频">
           <div className="inline-block w-[592px] mr-[6px]">
@@ -119,7 +120,7 @@ function CutForm(props: {}): ReactElement {
         </Form.Item>
         <div className="flex">
           <div className="content-center">
-            <Form.Item className="inline-block" name="reEncoding" valuePropName="checked">
+            <Form.Item className="inline-block mb-0 select-none" name="reEncoding" valuePropName="checked">
               <Checkbox>精确剪辑，重新编码（速度较慢）</Checkbox>
             </Form.Item>
             <Form.Item className="inline-block mr-[8px] mb-0" name="hwaccels" label="GPU加速">
@@ -131,6 +132,9 @@ function CutForm(props: {}): ReactElement {
               <Button onClick={ (event: MouseEvent): void => resetFields() }>重置</Button>
               <Button type="primary" htmlType="submit">添加到裁剪队列</Button>
             </Button.Group>
+          </div>
+          <div className="grow text-right">
+            <ButtonLink linkProps={{ to: '/' }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>
           </div>
         </div>
       </Form>
