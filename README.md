@@ -3,7 +3,8 @@
 [<img src="https://api.gitsponsors.com/api/badge/img?id=98806656" height="40">](https://api.gitsponsors.com/api/badge/link?p=5a5ig2BFPwUsOungg6IEKT75dLJ8ylyawqWr5ueKLdO+mHm3hJAAEARYRD4yivrh5yd8zhtCZeM45wDkT3R7H1eDgt2JM9MOg6u8IardzcJI0K51nJslq/p+8Ewg3L+5gqlGscmStyqvWAzgerZEfA==)   
 ![GitHub Release](https://img.shields.io/github/v/release/duan602728596/48tools)
    ![GitHub License](https://img.shields.io/github/license/duan602728596/48tools)   ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/duan602728596/48tools/.github%2Fworkflows%2Fbuild.yml?style=flat&label=Build%20apps%20CI%20(Intel))   ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/duan602728596/48tools/.github%2Fworkflows%2Fbuild-xlarge.yml?style=flat&label=Build%20apps%20CI%20in%20xlarge%20runner%20(ARM))   
-![Static Badge](https://img.shields.io/badge/Win10-fa541c?style=for-the-badge)   ![Static Badge](https://img.shields.io/badge/Win11-fa8c16?style=for-the-badge)   ![Static Badge](https://img.shields.io/badge/Linux-722ed1?style=for-the-badge)   ![Static Badge](https://img.shields.io/badge/MacOS-eb2f96?style=for-the-badge)
+![Static Badge](https://img.shields.io/badge/Win10-fa541c?style=for-the-badge)   ![Static Badge](https://img.shields.io/badge/Win11-fa8c16?style=for-the-badge)   ![Static Badge](https://img.shields.io/badge/Linux-722ed1?style=for-the-badge)   ![Static Badge](https://img.shields.io/badge/MacOS-eb2f96?style=for-the-badge)   
+[<img src="https://api.gitsponsors.com/api/badge/img?id=98806656" height="40">](https://api.gitsponsors.com/api/badge/link?p=5a5ig2BFPwUsOungg6IEKT75dLJ8ylyawqWr5ueKLdO+mHm3hJAAEARYRD4yivrh5yd8zhtCZeM45wDkT3R7H1eDgt2JM9MOg6u8IardzcJI0K51nJslq/p+8Ewg3L+5gqlGscmStyqvWAzgerZEfA==)   
 
 > 根据[Electron的支持政策](https://www.electronjs.org/docs/latest/tutorial/electron-timelines)，软件将会在下一个版本升级Electron的版本。Electron版本大于v22，软件将不支持win8及以下版本。
 
