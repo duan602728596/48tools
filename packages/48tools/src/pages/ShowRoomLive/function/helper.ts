@@ -1,0 +1,1 @@
+export const localStorageKey: string = 'SHOWROOM_LIVE_AUTO_RECORD_SAVE_PATH';

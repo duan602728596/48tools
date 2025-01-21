@@ -8,7 +8,8 @@ export const {
   slice: {
     actions: {
       setAddWorkerItem,
-      setRemoveWorkerItem
+      setRemoveWorkerItem,
+      setAutoRecordTimer
     },
     selectors: selectorsObject
   },

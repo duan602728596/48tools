@@ -70,6 +70,7 @@ function AutoRecordingSavePath(props: AutoRecordingSavePathProps): ReactElement 
         open={ open }
         width={ 600 }
         centered={ true }
+        maskClosable={ false }
         afterClose={ form.resetFields }
         onOk={ handleAutoRecordSavePathClick }
         onCancel={ handleCloseAutoRecordSavePathModalClick }

@@ -1,12 +1,13 @@
+import { setInterval, clearInterval } from 'node:timers';
 import type { SaveDialogReturnValue } from 'electron';
 import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Alert, Table, App, Popconfirm, Button } from 'antd';
+import { Alert, Table, App, Popconfirm, Button, Checkbox } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
-import { requestStreamingUrl, type StreamingUrl, type StreamingUrlItem } from '@48tools-api/showroom';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { showSaveDialog } from '../../utils/remote/dialog';
 import Header from '../../components/Header/Header';
 import AddLiveRoomForm from '../../components/AddLiveRoomForm/AddLiveRoomForm';
@@ -16,16 +17,19 @@ import {
   IDBCursorLiveList,
   IDBSaveLiveItem,
   IDBDeleteLiveItem,
-  setAddWorkerItem,
-  setRemoveWorkerItem,
+  IDBSaveAutoRecordLiveItem,
+  setAutoRecordTimer,
   selectorsObject
 } from './reducers/showroomLive';
 import ShowroomTextIcon from '../Index/ShowroomTextIcon/ShowroomTextIcon';
-import { getFFmpeg, getFilePath } from '../../utils/utils';
-import getFFmpegDownloadWorker from '../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
+import { getFilePath } from '../../utils/utils';
 import HelpButtonGroup from '../../components/HelpButtonGroup/HelpButtonGroup';
+import { localStorageKey } from './function/helper';
+import AutoRecordingSavePath from '../../components/AutoRecordingSavePath/AutoRecordingSavePath';
+import showroomLiveWorker from './function/showroomLiveWorker';
+import { showroomLiveAutoRecord } from './function/showroomLiveAutoRecord';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../store/slice/LiveSlice';
-import type { LiveItem, MessageEventData, WebWorkerChildItem } from '../../commonTypes';
+import type { LiveItem, WebWorkerChildItem } from '../../commonTypes';
 
 /* redux selector */
 type RState = { showroomLive: LiveSliceInitialState };
@@ -34,9 +38,34 @@ const selector: Selector<RState, LiveSliceSelector> = createStructuredSelector({
 
 /* showroom直播抓取 */
 function Index(props: {}): ReactElement {
-  const { liveList, workerList }: LiveSliceSelector = useSelector(selector);
+  const { liveList, workerList, autoRecordTimer }: LiveSliceSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const { message: messageApi }: useAppProps = App.useApp();
+
+  // 停止自动录制
+  function handleAutoRecordStopClick(event: MouseEvent): void {
+    clearInterval(autoRecordTimer!);
+    dispatch(setAutoRecordTimer(null));
+  }
+
+  // 自动录制
+  function handleAutoRecordStartClick(event: MouseEvent): void {
+    const showroomLiveAutoRecordSavePath: string | null = localStorage.getItem(localStorageKey);
+
+    if (showroomLiveAutoRecordSavePath) {
+      dispatch(setAutoRecordTimer(setInterval(showroomLiveAutoRecord, 60_000)));
+      showroomLiveAutoRecord();
+    } else {
+      messageApi.warning('请先配置视频自动保存的目录！');
+    }
+  }
+
+  // 修改自动录制的checkbox
+  function handleAutoRecordCheck(record: LiveItem, event: CheckboxChangeEvent): void {
+    dispatch(IDBSaveAutoRecordLiveItem({
+      data: { ...record, autoRecord: event.target.checked }
+    }));
+  }
 
   // 停止
   function handleStopClick(record: LiveItem, event?: MouseEvent): void {
@@ -59,44 +88,7 @@ function Index(props: {}): ReactElement {
 
     if (result.canceled || !result.filePath) return;
 
-    const res: StreamingUrl = await requestStreamingUrl(record.roomId);
-
-    if (!res?.streaming_url_list?.length) {
-      messageApi.error('获取直播地址失败！');
-
-      return;
-    }
-
-    res.streaming_url_list.sort((a: StreamingUrlItem, b: StreamingUrlItem): number => ((b.quality || 0) - (a.quality || 0)));
-
-    const worker: Worker = getFFmpegDownloadWorker();
-
-    worker.addEventListener('message', function(e: MessageEvent<MessageEventData>) {
-      const { type, error }: MessageEventData = e.data;
-
-      if (type === 'close' || type === 'error') {
-        if (type === 'error') {
-          messageApi.error(`${ record.description }[${ record.roomId }]录制失败！`);
-        }
-
-        worker.terminate();
-        dispatch(setRemoveWorkerItem(record.id));
-      }
-    }, false);
-
-    worker.postMessage({
-      type: 'start',
-      playStreamPath: res.streaming_url_list[0].url,
-      filePath: result.filePath,
-      id: record.id,
-      ffmpeg: getFFmpeg(),
-      protocolWhitelist: true
-    });
-
-    dispatch(setAddWorkerItem({
-      id: record.id,
-      worker
-    }));
+    showroomLiveWorker(record, messageApi, result.filePath);
   }
 
   // 删除
@@ -109,6 +101,17 @@ function Index(props: {}): ReactElement {
   const columns: ColumnsType<LiveItem> = [
     { title: '说明', dataIndex: 'description' },
     { title: '房间ID', dataIndex: 'roomId' },
+    {
+      title: '自动录制',
+      dataIndex: 'autoRecord',
+      width: 100,
+      render: (value: boolean, record: LiveItem, index: number): ReactElement => (
+        <Checkbox checked={ value }
+          disabled={ autoRecordTimer !== null }
+          onChange={ (event: CheckboxChangeEvent): void => handleAutoRecordCheck(record, event) }
+        />
+      )
+    },
     {
       title: '操作',
       key: 'handle',
@@ -153,6 +156,14 @@ function Index(props: {}): ReactElement {
   return (
     <Content>
       <Header>
+        <Button.Group className="mr-[8px]">
+          {
+            autoRecordTimer === null
+              ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
+              : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
+          }
+          <AutoRecordingSavePath localStorageItemKey={ localStorageKey } />
+        </Button.Group>
         <HelpButtonGroup navId="showroom-live" tooltipTitle={ <Fragment>如何添加{ ShowroomTextIcon }的直播间ID</Fragment> }>
           <AddLiveRoomForm modalTitle={
             <Fragment>

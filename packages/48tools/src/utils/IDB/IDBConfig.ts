@@ -91,13 +91,13 @@ export const objectStoreMaps: Record<
   showroomLive: {
     name: 'showroom_live',
     key: 'id',
-    data: ['description', 'roomId']
+    data: ['description', 'roomId', 'autoRecord']
   }
 };
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 17,
+  version: 18,
   objectStore: Object.values<ObjectStoreItem>(objectStoreMaps)
 };
 

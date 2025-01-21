@@ -29,6 +29,7 @@ packages/test/ffmpeg
 packages/test/.configscache
 node-nim-cache0
 .eslintcache
+.test
 
 docker/*.zip
 docker/48tools-**/*
