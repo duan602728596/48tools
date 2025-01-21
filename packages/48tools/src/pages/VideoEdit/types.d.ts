@@ -13,7 +13,7 @@ export interface CutItem {
   startTime?: string;   // 开始时间
   endTime?: string;     // 结束时间
   reEncoding?: boolean; // 重新编码
-  hwaccels?: string | undefined; // GPU加速
+  hwaccel?: string | undefined; // GPU加速
 }
 
 /* ========== FFmpegProcess ========== */

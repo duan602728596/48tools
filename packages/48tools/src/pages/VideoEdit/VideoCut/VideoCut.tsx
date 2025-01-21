@@ -59,7 +59,7 @@ function Index(props: {}): ReactElement {
 
     if (item.reEncoding) infoArray.push('re-encoding-1');
 
-    if (item.hwaccels) infoArray.push(`hwaccels-${ item.hwaccels }`);
+    if (item.hwaccel) infoArray.push(`hwaccel-${ item.hwaccel }`);
 
     const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: getFilePath({
@@ -93,7 +93,7 @@ function Index(props: {}): ReactElement {
       startTime: item.startTime,
       endTime: item.endTime,
       reEncoding: item.reEncoding,
-      hwaccels: item.hwaccels,
+      hwaccel: item.hwaccel,
       ffmpeg: getFFmpeg()
     });
 

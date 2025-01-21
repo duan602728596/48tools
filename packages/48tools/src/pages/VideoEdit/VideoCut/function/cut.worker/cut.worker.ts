@@ -7,7 +7,7 @@ export type WorkerEventData = {
   startTime?: string;     // 开始时间
   endTime?: string;       // 结束时间
   reEncoding?: boolean;   // 精确剪辑，重新编码
-  hwaccels?: string;      // GPU加速
+  hwaccel?: string;       // GPU加速
   ffmpeg: string;         // ffmpeg地址
 };
 
@@ -47,8 +47,8 @@ function cut(workerData: WorkerEventData): void {
   const { ffmpeg, playStreamPath, filePath, startTime, endTime }: WorkerEventData = workerData;
   const ffmpegArgs: Array<string> = [];
 
-  if (workerData.hwaccels && workerData.hwaccels !== '无') {
-    ffmpegArgs.push('-hwaccel', workerData.hwaccels);
+  if (workerData.hwaccel && workerData.hwaccel !== '无') {
+    ffmpegArgs.push('-hwaccel', workerData.hwaccel);
   }
 
   // 裁剪时长

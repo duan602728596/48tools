@@ -31,7 +31,7 @@ interface FormValue {
   endM?: string | number;
   endS?: string | number;
   reEncoding?: boolean | undefined;
-  hwaccels?: string | undefined;
+  hwaccel?: string | undefined;
 }
 
 /* 裁剪表单 */
@@ -63,7 +63,7 @@ function CutForm(props: {}): ReactElement {
       startTime: getFullTime(value.startH, value.startM, value.startS),
       endTime: getFullTime(value.endH, value.endM, value.endS),
       reEncoding: value.reEncoding,
-      hwaccels: value.hwaccels
+      hwaccel: value.hwaccel
     };
 
     dispatch(setCutListAdd(data));
@@ -80,7 +80,7 @@ function CutForm(props: {}): ReactElement {
 
   return (
     <Card className="min-w-[880px] !mb-[8px]">
-      <Form form={ form } onFinish={ handleFormSubmit }>
+      <Form form={ form } initialValues={{ hwaccel: '无' }} onFinish={ handleFormSubmit }>
         <Form.Item label="选择需要裁剪的视频">
           <div className="inline-block w-[592px] mr-[6px]">
             <Form.Item name="file" rules={ [{ required: true, whitespace: true, message: '请选择视频文件' }] } noStyle={ true }>
