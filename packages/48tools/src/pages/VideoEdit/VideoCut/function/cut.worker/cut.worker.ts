@@ -23,15 +23,15 @@ type Time = [number, number, number];
  * @return { Time }
  */
 export function computingTime(startTime: Time, endTime: Time): Time {
-  const startS: number = (startTime[0] * 3600) + (startTime[1] * 60) + startTime[2]; // 开始时间转换到秒
-  const endS: number = (endTime[0] * 3600) + (endTime[1] * 60) + endTime[2];         // 结束时间转换到秒
-  const cha: number = endS - startS;                                                 // 计算时间差
-  const h: number = Number(`${ cha / 3600 }`.match(/\d+/g)![0]);            // 时取整数
-  const hp: number = cha % 3600;                                                     // 时取余
-  const m: number = Number(`${ hp / 60 }`.match(/\d+/g)![0]);               // 分取整数
-  const s: number = hp % 60;                                                         // 分取余 => 秒
+  const startSecond: number = (startTime[0] * 3_600) + (startTime[1] * 60) + startTime[2]; // 开始时间转换到秒
+  const endSecond: number = (endTime[0] * 3_600) + (endTime[1] * 60) + endTime[2];         // 结束时间转换到秒
+  const diffSecond: number = endSecond - startSecond;                                      // 计算时间差
+  const hourInteger: number = Math.floor(diffSecond / 3_600);                              // 时取整数
+  const hourRemainder: number = diffSecond % 3_600;                                        // 时取余数
+  const minuteInteger: number = Math.floor(hourRemainder / 60);                            // 分取整数
+  const minuteRemainder: number = hourRemainder % 60;                                      // 分取余 => 秒
 
-  return [h, m, s];
+  return [hourInteger, minuteInteger, minuteRemainder];
 }
 
 let child: ChildProcessWithoutNullStreams;
