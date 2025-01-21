@@ -6,6 +6,8 @@ export type WorkerEventData = {
   filePath: string;       // 文件保存地址
   startTime?: string;     // 开始时间
   endTime?: string;       // 结束时间
+  reEncoding?: boolean;   // 精确剪辑，重新编码
+  hwaccels?: string;      // GPU加速
   ffmpeg: string;         // ffmpeg地址
 };
 
@@ -45,6 +47,10 @@ function cut(workerData: WorkerEventData): void {
   const { ffmpeg, playStreamPath, filePath, startTime, endTime }: WorkerEventData = workerData;
   const ffmpegArgs: Array<string> = [];
 
+  if (workerData.hwaccels && workerData.hwaccels !== '无') {
+    ffmpegArgs.push('-hwaccel', workerData.hwaccels);
+  }
+
   // 裁剪时长
   if (startTime) {
     ffmpegArgs.push('-ss', startTime);
@@ -63,7 +69,15 @@ function cut(workerData: WorkerEventData): void {
   if (/\.(gif|webp)$/i.test(filePath)) {
     ffmpegArgs.push('-i', playStreamPath, '-loop', '0', filePath);
   } else {
-    ffmpegArgs.push('-accurate_seek', '-i', playStreamPath, '-c', 'copy', '-avoid_negative_ts', '1', filePath);
+    ffmpegArgs.push('-accurate_seek', '-i', playStreamPath);
+
+    if (workerData.reEncoding) {
+      ffmpegArgs.push('-c:v', 'libx264', '-c:a', 'aac');
+    } else {
+      ffmpegArgs.push('-c', 'copy');
+    }
+
+    ffmpegArgs.push('-avoid_negative_ts', '1', filePath);
   }
 
   child = spawn(ffmpeg, ffmpegArgs);

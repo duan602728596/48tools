@@ -2,14 +2,16 @@ import { randomUUID } from 'node:crypto';
 import * as path from 'node:path';
 import type { ParsedPath } from 'node:path';
 import type { OpenDialogReturnValue } from 'electron';
-import type { ReactElement, MouseEvent } from 'react';
+import { useState, useEffect, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Form, Button, Input, InputNumber, Card, type FormInstance } from 'antd';
+import { Form, Button, Input, InputNumber, Card, Checkbox, Select, type FormInstance } from 'antd';
 import type { Rule } from 'antd/es/form';
+import type { DefaultOptionType } from 'rc-select/es/Select';
+import style from './cutForm.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 import { setCutListAdd } from '../reducers/videoCut';
-import { getFullTime } from './function/function';
+import { getFullTime, getHwaccels } from './function/function';
 import type { CutItem } from '../types';
 
 const timeRules: Rule[] = [{
@@ -28,11 +30,17 @@ interface FormValue {
   endH?: string | number;
   endM?: string | number;
   endS?: string | number;
+  reEncoding?: boolean | undefined;
+  hwaccels?: string | undefined;
 }
 
 /* 裁剪表单 */
 function CutForm(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
+  const [hwaccelsOptions, setHwaccelsOptions]: [Array<DefaultOptionType>, D<S<Array<DefaultOptionType>>>] = useState([
+    { label: '无', value: '无' },
+    { label: 'auto', value: 'auto' }
+  ]);
   const [form]: [FormInstance] = Form.useForm();
   const { setFieldsValue, resetFields }: FormInstance = form;
 
@@ -53,12 +61,22 @@ function CutForm(props: {}): ReactElement {
       file: value.file,
       name: parseResult.base,
       startTime: getFullTime(value.startH, value.startM, value.startS),
-      endTime: getFullTime(value.endH, value.endM, value.endS)
+      endTime: getFullTime(value.endH, value.endM, value.endS),
+      reEncoding: value.reEncoding,
+      hwaccels: value.hwaccels
     };
 
     dispatch(setCutListAdd(data));
     resetFields();
   }
+
+  useEffect(function() {
+    getHwaccels().then((r: Array<string>): void => {
+      setHwaccelsOptions((prevState: Array<DefaultOptionType>): Array<DefaultOptionType> => prevState.concat(
+        r.map((o: string): DefaultOptionType => ({ label: o, value: o }))
+      ));
+    });
+  }, []);
 
   return (
     <Card className="min-w-[880px] !mb-[8px]">
@@ -73,7 +91,7 @@ function CutForm(props: {}): ReactElement {
         </Form.Item>
         <Form.Item label="裁剪时间">
           {/* 开始时间 */}
-          <label className="align-[-4px]">开始时间：</label>
+          <label>开始时间：</label>
           <Form.Item name="startH" rules={ timeRules } noStyle={ true }>
             <InputNumber placeholder="时" />
           </Form.Item>
@@ -86,7 +104,7 @@ function CutForm(props: {}): ReactElement {
             <InputNumber placeholder="秒" />
           </Form.Item>
           {/* 结束时间 */}
-          <label className="ml-[12px] align-[-4px]">结束时间：</label>
+          <label className="ml-[12px]">结束时间：</label>
           <Form.Item name="endH" rules={ timeRules } noStyle={ true }>
             <InputNumber placeholder="时" />
           </Form.Item>
@@ -99,10 +117,22 @@ function CutForm(props: {}): ReactElement {
             <InputNumber placeholder="秒" />
           </Form.Item>
         </Form.Item>
-        <Button.Group>
-          <Button onClick={ (event: MouseEvent): void => resetFields() }>重置</Button>
-          <Button type="primary" htmlType="submit">添加到裁剪队列</Button>
-        </Button.Group>
+        <div className="flex">
+          <div className="content-center">
+            <Form.Item className="inline-block" name="reEncoding" valuePropName="checked">
+              <Checkbox>精确剪辑，重新编码（速度较慢）</Checkbox>
+            </Form.Item>
+            <Form.Item className="inline-block mr-[8px] mb-0" name="hwaccels" label="GPU加速">
+              <Select className={ style.select } options={ hwaccelsOptions } />
+            </Form.Item>
+          </div>
+          <div>
+            <Button.Group>
+              <Button onClick={ (event: MouseEvent): void => resetFields() }>重置</Button>
+              <Button type="primary" htmlType="submit">添加到裁剪队列</Button>
+            </Button.Group>
+          </div>
+        </div>
       </Form>
     </Card>
   );

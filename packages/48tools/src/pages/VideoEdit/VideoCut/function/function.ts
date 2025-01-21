@@ -1,3 +1,8 @@
+import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
+import { getFFmpeg } from '../../../../utils/utils';
+import { _ffmpegLogProtocol } from '../../../../utils/logProtocol/logActions';
+import type { _UtilObject } from '../../../../../../main/src/logProtocol/logTemplate/ffmpeg.mjs';
+
 type InputNumberValue = string | number | undefined;
 
 /**
@@ -28,4 +33,34 @@ export function getFullTime(h: InputNumberValue, m: InputNumberValue, s: InputNu
     secondStr: string = `${ second ?? 0 }`.padStart(2, '0');
 
   return `${ hourStr }:${ minuteStr }:${ secondStr }`;
+}
+
+/* 从ffmpeg中获得可以使用gpu加速的办法 */
+export function getHwaccels(): Promise<Array<string>> {
+  const ffmpeg: string = getFFmpeg();
+  const hwaccelsArr: Array<string> = [];
+
+  return new Promise((resolve: Function, reject: Function): void => {
+    const child: ChildProcessWithoutNullStreams = spawn(ffmpeg, ['-hwaccels']);
+
+    child.stdout.on('data', function(data: Buffer): void {
+      const result: Array<string> = data.toString().split(':');
+      const actions: Array<string> = result[1].split(/\r?\n/);
+
+      hwaccelsArr.push(...actions.filter((o: string): boolean => o !== ''));
+    });
+
+    child.stderr.on('data', function(data: Buffer): void {
+      // console.log(data.toString());
+    });
+
+    child.on('close', function(...args: string[]): void {
+      resolve(hwaccelsArr);
+    });
+
+    child.on('error', function(err: Error): void {
+      console.error(err);
+      resolve(hwaccelsArr);
+    });
+  });
 }

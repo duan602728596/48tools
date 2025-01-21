@@ -55,11 +55,17 @@ function Index(props: {}): ReactElement {
   // 开始裁剪
   async function handleStartCutClick(item: CutItem, event: MouseEvent): Promise<void> {
     const parseResult: ParsedPath = parse(item.name);
+    const infoArray: Array<string> = [item.id, parseResult.name];
+
+    if (item.reEncoding) infoArray.push('re-encoding-1');
+
+    if (item.hwaccels) infoArray.push(`hwaccels-${ item.hwaccels }`);
+
     const result: SaveDialogReturnValue = await showSaveDialog({
       defaultPath: getFilePath({
         typeTitle: '视频裁剪',
-        infoArray: [item.id, parseResult.name],
-        ext: parseResult.ext
+        infoArray,
+        ext: item.reEncoding ? '.mp4' : parseResult.ext
       })
     });
 
@@ -86,6 +92,8 @@ function Index(props: {}): ReactElement {
       filePath: result.filePath,
       startTime: item.startTime,
       endTime: item.endTime,
+      reEncoding: item.reEncoding,
+      hwaccels: item.hwaccels,
       ffmpeg: getFFmpeg()
     });
 
