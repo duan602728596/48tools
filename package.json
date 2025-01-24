@@ -54,7 +54,7 @@
     "@types/fluent-ffmpeg": "^2.1.21",
     "@types/fs-extra": "^11",
     "@types/jsdom": "^21",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
@@ -82,8 +82,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "express/cookie": "^0.7.0",
-    "express/path-to-regexp": "^0.1.10",
-    "rc-resize-observer": "1.4.0"
+    "express/path-to-regexp": "^0.1.10"
   },
   "lint-staged": {
     "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": "cross-env COMMITLINT=1 eslint --cache --cache-location .eslintcache --no-warn-ignored",
