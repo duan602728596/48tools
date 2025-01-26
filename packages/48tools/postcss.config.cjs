@@ -7,7 +7,8 @@ module.exports = {
       content: ['./src/**/*.{ts,tsx,js,jsx}']
     }),
     removeClassnames({
-      removeClassNames: ['transform', 'filter']
+      removeClassNames: ['transform', 'filter'],
+      removeProperty: ['--tw-']
     })
   ]
 };

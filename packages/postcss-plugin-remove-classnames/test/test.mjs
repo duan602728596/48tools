@@ -11,10 +11,14 @@ const { __dirname } = metaHelper(import.meta.url);
 test('it should remove classnames', async function() {
   const css = await fsPromises.readFile(path.join(__dirname, 'test.css'), { encoding: 'utf-8' });
   const result = await postcss([
-    postcssPluginRemoveClassNames.default({ removeClassNames: ['filter'] })
+    postcssPluginRemoveClassNames.default({
+      removeClassNames: ['filter'],
+      removeProperty: ['--tw-']
+    })
   ]).process(css);
 
   deepStrictEqual(result.css.includes('--tw-blur'), false);
   deepStrictEqual(result.css.includes('.filter'), false);
   deepStrictEqual(result.css.includes('.text'), true);
+  deepStrictEqual(result.css.includes('@property --tw-contrast'), false);
 });
