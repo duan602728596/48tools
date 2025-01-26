@@ -1,4 +1,4 @@
-const tailwindcss = require('tailwindcss');
+const tailwindcss = require('@tailwindcss/postcss');
 const { default: removeClassnames } = require('@48tools/postcss-plugin-remove-classnames');
 
 module.exports = {
