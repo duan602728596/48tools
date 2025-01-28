@@ -29,6 +29,7 @@ import IconCutSvgComponent from './images/cut.component.svg';
 import IconConcatSvgComponent from './images/concat.component.svg';
 import IconPowerShellSvgComponent from './images/powershell.component.svg';
 import IconDiantaiSvgComponent from './images/diantai.component.svg';
+import IconXiaohongshuSvgComponent from './images/xiaohongshu.component.svg';
 import imageUrlZfbAvif from './images/zfb.avif';
 import imageUrlWxAvif from './images/wx.avif';
 import ShowroomTextIcon from './ShowroomTextIcon/ShowroomTextIcon';
@@ -44,9 +45,9 @@ interface NativeItem {
 }
 
 const IconBilibiliLogo: ReactElement
-    = <Icon className="relative text-[32px]" component={ IconBilibiliLogoSvgComponent } />,
+    = <Icon className="text-[32px]" component={ IconBilibiliLogoSvgComponent } />,
   IconAcFunLogo: ReactElement
-    = <Icon className="relative text-[46px]" component={ IconAcFunLogoSvgComponent } />,
+    = <Icon className="text-[46px]" component={ IconAcFunLogoSvgComponent } />,
   IconDouyinLogo: ReactElement
     = <Icon className="text-[18px]" component={ IconDouyinSvgComponent } />,
   IconKuaishouLogo: ReactElement
@@ -146,19 +147,24 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       icon: IconKuaishouLogo
     },
     {
+      name: '小红书直播抓取',
+      url: '/Xiaohongshu/Live',
+      icon: <Icon className="text-[46px]" component={ IconXiaohongshuSvgComponent } />
+    },
+    {
       name: '微博直播录制',
       url: '/Weibo/Live',
       icon: <IconWeiboOutlined />,
       testId: 'weibo-live-link'
-    },
+    }
+  ],
+  [
     {
       name: '微博超话签到',
       url: '/Weibo/Super',
       icon: <IconWeiboOutlined />,
       help: { navId: 'weibo-login', tooltipTitle: '查看微博登录帮助' }
-    }
-  ],
-  [
+    },
     {
       name: '微博图片批量下载',
       url: '/Weibo/ImagesDownload',
@@ -178,14 +184,14 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       name: '视频裁剪',
       url: '/VideoEdit/VideoCut',
       icon: <Icon className="text-[18px]" component={ IconCutSvgComponent } />
-    },
+    }
+  ],
+  [
     {
       name: '视频合并',
       url: '/VideoEdit/Concat',
       icon: <Icon className="text-[18px]" component={ IconConcatSvgComponent } />
-    }
-  ],
-  [
+    },
     {
       name: '执行FFmpeg命令',
       url: '/VideoEdit/FFmpegProcess',
