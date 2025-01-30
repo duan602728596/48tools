@@ -29,6 +29,10 @@ import showroomLiveReducers, {
   ignoredPaths as showroomLiveIgnoredPaths,
   ignoredActions as showroomLiveIgnoredActions
 } from '../pages/ShowRoomLive/reducers/showroomLive';
+import xiaohongshuLiveReducers, {
+  ignoredPaths as xiaohongshuLiveIgnoredPaths,
+  ignoredActions as xiaohongshuLiveIgnoredActions
+} from '../pages/XiaohongshuLive/reducers/xiaohongshuLive';
 import pocketFriendsApi from '../pages/48/reducers/pocketFriends.api';
 
 /* reducers */
@@ -47,6 +51,7 @@ export const reducersMapObject: ReducersMapObject = Object.assign({},
   KuaishouVideoDownloadReducers,
   weiboLiveReducers,
   showroomLiveReducers,
+  xiaohongshuLiveReducers,
   { [pocketFriendsApi.reducerPath]: pocketFriendsApi.reducer }
 );
 
@@ -76,7 +81,8 @@ export const ignoreOptions: any = {
     'videoCut.cutChildList',
     'weiboLive.entities',
     'FFmpegProcess.entities',
-    ...showroomLiveIgnoredPaths
+    ...showroomLiveIgnoredPaths,
+    ...xiaohongshuLiveIgnoredPaths
   ],
   ignoredActions: [
     'pocket48/setAddLiveChildList',
@@ -110,7 +116,8 @@ export const ignoreOptions: any = {
     'weiboLive/setRemoveLiveOne',
     'FFmpegProcess/setAddProcess',
     'FFmpegProcess/setUpdateProcess',
-    ...showroomLiveIgnoredActions
+    ...showroomLiveIgnoredActions,
+    ...xiaohongshuLiveIgnoredActions
   ]
 };
 

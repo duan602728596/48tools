@@ -147,7 +147,7 @@ const navLinkConfig: Array<Array<NativeItem>> = [
       icon: IconKuaishouLogo
     },
     {
-      name: '小红书直播抓取',
+      name: '直播抓取',
       url: '/Xiaohongshu/Live',
       icon: <Icon className="text-[46px]" component={ IconXiaohongshuSvgComponent } />
     },
