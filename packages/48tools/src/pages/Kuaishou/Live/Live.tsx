@@ -197,7 +197,7 @@ function Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group className="mr-[8px] align-[4px]">
+        <Button.Group className="mr-[8px] align-[2px]">
           <AddLiveRoomForm modalTitle="添加快手直播间信息"
             customRoomIdRule={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
             IDBSaveDataFunc={ IDBSaveLiveItem }
