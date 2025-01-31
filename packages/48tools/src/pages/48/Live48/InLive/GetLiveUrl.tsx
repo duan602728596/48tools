@@ -212,10 +212,8 @@ function GetLiveUrl(props: {}): ReactElement {
   }
 
   useEffect(function(): void {
-    if (!OpenLiveListOptions.length) {
-      getLiveList();
-    }
-  }, [OpenLiveListOptions]);
+    getLiveList();
+  }, []);
 
   return (
     <Fragment>
