@@ -9,6 +9,7 @@ import { requestUid, requestUserInfo, type UserInfo } from '@48tools-api/weibo/l
 import { WeiboLoginChannel } from '@48tools/main/src/channelEnum';
 import { IDBSaveAccount, type WeiboLoginInitialState } from '../reducers/weiboLogin';
 import { weiboLoginSelector } from '../reducers/selectors';
+import HelpButtonGroup from '../../../components/HelpButtonGroup/HelpButtonGroup';
 import type { WeiboAccount } from '../../../commonTypes';
 
 type AppCaptureValue = Partial<Pick<WeiboAccount, 's' | 'from' | 'c'>>;
@@ -114,11 +115,16 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
   }, []);
 
   return (
-    <div className="mb-[16px]">
-      <Space size={ 8 }>
-        <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。" />
-        <Button type="primary" onClick={ handleLoginWeiboClick }>微博登陆</Button>
-      </Space>
+    <div className="flex mb-[16px]">
+      <div>
+        <Space size={ 8 }>
+          <Alert message="新窗口登陆完毕后关闭窗口，完成登陆。" />
+          <Button type="primary" onClick={ handleLoginWeiboClick }>微博登陆</Button>
+        </Space>
+      </div>
+      <div className="grow content-center text-right">
+        <HelpButtonGroup navId="weibo-visited" tooltipTitle="关于微博访客的查看" buttonProps={{ children: '关于微博访客的查看' }} />
+      </div>
       <Modal title="输入App抓请求URL得来的参数（可跳过）"
         open={ inputSOpen }
         width={ 430 }

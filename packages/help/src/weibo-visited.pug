@@ -1,0 +1,20 @@
+extends pug/template/_template
+
+include pug/components/_image
+include pug/components/_title
+
+block head
+  +Title('微博访客查看')
+
+block article
+  h1.h1 微博访客查看
+  article
+    p 目前由于微博访客接口的修改，不返回访客的UID，非SVIP已经无法查看具体的访客是谁，所以只会显示“未知用户”。
+    +Image('./image/weiboVisited/visitedList.webp', '微博访客', 300)
+    p 可以在关注列表中查看当前账号的关注，并且点击“检查”按钮，会和访客列表根据IP、星座、近期是否有发博、阳光信用来匹配是否是访客。
+      br
+      | 满足匹配条件时，文字颜色是绿色的。
+    p 由于可能会有多个访客满足匹配条件，
+      b 所以这个是不准确的
+      | ，只作为参考。
+    +Image('./image/weiboVisited/follow.webp', '参考列表', 480)
