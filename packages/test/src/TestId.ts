@@ -103,3 +103,13 @@ export const Weibo: Record<string, number> = {
 export const KuaishouDownload: Record<string, number> = {
   GetKuaishouVideo: 700
 };
+
+export const KuaishouVideoDownloadVP: Record<string, number> = {
+  Light: 7001,
+  Dark: 7002
+};
+
+export const KuaishouLiveVP: Record<string, number> = {
+  Light: 7003,
+  Dark: 7004
+};

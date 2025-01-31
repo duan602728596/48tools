@@ -144,7 +144,8 @@ const navLinkConfig: Array<Array<NativeItem>> = [
     {
       name: '快手直播抓取',
       url: '/Kuaishou/Live',
-      icon: IconKuaishouLogo
+      icon: IconKuaishouLogo,
+      testId: 'kuaishou-live-link'
     },
     {
       name: '直播抓取',
