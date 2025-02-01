@@ -39,6 +39,7 @@ const order: Array<string> = [
   'IDFT',
   '荣誉毕业生',
   '',
+  '燃烧吧团魂',
   '丝芭影视'
 ];
 
