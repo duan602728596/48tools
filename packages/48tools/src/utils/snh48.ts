@@ -22,7 +22,6 @@ function rStr(len: number): string {
 
 declare global {
   interface GlobalThis {
-    __c4x8zwu2__: PromiseWithResolvers<boolean>;
     __x6c2adf8__(): string;
   }
 }
