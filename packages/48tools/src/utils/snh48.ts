@@ -27,12 +27,9 @@ declare global {
 }
 
 const $__x6c2adf8__: () => Promise<string> = (function(): () => Promise<string> {
-  let r: boolean = false;
-
   return async function(): Promise<string> {
-    if (!r) {
+    if (!Reflect.has(globalThis, '__x6c2adf8__')) {
       await init();
-      r = true;
       Reflect.set(globalThis, '__x6c2adf8__', __x6c2adf8__);
     }
 
