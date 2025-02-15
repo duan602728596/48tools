@@ -21,7 +21,8 @@ export const objectStoreMaps: Record<
   | 'douyinLive'
   | 'kuaishouLive'
   | 'pocket48UserInfo'
-  | 'showroomLive',
+  | 'showroomLive'
+  | 'xiaohongshuLive',
   ObjectStoreItem
 > = {
   // 0：b站直播间信息
@@ -92,12 +93,19 @@ export const objectStoreMaps: Record<
     name: 'showroom_live',
     key: 'id',
     data: ['description', 'roomId', 'autoRecord']
+  },
+
+  // 10: xiaohongshu-live
+  xiaohongshuLive: {
+    name: 'xiaohongshu_live',
+    key: 'id',
+    data: ['description', 'roomId']
   }
 };
 
 const dbConfig: IDBConfig = {
   name: '48tools',
-  version: 18,
+  version: 19,
   objectStore: Object.values<ObjectStoreItem>(objectStoreMaps)
 };
 

@@ -1,0 +1,26 @@
+extends pug/template/_template
+
+include pug/components/_image
+include pug/components/_link
+include pug/components/_title
+
+block head
+  +Title('小红书直播录制')
+
+block article
+  h1.h1 小红书直播录制
+  article
+    p 录制小红书的直播需要获取直播间的ID。
+    h2.h2 直播间ID的获取
+    p 首先分享直播间。例如：
+    pre.d-inline-block.p-4.text-bg-secondary
+      code
+        | 76 小红书，你的生活指南#fussyychoice正在直播，来和我一起支持ta吧。😆 JtqIcBN9APLnEao 😆
+        | http://xhslink.com/l1mHS4，复制本条信息，打开【小红书】，直接观看直播！
+    p 在浏览器中打开分享链接：
+      +Link('http://xhslink.com/l1mHS4')
+      | ，跳转到
+      +Link('https://www.xiaohongshu.com/livestream/dynpathw82ztpcP/569594762423948288')
+      | 。其中URL的
+      b 569594762423948288
+      | 就是直播间ID。

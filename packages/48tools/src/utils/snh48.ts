@@ -1,4 +1,5 @@
 import { Pocket48Login } from '../functionalComponents/Pocket48Login/enum';
+import init, { __x6c2adf8__ } from '../pages/48/sdk/rust-wasm.js';
 import type { UserInfoString, UserInfo } from '../functionalComponents/Pocket48Login/types';
 
 // app端口袋48ua
@@ -21,16 +22,20 @@ function rStr(len: number): string {
 
 declare global {
   interface GlobalThis {
-    __c4x8zwu2__: PromiseWithResolvers<boolean>;
     __x6c2adf8__(): string;
   }
 }
 
-async function $__x6c2adf8__(): Promise<string> {
-  await globalThis.__c4x8zwu2__.promise;
+const $__x6c2adf8__: () => Promise<string> = (function(): () => Promise<string> {
+  return async function(): Promise<string> {
+    if (!Reflect.has(globalThis, '__x6c2adf8__')) {
+      await init();
+      Reflect.set(globalThis, '__x6c2adf8__', __x6c2adf8__);
+    }
 
-  return Reflect.get(globalThis, '__x6c2adf8__').call();
-}
+    return Reflect.get(globalThis, '__x6c2adf8__').call();
+  };
+})();
 
 /* 创建请求头 */
 export async function createHeaders(token?: string | undefined, pa?: boolean): Promise<Record<string, string>> {

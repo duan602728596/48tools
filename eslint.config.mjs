@@ -26,6 +26,7 @@ const ignores = [
   '!packages/48tools/src/pages/Toutiao/sdk/**/*.tsx',
   'packages/48tools/src/pages/PlayerWindow/Danmu/sdk/NIM_Web_SDK_v8.0.0.js',
   'packages/48tools/src/pages/48/sdk/1',
+  'packages/48tools/src/pages/48/sdk/rust-wasm.js',
   'packages/packages/main/.lib.mid/**'
 ];
 

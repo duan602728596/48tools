@@ -1,8 +1,0 @@
-script(src='wasm_exec.js')
-script(type='module').
-  globalThis.__c4x8zwu2__ = Promise.withResolvers();
-  const go = new Go();
-  const result = await WebAssembly.instantiateStreaming(fetch('1.wasm'), go.importObject);
-
-  go.run(result.instance);
-  globalThis.__c4x8zwu2__.resolve(true);

@@ -20,6 +20,7 @@ import type {
   TSTypeElement,
   TSInterfaceBody,
   TSModuleBlock,
+  TSEnumBody,
   Directive
 } from '@babel/types';
 import type { BabelTypes } from '../types.cjs';
@@ -53,10 +54,11 @@ export function variableRename(path: NodePath<Program>, importInfo: ImportInfo, 
   }
 }
 
-export type ClassBodyArray = Array<ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty | ClassAccessorProperty | TSDeclareMethod | TSIndexSignature | StaticBlock>;
+export type ClassBodyArray = Array<ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty
+  | ClassAccessorProperty | TSDeclareMethod | TSIndexSignature | StaticBlock>;
 export type FindScopeBody = ClassBodyArray | Expression | Array<Statement> | ClassBody | ObjectTypeAnnotation
   | Statement | EnumBooleanBody | EnumNumberBody | EnumStringBody | EnumSymbolBody | Program | Array<TSTypeElement>
-  | TSInterfaceBody | TSModuleBlock | undefined;
+  | TSInterfaceBody | TSModuleBlock | TSEnumBody | null | undefined;
 
 export interface FindScopeReturn {
   path: NodePath;
