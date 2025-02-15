@@ -76,8 +76,8 @@ function parseHtmlNext(html: string, type: string, id: string): ParseVideoUrlDAS
       const videoOnceInfoResult: VideoOnceInfoResult = videoOnceInfo?.state?.data?.result;
 
       return {
-        title: `${ videoEpInfo.season_title }-${ videoOnceInfoResult.play_view_business_info.episode_info.long_title }`,
-        pic: videoEpInfo.cover,
+        title: `${ videoEpInfo.state.season_title }-${ videoOnceInfoResult.play_view_business_info.episode_info.long_title }`,
+        pic: videoEpInfo.state.cover,
         videoData: {
           durl: [],
           dash: videoOnceInfoResult.video_info.dash,

@@ -59,8 +59,10 @@ export interface VideoOnceInfo {
 }
 
 export interface VideoEpInfo {
-  cover: string;
-  season_title: string;
+  state: {
+    cover: string;
+    season_title: string;
+  };
 }
 
 export interface NextData {
