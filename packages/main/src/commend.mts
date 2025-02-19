@@ -1,4 +1,4 @@
-import { argv } from 'process';
+import { argv } from 'node:process';
 // @ts-ignore
 import commandLineArgs from 'command-line-args';
 import type { OptionDefinition, CommandLineOptions as _CommandLineOptions } from 'command-line-args';
