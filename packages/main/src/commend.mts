@@ -1,4 +1,4 @@
-import * as process from 'process';
+import { argv } from 'process';
 // @ts-ignore
 import commandLineArgs from 'command-line-args';
 import type { OptionDefinition, CommandLineOptions as _CommandLineOptions } from 'command-line-args';
@@ -16,5 +16,5 @@ export interface CommandLineOptions extends _CommandLineOptions {
 }
 
 export const commandLineOptions: CommandLineOptions = isTest ? {} : commandLineArgs(optionDefinitions, {
-  argv: isDevelopment ? undefined : process.argv.slice(1)
+  argv: isDevelopment ? undefined : argv.slice(1)
 });

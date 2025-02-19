@@ -4,7 +4,7 @@ import { processWindow } from '../ProcessWindow.mjs';
 import { isDevelopment, workerProductionBasePath, metaHelper, type MetaHelperResult } from '../utils.mjs';
 import { Pocket48LiveRemoteHandleChannel } from '../channelEnum.js';
 
-const { __dirname }: MetaHelperResult = metaHelper(import.meta.url);
+const { __dirname }: MetaHelperResult = metaHelper(globalThis.__IMPORT_META_URL__ ?? import.meta.url);
 
 /* 缓存子线程 */
 export const pocket48LiveMap: Map<string, Pocket48LiveMain> = new Map();

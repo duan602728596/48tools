@@ -4,7 +4,7 @@ import { ipcMain, type IpcMainEvent } from 'electron';
 import { isDevelopment, workerProductionBasePath, metaHelper, type MetaHelperResult } from '../utils.mjs';
 import { NodeMediaServerChannel } from '../channelEnum.js';
 
-const { __dirname }: MetaHelperResult = metaHelper(import.meta.url);
+const { __dirname }: MetaHelperResult = metaHelper(globalThis.__IMPORT_META_URL__ ?? import.meta.url);
 let nodeMediaServerWorker: Worker | null = null; // node-media-server服务线程
 
 export interface NodeMediaServerArg {

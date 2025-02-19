@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import webpack from 'webpack';
 import { merge } from 'webpack-merge';
 import { metaHelper } from '@sweet-milktea/utils';
 import { webpackBuild, webpackNodeDefaultEsmBuildConfig } from '../../scripts/utils.mjs';
@@ -30,7 +31,7 @@ const entryConfig = {
 };
 
 await webpackBuild(merge(webpackNodeDefaultEsmBuildConfig, {
-  mode: 'production',
+  mode: 'development',
   entry: {
     index: entryConfig.index.entry,
     nodeMediaServerWorker: entryConfig.nodeMediaServerWorker.entry,
@@ -57,5 +58,12 @@ await webpackBuild(merge(webpackNodeDefaultEsmBuildConfig, {
         use: 'ts-loader'
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: 'globalThis.__IMPORT_META_URL__ = import.meta.url;',
+      raw: true,
+      entryOnly: true
+    })
+  ]
 }), false);

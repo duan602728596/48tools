@@ -1,4 +1,4 @@
-import * as process from 'node:process';
+import { execArgv } from 'node:process';
 import { BrowserWindow, Menu, nativeTheme } from 'electron';
 import { isDevelopment, isTest, titleBarIcon, createHtmlFilePath, createInitialState, packageJson } from './utils.mjs';
 import { storeInit, getStore } from './store.mjs';
@@ -25,7 +25,7 @@ async function handleProcessWindowClosed(): Promise<void> {
 
 /* 初始化窗口 */
 export function createWindow(): void {
-  process.execArgv.push('--experimental-require-module');
+  execArgv.push('--experimental-require-module');
   storeInit();
 
   /* 初始化主题 */

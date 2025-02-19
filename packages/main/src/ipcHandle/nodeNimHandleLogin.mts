@@ -4,7 +4,7 @@ import { ipcMain, type IpcMainInvokeEvent } from 'electron';
 import type NodeNim from 'node-nim';
 import type { NIMResCode, LoginRes } from 'node-nim';
 import { NodeNimLoginHandleChannel } from '../channelEnum.js';
-import { nodeRequire } from '../utils.mjs';
+import { nodeModulesRequire } from '../utils.mjs';
 
 const nimLoginAccountSet: Set<string> = new Set(); // 记录当前已登录的账号
 let nodeNimInitiated: boolean = false;             // 记录NodeNim是否已初始化
@@ -14,7 +14,7 @@ export const nodeNim: typeof NodeNim | undefined = ((): typeof NodeNim | undefin
   let node_nim: typeof NodeNim | undefined = undefined;
 
   try {
-    const nodeNimModule: { default: typeof NodeNim } | typeof NodeNim = nodeRequire('node-nim');
+    const nodeNimModule: { default: typeof NodeNim } | typeof NodeNim = nodeModulesRequire('node-nim');
 
     node_nim = ('default' in nodeNimModule) ? nodeNimModule.default : nodeNimModule;
   } catch { /* noop */ }
