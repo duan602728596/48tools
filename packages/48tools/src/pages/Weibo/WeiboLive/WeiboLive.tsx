@@ -4,7 +4,7 @@ import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { App, Tag, Table, Button, Popconfirm } from 'antd';
+import { App, Tag, Table, Button, Popconfirm, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import filenamify from 'filenamify/browser';
@@ -123,14 +123,14 @@ function WeiboLive(props: {}): ReactElement {
 
         if (record.status === 0) {
           return (
-            <Button.Group>
+            <Space.Compact>
               <Button onClick={ (e: MouseEvent): void => handleReDownloadLiveClick(record, e) }>重新下载</Button>
               <Popconfirm title="确定要删除吗？"
                 onConfirm={ (e?: MouseEvent): void => handleDeleteLiveClick(record, e) }
               >
                 <Button type="primary" danger={ true }>删除</Button>
               </Popconfirm>
-            </Button.Group>
+            </Space.Compact>
           );
         }
       }

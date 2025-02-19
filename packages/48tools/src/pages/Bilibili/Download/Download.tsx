@@ -17,7 +17,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message, Popconfirm } from 'antd';
+import { Button, Table, message, Popconfirm, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { requestDownloadFileByStream } from '@48tools-api/48';
@@ -322,7 +322,7 @@ function Download(props: {}): ReactElement {
         const inDownload: boolean = record.qid in downloadProgress;
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               record.dash && inDownload ? (
                 <Popconfirm title="确定要停止下载吗？"
@@ -352,7 +352,7 @@ function Download(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -365,11 +365,11 @@ function Download(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group>
+        <Space.Compact>
           <BilibiliLogin />
           <AddBySearch />
           <AddForm />
-        </Button.Group>
+        </Space.Compact>
       </Header>
       <Table size="middle"
         columns={ columns }

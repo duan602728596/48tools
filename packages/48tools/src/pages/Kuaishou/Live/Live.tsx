@@ -4,7 +4,7 @@ import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Checkbox, message, Popconfirm, Table } from 'antd';
+import { Button, Checkbox, message, Popconfirm, Table, Space } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
@@ -161,7 +161,7 @@ function Live(props: {}): ReactElement {
         const idx: number = kuaishouLiveWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
@@ -182,7 +182,7 @@ function Live(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -197,7 +197,7 @@ function Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group className="mr-[8px] align-[2px]">
+        <Space.Compact className="mr-[8px] align-[2px]">
           <AddLiveRoomForm modalTitle="添加快手直播间信息"
             customRoomIdRule={ [{ required: true, message: '请填写直播间ID', whitespace: true }] }
             IDBSaveDataFunc={ IDBSaveLiveItem }
@@ -208,7 +208,7 @@ function Live(props: {}): ReactElement {
               ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
               : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
           }
-        </Button.Group>
+        </Space.Compact>
         <KuaishouLogin />
       </Header>
       <Table size="middle"

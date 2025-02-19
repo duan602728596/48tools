@@ -12,7 +12,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Popconfirm, Table, message, Modal, Select, Checkbox } from 'antd';
+import { Button, Popconfirm, Table, message, Modal, Select, Checkbox, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -206,7 +206,7 @@ function DouyinLive(props: {}): ReactElement {
         const idx: number = douyinLiveWorkerList.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
@@ -227,7 +227,7 @@ function DouyinLive(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -242,7 +242,7 @@ function DouyinLive(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group>
+        <Space.Compact>
           <AutoRecordingSavePath localStorageItemKey="DOUYIN_LIVE_AUTO_RECORD_SAVE_PATH" />
           <AddLiveRoomForm dataTestId="douyin-add-live-id-btn" modalTitle="添加抖音直播间信息" IDBSaveDataFunc={ IDBSaveLiveItem } />
           {
@@ -250,7 +250,7 @@ function DouyinLive(props: {}): ReactElement {
               ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
               : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
           }
-        </Button.Group>
+        </Space.Compact>
       </Header>
       <Table size="middle"
         columns={ columns }

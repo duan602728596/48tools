@@ -4,7 +4,7 @@ import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Table, Button, message } from 'antd';
+import { Table, Button, message, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
@@ -115,7 +115,7 @@ function Index(props: {}): ReactElement {
         const hasChild: boolean = idx >= 0;
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               hasChild ? (
                 <Button type="primary"
@@ -137,7 +137,7 @@ function Index(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }

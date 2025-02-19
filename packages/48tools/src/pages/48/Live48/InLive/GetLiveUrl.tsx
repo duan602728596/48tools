@@ -235,14 +235,14 @@ function GetLiveUrl(props: {}): ReactElement {
           <Form.Item name="live" noStyle={ true }>
             <Select className={ style.liveSelect } loading={ getLiveListLoading } placeholder="选择公演" options={ OpenLiveListOptions } />
           </Form.Item>
-          <Button.Group className={ style.buttonGroup }>
+          <Space.Compact className={ style.buttonGroup }>
             <Tooltip title="刷新公演直播列表">
               <Button className={ style.reloadButton } icon={ <IconReloadOutlined /> } onClick={ getLiveList } />
             </Tooltip>
             <Tooltip title="复制直播流地址">
               <Button icon={ <IconCopyOutlined /> } onClick={ handleCopyClick } />
             </Tooltip>
-          </Button.Group>
+          </Space.Compact>
         </Space>
         <Button className="ml-[8px]" type="primary" htmlType="submit">开始直播录制</Button>
       </Form>

@@ -14,7 +14,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Popconfirm, Table, Checkbox } from 'antd';
+import { Button, message, Popconfirm, Table, Checkbox, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { MessageInstance } from 'antd/es/message/interface';
@@ -277,7 +277,7 @@ function Voice(props: {}): ReactElement {
         const idx: number = roomVoiceWorkerList.findIndex((o: WebWorkerChildItem) => o.id === record.id);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
@@ -298,7 +298,7 @@ function Voice(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -320,14 +320,14 @@ function Voice(props: {}): ReactElement {
           onSearch={ handleServerSearch }
           onSelect={ handleOwnerSelect }
         />
-        <Button.Group className="mx-[8px]">
+        <Space.Compact className="mx-[8px]">
           <Button onClick={ handleSaveClick }>保存</Button>
           {
             typeof autoRecordTimer === 'number'
               ? <Button type="primary" danger={ true } onClick={ handleStopAutoRecordClick }>停止录制</Button>
               : <Button type="primary" onClick={ handleStartAutoRecordClick }>自动录制</Button>
           }
-        </Button.Group>
+        </Space.Compact>
         <Pocket48Login className="align-bottom" />
       </Header>
       <p className={ classNames('text-[12px]', commonStyle.tips) }>

@@ -4,7 +4,7 @@ import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Alert, Table, App, Popconfirm, Button, Checkbox } from 'antd';
+import { Alert, Table, App, Popconfirm, Button, Checkbox, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -120,7 +120,7 @@ function Index(props: {}): ReactElement {
         const idx: number = workerList.findIndex((o: WebWorkerChildItem) => o.id === record.id);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
@@ -141,7 +141,7 @@ function Index(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -156,14 +156,14 @@ function Index(props: {}): ReactElement {
   return (
     <Content>
       <Header>
-        <Button.Group className="mr-[8px]">
+        <Space.Compact className="mr-[8px]">
           {
             autoRecordTimer === null
               ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
               : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
           }
           <AutoRecordingSavePath localStorageItemKey={ localStorageKey } />
-        </Button.Group>
+        </Space.Compact>
         <HelpButtonGroup navId="showroom-live" tooltipTitle={ <Fragment>如何添加{ ShowroomTextIcon }的直播间ID</Fragment> }>
           <AddLiveRoomForm modalTitle={
             <Fragment>

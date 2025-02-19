@@ -12,7 +12,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message, Modal, Select, Popconfirm } from 'antd';
+import { Button, Table, message, Modal, Select, Popconfirm, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
@@ -253,7 +253,7 @@ function Live(props: {}): ReactElement {
         const idx: number = liveWorkers.findIndex((o: WebWorkerChildItem): boolean => o.id === record.id);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
@@ -274,7 +274,7 @@ function Live(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -289,13 +289,13 @@ function Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group>
+        <Space.Compact>
           <AcFunLogin />
           <AddLiveRoomForm dataTestId="acfun-add-live-id-btn"
             modalTitle="添加A站直播间信息"
             IDBSaveDataFunc={ IDBSaveLiveItem }
           />
-        </Button.Group>
+        </Space.Compact>
       </Header>
       <Table size="middle"
         columns={ columns }

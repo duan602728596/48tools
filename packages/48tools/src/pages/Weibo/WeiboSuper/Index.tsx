@@ -108,7 +108,7 @@ function Index(props: {}): ReactElement {
             disabled={ checkIn }
             onSelect={ (value: string): void => setAccountValue(value) }
           />
-          <Button.Group>
+          <Space.Compact>
             {
               checkIn ? <Button type="primary" danger={ true } onClick={ handleWeiboCheckinStopClick }>停止签到</Button> : (
                 <Button type="primary" disabled={ accountValue === undefined } onClick={ handleWeiboCheckinStartClick }>
@@ -117,7 +117,7 @@ function Index(props: {}): ReactElement {
               )
             }
             <WeiboLoginDynamic />
-          </Button.Group>
+          </Space.Compact>
         </Space>
       </Header>
       <Alert type="warning" message={ `已签到超话：${ quantity.checkedInLen }` } />

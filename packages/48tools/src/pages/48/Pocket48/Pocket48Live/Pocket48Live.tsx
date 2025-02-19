@@ -17,7 +17,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Table, Popconfirm, Modal, Input } from 'antd';
+import { Button, message, Table, Popconfirm, Modal, Input, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { MessageInstance } from 'antd/es/message/interface';
 import type { UseModalReturnType, UseMessageReturnType, ModuleFuncReturn } from '@48tools-types/antd';
@@ -151,11 +151,11 @@ function Pocket48Live(props: {}): ReactElement {
       const m: ModuleFuncReturn = modalApi.confirm({
         title: '选择要录制的视频方法',
         content: (
-          <Button.Group className="mb-[16px]">
+          <Space.Compact className="mb-[16px]">
             <Button onClick={ handleFlvVideoClick }>录制(*.flv)</Button>
             <Button onClick={ handleTsVideoClick }>录制(*.ts)</Button>
             <Button onClick={ handleFlvVideoBackupClick }>备用录制(*.flv)</Button>
-          </Button.Group>
+          </Space.Compact>
         ),
         closable: false,
         keyboard: false,
@@ -368,7 +368,7 @@ function Pocket48Live(props: {}): ReactElement {
         return (
           <Fragment>
             <div className="mb-[6px]">
-              <Button.Group>
+              <Space.Compact>
                 {
                   inRecording ? (
                     <Popconfirm title="确定要停止录制吗？"
@@ -388,9 +388,9 @@ function Pocket48Live(props: {}): ReactElement {
                     </Button>
                   ]
                 }
-              </Button.Group>
+              </Space.Compact>
             </div>
-            <Button.Group size="small">
+            <Space.Compact size="small">
               <Button onClick={ (event: MouseEvent): void => handleOpenPlayerClick(record, event) }>
                 播放
               </Button>
@@ -400,7 +400,7 @@ function Pocket48Live(props: {}): ReactElement {
               <Button onClick={ (event: MouseEvent): Promise<void> => handleCopyLiveUrlClick(record, event) }>
                 复制直播地址
               </Button>
-            </Button.Group>
+            </Space.Compact>
           </Fragment>
         );
       }
@@ -422,7 +422,7 @@ function Pocket48Live(props: {}): ReactElement {
             placeholder="输入成员名字搜索"
             onSearch={ (value: string): void => setSearchValue(value) }
           />
-          <Button.Group>
+          <Space.Compact>
             <Button type="primary" onClick={ handleRefreshLiveListClick }>刷新列表</Button>
             {
               typeof autoGrabTimer === 'number'
@@ -430,7 +430,7 @@ function Pocket48Live(props: {}): ReactElement {
                 : <Button onClick={ handleStartAutoGrabClick }>开始自动抓取</Button>
             }
             <ButtonLink linkProps={{ to: '/48/LiveOptions' }}>自动抓取配置</ButtonLink>
-          </Button.Group>
+          </Space.Compact>
         </div>
       </Header>
       <Table size="middle"

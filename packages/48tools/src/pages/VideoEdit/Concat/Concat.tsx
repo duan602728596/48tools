@@ -7,7 +7,7 @@ import { Fragment, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, List, message } from 'antd';
+import { Button, List, message, Space } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { FileFilled as IconFileFilled } from '@ant-design/icons';
 import { DndContext, type DragEndEvent } from '@dnd-kit/core';
@@ -138,7 +138,7 @@ function Concat(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group>
+        <Space.Compact>
           <Button icon={ <IconFileFilled /> } onClick={ handleSelectVideosClick }>视频选择</Button>
           <Button onClick={ handleClearAllListClick }>清空视频</Button>
           {
@@ -146,7 +146,7 @@ function Concat(props: {}): ReactElement {
               ? <Button type="primary" danger={ true } onClick={ handleStopConcatVideoClick }>停止合并</Button>
               : <Button type="primary" onClick={ handleConcatVideoClick }>开始合并</Button>
           }
-        </Button.Group>
+        </Space.Compact>
       </Header>
       <div className="relative" id="container">
         <DndContext onDragEnd={ handleDragSortEnd }>

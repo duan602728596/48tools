@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Table, Button, Drawer, App, List, Avatar, Alert, Tag } from 'antd';
+import { Table, Button, Drawer, App, List, Avatar, Alert, Tag, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import { UserOutlined as IconUserOutlined } from '@ant-design/icons';
@@ -188,8 +188,7 @@ function LoginTable(props: {}): ReactElement {
         const disabledSeeVisitor: boolean = !(record.s && record.from && record.c);
 
         return (
-          <Button.Group size="small">
-            {/** @deprecated */}
+          <Space.Compact size="small">
             <Button disabled={ disabledSeeVisitor }
               onClick={ (event: MouseEvent): Promise<void> => handleVisitorWeiboAccountClick(record, event) }
             >
@@ -206,7 +205,7 @@ function LoginTable(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }

@@ -3,7 +3,7 @@ import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message, Popconfirm, Checkbox } from 'antd';
+import { Button, Table, message, Popconfirm, Checkbox, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
@@ -105,7 +105,7 @@ function Live(props: {}): ReactElement {
         const idx: number = workerList.findIndex((o: WebWorkerChildItem) => o.id === record.id);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
@@ -126,7 +126,7 @@ function Live(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -141,7 +141,7 @@ function Live(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group>
+        <Space.Compact>
           <BilibiliLogin />
           <AddLiveRoomForm dataTestId="bilibili-add-live-id-btn"
             modalTitle="添加B站直播间信息"
@@ -154,7 +154,7 @@ function Live(props: {}): ReactElement {
               ? <Button onClick={ handleAutoRecordStartClick }>自动录制</Button>
               : <Button type="primary" danger={ true } onClick={ handleAutoRecordStopClick }>停止录制</Button>
           }
-        </Button.Group>
+        </Space.Compact>
       </Header>
       <Table size="middle"
         columns={ columns }

@@ -2,7 +2,7 @@ import type { OpenDialogReturnValue } from 'electron';
 import { Fragment, useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Form, Input, InputNumber, Button, message, type FormInstance } from 'antd';
+import { Form, Input, InputNumber, Button, message, Space, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import classNames from 'classnames';
 import commonStyle from '../../../../common.sass';
@@ -87,10 +87,10 @@ function LiveOptions(props: {}): ReactElement {
           </div>
           <Button onClick={ handleChangeDirClick }>选择目录</Button>
         </Form.Item>
-        <Button.Group>
+        <Space.Compact>
           <ButtonLink linkProps={{ to: '/48/Pocket48Live' }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>
           <Button type="primary" htmlType="submit">保存</Button>
-        </Button.Group>
+        </Space.Compact>
       </Form>
       { messageContextHolder }
     </Fragment>

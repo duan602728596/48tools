@@ -14,7 +14,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message, Alert } from 'antd';
+import { Button, Table, message, Alert, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import filenamify from 'filenamify/browser';
@@ -250,7 +250,7 @@ function Douyin(props: {}): ReactElement {
         const inDownload: boolean = Object.hasOwn(downloadProgress, record.qid);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             <Button disabled={ inDownload }
               onClick={ (event: MouseEvent): Promise<void> => handleDownloadClick(record, event) }
             >
@@ -263,7 +263,7 @@ function Douyin(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }

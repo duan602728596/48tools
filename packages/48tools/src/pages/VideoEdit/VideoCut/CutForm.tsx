@@ -5,7 +5,7 @@ import type { OpenDialogReturnValue } from 'electron';
 import { useState, useEffect, type ReactElement, type MouseEvent, type Dispatch as D, type SetStateAction as S } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Form, Button, Input, InputNumber, Card, Checkbox, Select, type FormInstance } from 'antd';
+import { Form, Button, Input, InputNumber, Card, Checkbox, Select, Space, type FormInstance } from 'antd';
 import type { Rule } from 'antd/es/form';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import style from './cutForm.sass';
@@ -128,10 +128,10 @@ function CutForm(props: {}): ReactElement {
             </Form.Item>
           </div>
           <div>
-            <Button.Group>
+            <Space.Compact>
               <Button onClick={ (event: MouseEvent): void => resetFields() }>重置</Button>
               <Button type="primary" htmlType="submit">添加到裁剪队列</Button>
-            </Button.Group>
+            </Space.Compact>
           </div>
           <div className="grow text-right">
             <ButtonLink linkProps={{ to: '/' }} buttonProps={{ type: 'primary', danger: true }}>返回</ButtonLink>

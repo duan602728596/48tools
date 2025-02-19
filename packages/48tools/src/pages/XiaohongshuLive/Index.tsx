@@ -3,7 +3,7 @@ import { useEffect, type ReactElement, type MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Table, App, Popconfirm, Button } from 'antd';
+import { Table, App, Popconfirm, Button, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import { requestXiaohongshuLiveStream, type InitialState, type PullConfig, type PullConfigStreamInfo } from '@48tools-api/xiaohongshu';
@@ -131,7 +131,7 @@ function Index(props: {}): ReactElement {
         const idx: number = workerList.findIndex((o: WebWorkerChildItem) => o.id === record.id);
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               idx >= 0 ? (
                 <Popconfirm title="确定要停止录制吗？"
@@ -152,7 +152,7 @@ function Index(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }

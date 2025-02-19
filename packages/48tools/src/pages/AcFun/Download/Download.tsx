@@ -3,7 +3,7 @@ import { Fragment, type ReactElement, type ReactNode, type MouseEvent } from 're
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Table, Select, Button, message, Popconfirm } from 'antd';
+import { Table, Select, Button, message, Popconfirm, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
@@ -174,7 +174,7 @@ function Download(props: {}): ReactElement {
         const inDownload: boolean = idx >= 0;
 
         return (
-          <Button.Group>
+          <Space.Compact>
             {
               inDownload ? (
                 <Popconfirm title="确定要停止下载吗？"
@@ -210,7 +210,7 @@ function Download(props: {}): ReactElement {
             >
               删除
             </Button>
-          </Button.Group>
+          </Space.Compact>
         );
       }
     }
@@ -219,10 +219,10 @@ function Download(props: {}): ReactElement {
   return (
     <Fragment>
       <Header>
-        <Button.Group>
+        <Space.Compact>
           <AcFunLogin />
           <AddForm />
-        </Button.Group>
+        </Space.Compact>
       </Header>
       <Table size="middle"
         columns={ columns }

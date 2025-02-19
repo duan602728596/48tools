@@ -300,14 +300,14 @@ function InVideo(props: {}): ReactElement {
       <Header>
         <Space size={ 8 } data-test-id="48-in-video-group-type">
           <Select className="!w-[150px]" options={ liveTypeSelectOptions } value={ inVideoQueryLiveType } onSelect={ handleLiveTypeSelect } />
-          <Button.Group>
+          <Space.Compact>
             <Button type="primary" disabled={ inVideoQueryLiveType === undefined } onClick={ handleGetVideoListClick }>
               刷新录播
             </Button>
             <Button disabled={ inVideoQueryLiveType === undefined } onClick={ handleGetNextPageVideoListClick }>
               加载下一页
             </Button>
-          </Button.Group>
+          </Space.Compact>
         </Space>
       </Header>
       <Table size="middle"

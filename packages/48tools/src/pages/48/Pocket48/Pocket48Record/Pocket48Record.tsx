@@ -461,7 +461,7 @@ function Pocket48Record(props: {}): ReactElement {
             <div className="mb-[6px]">
               {
                 idx >= 0 ? (
-                  <Button.Group>
+                  <Space.Compact>
                     <Popconfirm title="确定要停止下载吗？"
                       onConfirm={ (event?: MouseEvent): void => handleStopClick(record, event) }
                     >
@@ -476,9 +476,9 @@ function Pocket48Record(props: {}): ReactElement {
                         </Button>
                       )
                     }
-                  </Button.Group>
+                  </Space.Compact>
                 ) : (
-                  <Button.Group>
+                  <Space.Compact>
                     <Button onClick={
                       (event: MouseEvent): Promise<void> =>
                         handleDownloadM3u8Click(record, 0, event)
@@ -488,11 +488,11 @@ function Pocket48Record(props: {}): ReactElement {
                     <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadM3u8Click(record, 1, event) }>
                       备用方案下载
                     </Button>
-                  </Button.Group>
+                  </Space.Compact>
                 )
               }
             </div>
-            <Button.Group size="small">
+            <Space.Compact size="small">
               <Button onClick={ (event: MouseEvent): Promise<void> => handleDownloadLrcClick(record, event) }>
                 下载弹幕
               </Button>
@@ -505,7 +505,7 @@ function Pocket48Record(props: {}): ReactElement {
               <Button onClick={ (event: MouseEvent): Promise<void> => handleCopyLiveUrlClick(record, event) }>
                 复制录播地址
               </Button>
-            </Button.Group>
+            </Space.Compact>
           </Fragment>
         );
       }
@@ -539,10 +539,10 @@ function Pocket48Record(props: {}): ReactElement {
                 { userIdSearchLoading && <Spin size="small" indicator={ <IconLoadingOutlined spin={ true } /> } /> }
               </div>
             </div>
-            <Button.Group>
+            <Space.Compact>
               <Button type="primary" onClick={ handleLoadRecordListClick }>加载列表</Button>
               <Button onClick={ handleRefreshLiveListClick }>刷新列表</Button>
-            </Button.Group>
+            </Space.Compact>
           </Space>
         </Form>
       </Header>

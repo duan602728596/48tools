@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Card, Tag, Popover, Tooltip } from 'antd';
+import { Button, Card, Tag, Popover, Tooltip, Space } from 'antd';
 import {
   PlayCircleTwoTone as IconPlayCircleTwoTone,
   StopFilled as IconStopFilled,
@@ -142,7 +142,7 @@ function ProcessItemRender(props: ProcessItemRenderProps): ReactElement {
             onClick={ (event: MouseEvent): void => setConsoleDisplay(!consoleDisplay) }
           />
         </Tooltip>,
-        <Button.Group key="action-griup" size="small">
+        <Space.Compact key="action-griup" size="small">
           <Button icon={ <IconPlayCircleTwoTone /> }
             disabled={ inRunning }
             onClick={ (event: MouseEvent): void => onReStart(item) }
@@ -154,7 +154,7 @@ function ProcessItemRender(props: ProcessItemRenderProps): ReactElement {
               ? <Button type="primary" danger={ true } icon={ <IconStopFilled /> } onClick={ handleStopClick }>停止</Button>
               : <Button type="primary" danger={ true } icon={ <IconDeleteFilled /> } onClick={ handleDeleteClick }>删除</Button>
           }
-        </Button.Group>
+        </Space.Compact>
       ] }
     >
       {
