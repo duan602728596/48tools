@@ -61,7 +61,7 @@ async function createFilesByDependenciesName(dependenciesName) {
 
   await fse.ensureDir(dependenciesDir); // 创建目录
 
-  if (appPackageJson.buildConfig.dependencies.esm.includes(dependenciesName)) {
+  if (appPackageJson.esm.includes(dependenciesName)) {
     // esm模块使用webpack编译
     esmBuild = true;
     await webpackBuildPackage(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.mjs'));
@@ -87,7 +87,7 @@ async function taskFile() {
   await rimraf(appNodeModules);
 
   // 创建目录和文件
-  for (const depName of [...appPackageJson.buildConfig.dependencies.cjs, ...appPackageJson.buildConfig.dependencies.esm]) {
+  for (const depName of Object.keys(appPackageJson.dependencies)) {
     if (!['node-nim'].includes(depName)) {
       console.log(`正在编译模块：${ depName }...`);
       await createFilesByDependenciesName(depName);
