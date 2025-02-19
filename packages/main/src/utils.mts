@@ -2,7 +2,6 @@ import { env, resourcesPath } from 'node:process';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as Module from 'node:module';
-import { readFileSync } from 'node:fs';
 
 /* 模块帮助 */
 export const nodeModulesRequire: NodeRequire = Module['createRequire'](globalThis.__IMPORT_META_URL__ ?? import.meta.url);
@@ -62,7 +61,7 @@ export function createInitialState(value: Record<string, any>): string {
 }
 
 /* 获取package.json文件 */
-export const packageJson: { version: string } = JSON.parse(readFileSync(path.join(wwwPath, 'package.json'), { encoding: 'utf-8' }));
+export const packageJson: { version: string } = nodeModulesRequire(path.join(wwwPath, 'package.json'));
 
 /* User-Agent */
 export const pcUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0';
