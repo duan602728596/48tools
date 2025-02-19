@@ -6,7 +6,7 @@ import { rimraf } from 'rimraf';
 import { merge } from 'webpack-merge';
 import { requireJson } from '@sweet-milktea/utils';
 import webpackJson from 'webpack/package.json' with { type: 'json' };
-import { require, appDir, webpackBuild, webpackNodeDefaultCjsBuildConfig } from './utils.mjs';
+import { require, appDir, webpackBuild, webpackNodeDefaultEsmBuildConfig } from './utils.mjs';
 import appPackageJson from '../app/package.json' with { type: 'json' };
 
 const argv = process.argv.slice(2);
@@ -37,7 +37,7 @@ async function nccBuild(input, output) {
 async function webpackBuildPackage(input, output) {
   const parseResult = path.parse(output);
 
-  await webpackBuild(merge(webpackNodeDefaultCjsBuildConfig, {
+  await webpackBuild(merge(webpackNodeDefaultEsmBuildConfig, {
     mode: 'production',
     entry: {
       index: [input]

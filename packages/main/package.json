@@ -6,19 +6,16 @@
   "scripts": {
     "start": "npm run clean && tsc --outDir lib --sourceMap --watch",
     "dev": "npm run clean && tsc --outDir lib --sourceMap",
-    "build": "npm run clean && tsc --outDir .lib.mid && gulp",
+    "build": "npm run clean && node build.mjs",
     "clean": "rimraf ./lib && rimraf ./.lib.mid"
   },
   "dependencies": {
     "command-line-args": "^5.2.1",
     "electron-store": "^8.1.0",
-    "node-media-server": "^2.6.2"
+    "node-media-server": "^2.6.2",
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
-    "gulp": "^5.0.0",
-    "gulp-change-file-content": "^1.0.1",
-    "gulp-terser": "^2.1.0",
-    "source-map-support": "^0.5.21",
     "typescript": "^5.4.5"
   }
 }

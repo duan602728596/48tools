@@ -89,7 +89,7 @@ export function command(cmd, args, cwdPath) {
 export const npm = isWindows ? 'npm.cmd' : 'npm';
 
 /* webpack编译 */
-export const webpackNodeDefaultCjsBuildConfig = {
+export const webpackNodeDefaultEsmBuildConfig = {
   output: {
     library: { type: 'module' },
     globalObject: 'globalThis',
@@ -103,6 +103,21 @@ export const webpackNodeDefaultCjsBuildConfig = {
   },
   target: ['node', 'node20'],
   performance: { hints: false },
+  resolve: {
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.js',
+      '.mjs',
+      '.cjs',
+      '.mts',
+      '.cts',
+      '.jsx',
+      '.vue',
+      '.json',
+      '.wasm'
+    ]
+  },
   node: {
     __filename: true,
     __dirname: true

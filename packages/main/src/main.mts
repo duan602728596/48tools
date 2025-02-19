@@ -1,4 +1,4 @@
-/* @#START_DEV_1 */ import './_sourcemap.mjs'; /* @#END_DEV_1 */
+import './_sourcemap.mjs';
 import * as process from 'node:process';
 import { app } from 'electron';
 import { nodeNimCleanup } from './ipcHandle/nodeNimHandleLogin.mjs';

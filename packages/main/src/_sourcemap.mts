@@ -1,3 +1,7 @@
-import sourcemap from 'source-map-support';
+if (process.env.NODE_ENV !== 'production') {
+  const sourcemap: any = await import('source-map-support');
 
-sourcemap.install();
+  sourcemap.install();
+}
+
+export {};

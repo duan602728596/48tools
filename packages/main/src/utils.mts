@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
 /* 模块帮助 */
-export const require: NodeRequire = createRequire(import.meta.url);
+export const nodeRequire: NodeRequire = createRequire(import.meta.url);
 
 export interface MetaHelperResult {
   __filename: string;
@@ -61,7 +61,7 @@ export function createInitialState(value: Record<string, any>): string {
 }
 
 /* 获取package.json文件的位置 */
-export const packageJson: any = require(path.join(wwwPath, 'package.json'));
+export const packageJson: any = nodeRequire(path.join(wwwPath, 'package.json'));
 
 /* User-Agent */
 export const pcUserAgent: string = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0';
