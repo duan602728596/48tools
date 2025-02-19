@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState.js';
-import { isDevelopment, isServe, isTest, titleBarIcon, createHtmlFilePath, createInitialState } from '../utils.mjs';
+import { isDevelopment, isServe, isTest, titleBarIcon, createHtmlFilePath, createHtmlUrl, createInitialState } from '../utils.mjs';
 import { themeEvent, type ThemeValue } from './themeChange.mjs';
 import { getStore } from '../store.mjs';
 import { commandLineOptions } from '../commend.mjs';
@@ -51,9 +51,7 @@ function open(title: string, query: string): void {
   });
 
   // initialState
-  const initialStateSearchParams: URLSearchParams = new URLSearchParams();
-
-  initialStateSearchParams.set('initialState', createInitialState({
+  const initialStateQs: string = createInitialState({
     theme: getStore().get('theme') ?? 'system',
     commandLineOptions,
     playerInfo: {
@@ -65,14 +63,12 @@ function open(title: string, query: string): void {
       proxyPort: playerSearchParams.proxyPort ? Number(playerSearchParams.proxyPort) : undefined
     },
     isTest
-  }));
+  });
 
   if (isDevelopment && isServe) {
-    win.loadURL(`http://localhost:7654/player.html?${ initialStateSearchParams.toString() }`);
+    win.loadURL(createHtmlUrl('player.html', initialStateQs));
   } else {
-    win.loadFile(createHtmlFilePath('player'), {
-      search: initialStateSearchParams.toString()
-    });
+    win.loadFile(createHtmlFilePath('player'), { search: initialStateQs });
   }
 
   // 切换主题

@@ -1,6 +1,6 @@
 import { execArgv } from 'node:process';
 import { BrowserWindow, Menu, nativeTheme } from 'electron';
-import { isDevelopment, isServe, isTest, titleBarIcon, createHtmlFilePath, createInitialState, packageJson } from './utils.mjs';
+import { isDevelopment, isServe, isTest, titleBarIcon, createHtmlFilePath, createHtmlUrl, createInitialState, packageJson } from './utils.mjs';
 import { storeInit, getStore } from './store.mjs';
 import { commandLineOptions } from './commend.mjs';
 import logProtocol from './logProtocol/logProtocol.mjs';
@@ -58,18 +58,16 @@ export function createWindow(): void {
   }
 
   // initialState
-  const initialState: string = createInitialState({
+  const initialStateQs: string = createInitialState({
     theme: themeSource ?? 'system',
     commandLineOptions,
     isTest
   });
 
   if (isDevelopment && isServe) {
-    processWindow.loadURL(`http://localhost:7654?initialState=${ initialState }`);
+    processWindow.loadURL(createHtmlUrl('', initialStateQs));
   } else {
-    processWindow.loadFile(createHtmlFilePath('index'), {
-      query: { initialState }
-    });
+    processWindow.loadFile(createHtmlFilePath('index'), { search: initialStateQs });
   }
 
   Menu.setApplicationMenu(null); // 去掉顶层菜单

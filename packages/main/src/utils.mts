@@ -2,6 +2,7 @@ import { env, resourcesPath } from 'node:process';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as Module from 'node:module';
+import { commandLineOptions } from './commend.mjs';
 
 /* 模块帮助 */
 export const nodeModulesRequire: NodeRequire = Module['createRequire'](globalThis.__IMPORT_META_URL__ ?? import.meta.url);
@@ -58,9 +59,22 @@ export function createHtmlFilePath(htmlName: string): string {
   return path.join(viewDir, `${ htmlName }.html`);
 }
 
+/**
+ * html开发环境的url
+ * @param { string } htmlName
+ * @param { string } qs
+ */
+export function createHtmlUrl(htmlName: string, qs: string): string {
+  return `http://localhost:7654/${ htmlName }?${ qs }`;
+}
+
 /* 生成initialState */
 export function createInitialState(value: Record<string, any>): string {
-  return encodeURIComponent(JSON.stringify(value));
+  const initialStateSearchParams: URLSearchParams = new URLSearchParams();
+
+  initialStateSearchParams.set('initialState', encodeURIComponent(JSON.stringify(value)));
+
+  return initialStateSearchParams.toString();
 }
 
 /* 获取package.json文件 */
