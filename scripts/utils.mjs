@@ -86,6 +86,7 @@ export function command(cmd, args, cwdPath) {
   });
 }
 
+export const node = isWindows ? 'node.exe' : 'node';
 export const npm = isWindows ? 'npm.cmd' : 'npm';
 
 /* webpack编译 */
