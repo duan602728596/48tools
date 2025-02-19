@@ -36,7 +36,7 @@ export function callback(): void {
     await selectItemClick(app, '48-in-video-group-type', liveType);
 
     // 加载数据
-    const loadDataBtn: Locator = app.win.locator('.ant-btn-group button.ant-btn-primary');
+    const loadDataBtn: Locator = app.win.locator('.ant-space-compact button.ant-btn-primary');
 
     await loadDataBtn.click();
     await app.win.waitForSelector('.ant-table-row');

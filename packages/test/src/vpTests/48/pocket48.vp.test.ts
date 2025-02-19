@@ -27,7 +27,7 @@ export function callback(): void {
     }
 
     await app.win.locator('.ant-btn').nth(0).click();
-    await app.win.locator('.ant-btn-group a.ant-btn').nth(0).click();
+    await app.win.locator('.ant-space-compact a.ant-btn').nth(0).click();
     await app.win.waitForSelector('.ant-form');
     await expect(app.win).toHaveScreenshot(vpImage('48', 'pocket48-live-options', isDark));
   }
