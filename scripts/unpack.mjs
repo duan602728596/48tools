@@ -6,7 +6,7 @@ import builder from 'electron-builder';
 import { cwd, appDir, wwwDir, staticsDir, build, sdkDownloadDir, output, unpacked, unpackedNodeModules, isMacOS, isArm64 } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import nimSdkDownload from './nimSdkDownload.mjs';
-import { packageJson } from './jsonImport/jsonImport.mjs';
+import packageJson from '../package.json' with { type: 'json' };
 
 const staticsFiles = {
   LICENSE: path.join(cwd, 'LICENSE'),  // 许可协议
