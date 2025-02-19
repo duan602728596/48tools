@@ -23,6 +23,9 @@ const { __dirname }: MetaHelperResult = metaHelper(globalThis.__IMPORT_META_URL_
 /* 判断是开发环境还是生产环境 */
 export const isDevelopment: boolean = env.NODE_ENV === 'development';
 
+/* 判断启动是否是serve的方式启动 */
+export const isServe: boolean = env.SERVE === '1';
+
 /* 判断是否是测试环境 */
 export const isTest: boolean = env.TEST === 'true';
 

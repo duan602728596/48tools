@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain, nativeTheme, type IpcMainEvent } from 'electron';
 import type { PlayerInfo } from '@48tools/48tools/src/components/basic/initialState/initialState.js';
-import { isTest, titleBarIcon, createHtmlFilePath, createInitialState } from '../utils.mjs';
+import { isDevelopment, isServe, isTest, titleBarIcon, createHtmlFilePath, createInitialState } from '../utils.mjs';
 import { themeEvent, type ThemeValue } from './themeChange.mjs';
 import { getStore } from '../store.mjs';
 import { commandLineOptions } from '../commend.mjs';
@@ -67,9 +67,13 @@ function open(title: string, query: string): void {
     isTest
   }));
 
-  win.loadFile(createHtmlFilePath('player'), {
-    search: initialStateSearchParams.toString()
-  });
+  if (isDevelopment && isServe) {
+    win.loadURL(`http://localhost:7654/player.html?${ initialStateSearchParams.toString() }`);
+  } else {
+    win.loadFile(createHtmlFilePath('player'), {
+      search: initialStateSearchParams.toString()
+    });
+  }
 
   // 切换主题
   function handleThemeEvent(value: ThemeValue): void {

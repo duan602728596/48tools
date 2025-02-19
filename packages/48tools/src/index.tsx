@@ -42,3 +42,7 @@ IDBInit();
 if (process.env.BUILD_SOURCEMAP) {
   proxyServerInit();
 }
+
+if (module.hot) {
+  module.hot.accept();
+}

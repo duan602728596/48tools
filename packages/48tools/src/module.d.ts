@@ -65,3 +65,11 @@ declare module 'filenamify/browser' {
 
   export default filenamify;
 }
+
+declare namespace NodeJS {
+  interface Module {
+    hot?: {
+      accept(): unknown;
+    };
+  }
+}

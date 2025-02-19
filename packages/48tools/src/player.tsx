@@ -19,3 +19,7 @@ root.render(
     </AntdConfig>
   </ThemeProvider>
 );
+
+if (module.hot) {
+  module.hot.accept();
+}
