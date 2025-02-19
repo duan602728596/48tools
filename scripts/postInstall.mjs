@@ -1,6 +1,6 @@
 import path from 'node:path';
 import fsP from 'node:fs/promises';
-import { cwd, command, npm } from './utils.mjs';
+import { cwd, command, node } from './utils.mjs';
 
 const nodeModules = path.join(cwd, 'node_modules');
 
@@ -20,7 +20,7 @@ async function replaceWebsocket(fp, ws) {
 
 /* 编译插件 */
 async function buildPlugin(pluginName) {
-  await command(npm, ['run', 'dev'], path.join(cwd, 'packages', pluginName));
+  await command(node, ['--run', 'dev'], path.join(cwd, 'packages', pluginName));
 }
 
 /**

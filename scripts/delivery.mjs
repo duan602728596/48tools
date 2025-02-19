@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { cwd, command, npm, node } from './utils.mjs';
+import { cwd, command, node } from './utils.mjs';
 
 /* 完整的编译步骤 */
 async function delivery() {
