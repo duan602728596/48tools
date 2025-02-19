@@ -1,7 +1,7 @@
 import { env, resourcesPath } from 'node:process';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import Module from 'node:module';
+import * as Module from 'node:module';
 import { readFileSync } from 'node:fs';
 
 /* 模块帮助 */
