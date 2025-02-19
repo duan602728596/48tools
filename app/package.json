@@ -8,13 +8,20 @@
     "email": "duanhaochen@126.com"
   },
   "main": "boot/main.mjs",
-  "dependencies": {
-    "command-line-args": "^5.2.1",
-    "electron-store": "^8.1.0",
-    "fluent-ffmpeg": "^2.1.2",
-    "got": "^14.4.2",
-    "hpagent": "^1.2.0",
-    "node-media-server": "^2.6.2",
-    "playwright-core": "^1.41.1"
+  "buildConfig": {
+    "dependencies": {
+      "cjs": [
+        "command-line-args",
+        "electron-store",
+        "fluent-ffmpeg",
+        "got",
+        "hpagent",
+        "node-media-server",
+        "playwright-core"
+      ],
+      "esm": [
+        "got"
+      ]
+    }
   }
 }

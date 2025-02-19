@@ -95,10 +95,7 @@ export default function(info: Record<string, any>): Record<string, any> {
     ['@48tools/babel-plugin-delay-require', {
       moduleNames: externalsName,
       idle: false,
-      mountToGlobalThis: true,
-      replaceModuleName: isDev ? {
-        got: '@48tools/esm-build/got'
-      } : undefined
+      mountToGlobalThis: true
     }]
   ];
   const distDir: string = path.join(__dirname, 'dist');

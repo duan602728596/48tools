@@ -5,9 +5,9 @@ import fse from 'fs-extra/esm';
 import { rimraf } from 'rimraf';
 import { merge } from 'webpack-merge';
 import { requireJson } from '@sweet-milktea/utils';
+import webpackJson from 'webpack/package.json' with { type: 'json' };
 import { require, appDir, webpackBuild, webpackNodeDefaultCjsBuildConfig } from './utils.mjs';
-import { buildModules } from '../packages/esm-build/buildModules.mjs';
-import { appPackageJson } from './jsonImport/jsonImport.mjs';
+import appPackageJson from '../app/package.json' with { type: 'json' };
 
 const argv = process.argv.slice(2);
 
@@ -57,12 +57,16 @@ async function createFilesByDependenciesName(dependenciesName) {
   const dependenciesDir = path.join(appNodeModules, dependenciesName); // 模块的输出目录
   const dependenciesNodeModulesDir = path.join(path.parse(require.resolve(dependenciesName))
     .dir.split(/node_modules/)[0], 'node_modules', dependenciesName); // 模块在node_modules中的原位置
+  let esmBuild = false;
 
   await fse.ensureDir(dependenciesDir); // 创建目录
 
-  if (buildModules.includes(dependenciesName)) {
+  if (appPackageJson.buildConfig.dependencies.esm.includes(dependenciesName)) {
     // esm模块使用webpack编译
-    await webpackBuildPackage(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.js'));
+    esmBuild = true;
+    await webpackBuildPackage(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.mjs'));
+    console.log(`webpack: Version ${ webpackJson.version }`);
+    console.log('webpack: Compiling file index.mjs into ESM');
   } else {
     await nccBuild(require.resolve(dependenciesName), path.join(dependenciesDir, 'index.js')); // 编译文件
   }
@@ -73,7 +77,7 @@ async function createFilesByDependenciesName(dependenciesName) {
   await fse.writeJSON(path.join(dependenciesDir, 'package.json'), {
     name: dependenciesName,
     version: depPackageJson.version,
-    main: 'index.js',
+    main: esmBuild ? 'index.mjs' : 'index.js',
     license: depPackageJson.license,
     author: depPackageJson.author
   });
@@ -83,7 +87,7 @@ async function taskFile() {
   await rimraf(appNodeModules);
 
   // 创建目录和文件
-  for (const depName of Object.keys(appPackageJson.dependencies)) {
+  for (const depName of [...appPackageJson.buildConfig.dependencies.cjs, ...appPackageJson.buildConfig.dependencies.esm]) {
     if (!['node-nim'].includes(depName)) {
       console.log(`正在编译模块：${ depName }...`);
       await createFilesByDependenciesName(depName);

@@ -91,8 +91,11 @@ export const npm = isWindows ? 'npm.cmd' : 'npm';
 /* webpack编译 */
 export const webpackNodeDefaultCjsBuildConfig = {
   output: {
-    library: { type: 'commonjs' },
-    globalObject: 'globalThis'
+    library: { type: 'module' },
+    globalObject: 'globalThis',
+    environment: {
+      module: true
+    }
   },
   externalsPresets: {
     node: true,
@@ -103,6 +106,9 @@ export const webpackNodeDefaultCjsBuildConfig = {
   node: {
     __filename: true,
     __dirname: true
+  },
+  experiments: {
+    outputModule: true
   }
 };
 

@@ -56,9 +56,6 @@ async function postInstall() {
 
   // 编译postcss插件
   await buildPlugin('postcss-plugin-remove-classnames');
-
-  // 编译esm -> cjs
-  await command(npm, ['run', 'build'], path.join(cwd, 'packages/esm-build'));
 }
 
 postInstall();
