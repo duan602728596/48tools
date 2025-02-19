@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run clean && tsc --outDir lib --sourceMap --watch",
     "dev": "npm run clean && tsc --outDir lib --sourceMap",
-    "build": "npm run clean && node build.mjs",
+    "build": "npm run clean && node webpackBuild.mjs",
     "clean": "rimraf ./lib && rimraf ./.lib.mid"
   },
   "dependencies": {

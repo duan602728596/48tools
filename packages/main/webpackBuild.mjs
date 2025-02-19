@@ -11,6 +11,7 @@ const { __dirname } = metaHelper(import.meta.url);
 const srcDir = join(__dirname, 'src'),
   buildDir = join(__dirname, 'lib');
 
+/* 文件入口配置 */
 const entryConfig = {
   index: {
     entry: [join(srcDir, 'main.mts')],
@@ -30,8 +31,9 @@ const entryConfig = {
   }
 };
 
+/* webpack编译 */
 await webpackBuild(merge(webpackNodeDefaultEsmBuildConfig, {
-  mode: 'development',
+  mode: 'production',
   entry: {
     index: entryConfig.index.entry,
     nodeMediaServerWorker: entryConfig.nodeMediaServerWorker.entry,
@@ -60,6 +62,7 @@ await webpackBuild(merge(webpackNodeDefaultEsmBuildConfig, {
     ]
   },
   plugins: [
+    // TODO: 注入import.meta.url，防止被重写
     new webpack.BannerPlugin({
       banner: 'globalThis.__IMPORT_META_URL__ = import.meta.url;',
       raw: true,
