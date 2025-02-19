@@ -34,7 +34,18 @@ function Software(props: {}): ReactElement {
     <Paragraph>
       <Text strong={ true }>本软件基于以下开源项目开发：</Text>
       <ul className="grid grid-cols-4">{ list }</ul>
-      <Text>以及其他开源项目。</Text>
+      <Text>
+        以及
+        <a role="button"
+          aria-label="打开网站"
+          tabIndex={ 0 }
+          data-href="https://github.com/duan602728596/48tools/blob/main/package.json#L36"
+          onClick={ handleOpenWebsiteClick }
+        >
+          其他开源项目
+        </a>
+        。
+      </Text>
     </Paragraph>
   );
 }
