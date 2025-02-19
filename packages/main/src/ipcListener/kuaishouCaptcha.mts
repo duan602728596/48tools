@@ -27,14 +27,9 @@ function kuaishouWebsite(videoId: string): void {
   kuaishouWin.on('close', async function(): Promise<void> {
     if (processWindow && kuaishouWin) {
       const ses: Session = kuaishouWin.webContents.session;
-      const winSes: Session = processWindow.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({});
 
       processWindow.webContents.send(KuaishouCookieChannel.KuaiShouCookieResponse, cookies, videoId);
-      await Promise.all([
-        ses.clearStorageData({ storages: ['cookies'] }),
-        winSes.clearStorageData({ storages: ['cookies'] })
-      ]);
     }
   });
 

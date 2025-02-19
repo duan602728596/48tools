@@ -27,14 +27,9 @@ function login(): void {
   weiboLoginWin.on('close', async function(): Promise<void> {
     if (processWindow && weiboLoginWin) {
       const ses: Session = weiboLoginWin.webContents.session;
-      const winSes: Session = processWindow.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({ url: undefined });
 
       processWindow.webContents.send(WeiboLoginChannel.WeiboLoginCookie, cookies);
-      await Promise.all([
-        ses.clearStorageData({ storages: ['cookies'] }),
-        winSes.clearStorageData({ storages: ['cookies'] })
-      ]);
     }
   });
 

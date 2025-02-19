@@ -26,14 +26,9 @@ function douyinCookie(): void {
   douyinWin.on('close', async function(): Promise<void> {
     if (processWindow && douyinWin) {
       const ses: Session = douyinWin.webContents.session;
-      const winSes: Session = processWindow.webContents.session;
       const cookies: Array<Cookie> = await ses.cookies.get({});
 
       processWindow.webContents.send(DouyinCookieChannel.DouyinCookieResponse, cookies);
-      await Promise.all([
-        ses.clearStorageData({ storages: ['cookies'] }),
-        winSes.clearStorageData({ storages: ['cookies'] })
-      ]);
     }
   });
 
