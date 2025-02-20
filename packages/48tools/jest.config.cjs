@@ -4,9 +4,9 @@ const path = require('node:path');
 const config = {
   testEnvironment: 'node',
   testMatch: [
-    '**/__tests__/**/*.test.(m|c)?ts',
-    '**/test/**/*.test.(m|c)?ts',
-    '**/?(*.)+(spec|test).(m|c)?ts'
+    '**/__tests__/**/*.test.(m|c)?tsx?',
+    '**/test/**/*.test.(m|c)?tsx?',
+    '**/?(*.)+(spec|test).(m|c)?tsx?'
   ],
   transform: {
     '^.+\\.(m|c)?ts?$': ['ts-jest', {
@@ -14,7 +14,7 @@ const config = {
       useESM: true
     }]
   },
-  moduleFileExtensions: ['ts', 'tsx', 'mts', 'cts', 'js', 'mjs', 'cjs', 'json'],
+  moduleFileExtensions: ['ts', 'tsx', 'mts', 'cts', 'js', 'jsx', 'mjs', 'cjs', 'json'],
   collectCoverage: false,
   preset: 'ts-jest/presets/default-esm'
 };
