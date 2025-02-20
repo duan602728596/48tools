@@ -1,40 +1,40 @@
 // 侧边导航栏
 mixin NavLink(id, title)
-  a.nav-link(href='./' + id + '.html' data-url-id=id)= title
+  a(class='text-black no-underline hover:underline' href='./' + id + '.html' data-url-id=id)= title
 
-aside.flex-shrink-0.p-3.h-100.border-end.border-secondary-subtle.overflow-auto.aside
-  ul.m-0.p-0.nav-list#nav-list
+aside(class='shrink-0 box-border p-3 w-[300px] h-full border-r border-gray-500 overflow-auto')
+  ul.m-0.p-0.list-none.select-none#nav-list
     li
       details(open)
         summary.pb-2 48tools帮助文件
-        ul.m-0.p-0.nav-list
-          li.pb-2
+        ul.m-0.p-0.list-none.select-none
+          li.ml-5.pb-2
             +NavLink('index', '关于48tools')
-          li.pb-2
+          li.ml-5.pb-2
             +NavLink('ffmpeg-option', 'FFmpeg配置')
-          li
+          li.ml-5
             details(open)
               summary.pb-2 口袋48相关
-              ul.m-0.p-0.nav-list
-                li.pb-2
+              ul.m-0.p-0.list-none.select-none
+                li.ml-5.pb-2
                   +NavLink('pocket48-login', '口袋48登录')
-                li.pb-2
+                li.ml-5.pb-2
                   +NavLink('appdata-directory-configuration', 'AppData目录配置')
-          li
+          li.ml-5
             details(open)
               summary.pb-2 B站功能
-              ul.m-0.p-0.nav-list
-                li.pb-2
+              ul.m-0.p-0.list-none.select-none
+                li.ml-5.pb-2
                   +NavLink('bilibili-video-id', '输入正确的视频ID')
-          li
+          li.ml-5
             details(open)
               summary.pb-2 微博功能
-              ul.m-0.p-0.nav-list
-                li.pb-2
+              ul.m-0.p-0.list-none.select-none
+                li.ml-5.pb-2
                   +NavLink('weibo-login', '微博登录')
-                li.pb-2
+                li.ml-5.pb-2
                   +NavLink('weibo-visited', '微博访客查看')
-          li.pb-2
+          li.ml-5.pb-2
             +NavLink('xiaohongshu-live', '小红书直播录制')
-          li.pb-2
+          li.ml-5.pb-2
             +NavLink('showroom-live', 'SHOWROOM直播录制')

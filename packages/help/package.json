@@ -8,9 +8,11 @@
     "build": "rimraf ./dist && gulp"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3"
+    "@tailwindcss/typography": "^0.5.16",
+    "daisyui": "^5.0.0-beta.8"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.1",
     "cross-env": "^7.0.3",
     "cssnano": "^7.0.4",
     "gulp": "^5.0.0",
@@ -21,6 +23,7 @@
     "gulp-sass": "^5.1.0",
     "postcss": "^8.4.39",
     "rimraf": "*",
+    "tailwindcss": "^4.0.0",
     "typescript": "^5.4.5",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^7.0.0"

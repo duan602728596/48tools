@@ -19,7 +19,7 @@ function selectedUrl(): void {
 
   if (!targetLink) return;
 
-  targetLink.classList.add('text-primary', 'fw-bold');
+  targetLink.classList.add('urlTarget');
 }
 
 export default selectedUrl;

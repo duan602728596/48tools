@@ -8,6 +8,7 @@ import gulpPostcss from 'gulp-postcss';
 import webpackStream from 'webpack-stream';
 import GulpMemoryFs from 'gulp-memory-fs';
 import * as sassCompiler from 'sass';
+import tailwindcss from '@tailwindcss/postcss';
 import cssnano from 'cssnano';
 import named from 'vinyl-named';
 import ForkTsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
@@ -98,6 +99,14 @@ function pugTask() {
   }
 }
 
+/* postcss plugins */
+const postcssPlugins = [
+  tailwindcss({
+    content: ['./src/**/*.{ts,tsx,js,jsx,pug,html}']
+  }),
+  !isDev && cssnano({ preset: 'default' })
+].filter(Boolean);
+
 /* css */
 function sassTask() {
   const src = ['src/**/*.{sass,scss}'];
@@ -107,11 +116,12 @@ function sassTask() {
       .pipe(mfs.changed())
       .pipe(gulpPlumber())
       .pipe(sass().on('error', sass.logError))
+      .pipe(gulpPostcss(postcssPlugins))
       .pipe(mfs.dest('dist'));
   } else {
     return gulp.src(src)
       .pipe(sass().on('error', sass.logError))
-      .pipe(gulpPostcss([cssnano({ preset: 'default' })]))
+      .pipe(gulpPostcss(postcssPlugins))
       .pipe(gulp.dest('dist'));
   }
 }
@@ -152,7 +162,7 @@ function imageTask() {
 }
 
 function watchProject() {
-  gulp.watch('src/**/*.pug', pugTask);
+  gulp.watch('src/**/*.pug', gulp.parallel(pugTask, sassTask));
   gulp.watch('src/**/*.{sass,scss}', sassTask);
   gulp.watch('src/**/*.{ts,tsx,mts,cts}', webpackTask);
   gulp.watch('src/**/*.{png,jpg,jpeg,gif,svg,webp,avif}', imageTask);

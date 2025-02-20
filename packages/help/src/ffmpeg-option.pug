@@ -8,44 +8,38 @@ block head
   +Title('FFmpeg配置')
 
 block article
-  h1.h1 FFmpeg配置
-  article
-    p.mb-4 48tools中，直播录制、录播下载、查看直播、视频处理等功能都需要使用FFmpeg。但是48tools不会自带FFmpeg，需要用户自行安装。
-    h2.h2 FFmpeg的下载
-    p 用户可以根据自己的操作系统，下载对应的安装包：
-    div
-      table.d-inline-block.table.table-striped.table-bordered
+  h1 FFmpeg配置
+  p.mb-4 48tools中，直播录制、录播下载、查看直播、视频处理等功能都需要使用FFmpeg。但是48tools不会自带FFmpeg，需要用户自行安装。
+  h2 FFmpeg的下载
+  p 用户可以根据自己的操作系统，下载对应的安装包：
+  div
+    div.inline-block
+      table(class='table overflow-x-auto rounded-box border border-base-content/5 bg-base-100')
         tbody
           tr
-            td Windows
-            td
+            td.p-2 Windows
+            td.p-2
               +Link('https://www.gyan.dev/ffmpeg/builds/')
           tr
-            td MacOS
-            td
+            td.p-2 MacOS
+            td.p-2
               +Link('https://evermeet.cx/ffmpeg/')
           tr
-            td Linux
-            td
+            td.p-2 Linux
+            td.p-2
               +Link('https://www.ffmpeg.org/download.html')
-    button.mb-3.btn.btn-primary#ffmpeg-download-btn(type='button') 下载
-    p 下载时要选择full build，避免导致视频转码失败。
-    +Image('./image/ffmpegOptions/fullBuildFFmpegLink.webp', '下载时要选择full build', 600)
+  button.mb-3.btn.btn-primary#ffmpeg-download-btn(type='button') 下载
+  p 下载时要选择full build，避免导致视频转码失败。
+  +Image('./image/ffmpegOptions/fullBuildFFmpegLink.webp', '下载时要选择full build', 600)
 
-    h2.h2 FFmpeg可执行文件的配置
-    p 在软件首页选择FFmpeg配置，并配置可执行文件：
+  h2 FFmpeg可执行文件的配置
+  p 在软件首页选择FFmpeg配置，并配置可执行文件：
+  div
     +Image('./image/ffmpegOptions/ffmpegOptionButton.webp', 'FFmpeg配置按钮', 600)
-    dl.d-inline-block
-      dt
-        +Image('./image/ffmpegOptions/ffmpegPathMac.webp', 'FFmpeg配置路径(MacOS)', 600)
-      dd.mb-3.text-center
-        em
-          small FFmpeg在MacOS系统下的路径配置
-      dt
-        +Image('./image/ffmpegOptions/ffmpegPathWin.webp', 'FFmpeg配置按钮(Windows)', 600)
-      dd.mb-3.text-center
-        em
-          small FFmpeg在Windows系统下的路径配置
+  div
+    +Image('./image/ffmpegOptions/ffmpegPathMac.webp', 'FFmpeg配置路径(MacOS)', 600, 'FFmpeg在MacOS系统下的路径配置')
+  div
+    +Image('./image/ffmpegOptions/ffmpegPathWin.webp', 'FFmpeg配置按钮(Windows)', 600, 'FFmpeg在Windows系统下的路径配置')
 
 block script
   script(src='./script/ffmpegOption.js')

@@ -1,29 +1,12 @@
-@use 'bootstrap-load'
+/* tailwindcss */
+@import 'tailwindcss/theme.css'
+@import 'tailwindcss/utilities.css'
 
-/*** common.sass ***/
-/* 右侧 */
-.aside
-  box-sizing: border-box
-  width: 300px
+/* https://v5.daisyui.com/docs/themes/?lang=zh_hans */
+@plugin 'daisyui'
+  themes: light --default
 
-/* 导航 */
-.nav-list
-  list-style: none
-  user-select: none
+@plugin '@tailwindcss/typography'
 
-  .nav-list li
-    margin-left: 22px
-
-.nav-summary
-  cursor: pointer
-
-.nav-link
-  color: #000
-  text-decoration: none
-
-  &:hover
-    text-decoration: underline
-
-/* 文章 */
-.main
-  box-sizing: border-box
+.urlTarget
+  @apply font-bold text-primary

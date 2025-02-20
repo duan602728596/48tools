@@ -2,5 +2,12 @@
 //- @param { string } src - 图片地址
 //- @param { string } alt - 图片描述
 //- @param { string } width - 图片宽度
-mixin Image(src, alt, width)
-  img.d-block.mb-3.img-thumbnail(src=src width=width alt=alt)
+//- @param { string | null } card_text卡片文字
+mixin Image(src, alt, width, card_text)
+  div.mb-3
+    div.inline-block.card.shadow-sm.overflow-hidden
+      figure(class='!m-0')
+        img(src=src width=width alt=alt)
+      if card_text
+        div.card-body
+          p.text-center=card_text

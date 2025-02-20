@@ -1,4 +1,4 @@
 //- 新窗口打开链接，且链接和链接文本相同
 //- @param { string } href - 链接地址
 mixin Link(href)
-  a(href=href target='_blank' rel='noreferrer')= href
+  a(class='text-primary no-underline hover:underline' href=href target='_blank' rel='noreferrer')= href
