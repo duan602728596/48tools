@@ -16,8 +16,8 @@
     "got": "^14.4.2"
   },
   "devDependencies": {
+    "7zip-min": "^2.0.0",
     "cross-zip": "^4.0.0",
-    "jsdom": "^23.0.1",
     "rimraf": "*"
   }
 }
