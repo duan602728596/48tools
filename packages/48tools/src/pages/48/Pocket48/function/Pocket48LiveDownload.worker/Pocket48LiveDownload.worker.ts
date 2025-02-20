@@ -1,11 +1,12 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { parse, type ParsedPath } from 'node:path';
 import { setTimeout } from 'node:timers';
+import * as process from 'node:process';
 import { requestLiveRoomInfo, type LiveRoomInfo } from '@48tools-api/48';
 import type { _UtilObject } from '../../../../../../../main/src/logProtocol/logTemplate/ffmpeg.mjs';
 import { _ffmpegLogProtocol } from '../../../../../utils/logProtocol/logActions';
-import { isMacOS } from '../utils';
 
+const isMacOS: boolean = process.platform === 'darwin';
 let _stdout: Array<string> = [];
 
 /**
