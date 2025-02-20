@@ -67,7 +67,7 @@
 ### 技术栈
 
 Pug + Sass + TypeScript + React + antd + Webpack + TailwindCSS + Electron。包管理工具使用corepack。   
-使用jest和ts-jest进行单元测试，使用playwright + @playwright/test进行E2E测试。   
+使用jest + ts-jest进行单元测试，使用playwright + @playwright/test进行E2E测试。   
 
 ### 模块
 
