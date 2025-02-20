@@ -8,7 +8,13 @@ type InputNumberValue = string | number | undefined;
  * @param { InputNumberValue } v - 数字
  */
 function isNumber(v: InputNumberValue): number | undefined {
-  return typeof v === 'number' ? v : undefined;
+  if (typeof v === 'number') return v;
+
+  if (typeof v === 'string') {
+    const n: number = Number(v);
+
+    return isNaN(n) ? undefined : n;
+  }
 }
 
 /**

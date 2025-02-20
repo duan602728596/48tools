@@ -45,7 +45,7 @@ function globalsSettings(keys) {
 const languageGlobalsOptions = {
   NodeJS: 'readonly',
   NodeRequire: 'readonly',
-  ...globalsSettings(['browser', 'chai', 'commonjs', 'es5', 'mocha', 'node', 'nodeBuiltin', 'worker'])
+  ...globalsSettings(['browser', 'chai', 'commonjs', 'es5', 'mocha', 'jest', 'node', 'nodeBuiltin', 'worker'])
 };
 
 const plugins = {
