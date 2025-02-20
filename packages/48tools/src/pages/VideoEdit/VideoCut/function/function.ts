@@ -1,7 +1,5 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { getFFmpeg } from '../../../../utils/utils';
-import { _ffmpegLogProtocol } from '../../../../utils/logProtocol/logActions';
-import type { _UtilObject } from '../../../../../../main/src/logProtocol/logTemplate/ffmpeg.mjs';
 
 type InputNumberValue = string | number | undefined;
 
