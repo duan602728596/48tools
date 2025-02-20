@@ -10,6 +10,7 @@
     { "name": "got", "href": "https://github.com/sindresorhus/got" },
     { "name": "gulp", "href": "https://gulpjs.com/" },
     { "name": "hls.js", "href": "https://github.com/video-dev/hls.js" },
+    { "name": "jest", "href": "https://jestjs.io" },
     { "name": "mdxjs", "href": "https://mdxjs.com" },
     { "name": "mpegts.js", "href": "https://github.com/xqq/mpegts.js" },
     { "name": "node-media-server", "href": "https://github.com/illuspas/Node-Media-Server" },

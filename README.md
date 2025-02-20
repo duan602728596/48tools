@@ -67,7 +67,7 @@
 ### 技术栈
 
 Pug + Sass + TypeScript + React + antd + Webpack + TailwindCSS + Electron。包管理工具使用corepack。   
-使用playwright + @playwright/test进行E2E测试。
+使用jest和ts-jest进行单元测试，使用playwright + @playwright/test进行E2E测试。   
 
 ### 模块
 
@@ -83,25 +83,32 @@ Pug + Sass + TypeScript + React + antd + Webpack + TailwindCSS + Electron。包�
 
 > 在使用WebStorm开发时，如果出现提示eslint检测超时的错误，需要按照[**这个步骤**](https://youtrack.jetbrains.com/issue/WEB-63073/ESLint-creates-a-lot-of-node-processes#focus=Comments-27-8111996.0-0)来配置。
 
-1. main模块：进入`packages/main`，运行`npm run start`，开发主程序源代码；或运行`npm run dev`，编译开发环境的主程序源代码。
-2. 48tools模块：进入`packages/48tools`，运行`npm run dll`，然后运行`npm run start`。
-3. 48tools模块：进入`packages/48tools`，运行`npm run runel`，启动软件。
-4. help模块：进入`packages/help`，运行`npm run start`，开发帮助文件源代码。
+1. main模块：进入`packages/main`，运行`node --run start`，开发主程序源代码；或运行`npm run dev`，编译开发环境的主程序源代码。
+2. 48tools模块：进入`packages/48tools`，运行`node --run dll`。
+3. 48tools模块：该模块有两种开发方式可选择。进入`packages/48tools`，
+   1. 启动开发服务器：
+      1. 运行`node --run start:serve`，启动开发服务器。
+      2. 运行`node --run runel:serve`，启动软件。
+   2. 编译文件到本地硬盘：
+      1. 运行`node --run start`，开始开发。
+      2. 运行`node --run runel`，启动软件。
+4. help模块：进入`packages/help`，运行`node --run start`，开发帮助文件源代码。
 
 ### 编译
 
 > 运行`node scripts/delivery.mjs`，完成整个编译过程。
 
-1. main模块：进入`packages/main`，运行`npm run build`，编译主程序源代码。
-2. 48tools模块：进入`packages/48tools`，运行`npm run build`，编译软件源代码。
-3. help模块：进入`packages/help`，运行`npm run build`，编译帮助文件源代码。
+1. main模块：进入`packages/main`，运行`node --run build`，编译主程序源代码。
+2. 48tools模块：进入`packages/48tools`，运行`node --run build`，编译软件源代码。
+3. help模块：进入`packages/help`，运行`node --run build`，编译帮助文件源代码。
 4. 运行`node scripts/unpack.mjs`，打包软件。
 5. 运行`node scripts/clean.mjs`，删除软件中的无用的文件。
 
 ### 测试
 
 1. 完成开发的所有编译过程。
-2. 进入`packages/test`，运行`npm run test`，运行E2E测试。
+2. 进入`packages/48tools`，运行`node --run test`，运行单元测试。
+3. 进入`packages/test`，运行`node --run test`，运行E2E测试。
 
 ### 源代码托管地址
 
