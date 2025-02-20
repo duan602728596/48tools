@@ -104,7 +104,7 @@ export function callback(): void {
     // 【4月/主题曲/官方歌词】剃须。然后捡到女高中生 OP&ED【中文字幕】https://www.bilibili.com/video/BV1Hp4y1t7Nd
     await query('视频（BV）', '1Hp4y1t7Nd');
 
-    // 【心灵终结3.3.6】全战役终结难度通关合集 https://www.bilibili.com/video/av370522884
+    // 【心灵终结3.3.6】全战役终结难度通关合集 https://www.bilibili.com/video/av724265559
     await query('视频（av）', '724265559', '140');
 
     // 有点甜（cover汪苏泷、BY2）翻唱：胡丽芝、田姝丽 https://www.bilibili.com/audio/au590187
