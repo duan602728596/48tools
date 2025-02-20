@@ -6,7 +6,7 @@ interface VideoWebsiteTestConfig {
 }
 
 interface TestConfig {
-  partialTest?: false | Array<PartialTest>; // 跑部分测试
+  partialTest?: false | Array<string>; // 跑部分测试
   bilibili: VideoWebsiteTestConfig & {
     useProxy: boolean;
     proxy: string;
