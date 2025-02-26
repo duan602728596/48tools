@@ -16,6 +16,11 @@ import type {
 
 export type * from './interface';
 
+/**
+ * 返回代理配置
+ * @param { string | undefined } proxy - 代理地址
+ * @return { GotAgents | undefined }
+ */
 function gotAgent(proxy: string | undefined): GotAgents | undefined {
   if (!proxy) return;
 
@@ -35,8 +40,15 @@ function gotAgent(proxy: string | undefined): GotAgents | undefined {
   return agent;
 }
 
-// B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
-// 请求bilibili的html
+/**
+ * B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
+ */
+
+/**
+ * 请求bilibili的html
+ * @param { string } url
+ * @param { string | undefined } proxy
+ */
 export async function requestBilibiliHtml(url: string, proxy: string | undefined): Promise<string> {
   const res: GotResponse<string> = await got.get(url, {
     responseType: 'text',
@@ -53,6 +65,11 @@ export async function requestBilibiliHtml(url: string, proxy: string | undefined
 
 /**
  * 请求视频信息
+ * @param { string } type
+ * @param { string } id
+ * @param { number } cid
+ * @param { string | undefined } proxy
+ * @param { boolean } isDash
  */
 export async function requestVideoInfo({ type, id, cid, proxy, isDash }: {
   type: string;
@@ -171,6 +188,7 @@ export async function requestWebInterfaceView(id: string, type: string, proxy: s
   return res.body;
 }
 
+/* 获取用户的信息 */
 export async function requestInterfaceNav(proxy: string | undefined): Promise<NavInterface> {
   const res: GotResponse<NavInterface> = await got.get('https://api.bilibili.com/x/web-interface/nav', {
     responseType: 'json',
