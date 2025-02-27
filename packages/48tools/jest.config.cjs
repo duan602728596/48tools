@@ -4,9 +4,9 @@ const path = require('node:path');
 const config = {
   testEnvironment: 'node',
   testMatch: [
-    '**/__tests__/**/*.test.(m|c)?tsx?',
-    '**/test/**/*.test.(m|c)?tsx?',
-    '**/?(*.)+(spec|test).(m|c)?tsx?'
+    '**/__tests__/**/*.(spec|test).(m|c)?ts(x)?',
+    '**/test/**/*.(spec|test).(m|c)?ts(x)?',
+    '**/?(*.)+(spec|test).(m|c)?ts(x)?'
   ],
   transform: {
     '^.+\\.(m|c)?ts?$': ['ts-jest', {
