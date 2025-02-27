@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse, Agents as GotAgents } from 'got';
 import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
 import { getBilibiliCookie, pcUserAgent, pcUserAgent2 } from '../../../utils/utils';

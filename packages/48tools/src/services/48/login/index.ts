@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse } from 'got';
 import { createHeaders } from '../../../utils/snh48';
 import type { SMSResult, LoginUserInfo, IMUserInfo, UserInfoReloadOrSwitch, UserMoney } from './interface';

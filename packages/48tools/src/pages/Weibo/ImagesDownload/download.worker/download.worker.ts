@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as fsPromises from 'node:fs/promises';
 import * as path from 'node:path';
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse } from 'got';
 import type { WeiboImageItem } from '../../types';
 

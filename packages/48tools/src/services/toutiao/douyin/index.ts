@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse } from 'got';
 import { pcUserAgent, pcUserAgent2 } from '../../../utils/utils';
 import { awemePostQueryV2, awemeDetailQueryV2 } from '../../../utils/toutiao/signUtils';

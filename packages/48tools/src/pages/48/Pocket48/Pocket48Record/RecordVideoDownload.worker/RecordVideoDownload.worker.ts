@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 import { promises as fsP, type BigIntStats } from 'node:fs';
 import * as path from 'node:path';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
-// @ts-ignore
+// @ts-expect-error
 import got from 'got';
 import type GotRequest from 'got/dist/source/core';
 

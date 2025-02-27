@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse } from 'got';
 import { pcUserAgent } from '../../../utils/utils';
 import type { TopicResponse, CheckinResult } from './interface';

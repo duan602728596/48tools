@@ -1,7 +1,7 @@
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
 import * as fsP from 'node:fs/promises';
-// @ts-ignore
+// @ts-expect-error
 import got, { type Headers, type Response as GotResponse } from 'got';
 import type { ProgressEventData } from '../../../pages/Bilibili/types';
 

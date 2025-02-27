@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse } from 'got';
 import type { PcLiveJson, VisitedList, DetailInfo, FollowContent, WeiboUserImages, WeiboShowDetails } from './interface';
 

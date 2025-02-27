@@ -2,7 +2,7 @@
 
 import { pipeline } from 'node:stream/promises';
 import * as fs from 'node:fs';
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse, type Headers as GotHeaders, type Delays } from 'got';
 import { createHeaders, getPocket48Token } from '../../utils/snh48';
 import type {

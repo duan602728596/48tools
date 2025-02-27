@@ -52,7 +52,7 @@ class NIM {
     return new Promise((resolve: Function): void => {
       this.chatroom!.getHistoryMsgs({
         timetag: timeTag,
-        // @ts-ignore
+        // @ts-expect-error
         done(err: Error, data: { msgs: Array<NIMChatroomMessage> }): void {
           resolve(data.msgs ?? []);
         }

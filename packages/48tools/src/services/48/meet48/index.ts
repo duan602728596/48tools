@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import got, { type Response as GotResponse } from 'got';
 import { createMeet48Headers } from '../../../utils/snh48';
 import { timeoutOptions } from '../index';

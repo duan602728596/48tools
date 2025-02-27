@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import got, { Response as GotResponse } from 'got';
 import { pcUserAgent, rStr } from '../../utils/utils';
 import type { ShortVideoDownloadResponse } from './interface';
