@@ -157,12 +157,12 @@ export default function(info: Record<string, any>): Record<string, any> {
     javascript: {
       ecmascript: true,
       plugins,
-      exclude: /node_modules|(toutiaosdk-acrawler|bdms)\.js|Signer\.js/i
+      exclude: /node_modules|(imports|appKey|rust-wasm)\.m?js|(toutiaosdk-acrawler|bdms)\.js|Signer\.js/i
     },
     typescript: {
       configFile: 'tsconfig.prod.json',
       plugins,
-      exclude: /node_modules|Signer\.js/,
+      exclude: /node_modules|(imports|appKey|rust-wasm)\.m?js|Signer\.js/,
       reactCompiler
     },
     sass: {
