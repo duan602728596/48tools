@@ -21,10 +21,10 @@ import {
   ffmpegProcessListSelectors,
   type FFmpegProcessInitialState
 } from '../reducers/FFmpegProcess';
-import getFFmpegChildProcessWorker from './function/FFmpegChildProcessWorker/getFFmpegChildProcessWorker';
+import getFFmpegChildProcessWorker from './utils/FFmpegChildProcessWorker/getFFmpegChildProcessWorker';
 import { getFFmpeg, rStr } from '../../../utils/utils';
 import type { ProcessItem, ProcessItemConsole } from '../types';
-import type { MessageEventData, ProgressMessageEventData } from './function/FFmpegChildProcessWorker/FFmpegChildProcess.worker';
+import type { MessageEventData, ProgressMessageEventData } from './utils/FFmpegChildProcessWorker/FFmpegChildProcess.worker';
 
 /* redux selector */
 type RSelector = { FFmpegProcessList: Array<ProcessItem> };

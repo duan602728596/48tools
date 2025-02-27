@@ -3,7 +3,7 @@ globalThis.addEventListener = jest.fn();
 
 import { computingTime } from './cut.worker';
 
-describe('test computingTime function', function(): void {
+describe('test computingTime utils', function(): void {
   test('should return right diff time - 1', function(): void {
     expect(computingTime([0, 0, 0], [0, 0, 3])).toEqual([0, 0, 3]);
   });

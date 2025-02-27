@@ -24,7 +24,7 @@ import {
   parseVideoUrlV2,
   type ParseVideoListArrayItemResult,
   type ParseVideoUrlV2ObjectResult
-} from '../function/parseBilibiliUrl';
+} from '../utils/parseBilibiliUrl';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
 import DASHSelect from './DASHSelect';
 import type { DownloadItem as BilibiliDownloadItem } from '../../types';

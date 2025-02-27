@@ -3,7 +3,7 @@ import type { FieldData } from 'rc-field-form/es/interface';
 import type { MsgType, LiveOnePlayStreams } from '@48tools-api/48';
 import type { PlayStreamName } from '@48tools-api/48/enum';
 import type { WebWorkerChildItem } from '../../commonTypes';
-import type Pocket48LiveRender from './Pocket48/function/Pocket48LiveRender';
+import type Pocket48LiveRender from './Pocket48/utils/Pocket48LiveRender';
 
 export interface InLiveFormValue {
   live?: string;

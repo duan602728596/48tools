@@ -13,7 +13,7 @@ import getDownloadAndTranscodingWorker from './DownloadAndTranscodingWorker/getD
 import { store } from '../../../../store/store';
 import { setLiveList, setDeleteLiveChildList, setAddLiveChildList, type Pocket48InitialState } from '../../reducers/pocket48';
 import { getFFmpeg, fileTimeFormat, getFilePath } from '../../../../utils/utils';
-import Pocket48LiveRender from '../function/Pocket48LiveRender';
+import Pocket48LiveRender from './Pocket48LiveRender';
 import type { MessageEventData, LiveStatusEventData, WebWorkerChildItem } from '../../../../commonTypes';
 
 interface DownloadArgs {

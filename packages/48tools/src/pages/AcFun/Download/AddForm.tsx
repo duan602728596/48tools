@@ -16,7 +16,7 @@ import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import { pick } from '../../../utils/lodash';
-import { parseAcFunUrl, type ParseAcFunUrlResult } from './function/parseAcFunUrl';
+import { parseAcFunUrl, type ParseAcFunUrlResult } from './utils/parseAcFunUrl';
 import { setAddDownloadList, setAddDownloadAllList } from '../reducers/acfunDownload';
 import VideoListSelect from './VideoListSelect';
 import type { Representation, VideoInfo, VideoInfoWithKey, DownloadItem } from '../types';

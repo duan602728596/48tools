@@ -9,7 +9,7 @@ import Kuaishou from '../pages/Kuaishou/Index';
 import VideoEditDynamic from '../pages/VideoEdit/loader';
 import Weibo from '../pages/Weibo/Index';
 import Agreement from '../pages/Agreement/Index';
-import { needToReadPower } from '../pages/Agreement/function/helper';
+import { needToReadPower } from '../pages/Agreement/utils/helper';
 import ShowroomLive from '../pages/ShowRoomLive/Index';
 import XiaohongshuLive from '../pages/XiaohongshuLive/Index';
 

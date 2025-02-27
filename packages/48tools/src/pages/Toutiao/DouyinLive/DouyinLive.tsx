@@ -38,7 +38,7 @@ import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
-import douyinLiveAutoRecord from './function/douyinLiveAutoRecord';
+import douyinLiveAutoRecord from './utils/douyinLiveAutoRecord';
 
 /* redux selector */
 type RState = { douyinLive: LiveSliceInitialState };

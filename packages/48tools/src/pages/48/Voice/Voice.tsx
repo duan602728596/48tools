@@ -49,7 +49,7 @@ import {
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
-import { startAutoRecord, stopAutoRecord } from './function/autoRecord';
+import { startAutoRecord, stopAutoRecord } from './utils/autoRecord';
 import type { RoomVoiceItem } from '../types';
 import type { WebWorkerChildItem, MessageEventData } from '../../../commonTypes';
 

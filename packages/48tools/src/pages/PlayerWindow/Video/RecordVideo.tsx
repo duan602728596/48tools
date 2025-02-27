@@ -3,7 +3,7 @@ import Hls, { type Events, type ManifestParsedData } from 'hls.js';
 import { requestDownloadFile, type LiveRoomInfo } from '@48tools-api/48';
 import { source, engineUserAgent } from '../../../utils/snh48';
 import { formatTsUrl } from '../../48/Pocket48/Pocket48Record/Pocket48Record';
-import { danmuStore } from '../function/DanmuStore';
+import { danmuStore } from '../utils/DanmuStore';
 import type { PlayerInfo } from '../../../components/basic/initialState/initialState';
 import type { DanmuItem } from '../types';
 

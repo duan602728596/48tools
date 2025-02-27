@@ -23,7 +23,7 @@ import {
 } from '../reducers/acfunDownload';
 import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import { ProgressNative, type ProgressSet } from '../../../components/ProgressNative/index';
-import { parseAcFunUrl, type ParseAcFunUrlResult } from './function/parseAcFunUrl';
+import { parseAcFunUrl, type ParseAcFunUrlResult } from './utils/parseAcFunUrl';
 import { pick } from '../../../utils/lodash';
 import type { WebWorkerChildItem } from '../../../commonTypes';
 import type { DownloadItem, Representation } from '../types';

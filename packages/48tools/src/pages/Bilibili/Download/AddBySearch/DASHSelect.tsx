@@ -6,9 +6,9 @@ import { Select, App } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { useAppProps } from 'antd/es/app/context';
 import type { DashSupportFormats } from '@48tools-api/bilibili/download';
-import { parseVideoUrlDASH, type ParseVideoUrlDASHObjectResult } from '../function/parseBilibiliUrl';
+import { parseVideoUrlDASH, type ParseVideoUrlDASHObjectResult } from '../utils/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
-import { getUrlFromDash, type GetUrlFromDashReturn } from '../function/getUrlFromDash';
+import { getUrlFromDash, type GetUrlFromDashReturn } from '../utils/getUrlFromDash';
 import type { DashInfo } from '../../types';
 
 interface DASHSelectProps {

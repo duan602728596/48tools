@@ -20,9 +20,9 @@ import {
   selectorsObject
 } from '../reducers/bilibiliLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import bilibiliAutoRecord from './function/bilibiliAutoRecord';
-import { localStorageKey } from './function/helper';
-import bilibiliLiveWorker from './function/bilibiliLiveWorker';
+import bilibiliAutoRecord from './utils/bilibiliAutoRecord';
+import { localStorageKey } from './utils/helper';
+import bilibiliLiveWorker from './utils/bilibiliLiveWorker';
 import type { WebWorkerChildItem, LiveItem } from '../../../commonTypes';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 

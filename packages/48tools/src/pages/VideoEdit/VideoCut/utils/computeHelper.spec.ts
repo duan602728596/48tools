@@ -1,9 +1,9 @@
 jest.mock('node:child_process', (): {} => ({}));
 jest.mock('../../../../utils/utils', (): {} => ({}));
 
-import { getFullTime } from './function';
+import { getFullTime } from './computeHelper';
 
-describe('test getFullTime function', function(): void {
+describe('test getFullTime utils', function(): void {
   test('should return time', function(): void {
     expect(getFullTime(1, '5', '16')).toBe('01:05:16');
   });

@@ -14,7 +14,7 @@ import { DndContext, type DragEndEvent } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import { arrayMoveImmutable } from 'array-move';
 import { showOpenDialog, showSaveDialog } from '../../../utils/remote/dialog';
-import getConcatVideoWorker from './function/concatVideo.worker/getConcatVideoWorker';
+import getConcatVideoWorker from './utils/concatVideo.worker/getConcatVideoWorker';
 import Header from '../../../components/Header/Header';
 import { setConcatListAdd, setConcatList, setConcatListDelete, setConcatWorker, type ConcatInitialState } from '../reducers/concat';
 import { getFFmpeg, getFilePath } from '../../../utils/utils';

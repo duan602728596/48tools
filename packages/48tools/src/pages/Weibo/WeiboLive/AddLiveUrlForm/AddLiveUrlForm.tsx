@@ -3,7 +3,7 @@ import { Form, Input, Button, Space, App, type FormInstance } from 'antd';
 import type { useAppProps } from 'antd/es/app/context';
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
 import { requestPcLiveJson, type PcLiveJson } from '@48tools-api/weibo';
-import { checkEmptyString } from '../function/helper';
+import { checkEmptyString } from '../utils/helper';
 import type { LiveItem } from '../../types';
 
 type LiveParam = Partial<{ liveId: string }>;

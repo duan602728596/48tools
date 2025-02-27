@@ -25,9 +25,9 @@ import {
   type DouyinHtmlResponseType
 } from '@48tools-api/toutiao/douyin';
 import douyinStyle from '../douyin.sass';
-import parseValueMiddleware from '../function/middlewares/parseValueMiddleware';
-import verifyMiddleware, { verifyCookieInNewWindow } from '../function/middlewares/verifyMiddleware';
-import rendedDataMiddleware from '../function/middlewares/rendedDataMiddleware';
+import parseValueMiddleware from '../utils/middlewares/parseValueMiddleware';
+import verifyMiddleware, { verifyCookieInNewWindow } from '../utils/middlewares/verifyMiddleware';
+import rendedDataMiddleware from '../utils/middlewares/rendedDataMiddleware';
 import { setAddDownloadList, setAddDownloadListAll } from '../../reducers/douyinDownload';
 import { douyinCookie } from '../../../../utils/toutiao/DouyinCookieStore';
 import * as toutiaosdk from '../../sdk/toutiaosdk';

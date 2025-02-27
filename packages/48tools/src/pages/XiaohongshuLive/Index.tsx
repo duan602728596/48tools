@@ -21,7 +21,7 @@ import {
   selectorsObject
 } from './reducers/xiaohongshuLive';
 import dbConfig from '../../utils/IDB/IDBConfig';
-import { parseXiaohongshuLive } from './function/parseXiaohongshuLive';
+import { parseXiaohongshuLive } from './utils/parseXiaohongshuLive';
 import { getFFmpeg, getFilePath } from '../../utils/utils';
 import getFFmpegDownloadWorker from '../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import type { LiveItem, MessageEventData, WebWorkerChildItem } from '../../commonTypes';

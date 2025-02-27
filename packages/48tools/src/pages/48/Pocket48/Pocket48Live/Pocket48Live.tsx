@@ -26,9 +26,9 @@ import { Onion } from '@bbkkbkk/q';
 import { requestLiveRoomInfo, type LiveInfo, type LiveRoomInfo } from '@48tools-api/48';
 import { WinIpcChannel } from '@48tools/main/src/channelEnum';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import getPocket48LiveDownloadWorker from '../function/Pocket48LiveDownload.worker/getPocket48LiveDownloadWorker';
-import getDownloadAndTranscodingWorker from '../function/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
-import Pocket48LiveRender from '../function/Pocket48LiveRender';
+import getPocket48LiveDownloadWorker from '../utils/Pocket48LiveDownload.worker/getPocket48LiveDownloadWorker';
+import getDownloadAndTranscodingWorker from '../utils/DownloadAndTranscodingWorker/getDownloadAndTranscodingWorker';
+import Pocket48LiveRender from '../utils/Pocket48LiveRender';
 import { pick } from '../../../../utils/lodash';
 import Header from '../../../../components/Header/Header';
 import ButtonLink from '../../../../components/ButtonLink/ButtonLink';
@@ -47,7 +47,7 @@ import {
   type NetMediaServerPort
 } from '../../../../utils/nodeMediaServer/nodeMediaServer';
 import downloadImages from './downloadImages/downloadImages';
-import autoGrab from '../function/autoGrab';
+import autoGrab from '../utils/autoGrab';
 import { OPTIONS_NAME } from '../LiveOptions/LiveOptions';
 import LiveType from '../../components/LiveType/LiveType';
 import Pocket48Login from '../../../../functionalComponents/Pocket48Login/Pocket48Login';

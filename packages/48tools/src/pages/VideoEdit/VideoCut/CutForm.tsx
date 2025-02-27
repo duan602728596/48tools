@@ -11,7 +11,7 @@ import type { DefaultOptionType } from 'rc-select/es/Select';
 import style from './cutForm.sass';
 import { showOpenDialog } from '../../../utils/remote/dialog';
 import { setCutListAdd } from '../reducers/videoCut';
-import { getFullTime, getHwaccels } from './function/function';
+import { getFullTime, getHwaccels } from './utils/computeHelper';
 import ButtonLink from '../../../components/ButtonLink/ButtonLink';
 import type { CutItem } from '../types';
 

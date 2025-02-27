@@ -24,10 +24,10 @@ import {
 import ShowroomTextIcon from '../Index/ShowroomTextIcon/ShowroomTextIcon';
 import { getFilePath } from '../../utils/utils';
 import HelpButtonGroup from '../../components/HelpButtonGroup/HelpButtonGroup';
-import { localStorageKey } from './function/helper';
+import { localStorageKey } from './utils/helper';
 import AutoRecordingSavePath from '../../components/AutoRecordingSavePath/AutoRecordingSavePath';
-import showroomLiveWorker from './function/showroomLiveWorker';
-import { showroomLiveAutoRecord } from './function/showroomLiveAutoRecord';
+import showroomLiveWorker from './utils/showroomLiveWorker';
+import { showroomLiveAutoRecord } from './utils/showroomLiveAutoRecord';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../store/slice/LiveSlice';
 import type { LiveItem, WebWorkerChildItem } from '../../commonTypes';
 

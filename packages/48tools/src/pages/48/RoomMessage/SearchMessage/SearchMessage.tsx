@@ -43,8 +43,8 @@ import {
   setHomeMessage,
   type RoomMessageInitialState
 } from '../../reducers/roomMessage';
-import { formatDataArray, formatSendData } from '../function/formatData';
-import createHtml from '../function/createHtml';
+import { formatDataArray, formatSendData } from '../utils/formatData';
+import createHtml from '../utils/createHtml';
 import MessageDisplay from '../MessageDisplay/MessageDisplay';
 import LocalMessage from '../LocalMessage/LocalMessage';
 import { showSaveDialog } from '../../../../utils/remote/dialog';

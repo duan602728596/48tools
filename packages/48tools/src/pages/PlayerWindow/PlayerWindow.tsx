@@ -8,7 +8,7 @@ import LiveVideo from './Video/LiveVideo';
 import RecordVideo from './Video/RecordVideo';
 import RecordDanmu from './Danmu/RecordDanmu';
 import Damu from './Danmu/Danmu';
-import { getUserInfo } from './function/helper';
+import { getUserInfo } from './utils/helper';
 import { Pocket48Login } from '../../functionalComponents/Pocket48Login/enum';
 import { nodeNim } from './sdk/NodeNimChatroomSocket';
 import type { PlayerInfo } from '../../components/basic/initialState/initialState';

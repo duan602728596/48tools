@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, type NavigateFunction, type SetURLSearchP
 import { Typography, Button } from 'antd';
 import Header from '../../../components/Header/Header';
 import PowerText from './PowerText.mdx';
-import { setReadPower } from '../function/helper';
+import { setReadPower } from '../utils/helper';
 
 /* 声明 */
 function Power(props: {}): ReactElement {

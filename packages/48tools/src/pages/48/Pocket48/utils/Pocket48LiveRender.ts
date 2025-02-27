@@ -15,6 +15,10 @@ export interface Pocket48LiveArgs {
   onClose: (id: string) => (void | Promise<void>);
 }
 
+/**
+ * 渲染进程和主进程通信
+ * 直播转码
+ */
 class Pocket48LiveRender {
   id: string;
   liveId: string;

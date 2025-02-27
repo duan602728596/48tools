@@ -30,9 +30,9 @@ import {
   parseVideoUrlDASH,
   type ParseVideoUrlV2ObjectResult,
   type ParseVideoUrlDASHObjectResult
-} from '../function/parseBilibiliUrl';
+} from '../utils/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
-import { getUrlFromDash, type GetUrlFromDashReturn } from '../function/getUrlFromDash';
+import { getUrlFromDash, type GetUrlFromDashReturn } from '../utils/getUrlFromDash';
 import HelpButtonGroup from '../../../../components/HelpButtonGroup/HelpButtonGroup';
 import type { DashInfo } from '../../types';
 

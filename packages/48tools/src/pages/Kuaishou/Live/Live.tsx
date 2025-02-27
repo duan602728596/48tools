@@ -22,12 +22,12 @@ import {
   selectorsObject
 } from '../reducers/kuaishouLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
-import getLiveInfo from './function/getLiveInfo';
+import getLiveInfo from './utils/getLiveInfo';
 import { getFFmpeg, getFilePath } from '../../../utils/utils';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
-import { localStorageKey } from './function/helper';
-import kuaishouAutoRecord from './function/kuaishouAutoRecord';
+import { localStorageKey } from './utils/helper';
+import kuaishouAutoRecord from './utils/kuaishouAutoRecord';
 import KuaishouLogin from '../../../functionalComponents/KuaishouLogin/KuaishouLogin';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';

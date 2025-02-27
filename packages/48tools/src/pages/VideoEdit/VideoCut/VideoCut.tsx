@@ -8,7 +8,7 @@ import { Table, Button, message, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { showSaveDialog } from '../../../utils/remote/dialog';
-import getCutWorker from './function/cut.worker/getCutWorker';
+import getCutWorker from './utils/cut.worker/getCutWorker';
 import CutForm from './CutForm';
 import {
   setCutListDelete,

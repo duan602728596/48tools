@@ -25,7 +25,7 @@ import {
   selectorsObject as pocket48LoginSelectorsObject,
   type Pocket48LoginInitialState
 } from '../../../../functionalComponents/Pocket48Login/reducers/pocket48Login';
-import calculate, { type CalculateResult } from '../function/calculate';
+import calculate, { type CalculateResult } from '../utils/calculate';
 import { Pocket48Login } from '../../../../functionalComponents/Pocket48Login/enum';
 import type { QingchunshikeUserItem } from '../../types';
 
