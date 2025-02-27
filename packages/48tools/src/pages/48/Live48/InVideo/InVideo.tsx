@@ -34,7 +34,7 @@ import {
 import { getFFmpeg, getFilePath } from '../../../../utils/utils';
 import { proxyServerInit } from '../../../../utils/proxyServer/proxyServer';
 import { ProgressNative, type ProgressSet } from '../../../../components/ProgressNative/index';
-import { formatTsUrl, getTeamId } from '../function/utils';
+import { formatTsUrl, getTeamId } from '../utils/utils';
 import type { WebWorkerChildItem } from '../../../../commonTypes';
 import type { MessageEventData } from '../../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 
