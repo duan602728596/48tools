@@ -211,7 +211,7 @@ function Pocket48Live(props: {}): ReactElement {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: '口袋48直播(备用录制)',
-          infoArray: [record.userInfo.nickname, record.title, record.liveId, getFileTime(record.ctime)],
+          infoArray: [record.userInfo.nickname, record.title, getFileTime(record.ctime), record.liveId],
           ext: 'flv'
         })
       });
@@ -267,7 +267,7 @@ function Pocket48Live(props: {}): ReactElement {
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: '口袋48直播',
-          infoArray: [record.userInfo.nickname, record.title, record.liveId, getFileTime(record.ctime)],
+          infoArray: [record.userInfo.nickname, record.title, getFileTime(record.ctime), record.liveId],
           ext: transcoding ? 'ts' : 'flv'
         })
       });
