@@ -49,8 +49,10 @@ export interface AudioInfo {
   code: number;
   data: {
     cdns?: Array<string>;
+    title: string;
+    cover: string;
   };
-  message: string;
+  msg: string;
 }
 
 // 接口请求到的番剧信息

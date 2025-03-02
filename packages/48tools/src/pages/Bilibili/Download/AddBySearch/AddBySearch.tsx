@@ -72,7 +72,7 @@ function AddBySearch(props: {}): ReactElement {
         if (result) {
           addItems.push({
             qid: randomUUID(),
-            durl: result.flvUrl,
+            durl: result.url,
             pic: result.pic,
             type: 'bv',
             id: bvId,
@@ -101,7 +101,7 @@ function AddBySearch(props: {}): ReactElement {
       if (result) {
         dispatch(setAddDownloadList({
           qid: randomUUID(),
-          durl: result.flvUrl,
+          durl: result.url,
           pic: result.pic,
           type: 'bv',
           id: bvId,

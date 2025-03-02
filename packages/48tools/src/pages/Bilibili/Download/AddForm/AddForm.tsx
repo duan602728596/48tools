@@ -190,7 +190,7 @@ function AddForm(props: {}): ReactElement {
         if (result) {
           dispatch(setAddDownloadList({
             qid: randomUUID(),
-            durl: typeof result === 'object' ? result.flvUrl : result,
+            durl: typeof result === 'object' ? result.url : result,
             pic: typeof result === 'object' ? result.pic : undefined,
             type: formValue.type,
             id: formValue.id,

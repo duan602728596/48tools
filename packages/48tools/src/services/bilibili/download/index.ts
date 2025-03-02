@@ -131,7 +131,7 @@ export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: s
  * @param { string | undefined } proxy - 是否使用代理
  */
 export async function requestAudioInfo(auid: string, proxy: string | undefined): Promise<AudioInfo> {
-  const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/web/url?sid=${ auid }&privilege=2&quality=2`;
+  const apiUrl: string = `https://www.bilibili.com/audio/music-service-c/url?songid=${ auid }&quality=2&privilege=2&mid=0&platform=0`;
   const res: GotResponse<AudioInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {

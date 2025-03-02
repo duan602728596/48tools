@@ -125,7 +125,7 @@ async function parseVideoUrlCore(
 }
 
 export interface ParseVideoUrlV2ObjectResult {
-  flvUrl: string;
+  url: string;
   pic: string;
   title: string;
 }
@@ -145,11 +145,11 @@ export async function parseVideoUrlV2(
 ): Promise<ParseVideoUrlV2ObjectResult | undefined> {
   const videoResult: ParseVideoUrlCoreObjectResult | undefined = await parseVideoUrlCore(
     type, id, page, proxy, false);
-  let result: { flvUrl: string; pic: string; title: string } | undefined = undefined;
+  let result: ParseVideoUrlV2ObjectResult | undefined = undefined;
 
   if (videoResult?.videoInfo?.data?.durl?.length) {
     result = {
-      flvUrl: videoResult.videoInfo.data.durl[0].url,
+      url: videoResult.videoInfo.data.durl[0].url,
       pic: videoResult.pic,
       title: videoResult.title
     };
@@ -234,8 +234,14 @@ export async function parseBangumiVideo(type: string, id: string, proxy: string 
  * @param { string } id - 音频id
  * @param { string | undefined } proxy - 是否使用代理
  */
-export async function parseAudioUrl(id: string, proxy: string | undefined): Promise<string | void> {
+export async function parseAudioUrl(id: string, proxy: string | undefined): Promise<ParseVideoUrlV2ObjectResult | void> {
   const res: AudioInfo = await requestAudioInfo(id, proxy);
 
-  return res.data.cdns?.[0];
+  if (res.data.cdns?.length) {
+    return {
+      url: res.data.cdns[0],
+      title: res.data.title,
+      pic: res.data.cover
+    };
+  }
 }
