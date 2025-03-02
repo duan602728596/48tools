@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import * as Module from 'node:module';
 
 /* 模块帮助 */
-export const nodeModulesRequire: NodeRequire = Module['createRequire'](globalThis.__IMPORT_META_URL__ ?? import.meta.url);
+export const nodeModulesRequire: NodeRequire = Module.createRequire(globalThis.__IMPORT_META_URL__ ?? import.meta.url);
 
 export interface MetaHelperResult {
   __filename: string;
