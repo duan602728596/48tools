@@ -33,26 +33,19 @@ const entryConfig = {
 
 /* webpack编译 */
 await webpackBuild(merge(webpackNodeDefaultEsmBuildConfig, {
-  mode: 'production',
   entry: {
     index: entryConfig.index.entry,
     nodeMediaServerWorker: entryConfig.nodeMediaServerWorker.entry,
     pocket48LiveWorker: entryConfig.pocket48LiveWorker.entry,
     proxyServerWorker: entryConfig.proxyServerWorker.entry
   },
-  resolve: {
-    extensionAlias: {
-      '.js': ['.ts', '.js'],
-      '.mjs': ['.mts', '.mjs']
-    }
-  },
-  externals: Object.keys(packageJson.dependencies).map((dep) => ({ [dep]: dep })),
   output: {
     path: buildDir,
     filename(x) {
       return entryConfig[x.runtime].output;
     }
   },
+  externals: Object.keys(packageJson.dependencies).map((dep) => ({ [dep]: dep })),
   module: {
     rules: [
       {

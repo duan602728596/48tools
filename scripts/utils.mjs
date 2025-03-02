@@ -91,6 +91,7 @@ export const npm = isWindows ? 'npm.cmd' : 'npm';
 
 /* webpack编译 */
 export const webpackNodeDefaultEsmBuildConfig = {
+  mode: 'production',
   output: {
     library: { type: 'module' },
     globalObject: 'globalThis',
@@ -117,7 +118,11 @@ export const webpackNodeDefaultEsmBuildConfig = {
       '.vue',
       '.json',
       '.wasm'
-    ]
+    ],
+    extensionAlias: {
+      '.js': ['.ts', '.js'],
+      '.mjs': ['.mts', '.mjs']
+    }
   },
   node: {
     __filename: true,

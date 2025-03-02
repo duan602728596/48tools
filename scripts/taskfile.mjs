@@ -38,7 +38,6 @@ async function webpackBuildPackage(input, output) {
   const parseResult = path.parse(output);
 
   await webpackBuild(merge(webpackNodeDefaultEsmBuildConfig, {
-    mode: 'production',
     entry: {
       index: [input]
     },
