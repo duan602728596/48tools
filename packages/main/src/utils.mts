@@ -2,7 +2,6 @@ import { env, resourcesPath } from 'node:process';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as Module from 'node:module';
-import { commandLineOptions } from './commend.mjs';
 
 /* 模块帮助 */
 export const nodeModulesRequire: NodeRequire = Module['createRequire'](globalThis.__IMPORT_META_URL__ ?? import.meta.url);
