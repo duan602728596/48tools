@@ -3,6 +3,10 @@ export interface LiveInfo {
   list: Array<PlayUrlItem>;
 }
 
+export interface ErrorInfo {
+  error: string;
+}
+
 /* 快手直播 */
 export interface PlayUrlItem {
   url: string;
@@ -11,14 +15,24 @@ export interface PlayUrlItem {
 }
 
 /* 快手视频地址 */
+export interface PlayUrl {
+  adaptationSet: {
+    representation: Array<PlayUrlItem>;
+  };
+}
+
 export interface PlayListItem {
   liveStream: {
     caption: string;
-    playUrls: Array<{
-      adaptationSet: {
-        representation: Array<PlayUrlItem>;
-      };
-    }>;
+    playUrls: {
+      h264: PlayUrl;
+      hevc: PlayUrl;
+    };
+  };
+  errorType?: {
+    title: string;
+    content: string;
+    type: number;
   };
 }
 

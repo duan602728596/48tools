@@ -31,7 +31,7 @@ import kuaishouAutoRecord from './utils/kuaishouAutoRecord';
 import KuaishouLogin from '../../../functionalComponents/KuaishouLogin/KuaishouLogin';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, LiveItem, MessageEventData } from '../../../commonTypes';
-import type { LiveInfo, PlayUrlItem } from '../types';
+import type { LiveInfo, ErrorInfo, PlayUrlItem } from '../types';
 
 /* redux selector */
 type RState = { kuaishouLive: LiveSliceInitialState };
@@ -65,7 +65,14 @@ function Live(props: {}): ReactElement {
   // 录制直播
   async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
     try {
-      const liveInfo: LiveInfo | undefined = await getLiveInfo(record.roomId);
+      const liveInfo: LiveInfo | ErrorInfo | undefined = await getLiveInfo(record.roomId);
+
+      if (liveInfo && ('error' in liveInfo)) {
+        messageApi.error(liveInfo.error);
+
+        return;
+      }
+
       const playUrlItem: PlayUrlItem | undefined = liveInfo?.list?.at?.(-1);
 
       if (!liveInfo || !playUrlItem) {

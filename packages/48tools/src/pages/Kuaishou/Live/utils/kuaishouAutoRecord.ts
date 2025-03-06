@@ -8,7 +8,7 @@ import { localStorageKey } from './helper';
 import getLiveInfo from './getLiveInfo';
 import type { WebWorkerChildItem, MessageEventData } from '../../../../commonTypes';
 import type { LiveSliceInitialState } from '../../../../store/slice/LiveSlice';
-import type { LiveInfo, PlayUrlItem } from '../../types';
+import type { LiveInfo, ErrorInfo, PlayUrlItem } from '../../types';
 
 /* 自动录制直播 */
 async function kuaishouAutoRecord(): Promise<void> {
@@ -24,7 +24,10 @@ async function kuaishouAutoRecord(): Promise<void> {
     if (index >= 0) continue;
 
     try {
-      const liveInfo: LiveInfo | undefined = await getLiveInfo(record.roomId);
+      const liveInfo: LiveInfo | ErrorInfo | undefined = await getLiveInfo(record.roomId);
+
+      if (liveInfo && ('error' in liveInfo)) continue;
+
       const playUrlItem: PlayUrlItem | undefined = liveInfo?.list?.at?.(-1);
 
       if (liveInfo && playUrlItem) {

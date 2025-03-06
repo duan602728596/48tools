@@ -1,6 +1,6 @@
 import { requestLiveHtml } from '@48tools-api/kuaishou';
 import { kuaishouCookie } from '../../../../functionalComponents/KuaishouLogin/function/kuaishouCookie';
-import type { LiveInfo, KuaishouLiveInitialState, PlayListItem } from '../../types';
+import type { LiveInfo, ErrorInfo, KuaishouLiveInitialState, PlayUrl, PlayListItem } from '../../types';
 
 function evalFunction(objectString: string): Function {
   // eslint-disable-next-line no-new-func
@@ -34,20 +34,28 @@ function parseHtml(html: string): KuaishouLiveInitialState | undefined {
 }
 
 /* 获取直播间的相关信息 */
-async function getLiveInfo(id: string): Promise<LiveInfo | undefined> {
+async function getLiveInfo(id: string): Promise<LiveInfo | ErrorInfo | undefined> {
   const res: string = await requestLiveHtml(id, kuaishouCookie.cookie);
   const initialState: KuaishouLiveInitialState | undefined = parseHtml(res);
 
   if (!initialState) return;
 
+  if (initialState?.liveroom?.playList?.[0]?.errorType) {
+    return {
+      error: initialState.liveroom.playList[0].errorType.title
+    };
+  }
+
   const playListItem: PlayListItem | undefined = initialState?.liveroom?.playList?.[0];
 
   if (!playListItem) return;
 
-  if (playListItem?.liveStream?.playUrls?.[0]?.adaptationSet?.representation?.length) {
+  const playUrl: PlayUrl = playListItem?.liveStream?.playUrls?.h264 ?? playListItem?.liveStream?.playUrls?.hevc;
+
+  if (playUrl?.adaptationSet?.representation?.length) {
     return {
       title: playListItem.liveStream.caption,
-      list: playListItem.liveStream.playUrls[0].adaptationSet.representation
+      list: playUrl.adaptationSet.representation
     };
   }
 }

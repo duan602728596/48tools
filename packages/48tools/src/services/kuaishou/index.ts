@@ -11,16 +11,13 @@ export type * from './interface';
  * @param { string } cookie
  */
 export async function requestLiveHtml(id: string, cookie?: string): Promise<string> {
-  const res: GotResponse<string> = await got.get(`https://live.kuaishou.com/u/${ id }`, {
-    responseType: 'text',
+  const res: Response = await fetch(`https://live.kuaishou.com/u/${ id }`, {
     headers: {
-      'User-Agent': pcUserAgent,
-      Host: 'live.kuaishou.com',
-      Cookie: cookie ?? `did=web_${ rStr(31) }`
+      Cookie1: cookie ?? `did=web_${ rStr(31) }`
     }
   });
 
-  return res.body;
+  return res.text();
 }
 
 /**

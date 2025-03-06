@@ -1,11 +1,13 @@
 import { session, type OnBeforeSendHeadersListenerDetails, type BeforeSendResponse } from 'electron';
+import { pcUserAgent } from '../utils.mjs';
 
 function webRequest(): void {
   session.defaultSession.webRequest.onBeforeSendHeaders({
     urls: [
       'ws://*.netease.im:*/*',
       'wss://*.netease.im:*/*',
-      '*://*.sinaimg.cn/*'
+      '*://*.sinaimg.cn/*',
+      '*://live.kuaishou.com/*'
     ]
   }, function(details: OnBeforeSendHeadersListenerDetails, callback: (res: BeforeSendResponse) => void): void {
     const url: URL = new URL(details.url);
@@ -22,6 +24,15 @@ function webRequest(): void {
         Origin: 'https://pocketapi.48.cn',
         'User-Agent': 'PocketFans201807/24020203'
       });
+    } else if (/live\.kuaishou\.com/i.test(url.hostname)) {
+      /* 修改快手的请求 */
+      Object.assign(headers, {
+        Host: 'live.kuaishou.com',
+        Referer: 'https://live.kuaishou.com/',
+        'User-Agent': pcUserAgent,
+        Cookie: headers.Cookie1
+      });
+      delete headers.Cookie1;
     }
 
     callback({ requestHeaders: headers });
