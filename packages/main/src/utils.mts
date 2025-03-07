@@ -48,7 +48,7 @@ export const helpDir: string = isDevelopment
 export const workerProductionBasePath: string = path.join(resourcesPath, 'app/boot');
 
 /* 图标文件 */
-export const titleBarIcon: string | undefined = isDevelopment ? undefined : path.join(wwwPath, 'titleBarIcon.png');
+export const titleBarIcon: string | undefined = path.join(wwwPath, isDevelopment ? '../../app/titleBarIcon.png' : 'titleBarIcon.png');
 
 /**
  * html路径
