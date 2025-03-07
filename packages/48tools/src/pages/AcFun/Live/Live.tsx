@@ -8,7 +8,6 @@ import {
   type SetStateAction as S,
   type MouseEvent
 } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
@@ -16,7 +15,6 @@ import { Button, Table, message, Modal, Select, Popconfirm, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { Onion } from '@bbkkbkk/q';
 import {
   requestAcFunLiveHtml,
   requestRestAppVisitorLogin,
@@ -41,14 +39,17 @@ import {
 } from '../reducers/acfunLive';
 import dbConfig from '../../../utils/IDB/IDBConfig';
 import { getAcFuncCookie, getFFmpeg, getFilePath } from '../../../utils/utils';
-import AntdConfig from '../../../components/basic/AntdConfig/AntdConfig';
-import ThemeProvider from '../../../components/basic/Theme/ThemeProvider';
 import type { LiveSliceInitialState, LiveSliceSelectorNoAutoRecordTimer } from '../../../store/slice/LiveSlice';
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import type { LiveRepresentation, LiveVideoPlayRes } from '../types';
 
-let divElement: HTMLDivElement | null = null;
-let divRoot: Root | null = null;
+interface SelectUrlPromiseResolveValue {
+  url: string;
+  filePath: string;
+}
+
+let selectUrlPromise: PromiseWithResolvers<SelectUrlPromiseResolveValue | undefined> | null = null;
+let recordCache: LiveItem;
 
 /* redux selector */
 type RState = { acfunLive: LiveSliceInitialState };
@@ -59,6 +60,9 @@ const selector: Selector<RState, LiveSliceSelectorNoAutoRecordTimer> = createStr
 function Live(props: {}): ReactElement {
   const { liveList: acfunLiveList, workerList: liveWorkers }: LiveSliceSelectorNoAutoRecordTimer = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
+  const [acfunLiveUrlSelectOptions, setAcfunLiveUrlSelectOptions]: [Array<DefaultOptionType>, D<S<Array<DefaultOptionType>>>] = useState([]);
+  const [acfunLiveSelectOpen, setAcfunLiveSelectOpen]: [boolean, D<S<boolean>>] = useState(false);
+  const [acfunLiveUrlSelectValue, setAcfunLiveUrlSelectValue]: [string | undefined, D<S<string | undefined>>] = useState(undefined);
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
 
   // 停止
@@ -70,10 +74,8 @@ function Live(props: {}): ReactElement {
     }
   }
 
-  // 直播
-  function playerUrlWorkerMiddleware(ctx: any, next: Function): void {
-    const { record, player, filePath }: { record: LiveItem; player: string; filePath: string } = ctx;
-
+  // 录制
+  function acfunLivePlayerUrlWorker(record: LiveItem, selectUrlValue: SelectUrlPromiseResolveValue): void {
     try {
       const worker: Worker = getFFmpegDownloadWorker();
 
@@ -92,8 +94,8 @@ function Live(props: {}): ReactElement {
 
       worker.postMessage({
         type: 'start',
-        playStreamPath: player,
-        filePath,
+        playStreamPath: selectUrlValue.url,
+        filePath: selectUrlValue.filePath,
         id: record.id,
         ffmpeg: getFFmpeg(),
         ua: true
@@ -109,84 +111,8 @@ function Live(props: {}): ReactElement {
     }
   }
 
-  // 选择直播地址
-  function selectPlayerUrlMiddleware(ctx: any, next: Function): void {
-    const { representation, record }: { representation: Array<LiveRepresentation>; record: LiveItem } = ctx;
-
-    function SelectPlayerUrl(props1: {}): ReactElement {
-      const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(true);
-      const liveUrlSelectOptions: Array<DefaultOptionType> = representation.map((o: LiveRepresentation): DefaultOptionType => ({
-        label: o.name,
-        value: o.url
-      }));
-
-      // 全部关闭后清除
-      function afterClose(): void {
-        requestAnimationFrame((): void => {
-          document.body.removeChild(divElement!);
-          divRoot?.unmount();
-          divRoot = null;
-          divElement = null;
-        });
-      }
-
-      // 确认
-      async function handleOkClick(event: MouseEvent): Promise<void> {
-        if (ctx.player) {
-          const result: SaveDialogReturnValue = await showSaveDialog({
-            defaultPath: getFilePath({
-              typeTitle: 'A站直播',
-              infoArray: [record.roomId, record.description],
-              ext: 'flv'
-            })
-          });
-
-          if (result.canceled || !result.filePath) return;
-
-          ctx.filePath = result.filePath;
-          next();
-          setVisible(false);
-        } else {
-          messageApi.warning('请先选择一个直播源。');
-        }
-      }
-
-      // 关闭弹出层
-      function handleCloseClick(event: MouseEvent): void {
-        setVisible(false);
-      }
-
-      return (
-        <ThemeProvider>
-          <AntdConfig>
-            <Modal title="选择直播源"
-              open={ visible }
-              width={ 400 }
-              centered={ true }
-              okText="开始录制"
-              getContainer={ (): HTMLDivElement => divElement! }
-              afterClose={ afterClose }
-              onOk={ handleOkClick }
-              onCancel={ handleCloseClick }
-            >
-              <div className="h-[60px]" data-test-id="acfun-live-type">
-                <Select className="!w-full" options={ liveUrlSelectOptions } onSelect={ (value: string): string => (ctx.player = value) } />
-              </div>
-            </Modal>
-          </AntdConfig>
-        </ThemeProvider>
-      );
-    }
-
-    divElement = document.createElement('div');
-    document.body.appendChild(divElement);
-    divRoot = createRoot(divElement);
-    divRoot.render(<SelectPlayerUrl />);
-  }
-
-  // 获取直播地址
-  async function getLivePlayerUrlMiddleware(ctx: any, next: Function): Promise<void> {
-    const { record }: { record: LiveItem } = ctx;
+  // 开始录制
+  async function handleRecordNextClick(record: LiveItem, event: MouseEvent): Promise<void> {
     const didCookie: string = await requestAcFunLiveHtml(record.roomId);
     const cookie: string| undefined = getAcFuncCookie();
     let userId: number, token: string;
@@ -221,18 +147,52 @@ function Live(props: {}): ReactElement {
     const videoPlayRes: LiveVideoPlayRes = JSON.parse(playerRes.data.videoPlayRes);
     const representation: Array<LiveRepresentation> = videoPlayRes.liveAdaptiveManifest[0].adaptationSet.representation;
 
-    ctx.representation = representation;
-    next();
+    recordCache = record;
+    setAcfunLiveUrlSelectOptions(
+      representation.map((o: LiveRepresentation): DefaultOptionType => ({
+        label: o.name,
+        value: o.url
+      }))
+    );
+    setAcfunLiveUrlSelectValue(undefined);
+    setAcfunLiveSelectOpen(true);
+    selectUrlPromise = Promise.withResolvers();
+    const selectUrlValue: SelectUrlPromiseResolveValue | undefined = await selectUrlPromise.promise;
+
+    if (!selectUrlValue) return;
+
+    acfunLivePlayerUrlWorker(record, selectUrlValue);
   }
 
-  // 开始录制
-  async function handleRecordClick(record: LiveItem, event: MouseEvent): Promise<void> {
-    const onion: Onion = new Onion();
+  // 确认选择
+  async function handleAcfunSelectUrlModelOkClick(event: MouseEvent): Promise<void> {
+    if (!acfunLiveUrlSelectValue) {
+      messageApi.warning('请先选择一个直播源。');
 
-    onion.use(getLivePlayerUrlMiddleware);
-    onion.use(selectPlayerUrlMiddleware);
-    onion.use(playerUrlWorkerMiddleware);
-    await onion.run({ record });
+      return;
+    }
+
+    const result: SaveDialogReturnValue = await showSaveDialog({
+      defaultPath: getFilePath({
+        typeTitle: 'A站直播',
+        infoArray: [recordCache.roomId, recordCache.description],
+        ext: 'flv'
+      })
+    });
+
+    if (result.canceled || !result.filePath) return;
+
+    selectUrlPromise?.resolve?.({
+      url: acfunLiveUrlSelectValue,
+      filePath: result.filePath
+    });
+    setAcfunLiveSelectOpen(false);
+  }
+
+  // 关闭选择
+  function handleCloseAcfunSelectUrlModelClick(event: MouseEvent): void {
+    selectUrlPromise?.resolve?.(undefined);
+    setAcfunLiveSelectOpen(false);
   }
 
   // 删除
@@ -262,7 +222,7 @@ function Live(props: {}): ReactElement {
                   <Button type="primary" danger={ true }>停止录制</Button>
                 </Popconfirm>
               ) : (
-                <Button onClick={ (event: MouseEvent): Promise<void> => handleRecordClick(record, event) }>
+                <Button onClick={ (event: MouseEvent): Promise<void> => handleRecordNextClick(record, event) }>
                   开始录制
                 </Button>
               )
@@ -306,6 +266,22 @@ function Live(props: {}): ReactElement {
           showQuickJumper: true
         }}
       />
+      <Modal title="选择直播源"
+        open={ acfunLiveSelectOpen }
+        width={ 400 }
+        centered={ true }
+        okText="开始录制"
+        onOk={ handleAcfunSelectUrlModelOkClick }
+        onCancel={ handleCloseAcfunSelectUrlModelClick }
+      >
+        <div className="h-[60px]" data-test-id="acfun-live-type">
+          <Select className="!w-full"
+            value={ acfunLiveUrlSelectValue }
+            options={ acfunLiveUrlSelectOptions }
+            onSelect={ (value: string): void => setAcfunLiveUrlSelectValue(value) }
+          />
+        </div>
+      </Modal>
       { messageContextHolder }
     </Fragment>
   );
