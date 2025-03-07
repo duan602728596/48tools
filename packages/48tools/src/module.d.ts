@@ -1,11 +1,31 @@
+import 'webpack/module';
+import type Filenamify from 'filenamify/filenamify';
+import type { FunctionComponent } from 'react';
+
+declare namespace NodeJS {
+  interface Module {
+    hot?: webpack.Hot;
+  }
+}
+
+declare module 'filenamify/browser' {
+  export default Filenamify;
+}
+
 declare module '*.css' {
-  const style: { [key: string]: string };
+  const style: Record<string, string>;
 
   export default style;
 }
 
 declare module '*.sass' {
-  const style: { [key: string]: string };
+  const style: Record<string, string>;
+
+  export default style;
+}
+
+declare module '*.scss' {
+  const style: Record<string, string>;
 
   export default style;
 }
@@ -47,8 +67,6 @@ declare module '*.avif' {
 }
 
 declare module '*.component.svg' {
-  import type { FunctionComponent } from 'react';
-
   const ReactComponent: FunctionComponent;
 
   export default ReactComponent;
@@ -58,18 +76,4 @@ declare module '*.svg' {
   const url: string;
 
   export default url;
-}
-
-declare module 'filenamify/browser' {
-  import filenamify from 'filenamify/filenamify';
-
-  export default filenamify;
-}
-
-declare namespace NodeJS {
-  interface Module {
-    hot?: {
-      accept(): unknown;
-    };
-  }
 }
