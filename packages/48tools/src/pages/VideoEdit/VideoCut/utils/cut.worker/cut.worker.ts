@@ -4,8 +4,8 @@ export type WorkerEventData = {
   type: 'start' | 'stop'; // 执行的方法
   playStreamPath: string; // 媒体地址
   filePath: string;       // 文件保存地址
-  startTime?: string;     // 开始时间
-  endTime?: string;       // 结束时间
+  startTime?: `${ number }:${ number }:${ number }`; // 开始时间
+  endTime?: `${ number }:${ number }:${ number }`; // 结束时间
   reEncoding?: boolean;   // 精确剪辑，重新编码
   hwaccel?: string;       // GPU加速
   ffmpeg: string;         // ffmpeg地址
@@ -52,8 +52,8 @@ function cut(workerData: WorkerEventData): void {
   }
 
   // 裁剪时长
-  if (startTime) {
-    ffmpegArgs.push('-ss', startTime);
+  if (startTime || endTime) {
+    if (startTime) ffmpegArgs.push('-accurate_seek', '-ss', startTime);
 
     if (endTime) {
       const startTimeArr: [number, number, number] = startTime ? toNumber(startTime.split(/:/)) : [0, 0, 0];
@@ -69,7 +69,7 @@ function cut(workerData: WorkerEventData): void {
   if (/\.(gif|webp)$/i.test(filePath)) {
     ffmpegArgs.push('-i', playStreamPath, '-loop', '0', filePath);
   } else {
-    ffmpegArgs.push('-accurate_seek', '-i', playStreamPath);
+    ffmpegArgs.push('-i', playStreamPath);
 
     if (workerData.reEncoding) {
       ffmpegArgs.push('-c:v', 'libx264', '-c:a', 'aac');
