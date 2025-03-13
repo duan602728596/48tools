@@ -81,6 +81,22 @@ export class BilibiliScrapy {
       ?? dashVideoItem.backupUrl?.[0];
   }
 
+  // 视频的码率
+  static videoQn: Array<DefaultOptionType> = [
+    { value: 127, label: '8K 超高清' },
+    { value: 126, label: '杜比视界' },
+    { value: 125, label: 'HDR 真彩色' },
+    { value: 120, label: '4K 超清' },
+    { value: 116, label: '1080P60 高帧率' },
+    { value: 112, label: '1080P+ 高码率' },
+    { value: 80, label: '1080P 高清' },
+    { value: 74, label: '720P60 高帧率' },
+    { value: 64, label: '720P 高清' },
+    { value: 32, label: '480P 清晰' },
+    { value: 16, label: '360P 流畅' },
+    { value: 6, label: '240P 极速' }
+  ];
+
   /** @param options */
   constructor(options: BilibiliScrapyOptions) {
     this.options = options;
