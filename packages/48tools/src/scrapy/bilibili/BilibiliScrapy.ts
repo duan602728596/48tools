@@ -2,23 +2,33 @@ import {
   requestRoomInfoData,
   requestRoomPlayerUrlV2,
   type RoomInfo,
-  type RoomPlayUrlV2,
-  type RoomPlayUrlV2QnDesc
+  type RoomPlayUrlV2
 } from '@48tools-api/bilibili/live';
 import {
   requestWebInterfaceView,
   requestVideoInfo,
+  requestAudioInfo,
+  requestBangumiWebSeason,
+  requestPugvSeasonV2,
   type WebInterfaceViewData,
   type WebInterfaceViewDataPageItem,
   type VideoInfo,
   type DashVideoItem,
-  type DurlVideoInfo
+  type DurlVideoInfo,
+  type AudioInfo,
+  type BangumiWebSeason,
+  type BangumiWebSeasonEpisodesItem,
+  type PugvSeason,
+  type PugvSeasonEpisodesItem,
+  type PugvSeasonPlayUrl,
+  requestPugvPlayurl
 } from '@48tools-api/bilibili/download';
 import { BilibiliVideoType, ErrorLevel } from './enum';
 import { BilibiliVideoUrlParser } from './BilibiliVideoUrlParser';
-import type { BilibiliVideoResultItem, BilibiliVideoInfoItem } from './interface';
+import type { ScrapyError, BilibiliVideoResultItem, BilibiliVideoInfoItem } from './interface';
 
 export * from './enum';
+export type * from './interface';
 
 interface BilibiliScrapyCoreOptions {
   useProxy?: boolean;
@@ -46,10 +56,7 @@ export class BilibiliScrapy {
   title: string; // 视频标题
   cover: string; // 视频主封面
   videoResult: Array<BilibiliVideoResultItem>; // 视频列表
-  error?: {
-    level: ErrorLevel;
-    message: string;
-  };
+  error?: ScrapyError;
 
   /**
    * 判断是否是完整url的参数
@@ -57,6 +64,10 @@ export class BilibiliScrapy {
    */
   static isUrlOptions(options: BilibiliScrapyOptions): options is BilibiliScrapyUrlOptions {
     return 'url' in options;
+  }
+
+  static isVideoInfo(r: PugvSeasonPlayUrl | VideoInfo): r is VideoInfo {
+    return 'durl' in r.data;
   }
 
   /**
@@ -94,6 +105,16 @@ export class BilibiliScrapy {
     [6, '240P 极速']
   ]);
 
+  static liveVideoQnMap: Map<number, string> = new Map([
+    [30000, '杜比'],
+    [20000, '4K'],
+    [10000, '原画'],
+    [400, '蓝光'],
+    [250, '超清'],
+    [150, '高清'],
+    [80, '流畅']
+  ]);
+
   /** @param options */
   constructor(options: BilibiliScrapyOptions) {
     this.options = options;
@@ -111,6 +132,10 @@ export class BilibiliScrapy {
 
     if (this.options.type === 'pugv_ep') {
       return BilibiliVideoType.CHEESE_EP;
+    }
+
+    if (this.options.type === 'pugv_ss') {
+      return BilibiliVideoType.CHEESE_SS;
     }
 
     return this.options.type as BilibiliVideoType;
@@ -134,11 +159,21 @@ export class BilibiliScrapy {
     return this.options.page;
   }
 
+  // 根据分页得到的index
+  get pageIndex(): number {
+    return (this.page ?? 1) - 1;
+  }
+
   // 获取代理
   get proxy(): string | undefined {
     if (this.options.useProxy) {
       return this.options.proxy;
     }
+  }
+
+  // 获取取得的最大的qn
+  get maxQn(): number {
+    return this.type === BilibiliVideoType.LIVE ? 10_000 : 80;
   }
 
   /**
@@ -156,6 +191,12 @@ export class BilibiliScrapy {
 
     if (this.type === BilibiliVideoType.AV || this.type === BilibiliVideoType.BV) return await this.parseVideo(this.type, this.id);
 
+    if (this.type === BilibiliVideoType.AU) return await this.parseAudio(this.id);
+
+    if (this.type === BilibiliVideoType.EP || this.type === BilibiliVideoType.SS) return await this.parseBangumi(this.type, this.id);
+
+    if (this.type === BilibiliVideoType.CHEESE_EP || this.type === BilibiliVideoType.CHEESE_SS) return await this.parseCheese(this.type, this.id);
+
     if (this.type === BilibiliVideoType.LIVE) return await this.parseLive(this.id);
   }
 
@@ -165,8 +206,7 @@ export class BilibiliScrapy {
    * @param { string } id
    */
   async parseVideo(type: BilibiliVideoType, id: string): Promise<void> {
-    const webInterfaceViewType: string = String(type);
-    const interfaceNavRes: WebInterfaceViewData = await requestWebInterfaceView(id, webInterfaceViewType, this.proxy);
+    const interfaceNavRes: WebInterfaceViewData = await requestWebInterfaceView(id, type, this.proxy);
 
     if (interfaceNavRes.code !== 0 || !interfaceNavRes.data) return this.setError(ErrorLevel.Error, interfaceNavRes.message);
 
@@ -180,6 +220,87 @@ export class BilibiliScrapy {
       cid: o.cid,
       page: o.page,
       videoInfo: []
+    }));
+  }
+
+  /**
+   * 解析音频
+   * @param { string } id
+   */
+  async parseAudio(id: string): Promise<void> {
+    const res: AudioInfo = await requestAudioInfo(id, this.proxy);
+
+    if (!(res.code === 0 && res.data && res.data.cdns?.length)) {
+      return this.setError(ErrorLevel.Error, res.msg);
+    }
+
+    this.title = res.data.title;
+    this.cover = res.data.cover;
+
+    const videoInfo: BilibiliVideoInfoItem = {
+      quality: 0,
+      qualityDescription: '标准',
+      videoUrl: res.data.cdns[0]
+    };
+
+    this.videoResult = [{
+      title: this.title,
+      cover: this.cover,
+      aid: 0,
+      bvid: '',
+      cid: 0,
+      page: 1,
+      videoInfo: [videoInfo]
+    }];
+  }
+
+  /**
+   * 解析番剧
+   * @param { BilibiliVideoType } type
+   * @param { string } id
+   */
+  async parseBangumi(type: BilibiliVideoType, id: string): Promise<void> {
+    const res: BangumiWebSeason = await requestBangumiWebSeason(type, id, this.proxy);
+
+    if (!(res.code === 0 && res.result)) return this.setError(ErrorLevel.Error, res.message);
+
+    this.title = res.result.title;
+    this.cover = BilibiliScrapy.http2https(res.result.cover);
+    this.videoResult = res.result.episodes.map((o: BangumiWebSeasonEpisodesItem, i: number): BilibiliVideoResultItem => ({
+      title: o.long_title,
+      cover: BilibiliScrapy.http2https(o.cover),
+      aid: o.aid,
+      bvid: o.bvid,
+      cid: o.cid,
+      page: i + 1,
+      videoInfo: []
+    }));
+  }
+
+  /**
+   * 解析课程
+   * @param { BilibiliVideoType } type
+   * @param { string } id
+   */
+  async parseCheese(type: BilibiliVideoType, id: string): Promise<void> {
+    const pugvSeasonRes: PugvSeason = await requestPugvSeasonV2(type === BilibiliVideoType.CHEESE_SS ? 'ss' : 'ep', id, this.proxy);
+
+    if (!(pugvSeasonRes.code === 0 && pugvSeasonRes.data)) return this.setError(ErrorLevel.Error, pugvSeasonRes.message);
+
+    this.title = pugvSeasonRes.data.title;
+    this.cover = BilibiliScrapy.http2https(pugvSeasonRes.data.cover);
+    this.videoResult = pugvSeasonRes.data.episodes.map((o: PugvSeasonEpisodesItem, i: number): BilibiliVideoResultItem => ({
+      title: o.title,
+      cover: o.cover,
+      aid: o.aid,
+      bvid: '',
+      cid: o.cid,
+      page: i + 1,
+      videoInfo: [],
+      cheeseInfo: {
+        epid: o.id,
+        canRequest: o.status === 1
+      }
     }));
   }
 
@@ -203,9 +324,6 @@ export class BilibiliScrapy {
     this.title = roomInfoRes.data.title;
     this.cover = roomInfoRes.data.user_cover;
 
-    // 分辨率
-    const qnMap: Map<number, string> = new Map(roomPlayUrlRes.data.playurl_info.playurl.g_qn_desc.map((o: RoomPlayUrlV2QnDesc): [number, string] => [o.qn, o.desc]));
-
     // 视频列表
     const videoInfo: Array<BilibiliVideoInfoItem> = [];
 
@@ -216,7 +334,7 @@ export class BilibiliScrapy {
             videoInfo.push({
               videoUrl: `${ urlInfo.host }${ codec.base_url }${ urlInfo.extra }`,
               quality: codec.current_qn,
-              qualityDescription: qnMap.get(codec.current_qn) || ''
+              qualityDescription: BilibiliScrapy.liveVideoQnMap.get(codec.current_qn) || ''
             });
           }
         }
@@ -238,19 +356,29 @@ export class BilibiliScrapy {
    * 根据分页获取视频详细信息
    * @param { number } [p]
    */
-  async asyncGetVideoInfoByPage(p?: number): Promise<void> {
+  async asyncLoadVideoInfoByPage(p?: number): Promise<ScrapyError | undefined> {
     const index: number = ((typeof p === 'number') ? p : (this.page ?? 1)) - 1;
 
     if (index >= this.videoResult.length || this.videoResult[index].videoInfo.length > 0) return;
 
     const item: BilibiliVideoResultItem = this.videoResult[index];
-    const videoInfoRes: VideoInfo = await requestVideoInfo({
-      type: '',
-      id: item.bvid,
-      cid: item.cid,
-      proxy: this.proxy,
-      isDash: true
-    });
+    let videoInfoRes: PugvSeasonPlayUrl | VideoInfo;
+
+    if (this.type === BilibiliVideoType.CHEESE_SS || this.type === BilibiliVideoType.CHEESE_EP) {
+      videoInfoRes = await requestPugvPlayurl(item.cheeseInfo!.epid, item.aid, item.cid, this.proxy);
+    } else {
+      videoInfoRes = await requestVideoInfo({
+        type: '',
+        id: item.bvid,
+        cid: item.cid,
+        proxy: this.proxy,
+        isDash: true
+      });
+    }
+
+    if (!(videoInfoRes.code === 0 && videoInfoRes.data)) {
+      return { level: ErrorLevel.Error, message: videoInfoRes.message };
+    }
 
     if (videoInfoRes.data.dash) {
       const audioUrl: string = BilibiliScrapy.getVideoUrl(videoInfoRes.data.dash.audio[0]);
@@ -265,7 +393,7 @@ export class BilibiliScrapy {
         });
       });
       item.videoInfo = videoInfo;
-    } else if (videoInfoRes.data.durl) {
+    } else if (BilibiliScrapy.isVideoInfo(videoInfoRes) && videoInfoRes.data.durl) {
       const videoInfo: Array<BilibiliVideoInfoItem> = [];
 
       videoInfoRes.data.durl.forEach((o: DurlVideoInfo, i: number): void => {

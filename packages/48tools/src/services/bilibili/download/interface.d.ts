@@ -1,4 +1,6 @@
 /* ========== 加密 ========== */
+import { requestBangumiWebSeason } from '@48tools-api/bilibili/download/index';
+
 export interface NavInterface {
   data: {
     wbi_img: {
@@ -58,6 +60,29 @@ export interface AudioInfo {
     cover: string;
   };
   msg: string;
+}
+
+// 请求的番剧列表
+export interface BangumiWebSeasonEpisodesItem {
+  aid: number;
+  bvid: string;
+  cid: number;
+  cover: string;
+  long_title: string; // 标题
+  share_copy: string; // 完整标题
+  show_title: string; // 显示标题
+}
+
+export interface BangumiWebSeasonResult {
+  episodes: Array<BangumiWebSeasonEpisodesItem>;
+  title: string;
+  cover: string;
+}
+
+export interface BangumiWebSeason {
+  code: number;
+  message: string;
+  result: BangumiWebSeasonResult;
 }
 
 // 接口请求到的番剧信息
@@ -147,6 +172,7 @@ export interface PugvSeasonEpisodesItem {
   id: number;
   title: string;
   cover: string;
+  status: 1 | 2; // 2：需要付费
 }
 
 export interface PugvSeason {
@@ -154,7 +180,9 @@ export interface PugvSeason {
   data: {
     episodes: Array<PugvSeasonEpisodesItem>;
     title: string;
+    cover: string;
   };
+  message: string;
 }
 
 export interface PugvSeasonPlayUrl {
@@ -163,4 +191,5 @@ export interface PugvSeasonPlayUrl {
     dash: DashVideoInfo;
     support_formats: Array<DashSupportFormats>;
   };
+  message: string;
 }

@@ -1,4 +1,5 @@
 import type { DashSupportFormats, DashVideoInfo } from '@48tools-api/bilibili/download';
+import type { BilibiliVideoInfoItem } from '../../scrapy/bilibili/interface';
 
 /* ========== Download ========== */
 export interface DownloadItem {
@@ -88,6 +89,12 @@ export interface ProgressEventData {
 interface DashInfo {
   dash: DashVideoInfo;
   supportFormats: Array<DashSupportFormats>;
+  pic: string;
+  title: string;
+}
+
+interface DashInfoV2 {
+  dash: Array<BilibiliVideoInfoItem>;
   pic: string;
   title: string;
 }

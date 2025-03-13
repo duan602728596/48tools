@@ -6,6 +6,7 @@ import { sign } from '../../../utils/bilibili/wbiSign';
 import type {
   VideoInfo,
   AudioInfo,
+  BangumiWebSeason,
   BangumiVideoInfo,
   SpaceArcSearch,
   WebInterfaceViewData,
@@ -97,6 +98,25 @@ export async function requestVideoInfo({ type, id, cid, proxy, isDash }: {
   });
   const apiUrl: string = `https://api.bilibili.com/x/player/playurl?${ searchParams.toString() }`;
   const res: GotResponse<VideoInfo> = await got.get(apiUrl, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    },
+    agent: gotAgent(proxy)
+  });
+
+  return res.body;
+}
+
+/**
+ * 请求番剧列表
+ * @param { type } type
+ * @param { string } id
+ * @param { string | undefined } proxy - 是否使用代理
+ */
+export async function requestBangumiWebSeason(type: string, id: string, proxy: string | undefined): Promise<BangumiWebSeason> {
+  const queryType: string = type === 'ss' ? 'season_id' : 'ep_id';
+  const res: GotResponse<BangumiWebSeason> = await got.get(`https://api.bilibili.com/pgc/view/web/season?${ queryType }=${ id }`, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
@@ -215,12 +235,32 @@ export async function requestPugvSeason(epId: string, proxy: string | undefined)
   return res.body;
 }
 
-/* 获取视频地址 */
-export async function requestPugvPlayurl(epId: string, aid: number, cid: number, proxy: string | undefined): Promise<PugvSeasonPlayUrl> {
+/* 获取课程基本信息 */
+export async function requestPugvSeasonV2(type: string, epId: string, proxy: string | undefined): Promise<PugvSeason> {
+  const queryType: string = type === 'ss' ? 'season_id' : 'ep_id';
+  const res: GotResponse<PugvSeason> = await got.get(`https://api.bilibili.com/pugv/view/web/season?${ queryType }=${ epId }`, {
+    responseType: 'json',
+    headers: {
+      Cookie: getBilibiliCookie()
+    },
+    agent: gotAgent(proxy)
+  });
+
+  return res.body;
+}
+
+/**
+ * 获取课程视频地址
+ * @param { string | number } epId - 课程的epid
+ * @param { number } aid
+ * @param { number } cid
+ * @param { string | undefined } proxy
+ */
+export async function requestPugvPlayurl(epId: string | number, aid: number, cid: number, proxy: string | undefined): Promise<PugvSeasonPlayUrl> {
   const qs: URLSearchParams = new URLSearchParams({
     avid: String(aid),
     cid: String(cid),
-    ep_id: epId,
+    ep_id: String(epId),
     fnval: '16'
   });
 

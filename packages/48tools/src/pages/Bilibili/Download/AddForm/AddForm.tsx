@@ -15,35 +15,43 @@ import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, typ
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { Store as FormStore } from 'antd/es/form/interface';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import {
-  requestPugvSeason,
-  requestPugvPlayurl,
-  type DashSupportFormats,
-  type PugvSeason,
-  type PugvSeasonEpisodesItem,
-  type PugvSeasonPlayUrl
-} from '@48tools-api/bilibili/download';
-import {
-  parseVideoUrlV2,
-  parseAudioUrl,
-  parseBangumiVideo,
-  parseVideoUrlDASH,
-  type ParseVideoUrlV2ObjectResult,
-  type ParseVideoUrlDASHObjectResult
-} from '../utils/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
-import { getUrlFromDash, type GetUrlFromDashReturn } from '../utils/getUrlFromDash';
 import HelpButtonGroup from '../../../../components/HelpButtonGroup/HelpButtonGroup';
-import type { DashInfo } from '../../types';
+import {
+  BilibiliScrapy,
+  type BilibiliVideoInfoItem,
+  type BilibiliVideoResultItem,
+  type ScrapyError
+} from '../../../../scrapy/bilibili/BilibiliScrapy';
+import type { DashInfoV2 } from '../../types';
 
 /* 视频分类 */
 const bilibiliVideoTypesOptions: Array<DefaultOptionType> = [
-  { value: 'bv', label: '视频（BV）' },
-  { value: 'av', label: '视频（av）' },
-  { value: 'au', label: '音频（au）' },
-  { value: 'ep', label: '番剧（ep）' },
-  { value: 'ss', label: '番剧（ss）' },
-  { value: 'pugv_ep', label: '课程（ep）' }
+  {
+    label: '视频',
+    options: [
+      { value: 'bv', label: '视频 (BV)' },
+      { value: 'av', label: '视频 (av)' }
+    ]
+  },
+  {
+    label: '音频',
+    options: [{ value: 'au', label: '音频 (au)' }]
+  },
+  {
+    label: '番剧',
+    options: [
+      { value: 'ep', label: '番剧 (ep)' },
+      { value: 'ss', label: '番剧 (ss)' }
+    ]
+  },
+  {
+    label: '课程',
+    options: [
+      { value: 'pugv_ep', label: '课程 (ep)' },
+      { value: 'pugv_ss', label: '课程 (ss)' }
+    ]
+  }
 ];
 
 type TypesResult = { [key: string]: string };
@@ -54,20 +62,25 @@ export const bilibiliVideoTypesMap: TypesResult = bilibiliVideoTypesOptions.redu
     return result;
   }, {});
 
+interface GetBilibiliScrapyReturn {
+  bilibiliScrapy: BilibiliScrapy;
+  item: BilibiliVideoResultItem;
+  index: number;
+}
+
 /* 添加下载信息 */
 function AddForm(props: {}): ReactElement {
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [visible, setVisible]: [boolean, D<S<boolean>>] = useState(false);
-  const [dash, setDash]: [DashInfo | undefined, D<S<DashInfo | undefined>>] = useState(undefined);
+  const [dash, setDash]: [DashInfoV2 | undefined, D<S<DashInfoV2 | undefined>>] = useState(undefined);
   const [modalLoading, startModalLoadingTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
 
   // 选择DASH video并准备下载
-  function handleDownloadDashVideoClick(item: DashSupportFormats, event: MouseEvent): void {
+  function handleDownloadDashVideoClick(item: BilibiliVideoInfoItem, event: MouseEvent): void {
     if (!dash) return;
 
-    const { videoUrl, audioUrl }: GetUrlFromDashReturn = getUrlFromDash(dash, item.quality);
     const formValue: FormStore = form.getFieldsValue();
 
     dispatch(setAddDownloadList({
@@ -77,38 +90,48 @@ function AddForm(props: {}): ReactElement {
       type: formValue.type,
       id: formValue.id,
       page: formValue.page ?? 1,
-      dash: { video: videoUrl, audio: audioUrl },
+      dash: { video: item.videoUrl, audio: item.audioUrl! },
       title: dash.title
     }));
     setVisible(false);
   }
 
-  // 课程的处理
-  // 测试：https://www.bilibili.com/cheese/play/ep205797?csource=private_space_tougao_null
-  async function getPugvData(formValue: FormStore, proxy: string | undefined): Promise<void> {
-    const resPugvSeason: PugvSeason = await requestPugvSeason(formValue.id, proxy);
-    const resItem: PugvSeasonEpisodesItem | undefined = resPugvSeason.data.episodes.find(
-      (o: PugvSeasonEpisodesItem) => `${ o.id }` === formValue.id);
+  // 通用的获取bilibiliScrapy的方法
+  async function getBilibiliScrapy(formValue: FormStore): Promise<GetBilibiliScrapyReturn | undefined> {
+    const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+      type: formValue.type,
+      id: formValue.id,
+      page: formValue.page,
+      useProxy: formValue.useProxy,
+      proxy: formValue.proxy
+    });
 
-    if (resItem) {
-      const resPlayUrl: PugvSeasonPlayUrl = await requestPugvPlayurl(formValue.id, resItem.aid, resItem.cid, proxy);
+    await bilibiliScrapy.parse();
 
-      if (resPlayUrl?.data?.dash) {
-        setDash({
-          dash: resPlayUrl.data.dash,
-          supportFormats: resPlayUrl.data.support_formats,
-          pic: resItem.cover,
-          title: `${ resPugvSeason.data.title }_${ resItem.title }`
-        });
-      } else {
-        messageApi.warning('没有获取到媒体地址！');
-      }
-    } else {
-      messageApi.warning('没有获取到媒体地址！');
+    if (bilibiliScrapy.error) {
+      messageApi[bilibiliScrapy.error.level](bilibiliScrapy.error.message);
+
+      return;
     }
+
+    const err: ScrapyError | undefined = await bilibiliScrapy.asyncLoadVideoInfoByPage();
+
+    if (err) {
+      messageApi[err.level](err.message);
+
+      return;
+    }
+
+    const item: BilibiliVideoResultItem = bilibiliScrapy.videoResult[bilibiliScrapy.pageIndex];
+    let index: number = item.videoInfo.findIndex((o: BilibiliVideoInfoItem) => o.quality <= bilibiliScrapy.maxQn);
+
+    if (index < 0) index = 0;
+
+    return { bilibiliScrapy, item, index };
   }
 
   // 选择DASH video
+  // 测试：https://www.bilibili.com/cheese/play/ep205797?csource=private_space_tougao_null
   async function handleDASHVideoClick(event: MouseEvent): Promise<void> {
     let formValue: FormStore;
 
@@ -118,35 +141,19 @@ function AddForm(props: {}): ReactElement {
       return console.error(err);
     }
 
-    if (!['bv', 'av', 'pugv_ep'].includes(formValue.type)) {
-      messageApi.warning('不支持的视频类型！');
-
-      return;
-    }
-
     startModalLoadingTransition(async (): Promise<void> => {
       try {
-        const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
-          ? formValue.proxy : undefined;
+        const bilibiliScrapyReturn: GetBilibiliScrapyReturn | undefined = await getBilibiliScrapy(formValue);
 
-        // 课程的处理
-        if (formValue.type === 'pugv_ep') {
-          return await getPugvData(formValue, proxy);
-        }
+        if (!bilibiliScrapyReturn) return;
 
-        const res: ParseVideoUrlDASHObjectResult | undefined = await parseVideoUrlDASH(
-          formValue.type, formValue.id, formValue.page, proxy);
+        const { bilibiliScrapy, item }: GetBilibiliScrapyReturn = bilibiliScrapyReturn;
 
-        if (res && res?.videoData?.dash) {
-          setDash({
-            dash: res.videoData.dash,
-            supportFormats: res.videoData.support_formats,
-            pic: res.pic,
-            title: res.title
-          });
-        } else {
-          messageApi.warning('没有获取到媒体地址！');
-        }
+        setDash({
+          dash: item.videoInfo,
+          pic: item.cover,
+          title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`
+        });
       } catch (err) {
         messageApi.error('地址解析失败！');
         console.error(err);
@@ -166,36 +173,34 @@ function AddForm(props: {}): ReactElement {
 
     startModalLoadingTransition(async (): Promise<void> => {
       try {
-        const proxy: string | undefined = (formValue.useProxy && formValue.proxy && !/^\s*$/.test(formValue.proxy))
-          ? formValue.proxy : undefined;
+        const bilibiliScrapyReturn: GetBilibiliScrapyReturn | undefined = await getBilibiliScrapy(formValue);
 
-        // 课程的处理
-        if (formValue.type === 'pugv_ep') {
-          return await getPugvData(formValue, proxy);
-        }
+        if (!bilibiliScrapyReturn) return;
 
-        let result: string | ParseVideoUrlV2ObjectResult | void;
+        const { bilibiliScrapy, item, index }: GetBilibiliScrapyReturn = bilibiliScrapyReturn;
 
-        if (formValue.type === 'au') {
-          // 下载音频
-          result = await parseAudioUrl(formValue.id, proxy);
-        } else if (formValue.type === 'ss' || formValue.type === 'ep') {
-          // 下载番剧
-          result = await parseBangumiVideo(formValue.type, formValue.id, proxy);
-        } else {
-          // 下载av、bv视频，会返回视频封面
-          result = await parseVideoUrlV2(formValue.type, formValue.id, formValue.page, proxy);
-        }
+        if (item) {
+          const obj: {
+            dash?: { video: string; audio: string };
+            durl: string;
+          } = item.videoInfo[index].audioUrl ? {
+            dash: {
+              video: item.videoInfo[index].videoUrl,
+              audio: item.videoInfo[index].audioUrl!
+            },
+            durl: ''
+          } : {
+            durl: item.videoInfo[index].videoUrl
+          };
 
-        if (result) {
           dispatch(setAddDownloadList({
             qid: randomUUID(),
-            durl: typeof result === 'object' ? result.url : result,
-            pic: typeof result === 'object' ? result.pic : undefined,
+            pic: item.cover,
             type: formValue.type,
             id: formValue.id,
             page: formValue.page ?? 1,
-            title: typeof result === 'object' ? result.title : undefined
+            title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`,
+            ...obj
           }));
           setVisible(false);
         } else {
@@ -231,15 +236,15 @@ function AddForm(props: {}): ReactElement {
 
   // 渲染supportFormats
   function supportFormatsRender(): Array<ReactElement> {
-    return (dash?.supportFormats ?? []).map((item: DashSupportFormats, index: number): ReactElement => {
+    return (dash?.dash ?? []).map((item: BilibiliVideoInfoItem, index: number): ReactElement => {
       return (
-        <Button key={ item.new_description }
+        <Button key={ `${ item.quality }-${ index }` }
           className="mb-[6px]"
           size="small"
           block={ true }
           onClick={ (event: MouseEvent): void => handleDownloadDashVideoClick(item, event) }
         >
-          { item.new_description }
+          { item.qualityDescription }
         </Button>
       );
     });
@@ -305,7 +310,9 @@ function AddForm(props: {}): ReactElement {
             </Form.Item>
           </Form>
           {/* DASH视频下载 */}
-          <div className="w-[200px] mx-auto" data-test-id="bilibili-DASH-video">{ supportFormatsRender() }</div>
+          <div className="w-full h-full overflow-auto" data-test-id="bilibili-DASH-video">
+            <div className="mx-auto w-[200px]">{ supportFormatsRender() }</div>
+          </div>
         </div>
       </Modal>
       { messageContextHolder }

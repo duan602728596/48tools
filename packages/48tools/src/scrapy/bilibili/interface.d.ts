@@ -1,3 +1,5 @@
+import { ErrorLevel } from './enum';
+
 // 视频列表的详细信息
 export interface BilibiliVideoInfoItem {
   videoUrl: string;
@@ -15,4 +17,14 @@ export interface BilibiliVideoResultItem {
   cid: number;
   page: number;
   videoInfo: Array<BilibiliVideoInfoItem>;
+  cheeseInfo?: {
+    epid: number;
+    canRequest: boolean; // 判断是否能够请求
+  };
+}
+
+// 错误
+interface ScrapyError {
+  level: ErrorLevel;
+  message: string;
 }
