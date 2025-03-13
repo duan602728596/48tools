@@ -79,8 +79,9 @@ export async function requestVideoInfo({ type, id, cid, proxy, isDash }: {
   isDash: boolean;
 }): Promise<VideoInfo> {
   const isAV: boolean = type === 'av';
+  const idIsBVBeginning: boolean = /^BV/i.test(id);
   const searchParams: URLSearchParams = new URLSearchParams({
-    [isAV ? 'avid' : 'bvid']: `${ isAV ? '' : 'BV' }${ id }`,
+    [isAV ? 'avid' : 'bvid']: `${ (isAV || idIsBVBeginning) ? '' : 'BV' }${ id }`,
     cid: `${ cid }`,
     ...(isDash ? {
       fnval: '80',

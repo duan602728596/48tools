@@ -20,7 +20,7 @@ interface ParseHtmlResult {
 
 // 选择分辨率的解析结果
 export interface ParseVideoUrlDASHObjectResult {
-  videoData: VideoData;
+  videoData: Pick<VideoData, 'durl' | 'dash' | 'support_formats'>;
   pic: string;
   title: string;
   aid?: number;

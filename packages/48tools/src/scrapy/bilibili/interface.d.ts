@@ -9,8 +9,9 @@ export interface BilibiliVideoInfoItem {
 export interface BilibiliVideoResultItem {
   title: string; // 副标题
   cover: string; // 封面
-  avid: string;
-  bid: string;
-  cid: string;
+  aid: number;
+  bvid: string;
+  cid: number;
+  page: number;
   videoInfo: Array<BilibiliVideoInfoItem>;
 }

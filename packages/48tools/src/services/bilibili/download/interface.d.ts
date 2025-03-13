@@ -15,6 +15,7 @@ export interface DashVideoItem {
   baseUrl: string;
   base_url: string;
   id: number;
+  first_frame?: string;
 }
 
 export interface DashSupportFormats {
@@ -28,11 +29,15 @@ export interface DashVideoInfo {
   video: Array<DashVideoItem>;
 }
 
+export interface DurlVideoInfo {
+  backup_url: Array<string>;
+  url: string;
+}
+
 export interface VideoData {
-  durl?: Array<{
-    backup_url: Array<string>;
-    url: string;
-  }>;
+  accept_description: Array<string>;
+  accept_quality: Array<number>;
+  durl?: Array<DurlVideoInfo>;
   dash?: DashVideoInfo;
   support_formats: Array<DashSupportFormats>;
 }
