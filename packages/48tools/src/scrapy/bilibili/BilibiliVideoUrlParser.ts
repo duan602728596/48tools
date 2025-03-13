@@ -1,20 +1,10 @@
 import { match, type Match, type MatchFunction } from 'path-to-regexp';
+import { BilibiliVideoType } from './enum';
 
 type BilibiliVideoParam = Partial<{
   classification: string;
   videoId: string
 }>;
-
-export const enum BilibiliVideoType {
-  BV = 'bv',
-  AV = 'av',
-  AU = 'au',
-  SS = 'ss',
-  EP = 'ep',
-  CHEESE_SS = 'cheese_ss',
-  CHEESE_EP = 'cheese_ep',
-  LIVE = 'live'
-}
 
 /* B站视频解析 */
 export class BilibiliVideoUrlParser {
@@ -31,6 +21,7 @@ export class BilibiliVideoUrlParser {
 
   public videoType?: BilibiliVideoType; // 视频类型
   public videoId?: string; // 视频id
+  public videoPage?: number;
 
   /** @param { string } url - 视频地址 */
   constructor(url: string) {
@@ -54,6 +45,12 @@ export class BilibiliVideoUrlParser {
 
     if (/live\.bilibili\.com$/i.test(this.videoURL.hostname)) return this.parseLive();
 
+    // 分页
+    const page: string | null = this.videoURL.searchParams.get('p');
+
+    if (page && /^\d+$/.test(page)) this.videoPage = Number(page);
+
+    // 解析视频
     const parseVideoResult: true | undefined = this.parseVideo();
 
     if (parseVideoResult) return;

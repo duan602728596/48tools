@@ -1,4 +1,5 @@
-import { BilibiliVideoUrlParser, BilibiliVideoType } from './BilibiliVideoUrlParser';
+import { BilibiliVideoUrlParser } from './BilibiliVideoUrlParser';
+import { BilibiliVideoType } from './enum';
 
 describe('test BilibiliVideoUrlParser class', function(): void {
   test('should parse bilibili video url - 1', function(): void {

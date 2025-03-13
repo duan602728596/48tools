@@ -1,13 +1,13 @@
 import type { SaveDialogReturnValue } from 'electron';
 import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
-import { requestRoomInitData, requestRoomPlayerUrlV2, type RoomInit, type RoomPlayUrlV2 } from '@48tools-api/bilibili/live';
 import { store } from '../../../../store/store';
 import { showSaveDialog } from '../../../../utils/remote/dialog';
-import { createV2LiveUrl, ffmpegHeaders, isCNCdnHost } from './helper';
+import { ffmpegHeaders, isCNCdnHost } from './helper';
 import getFFmpegDownloadWorker from '../../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { setAddWorkerItem, setRemoveWorkerItem } from '../../reducers/bilibiliLive';
 import { getFFmpeg, getFilePath } from '../../../../utils/utils';
+import { BilibiliScrapy, BilibiliVideoType } from '../../../../scrapy/bilibili/BilibiliScrapy';
 import type { LiveItem, MessageEventData } from '../../../../commonTypes';
 
 /**
@@ -20,10 +20,15 @@ async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance 
   const { dispatch }: Store = store;
 
   try {
-    const resInit: RoomInit = await requestRoomInitData(record.roomId);
+    const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+      type: BilibiliVideoType.LIVE,
+      id: record.roomId
+    });
 
-    if (resInit.data.live_status !== 1) {
-      messageApi && messageApi.warning('直播未开始。');
+    await bilibiliScrapy.parse();
+
+    if (bilibiliScrapy.error) {
+      messageApi && messageApi[bilibiliScrapy.error.level](bilibiliScrapy.error.message);
 
       return;
     }
@@ -36,7 +41,7 @@ async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance 
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: 'B站直播',
-          infoArray: [record.roomId, record.description],
+          infoArray: [record.roomId, record.description, bilibiliScrapy.title],
           ext: 'flv'
         })
       });
@@ -46,15 +51,7 @@ async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance 
       liveFilePath = result.filePath;
     }
 
-    const resPlayUrl: RoomPlayUrlV2 = await requestRoomPlayerUrlV2(`${ resInit.data.room_id }`);
-    const playStreamPath: string | null = createV2LiveUrl(resPlayUrl);
-
-    if (!playStreamPath) {
-      messageApi && messageApi.warning('直播获取错误。');
-
-      return;
-    }
-
+    const playStreamPath: string = bilibiliScrapy.videoResult[0].videoInfo[0].videoUrl;
     const worker: Worker = getFFmpegDownloadWorker();
     const isCN: boolean = isCNCdnHost(playStreamPath);
 

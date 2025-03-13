@@ -3,17 +3,17 @@ import got, { type Response as GotResponse } from 'got';
 import type { _PlayUrlObject } from '../../../../../main/src/logProtocol/logTemplate/bilibiliLive.mjs';
 import { getBilibiliCookie } from '../../../utils/utils';
 import { _bilibiliLiveLogProtocol } from '../../../utils/logProtocol/logActions';
-import type { RoomInit, RoomPlayUrlV2 } from './interface';
+import type { RoomInfo, RoomPlayUrlV2 } from './interface';
 
 export type * from './interface';
 
 /**
- * 获取直播间的初始信息
+ * 获取直播间的信息
  * @param { string } roomId
  */
-export async function requestRoomInitData(roomId: string): Promise<RoomInit> {
-  const apiUrl: string = `https://api.live.bilibili.com/room/v1/Room/room_init?id=${ roomId }`;
-  const res: GotResponse<RoomInit> = await got(apiUrl, {
+export async function requestRoomInfoData(roomId: string): Promise<RoomInfo> {
+  const apiUrl: string = `https://api.live.bilibili.com/room/v1/Room/get_info?id=${ roomId }`;
+  const res: GotResponse<RoomInfo> = await got(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
