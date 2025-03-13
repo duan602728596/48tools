@@ -41,7 +41,7 @@ async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance 
       const result: SaveDialogReturnValue = await showSaveDialog({
         defaultPath: getFilePath({
           typeTitle: 'B站直播',
-          infoArray: [record.roomId, record.description, bilibiliScrapy.title],
+          infoArray: [record.roomId, record.description, bilibiliScrapy.title, bilibiliScrapy.videoResult[0].videoInfo[0].qualityDescription],
           ext: 'flv'
         })
       });

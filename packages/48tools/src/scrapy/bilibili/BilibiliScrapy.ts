@@ -1,4 +1,3 @@
-import type { DefaultOptionType } from 'rc-select/es/Select';
 import {
   requestRoomInfoData,
   requestRoomPlayerUrlV2,
@@ -12,7 +11,6 @@ import {
   type WebInterfaceViewData,
   type WebInterfaceViewDataPageItem,
   type VideoInfo,
-  type DashSupportFormats,
   type DashVideoItem,
   type DurlVideoInfo
 } from '@48tools-api/bilibili/download';
@@ -48,7 +46,6 @@ export class BilibiliScrapy {
   title: string; // 视频标题
   cover: string; // 视频主封面
   videoResult: Array<BilibiliVideoResultItem>; // 视频列表
-  qnList: Array<DefaultOptionType>; // 分辨率选择
   error?: {
     level: ErrorLevel;
     message: string;
@@ -82,20 +79,20 @@ export class BilibiliScrapy {
   }
 
   // 视频的码率
-  static videoQn: Array<DefaultOptionType> = [
-    { value: 127, label: '8K 超高清' },
-    { value: 126, label: '杜比视界' },
-    { value: 125, label: 'HDR 真彩色' },
-    { value: 120, label: '4K 超清' },
-    { value: 116, label: '1080P60 高帧率' },
-    { value: 112, label: '1080P+ 高码率' },
-    { value: 80, label: '1080P 高清' },
-    { value: 74, label: '720P60 高帧率' },
-    { value: 64, label: '720P 高清' },
-    { value: 32, label: '480P 清晰' },
-    { value: 16, label: '360P 流畅' },
-    { value: 6, label: '240P 极速' }
-  ];
+  static videoQnMap: Map<number, string> = new Map([
+    [127, '8K 超高清'],
+    [126, '杜比视界'],
+    [125, 'HDR 真彩色'],
+    [120, '4K 超清'],
+    [116, '1080P60 高帧率'],
+    [112, '1080P+ 高码率'],
+    [80, '1080P 高清'],
+    [74, '720P60 高帧率'],
+    [64, '720P 高清'],
+    [32, '480P 清晰'],
+    [16, '360P 流畅'],
+    [6, '240P 极速']
+  ]);
 
   /** @param options */
   constructor(options: BilibiliScrapyOptions) {
@@ -184,48 +181,6 @@ export class BilibiliScrapy {
       page: o.page,
       videoInfo: []
     }));
-
-    // 获取画质
-    const videoInfoRes: VideoInfo = await requestVideoInfo({
-      type: 'bv',
-      id: this.videoResult[0].bvid,
-      cid: this.videoResult[0].cid,
-      proxy: this.proxy,
-      isDash: true
-    });
-
-    if (videoInfoRes.code !== 0 || !videoInfoRes.data) return this.setError(ErrorLevel.Error, interfaceNavRes.message);
-
-    if (videoInfoRes.data.dash) {
-      this.qnList = videoInfoRes.data.support_formats.map((o: DashSupportFormats): DefaultOptionType => ({ value: o.quality, label: o.new_description }));
-
-      const audioUrl: string = BilibiliScrapy.getVideoUrl(videoInfoRes.data.dash.audio[0]);
-      const videoInfo: Array<BilibiliVideoInfoItem> = [];
-
-      videoInfoRes.data.dash.video.forEach((o: DashVideoItem): void => {
-        videoInfo.push({
-          quality: o.id,
-          videoUrl: BilibiliScrapy.getVideoUrl(o),
-          audioUrl
-        });
-      });
-      this.videoResult[0].videoInfo = videoInfo;
-    } else if (videoInfoRes.data.durl) {
-      const videoInfo: Array<BilibiliVideoInfoItem> = [];
-
-      this.qnList = [];
-      videoInfoRes.data.durl.forEach((o: DurlVideoInfo, i: number): void => {
-        videoInfo.push({
-          quality: videoInfoRes.data.accept_quality[i],
-          videoUrl: o.url
-        });
-        this.qnList.push({
-          value: videoInfoRes.data.accept_quality[i],
-          label: videoInfoRes.data.accept_description[i]
-        });
-      });
-      this.videoResult[0].videoInfo = videoInfo;
-    }
   }
 
   /**
@@ -248,6 +203,9 @@ export class BilibiliScrapy {
     this.title = roomInfoRes.data.title;
     this.cover = roomInfoRes.data.user_cover;
 
+    // 分辨率
+    const qnMap: Map<number, string> = new Map(roomPlayUrlRes.data.playurl_info.playurl.g_qn_desc.map((o: RoomPlayUrlV2QnDesc): [number, string] => [o.qn, o.desc]));
+
     // 视频列表
     const videoInfo: Array<BilibiliVideoInfoItem> = [];
 
@@ -257,15 +215,14 @@ export class BilibiliScrapy {
           for (const urlInfo of codec.url_info) {
             videoInfo.push({
               videoUrl: `${ urlInfo.host }${ codec.base_url }${ urlInfo.extra }`,
-              quality: codec.current_qn
+              quality: codec.current_qn,
+              qualityDescription: qnMap.get(codec.current_qn) || ''
             });
           }
         }
       }
     }
 
-    // 画质列表
-    this.qnList = roomPlayUrlRes.data.playurl_info.playurl.g_qn_desc.map((o: RoomPlayUrlV2QnDesc): DefaultOptionType => ({ value: o.qn, label: o.desc }));
     this.videoResult = [{
       title: this.title,
       cover: this.cover,
@@ -279,9 +236,9 @@ export class BilibiliScrapy {
 
   /**
    * 根据分页获取视频详细信息
-   * @param p
+   * @param { number } [p]
    */
-  async getVideoInfoByPage(p?: number): Promise<void> {
+  async asyncGetVideoInfoByPage(p?: number): Promise<void> {
     const index: number = ((typeof p === 'number') ? p : (this.page ?? 1)) - 1;
 
     if (index >= this.videoResult.length || this.videoResult[index].videoInfo.length > 0) return;
@@ -302,6 +259,7 @@ export class BilibiliScrapy {
       videoInfoRes.data.dash.video.forEach((o: DashVideoItem): void => {
         videoInfo.push({
           quality: o.id,
+          qualityDescription: BilibiliScrapy.videoQnMap.get(o.id) || '',
           videoUrl: BilibiliScrapy.getVideoUrl(o),
           audioUrl
         });
@@ -313,6 +271,7 @@ export class BilibiliScrapy {
       videoInfoRes.data.durl.forEach((o: DurlVideoInfo, i: number): void => {
         videoInfo.push({
           quality: videoInfoRes.data.accept_quality[i],
+          qualityDescription: videoInfoRes.data.accept_description[i],
           videoUrl: o.url
         });
       });

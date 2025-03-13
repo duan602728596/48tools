@@ -3,6 +3,7 @@ export interface BilibiliVideoInfoItem {
   videoUrl: string;
   audioUrl?: string;
   quality: number; // 分辨率
+  qualityDescription: string;
 }
 
 // 解析的视频列表
