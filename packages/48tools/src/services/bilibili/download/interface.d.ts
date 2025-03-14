@@ -1,6 +1,4 @@
 /* ========== 加密 ========== */
-import { requestBangumiWebSeason } from '@48tools-api/bilibili/download/index';
-
 export interface NavInterface {
   data: {
     wbi_img: {
@@ -83,18 +81,6 @@ export interface BangumiWebSeason {
   code: number;
   message: string;
   result: BangumiWebSeasonResult;
-}
-
-// 接口请求到的番剧信息
-export interface BangumiVideoInfo {
-  code: number;
-  messgae: string;
-  data: {
-    durl: Array<{
-      backup_url: string;
-      url: string;
-    }>;
-  } | null; // 非会员时查不到
 }
 
 // 空间信息

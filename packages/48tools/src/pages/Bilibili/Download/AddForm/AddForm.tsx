@@ -19,6 +19,7 @@ import { setAddDownloadList } from '../../reducers/bilibiliDownload';
 import HelpButtonGroup from '../../../../components/HelpButtonGroup/HelpButtonGroup';
 import {
   BilibiliScrapy,
+  BilibiliVideoType,
   type BilibiliVideoInfoItem,
   type BilibiliVideoResultItem,
   type ScrapyError
@@ -30,43 +31,38 @@ const bilibiliVideoTypesOptions: Array<DefaultOptionType> = [
   {
     label: '视频',
     options: [
-      { value: 'bv', label: '视频 (BV)' },
-      { value: 'av', label: '视频 (av)' }
+      { value: BilibiliVideoType.BV, label: '视频 (BV)' },
+      { value: BilibiliVideoType.AV, label: '视频 (av)' }
     ]
   },
   {
     label: '音频',
-    options: [{ value: 'au', label: '音频 (au)' }]
+    options: [{ value: BilibiliVideoType.AU, label: '音频 (au)' }]
   },
   {
     label: '番剧',
     options: [
-      { value: 'ep', label: '番剧 (ep)' },
-      { value: 'ss', label: '番剧 (ss)' }
+      { value: BilibiliVideoType.EP, label: '番剧 (ep)' },
+      { value: BilibiliVideoType.SS, label: '番剧 (ss)' }
     ]
   },
   {
     label: '课程',
     options: [
-      { value: 'pugv_ep', label: '课程 (ep)' },
-      { value: 'pugv_ss', label: '课程 (ss)' }
+      { value: BilibiliVideoType.CHEESE_EP, label: '课程 (ep)' },
+      { value: BilibiliVideoType.CHEESE_SS, label: '课程 (ss)' }
     ]
   }
 ];
 
-type TypesResult = { [key: string]: string };
-export const bilibiliVideoTypesMap: TypesResult = bilibiliVideoTypesOptions.reduce(
-  function(result: TypesResult, item: { label: string; value: string }, index: number): TypesResult {
-    result[item.value] = item.label;
+export const bilibiliVideoTypesMap: Record<string, string> = bilibiliVideoTypesOptions.reduce(
+  function(result: Record<string, string>, item: DefaultOptionType, index: number): Record<string, string> {
+    for (const option of item.options) {
+      result[option.value] = item.label as string;
+    }
 
     return result;
   }, {});
-
-interface GetBilibiliScrapyReturn {
-  bilibiliScrapy: BilibiliScrapy;
-  item: BilibiliVideoResultItem;
-  index: number;
-}
 
 /* 添加下载信息 */
 function AddForm(props: {}): ReactElement {
@@ -97,7 +93,7 @@ function AddForm(props: {}): ReactElement {
   }
 
   // 通用的获取bilibiliScrapy的方法
-  async function getBilibiliScrapy(formValue: FormStore): Promise<GetBilibiliScrapyReturn | undefined> {
+  async function getBilibiliScrapy(formValue: FormStore): Promise<BilibiliScrapy | undefined> {
     const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
       type: formValue.type,
       id: formValue.id,
@@ -122,12 +118,7 @@ function AddForm(props: {}): ReactElement {
       return;
     }
 
-    const item: BilibiliVideoResultItem = bilibiliScrapy.videoResult[bilibiliScrapy.pageIndex];
-    let index: number = item.videoInfo.findIndex((o: BilibiliVideoInfoItem) => o.quality <= bilibiliScrapy.maxQn);
-
-    if (index < 0) index = 0;
-
-    return { bilibiliScrapy, item, index };
+    return bilibiliScrapy;
   }
 
   // 选择DASH video
@@ -143,11 +134,11 @@ function AddForm(props: {}): ReactElement {
 
     startModalLoadingTransition(async (): Promise<void> => {
       try {
-        const bilibiliScrapyReturn: GetBilibiliScrapyReturn | undefined = await getBilibiliScrapy(formValue);
+        const bilibiliScrapy: BilibiliScrapy | undefined = await getBilibiliScrapy(formValue);
 
-        if (!bilibiliScrapyReturn) return;
+        if (!bilibiliScrapy) return;
 
-        const { bilibiliScrapy, item }: GetBilibiliScrapyReturn = bilibiliScrapyReturn;
+        const item: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
 
         setDash({
           dash: item.videoInfo,
@@ -173,39 +164,35 @@ function AddForm(props: {}): ReactElement {
 
     startModalLoadingTransition(async (): Promise<void> => {
       try {
-        const bilibiliScrapyReturn: GetBilibiliScrapyReturn | undefined = await getBilibiliScrapy(formValue);
+        const bilibiliScrapy: BilibiliScrapy | undefined = await getBilibiliScrapy(formValue);
 
-        if (!bilibiliScrapyReturn) return;
+        if (!bilibiliScrapy) return;
 
-        const { bilibiliScrapy, item, index }: GetBilibiliScrapyReturn = bilibiliScrapyReturn;
+        const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
+        const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo();
+        const obj: {
+          dash?: { video: string; audio: string };
+          durl: string;
+        } = videoInfoItem.audioUrl ? {
+          dash: {
+            video: videoInfoItem.videoUrl,
+            audio: videoInfoItem.audioUrl!
+          },
+          durl: ''
+        } : {
+          durl: videoInfoItem.videoUrl
+        };
 
-        if (item) {
-          const obj: {
-            dash?: { video: string; audio: string };
-            durl: string;
-          } = item.videoInfo[index].audioUrl ? {
-            dash: {
-              video: item.videoInfo[index].videoUrl,
-              audio: item.videoInfo[index].audioUrl!
-            },
-            durl: ''
-          } : {
-            durl: item.videoInfo[index].videoUrl
-          };
-
-          dispatch(setAddDownloadList({
-            qid: randomUUID(),
-            pic: item.cover,
-            type: formValue.type,
-            id: formValue.id,
-            page: formValue.page ?? 1,
-            title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`,
-            ...obj
-          }));
-          setVisible(false);
-        } else {
-          messageApi.warning('没有获取到媒体地址！');
-        }
+        dispatch(setAddDownloadList({
+          qid: randomUUID(),
+          pic: videoResultItem.cover,
+          type: formValue.type,
+          id: formValue.id,
+          page: formValue.page ?? 1,
+          title: bilibiliScrapy.title === videoResultItem.title ? videoResultItem.title : `${ bilibiliScrapy.title } ${ videoResultItem.title }`,
+          ...obj
+        }));
+        setVisible(false);
       } catch (err) {
         messageApi.error('地址解析失败！');
         console.error(err);

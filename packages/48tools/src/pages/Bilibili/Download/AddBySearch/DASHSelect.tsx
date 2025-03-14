@@ -5,11 +5,9 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { Select, App } from 'antd';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { useAppProps } from 'antd/es/app/context';
-import type { DashSupportFormats } from '@48tools-api/bilibili/download';
-import { parseVideoUrlDASH, type ParseVideoUrlDASHObjectResult } from '../utils/parseBilibiliUrl';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
-import { getUrlFromDash, type GetUrlFromDashReturn } from '../utils/getUrlFromDash';
-import type { DashInfo } from '../../types';
+import { BilibiliScrapy, BilibiliVideoType, type BilibiliVideoInfoItem, type BilibiliVideoResultItem } from '../../../../scrapy/bilibili/BilibiliScrapy';
+import type { DashInfoV2 } from '../../types';
 
 interface DASHSelectProps {
   id: string;
@@ -20,7 +18,7 @@ interface DASHSelectProps {
 function DASHSelect(props: DASHSelectProps): ReactElement {
   const { id, page }: DASHSelectProps = props;
   const dispatch: Dispatch = useDispatch();
-  const [dash, setDash]: [DashInfo | undefined, D<S<DashInfo | undefined>>] = useState(undefined);
+  const [dash, setDash]: [DashInfoV2 | undefined, D<S<DashInfoV2 | undefined>>] = useState(undefined);
   const [options, setOptions]: [DefaultOptionType[], D<S<DefaultOptionType[]>>] = useState([]); // 分辨率列表
   const [loading, setLoading]: [boolean, D<S<boolean>>] = useState(false); // 加载动画
   const { message: messageApi }: useAppProps = App.useApp();
@@ -30,7 +28,7 @@ function DASHSelect(props: DASHSelectProps): ReactElement {
   function handleDownloadSelect(value: number, option: DefaultOptionType): void {
     if (!dash) return;
 
-    const { videoUrl, audioUrl }: GetUrlFromDashReturn = getUrlFromDash(dash, value);
+    const item: BilibiliVideoInfoItem = option.item;
 
     dispatch(setAddDownloadList({
       qid: randomUUID(),
@@ -39,7 +37,7 @@ function DASHSelect(props: DASHSelectProps): ReactElement {
       type: 'bv',
       id: bvid,
       page: page ?? 1,
-      dash: { video: videoUrl, audio: audioUrl },
+      dash: { video: item.videoUrl, audio: item.audioUrl! },
       title: dash.title
     }));
     messageApi.success('添加到下载队列！');
@@ -52,21 +50,31 @@ function DASHSelect(props: DASHSelectProps): ReactElement {
     setLoading(true);
 
     try {
-      const res: ParseVideoUrlDASHObjectResult | undefined = await parseVideoUrlDASH('bv', bvid, page, undefined);
+      const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+        type: BilibiliVideoType.BV,
+        id: bvid,
+        page: page ?? 1
+      });
 
-      if (res && res?.videoData?.dash) {
-        setDash({
-          dash: res.videoData.dash,
-          supportFormats: res.videoData.support_formats,
-          pic: res.pic,
-          title: res.title
-        });
+      await bilibiliScrapy.parse();
+      await bilibiliScrapy.asyncLoadVideoInfoByPage();
 
-        setOptions((res.videoData.support_formats ?? []).map((o: DashSupportFormats): DefaultOptionType => ({
-          label: o.new_description,
-          value: o.quality
-        })));
-      }
+      if (bilibiliScrapy.error) return;
+
+      const item: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
+
+      setDash({
+        dash: item.videoInfo,
+        pic: item.cover,
+        title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`
+      });
+      setOptions(item.videoInfo.map((o: BilibiliVideoInfoItem): DefaultOptionType => ({
+        key: `${ o.quality }-${ o.videoUrl }`,
+        label: o.qualityDescription,
+        value: o.quality,
+        item: o,
+        title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`
+      })));
     } catch (err) {
       console.error(err);
     }

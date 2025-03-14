@@ -16,68 +16,6 @@ export interface DownloadItem {
   title?: string;
 }
 
-// b站页面上的视频信息
-export interface InitialState {
-  aid: number;
-  videoData: {
-    aid: number;  // av号
-    bvid: string; // bv号
-    pages: Array<{
-      cid: number;
-      part: string; // 分part的标题
-    }>;
-    title: string;
-  };
-  epInfo: {
-    aid: number;
-    cid: number;
-  };
-}
-
-// 番剧__NEXT_DATA__的数据结构
-export interface VideoOnceInfoResult {
-  play_view_business_info: {
-    episode_info: {
-      aid: number;
-      bvid: string;
-      cid: number;
-      long_title: string;
-      title: string;
-    };
-  };
-  video_info: {
-    dash: DashVideoInfo;
-    support_formats: Array<DashSupportFormats>;
-  };
-}
-
-export interface VideoOnceInfo {
-  state: {
-    data: {
-      result: VideoOnceInfoResult;
-    };
-  };
-}
-
-export interface VideoEpInfo {
-  state: {
-    data: {
-      cover: string;
-      season_title: string;
-    };
-  };
-}
-
-export interface NextData {
-  props: {
-    pageProps: {
-      dehydratedState: {
-        queries: [VideoOnceInfo, VideoEpInfo];
-      };
-    };
-  };
-}
-
 // 进度条信息
 export interface ProgressEventData {
   percent: number;

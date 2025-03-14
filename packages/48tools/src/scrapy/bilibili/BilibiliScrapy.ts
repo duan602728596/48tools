@@ -40,7 +40,7 @@ interface BilibiliScrapyUrlOptions extends BilibiliScrapyCoreOptions {
 }
 
 interface BilibiliScrapyParseOptions extends BilibiliScrapyCoreOptions {
-  type: string;
+  type: BilibiliVideoType;
   id: string;
   page?: number;
 }
@@ -130,15 +130,7 @@ export class BilibiliScrapy {
       return this.videoUrlParseResult?.videoType;
     }
 
-    if (this.options.type === 'pugv_ep') {
-      return BilibiliVideoType.CHEESE_EP;
-    }
-
-    if (this.options.type === 'pugv_ss') {
-      return BilibiliVideoType.CHEESE_SS;
-    }
-
-    return this.options.type as BilibiliVideoType;
+    return this.options.type;
   }
 
   // 视频id
@@ -405,5 +397,28 @@ export class BilibiliScrapy {
       });
       item.videoInfo = videoInfo;
     }
+  }
+
+  /**
+   * 搜索对应的page的videoResult
+   * @param { number } [p]
+   */
+  findVideoResult(p?: number): BilibiliVideoResultItem {
+    const findIndex: number = ((typeof p === 'number') ? p : (this.page ?? 1)) - 1;
+
+    return this.videoResult[findIndex];
+  }
+
+  /**
+   * 搜索最符合满足分辨率的视频
+   * @param { number } [p]
+   */
+  findVideoInfo(p?: number): BilibiliVideoInfoItem {
+    const item: BilibiliVideoResultItem = this.findVideoResult(p);
+    let index: number = item.videoInfo.findIndex((o: BilibiliVideoInfoItem) => o.quality <= this.maxQn);
+
+    if (index < 0) index = 0;
+
+    return item.videoInfo[index];
   }
 }

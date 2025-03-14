@@ -1,13 +1,12 @@
 // @ts-expect-error
 import got, { type Response as GotResponse, Agents as GotAgents } from 'got';
 import { HttpProxyAgent, HttpsProxyAgent, type HttpProxyAgentOptions, type HttpsProxyAgentOptions } from 'hpagent';
-import { getBilibiliCookie, pcUserAgent, pcUserAgent2 } from '../../../utils/utils';
+import { getBilibiliCookie, pcUserAgent2 } from '../../../utils/utils';
 import { sign } from '../../../utils/bilibili/wbiSign';
 import type {
   VideoInfo,
   AudioInfo,
   BangumiWebSeason,
-  BangumiVideoInfo,
   SpaceArcSearch,
   WebInterfaceViewData,
   NavInterface,
@@ -44,25 +43,6 @@ function gotAgent(proxy: string | undefined): GotAgents | undefined {
 /**
  * B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
  */
-
-/**
- * 请求bilibili的html
- * @param { string } url
- * @param { string | undefined } proxy
- */
-export async function requestBilibiliHtml(url: string, proxy: string | undefined): Promise<string> {
-  const res: GotResponse<string> = await got.get(url, {
-    responseType: 'text',
-    headers: {
-      Host: 'www.bilibili.com',
-      'User-Agent': pcUserAgent,
-      Cookie: getBilibiliCookie()
-    },
-    agent: gotAgent(proxy)
-  });
-
-  return res.body;
-}
 
 /**
  * 请求视频信息
@@ -117,25 +97,6 @@ export async function requestVideoInfo({ type, id, cid, proxy, isDash }: {
 export async function requestBangumiWebSeason(type: string, id: string, proxy: string | undefined): Promise<BangumiWebSeason> {
   const queryType: string = type === 'ss' ? 'season_id' : 'ep_id';
   const res: GotResponse<BangumiWebSeason> = await got.get(`https://api.bilibili.com/pgc/view/web/season?${ queryType }=${ id }`, {
-    responseType: 'json',
-    headers: {
-      Cookie: getBilibiliCookie()
-    },
-    agent: gotAgent(proxy)
-  });
-
-  return res.body;
-}
-
-/**
- * 请求番剧信息
- * @param { number } aid
- * @param { number } cid
- * @param { string | undefined } proxy - 是否使用代理
- */
-export async function requestBangumiVideoInfo(aid: number, cid: number, proxy: string | undefined): Promise<BangumiVideoInfo> {
-  const apiUrl: string = `https://api.bilibili.com/x/player/playurl?avid=${ aid }&cid=${ cid }&qn=112`;
-  const res: GotResponse<BangumiVideoInfo> = await got.get(apiUrl, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()
@@ -212,19 +173,6 @@ export async function requestWebInterfaceView(id: string, type: string, proxy: s
 /* 获取用户的信息 */
 export async function requestInterfaceNav(proxy: string | undefined): Promise<NavInterface> {
   const res: GotResponse<NavInterface> = await got.get('https://api.bilibili.com/x/web-interface/nav', {
-    responseType: 'json',
-    headers: {
-      Cookie: getBilibiliCookie()
-    },
-    agent: gotAgent(proxy)
-  });
-
-  return res.body;
-}
-
-/* 获取课程基本信息 */
-export async function requestPugvSeason(epId: string, proxy: string | undefined): Promise<PugvSeason> {
-  const res: GotResponse<PugvSeason> = await got.get(`https://api.bilibili.com/pugv/view/web/season?ep_id=${ epId }`, {
     responseType: 'json',
     headers: {
       Cookie: getBilibiliCookie()

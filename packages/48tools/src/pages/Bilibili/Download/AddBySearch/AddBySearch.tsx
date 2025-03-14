@@ -12,21 +12,16 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Input, Form, Table, Spin, message, List, App, type FormInstance } from 'antd';
+import { Button, Modal, Input, Form, Table, Spin, message, List, type FormInstance } from 'antd';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { ColumnsType } from 'antd/es/table';
 import classNames from 'classnames';
 import { requestSpaceArcSearch, type SpaceArcSearchVListItem, type SpaceArcSearch } from '@48tools-api/bilibili/download';
 import commonStyle from '../../../../common.sass';
 import style from './addBySearch.sass';
-import {
-  parseVideoList,
-  parseVideoUrlV2,
-  type ParseVideoListArrayItemResult,
-  type ParseVideoUrlV2ObjectResult
-} from '../utils/parseBilibiliUrl';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
 import DASHSelect from './DASHSelect';
+import { BilibiliScrapy, BilibiliVideoType, type BilibiliVideoInfoItem, type BilibiliVideoResultItem } from '../../../../scrapy/bilibili/BilibiliScrapy';
 import type { DownloadItem as BilibiliDownloadItem } from '../../types';
 
 interface PageQuery {
@@ -64,22 +59,42 @@ function AddBySearch(props: {}): ReactElement {
 
     setDownloadAllLoading(true);
 
-    for (const item of bvVideoList) {
-      try {
-        const bvId: string = item.bvid.replace(/^bv/i, '');
-        const result: ParseVideoUrlV2ObjectResult | void = await parseVideoUrlV2('bv', bvId, item.index, undefined);
+    const bvid: string = bvVideoList[0].bvid.replace(/^bv/i, '');
+    const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+      type: BilibiliVideoType.BV,
+      id: bvid
+    });
 
-        if (result) {
-          addItems.push({
-            qid: randomUUID(),
-            durl: result.url,
-            pic: result.pic,
-            type: 'bv',
-            id: bvId,
-            page: item.index,
-            title: item.part
-          });
-        }
+    await bilibiliScrapy.parse();
+
+    for (const downloadItem of bvVideoList) {
+      try {
+        await bilibiliScrapy.asyncLoadVideoInfoByPage(downloadItem.index);
+
+        const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult(downloadItem.index);
+        const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo(downloadItem.index);
+        const obj: {
+          dash?: { video: string; audio: string };
+          durl: string;
+        } = videoInfoItem.audioUrl ? {
+          dash: {
+            video: videoInfoItem.videoUrl,
+            audio: videoInfoItem.audioUrl!
+          },
+          durl: ''
+        } : {
+          durl: videoInfoItem.videoUrl
+        };
+
+        addItems.push({
+          qid: randomUUID(),
+          pic: videoResultItem.cover,
+          type: 'bv',
+          id: bvid,
+          page: downloadItem.index,
+          title: videoResultItem.title,
+          ...obj
+        });
       } catch (err) {
         console.error(err);
       }
@@ -96,22 +111,45 @@ function AddBySearch(props: {}): ReactElement {
   async function handleAddDownloadQueueClick(o: DownloadItem, event: MouseEvent): Promise<void> {
     try {
       const bvId: string = o.bvid.replace(/^bv/i, '');
-      const result: ParseVideoUrlV2ObjectResult | void = await parseVideoUrlV2('bv', bvId, o.index, undefined);
+      const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+        type: BilibiliVideoType.BV,
+        id: bvId,
+        page: o.index
+      });
 
-      if (result) {
-        dispatch(setAddDownloadList({
-          qid: randomUUID(),
-          durl: result.url,
-          pic: result.pic,
-          type: 'bv',
-          id: bvId,
-          page: o.index,
-          title: o.part
-        }));
-        messageApi.success('添加到下载队列！');
-      } else {
-        messageApi.warning('没有获取到媒体地址！');
+      await bilibiliScrapy.parse();
+      await bilibiliScrapy.asyncLoadVideoInfoByPage();
+
+      if (bilibiliScrapy.error) {
+        messageApi[bilibiliScrapy.error.level](bilibiliScrapy.error.message);
+
+        return;
       }
+
+      const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
+      const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo();
+      const obj: {
+        dash?: { video: string; audio: string };
+        durl: string;
+      } = videoInfoItem.audioUrl ? {
+        dash: {
+          video: videoInfoItem.videoUrl,
+          audio: videoInfoItem.audioUrl!
+        },
+        durl: ''
+      } : {
+        durl: videoInfoItem.videoUrl
+      };
+
+      dispatch(setAddDownloadList({
+        qid: randomUUID(),
+        pic: videoResultItem.cover,
+        type: 'bv',
+        id: bvId,
+        page: o.index,
+        title: o.part,
+        ...obj
+      }));
     } catch (err) {
       console.error(err);
     }
@@ -141,14 +179,25 @@ function AddBySearch(props: {}): ReactElement {
   function handleGetUrlListClick(record: SpaceArcSearchVListItem, event: MouseEvent): void {
     startGetUrlListTransition(async (): Promise<void> => {
       try {
-        const videoList: Array<ParseVideoListArrayItemResult> | void = await parseVideoList(record.bvid);
+        const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+          url: `https://www.bilibili.com/video/${ record.bvid }`
+        });
+
+        await bilibiliScrapy.parse();
+
+        if (bilibiliScrapy.error) {
+          messageApi[bilibiliScrapy.error.level](bilibiliScrapy.error.message);
+
+          return;
+        }
 
         setBvVideoList(
-          (videoList ?? []).map((o: ParseVideoListArrayItemResult, i: number): DownloadItem =>
-            Object.assign(o, {
-              bvid: record.bvid,
-              index: i + 1
-            }))
+          bilibiliScrapy.videoResult.map((o: BilibiliVideoResultItem, i: number): DownloadItem => ({
+            cid: o.cid,
+            part: o.title,
+            bvid: o.bvid,
+            index: i + 1
+          }))
         );
       } catch (err) {
         console.error(err);
