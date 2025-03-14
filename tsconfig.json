@@ -6,7 +6,12 @@
     "newLine": "LF",
     "resolveJsonModule": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@48tools-types/*": ["./packages/48tools/src/types/*"],
+      "@48tools-api/*": ["./packages/48tools/src/services/*"],
+      "__mocks__/*": ["./packages/48tools/src/__mocks__/*"]
+    }
   },
   "exclude": [
     "node_modules"

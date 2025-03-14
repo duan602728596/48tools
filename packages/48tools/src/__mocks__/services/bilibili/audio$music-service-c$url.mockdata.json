@@ -1,0 +1,36 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": {
+    "sid": 590187,
+    "type": 1,
+    "info": "",
+    "timeout": 10800,
+    "size": 3867171,
+    "cdns": [
+      "https://upos-sz-mirrorhw.bilivideo.com/ugaxcode/i181116wsj8tqia6qubhw3dyaz8jmg2e-192k.m4a?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEqxTEto8BTrNvN0GvT90W5JZMkX_YN0MvXg8gNEV4NC8xNEV4N03eN0B5tZlqNxTEto8BTrNvNeZVuJ10Kj_g2UB02J0mN0B5tZlqNCNEto8BTrNvNC7MTX502C8f2jmMQJ6mqF2fka1mqx6gqj0eN0B599M=&uipk=5&nbs=1&deadline=1741940059&gen=playurlv2&os=hwbv&oi=176096901&trid=3a70cc791bd347989e1fcbe173c3eeceB&mid=0&platform=pc&og=hw&upsig=b92a2fb63040c2263971d5cf05603d6e&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&bvc=vod&nettype=0&orderid=0,1&logo=00000000"
+    ],
+    "qualities": [
+      {
+        "type": 1,
+        "desc": "标准",
+        "size": 3867171,
+        "bps": "192kbit/s",
+        "tag": "",
+        "require": 0,
+        "requiredesc": ""
+      },
+      {
+        "type": 0,
+        "desc": "流畅",
+        "size": 2588361,
+        "bps": "128kbit/s",
+        "tag": "",
+        "require": 0,
+        "requiredesc": ""
+      }
+    ],
+    "title": "有点甜（cover汪苏泷、BY2）翻唱：胡丽芝、田姝丽",
+    "cover": "http://i0.hdslb.com/bfs/music/4bb707580e951f2834cbffd5d68b984b76ac74b5.jpg"
+  }
+}

@@ -14,6 +14,10 @@ const config = {
       useESM: true
     }]
   },
+  moduleNameMapper: {
+    '^@48tools-api/(.*)$': '<rootDir>/src/services/$1',
+    '^__mocks__/(.*)$': '<rootDir>/src/__mocks__/$1'
+  },
   moduleFileExtensions: ['ts', 'tsx', 'mts', 'cts', 'js', 'jsx', 'mjs', 'cjs', 'json'],
   collectCoverage: false,
   preset: 'ts-jest/presets/default-esm'

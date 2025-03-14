@@ -253,7 +253,7 @@ const eslintRules = {
     commitLint ? 'error' : 'off',
     {
       commonjs: true,
-      ignore: ['filenamify/browser', 'SDK', '^@48tools-api/', '^@48tools-types/']
+      ignore: ['filenamify/browser', 'SDK']
     }
   ]
 };
