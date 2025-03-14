@@ -1,0 +1,389 @@
+{
+  "code": 0,
+  "message": "0",
+  "ttl": 1,
+  "data": {
+    "bvid": "BV1og4y187vP",
+    "aid": 837786151,
+    "videos": 20,
+    "tid": 136,
+    "tid_v2": 2017,
+    "tname": "音游",
+    "tname_v2": "MV",
+    "copyright": 1,
+    "pic": "http://i0.hdslb.com/bfs/archive/c08405af9b6731055cc90cfe9ab1929ac4e788dd.png",
+    "title": "【DJMAX RESPECT】最新DLC V EXTENSION PACK全动画合集  BGA MV",
+    "pubdate": 1587182270,
+    "ctime": 1587182270,
+    "desc": "自剪DJMAX RESPECT 官方BGA 持续更新中 \r\n后续DLC也会更新\r\n希望喜欢DJMAX的朋友喜欢",
+    "desc_v2": [
+      {
+        "raw_text": "自剪DJMAX RESPECT 官方BGA 持续更新中 \r\n后续DLC也会更新\r\n希望喜欢DJMAX的朋友喜欢",
+        "type": 1,
+        "biz_id": 0
+      }
+    ],
+    "state": 0,
+    "duration": 2680,
+    "rights": {
+      "bp": 0,
+      "elec": 0,
+      "download": 1,
+      "movie": 0,
+      "pay": 0,
+      "hd5": 1,
+      "no_reprint": 1,
+      "autoplay": 1,
+      "ugc_pay": 0,
+      "is_cooperation": 0,
+      "ugc_pay_preview": 0,
+      "no_background": 0,
+      "clean_mode": 0,
+      "is_stein_gate": 0,
+      "is_360": 0,
+      "no_share": 0,
+      "arc_pay": 0,
+      "free_watch": 0
+    },
+    "owner": {
+      "mid": 3295911,
+      "name": "HIBIKI_MOE",
+      "face": "https://i0.hdslb.com/bfs/face/462df0bd4ddb542ae33d33da5ba9356977e81ab5.jpg"
+    },
+    "stat": {
+      "aid": 837786151,
+      "view": 2940,
+      "danmaku": 3,
+      "reply": 7,
+      "favorite": 58,
+      "coin": 34,
+      "share": 24,
+      "now_rank": 0,
+      "his_rank": 0,
+      "like": 40,
+      "dislike": 0,
+      "evaluation": "",
+      "vt": 0
+    },
+    "argue_info": {
+      "argue_msg": "",
+      "argue_type": 0,
+      "argue_link": ""
+    },
+    "dynamic": "",
+    "cid": 179897725,
+    "dimension": {
+      "width": 1920,
+      "height": 1080,
+      "rotate": 0
+    },
+    "premiere": null,
+    "teenage_mode": 0,
+    "is_chargeable_season": false,
+    "is_story": false,
+    "is_upower_exclusive": false,
+    "is_upower_play": false,
+    "is_upower_preview": false,
+    "enable_vt": 0,
+    "vt_display": "",
+    "no_cache": false,
+    "pages": [
+      {
+        "cid": 179897725,
+        "page": 1,
+        "from": "vupload",
+        "part": "01 Attack - Mr.Funky",
+        "duration": 130,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 185864709,
+        "page": 2,
+        "from": "vupload",
+        "part": "02 BLACK GOLD - Cranky  已修复",
+        "duration": 162,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179897891,
+        "page": 3,
+        "from": "vupload",
+        "part": "03 Do it - House Rulez",
+        "duration": 140,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179897845,
+        "page": 4,
+        "from": "vupload",
+        "part": "04 Dream it - BEXTER",
+        "duration": 132,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179897922,
+        "page": 5,
+        "from": "vupload",
+        "part": "05 Fancy Night - SiNAxCHUCK",
+        "duration": 123,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179898682,
+        "page": 6,
+        "from": "vupload",
+        "part": "06 FIGHT NIGHT(feat.Calyae) - Messier",
+        "duration": 109,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179898940,
+        "page": 7,
+        "from": "vupload",
+        "part": "07 Kensei - Pure 100%",
+        "duration": 123,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179898956,
+        "page": 8,
+        "from": "vupload",
+        "part": "08 Lisrim - onoken",
+        "duration": 138,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179898936,
+        "page": 9,
+        "from": "vupload",
+        "part": "09 Lost Serenity - Benicx",
+        "duration": 125,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179899195,
+        "page": 10,
+        "from": "vupload",
+        "part": "10 Lost Temple - IMLAY",
+        "duration": 126,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179900009,
+        "page": 11,
+        "from": "vupload",
+        "part": "11 Maharajah -fenomeno edition- Alice Schach and the Magic Orchestra",
+        "duration": 155,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179900146,
+        "page": 12,
+        "from": "vupload",
+        "part": "12 Misty Er'A - Mycin.T x jam-jam",
+        "duration": 135,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179900152,
+        "page": 13,
+        "from": "vupload",
+        "part": "13 Move Yourself - IMLAYYESEO",
+        "duration": 144,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179900072,
+        "page": 14,
+        "from": "vupload",
+        "part": "14 NANAIRO - HAYAKO",
+        "duration": 125,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179900260,
+        "page": 15,
+        "from": "vupload",
+        "part": "15 Never Die - Paul Bazooka",
+        "duration": 133,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179901204,
+        "page": 16,
+        "from": "vupload",
+        "part": "16 Remember Me - NieN",
+        "duration": 165,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179901179,
+        "page": 17,
+        "from": "vupload",
+        "part": "17 Space Challenger - Bagagee Viphex13",
+        "duration": 144,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179901168,
+        "page": 18,
+        "from": "vupload",
+        "part": "18 Vile Requiem - GOTH",
+        "duration": 134,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179901042,
+        "page": 19,
+        "from": "vupload",
+        "part": "19 welcome to the space(feat.Jisun)",
+        "duration": 119,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      },
+      {
+        "cid": 179901152,
+        "page": 20,
+        "from": "vupload",
+        "part": "20 WONDER $LOT 777 - MYUKKE.",
+        "duration": 118,
+        "vid": "",
+        "weblink": "",
+        "dimension": {
+          "width": 1920,
+          "height": 1080,
+          "rotate": 0
+        }
+      }
+    ],
+    "subtitle": {
+      "allow_submit": false,
+      "list": []
+    },
+    "is_season_display": false,
+    "user_garb": {
+      "url_image_ani_cut": "https://i0.hdslb.com/bfs/garb/98a12e841214842680e6e495cf0c6df75e048579.bin"
+    },
+    "honor_reply": {
+
+    },
+    "like_icon": "",
+    "need_jump_bv": false,
+    "disable_show_up_info": false,
+    "is_story_play": 0,
+    "is_view_self": false
+  }
+}

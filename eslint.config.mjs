@@ -253,7 +253,7 @@ const eslintRules = {
     commitLint ? 'error' : 'off',
     {
       commonjs: true,
-      ignore: ['filenamify/browser', 'SDK']
+      ignore: ['filenamify/browser', 'SDK', '^__mocks__/']
     }
   ]
 };
