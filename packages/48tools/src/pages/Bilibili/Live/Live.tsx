@@ -73,7 +73,7 @@ function Live(props: {}): ReactElement {
 
   // 开始录制
   function handleRecordClick(record: LiveItem, event: MouseEvent): void {
-    bilibiliLiveWorker(record, messageApi, undefined);
+    bilibiliLiveWorker({ record, messageApi });
   }
 
   // 删除

@@ -1,7 +1,5 @@
-import * as path from 'node:path';
 import type { Store } from '@reduxjs/toolkit';
 import { store } from '../../../../store/store';
-import { getFilePath } from '../../../../utils/utils';
 import { liveSlice } from '../../reducers/bilibiliLive';
 import { localStorageKey } from './helper';
 import bilibiliLiveWorker from './bilibiliLiveWorker';
@@ -21,11 +19,7 @@ async function bilibiliAutoRecord(): Promise<void> {
 
     if (index >= 0) continue;
 
-    await bilibiliLiveWorker(record, undefined, path.join(bilibiliAutoRecordSavePath, getFilePath({
-      typeTitle: 'B站直播',
-      infoArray: [record.roomId, record.description],
-      ext: 'flv'
-    })));
+    await bilibiliLiveWorker({ record, basicDir: bilibiliAutoRecordSavePath });
   }
 }
 

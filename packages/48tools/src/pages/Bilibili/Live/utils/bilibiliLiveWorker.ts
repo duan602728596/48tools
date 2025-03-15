@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import type { SaveDialogReturnValue } from 'electron';
 import type { Store } from '@reduxjs/toolkit';
 import type { MessageInstance } from 'antd/es/message/interface';
@@ -10,13 +11,19 @@ import { getFFmpeg, getFilePath } from '../../../../utils/utils';
 import { BilibiliScrapy, BilibiliVideoType } from '../../../../scrapy/bilibili/BilibiliScrapy';
 import type { LiveItem, MessageEventData } from '../../../../commonTypes';
 
+interface BilibiliLiveWorkerArgObject {
+  record: LiveItem;
+  messageApi?: MessageInstance;
+  basicDir?: string; // 基础的
+}
+
 /**
  * 创建bilibili直播worker的逻辑封装
  * @param { LiveItem } record
  * @param { MessageInstance | undefined } messageApi - 是否显示消息
- * @param { string | undefined } filePath - 文件路径
+ * @param { string | undefined } basicDir - 自动保存时的文件路径
  */
-async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance | undefined, filePath: string | undefined): Promise<void> {
+async function bilibiliLiveWorker({ record, messageApi, basicDir }: BilibiliLiveWorkerArgObject): Promise<void> {
   const { dispatch }: Store = store;
 
   try {
@@ -33,18 +40,17 @@ async function bilibiliLiveWorker(record: LiveItem, messageApi: MessageInstance 
       return;
     }
 
+    const fileName: string = getFilePath({
+      typeTitle: 'B站直播',
+      infoArray: [record.roomId, record.description, bilibiliScrapy.title, bilibiliScrapy.videoResult[0].videoInfo[0].qualityDescription],
+      ext: 'flv'
+    });
     let liveFilePath: string;
 
-    if (filePath) {
-      liveFilePath = filePath;
+    if (basicDir) {
+      liveFilePath = join(basicDir, fileName);
     } else {
-      const result: SaveDialogReturnValue = await showSaveDialog({
-        defaultPath: getFilePath({
-          typeTitle: 'B站直播',
-          infoArray: [record.roomId, record.description, bilibiliScrapy.title, bilibiliScrapy.videoResult[0].videoInfo[0].qualityDescription],
-          ext: 'flv'
-        })
-      });
+      const result: SaveDialogReturnValue = await showSaveDialog({ defaultPath: fileName });
 
       if (result.canceled || !result.filePath) return;
 
