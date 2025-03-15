@@ -65,8 +65,11 @@ function DASHSelect(props: DASHSelectProps): ReactElement {
 
       setDash({
         dash: item.videoInfo,
-        pic: item.cover,
-        title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`
+        type: bilibiliScrapy.type!,
+        id: bilibiliScrapy.id!,
+        title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`,
+        page: bilibiliScrapy.page,
+        pic: item.cover
       });
       setOptions(item.videoInfo.map((o: BilibiliVideoInfoItem): DefaultOptionType => ({
         key: `${ o.quality }-${ o.videoUrl }`,

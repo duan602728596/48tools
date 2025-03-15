@@ -11,15 +11,17 @@ import {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
-import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, type FormInstance } from 'antd';
-import type { DefaultOptionType } from 'rc-select/es/Select';
+import { Button, Modal, Form, Input, Select, InputNumber, Checkbox, message, Divider, type FormInstance } from 'antd';
+import type { Rule, RuleObject } from 'antd/es/form';
 import type { Store as FormStore } from 'antd/es/form/interface';
+import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { setAddDownloadList } from '../../reducers/bilibiliDownload';
 import HelpButtonGroup from '../../../../components/HelpButtonGroup/HelpButtonGroup';
 import {
   BilibiliScrapy,
   BilibiliVideoType,
+  type BilibiliScrapyOptions,
   type BilibiliVideoInfoItem,
   type BilibiliVideoResultItem,
   type ScrapyError
@@ -73,19 +75,34 @@ function AddForm(props: {}): ReactElement {
   const [modalLoading, startModalLoadingTransition]: [boolean, TransitionStartFunction] = useTransition();
   const [form]: [FormInstance] = Form.useForm();
 
+  /* 验证id或者url必须有一个 */
+  const idAndUrlRule: Rule = {
+    async validator(rule: RuleObject, value: string | undefined): Promise<void> {
+      const id: string | undefined = form.getFieldValue('id'),
+        url: string | undefined = form.getFieldValue('url');
+
+      if (url && !/^\s*$/.test(url)) {
+        return await Promise.resolve();
+      } else if (id && !/^\s*$/.test(id)) {
+        return await Promise.resolve();
+      } else {
+        throw new Error(typeof rule.message === 'string' ? rule.message : undefined);
+      }
+    },
+    message: '必须输入视频ID或者视频URL'
+  };
+
   // 选择DASH video并准备下载
   function handleDownloadDashVideoClick(item: BilibiliVideoInfoItem, event: MouseEvent): void {
     if (!dash) return;
-
-    const formValue: FormStore = form.getFieldsValue();
 
     dispatch(setAddDownloadList({
       qid: randomUUID(),
       durl: '',
       pic: dash.pic,
-      type: formValue.type,
-      id: formValue.id,
-      page: formValue.page ?? 1,
+      type: dash.type,
+      id: dash.id,
+      page: dash.page ?? 1,
       dash: { video: item.videoUrl, audio: item.audioUrl! },
       title: dash.title
     }));
@@ -94,10 +111,13 @@ function AddForm(props: {}): ReactElement {
 
   // 通用的获取bilibiliScrapy的方法
   async function getBilibiliScrapy(formValue: FormStore): Promise<BilibiliScrapy | undefined> {
-    const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+    const options: BilibiliScrapyOptions = formValue.url ? { url: formValue.url } : {
       type: formValue.type,
       id: formValue.id,
-      page: formValue.page,
+      page: formValue.page
+    };
+    const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+      ...options,
       useProxy: formValue.useProxy,
       proxy: formValue.proxy
     });
@@ -142,8 +162,11 @@ function AddForm(props: {}): ReactElement {
 
         setDash({
           dash: item.videoInfo,
-          pic: item.cover,
-          title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`
+          type: bilibiliScrapy.type!,
+          id: bilibiliScrapy.id!,
+          title: bilibiliScrapy.title === item.title ? item.title : `${ bilibiliScrapy.title } ${ item.title }`,
+          page: bilibiliScrapy.page,
+          pic: item.cover
         });
       } catch (err) {
         messageApi.error('地址解析失败！');
@@ -186,9 +209,9 @@ function AddForm(props: {}): ReactElement {
         dispatch(setAddDownloadList({
           qid: randomUUID(),
           pic: videoResultItem.cover,
-          type: formValue.type,
-          id: formValue.id,
-          page: formValue.page ?? 1,
+          type: bilibiliScrapy.type!,
+          id: bilibiliScrapy.id!,
+          page: bilibiliScrapy.page ?? 1,
           title: bilibiliScrapy.title === videoResultItem.title ? videoResultItem.title : `${ bilibiliScrapy.title } ${ videoResultItem.title }`,
           ...obj
         }));
@@ -207,7 +230,7 @@ function AddForm(props: {}): ReactElement {
 
   // 关闭窗口后重置表单
   function handleAddModalClose(): void {
-    form.resetFields(['type', 'id', 'page']);
+    form.resetFields(['type', 'id', 'page', 'url']);
     setDash(undefined);
   }
 
@@ -242,7 +265,7 @@ function AddForm(props: {}): ReactElement {
       <Button type="primary" data-test-id="bilibili-download-add-btn" onClick={ handleOpenAddModalClick }>添加下载任务</Button>
       <Modal open={ visible }
         title={ dash ? '选择其他分辨率' : '添加下载任务' }
-        width={ 480 }
+        width={ 500 }
         centered={ true }
         maskClosable={ false }
         confirmLoading={ modalLoading }
@@ -260,7 +283,7 @@ function AddForm(props: {}): ReactElement {
         }
         onCancel={ dash ? handleLevelDASHVideoClick : handleCloseAddModalClick }
       >
-        <div className="h-[210px]">
+        <div className="h-[340px]">
           {/* add的表单 */}
           <Form className={ dash ? 'hidden' : undefined }
             form={ form }
@@ -273,7 +296,7 @@ function AddForm(props: {}): ReactElement {
             </Form.Item>
             <Form.Item label="ID">
               <HelpButtonGroup spaceCompactProps={{ className: 'w-full' }} navId="bilibili-video-id" tooltipTitle="输入正确的视频ID">
-                <Form.Item name="id" rules={ [{ required: true, message: '必须输入视频ID', whitespace: true }] } noStyle={ true }>
+                <Form.Item name="id" rules={ [idAndUrlRule] } noStyle={ true }>
                   <Input />
                 </Form.Item>
               </HelpButtonGroup>
@@ -281,6 +304,11 @@ function AddForm(props: {}): ReactElement {
             <Form.Item name="page" label="Page">
               <InputNumber />
             </Form.Item>
+            <Divider plain={ true }>输入视频地址，直接解析B站视频</Divider>
+            <Form.Item name="url" label="视频地址" rules={ [idAndUrlRule, { pattern: /ht{2}ps?:\/{2}(w{3})?\.bilibili\.com\//i, message: '必须填写有效的B站地址' }] }>
+              <Input allowClear={ true } />
+            </Form.Item>
+            <Divider plain={ true }>代理设置</Divider>
             <Form.Item label="代理地址">
               <div className="flex">
                 <div className="leading-[32px]">

@@ -46,7 +46,7 @@ interface BilibiliScrapyParseOptions extends BilibiliScrapyCoreOptions {
   page?: number;
 }
 
-type BilibiliScrapyOptions = BilibiliScrapyUrlOptions | BilibiliScrapyParseOptions;
+export type BilibiliScrapyOptions = BilibiliScrapyUrlOptions | BilibiliScrapyParseOptions;
 
 /* B站爬虫 */
 export class BilibiliScrapy {
