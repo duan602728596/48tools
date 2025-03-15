@@ -58,7 +58,7 @@ const bilibiliVideoTypesOptions: Array<DefaultOptionType> = [
 export const bilibiliVideoTypesMap: Record<string, string> = bilibiliVideoTypesOptions.reduce(
   function(result: Record<string, string>, item: DefaultOptionType, index: number): Record<string, string> {
     for (const option of item.options) {
-      result[option.value] = item.label as string;
+      result[option.value] = option.label;
     }
 
     return result;

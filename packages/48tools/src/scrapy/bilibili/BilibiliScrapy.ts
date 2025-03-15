@@ -10,6 +10,7 @@ import {
   requestAudioInfo,
   requestBangumiWebSeason,
   requestPugvSeasonV2,
+  requestPugvPlayurl,
   type WebInterfaceViewData,
   type WebInterfaceViewDataPageItem,
   type VideoInfo,
@@ -21,7 +22,7 @@ import {
   type PugvSeason,
   type PugvSeasonEpisodesItem,
   type PugvSeasonPlayUrl,
-  requestPugvPlayurl
+  type PugvSeasonPlayUrlVideoDataDurl
 } from '@48tools-api/bilibili/download';
 import { BilibiliVideoType, ErrorLevel } from './enum';
 import { BilibiliVideoUrlParser } from './BilibiliVideoUrlParser';
@@ -68,8 +69,8 @@ export class BilibiliScrapy {
     return 'url' in options;
   }
 
-  static isVideoInfo(r: PugvSeasonPlayUrl | VideoInfo): r is VideoInfo {
-    return 'durl' in r.data;
+  static isCheeseVideoInfo(r: PugvSeasonPlayUrl | VideoInfo): r is PugvSeasonPlayUrl {
+    return 'durls' in r.data;
   }
 
   /**
@@ -392,9 +393,10 @@ export class BilibiliScrapy {
       return { level: ErrorLevel.Error, message: videoInfoRes.message };
     }
 
+    const videoInfo: Array<BilibiliVideoInfoItem> = [];
+
     if (videoInfoRes.data.dash) {
       const audioUrl: string = BilibiliScrapy.getVideoUrl(videoInfoRes.data.dash.audio[0]);
-      const videoInfo: Array<BilibiliVideoInfoItem> = [];
 
       videoInfoRes.data.dash.video.forEach((o: DashVideoItem): void => {
         videoInfo.push({
@@ -404,10 +406,16 @@ export class BilibiliScrapy {
           audioUrl
         });
       });
-      item.videoInfo = videoInfo;
-    } else if (videoInfoRes.data.durl) {
-      const videoInfo: Array<BilibiliVideoInfoItem> = [];
 
+    } else if (BilibiliScrapy.isCheeseVideoInfo(videoInfoRes) && videoInfoRes.data.durls) {
+      videoInfoRes.data.durls.forEach((o: PugvSeasonPlayUrlVideoDataDurl, i: number): void => {
+        videoInfo.push({
+          quality: o.quality,
+          qualityDescription: videoInfoRes.data.accept_description[i],
+          videoUrl: o.durl[0].url
+        });
+      });
+    } else if (videoInfoRes.data.durl) {
       videoInfoRes.data.durl.forEach((o: DurlVideoInfo, i: number): void => {
         videoInfo.push({
           quality: videoInfoRes.data.accept_quality[i],
@@ -415,8 +423,9 @@ export class BilibiliScrapy {
           videoUrl: o.url
         });
       });
-      item.videoInfo = videoInfo;
     }
+
+    item.videoInfo = videoInfo;
   }
 
   /**

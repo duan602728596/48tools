@@ -16,12 +16,21 @@ import { Button, Modal, Input, Form, Table, Spin, message, List, type FormInstan
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import type { ColumnsType } from 'antd/es/table';
 import classNames from 'classnames';
-import { requestSpaceArcSearch, type SpaceArcSearchVListItem, type SpaceArcSearch } from '@48tools-api/bilibili/download';
+import {
+  requestSpaceArcSearch,
+  type SpaceArcSearchVListItem,
+  type SpaceArcSearch
+} from '@48tools-api/bilibili/download';
 import commonStyle from '../../../../common.sass';
 import style from './addBySearch.sass';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
 import DASHSelect from './DASHSelect';
-import { BilibiliScrapy, BilibiliVideoType, type BilibiliVideoInfoItem, type BilibiliVideoResultItem } from '../../../../scrapy/bilibili/BilibiliScrapy';
+import {
+  BilibiliScrapy,
+  BilibiliVideoType,
+  type BilibiliVideoInfoItem,
+  type BilibiliVideoResultItem
+} from '../../../../scrapy/bilibili/BilibiliScrapy';
 import type { DownloadItem as BilibiliDownloadItem } from '../../types';
 
 interface PageQuery {
@@ -89,7 +98,7 @@ function AddBySearch(props: {}): ReactElement {
         addItems.push({
           qid: randomUUID(),
           pic: videoResultItem.cover,
-          type: 'bv',
+          type: BilibiliVideoType.BV,
           id: bvid,
           page: downloadItem.index,
           title: videoResultItem.title,
@@ -144,7 +153,7 @@ function AddBySearch(props: {}): ReactElement {
       dispatch(setAddDownloadList({
         qid: randomUUID(),
         pic: videoResultItem.cover,
-        type: 'bv',
+        type: BilibiliVideoType.BV,
         id: bvId,
         page: o.index,
         title: o.part,

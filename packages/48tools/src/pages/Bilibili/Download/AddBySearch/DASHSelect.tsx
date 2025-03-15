@@ -34,7 +34,7 @@ function DASHSelect(props: DASHSelectProps): ReactElement {
       qid: randomUUID(),
       durl: '',
       pic: dash.pic,
-      type: 'bv',
+      type: BilibiliVideoType.BV,
       id: bvid,
       page: page ?? 1,
       dash: { video: item.videoUrl, audio: item.audioUrl! },

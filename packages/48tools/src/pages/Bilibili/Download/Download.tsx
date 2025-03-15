@@ -17,7 +17,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, Table, message, Popconfirm, Space } from 'antd';
+import { Button, Table, message, Popconfirm, Space, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { UseMessageReturnType } from '@48tools-types/antd';
 import { requestDownloadFileByStream } from '@48tools-api/48';
@@ -25,10 +25,7 @@ import { showSaveDialog } from '../../../utils/remote/dialog';
 import getDownloadWorker from '../../../utils/worker/download.worker/getDownloadWorker';
 import type { MessageEventData } from '../../../utils/worker/download.worker/download.worker';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
-import type {
-  MessageEventData as FFmpegMessageEventData,
-  ProgressMessageEventData
-} from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
+import type { MessageEventData as FFmpegMessageEventData, ProgressMessageEventData } from '../../../utils/worker/FFmpegDownload.worker/FFmpegDownload.worker';
 import Header from '../../../components/Header/Header';
 import BilibiliLogin from '../../../functionalComponents/BilibiliLogin/BilibiliLogin';
 import AddForm, { bilibiliVideoTypesMap } from './AddForm/AddForm';
@@ -47,6 +44,7 @@ import { ProgressNative, type ProgressSet } from '../../../components/ProgressNa
 import { getFilePath } from '../../../utils/utils';
 import type { DownloadItem } from '../types';
 import type { WebWorkerChildItem } from '../../../commonTypes';
+import { BilibiliVideoType } from '../../../scrapy/bilibili/enum';
 
 /* redux selector */
 type RSelector = Pick<BilibiliDownloadInitialState, 'downloadProgress' | 'downloadWorkerList'> & {
@@ -281,11 +279,32 @@ function Download(props: {}): ReactElement {
   }
 
   const columns: ColumnsType<DownloadItem> = [
-    { title: 'ID', dataIndex: 'id' },
     {
-      title: '下载类型',
+      title: 'ID',
+      dataIndex: 'id',
+      render: (value: string, record: DownloadItem, index: number): string => {
+        const type: string = record.type === BilibiliVideoType.CHEESE_EP ? 'ep' : (
+          record.type === BilibiliVideoType.CHEESE_SS ? 'ss' : (
+            record.type === BilibiliVideoType.BV ? 'BV' : record.type));
+
+        return `${ type }${ value }`;
+      }
+    },
+    {
+      title: '标题',
+      dataIndex: 'title',
+      render: (value: string, record: DownloadItem, index: number): ReactElement => {
+        return (
+          <div className="w-[250px] truncate">
+            <Tooltip title={ value }>{ value }</Tooltip>
+          </div>
+        );
+      }
+    },
+    {
+      title: '类型',
       dataIndex: 'type',
-      render: (value: string, record: DownloadItem, index: number): string => bilibiliVideoTypesMap[value]
+      render: (value: string, record: DownloadItem, index: number): string => bilibiliVideoTypesMap[record.type]
     },
     { title: '分页', dataIndex: 'page' },
     {
