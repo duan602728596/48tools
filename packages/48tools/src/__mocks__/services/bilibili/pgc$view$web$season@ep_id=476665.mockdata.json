@@ -1,0 +1,442 @@
+{
+  "code": 0,
+  "message": "success",
+  "result": {
+    "activity": {
+      "head_bg_url": "",
+      "id": 0,
+      "title": ""
+    },
+    "actors": "環彩羽：麻倉桃\n七海八千代：雨宮天\n小丘比：加藤英美裡\n黑江：花澤香菜\n由比鶴乃：夏川椎菜\n深月菲莉希亞：佐倉綾音\n二葉莎奈：小倉唯\n十咎桃子：小松未可子\n秋野楓：大橋彩香\n水波玲奈：石原夏織\n",
+    "alias": "",
+    "areas": [
+      {
+        "id": 2,
+        "name": "日本"
+      }
+    ],
+    "bkg_cover": "",
+    "cover": "http://i0.hdslb.com/bfs/bangumi/image/d27fa27b3e870c36212d28b7dad2ecfec53f8dce.png",
+    "delivery_fragment_video": false,
+    "enable_vt": false,
+    "episodes": [
+      {
+        "aid": 640332509,
+        "badge": "",
+        "badge_info": {
+          "bg_color": "#FB7299",
+          "bg_color_night": "#D44E7D",
+          "text": ""
+        },
+        "badge_type": 0,
+        "bvid": "BV1JY4y1W7W1",
+        "cid": 566152386,
+        "cover": "http://i0.hdslb.com/bfs/archive/91810305d41270c6fa92923c518ec65d6a2ed53f.png",
+        "dimension": {
+          "height": 1080,
+          "rotate": 0,
+          "width": 1920
+        },
+        "duration": 1431000,
+        "enable_vt": false,
+        "ep_id": 476663,
+        "from": "bangumi",
+        "id": 476663,
+        "is_view_hide": false,
+        "link": "https://www.bilibili.com/bangumi/play/ep476663",
+        "long_title": "我們失敗了",
+        "pub_time": 1648990800,
+        "pv": 0,
+        "release_date": "",
+        "rights": {
+          "allow_dm": 1,
+          "allow_download": 0,
+          "area_limit": 0
+        },
+        "section_type": 0,
+        "share_copy": "《魔法紀錄 魔法少女小圓外傳 FINAL SEASON - 淺夢的黎明 -（僅限港澳台地區）》第1话 我們失敗了",
+        "share_url": "https://www.bilibili.com/bangumi/play/ep476663",
+        "short_link": "https://b23.tv/ep476663",
+        "showDrmLoginDialog": false,
+        "show_title": "第1话 我們失敗了",
+        "skip": {
+          "ed": {
+            "end": 0,
+            "start": 0
+          },
+          "op": {
+            "end": 0,
+            "start": 0
+          }
+        },
+        "status": 2,
+        "subtitle": "已观看12.4万次",
+        "title": "1",
+        "vid": ""
+      },
+      {
+        "aid": 895358963,
+        "badge": "",
+        "badge_info": {
+          "bg_color": "#FB7299",
+          "bg_color_night": "#D44E7D",
+          "text": ""
+        },
+        "badge_type": 0,
+        "bvid": "BV1BP4y1K7cC",
+        "cid": 566153909,
+        "cover": "http://i0.hdslb.com/bfs/archive/c3ad4449a6d637187dd07ae7583eeec071f638f1.png",
+        "dimension": {
+          "height": 1080,
+          "rotate": 0,
+          "width": 1920
+        },
+        "duration": 1521000,
+        "enable_vt": false,
+        "ep_id": 476664,
+        "from": "bangumi",
+        "id": 476664,
+        "is_view_hide": false,
+        "link": "https://www.bilibili.com/bangumi/play/ep476664",
+        "long_title": "終將消失的少女們",
+        "pub_time": 1648990800,
+        "pv": 0,
+        "release_date": "",
+        "rights": {
+          "allow_dm": 1,
+          "allow_download": 0,
+          "area_limit": 0
+        },
+        "section_type": 0,
+        "share_copy": "《魔法紀錄 魔法少女小圓外傳 FINAL SEASON - 淺夢的黎明 -（僅限港澳台地區）》第2话 終將消失的少女們",
+        "share_url": "https://www.bilibili.com/bangumi/play/ep476664",
+        "short_link": "https://b23.tv/ep476664",
+        "showDrmLoginDialog": false,
+        "show_title": "第2话 終將消失的少女們",
+        "skip": {
+          "ed": {
+            "end": 0,
+            "start": 0
+          },
+          "op": {
+            "end": 0,
+            "start": 0
+          }
+        },
+        "status": 2,
+        "subtitle": "已观看12.4万次",
+        "title": "2",
+        "vid": ""
+      },
+      {
+        "aid": 682754745,
+        "badge": "",
+        "badge_info": {
+          "bg_color": "#FB7299",
+          "bg_color_night": "#D44E7D",
+          "text": ""
+        },
+        "badge_type": 0,
+        "bvid": "BV1wS4y1K7Ab",
+        "cid": 566156841,
+        "cover": "http://i0.hdslb.com/bfs/archive/36979deeaee956bd02524eaadd6b1cc7bb59242d.png",
+        "dimension": {
+          "height": 1080,
+          "rotate": 0,
+          "width": 1920
+        },
+        "duration": 1431000,
+        "enable_vt": false,
+        "ep_id": 476665,
+        "from": "bangumi",
+        "id": 476665,
+        "is_view_hide": false,
+        "link": "https://www.bilibili.com/bangumi/play/ep476665",
+        "long_title": "還要當魔法少女到什麼時候",
+        "pub_time": 1648990800,
+        "pv": 0,
+        "release_date": "",
+        "rights": {
+          "allow_dm": 1,
+          "allow_download": 0,
+          "area_limit": 0
+        },
+        "section_type": 0,
+        "share_copy": "《魔法紀錄 魔法少女小圓外傳 FINAL SEASON - 淺夢的黎明 -（僅限港澳台地區）》第3话 還要當魔法少女到什麼時候",
+        "share_url": "https://www.bilibili.com/bangumi/play/ep476665",
+        "short_link": "https://b23.tv/ep476665",
+        "showDrmLoginDialog": false,
+        "show_title": "第3话 還要當魔法少女到什麼時候",
+        "skip": {
+          "ed": {
+            "end": 0,
+            "start": 0
+          },
+          "op": {
+            "end": 0,
+            "start": 0
+          }
+        },
+        "status": 2,
+        "subtitle": "已观看12.4万次",
+        "title": "3",
+        "vid": ""
+      },
+      {
+        "aid": 682834875,
+        "badge": "",
+        "badge_info": {
+          "bg_color": "#FB7299",
+          "bg_color_night": "#D44E7D",
+          "text": ""
+        },
+        "badge_type": 0,
+        "bvid": "BV1sS4y1K7zn",
+        "cid": 566155214,
+        "cover": "http://i0.hdslb.com/bfs/archive/530a959263b5c581a81d65ae2d8b2b499a75642c.png",
+        "dimension": {
+          "height": 1080,
+          "rotate": 0,
+          "width": 1920
+        },
+        "duration": 1596000,
+        "enable_vt": false,
+        "ep_id": 476666,
+        "from": "bangumi",
+        "id": 476666,
+        "is_view_hide": false,
+        "link": "https://www.bilibili.com/bangumi/play/ep476666",
+        "long_title": "無人知曉的 我們的紀錄",
+        "pub_time": 1648990800,
+        "pv": 0,
+        "release_date": "",
+        "rights": {
+          "allow_dm": 1,
+          "allow_download": 0,
+          "area_limit": 0
+        },
+        "section_type": 0,
+        "share_copy": "《魔法紀錄 魔法少女小圓外傳 FINAL SEASON - 淺夢的黎明 -（僅限港澳台地區）》第4话 無人知曉的 我們的紀錄",
+        "share_url": "https://www.bilibili.com/bangumi/play/ep476666",
+        "short_link": "https://b23.tv/ep476666",
+        "showDrmLoginDialog": false,
+        "show_title": "第4话 無人知曉的 我們的紀錄",
+        "skip": {
+          "ed": {
+            "end": 0,
+            "start": 0
+          },
+          "op": {
+            "end": 0,
+            "start": 0
+          }
+        },
+        "status": 2,
+        "subtitle": "已观看12.4万次",
+        "title": "4",
+        "vid": ""
+      }
+    ],
+    "evaluate": "願望的代價，究竟是希望還是絕望——。\n",
+    "freya": {
+      "bubble_show_cnt": 0,
+      "icon_show": 0
+    },
+    "hide_ep_vv_vt_dm": 1,
+    "icon_font": {
+      "name": "playdata-square-line@500",
+      "text": "12.4万"
+    },
+    "jp_title": "",
+    "link": "bilibili://pgc/media/28237212",
+    "media_id": 28237212,
+    "mode": 2,
+    "new_ep": {
+      "desc": "连载中",
+      "id": 476666,
+      "is_new": 0,
+      "title": "4"
+    },
+    "play_strategy": {
+      "strategies": [
+        "common_section-formal_first_ep",
+        "common_section-common_section",
+        "common_section-next_season",
+        "formal-finish-next_season",
+        "formal-end-other_section",
+        "formal-end-next_season",
+        "ord"
+      ]
+    },
+    "positive": {
+      "id": 66304,
+      "title": "正片"
+    },
+    "publish": {
+      "is_finish": 0,
+      "is_started": 1,
+      "pub_time": "2022-04-03 21:00:00",
+      "pub_time_show": "2022年04月03日21:00",
+      "unknow_pub_date": 0,
+      "weekday": 0
+    },
+    "record": "",
+    "rights": {
+      "allow_bp": 0,
+      "allow_bp_rank": 0,
+      "allow_download": 0,
+      "allow_review": 0,
+      "area_limit": 0,
+      "ban_area_show": 4,
+      "can_watch": 1,
+      "copyright": "bilibili",
+      "forbid_pre": 0,
+      "freya_white": 0,
+      "is_cover_show": 0,
+      "is_preview": 0,
+      "only_vip_download": 0,
+      "resource": "",
+      "watch_platform": 0
+    },
+    "season_id": 41503,
+    "season_title": "魔法紀錄 魔法少女小圓外傳 FINAL SEASON - 淺夢的黎明 -（僅限港澳台地區）",
+    "seasons": [
+      {
+        "badge": "",
+        "badge_info": {
+          "bg_color": "#FB7299",
+          "bg_color_night": "#D44E7D",
+          "text": ""
+        },
+        "badge_type": 0,
+        "cover": "http://i0.hdslb.com/bfs/bangumi/image/4e239003c73319745b899cc820229ade2e92e9fc.png",
+        "enable_vt": false,
+        "horizontal_cover_1610": "http://i0.hdslb.com/bfs/bangumi/image/b23b46e00900682947b026c8804173da0dcc983c.png",
+        "horizontal_cover_169": "http://i0.hdslb.com/bfs/bangumi/image/1273a7b4bf95839931950a9a274eb5f1eb66ceeb.png",
+        "icon_font": {
+          "name": "playdata-square-line@500",
+          "text": "35.3万"
+        },
+        "media_id": 28234879,
+        "new_ep": {
+          "cover": "http://i0.hdslb.com/bfs/archive/1eadf8fb09aade245f99112bd19134a2325a8be1.png",
+          "id": 422935,
+          "index_show": "更新至第8话"
+        },
+        "season_id": 39187,
+        "season_title": "TV",
+        "season_type": 1,
+        "stat": {
+          "favorites": 29055,
+          "series_follow": 35162,
+          "views": 353032,
+          "vt": 0
+        }
+      },
+      {
+        "badge": "",
+        "badge_info": {
+          "bg_color": "#FB7299",
+          "bg_color_night": "#D44E7D",
+          "text": ""
+        },
+        "badge_type": 0,
+        "cover": "http://i0.hdslb.com/bfs/bangumi/image/d27fa27b3e870c36212d28b7dad2ecfec53f8dce.png",
+        "enable_vt": false,
+        "horizontal_cover_1610": "http://i0.hdslb.com/bfs/bangumi/image/07e2b796b7bb0139a1acddc6cc7b4967ca68c5f8.png",
+        "horizontal_cover_169": "http://i0.hdslb.com/bfs/bangumi/image/59306066770b1ee2148b29d05b425502d0f9c9eb.png",
+        "icon_font": {
+          "name": "playdata-square-line@500",
+          "text": "12.4万"
+        },
+        "media_id": 28237212,
+        "new_ep": {
+          "cover": "http://i0.hdslb.com/bfs/archive/530a959263b5c581a81d65ae2d8b2b499a75642c.png",
+          "id": 476666,
+          "index_show": "更新至第4话"
+        },
+        "season_id": 41503,
+        "season_title": "最終季",
+        "season_type": 1,
+        "stat": {
+          "favorites": 12657,
+          "series_follow": 35162,
+          "views": 124010,
+          "vt": 0
+        }
+      }
+    ],
+    "series": {
+      "display_type": 0,
+      "series_id": 5652,
+      "series_title": "魔法紀錄 魔法少女小圓外傳 第二季 -覺醒前夜-（僅限港澳台"
+    },
+    "share_copy": "《魔法紀錄 魔法少女小圓外傳 FINAL SEASON - 淺夢的黎明 -（僅限港澳台地區）》為了尋找失去的願望",
+    "share_sub_title": "為了尋找失去的願望",
+    "share_url": "https://www.bilibili.com/bangumi/play/ss41503",
+    "show": {
+      "wide_screen": 0
+    },
+    "show_season_type": 1,
+    "square_cover": "http://i0.hdslb.com/bfs/bangumi/image/d7fbcb072b2027a7ee63902c6ab8f801d2591a8e.png",
+    "staff": "原作：Magica Quartet\n總監督 / 系列構成：劇團狗咖喱（泥犬）\n主要角色原案：蒼樹梅\n副監督：宮本幸裕\n角色設計·總作畫監督：谷口淳一郎\n總作畫監督：杉山延寬 / 山村洋貴\n動作導演：橋本敬史\n主動畫師：伊藤良明 / 高野晃久 / 宮井加奈\n美術監督：內藤健\n色彩設計：日比野仁\n剪輯：松原理惠\nCG監督：島久登\n攝影監督：土屋康次\n腳本協力：エルスウェア\n音樂：尾澤拓實\n音響監督：鶴岡陽太\n動畫監製：新房昭之\n動畫製作：SHAFT",
+    "stat": {
+      "coins": 598,
+      "danmakus": 2533,
+      "favorite": 223,
+      "favorites": 12657,
+      "follow_text": "3.5万系列追番",
+      "likes": 3792,
+      "reply": 944,
+      "share": 153,
+      "views": 124010,
+      "vt": 0
+    },
+    "status": 2,
+    "styles": [
+      "游戏改",
+      "奇幻",
+      "战斗",
+      "魔法"
+    ],
+    "subtitle": "已观看12.4万次",
+    "title": "魔法紀錄 魔法少女小圓外傳 FINAL SEASON - 淺夢的黎明 -（僅限港澳台地區）",
+    "total": -1,
+    "type": 1,
+    "up_info": {
+      "avatar": "http://i2.hdslb.com/bfs/face/9f10323503739e676857f06f5e4f5eb323e9f3f2.jpg",
+      "avatar_subscript_url": "",
+      "follower": 827958,
+      "is_follow": 0,
+      "mid": 11783021,
+      "nickname_color": "",
+      "pendant": {
+        "image": "",
+        "name": "",
+        "pid": 0
+      },
+      "theme_type": 0,
+      "uname": "哔哩哔哩番剧出差",
+      "verify_type": 3,
+      "vip_label": {
+        "bg_color": "",
+        "bg_style": 0,
+        "border_color": "",
+        "text": "",
+        "text_color": ""
+      },
+      "vip_status": 0,
+      "vip_type": 0
+    },
+    "user_status": {
+      "area_limit": 0,
+      "ban_area_show": 0,
+      "follow": 0,
+      "follow_status": 0,
+      "login": 0,
+      "pay": 0,
+      "pay_pack_paid": 0,
+      "sponsor": 0
+    }
+  }
+}

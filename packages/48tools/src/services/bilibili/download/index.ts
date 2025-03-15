@@ -44,6 +44,14 @@ function gotAgent(proxy: string | undefined): GotAgents | undefined {
  * B站api参考：https://github.com/SocialSisterYi/bilibili-API-collect
  */
 
+export interface RequestVideoInfoArgumentObject {
+  type: string;
+  id: string;
+  cid: number;
+  proxy: string | undefined;
+  isDash: boolean;
+}
+
 /**
  * 请求视频信息
  * @param { string } type
@@ -52,13 +60,7 @@ function gotAgent(proxy: string | undefined): GotAgents | undefined {
  * @param { string | undefined } proxy
  * @param { boolean } isDash
  */
-export async function requestVideoInfo({ type, id, cid, proxy, isDash }: {
-  type: string;
-  id: string;
-  cid: number;
-  proxy: string | undefined;
-  isDash: boolean;
-}): Promise<VideoInfo> {
+export async function requestVideoInfo({ type, id, cid, proxy, isDash }: RequestVideoInfoArgumentObject): Promise<VideoInfo> {
   const isAV: boolean = type === 'av';
   const idIsBVBeginning: boolean = /^BV/i.test(id);
   const searchParams: URLSearchParams = new URLSearchParams({
