@@ -173,11 +173,29 @@ export interface PugvSeason {
   message: string;
 }
 
+export interface PugvSeasonPlayUrlVideoDataDurl {
+  quality: number;
+  durl: Array<DurlVideoInfo>;
+}
+
+export interface PugvSeasonPlayUrlVideoData extends VideoData {
+  durls: Array<PugvSeasonPlayUrlVideoDataDurl>;
+}
+
+/**
+ * 旧的课程可能出现返回durl的情况
+ * 例如：
+ * 零基础学会伪厚涂：暗黑病娇风少女篇（全过程详解）- 劣质罐头 就是返回durl
+ * - https://www.bilibili.com/cheese/play/ss394?csource=private_space_class_null
+ * - https://api.bilibili.com/pugv/view/web/season?ep_id=11984
+ * - https://api.bilibili.com/pugv/player/web/playurl?avid=719340517&ep_id=11984&cid=444505720&fnval=16
+ * 而 宋浩：专升本高等数学考前串讲冲刺课 就是返回的dash
+ * - https://www.bilibili.com/cheese/play/ep205797?csource=private_space_tougao_null
+ * - https://api.bilibili.com/pugv/view/web/season?ep_id=205797
+ * - https://api.bilibili.com/pugv/player/web/playurl?avid=960526794&ep_id=215167&cid=1255148570&fnval=16
+ */
 export interface PugvSeasonPlayUrl {
   code: number;
-  data: {
-    dash: DashVideoInfo;
-    support_formats: Array<DashSupportFormats>;
-  };
+  data: PugvSeasonPlayUrlVideoData;
   message: string;
 }

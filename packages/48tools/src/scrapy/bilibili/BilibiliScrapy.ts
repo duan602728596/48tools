@@ -405,7 +405,7 @@ export class BilibiliScrapy {
         });
       });
       item.videoInfo = videoInfo;
-    } else if (BilibiliScrapy.isVideoInfo(videoInfoRes) && videoInfoRes.data.durl) {
+    } else if (videoInfoRes.data.durl) {
       const videoInfo: Array<BilibiliVideoInfoItem> = [];
 
       videoInfoRes.data.durl.forEach((o: DurlVideoInfo, i: number): void => {
