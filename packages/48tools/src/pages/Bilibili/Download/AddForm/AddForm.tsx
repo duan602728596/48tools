@@ -305,7 +305,7 @@ function AddForm(props: {}): ReactElement {
               <InputNumber />
             </Form.Item>
             <Divider plain={ true }>输入视频地址，直接解析B站视频</Divider>
-            <Form.Item name="url" label="视频地址" rules={ [idAndUrlRule, { pattern: /ht{2}ps?:\/{2}(w{3})?\.bilibili\.com\//i, message: '必须填写有效的B站地址' }] }>
+            <Form.Item name="url" label="视频地址" rules={ [idAndUrlRule, { pattern: /ht{2}ps?:\/{2}(w{3}\.)?bilibili\.com\//i, message: '必须填写有效的B站地址' }] }>
               <Input allowClear={ true } />
             </Form.Item>
             <Divider plain={ true }>代理设置</Divider>
