@@ -58,6 +58,8 @@ export class BilibiliScrapy {
   videoResult: Array<BilibiliVideoResultItem>; // 视频列表
   error?: ScrapyError;
 
+  #page?: number; // 番剧或者课程的分页
+
   /**
    * 判断是否是完整url的参数
    * @param { BilibiliScrapyOptions } options
@@ -144,6 +146,11 @@ export class BilibiliScrapy {
 
   // 视频分页
   get page(): number | undefined {
+    // 番剧和课程的page由传递的epid决定
+    if (this.type && [BilibiliVideoType.EP, BilibiliVideoType.CHEESE_EP].includes(this.type)) {
+      return this.#page;
+    }
+
     if (BilibiliScrapy.isUrlOptions(this.options)) {
       return this.videoUrlParseResult?.videoPage;
     }
@@ -151,9 +158,10 @@ export class BilibiliScrapy {
     return this.options.page;
   }
 
-  // 根据分页得到的index
-  get pageIndex(): number {
-    return (this.page ?? 1) - 1;
+  set page(value: number) {
+    if (this.type && [BilibiliVideoType.EP, BilibiliVideoType.CHEESE_EP].includes(this.type)) {
+      this.#page = value;
+    }
   }
 
   // 获取代理
@@ -258,15 +266,21 @@ export class BilibiliScrapy {
 
     this.title = res.result.title;
     this.cover = BilibiliScrapy.http2https(res.result.cover);
-    this.videoResult = res.result.episodes.map((o: BangumiWebSeasonEpisodesItem, i: number): BilibiliVideoResultItem => ({
-      title: o.long_title,
-      cover: BilibiliScrapy.http2https(o.cover),
-      aid: o.aid,
-      bvid: o.bvid,
-      cid: o.cid,
-      page: i + 1,
-      videoInfo: []
-    }));
+    this.videoResult = res.result.episodes.map((o: BangumiWebSeasonEpisodesItem, i: number): BilibiliVideoResultItem => {
+      if (this.type === BilibiliVideoType.EP && String(o.ep_id) === this.id) {
+        this.page = i + 1;
+      }
+
+      return {
+        title: o.long_title,
+        cover: BilibiliScrapy.http2https(o.cover),
+        aid: o.aid,
+        bvid: o.bvid,
+        cid: o.cid,
+        page: i + 1,
+        videoInfo: []
+      };
+    });
   }
 
   /**
@@ -281,19 +295,25 @@ export class BilibiliScrapy {
 
     this.title = pugvSeasonRes.data.title;
     this.cover = BilibiliScrapy.http2https(pugvSeasonRes.data.cover);
-    this.videoResult = pugvSeasonRes.data.episodes.map((o: PugvSeasonEpisodesItem, i: number): BilibiliVideoResultItem => ({
-      title: o.title,
-      cover: o.cover,
-      aid: o.aid,
-      bvid: '',
-      cid: o.cid,
-      page: i + 1,
-      videoInfo: [],
-      cheeseInfo: {
-        epid: o.id,
-        canRequest: o.status === 1
+    this.videoResult = pugvSeasonRes.data.episodes.map((o: PugvSeasonEpisodesItem, i: number): BilibiliVideoResultItem => {
+      if (this.type === BilibiliVideoType.CHEESE_EP && String(o.id) === this.id) {
+        this.page = i + 1;
       }
-    }));
+
+      return {
+        title: o.title,
+        cover: o.cover,
+        aid: o.aid,
+        bvid: '',
+        cid: o.cid,
+        page: i + 1,
+        videoInfo: [],
+        cheeseInfo: {
+          epid: o.id,
+          canRequest: o.status === 1
+        }
+      };
+    });
   }
 
   /**

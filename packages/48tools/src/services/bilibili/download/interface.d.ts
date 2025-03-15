@@ -65,6 +65,8 @@ export interface BangumiWebSeasonEpisodesItem {
   aid: number;
   bvid: string;
   cid: number;
+  ep_id: number;
+  id: number;
   cover: string;
   long_title: string; // 标题
   share_copy: string; // 完整标题
