@@ -33,7 +33,6 @@ jest.mock('@48tools-api/bilibili/download', (): {
 }));
 
 import { BilibiliScrapy, BilibiliVideoType, type BilibiliVideoResultItem, type BilibiliVideoInfoItem } from './BilibiliScrapy';
-import { describe } from 'node:test';
 
 describe('test BilibiliScrapy class', function(): void {
   /* 视频的测试 */
