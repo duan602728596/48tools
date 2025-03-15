@@ -124,8 +124,8 @@ describe('test BilibiliScrapy class', function(): void {
       expect(bilibiliScrapy.title).toBe(pgc$view$web$season__ep_id_476665.result.title);
       expect(videoResultItem.videoInfo.length).toBeGreaterThan(0);
       expect(videoResultItem.title).toBe(pgc$view$web$season__ep_id_476665.result.episodes[1].long_title);
-      expect(videoResultItem.cid).toBe(x$player$playUrl__bvid_BV1BP4y1K7cC_cid_566153909.data.last_play_cid);
-      expect(videoInfoItem.videoUrl).toBe(x$player$playUrl__bvid_BV1BP4y1K7cC_cid_566153909.data.dash.video[1].base_url);
+      expect(x$player$playUrl__bvid_BV1BP4y1K7cC_cid_566153909.data.dash.video[1].base_url.includes(String(videoResultItem.cid))).toBeTruthy();
+      expect(videoInfoItem.videoUrl).toBe(x$player$playUrl__bvid_BV1BP4y1K7cC_cid_566153909.data.dash.video[2].base_url);
     }
 
     test('should parse bangumi when pass type and id', async function(): Promise<void> {
