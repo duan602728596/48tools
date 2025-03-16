@@ -24,6 +24,7 @@ import {
   type BilibiliScrapyOptions,
   type BilibiliVideoInfoItem,
   type BilibiliVideoResultItem,
+  type FindVideoInfoReturn,
   type ScrapyError
 } from '../../../../scrapy/bilibili/BilibiliScrapy';
 import type { DashInfoV2 } from '../../types';
@@ -191,8 +192,7 @@ function AddForm(props: {}): ReactElement {
 
         if (!bilibiliScrapy) return;
 
-        const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
-        const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo();
+        const { videoResultItem, videoInfoItem }: FindVideoInfoReturn = bilibiliScrapy.findVideoInfo();
         const obj: {
           dash?: { video: string; audio: string };
           durl: string;

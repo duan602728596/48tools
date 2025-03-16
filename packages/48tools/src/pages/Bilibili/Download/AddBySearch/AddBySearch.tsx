@@ -25,12 +25,7 @@ import commonStyle from '../../../../common.sass';
 import style from './addBySearch.sass';
 import { setAddDownloadList, setAddMoreDownloadLists } from '../../reducers/bilibiliDownload';
 import DASHSelect from './DASHSelect';
-import {
-  BilibiliScrapy,
-  BilibiliVideoType,
-  type BilibiliVideoInfoItem,
-  type BilibiliVideoResultItem
-} from '../../../../scrapy/bilibili/BilibiliScrapy';
+import { BilibiliScrapy, BilibiliVideoType, type FindVideoInfoReturn, type BilibiliVideoResultItem } from '../../../../scrapy/bilibili/BilibiliScrapy';
 import type { DownloadItem as BilibiliDownloadItem } from '../../types';
 
 interface PageQuery {
@@ -80,8 +75,7 @@ function AddBySearch(props: {}): ReactElement {
       try {
         await bilibiliScrapy.asyncLoadVideoInfoByPage(downloadItem.index);
 
-        const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult(downloadItem.index);
-        const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo(downloadItem.index);
+        const { videoResultItem, videoInfoItem }: FindVideoInfoReturn = bilibiliScrapy.findVideoInfo(downloadItem.index);
         const obj: {
           dash?: { video: string; audio: string };
           durl: string;
@@ -135,8 +129,7 @@ function AddBySearch(props: {}): ReactElement {
         return;
       }
 
-      const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
-      const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo();
+      const { videoResultItem, videoInfoItem }: FindVideoInfoReturn = bilibiliScrapy.findVideoInfo();
       const obj: {
         dash?: { video: string; audio: string };
         durl: string;

@@ -32,7 +32,7 @@ jest.mock('@48tools-api/bilibili/download', (): {
   requestBangumiWebSeason: (): Promise<BangumiWebSeason> => Promise.resolve(pgc$view$web$season__ep_id_476665)
 }));
 
-import { BilibiliScrapy, BilibiliVideoType, type BilibiliVideoResultItem, type BilibiliVideoInfoItem } from './BilibiliScrapy';
+import { BilibiliScrapy, BilibiliVideoType, type BilibiliVideoResultItem, type BilibiliVideoInfoItem, type FindVideoInfoReturn } from './BilibiliScrapy';
 
 describe('test BilibiliScrapy class', function(): void {
   /* 视频的测试 */
@@ -43,7 +43,7 @@ describe('test BilibiliScrapy class', function(): void {
       await bilibiliScrapy.asyncLoadVideoInfoByPage();
 
       const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
-      const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo();
+      const { videoInfoItem }: FindVideoInfoReturn = bilibiliScrapy.findVideoInfo();
 
       expect(bilibiliScrapy.videoResult.length).toBeGreaterThan(0);
       expect(bilibiliScrapy.title).toBe(x$webInterface$view__bvid_BV1og4y187vP.data.title);
@@ -79,7 +79,7 @@ describe('test BilibiliScrapy class', function(): void {
       await bilibiliScrapy.parse();
 
       const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
-      const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo();
+      const { videoInfoItem }: FindVideoInfoReturn = bilibiliScrapy.findVideoInfo();
 
       expect(bilibiliScrapy.videoResult.length).toBeGreaterThan(0);
       expect(bilibiliScrapy.title).toBe(audio$musicServiceC$url__songid_590187.data.title);
@@ -117,7 +117,7 @@ describe('test BilibiliScrapy class', function(): void {
       await bilibiliScrapy.asyncLoadVideoInfoByPage();
 
       const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
-      const videoInfoItem: BilibiliVideoInfoItem = bilibiliScrapy.findVideoInfo();
+      const { videoInfoItem }: FindVideoInfoReturn = bilibiliScrapy.findVideoInfo();
 
       expect(bilibiliScrapy.videoResult.length).toBeGreaterThan(0);
       expect(bilibiliScrapy.title).toBe(pgc$view$web$season__ep_id_476665.result.title);

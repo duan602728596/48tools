@@ -48,6 +48,11 @@ interface BilibiliScrapyParseOptions extends BilibiliScrapyCoreOptions {
 
 export type BilibiliScrapyOptions = BilibiliScrapyUrlOptions | BilibiliScrapyParseOptions;
 
+export interface FindVideoInfoReturn {
+  videoResultItem: BilibiliVideoResultItem;
+  videoInfoItem: BilibiliVideoInfoItem;
+}
+
 /* B站爬虫 */
 export class BilibiliScrapy {
   public options: BilibiliScrapyOptions;
@@ -442,12 +447,15 @@ export class BilibiliScrapy {
    * 搜索最符合满足分辨率的视频
    * @param { number } [p]
    */
-  findVideoInfo(p?: number): BilibiliVideoInfoItem {
+  findVideoInfo(p?: number): FindVideoInfoReturn {
     const item: BilibiliVideoResultItem = this.findVideoResult(p);
     let index: number = item.videoInfo.findIndex((o: BilibiliVideoInfoItem) => o.quality <= this.maxQn);
 
     if (index < 0) index = 0;
 
-    return item.videoInfo[index];
+    return {
+      videoResultItem: item,
+      videoInfoItem: item.videoInfo[index]
+    };
   }
 }
