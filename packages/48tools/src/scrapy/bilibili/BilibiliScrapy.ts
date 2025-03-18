@@ -1,9 +1,4 @@
-import {
-  requestRoomInfoData,
-  requestRoomPlayerUrlV2,
-  type RoomInfo,
-  type RoomPlayUrlV2
-} from '@48tools-api/bilibili/live';
+import { requestRoomInfoData, requestRoomPlayerUrlV2, type RoomInfo, type RoomPlayUrlV2 } from '@48tools-api/bilibili/live';
 import {
   requestWebInterfaceView,
   requestVideoInfo,
