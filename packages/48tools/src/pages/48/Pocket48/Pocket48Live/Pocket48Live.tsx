@@ -316,15 +316,18 @@ function Pocket48Live(props: {}): ReactElement {
       {
         id: record.liveId,  // rtmp服务器id
         playerType: 'live', // 'live' | 'record': 直播还是录播
-        ...port             // 端口号
+        httpPort: String(port.httpPort),
+        rtmpPort: String(port.rtmpPort)// 端口号
       },
       pick(record, [
         'coverPath', // 头像
         'title',     // 直播间标题
-        'liveId',    // 直播id
-        'liveType',  // 直播类型
-        'liveMode'
-      ])
+        'liveId'     // 直播id
+      ]),
+      {
+        liveType: String(record.liveType), // 直播类型
+        liveMode: String(record.liveMode)
+      }
     ));
 
     ipcRenderer.send(WinIpcChannel.PlayerHtml, record.title, searchParams.toString());
