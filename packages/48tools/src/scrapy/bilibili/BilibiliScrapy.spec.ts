@@ -1,4 +1,5 @@
 import type { WebInterfaceViewData, RequestVideoInfoArgumentObject, VideoInfo, AudioInfo, BangumiWebSeason, PugvSeason, PugvSeasonPlayUrl } from '@48tools-api/bilibili/download';
+import type { RoomInfo, RoomPlayUrlV2, RoomPlayUrlV2StreamFormat } from '@48tools-api/bilibili/live';
 import * as x$webInterface$view__bvid_BV1og4y187vP from '__mocks__/services/bilibili/download/x$web-interface$view@bvid=BV1og4y187vP.mockdata.json';
 import * as x$player$playUrl__bvid_BV1og4y187vP_cid_185864709 from '__mocks__/services/bilibili/download/x$player$playurl@bvid=BV1og4y187vP#cid=185864709.mockdata.json';
 import * as audio$musicServiceC$url__songid_590187 from '__mocks__/services/bilibili/download/audio$music-service-c$ur@songid=590187.mockdata.json';
@@ -6,6 +7,8 @@ import * as pgc$view$web$season__ep_id_476665 from '__mocks__/services/bilibili/
 import * as x$player$playUrl__bvid_BV1BP4y1K7cC_cid_566153909 from '__mocks__/services/bilibili/download/x$player$playurl@bvid=BV1BP4y1K7cC#cid=566153909.mockdata.json';
 import * as pugv$view$web$season__ep_id_215167 from '__mocks__/services/bilibili/download/pugv$view$web$season@ep_id=215167.mock.json';
 import * as pugv$player$web$playurl__avid_960526794_ep_id_215167_cid_1255148570 from '__mocks__/services/bilibili/download/pugv$player$web$playurl@avid=960526794#ep_id=215167#cid=1255148570.mockdata.json';
+import * as room$v1$room$get_info__id_1947277414 from '__mocks__/services/bilibili/live/room$v1$room$get_info@id=1947277414.mockdata.json';
+import * as xlive$web_room$v2$index$getRoomPlayInfo__room_id_1947277414 from '__mocks__/services/bilibili/live/xlive$web-room$v2$index$getRoomPlayInfo@room_id=1947277414.mockdata.json';
 
 /**
  * 将json的类型转换，修复某些类型对不上的问题
@@ -15,7 +18,13 @@ function JsonTypeTransform<T>(x: any): T {
   return x;
 }
 
-jest.mock('@48tools-api/bilibili/live', (): {} => ({}));
+jest.mock('@48tools-api/bilibili/live', (): {
+  requestRoomInfoData(): Promise<RoomInfo>;
+  requestRoomPlayerUrlV2(): Promise<RoomPlayUrlV2>;
+} => ({
+  requestRoomInfoData: (): Promise<RoomInfo> => Promise.resolve(room$v1$room$get_info__id_1947277414),
+  requestRoomPlayerUrlV2: (): Promise<RoomPlayUrlV2> => Promise.resolve(JsonTypeTransform<RoomPlayUrlV2>(xlive$web_room$v2$index$getRoomPlayInfo__room_id_1947277414))
+}));
 jest.mock('@48tools-api/bilibili/download', (): {
   requestWebInterfaceView(): Promise<WebInterfaceViewData>;
   requestVideoInfo(x: RequestVideoInfoArgumentObject): Promise<VideoInfo>;
@@ -181,6 +190,42 @@ describe('test BilibiliScrapy class', function(): void {
     test('should parse cheese when pass url', async function(): Promise<void> {
       const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
         url: 'https://www.bilibili.com/cheese/play/ep215167?csource=private_space_tougao_null'
+      });
+
+      await verify(bilibiliScrapy);
+    });
+  });
+
+  /* 直播的测试 */
+  describe('test parse live', function(): void {
+    // 验证
+    async function verify(bilibiliScrapy: BilibiliScrapy): Promise<void> {
+      await bilibiliScrapy.parse();
+      await bilibiliScrapy.asyncLoadVideoInfoByPage();
+
+      const videoResultItem: BilibiliVideoResultItem = bilibiliScrapy.findVideoResult();
+      const { videoInfoItem }: FindVideoInfoReturn = bilibiliScrapy.findVideoInfo();
+      const { codec }: RoomPlayUrlV2StreamFormat = JsonTypeTransform<RoomPlayUrlV2StreamFormat>(xlive$web_room$v2$index$getRoomPlayInfo__room_id_1947277414.data.playurl_info.playurl.stream[0].format[0]);
+
+      expect(bilibiliScrapy.videoResult.length).toBeGreaterThan(0);
+      expect(bilibiliScrapy.title).toBe(room$v1$room$get_info__id_1947277414.data.title);
+      expect(videoResultItem.videoInfo.length).toBeGreaterThan(0);
+      expect(videoResultItem.title).toBe(room$v1$room$get_info__id_1947277414.data.title);
+      expect(videoInfoItem.videoUrl).toBe(`${ codec[0].url_info[0].host }${ codec[0].base_url }${ codec[0].url_info[0].extra }`);
+    }
+
+    test('should parse live when pass type and id', async function(): Promise<void> {
+      const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+        type: BilibiliVideoType.LIVE,
+        id: '1947277414'
+      });
+
+      await verify(bilibiliScrapy);
+    });
+
+    test('should parse live when pass url', async function(): Promise<void> {
+      const bilibiliScrapy: BilibiliScrapy = new BilibiliScrapy({
+        url: 'https://live.bilibili.com/1947277414?session_id=4e7667a0350bb7544f224bba0667dc11_7F52BD35-6117-4218-AD6D-23E2595DDCED&launch_id=1000216&live_from=71001'
       });
 
       await verify(bilibiliScrapy);

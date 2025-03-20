@@ -1,0 +1,253 @@
+{
+  "code": 0,
+  "message": "0",
+  "ttl": 1,
+  "data": {
+    "room_id": 1947277414,
+    "short_id": 0,
+    "uid": 1203217682,
+    "is_hidden": false,
+    "is_locked": false,
+    "is_portrait": false,
+    "live_status": 1,
+    "hidden_till": 0,
+    "lock_till": 0,
+    "encrypted": false,
+    "pwd_verified": true,
+    "live_time": 1742475582,
+    "room_shield": 0,
+    "all_special_types": [],
+    "playurl_info": {
+      "conf_json": "{\"cdn_rate\":10000,\"report_interval_sec\":150}",
+      "playurl": {
+        "cid": 1947277414,
+        "g_qn_desc": [
+          {
+            "qn": 30000,
+            "desc": "杜比",
+            "hdr_desc": "",
+            "attr_desc": null,
+            "hdr_type": 0
+          },
+          {
+            "qn": 20000,
+            "desc": "4K",
+            "hdr_desc": "",
+            "attr_desc": null,
+            "hdr_type": 0
+          },
+          {
+            "qn": 10000,
+            "desc": "原画",
+            "hdr_desc": "",
+            "attr_desc": null,
+            "hdr_type": 0
+          },
+          {
+            "qn": 400,
+            "desc": "蓝光",
+            "hdr_desc": "",
+            "attr_desc": null,
+            "hdr_type": 0
+          },
+          {
+            "qn": 250,
+            "desc": "超清",
+            "hdr_desc": "",
+            "attr_desc": null,
+            "hdr_type": 0
+          },
+          {
+            "qn": 150,
+            "desc": "高清",
+            "hdr_desc": "",
+            "attr_desc": null,
+            "hdr_type": 0
+          },
+          {
+            "qn": 80,
+            "desc": "流畅",
+            "hdr_desc": "",
+            "attr_desc": null,
+            "hdr_type": 0
+          }
+        ],
+        "stream": [
+          {
+            "protocol_name": "http_stream",
+            "format": [
+              {
+                "format_name": "flv",
+                "codec": [
+                  {
+                    "codec_name": "avc",
+                    "current_qn": 10000,
+                    "accept_qn": [10000, 400, 250],
+                    "base_url": "/live-bvc/629504/live_1203217682_2515554_bluray.flv?",
+                    "url_info": [
+                      {
+                        "host": "https://cn-sdqd-cu-01-15.bilivideo.com",
+                        "extra": "expires=1742479441&pt=web&deadline=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&platform=web&qn=10000&trid=10001fb5ea20bde8788513b8caf88367dc12&uipk=100&uipv=100&nbs=1&uparams=cdn,deadline,len,oi,platform,qn,trid,uipk,uipv,nbs&cdn=cn-gotcha01&upsig=402ce3a2fdc3e384805b074c7fe08a6e&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&sid=cn-sdqd-cu-01-15&chash=1&bmt=1&sg=lr&trace=41&isp=cu&rg=NorthEast&pv=Liaoning&score=1&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&sl=1&hot_cdn=0&pp=rtmp&origin_bitrate=1021237&p2p_type=1&suffix=bluray&info_source=origin&source=puv3_onetier&deploy_env=prod&vd=nc&zoneid_l=151420930&sid_l=stream_name_cold&src=puv3&order=1",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha04.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10001fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha04&sign=89dc98cf44e544ee5e8def314c46b1b4&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&score=1&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&sl=1&hot_cdn=0&pp=rtmp&origin_bitrate=1021237&p2p_type=1&suffix=bluray&info_source=origin&source=puv3_onetier&deploy_env=prod&vd=bc&src=puv3&order=2",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha07.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10001fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha07&sign=2f1303b97c93ca6e884aa44ae3464737&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&sl=1&hot_cdn=0&pp=rtmp&origin_bitrate=1021237&p2p_type=1&suffix=bluray&score=1&info_source=origin&source=puv3_onetier&deploy_env=prod&vd=bc&src=puv3&order=3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": "",
+                    "hdr_type": 0
+                  },
+                  {
+                    "codec_name": "hevc",
+                    "current_qn": 10000,
+                    "accept_qn": [10000, 400, 250],
+                    "base_url": "/live-bvc/241235/live_1203217682_2515554_prohevc.flv?",
+                    "url_info": [
+                      {
+                        "host": "https://cn-sdqd-cu-01-40.bilivideo.com",
+                        "extra": "expires=1742479441&pt=web&deadline=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&platform=web&qn=10000&trid=10001fb5ea20bde8788513b8caf88367dc12&uipk=100&uipv=100&nbs=1&uparams=cdn,deadline,len,oi,platform,qn,trid,uipk,uipv,nbs&cdn=cn-gotcha01&upsig=aa30540087d47c6be171a2392d90ac15&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&sid=cn-sdqd-cu-01-40&chash=1&bmt=1&sg=lr&trace=41&isp=cu&rg=NorthEast&pv=Liaoning&origin_bitrate=1021237&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&suffix=prohevc&score=1&sl=1&info_source=origin&source=puv3_onetier&p2p_type=1&pp=rtmp&deploy_env=prod&hot_cdn=0&vd=nc&zoneid_l=151420930&sid_l=stream_name_cold&src=puv3&order=1",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha04.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10001fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha04&sign=7a6ad99894e75746fd6bb716ccc440e6&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&source=puv3_onetier&p2p_type=1&pp=rtmp&deploy_env=prod&hot_cdn=0&info_source=origin&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&suffix=prohevc&score=1&sl=1&origin_bitrate=1021237&vd=bc&src=puv3&order=2",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha07.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10001fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha07&sign=a9ba8130fb6f8e482b92a5f07428f3e7&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&sl=1&origin_bitrate=1021237&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&suffix=prohevc&score=1&hot_cdn=0&info_source=origin&source=puv3_onetier&p2p_type=1&pp=rtmp&deploy_env=prod&vd=bc&src=puv3&order=3",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": "",
+                    "hdr_type": 0
+                  }
+                ],
+                "master_url": ""
+              }
+            ]
+          },
+          {
+            "protocol_name": "http_hls",
+            "format": [
+              {
+                "format_name": "ts",
+                "codec": [
+                  {
+                    "codec_name": "avc",
+                    "current_qn": 10000,
+                    "accept_qn": [10000, 400, 250],
+                    "base_url": "/live-bvc/959133/live_1203217682_2515554_bluray.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://d1--cn-gotcha104.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10031fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha104&sign=e73b5f560993b6b9f51315907ede30e3&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&p2p_type=1&pp=rtmp&info_source=origin&source=puv3_onetier&score=1&origin_bitrate=1021237&suffix=bluray&sl=1&hot_cdn=0&deploy_env=prod&vd=bc&src=puv3&order=1",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": "",
+                    "hdr_type": 0
+                  },
+                  {
+                    "codec_name": "hevc",
+                    "current_qn": 10000,
+                    "accept_qn": [10000, 400, 250],
+                    "base_url": "/live-bvc/727124/live_1203217682_2515554_prohevc.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://d1--cn-gotcha104.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10031fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha104&sign=c4f754a74dc906fc7893d4d03acae8fc&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&sl=1&suffix=prohevc&pp=rtmp&origin_bitrate=1021237&hot_cdn=0&deploy_env=prod&score=1&sk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&info_source=origin&source=puv3_onetier&p2p_type=1&vd=bc&src=puv3&order=1",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": "",
+                    "hdr_type": 0
+                  }
+                ],
+                "master_url": ""
+              },
+              {
+                "format_name": "fmp4",
+                "codec": [
+                  {
+                    "codec_name": "avc",
+                    "current_qn": 10000,
+                    "accept_qn": [10000, 400, 250],
+                    "base_url": "/live-bvc/729203/live_1203217682_2515554_bluray/index.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://cn-sdqd-cu-01-15.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10071fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha01&sign=ff537b7e52fd7ff0e5f5ff708ec2e243&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&bvchls=1&sid=cn-sdqd-cu-01-15&chash=1&bmt=1&sg=lr&trace=41&isp=cu&rg=NorthEast&pv=Liaoning&origin_bitrate=1021237&hot_cdn=0&source=puv3_onetier&pp=rtmp&sl=1&score=1&info_source=origin&sk=657866af8fc16d8b2b84dfdde3e981438dff44b02a5b137933388fa4fca4c196&p2p_type=1&suffix=bluray&deploy_env=prod&flvsk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&vd=nc&zoneid_l=151420930&sid_l=stream_name_cold&src=puv3&order=1",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha204.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10071fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha204&sign=04434995bef8b5d5a941c44801c5fc12&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&bvchls=1&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&source=puv3_onetier&origin_bitrate=1021237&hot_cdn=0&deploy_env=prod&pp=rtmp&sl=1&score=1&info_source=origin&sk=657866af8fc16d8b2b84dfdde3e981438dff44b02a5b137933388fa4fca4c196&p2p_type=1&suffix=bluray&flvsk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&vd=bc&src=puv3&order=2",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": "",
+                    "hdr_type": 0
+                  },
+                  {
+                    "codec_name": "hevc",
+                    "current_qn": 10000,
+                    "accept_qn": [10000, 400, 250],
+                    "base_url": "/live-bvc/652655/live_1203217682_2515554_prohevc/index.m3u8?",
+                    "url_info": [
+                      {
+                        "host": "https://cn-sdqd-cu-01-40.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10071fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha01&sign=8acd2e72dee2a9dba62590e37ab01540&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&bvchls=1&sid=cn-sdqd-cu-01-40&chash=1&bmt=1&sg=lr&trace=41&isp=cu&rg=NorthEast&pv=Liaoning&hot_cdn=0&p2p_type=1&score=1&origin_bitrate=1021237&sk=657866af8fc16d8b2b84dfdde3e981438dff44b02a5b137933388fa4fca4c196&flvsk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&source=puv3_onetier&pp=rtmp&sl=1&suffix=prohevc&deploy_env=prod&info_source=origin&vd=nc&zoneid_l=151420930&sid_l=stream_name_cold&src=puv3&order=1",
+                        "stream_ttl": 0
+                      },
+                      {
+                        "host": "https://d1--cn-gotcha204.bilivideo.com",
+                        "extra": "expires=1742479441&len=0&oi=0x2408832e0c92bd60b85b225940af4fae&pt=web&qn=10000&trid=10071fb5ea20bde8788513b8caf88367dc12&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha204&sign=191ea22f07bbde9a00ee387ef54aa561&site=8d32b0fcaf9962abfe2545ca328e71e6&free_type=0&mid=429719&sche=ban&bvchls=1&trace=32&isp=cu&rg=NorthEast&pv=Liaoning&sk=657866af8fc16d8b2b84dfdde3e981438dff44b02a5b137933388fa4fca4c196&flvsk=1304f646dfeb4df8b6e7ff33c167d3ade5499fb3816ee44156bf0a67c558bc61&source=puv3_onetier&pp=rtmp&sl=1&suffix=prohevc&deploy_env=prod&info_source=origin&hot_cdn=0&p2p_type=1&score=1&origin_bitrate=1021237&vd=bc&src=puv3&order=2",
+                        "stream_ttl": 0
+                      }
+                    ],
+                    "hdr_qn": null,
+                    "dolby_type": 0,
+                    "attr_name": "",
+                    "hdr_type": 0
+                  }
+                ],
+                "master_url": ""
+              }
+            ]
+          }
+        ],
+        "p2p_data": {
+          "p2p": true,
+          "p2p_type": 1,
+          "m_p2p": false,
+          "m_servers": null
+        },
+        "dolby_qn": null
+      }
+    },
+    "official_type": 0,
+    "official_room_id": 0,
+    "risk_with_delay": 0,
+    "multi_screen_info": "",
+    "pure_control_function": null,
+    "degraded_playurl": null
+  }
+}
