@@ -1,11 +1,11 @@
 import type { WebInterfaceViewData, RequestVideoInfoArgumentObject, VideoInfo, AudioInfo, BangumiWebSeason, PugvSeason, PugvSeasonPlayUrl } from '@48tools-api/bilibili/download';
-import * as x$webInterface$view__bvid_BV1og4y187vP from '__mocks__/services/bilibili/x$web-interface$view@bvid=BV1og4y187vP.mockdata.json';
-import * as x$player$playUrl__bvid_BV1og4y187vP_cid_185864709 from '__mocks__/services/bilibili/x$player$playurl@bvid=BV1og4y187vP#cid=185864709.mockdata.json';
-import * as audio$musicServiceC$url__songid_590187 from '__mocks__/services/bilibili/audio$music-service-c$ur@songid=590187.mockdata.json';
-import * as pgc$view$web$season__ep_id_476665 from '__mocks__/services/bilibili/pgc$view$web$season@ep_id=476665.mockdata.json';
-import * as x$player$playUrl__bvid_BV1BP4y1K7cC_cid_566153909 from '__mocks__/services/bilibili/x$player$playurl@bvid=BV1BP4y1K7cC#cid=566153909.mockdata.json';
-import * as pugv$view$web$season__ep_id_215167 from '__mocks__/services/bilibili/pugv$view$web$season@ep_id=215167.mock.json';
-import * as pugv$player$web$playurl__avid_960526794_ep_id_215167_cid_1255148570 from '__mocks__/services/bilibili/pugv$player$web$playurl@avid=960526794#ep_id=215167#cid=1255148570.mockdata.json';
+import * as x$webInterface$view__bvid_BV1og4y187vP from '__mocks__/services/bilibili/download/x$web-interface$view@bvid=BV1og4y187vP.mockdata.json';
+import * as x$player$playUrl__bvid_BV1og4y187vP_cid_185864709 from '__mocks__/services/bilibili/download/x$player$playurl@bvid=BV1og4y187vP#cid=185864709.mockdata.json';
+import * as audio$musicServiceC$url__songid_590187 from '__mocks__/services/bilibili/download/audio$music-service-c$ur@songid=590187.mockdata.json';
+import * as pgc$view$web$season__ep_id_476665 from '__mocks__/services/bilibili/download/pgc$view$web$season@ep_id=476665.mockdata.json';
+import * as x$player$playUrl__bvid_BV1BP4y1K7cC_cid_566153909 from '__mocks__/services/bilibili/download/x$player$playurl@bvid=BV1BP4y1K7cC#cid=566153909.mockdata.json';
+import * as pugv$view$web$season__ep_id_215167 from '__mocks__/services/bilibili/download/pugv$view$web$season@ep_id=215167.mock.json';
+import * as pugv$player$web$playurl__avid_960526794_ep_id_215167_cid_1255148570 from '__mocks__/services/bilibili/download/pugv$player$web$playurl@avid=960526794#ep_id=215167#cid=1255148570.mockdata.json';
 
 /**
  * 将json的类型转换，修复某些类型对不上的问题
