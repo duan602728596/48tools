@@ -13,7 +13,8 @@ export function parseXiaohongshuLive(html: string): InitialState | undefined {
     const scriptText: string = script.innerHTML;
 
     if (/window\.__INITIAL_STATE__/i.test(scriptText)) {
-      initialState = JSON.parse(scriptText.replace(/\s*window\.__INITIAL_STATE__\s*=\s*/i, '').replace(/;?\s*$/, ''));
+      // eslint-disable-next-line no-eval
+      initialState = eval(`(${ scriptText.replace(/\s*window\.__INITIAL_STATE__\s*=\s*/i, '').replace(/;?\s*$/, '') })`);
     }
   }
 

@@ -109,6 +109,7 @@ function Index(props: {}): ReactElement {
         worker
       }));
     } catch (err) {
+      console.error(err);
       messageApi.error('获取小红书直播间信息失败！');
     }
   }
