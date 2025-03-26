@@ -34,6 +34,13 @@ import imageUrlZfbAvif from './images/zfb.avif';
 import imageUrlWxAvif from './images/wx.avif';
 import ShowroomTextIcon from './ShowroomTextIcon/ShowroomTextIcon';
 
+/* 开发环境下二维码图片替换为占位图片 */
+let [imageUrlZfbAvifUrl, imageUrlWxAvifUrl]: [string, string] = [imageUrlZfbAvif, imageUrlWxAvif];
+
+if (process.env.NODE_ENV === 'development') {
+  [imageUrlZfbAvifUrl, imageUrlWxAvifUrl] = (await import('./devImages')).default;
+}
+
 interface NativeItem {
   name: string | ReactElement;
   key?: string;
@@ -306,8 +313,8 @@ function Index(props: {}): ReactElement {
             下载软件的最新版本。如果你想要赞助作者，请扫码打赏。
           </p>
           <Space size={ 8 }>
-            <Image className="cursor-pointer !w-[180px]" src={ imageUrlZfbAvif } />
-            <Image className="cursor-pointer !w-[180px]" src={ imageUrlWxAvif } />
+            <Image className="cursor-pointer !w-[180px]" src={ imageUrlZfbAvifUrl } />
+            <Image className="cursor-pointer !w-[180px]" src={ imageUrlWxAvifUrl } />
           </Space>
         </div>
       </div>
