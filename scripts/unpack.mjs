@@ -3,7 +3,7 @@ import fsP from 'node:fs/promises';
 import { rimraf } from 'rimraf';
 import fse from 'fs-extra/esm';
 import builder from 'electron-builder';
-import { cwd, appDir, wwwDir, staticsDir, build, sdkDownloadDir, output, unpacked, unpackedNodeModules, isMacOS, isArm64 } from './utils.mjs';
+import { softwareName, cwd, appDir, wwwDir, staticsDir, build, sdkDownloadDir, output, unpacked, unpackedNodeModules, isMacOS, isArm64 } from './utils.mjs';
 import taskfile from './taskfile.mjs';
 import nimSdkDownload from './nimSdkDownload.mjs';
 import packageJson from '../package.json' with { type: 'json' };
@@ -29,8 +29,8 @@ const electronDownloadVersion = packageJson.dependencies.electron.replace(/^\^/,
  */
 function config(outputDir, target) {
   const cfg = {
-    appId: '48tools',
-    productName: '48tools',
+    appId: softwareName,
+    productName: softwareName,
     copyright: '段昊辰',
     files: [
       '**/*',
@@ -67,7 +67,7 @@ function config(outputDir, target) {
     linux: {
       target: 'dir',
       icon: icon.linux,
-      executableName: '48tools'
+      executableName: softwareName
     },
     includeSubNodeModules: false,
     npmRebuild: false,

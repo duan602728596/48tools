@@ -4,19 +4,19 @@ import path from 'node:path';
 import { glob } from 'glob';
 import fse from 'fs-extra/esm';
 import zip from 'cross-zip';
-import { build, unpacked, isMacOS, isWindows, isArm64 } from './utils.mjs';
+import { softwareName, build, unpacked, isMacOS, isWindows, isArm64 } from './utils.mjs';
 import lernaJson from '../lerna.json' with { type: 'json' };
 
 const zipPromise = util.promisify(zip.zip);
 
 const { version } = lernaJson;
 const renameDir = {
-  mac: path.join(build, `mac/48tools-${ version }-mac`),
-  macArm64: path.join(build, `mac-arm64/48tools-${ version }-mac-arm64`),
-  win: path.join(build, `win/48tools-${ version }-win64`),
-  win32: path.join(build, `win32/48tools-${ version }-win32`),
-  winArm64: path.join(build, `win-arm64/48tools-${ version }-win-arm64`),
-  linux: path.join(build, `linux/48tools-${ version }-linux64`)
+  mac: path.join(build, `mac/${ softwareName }-${ version }-mac`),
+  macArm64: path.join(build, `mac-arm64/${ softwareName }-${ version }-mac-arm64`),
+  win: path.join(build, `win/${ softwareName }-${ version }-win64`),
+  win32: path.join(build, `win32/${ softwareName }-${ version }-win32`),
+  winArm64: path.join(build, `win-arm64/${ softwareName }-${ version }-win-arm64`),
+  linux: path.join(build, `linux/${ softwareName }-${ version }-linux64`)
 };
 
 /**
@@ -25,7 +25,7 @@ const renameDir = {
  */
 async function lprojDeleteFilesAndWriteVersion(unpackedDir) {
   // 删除多语言文件
-  const files = await glob(path.join(unpackedDir, '48tools.app/Contents/Resources/*.lproj'));
+  const files = await glob(path.join(unpackedDir, `${ softwareName }.app/Contents/Resources/*.lproj`));
   const deleteTasks = [];
 
   files.forEach((o) => !/zh_CN/i.test(o) && deleteTasks.push(fse.remove(o)));

@@ -8,6 +8,8 @@ import { metaHelper } from '@sweet-milktea/utils';
 export const require = createRequire(import.meta.url);
 export const { __dirname } = metaHelper(import.meta.url);
 
+export const softwareName = '48tools'; // 文件名
+
 // 定义文件位置
 export const cwd = path.join(__dirname, '../');      // 网站目录
 export const appDir = path.join(cwd, 'app');         // build用的目录
