@@ -263,6 +263,7 @@ function Pocket48Record(props: {}): ReactElement {
   async function handleDownloadM3u8Click(record: LiveInfo, downloadType: 0 | 1, event: MouseEvent): Promise<void> {
     try {
       const resInfo: LiveRoomInfo = await requestLiveRoomInfo(record.liveId);
+      const url: URL = new URL(resInfo.content.playStreamPath);
       const parseResult: ParsedPath = path.parse(resInfo.content.playStreamPath);
       const isM3u8: boolean = parseResult.ext === '.m3u8'; // 以前的视频可能是mp4的
 
@@ -287,9 +288,8 @@ function Pocket48Record(props: {}): ReactElement {
         } else {
           m3u8File = `${ result.filePath }.m3u8`;
         }
-
         const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath, {
-          'Host': 'cychengyuan-vod.48.cn',
+          'Host': /live\.us\.sinaimg\.cn/.test(url.hostname) ? undefined : 'cychengyuan-vod.48.cn',
           'User-Agent': engineUserAgent
         });
 
