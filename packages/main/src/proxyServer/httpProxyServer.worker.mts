@@ -66,9 +66,12 @@ function tsResponseHandle(urlParse: URL, httpResponse: ServerResponse, headers: 
 
   const deTsUrl: string = decodeURIComponent(tsUrl);
   const deTsUrlParse: URL = new URL(deTsUrl);
-
+  const headers2: OutgoingHttpHeaders = {
+    ...headers,
+    Host: /live\.us\.sinaimg\.cn/.test(deTsUrlParse.hostname) ? undefined : deTsUrlParse.hostname
+  };
   const req: ClientRequest = (deTsUrlParse.protocol === 'https:' ? https : http)
-    .get(deTsUrl, { headers, timeout: 10_000 }, function(response: IncomingMessage): void {
+    .get(deTsUrl, { headers: headers2, timeout: 10_000 }, function(response: IncomingMessage): void {
       const buffer: Array<Buffer> = [];
 
       response.on('data', (chunk: Buffer): unknown => buffer.push(chunk));
@@ -130,7 +133,6 @@ http.createServer(function(httpRequest: IncomingMessage, httpResponse: ServerRes
   } else if (urlParse.pathname === '/proxy/cychengyuan-vod48') {
     // 口袋48录播的ts的下载
     tsResponseHandle(urlParse, httpResponse, {
-      Host: 'cychengyuan-vod.48.cn',
       'User-Agent': 'SNH48 ENGINE'
     });
   } else if (urlParse.pathname === '/proxy/bilibili-video') {

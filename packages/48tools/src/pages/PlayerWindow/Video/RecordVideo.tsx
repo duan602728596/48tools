@@ -35,11 +35,12 @@ function RecordVideo(props: RecordVideoProps): ReactElement {
 
       if (hlsPlayerRef.current) return;
 
+      const url: URL = new URL(info.content.playStreamPath);
       const m3u8Data: string = await requestDownloadFile(info.content.playStreamPath, {
-        'Host': 'cychengyuan-vod.48.cn',
+        Host: /live\.us\.sinaimg\.cn/.test(url.hostname) ? undefined : url.hostname,
         'User-Agent': engineUserAgent
       });
-      const blob: Blob = new Blob([formatTsUrl(m3u8Data, playerInfo.proxyPort)], { type: 'application/vnd.apple.mpegurl' });
+      const blob: Blob = new Blob([formatTsUrl(m3u8Data, playerInfo.proxyPort, url.hostname)], { type: 'application/vnd.apple.mpegurl' });
       const m3u8Url: string = URL.createObjectURL(blob);
 
       hlsPlayerRef.current = new Hls();

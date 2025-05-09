@@ -79,14 +79,15 @@ const groupIdSelectOptions: Array<DefaultOptionType> = [
  * 格式化m3u8文件内视频的地址
  * @param { string } data - m3u8文件内容
  * @param { number } port - 代理的端口号
+ * @param { string } hostname
  */
-export function formatTsUrl(data: string, port: number): string {
+export function formatTsUrl(data: string, port: number, hostname: string): string {
   const dataArr: string[] = data.split('\n');
   const newStrArr: string[] = [];
 
   for (const item of dataArr) {
     if (/^\/fragments.*\.ts$/.test(item)) {
-      const tsUrl: string = `https://cychengyuan-vod.48.cn${ item }`;
+      const tsUrl: string = `https://${ hostname }${ item }`;
 
       newStrArr.push(`http://localhost:${ port }/proxy/cychengyuan-vod48?url=${ encodeURIComponent(tsUrl) }`);
     } else {
@@ -289,11 +290,11 @@ function Pocket48Record(props: {}): ReactElement {
           m3u8File = `${ result.filePath }.m3u8`;
         }
         const m3u8Data: string = await requestDownloadFile(resInfo.content.playStreamPath, {
-          'Host': /live\.us\.sinaimg\.cn/.test(url.hostname) ? undefined : 'cychengyuan-vod.48.cn',
+          Host: /live\.us\.sinaimg\.cn/.test(url.hostname) ? undefined : url.hostname,
           'User-Agent': engineUserAgent
         });
 
-        await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, getProxyServerPort().port)); // 写入m3u8文件
+        await fsP.writeFile(m3u8File, formatTsUrl(m3u8Data, getProxyServerPort().port, url.hostname)); // 写入m3u8文件
         downloadFile = m3u8File; // m3u8文件地址
       } else {
         downloadFile = resInfo.content.playStreamPath;
