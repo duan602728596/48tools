@@ -17,7 +17,7 @@ import type { ColumnsType } from 'antd/es/table';
 import type { DefaultOptionType } from 'rc-select/es/Select';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { UseMessageReturnType } from '@48tools-types/antd';
-import { requestLiveEnter, requestTtwidCookie, type LiveEnter } from '@48tools-api/toutiao/douyin';
+import { requestLiveEnter, requestLiveReflowInfo, requestTtwidCookie, type LiveEnter, type LiveReflowInfo, type LiveStreamUrl } from '@48tools-api/toutiao/douyin';
 import { showSaveDialog } from '../../../utils/remote/dialog';
 import Header from '../../../components/Header/Header';
 import AddLiveRoomForm from '../../../components/AddLiveRoomForm/AddLiveRoomForm';
@@ -39,6 +39,35 @@ import type { LiveSliceInitialState, LiveSliceSelector } from '../../../store/sl
 import type { WebWorkerChildItem, MessageEventData, LiveItem } from '../../../commonTypes';
 import AutoRecordingSavePath from '../../../components/AutoRecordingSavePath/AutoRecordingSavePath';
 import douyinLiveAutoRecord from './utils/douyinLiveAutoRecord';
+
+/**
+ * 创建options
+ * @param { LiveStreamUrl } streamUrl
+ * @param { LiveItem } record
+ */
+function createOptions(streamUrl: LiveStreamUrl, record: LiveItem): Array<DefaultOptionType> {
+  const options: Array<DefaultOptionType> = [];
+
+  for (const key in streamUrl.flv_pull_url) {
+    options.push({
+      label: `FLV - ${ key }`,
+      value: streamUrl.flv_pull_url[key],
+      type: 'flv',
+      item: record
+    });
+  }
+
+  for (const key in streamUrl.hls_pull_url_map) {
+    options.push({
+      label: `M3U8 - ${ key }`,
+      value: streamUrl.hls_pull_url_map[key],
+      type: 'm3u8',
+      item: record
+    });
+  }
+
+  return options;
+}
 
 /* redux selector */
 type RState = { douyinLive: LiveSliceInitialState };
@@ -149,36 +178,35 @@ function DouyinLive(props: {}): ReactElement {
       await requestTtwidCookie(); // 获取ttwid的cookie
       const res: LiveEnter | string = await requestLiveEnter(douyinCookie.toString(), record.roomId);
 
-      if (typeof res === 'object') {
-        if (res?.data?.data?.length && res.data.data[0]?.stream_url) {
-          const options: Array<DefaultOptionType> = [];
-
-          for (const key in res.data.data[0].stream_url.flv_pull_url) {
-            options.push({
-              label: `FLV - ${ key }`,
-              value: res.data.data[0].stream_url.flv_pull_url[key],
-              type: 'flv',
-              item: record
-            });
-          }
-
-          for (const key in res.data.data[0].stream_url.hls_pull_url_map) {
-            options.push({
-              label: `M3U8 - ${ key }`,
-              value: res.data.data[0].stream_url.hls_pull_url_map[key],
-              type: 'm3u8',
-              item: record
-            });
-          }
-
-          setLiveOptions(options);
-          setOpen(true);
-        } else {
-          messageApi.warning('直播未开启！');
-        }
-      } else {
+      if (typeof res !== 'object') {
         messageApi.error('抖音Cookie错误或其他错误，请联系开发者！');
+
+        return;
       }
+
+      if (res?.data?.data?.length && res.data.data[0]?.stream_url) {
+        setLiveOptions(createOptions(res.data.data[0].stream_url, record));
+        setOpen(true);
+
+        return;
+      }
+
+      const res2: LiveReflowInfo | string = await requestLiveReflowInfo(douyinCookie.toString(), record.roomId, res.data.user.sec_uid);
+
+      if (typeof res2 !== 'object') {
+        messageApi.error('抖音Cookie错误或其他错误，请联系开发者！');
+
+        return;
+      }
+
+      if (res2?.data?.room?.stream_url) {
+        setLiveOptions(createOptions(res2.data.room.stream_url, record));
+        setOpen(true);
+
+        return;
+      }
+
+      messageApi.warning('直播未开启！');
     } catch (err) {
       console.error(err);
     }

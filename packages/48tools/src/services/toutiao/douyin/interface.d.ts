@@ -1,4 +1,6 @@
 /* 抖音user的数据结构 */
+import { requestLiveReflowInfo } from '@48tools-api/toutiao/douyin/index';
+
 interface AwemeItemRate {
   width: number;
   height: number;
@@ -59,32 +61,47 @@ export interface DouyinDetailApiType {
 
 export type DouyinHtmlResponseType = DouyinHtmlCookieType | DouyinHtmlType | DouyinUserApiType | DouyinDetailApiType;
 
+export interface LiveStreamUrl {
+  // flv
+  flv_pull_url: {
+    FULL_HD1: string;
+    HD1?: string;
+    SD1?: string;
+    SD2?: string;
+  };
+  // m3u8
+  hls_pull_url_map: {
+    FULL_HD1: string;
+    HD1?: string;
+    SD1?: string;
+    SD2?: string;
+  };
+  hls_pull_url: string;
+}
+
 /* 抖音直播的数据结构 */
 export interface LiveEnterData {
   status: 2;
-  stream_url?: {
-    // flv
-    flv_pull_url: {
-      FULL_HD1: string;
-      HD1: string;
-      SD1: string;
-      SD2: string;
-    };
-    // m3u8
-    hls_pull_url_map: {
-      FULL_HD1: string;
-      HD1: string;
-      SD1: string;
-      SD2: string;
-    };
-    hls_pull_url: string;
-  };
+  stream_url?: LiveStreamUrl;
 }
 
 export interface LiveEnter {
   data: {
     data: [LiveEnterData] | [];
     room_status: 0 | 2; // 0 开启 2 未直播
+    user: {
+      sec_uid: string;
+    };
+  };
+  status_code: number;
+}
+
+/* 抖音电台 */
+export interface LiveReflowInfo {
+  data: {
+    room: {
+      stream_url?: LiveStreamUrl;
+    };
   };
   status_code: number;
 }

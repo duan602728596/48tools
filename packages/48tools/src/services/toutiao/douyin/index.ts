@@ -11,7 +11,8 @@ import type {
   DouyinHtmlResponseType,
   DouyinUserApiType,
   DouyinDetailApiType,
-  LiveEnter
+  LiveEnter,
+  LiveReflowInfo
 } from './interface';
 import type { VideoQuery } from '../../../pages/Toutiao/types';
 
@@ -174,6 +175,32 @@ export async function requestLiveEnter(cookie: string, rid: string): Promise<Liv
         Cookie: cookie
       }
     });
+
+  return res.body;
+}
+
+/**
+ * 抖音电台
+ * @param { string } cookie
+ * @param { string } rid
+ * @param { string } secUserId
+ */
+export async function requestLiveReflowInfo(cookie: string, rid: string, secUserId: string): Promise<LiveReflowInfo | string> {
+  const searchParams: URLSearchParams = new URLSearchParams({
+    'type_id': '0',
+    'live_id': '1',
+    'version_code': '99.99.99',
+    'app_id': '1128',
+    'room_id': String(rid),
+    'sec_user_id': secUserId
+  });
+  const res: GotResponse<LiveReflowInfo | string> = await got.get(`https://webcast.amemv.com/webcast/room/reflow/info/?${ searchParams.toString() }`, {
+    responseType: 'json',
+    headers: {
+      Cookie: cookie,
+      'User-Agent': pcUserAgent
+    }
+  });
 
   return res.body;
 }
