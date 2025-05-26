@@ -19,11 +19,15 @@ export function formatTsUrl(data: string, m3u8Url: string): [string, Array<strin
     } else if (/^\//.test(item)) {
       const tsUrl: string = `https://ts.48.cn${ item }`;
 
-      newStrArr.push(`http://localhost:${ port }/proxy/ts48?url=${ encodeURIComponent(tsUrl) }`);
+      // TODO: 尝试使用原始地址下载
+      // newStrArr.push(`http://localhost:${ port }/proxy/ts48?url=${ encodeURIComponent(tsUrl) }`);
+      newStrArr.push(tsUrl);
     } else {
       const tsUrl: string = `${ m3u8Pathname }/${ item }`;
 
-      newStrArr.push(`http://localhost:${ port }/proxy/ts48?url=${ encodeURIComponent(tsUrl) }`);
+      // TODO: 尝试使用原始地址下载
+      // newStrArr.push(`http://localhost:${ port }/proxy/ts48?url=${ encodeURIComponent(tsUrl) }`);
+      newStrArr.push(tsUrl);
     }
   }
 

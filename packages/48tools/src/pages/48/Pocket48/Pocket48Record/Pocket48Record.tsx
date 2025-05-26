@@ -89,7 +89,9 @@ export function formatTsUrl(data: string, port: number, hostname: string): strin
     if (/^\/fragments.*\.ts$/.test(item)) {
       const tsUrl: string = `https://${ hostname }${ item }`;
 
-      newStrArr.push(`http://localhost:${ port }/proxy/cychengyuan-vod48?url=${ encodeURIComponent(tsUrl) }`);
+      // TODO: 尝试使用原始地址下载
+      // newStrArr.push(`http://localhost:${ port }/proxy/cychengyuan-vod48?url=${ encodeURIComponent(tsUrl) }`);
+      newStrArr.push(tsUrl);
     } else {
       newStrArr.push(item);
     }
