@@ -46,13 +46,14 @@ async function rm(file: string): Promise<void> {
 }
 
 /**
- * 解析参数
+ * 解析参数：由于使用了原始地址，不需要从param.url中读取原始地址
  * @param { string } uri
  */
 function getUrlQuery(uri: string): string {
   const urlParse: URL = new URL(uri);
+  const u: string | null = urlParse.searchParams.get('url');
 
-  return decodeURIComponent(urlParse.searchParams.get('url')!);
+  return u ? decodeURIComponent(u) : uri;
 }
 
 /**
@@ -61,9 +62,11 @@ function getUrlQuery(uri: string): string {
  * @param { string } filename - 文件本地地址
  */
 async function requestDownloadFileByStream(fileUrl: string, filename: string): Promise<void> {
+  const url: URL = new URL(fileUrl);
+
   downloadFileReq = got.stream(fileUrl, {
     headers: {
-      'Host': 'cychengyuan-vod.48.cn',
+      'Host': url.hostname,
       'User-Agent': 'SNH48 ENGINE'
     }
   });
@@ -160,16 +163,16 @@ async function download(workerData: WorkerEventData): Promise<void> {
 
   if (isStop) return;
 
-  const ffmpegArgs: Array<string> = ['-f', 'concat', '-safe', '0', '-i', concatTxt, '-c', 'copy', filePath];
+  const ffmpegArgs: Array<string> = ['-f', 'concat', '-safe', '0', '-i', concatTxt.replace(/\\/g, '/'), '-c', 'copy', filePath.replace(/\\/g, '/')];
 
   child = spawn(ffmpeg, ffmpegArgs);
 
   child.stdout.on('data', function(data: Buffer): void {
-    // console.log(data.toString());
+    console.log(data.toString());
   });
 
   child.stderr.on('data', function(data: Buffer): void {
-    // console.log(data.toString());
+    console.log(data.toString());
   });
 
   child.on('close', function(...args: string[]): void {
