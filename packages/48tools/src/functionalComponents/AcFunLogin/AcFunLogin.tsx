@@ -27,7 +27,7 @@ function AcFunLogin(props: {}): ReactElement {
         title="A站账号扫码登陆"
         width={ 600 }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         footer={ <Button onClick={ handleCloseQrcodeClick }>关闭</Button> }
         onCancel={ handleCloseQrcodeClick }
       >

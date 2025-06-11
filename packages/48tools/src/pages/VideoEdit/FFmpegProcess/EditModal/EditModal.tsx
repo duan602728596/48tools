@@ -108,7 +108,7 @@ function EditModal(props: EditModalProps & EditModalUseProps): ReactElement {
       <Modal open={ open }
         width={ 600 }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         closable={ false }
         maskClosable={ false }
         okText="执行"

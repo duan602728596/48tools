@@ -246,7 +246,7 @@ function LoginTable(props: {}): ReactElement {
         maskClosable={ false }
         mask={ false }
         closeIcon={ null }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         footer={ <Button type="primary" danger={ true } onClick={ (): void => setFollowDrawerVisible(false) }>关闭</Button> }
       >
         <Follow weiboAccount={ checkWeiboAccount! } />

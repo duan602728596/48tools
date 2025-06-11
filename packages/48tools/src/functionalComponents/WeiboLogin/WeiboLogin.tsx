@@ -27,7 +27,7 @@ function WeiboLogin(props: {}): ReactElement {
         title="微博账号登陆"
         width={ 800 }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         closable={ false }
         maskClosable={ false }
         footer={ <Button onClick={ handleCloseQrcodeClick }>关闭</Button> }

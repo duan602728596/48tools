@@ -383,7 +383,7 @@ function SearchMessage(props: {}): ReactElement {
         width={ 320 }
         closable={ false }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         footer={ <Button onClick={ (event: MouseEvent): void => setExportMessageModalOpen(false) }>关闭</Button> }
       >
         <Space className="w-full" direction="vertical" size={ 8 }>

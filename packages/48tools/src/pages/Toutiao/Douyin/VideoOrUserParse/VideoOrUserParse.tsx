@@ -364,7 +364,7 @@ function VideoOrUserParse(props: {}): ReactElement {
         open={ visible }
         width={ 400 }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         closable={ false }
         maskClosable={ false }
         afterClose={ videoDownloadModalAfterClose }
@@ -392,7 +392,7 @@ function VideoOrUserParse(props: {}): ReactElement {
         open={ userModalVisible }
         width={ 800 }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         closable={ false }
         maskClosable={ false }
         afterClose={ userModalAfterClose }

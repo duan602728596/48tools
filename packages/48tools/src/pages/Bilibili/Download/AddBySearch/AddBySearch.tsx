@@ -289,7 +289,7 @@ function AddBySearch(props: {}): ReactElement {
         ] }
         width={ 900 }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         maskClosable={ false }
         footer={ <Button onClick={ handleCancelClick }>关闭</Button> }
         onCancel={ handleCancelClick }

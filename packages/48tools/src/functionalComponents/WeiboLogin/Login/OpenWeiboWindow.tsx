@@ -132,7 +132,7 @@ function OpenWeiboWindow(props: { onCancel?: Function }): ReactElement {
         closable={ false }
         mask={ false }
         maskClosable={ false }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         footer={ <Button type="primary" onClick={ handleInputSOkClick }>下一步</Button> }
       >
         <Form form={ form } labelCol={{ span: 3 }}>

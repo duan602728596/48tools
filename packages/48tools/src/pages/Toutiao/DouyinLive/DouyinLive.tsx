@@ -295,7 +295,7 @@ function DouyinLive(props: {}): ReactElement {
         centered={ true }
         closable={ false }
         maskClosable={ false }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         footer={ <Button onClick={ (event: MouseEvent): void => setOpen(false) }>关闭</Button> }
       >
         <Select className="!w-[350px]" options={ liveOptions } onSelect={ handleStartRecordSelect } />

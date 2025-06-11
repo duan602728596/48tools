@@ -401,7 +401,7 @@ function Pocket48Login(props: Pocket48LoginProps): ReactElement {
         open={ open }
         width={ 400 }
         centered={ true }
-        destroyOnClose={ true }
+        destroyOnHidden={ true }
         closable={ false }
         maskClosable={ false }
         afterClose={ afterClose }
