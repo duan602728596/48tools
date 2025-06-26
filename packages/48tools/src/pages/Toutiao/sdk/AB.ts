@@ -1,6 +1,6 @@
 import loadScript from '../../../utils/loadScript';
 
-let ABogus: any;
+let ABogus: (a: number, b: number, c: number, params: string, data: string, ua: string) => string;
 
 /**
  * 计算a_bogus
