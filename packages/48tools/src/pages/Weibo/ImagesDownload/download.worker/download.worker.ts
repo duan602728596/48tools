@@ -44,8 +44,15 @@ addEventListener('message', async function(event: MessageEvent<WorkerEventData>)
 
     // 额外下载视频
     if (item.infos.video) {
+      // videoFileUrl: xxx.mov?Expires=xxxx
       const videoFileUrl: string = item.infos.video;
-      const videoFilename: string = path.join(filePath, `${ item.pid }${ path.extname(videoFileUrl) }`);
+      let ext: string = path.extname(videoFileUrl);
+      const queryIndex: number = ext.indexOf('?');
+
+      if (queryIndex !== -1) {
+        ext = ext.substring(0, queryIndex);
+      }
+      const videoFilename: string = path.join(filePath, `${ item.pid }${ ext }`);
 
       downloadList.push(requestDownloadFileByStream(videoFileUrl, videoFilename));
     }
