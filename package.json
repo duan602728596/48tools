@@ -26,7 +26,7 @@
     "set-version": "node scripts/setVersion.mjs",
     "check-token": "node scripts/checkToken.mjs",
     "cz1": "NODE_OPTIONS=\"--max-old-space-size=409600\" git cz",
-    "postinstall": "husky install && node scripts/postInstall.mjs"
+    "postinstall": "husky install && node scripts/postInstall.mts"
   },
   "private": true,
   "workspaces": [
