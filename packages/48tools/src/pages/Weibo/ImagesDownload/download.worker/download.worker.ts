@@ -52,6 +52,7 @@ addEventListener('message', async function(event: MessageEvent<WorkerEventData>)
       if (queryIndex !== -1) {
         ext = ext.substring(0, queryIndex);
       }
+
       const videoFilename: string = path.join(filePath, `${ item.pid }${ ext }`);
 
       downloadList.push(requestDownloadFileByStream(videoFileUrl, videoFilename));
