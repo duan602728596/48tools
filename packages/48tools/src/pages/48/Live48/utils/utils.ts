@@ -12,12 +12,14 @@ export function formatTsUrl(data: string, m3u8Url: string): [string, Array<strin
 
   // m3u8文件所在的文件夹
   const m3u8Pathname: string = m3u8Url.split(/\?/)[0].replace(/\/[^/]+$/, '');
+  const url: URL = new URL(m3u8Url);
 
   for (const item of dataArr) {
     if (/^#/.test(item) || item === '') {
       newStrArr.push(item);
     } else if (/^\//.test(item)) {
-      const tsUrl: string = `https://ts.48.cn${ item }`;
+      // const tsUrl: string = `https://ts.48.cn${ item }`;
+      const tsUrl: string = `${ url.protocol }//${ url.host }${ item }`;
 
       // TODO: 尝试使用原始地址下载
       // newStrArr.push(`http://localhost:${ port }/proxy/ts48?url=${ encodeURIComponent(tsUrl) }`);
