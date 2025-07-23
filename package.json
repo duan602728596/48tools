@@ -23,7 +23,7 @@
     "install:cn:win": "set ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ && set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 && yarn install",
     "install:ci": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 yarn install",
     "install:ci:win": "set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 && yarn install",
-    "set-version": "node scripts/setVersion.mjs",
+    "set-version": "node scripts/setVersion.mts",
     "check-token": "node scripts/checkToken.mjs",
     "cz1": "NODE_OPTIONS=\"--max-old-space-size=409600\" git cz",
     "postinstall": "husky install && node scripts/postInstall.mts"
