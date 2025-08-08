@@ -13,7 +13,8 @@ export async function requestUserInfo(id: string, cookie: string): Promise<UserI
   const res: GotResponse<UserInfo> = await got.get(`https://weibo.com/ajax/profile/info?uid=${ id }`, {
     responseType: 'json',
     headers: {
-      Cookie: cookie
+      Cookie: cookie,
+      Referer: `https://weibo.com/u/${ id }`
     }
   });
 
