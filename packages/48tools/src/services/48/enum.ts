@@ -5,7 +5,8 @@
 export const enum Pocket48LiveType {
   Live = 1,
   Radio = 2,
-  Game = 5
+  Game = 5,
+  AI = 6
 }
 
 /**

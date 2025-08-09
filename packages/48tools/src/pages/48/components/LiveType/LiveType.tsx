@@ -8,6 +8,9 @@ export function liveTypeRender(liveType: Pocket48LiveType): ReactElement {
     case Pocket48LiveType.Game:
       return <Tag color="magenta">游戏</Tag>;
 
+    case Pocket48LiveType.AI:
+      return <Tag color="magenta">AI</Tag>;
+
     case Pocket48LiveType.Radio:
       return <Tag color="volcano">电台</Tag>;
 

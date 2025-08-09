@@ -20,7 +20,7 @@ export interface LiveInfo {
   ctime: string;
   liveId: string;
   roomId: string;
-  liveType: Pocket48LiveType; // 1：直播，2：电台，5：游戏
+  liveType: Pocket48LiveType; // 1：直播，2：电台，5：游戏，6：AI
   liveMode: Pocket48LiveMode; // 0：正常，1：录屏
   title: string;
   userInfo: UserInfo;
