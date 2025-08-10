@@ -93,11 +93,13 @@ function ThemeProvider(props: ThemeProviderProps): ReactElement {
   );
 
   useEffect(function(): void {
-    if (isDark) {
-      document.body.setAttribute('theme', 'dark');
-    } else {
-      document.body.removeAttribute('theme');
-    }
+    document.startViewTransition((): void => {
+      if (isDark) {
+        document.body.setAttribute('theme', 'dark');
+      } else {
+        document.body.removeAttribute('theme');
+      }
+    });
   }, [isDark]);
 
   useEffect(function(): void {
