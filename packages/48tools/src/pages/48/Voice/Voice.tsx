@@ -14,7 +14,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import type { Dispatch } from '@reduxjs/toolkit';
 import { createStructuredSelector, type Selector } from 'reselect';
-import { Button, message, Popconfirm, Table, Checkbox, Space } from 'antd';
+import { Button, message, Popconfirm, Table, Checkbox, Space, Input } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { MessageInstance } from 'antd/es/message/interface';
@@ -87,8 +87,8 @@ function Voice(props: {}): ReactElement {
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [searchLoading, setSearchLoading]: [boolean, D<S<boolean>>] = useState(false); // 搜索的loading状态
   const [searchResult, setSearchResult]: [Array<ServerApiItem>, D<S<ServerApiItem[]>>] = useState([]); // 搜索结果
-  const [searchValue, setSearchValue]: [DefaultOptionType | undefined, D<S<DefaultOptionType | undefined>>]
-    = useState(undefined);
+  const [searchValue, setSearchValue]: [DefaultOptionType | undefined, D<S<DefaultOptionType | undefined>>] = useState(undefined);
+  const [channelIdValue, setChannelIdValue]: [string, D<S<string>>] = useState<string>('');
 
   // 停止自动录制
   function handleStopAutoRecordClick(event: MouseEvent): void {
@@ -194,6 +194,12 @@ function Voice(props: {}): ReactElement {
   async function handleSaveClick(event: MouseEvent): Promise<void> {
     if (!searchValue) return;
 
+    if (!/^\d*$/.test(channelIdValue)) {
+      messageApi.warning('自定义的channelId必须是数字！');
+
+      return;
+    }
+
     const item: RoomVoiceItem | undefined = roomVoice.find(
       (o: RoomVoiceItem): boolean => `${ o.serverId }` === searchValue.value);
 
@@ -205,7 +211,7 @@ function Voice(props: {}): ReactElement {
       dispatch(IDBSaveRoomVoiceInfo({
         data: {
           id: randomUUID(),
-          channelId: jumpRes.content.channelId,
+          channelId: /^\s*$/.test(channelIdValue) ? jumpRes.content.channelId : Number(channelIdValue),
           serverId: jumpRes.content.serverId,
           nickname: searchValue.label
         }
@@ -220,6 +226,7 @@ function Voice(props: {}): ReactElement {
       label: option.label,
       value: option.value
     });
+    setChannelIdValue('');
   }
 
   // 搜索
@@ -252,6 +259,11 @@ function Voice(props: {}): ReactElement {
     dispatch(IDBUpdateRoomVoiceInfo({
       data: { ...record, autoRecord: event.target.checked }
     }));
+  }
+
+  // 自定义输入channelId
+  function handleChannelIdValueInput(event: InputEvent & { target: HTMLInputElement }): void {
+    setChannelIdValue(event.target.value);
   }
 
   const columns: ColumnsType<RoomVoiceItem> = [
@@ -320,6 +332,9 @@ function Voice(props: {}): ReactElement {
           onSearch={ handleServerSearch }
           onSelect={ handleOwnerSelect }
         />
+        <div className="inline-block ml-[8px] w-[150px]">
+          <Input value={ channelIdValue } placeholder="自定义channelId" onInput={ handleChannelIdValueInput } />
+        </div>
         <Space.Compact className="mx-[8px]">
           <Button onClick={ handleSaveClick }>保存</Button>
           {
