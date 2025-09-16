@@ -71,6 +71,8 @@ const externalsName: Array<string> = nodeModules([
   'crypto',
   'fs',
   'fs/promises',
+  'http',
+  'https',
   'net',
   'os',
   'path',

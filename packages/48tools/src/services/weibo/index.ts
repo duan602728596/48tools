@@ -1,5 +1,8 @@
+import { request } from 'node:https';
+import type { ClientRequest, IncomingMessage } from 'node:http';
 // @ts-expect-error
 import got, { type Response as GotResponse } from 'got';
+import { pcUserAgent2 } from '../../utils/utils';
 import type { PcLiveJson, VisitedList, DetailInfo, FollowContent, WeiboUserImages, WeiboShowDetails } from './interface';
 
 export type * from './interface';
@@ -12,7 +15,8 @@ export async function requestPcLiveJson(liveId: string): Promise<PcLiveJson> {
   const res: GotResponse<PcLiveJson> = await got.get(`https://weibo.com/l/!/2/wblive/room/show_pc_live.json?live_id=${ liveId }`, {
     responseType: 'json',
     headers: {
-      Referer: `https://weibo.com/l/wblive/p/show/${ liveId }`
+      Referer: `https://weibo.com/l/wblive/p/show/${ liveId }`,
+      'User-Agent': pcUserAgent2
     }
   });
 
@@ -35,7 +39,10 @@ export async function requestVisitedList(gsid: string, s: string, from: string, 
   params.set('s', s);
 
   const res: GotResponse<VisitedList> = await got.get(`https://api.weibo.cn/2/!/wbox/2pi6c3qvdd/getvisitedlist?${ params.toString() }`, {
-    responseType: 'json'
+    responseType: 'json',
+    headers: {
+      'User-Agent': pcUserAgent2
+    }
   });
 
   return res.body;
@@ -50,7 +57,8 @@ export async function requestSelfFollowedListPC(cookie: string, page: number = 1
   const res: GotResponse<FollowContent> = await got.get(`https://weibo.com/ajax/profile/followContent?page=${ page }&next_cursor=50`, {
     responseType: 'json',
     headers: {
-      Cookie: cookie
+      Cookie: cookie,
+      'User-Agent': pcUserAgent2
     }
   });
 
@@ -66,7 +74,8 @@ export async function requestDetailByUserId(id: string, cookie: string | undefin
   const res: GotResponse<DetailInfo> = await got.get('https://weibo.com/ajax/profile/detail?uid=' + id, {
     responseType: 'json',
     headers: {
-      Cookie: cookie
+      Cookie: cookie,
+      'User-Agent': pcUserAgent2
     }
   });
 
@@ -80,15 +89,42 @@ export async function requestDetailByUserId(id: string, cookie: string | undefin
  * @param { string } cookie
  */
 export async function requestWeiboUserImages(uid: string, sinceId: string, cookie: string): Promise<WeiboUserImages> {
-  const res: GotResponse<WeiboUserImages> = await got.get(`https://weibo.com/ajax/profile/getImageWall?uid=${ uid }&sinceid=${ sinceId }`, {
-    responseType: 'json',
+  const { resolve, reject, promise }: PromiseWithResolvers<WeiboUserImages> = Promise.withResolvers();
+
+  const req: ClientRequest = request(`https://weibo.com/ajax/profile/getImageWall?uid=${ uid }&sinceid=${ sinceId }`, {
     headers: {
       Cookie: cookie,
-      Referer: `https://weibo.com/u/${ uid }?tabtype=album`
+      Referer: `https://weibo.com/u/${ uid }?tabtype=album`,
+      'User-Agent': pcUserAgent2
     }
   });
 
-  return res.body;
+  req.on('response', function(res: IncomingMessage): void {
+    const buffers: Array<Buffer> = [];
+
+    res.on('data', function(buffer: Buffer): void {
+      buffers.push(buffer);
+    });
+
+    res.on('end', function(): void {
+      const data: string = Buffer.concat(buffers).toString();
+
+      resolve(JSON.parse(data));
+    });
+
+    res.on('error', function(err: Error): void {
+      reject(err);
+    });
+  });
+
+  req.on('error', function(err: Error) {
+    reject(err);
+  });
+
+  req.write('');
+  req.end();
+
+  return await promise;
 }
 
 /**
@@ -100,7 +136,9 @@ export async function requestWeiboShow(mid: string, cookie: string): Promise<Wei
   const res: GotResponse<WeiboShowDetails> = await got.get(`https://weibo.com/ajax/statuses/show?id=${ mid }&locale=zh`, {
     responseType: 'json',
     headers: {
-      Cookie: cookie
+      Cookie: cookie,
+      Referer: 'https://weibo.com/',
+      'User-Agent': pcUserAgent2
     }
   });
 
