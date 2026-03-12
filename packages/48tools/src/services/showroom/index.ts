@@ -9,10 +9,8 @@ export type * from './interface';
  * @param { string } userId - 用户id
  * @return { Promise<string> } - 返回html，用于解析直播id
  */
-export async function requestHtml(userId: string): Promise<string> {
-  const res: GotResponse<string> = await got.get(`https://www.showroom-live.com/r/${ userId }`, {
-    type: 'text'
-  });
+export async function requestShowroomHtml(userId: string): Promise<string> {
+  const res: GotResponse<string> = await got.get(`https://www.showroom-live.com/r/${ userId }`);
 
   return res.body;
 }

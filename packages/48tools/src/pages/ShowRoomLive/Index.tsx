@@ -8,6 +8,7 @@ import { Alert, Table, App, Popconfirm, Button, Checkbox, Space } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import type { useAppProps } from 'antd/es/app/context';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import type { Rule } from 'rc-field-form/es/interface';
 import { showSaveDialog } from '../../utils/remote/dialog';
 import Header from '../../components/Header/Header';
 import AddLiveRoomForm from '../../components/AddLiveRoomForm/AddLiveRoomForm';
@@ -30,6 +31,10 @@ import showroomLiveWorker from './utils/showroomLiveWorker';
 import { showroomLiveAutoRecord } from './utils/showroomLiveAutoRecord';
 import type { LiveSliceInitialState, LiveSliceSelector } from '../../store/slice/LiveSlice';
 import type { LiveItem, WebWorkerChildItem } from '../../commonTypes';
+
+const roomIdRule: Array<Rule> = [
+  { required: true, message: '请填写直播间ID', whitespace: true }
+];
 
 /* redux selector */
 type RState = { showroomLive: LiveSliceInitialState };
@@ -171,7 +176,7 @@ function Index(props: {}): ReactElement {
               <span className="font-normal">{ ShowroomTextIcon }</span>
               直播间信息
             </Fragment>
-          } IDBSaveDataFunc={ IDBSaveLiveItem } />
+          } IDBSaveDataFunc={ IDBSaveLiveItem } customRoomIdRule={ roomIdRule } />
         </HelpButtonGroup>
       </Header>
       <Alert className="mb-[8px]" type="warning" message="录制时需要开启VPN，使用Tun（虚拟网卡）模式代理最佳。" />

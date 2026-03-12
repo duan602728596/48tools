@@ -1,6 +1,6 @@
 import type { Store } from '@reduxjs/toolkit';
 import { store } from '../../../store/store';
-import { requestStreamingUrl, type StreamingUrl, type StreamingUrlItem } from '@48tools-api/showroom';
+import { requestStreamingUrl, requestShowroomHtml, type StreamingUrl, type StreamingUrlItem } from '@48tools-api/showroom';
 import getFFmpegDownloadWorker from '../../../utils/worker/FFmpegDownload.worker/getFFmpegDownloadWorker';
 import { setAddWorkerItem, setRemoveWorkerItem } from '../reducers/showroomLive';
 import { getFFmpeg } from '../../../utils/utils';
@@ -15,9 +15,22 @@ import type { LiveItem, MessageEventData } from '../../../commonTypes';
  */
 async function showroomLiveWorker(record: LiveItem, messageApi: MessageInstance | undefined, filePath: string | undefined): Promise<void> {
   const { dispatch }: Store = store;
+  let roomId: string = record.roomId;
 
   try {
-    const res: StreamingUrl = await requestStreamingUrl(record.roomId);
+    if (!/^\d+$/.test(record.roomId)) {
+      const resHtml: string = await requestShowroomHtml(record.roomId);
+      const href: string | undefined = /<a[^>]*class="[^"]*st-header__link[^"]*"[^>]*href="([^"]+)"/i.exec(resHtml)?.[1];
+
+      if (href) {
+        const url: URL = new URL(href, 'https://www.showroom-live.com');
+        const _roomId: string | null = url.searchParams.get('room_id');
+
+        _roomId && (roomId = _roomId);
+      }
+    }
+
+    const res: StreamingUrl = await requestStreamingUrl(roomId);
 
     if (!res?.streaming_url_list?.length) {
       messageApi && messageApi.error('获取直播地址失败！');
@@ -25,7 +38,9 @@ async function showroomLiveWorker(record: LiveItem, messageApi: MessageInstance 
       return;
     }
 
-    res.streaming_url_list.sort((a: StreamingUrlItem, b: StreamingUrlItem): number => ((b.quality || 0) - (a.quality || 0)));
+    const streamingUrlList: Array<StreamingUrlItem> = res.streaming_url_list.filter((o: StreamingUrlItem): boolean => o.type !== 'webrtc');
+
+    streamingUrlList.sort((a: StreamingUrlItem, b: StreamingUrlItem): number => ((b.quality || 0) - (a.quality || 0)));
 
     const worker: Worker = getFFmpegDownloadWorker();
 
@@ -44,7 +59,7 @@ async function showroomLiveWorker(record: LiveItem, messageApi: MessageInstance 
 
     worker.postMessage({
       type: 'start',
-      playStreamPath: res.streaming_url_list[0].url,
+      playStreamPath: streamingUrlList[0].url,
       filePath,
       id: record.id,
       ffmpeg: getFFmpeg(),
