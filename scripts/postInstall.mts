@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { readFile as readFileAsync, writeFile as writeFileAsync } from 'node:fs/promises';
+import { readFile as readFileAsync, writeFile as writeFileAsync, glob } from 'node:fs/promises';
 import { cwd, command, node } from './utils.mjs';
 
 const nodeModules: string = join(cwd, 'node_modules');
@@ -45,6 +45,40 @@ async function fixPlaywrightType(typeFilePath: string): Promise<void> {
   await writeFileAsync(typeFilePath, newFileStr, { encoding: 'utf8' });
 }
 
+/* 修复@reduxjs/toolkit的类型错误 */
+async function fixReduxjsToolkitTypeError(): Promise<void> {
+  const reduxjsToolkitSrc: string = join(cwd, 'node_modules', '@reduxjs/toolkit/src');
+  const filesAsyncIterable: AsyncIterable<string> = glob(`${ reduxjsToolkitSrc }/**/*.ts`);
+  const files: Array<string> = [];
+
+  for await (const file of filesAsyncIterable) {
+    files.push(file);
+  }
+
+  for (const file of files) {
+    const content: string = await readFileAsync(file, 'utf8');
+
+    if (!content.includes("'@internal/")) {
+      continue;
+    }
+
+    const lines: Array<string> = content.split('\n');
+    const output: string[] = [];
+
+    for (let i: number = 0; i < lines.length; i++) {
+      const line: string = lines[i];
+
+      if (line.includes("'@internal/")) {
+        output.push('// @ts-expect-error');
+      }
+
+      output.push(line);
+    }
+
+    await writeFileAsync(file, output.join('\n'), 'utf8');
+  }
+}
+
 /* 执行postinstall脚本 */
 async function postInstall(): Promise<void> {
   // 替换window.WebSocket
@@ -63,6 +97,9 @@ async function postInstall(): Promise<void> {
 
   // 编译postcss插件
   await buildPlugin('postcss-plugin-remove-classnames');
+
+  // 修复@reduxjs/toolkit的类型错误
+  await fixReduxjsToolkitTypeError();
 }
 
 postInstall();
