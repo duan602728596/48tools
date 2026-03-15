@@ -139,7 +139,7 @@ async function unpackOthers() {
     console.log('⏳正在编译：mac');
     await builder.build({
       targets: builder.Platform.MAC.createTarget(),
-      config: config(output.mac)
+      config: config(output.mac, ['mac', { target: 'dir', arch: 'x64' }])
     });
     await copySDK(sdkDownloadDir.mac, unpackedNodeModules.mac);
   }
@@ -148,7 +148,7 @@ async function unpackOthers() {
   console.log('⏳正在编译：win64');
   await builder.build({
     targets: builder.Platform.WINDOWS.createTarget(),
-    config: config(output.win)
+    config: config(output.win, ['win', { target: 'dir', arch: 'x64' }])
   });
   await copySDK(sdkDownloadDir.win64, unpackedNodeModules.win);
 
@@ -164,7 +164,7 @@ async function unpackOthers() {
   console.log('⏳正在编译：linux');
   await builder.build({
     targets: builder.Platform.LINUX.createTarget(),
-    config: config(output.linux)
+    config: config(output.linux, ['linux', { target: 'dir', arch: 'x64' }])
   });
   await copySDK(sdkDownloadDir.linux, unpackedNodeModules.linux);
 
@@ -228,11 +228,8 @@ async function unpack() {
   ]);
   // await command('npm', ['install', '--production', '--legacy-peer-deps=true'], wwwDir);
 
-  if (isArm64) {
-    await unpackArm64();
-  } else {
-    await unpackOthers();
-  }
+  await unpackArm64();
+  await unpackOthers();
 }
 
 unpack();

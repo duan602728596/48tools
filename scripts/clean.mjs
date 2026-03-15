@@ -100,11 +100,8 @@ async function cleanArm64() {
 }
 
 async function clean() {
-  if (isArm64) {
-    await cleanArm64();
-  } else {
-    await cleanOthers();
-  }
+  await cleanArm64();
+  await cleanOthers();
 }
 
 clean();
