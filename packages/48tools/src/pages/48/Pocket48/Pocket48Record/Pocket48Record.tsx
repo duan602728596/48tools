@@ -333,6 +333,7 @@ function Pocket48Record(props: {}): ReactElement {
         filePath: result.filePath,
         ffmpeg: getFFmpeg(),
         protocolWhitelist: isM3u8,
+        preserveInputTimestamps: isM3u8,
         qid: record.liveId
       });
 

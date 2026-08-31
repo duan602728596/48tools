@@ -18,6 +18,7 @@ export type WorkerEventData = {
   qid?: string;                           // id
   ffmpegHeaders?: string;                 // ffmpeg的headers
   concat?: boolean;                       // 合并
+  preserveInputTimestamps?: boolean;      // 保留输入流原始时间线
   // 是否添加"-flvflags no_duration_filesize"
   // see: https://stackoverflow.com/questions/50300013/ffmpeg-streaming-stops-after-few-seconds
   noDurationFilesize?: boolean;
@@ -112,6 +113,7 @@ function download(workerData: WorkerEventData): void {
     qid,
     ffmpegHeaders,
     concat,
+    preserveInputTimestamps,
     noDurationFilesize
   }: WorkerEventData = workerData;
   let ffmpegArgs: Array<string> = playStreamPathArray(playStreamPath).concat(
@@ -119,6 +121,12 @@ function download(workerData: WorkerEventData): void {
 
   if (libx264) {
     ffmpegArgs = playStreamPathArray(playStreamPath).concat(['-vcodec', 'libx264', filePath]);
+  }
+
+  if (preserveInputTimestamps) {
+    // 口袋48的HLS分片可能暂时没有音频包。复制源时间戳可保留这段静音时间，
+    // start_at_zero只整体平移起点，不改变音视频之间的相对时间。
+    ffmpegArgs.unshift('-copyts', '-start_at_zero');
   }
 
   if (ffmpegHeaders) {
