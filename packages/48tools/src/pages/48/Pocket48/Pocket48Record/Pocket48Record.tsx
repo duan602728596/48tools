@@ -303,7 +303,9 @@ function Pocket48Record(props: {}): ReactElement {
       }
 
       let requestIdleID: number | null = null;
-      const worker: Worker = (isM3u8 && downloadType === 1 ? getRecordVideoDownloadWorker : getFFmpegDownloadWorker)();
+      const worker: Worker = isM3u8 && downloadType === 0
+        ? new Worker(new URL('./Pocket48M3u8Download.worker/Pocket48M3u8Download.worker.ts', import.meta.url))
+        : (isM3u8 && downloadType === 1 ? getRecordVideoDownloadWorker : getFFmpegDownloadWorker)();
 
       worker.addEventListener('message', function(workerEvent: MessageEvent<MessageEventData>) {
         const { type }: MessageEventData = workerEvent.data;
