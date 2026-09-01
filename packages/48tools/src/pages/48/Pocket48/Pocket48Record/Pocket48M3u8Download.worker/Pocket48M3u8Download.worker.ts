@@ -7,6 +7,11 @@ import { pipeline } from 'node:stream/promises';
 import got from 'got';
 import type GotRequest from 'got/dist/source/core';
 import {
+  inspectTsSegment,
+  type AudioFormat,
+  type SegmentProbeResult
+} from './inspectTs';
+import {
   createGroupConcatFile,
   isSourceBoundary,
   parseMediaPlaylist,
@@ -61,6 +66,8 @@ type ProbeFormatResult = {
 
 type DownloadPartsResult = {
   partFiles: string[];
+  partHasAudio: boolean[];
+  audioFormat: AudioFormat | null;
   needsContinuousAudio: boolean;
 };
 
@@ -218,7 +225,16 @@ function createStreamTimeline(stream: ProbeStream, packets: ProbePacket[]): Stre
   };
 }
 
-async function probeTimeline(ffprobe: string, file: string): Promise<SegmentTimeline> {
+function getAudioFormat(stream: ProbeStream): AudioFormat {
+  const channels: number = stream.channels ?? 2;
+
+  return {
+    sampleRate: stream.sample_rate ?? '44100',
+    channelLayout: stream.channel_layout ?? (channels === 1 ? 'mono' : channels === 2 ? 'stereo' : `${ channels }c`)
+  };
+}
+
+async function probeSegmentWithFFprobe(ffprobe: string, file: string): Promise<SegmentProbeResult> {
   const output: string = await runProcessOutput(ffprobe, [
     '-v', 'error',
     '-show_packets',
@@ -257,7 +273,18 @@ async function probeTimeline(ffprobe: string, file: string): Promise<SegmentTime
     throw new Error(`媒体分片中没有可识别的音视频流：${ path.basename(file) }`);
   }
 
-  return timeline;
+  return {
+    timeline,
+    audioFormat: audioStream ? getAudioFormat(audioStream) : null
+  };
+}
+
+async function probeSegment(ffprobe: string, file: string): Promise<SegmentProbeResult> {
+  try {
+    return inspectTsSegment(await fsP.readFile(file));
+  } catch {
+    return probeSegmentWithFFprobe(ffprobe, file);
+  }
 }
 
 async function downloadSegment(uri: string, file: string): Promise<void> {
@@ -307,8 +334,10 @@ async function downloadParts(
   qid?: string
 ): Promise<DownloadPartsResult> {
   const partFiles: string[] = [];
+  const partHasAudio: boolean[] = [];
   const segmentFile: string = path.join(workDir, '_current_segment.ts');
   let previousTimeline: SegmentTimeline | null = null;
+  let audioFormat: AudioFormat | null = null;
   let hasAudio: boolean = false;
   let hasVideoWithoutAudio: boolean = false;
 
@@ -321,15 +350,20 @@ async function downloadParts(
       await downloadSegment(segment.uri, segmentFile);
       if (isStopped) break;
 
-      const timeline: SegmentTimeline = await probeTimeline(ffprobe, segmentFile);
+      const probeResult: SegmentProbeResult = await probeSegment(ffprobe, segmentFile);
+      const { timeline }: SegmentProbeResult = probeResult;
       const startsNewPart: boolean = previousTimeline === null
         || isSourceBoundary(segment, previousTimeline, timeline);
 
       hasAudio ||= timeline.audio !== null;
       hasVideoWithoutAudio ||= timeline.video !== null && timeline.audio === null;
+      audioFormat ??= probeResult.audioFormat;
 
       if (startsNewPart) {
         partFiles.push(getPartFile(filePath, partFiles.length));
+        partHasAudio.push(timeline.audio !== null);
+      } else if (timeline.audio) {
+        partHasAudio[partHasAudio.length - 1] = true;
       }
 
       await appendSegment(segmentFile, partFiles.at(-1) as string, startsNewPart);
@@ -342,6 +376,8 @@ async function downloadParts(
 
   return {
     partFiles,
+    partHasAudio,
+    audioFormat,
     needsContinuousAudio: hasAudio && hasVideoWithoutAudio
   };
 }
@@ -368,6 +404,8 @@ async function normalizeParts(
   ffprobe: string,
   workDir: string,
   partFiles: string[],
+  partHasAudio: boolean[],
+  silentAudioFormat: AudioFormat | null,
   qid?: string
 ): Promise<Array<{ filename: string; duration: number }>> {
   const result: Array<{ filename: string; duration: number }> = [];
@@ -378,19 +416,40 @@ async function normalizeParts(
     const outputFilename: string = `_normalized_${ String(index).padStart(4, '0') }.ts`;
     const outputFile: string = path.join(workDir, outputFilename);
 
-    await runProcess(ffmpeg, [
-      '-y',
-      '-v', 'error',
-      '-copyts',
-      '-start_at_zero',
-      '-i', partFiles[index],
-      '-map', '0:v:0?',
-      '-map', '0:a:0?',
-      '-c', 'copy',
-      '-muxpreload', '0',
-      '-muxdelay', '0',
-      outputFile
-    ]);
+    if (silentAudioFormat && !partHasAudio[index]) {
+      await runProcess(ffmpeg, [
+        '-y',
+        '-v', 'error',
+        '-copyts',
+        '-start_at_zero',
+        '-i', partFiles[index],
+        '-f', 'lavfi',
+        '-i', `anullsrc=r=${ silentAudioFormat.sampleRate }:cl=${ silentAudioFormat.channelLayout }`,
+        '-map', '0:v:0',
+        '-map', '1:a:0',
+        '-c:v', 'copy',
+        '-c:a', 'aac',
+        '-b:a', '64k',
+        '-shortest',
+        '-muxpreload', '0',
+        '-muxdelay', '0',
+        outputFile
+      ]);
+    } else {
+      await runProcess(ffmpeg, [
+        '-y',
+        '-v', 'error',
+        '-copyts',
+        '-start_at_zero',
+        '-i', partFiles[index],
+        '-map', '0:v:0?',
+        '-map', '0:a:0?',
+        '-c', 'copy',
+        '-muxpreload', '0',
+        '-muxdelay', '0',
+        outputFile
+      ]);
+    }
 
     result.push({ filename: outputFilename, duration: await probeDuration(ffprobe, outputFile) });
     postProgress(qid, 90 + (((index + 1) / partFiles.length) * 8));
@@ -416,7 +475,12 @@ async function createVideo(workerData: WorkerEventData, partsDir: string): Promi
     segments,
     qid
   );
-  const { partFiles, needsContinuousAudio }: DownloadPartsResult = downloadResult;
+  const {
+    partFiles,
+    partHasAudio,
+    audioFormat,
+    needsContinuousAudio
+  }: DownloadPartsResult = downloadResult;
 
   if (isStopped) return;
   if (partFiles.length === 0) throw new Error('没有已完成的TS分段。');
@@ -427,11 +491,17 @@ async function createVideo(workerData: WorkerEventData, partsDir: string): Promi
     return;
   }
 
+  if (needsContinuousAudio && !audioFormat) {
+    throw new Error('无法获取静音分段所需的音频参数。');
+  }
+
   const groupFiles: Array<{ filename: string; duration: number }> = await normalizeParts(
     ffmpeg,
     ffprobe,
     partsDir,
     partFiles,
+    partHasAudio,
+    needsContinuousAudio ? audioFormat : null,
     qid
   );
 
