@@ -30,6 +30,7 @@ import { douyinCookie } from '../../../utils/toutiao/DouyinCookieStore';
 import {
   douyinDownloadListSelectors,
   setDeleteDownloadList,
+  setStartDownload,
   setDownloadProgress,
   type DouyinDownloadInitialState
 } from '../reducers/douyinDownload';
@@ -38,7 +39,7 @@ import { ProgressNative, type ProgressSet } from '../../../components/ProgressNa
 import type { DownloadItem } from '../types';
 
 /* redux selector */
-type RSelector = Pick<DouyinDownloadInitialState, 'downloadProgress'> & {
+type RSelector = Pick<DouyinDownloadInitialState, 'downloadProgress' | 'downloadCompleted'> & {
   downloadList: Array<DownloadItem>;
 };
 type RState = { douyinDownload: DouyinDownloadInitialState };
@@ -48,12 +49,15 @@ const selector: Selector<RState, RSelector> = createStructuredSelector({
   downloadList: ({ douyinDownload }: RState): Array<DownloadItem> => douyinDownloadListSelectors.selectAll(douyinDownload),
 
   // 进度条列表
-  downloadProgress: ({ douyinDownload }: RState): { [key: string]: ProgressSet } => douyinDownload.downloadProgress
+  downloadProgress: ({ douyinDownload }: RState): { [key: string]: ProgressSet } => douyinDownload.downloadProgress,
+
+  // 下载完成列表
+  downloadCompleted: ({ douyinDownload }: RState): { [key: string]: boolean } => douyinDownload.downloadCompleted
 });
 
 /* 抖音视频下载 */
 function Douyin(props: {}): ReactElement {
-  const { downloadList, downloadProgress }: RSelector = useSelector(selector);
+  const { downloadList, downloadProgress, downloadCompleted }: RSelector = useSelector(selector);
   const dispatch: Dispatch = useDispatch();
   const [messageApi, messageContextHolder]: UseMessageReturnType = message.useMessage();
   const [downloadSelectedRowKeys, setDownloadSelectedRowKeys]: [Array<string>, D<S<Array<string>>>] = useState([]); // 选中状态
@@ -81,6 +85,7 @@ function Douyin(props: {}): ReactElement {
   // 下载单个
   function downloadItem(item: DownloadItem, filePath: string): Promise<void> {
     return new Promise(async (resolve: Function, reject: Function): Promise<void> => {
+      dispatch(setStartDownload(item.qid));
       const worker: Worker = getDownloadWorker();
 
       worker.addEventListener('message', function(messageEvent: MessageEvent<MessageEventData>): void {
@@ -221,9 +226,12 @@ function Douyin(props: {}): ReactElement {
       width: 95,
       render: (value: string, record: DownloadItem, index: number): ReactNode => {
         const inDownload: boolean = value in downloadProgress;
+        const isDownloadCompleted: boolean = Object.hasOwn(downloadCompleted, value);
 
         if (inDownload) {
           return <ProgressNative progressSet={ downloadProgress[value] } />;
+        } else if (isDownloadCompleted) {
+          return '下载完成';
         } else {
           return '等待下载';
         }
