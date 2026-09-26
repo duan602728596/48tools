@@ -1,0 +1,42 @@
+# https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners
+
+name: Latest Build (ARM)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: SKIP_YARN_COREPACK_CHECK=0 npm run install:ci
+
+      - run: npm run build:ci
+      
+      - name: Upload 48tools-win-arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: 48tools-win-arm64
+          path: |
+            build/win-arm64/*.zip 
+
+      - name: Upload 48tools-mac-arm64
+        uses: actions/upload-artifact@v4
+        with:
+          name: 48tools-mac-arm64
+          path: |
+            build/mac-arm64/*.zip 
