@@ -39,14 +39,18 @@ function requestDouyinHtml(url?: string): RequestDouyinHtmlReturn {
 
     const acNonceStr: string | undefined = res?.headers?.['set-cookie']?.find?.(
       (o: string): boolean => o.includes('__ac_nonce'));
+    const location: string | string[] | undefined = res?.headers?.location;
+    const redirectUrl: string | undefined = Array.isArray(location) ? location[0] : location;
 
     return acNonceStr ? {
       type: 'cookie',
       cookie: acNonceStr.split(/s*;s*/)[0].split(/=/)[1],
-      html: res.body
+      html: res.body,
+      ...(redirectUrl ? { redirectUrl } : {})
     } : {
       type: 'html',
-      html: res.body
+      html: res.body,
+      ...(redirectUrl ? { redirectUrl } : {})
     };
   }
 

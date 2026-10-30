@@ -42,11 +42,13 @@ export interface DouyinHtmlCookieType {
   type: 'cookie';
   cookie: string;
   html: string;
+  redirectUrl?: string;
 }
 
 export interface DouyinHtmlType {
   type: 'html';
   html: string;
+  redirectUrl?: string;
 }
 
 export interface DouyinUserApiType {
